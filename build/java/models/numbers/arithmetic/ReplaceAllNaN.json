@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Replace all NaN",
+  "description": "Replaces all NaN values in float array with the given value",
+  "id": "226576e4-14e0-47ba-b9e5-3f5d994c5e24",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.ReplaceAllNaN"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "valueToReplace",
+      "caption": "Value to replace NaN",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0.0"
+    }
+  ]
+}

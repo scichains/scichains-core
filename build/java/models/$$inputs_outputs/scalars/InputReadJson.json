@@ -1,0 +1,78 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/read JSON",
+  "id": "f64640cf-a18b-4f57-9d7b-60c16277cdde",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.io.ReadJson",
+    "new_instance_method": "getSecureInstance"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.json\" or \"samples/test.json\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.json, %TEMP%/my_file.json or (in Windows) %TEMP%\\my_file.json.\nAlso you can use in this string executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Requires existing file",
+      "name": "fileExistenceRequired",
+      "description": "If set, if the file does not exists, this function throws an exception. If cleared and if there is no existing file, output port stays not initialized.\nAll this relates to situation when  \"external input\" is not initialized. If it contains some value, this function returns its copy and ignores this flag.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

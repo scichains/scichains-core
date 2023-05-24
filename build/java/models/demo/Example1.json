@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example 1",
+  "id": "8011bc4b-6d0d-485b-986f-56b069f57589",
+  "description": "Example of java extension",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.Example1"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "image"
+    }
+  ],
+  "controls": [
+    {
+      "name": "width",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "height",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    }
+  ]
+}

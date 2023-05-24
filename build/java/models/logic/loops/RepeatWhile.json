@@ -1,0 +1,113 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.loops",
+  "name": "repeat... while (xxx)",
+  "id": "a3a3b9fe-3464-4492-a399-df04cde4f5a7",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.loops.RepeatWhile"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "while",
+      "hint": "[Optional] When specified, defines whether the loop should be repeated or stopped.\nIf not specified, it is considered to be \"true\"; in this case, you must use \"Maximal iterations count\" parameter."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] When specified, this data is just copied to \"s\" output before all other operations.\nCan be convenient if you need to \"build\" this operation into some chain of other functions.\nOther inputs \"x\", \"m\" are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "is_first",
+      "hint": "Will contain \"true\" if it is the first iteration; in other case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "is_last",
+      "hint": "Will contain \"true\" if it is the last iteration of the loop; in other case will contain \"false\".\nActually it is the inverted input \"while\" condition."
+    },
+    {
+      "value_type": "scalar",
+      "name": "is_not_first",
+      "hint": "Will contain \"false\" if it is the first iteration of the loop; in other case will contain \"true\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "is_not_last",
+      "hint": "Will contain \"false\" if it is the last iteration of the loop; in other case will contain \"true\".\nActually it is the input \"while\" condition."
+    },
+    {
+      "value_type": "scalar",
+      "name": "count",
+      "hint": "Counter, starting from 0. Will be 0 while first iteration of the loop, 1 while the second, etc.\nNote: if very improbable sitution of overflow (2^63−1=9223372036854775806 iterations), this counter stops increasing."
+    },
+    {
+      "value_type": "scalar",
+      "name": "count_1",
+      "caption": "counter from 1",
+      "hint": "Counter, starting from 1. Equal to \"count+1\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] Copy of \"s\" input, when it is specified: see comments to \"s\" input.\nOther outputs \"x\", \"m\" are also copies of the corresponding inputs."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0 or empty string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "name": "invertCondition",
+      "caption": "Invert condition",
+      "description": "If cleared, the loop is repeated while the input condition \"xxx\" is true.\nIf set, this condition is inverted, and the loop is repeated while \"xxx\" is false.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Maximal iterations count",
+      "name": "maxIterationsCount",
+      "description": "Maximal number of iterations. If specified (contains non-empty string), the loop is stopped after such number of iterations, even if the input while condition (\"xxx\" or inverted \"xxx\") is still true.\nNote: this parameter MUST be specified if the input port \"while\" is empty.\n\nREMEMBER: you SHOULD \"build\" this operation into some chain of other functions with help of input/output ports \"s\", \"x\" or \"m\", so that the final result of the chain will DEPEND on some outputs of this function. This is important: if results of this function are not used, then it is usually ignored when this chain is used as a sub-chain.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

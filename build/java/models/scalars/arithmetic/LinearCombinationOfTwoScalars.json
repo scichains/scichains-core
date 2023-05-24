@@ -1,0 +1,107 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.arithmetic",
+  "name": "Scalar ax + by + Δ",
+  "id": "6b37314e-fdbd-416d-8574-4f48853d60b2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.arithmetic.LinearCombinationOfTwoScalars"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "y",
+      "hint": "[Optional] Ignored if skipped (function returns ax + Δ)"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "b",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "summand",
+      "caption": "Δ (delta, additional summand)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "absoluteValue",
+      "caption": "Absolute value",
+      "description": "If set, this function returns absolute value |ax + by + Δ| instead of usual result.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "roundingMode",
+      "caption": "Rounding mode",
+      "description": "Specifies how to round the result.\n\"None\" means that rounding is not necessary.\n\"⌊v⌉\" operation (round half to even), when the result is integer (long or int) and the input double value is out of range of integer values, represented by integer type (−2^63..2^63−1 for long, −2^31..2^31−1 for int), returns the nearest boundary of this range. For example, [1e27] will return 2^63−1 for long and 2^31−1 for int (but original 1.0E27 for double result).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "None"
+        },
+        {
+          "value": "FLOOR_TO_DOUBLE",
+          "caption": "⌊v⌋ = StrictMath.floor(v) (double result)"
+        },
+        {
+          "value": "CEIL_TO_DOUBLE",
+          "caption": "⌈v⌉ = StrictMath.ceil(v) (double result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_DOUBLE",
+          "caption": "⌊v⌉ = StrictMath.rint(v) (round half to even, double result)"
+        },
+        {
+          "value": "CAST_TO_LONG",
+          "caption": "(long) v (standard Java cast to long)"
+        },
+        {
+          "value": "CAST_TO_INT",
+          "caption": "(int) v (standard Java cast to int)"
+        },
+        {
+          "value": "ROUND_TO_LONG",
+          "caption": "StrictMath.round(v) (round to +∞,  long result)"
+        },
+        {
+          "value": "ROUND_TO_INT",
+          "caption": "StrictMath.round(v) (round to +∞,  int result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_LONG",
+          "caption": "⌊v⌉ = (long) StrictMath.rint(value) (round half to even,  long result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_INT",
+          "caption": "⌊v⌉ = (int) StrictMath.rint(value) (round half to even,  int result)"
+        }
+      ],
+      "default": "NONE"
+    }
+  ]
+}

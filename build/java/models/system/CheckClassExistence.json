@@ -1,0 +1,40 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Checks class existence in class path",
+  "description": "Allows to check, whether the given class is available in the system class path. Can be helpful for debugging situations, when the system cannot find some component.",
+  "id": "9f5c1992-90ae-48ae-bf32-beffb14dc456",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.CheckClassExistence"
+  },
+  "in_ports":  [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "is_existing_class",
+      "hint": "Boolean value: true if the specified class found, false if not."
+    },
+    {
+      "value_type": "scalar",
+      "name": "class_path",
+      "hint": "Value of system property \"java.class.path\"."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Class name",
+      "name": "className",
+      "description": "Full exact name of Java class. It it is found in the current Java class path, \"is_existing_class\" output will contain true, in other case it will be false.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "java.lang.System"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Round numbers to nearest integer",
+  "id": "d17411fc-4a51-489f-95f6-7e3f9dabcf96",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.RoundNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    }
+  ]
+}

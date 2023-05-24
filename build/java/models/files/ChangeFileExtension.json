@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "files",
+  "name": "Change extension in a file name",
+  "id": "d31d3767-7df2-4fe1-b144-ff2101d76178",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.files.ChangeFileExtension"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "New extension",
+      "name": "extension",
+      "description": "This function assumes that the input scalar contains some file name, ending with some extension \".xxx\" (where xxx characters do not contain dots). It replaces this extension xxx with this new one, or simply removes an existing extension xxx if this parameter is empty. If the input string does not contain a dot \".\", this function just adds a new extension or does nothing if it is empty.\nNote: this function does not try to analyse file path. It supposes that an existing extension is just the ending substring after the last dot \".\". It can lead to strange (incorrect) results for such strings as \"/folder1/folder2.ext/my_file\" (a folder with extension, but a file without).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Preserve when empty",
+      "name": "preserveWhenEmpty",
+      "description": "If this flag is set and if the new extension, specified above, is empty, then this function changes behaviour: it just returns the source string without changes (does not try to remove an existing extension).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

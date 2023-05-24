@@ -1,0 +1,158 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Split channels",
+  "id": "264a8e7e-4a0a-43e2-8a8c-4642794bf1ed",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.SplitChannels"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_4"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_5"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_6"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_7"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_8"
+    },
+    {
+      "value_type": "mat",
+      "name": "output_9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_11",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_12",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_13",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_14",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_15",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "output_16",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output ports will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output_1"
+        },
+        {
+          "value": "output_2"
+        },
+        {
+          "value": "output_3"
+        },
+        {
+          "value": "output_4"
+        },
+        {
+          "value": "output_5"
+        },
+        {
+          "value": "output_6"
+        },
+        {
+          "value": "output_7"
+        },
+        {
+          "value": "output_8"
+        },
+        {
+          "value": "output_9"
+        },
+        {
+          "value": "output_10"
+        },
+        {
+          "value": "output_11"
+        },
+        {
+          "value": "output_12"
+        },
+        {
+          "value": "output_13"
+        },
+        {
+          "value": "output_14"
+        },
+        {
+          "value": "output_15"
+        },
+        {
+          "value": "output_16"
+        }
+      ],
+      "default": "output_1"
+    }
+  ]
+}

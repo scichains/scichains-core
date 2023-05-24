@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.creation",
+  "name": "Create double scalar",
+  "id": "1ef9205e-94d1-4c93-badc-ebbaa82a7365",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateDouble"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

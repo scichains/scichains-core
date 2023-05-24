@@ -1,0 +1,82 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create arithmetic progression",
+  "id": "14e5c1b3-6b54-45c3-bba1-eb6127bcca10",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateArithmeticProgression"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Number of blocks",
+      "name": "numberOfBlocks",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "Start value",
+      "name": "startValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Increment of value for each block",
+      "name": "increment",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

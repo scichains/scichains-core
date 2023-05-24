@@ -1,0 +1,81 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.misc",
+  "name": "Contrast",
+  "id": "79cc4e95-d38e-4e20-9bd8-b2a8490185b8",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.misc.Contrast"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "low limit",
+      "name": "lowLimit",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "high limit",
+      "name": "highLimit",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "interpretation of the low limit",
+      "name": "lowLimitInterpretation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_VALUE",
+          "caption": "value (0..1) between 0.0 (black) and maximal possible value (white)"
+        },
+        {
+          "value": "VALUE_BETWEEN_MIN_AND_MAX",
+          "caption": "value (0..1) between global minimum and global maximum at the image"
+        },
+        {
+          "value": "PERCENTILE_BETWEEN_MIN_AND_MAX",
+          "caption": "percentile (0..1) between global minimum and global maximum at the histogram of intensities"
+        }
+      ],
+      "default": "PERCENTILE_BETWEEN_MIN_AND_MAX"
+    },
+    {
+      "caption": "interpretation of the high limit",
+      "name": "highLimitInterpretation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_VALUE",
+          "caption": "value (0..1) between 0.0 (black) and maximal possible value (white)"
+        },
+        {
+          "value": "VALUE_BETWEEN_MIN_AND_MAX",
+          "caption": "value (0..1) between global minimum and global maximum at the image"
+        },
+        {
+          "value": "PERCENTILE_BETWEEN_MIN_AND_MAX",
+          "caption": "percentile (0..1) between global minimum and global maximum at the histogram of intensities"
+        }
+      ],
+      "default": "PERCENTILE_BETWEEN_MIN_AND_MAX"
+    }
+  ]
+}

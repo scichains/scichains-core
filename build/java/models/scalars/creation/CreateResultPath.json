@@ -1,0 +1,112 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.creation",
+  "name": "Create path to result file/folder",
+  "id": "b6f6970a-bf22-4f46-9fac-a3fa12c2c09a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreatePath",
+    "new_instance_method": "getInstanceForResult"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "[Optional] Input path. If specified, it is used instead of \"Path\" parameter."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the specified path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file/folder name."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Path",
+      "name": "path",
+      "description": "File/folder for the result data.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.jpg\" or \"images/test.jpg\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "What to do?",
+      "name": "operation",
+      "description": "What to do with the path.\nFor \"check xxx\" operations, this function throws exception if there is no existing file or folder (or if we needs a file, but it is a folder, and vice versa).\nFor \"create xxx\" operations, this function does nothing if the folder or file, requested to create, already exists.\nNote: 3 operations with parent folder (check existence, create parent, create all parents) do nothing if the specified path has no parents, i.e. if it is a root folder.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "do not anything"
+        },
+        {
+          "value": "CHECK_EXISTENCE",
+          "caption": "check, if the file or folder exists"
+        },
+        {
+          "value": "CHECK_FOLDER_EXISTENCE",
+          "caption": "check, if the path specifies existing folder"
+        },
+        {
+          "value": "CHECK_FILE_EXISTENCE",
+          "caption": "check, if the path specifies existing file"
+        },
+        {
+          "value": "CHECK_PARENT_EXISTENCE",
+          "caption": "check existence of parent folder of the specified path"
+        },
+        {
+          "value": "CREATE_FOLDER",
+          "caption": "create specified folder"
+        },
+        {
+          "value": "CREATE_FILE",
+          "caption": "create empty file at specified path"
+        },
+        {
+          "value": "CREATE_PARENT",
+          "caption": "create parent folder of specified file/folder"
+        },
+        {
+          "value": "CREATE_FOLDER_WITH_PARENTS",
+          "caption": "create folder with all parents"
+        },
+        {
+          "value": "CREATE_FILE_WITH_PARENTS",
+          "caption": "create empty file with all parents"
+        },
+        {
+          "value": "CREATE_PARENTS",
+          "caption": "create all parents of specified file/folder"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature, Java system properties and executor system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. Moreover, the path MUST be absolute; it will NOT be resolved relative any \"current\" folder. However, starting %TEMP%/ is allowed.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

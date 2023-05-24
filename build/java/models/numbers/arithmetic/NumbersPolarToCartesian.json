@@ -1,0 +1,131 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise polar r/φ → cartesian x/y",
+  "id": "579ea27e-68a3-4c58-b584-eb1b0a5be0d3",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersPolarToCartesian"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "r",
+      "hint": "Can be skipped, then r will be the first column of \"r/φ\"."
+    },
+    {
+      "value_type": "numbers",
+      "name": "fi",
+      "caption": "φ",
+      "hint": "Can be skipped, then φ will be the second column of \"r/φ\"."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "r/φ",
+      "name": "r_fi",
+      "hint": "2-column array with r/φ pairs. Used only if \"r\" and/or \"φ\" above is not initialized."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x",
+      "hint": "X-coordinate: r*cos(Lφ) (see parameter \"Angle multiplier L\")."
+    },
+    {
+      "value_type": "numbers",
+      "name": "y",
+      "hint": "Y-coordinate: r*sin(Lφ) (see parameter \"Angle multiplier L\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "x/y",
+      "name": "x_y",
+      "hint": "2-column array with pairs (x,y)."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Angle multiplier L",
+      "name": "angleMultiplier",
+      "description": "Actual angle ψ is L*φ, where φ is the value in the source array \"φ\" and L is this value. So, result cartesian coordinates are calculated as x=r*cos(Lφ), y=r*sin(Lφ).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "1.0 (φ is an angle in radians)"
+        },
+        {
+          "value": "MULTIPLIER_TO_RADIANS",
+          "caption": "π/180 (φ is an angle in degrees)"
+        },
+        {
+          "value": "MULTIPLIER_PI",
+          "caption": "π (−π..+π angles are represented as φ=-1..1 values)"
+        },
+        {
+          "value": "MULTIPLIER_2PI",
+          "caption": "2π (−π..+π angles are represented as φ=−½..+½ values)"
+        },
+        {
+          "value": "CUSTOM",
+          "caption": "Custom (see below)"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "name": "customAngleMultiplier",
+      "caption": "Custom angle multiplier L",
+      "description": "Value of multiplier L for a case, when \"Angle multiplier L\" is \"Custom\".",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "r column",
+      "description": "If the source \"r\" is multi-column, its column with this index will be used as r values.",
+      "name": "indexInBlockR",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "φ column",
+      "description": "If the source \"φ\" is multi-column, its column with this index will be used as φ values.",
+      "name": "indexInBlockFi",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "r/φ columns",
+      "description": "If the source \"r/φ\" is multi-column, its columns with this and following indexes will be used as r and φ values.",
+      "name": "indexInBlockR_fi",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "x"
+        },
+        {
+          "value": "y"
+        },
+        {
+          "value": "x_y",
+          "caption": "x/y"
+        }
+      ],
+      "default": "x_y"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.settings",
+  "name": "Get sub-settings",
+  "description": "Retrieves sub-JSON (sub-settings) from existing parent JSON (settings).<br>Though we suppose that this function will be used with settings JSONs, it can be applied to any correct JSON.",
+  "id": "22fe2ce7-c30b-47a7-a352-6b6573b8b10a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.settings.GetSubSettings"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "settings",
+      "hint": "If not specified, an empty JSON is supposed."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "sub-settings",
+      "hint": "Sub-section of the source (parent) settings, maybe with some entries of the parent (see \"Inheritance mode\")."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Sub-settings name",
+      "name": "subSettingsName",
+      "description": "Name of extracted sub-settings JSON is \"@\" + this name. For example, if you want to retrieve sub-JSON with name \"@xxxParameters\", please use the name \"xxxParameters\". (Note that usual parameters in the settings combiner cannot start with @ character.) If there is no sub-section with such a name, this function creates an empty JSON.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "subsettings"
+    },
+    {
+      "caption": "Sub-settings inheritance mode",
+      "name": "subSettingsInheritanceMode",
+      "description": "Allows to merge sub-settings with entries of the parent JSON.\n\"Returns parent with added new sub-settings\" takes all the parent JSON, adds entries of sub-settings, not existing in the parent, and returns the result.\n\"Override parent settings by sub-settings\" takes all the parent JSON, adds all entries of sub-settings with overriding parent ones and returns the result.\n\"Override sub-settings by parent\" takes all sub-settings JSON, finds its keys, existing also in the parent JSON, and replaces them by values from the parent. It is probably most useful mode: it allows to clarify sub-settings by parent values without adding extra entries.\nNote that in all modes we use only simple parent values and NOT include into result JSON objects and arrays, may be present in the parent.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "None: the requested JSON sub-section is returned as-is"
+        },
+        {
+          "value": "ADD_NEW_TO_PARENT",
+          "caption": "Returns parent with added new sub-settings"
+        },
+        {
+          "value": "OVERRIDE_PARENT",
+          "caption": "Override parent settings by sub-settings"
+        },
+        {
+          "value": "OVERRIDE_BY_EXISTING_IN_PARENT",
+          "caption": "Override sub-settings by parent"
+        }
+      ],
+      "default": "OVERRIDE_BY_EXISTING_IN_PARENT"
+    },
+    {
+      "caption": "Use \"@\" prefix",
+      "name": "useSubSettingsPrefix",
+      "description": "If set, sub-settings with name \"xxxParameters\" are represented by JSON object named \"@xxxParameters\", as described above. If cleared, this function does not add \"@\". It can be useful for processing usual JSON files (not settings).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

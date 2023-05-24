@@ -1,0 +1,40 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[parameters].scalars",
+  "name": "Scalar double parameter",
+  "options": {
+    "behavior": {
+      "data": true,
+      "data_type": "double"
+    }
+  },
+  "id": "b8cfcae4-26c7-4fd7-b1cf-dee514f83076",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateDouble"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external parameter",
+      "hint": "Chain constant or one of external parameters of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "description": "\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a sub-chain from other solutions.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

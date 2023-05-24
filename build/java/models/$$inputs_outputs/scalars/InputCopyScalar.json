@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/copy scalar",
+  "options": {
+    "behavior": {
+      "copy": true,
+      "input": true
+    }
+  },
+  "id": "2645f8a7-b91b-4172-a090-b637f08a21bd",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.copying.CopyScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

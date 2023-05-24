@@ -1,0 +1,250 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.strings",
+  "name": "Concatenate scalars",
+  "description": "Returns concatenation of several scalars, like in s1+\", \"+s2+... Java operator.",
+  "id": "ff94d525-7255-42ba-ba23-38d3a987f869",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.strings.ConcatenateScalars"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s11",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s12",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s13",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s14",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s15",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s16",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s17",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s18",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s19",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s20",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s21",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s22",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s23",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s24",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s25",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s26",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s27",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s28",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s29",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s30",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s31",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s32",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "separator",
+      "description": "Separator between concatenated strings. Note that substrings \\n and \\r are interpreted as corresponding special characters (line separators).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ", "
+    },
+    {
+      "caption": "s1 (default value)",
+      "name": "defaultS1",
+      "description": "Every parameter sK (default value) is instead of the input scalar sK, if the input sK is not specified (non-initialized), but the parameter sK contains non-empty string.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s2 (default value)",
+      "name": "defaultS2",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s3 (default value)",
+      "name": "defaultS3",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s4 (default value)",
+      "name": "defaultS4",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s5 (default value)",
+      "name": "defaultS5",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s6 (default value)",
+      "name": "defaultS6",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s7 (default value)",
+      "name": "defaultS7",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s8 (default value)",
+      "name": "defaultS8",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s9 (default value)",
+      "name": "defaultS9",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "s10 (default value)",
+      "name": "defaultS10",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Change number of channels",
+  "id": "f7cede12-52d8-4e7d-b93c-1d4a3edd4563",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.ChangeNumberOfChannels"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "New number of channels (0 to stay unchanged)",
+      "name": "numberOfChannels",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 3
+    }
+  ]
+}

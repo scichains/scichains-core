@@ -1,0 +1,111 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.scripting.js.arrays",
+  "name": "Formula for several multi-column arrays",
+  "id": "729da55c-6426-4342-8d1b-d28b68a44227",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.scripting.js.arrays.BlockFormulaForSeveralNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "a"
+    },
+    {
+      "value_type": "numbers",
+      "name": "b"
+    },
+    {
+      "value_type": "numbers",
+      "name": "c"
+    },
+    {
+      "value_type": "numbers",
+      "name": "d"
+    },
+    {
+      "value_type": "numbers",
+      "name": "e"
+    },
+    {
+      "value_type": "numbers",
+      "name": "f"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "formula",
+      "caption": "Formula",
+      "description": "This JavaScript formula is evaluated for each block of number arrays a, b, c, d, e, f. You can use the following variables: \"a\", \"b\", \"c\", \"d\", \"e\", \"f\" arrays (double[blockLength]); \"aInfo\", \"bInfo\", \"cInfo\", \"dInfo\", \"eInfo\", \"fInfo\" objects (see JSNumbersBlockInformation class); \"p\", \"q\", \"r\", \"s\", \"t\", \"u\" global parameters (specified below).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "a[0] + p * aInfo.i"
+    },
+    {
+      "caption": "Resulting element type",
+      "name": "resultElementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "INT",
+          "caption": "\"int[]\" type"
+        },
+        {
+          "value": "FLOAT",
+          "caption": "\"float[]\" type"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "\"double[]\" type"
+        }
+      ],
+      "default": "FLOAT"
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

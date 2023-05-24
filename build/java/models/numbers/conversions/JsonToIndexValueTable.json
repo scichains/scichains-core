@@ -1,0 +1,106 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Convert JSON index/value map to translation table",
+  "id": "4faa82b3-3e18-4dc7-bb5b-0abb5a4f9377",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.JsonToIndexValueTable"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json_table",
+      "hint": "JSON, consisting of pairs: \"INDEX\": VALUE or \"nn\": VALUE, where:\nINDEX is a symbolic name from \"json_index_names\";\n\"nn\" is some integer like  \"1\", \"2\", ...;\nVALUE is either a number (real or integer), or a symbolic namק from \"json_value_names\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "json_named_indexes",
+      "hint": "[Optional] JSON with a table of several numbers (INDEXes in the result), listed by their symbolic names.\nIt consists of pairs:\n\"KEY\": xxx\nwhere KEY is a symbolic name, xxx is an integer non-negative number, represented in keys of \"json_table\" under this name."
+    },
+    {
+      "value_type": "scalar",
+      "name": "json_named_values",
+      "hint": "[Optional] JSON with a table of several numbers (VALUEs in the result), listed by their symbolic names.\nIt consists of pairs:\n\"KEY\": xxx\nwhere KEY is a symbolic name, xxx is a number (real or integer), represented in values of \"json_table\" under this name."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "table",
+      "hint": "Numeric translation table INDEX → VALUE (integer INDEX, integer or real VALUE), equivalent to the source \"json_table\"."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Elements type of values",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "int"
+    },
+    {
+      "caption": "Minimal length of result table",
+      "name": "minimalTableLength",
+      "description": "The length of returned numeric array is maximum of this value and M+1−B, where M is the maximal index, occured in keys of \"json_table\", and B = \"Indexing base of result table\".",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Table filler",
+      "name": "tableFiller",
+      "description": "Result table elements, absent in \"json_table\", will have filled by this value. You can use here symbolic names from \"json_value_names\", if it is specified.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "Indexing base of result table",
+      "name": "indexingBase",
+      "description": "For every index K in the source \"json_table\", the corresponding value will be stored in the result table in table[K] or table[K−1], depending of this parameter.\nNote: indexes in \"json_table\" must not be less than this indexing base (0 or 1).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ZERO_BASED"
+    },
+    {
+      "caption": "Allow too low indexes",
+      "name": "allowTooLowIndexes",
+      "description": "If set, too low indexes in the source \"json_table\" (less than \"Indexing base\") are just ignored. If not (default state), such indexes lead to an exception.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

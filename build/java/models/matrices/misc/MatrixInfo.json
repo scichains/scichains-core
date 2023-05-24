@@ -1,0 +1,158 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.misc",
+  "name": "Matrix information",
+  "id": "3d60369f-c8d8-4c84-8e12-1f6ccea3053a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.misc.MatrixInfo"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "number_of_dimensions"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_y"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_z"
+    },
+    {
+      "value_type": "scalar",
+      "name": "element_type"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_possible"
+    },
+    {
+      "value_type": "scalar",
+      "name": "number_of_channels"
+    },
+    {
+      "value_type": "numbers",
+      "name": "mean"
+    },
+    {
+      "value_type": "numbers",
+      "name": "sum"
+    },
+    {
+      "value_type": "numbers",
+      "name": "min"
+    },
+    {
+      "value_type": "numbers",
+      "name": "max"
+    },
+    {
+      "value_type": "numbers",
+      "name": "min_position"
+    },
+    {
+      "value_type": "numbers",
+      "name": "max_position"
+    },
+    {
+      "value_type": "numbers",
+      "name": "range"
+    },
+    {
+      "value_type": "numbers",
+      "name": "non_zero_range"
+    },
+    {
+      "value_type": "numbers",
+      "name": "hash",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "description",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "rawValues",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "caption": "description (short summary)",
+          "value": "description"
+        },
+        {
+          "value": "number_of_dimensions"
+        },
+        {
+          "value": "dim_x"
+        },
+        {
+          "value": "dim_y"
+        },
+        {
+          "value": "dim_z"
+        },
+        {
+          "value": "element_type"
+        },
+        {
+          "value": "max_possible"
+        },
+        {
+          "value": "number_of_channels"
+        },
+        {
+          "value": "mean"
+        },
+        {
+          "value": "sum"
+        },
+        {
+          "value": "min"
+        },
+        {
+          "value": "max"
+        },
+        {
+          "value": "min_position"
+        },
+        {
+          "value": "max_position"
+        },
+        {
+          "value": "range"
+        },
+        {
+          "value": "non_zero_range"
+        },
+        {
+          "value": "hash"
+        }
+      ],
+      "default": "description"
+    }
+  ]
+}

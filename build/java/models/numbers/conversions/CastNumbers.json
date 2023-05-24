@@ -1,0 +1,52 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Cast precision of number array",
+  "id": "2b22bc17-d59d-43d0-a976-b2eb08bbd027",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.CastNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    }
+  ]
+}

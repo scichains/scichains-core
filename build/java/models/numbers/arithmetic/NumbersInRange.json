@@ -1,0 +1,134 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Numbers in range",
+  "description": "Returns TRUE value for every input number, that is in the specified range, or FALSE value for all other numbers.",
+  "id": "a4a32079-ea56-4a44-870c-10c18bd855d2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersInRange"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result elements type",
+      "name": "elementType",
+      "description": "Usually you may specify \"byte\" to save memory, if FALSE/TRUE values are 0/1 or other little integers in 0..255 range.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "name": "min",
+      "caption": "min value",
+      "hint": "Empty string means −∞",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "max",
+      "caption": "max value",
+      "hint": "Empty string means +∞",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "TRUE value in the result",
+      "name": "trueValue",
+      "description": "Input numbers inside the range are replaced with this value. Usually 1.0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "Add array index to TRUE value",
+      "name": "addTrueValueToIndex",
+      "description": "If set, the index in the array (0,1,...) is added to every TRUE value",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "FALSE value in the result",
+      "description": "Input numbers outside the range are replaced with this value. Usually 0.0",
+      "name": "falseValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Add array index to FALSE value",
+      "name": "addFalseValueToIndex",
+      "description": "If set, the index in the array (0,1,...) is added to every FALSE value",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "invert",
+      "caption": "Invert behaviour",
+      "description": "If set, the results described above are inverted: value for TRUE is used outside the range, value for FALSE is used inside",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "First processed column",
+      "description": "First processed index in every block, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in every block; if 0, all array is filled and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "replaceColumnRangeInInput",
+      "description": "Replace the specified columns and return the result; in other case, only processed columns will be returned",
+      "caption": "Fill the specified columns",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create number array from values",
+  "id": "a69fe1bc-7b70-4382-a58b-f19617ef8a28",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateNumbersFromValues"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "hint": "The block length in the result (ignored in \"Single block\" mode)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Single block",
+      "name": "singleBlock",
+      "hint": "If true, the block length will be equal to array length (single block in array)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Number of blocks",
+      "name": "numberOfBlocks",
+      "description": "Note that the total number of the elements (block length * number of blocks) should be ≤20. In other case, all further elements will be just filled with 0.0.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 10
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "double"
+    },
+    {
+      "caption": "Value of element #0",
+      "name": "v0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #1",
+      "name": "v1",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #2",
+      "name": "v2",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #3",
+      "name": "v3",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #4",
+      "name": "v4",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #5",
+      "name": "v5",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #6",
+      "name": "v6",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #7",
+      "name": "v7",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #8",
+      "name": "v8",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #9",
+      "name": "v9",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #10",
+      "name": "v10",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #11",
+      "name": "v11",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #12",
+      "name": "v12",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #13",
+      "name": "v13",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #14",
+      "name": "v14",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #15",
+      "name": "v15",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #16",
+      "name": "v16",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #17",
+      "name": "v17",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #18",
+      "name": "v18",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Value of element #19",
+      "name": "v19",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

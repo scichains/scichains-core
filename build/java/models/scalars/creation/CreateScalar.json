@@ -1,0 +1,34 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.creation",
+  "name": "Create scalar",
+  "id": "78106eb4-cdd2-4082-833c-47dc9b70e215",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "New scalar"
+    }
+  ]
+}

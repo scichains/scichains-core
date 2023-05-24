@@ -1,0 +1,78 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Merge color channels",
+  "description": "Merge specified channels into colored image (RGB)",
+  "id": "bdfe2943-4d75-4811-a31f-4e8fec73e212",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.MergeColorChannels"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "channel_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_4"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "channelsColorSpace",
+      "caption": "Channels color space",
+      "description": "Input color channels interpretation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RGBA"
+        },
+        {
+          "value": "HSV"
+        },
+        {
+          "value": "HLS"
+        }
+      ],
+      "default": "RGBA"
+    },
+    {
+      "name": "defaultFillerForChannel1",
+      "caption": "Default \"channel_1\" value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "defaultFillerForChannel2",
+      "caption": "Default \"channel_2\" value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "defaultFillerForChannel3",
+      "caption": "Default \"channel_3\" value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    }
+  ]
+}

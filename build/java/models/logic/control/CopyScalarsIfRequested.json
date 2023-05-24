@@ -1,0 +1,733 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "copy scalars if requested",
+  "id": "780b5cb7-a8bf-4926-99a9-1acba0993473",
+  "description": "For each input data checks, if the corresponding condition is fulfilled. If yes, this function copies it (if it exist) into the corresponding output. If not, the corresponding output stays to be non-initialized.<br>This function helps to request calculation of some subset of data, depending on several boolean flags, passed to the condition inputs.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CopyScalarsIfRequested"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s1",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s1",
+      "name": "s1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s2",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s2",
+      "name": "s2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s3",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s3",
+      "name": "s3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s4",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s4",
+      "name": "s4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s5",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s5",
+      "name": "s5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s6",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s6",
+      "name": "s6",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s7",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s7",
+      "name": "s7",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s8",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s8",
+      "name": "s8",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s9",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s9",
+      "name": "s9",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s10",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s10",
+      "name": "s10",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s11",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s11",
+      "name": "s11",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s12",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s12",
+      "name": "s12",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s13",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s13",
+      "name": "s13",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s14",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s14",
+      "name": "s14",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s15",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s15",
+      "name": "s15",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s16",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s16",
+      "name": "s16",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s17",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s17",
+      "name": "s17",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s18",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s18",
+      "name": "s18",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s19",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s19",
+      "name": "s19",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s20",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s20",
+      "name": "s20",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s21",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s21",
+      "name": "s21",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s22",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s22",
+      "name": "s22",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s23",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s23",
+      "name": "s23",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s24",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s24",
+      "name": "s24",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s25",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s25",
+      "name": "s25",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s26",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s26",
+      "name": "s26",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s27",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s27",
+      "name": "s27",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s28",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s28",
+      "name": "s28",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s29",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s29",
+      "name": "s29",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s30",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s30",
+      "name": "s30",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s31",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s31",
+      "name": "s31",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s32",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s32",
+      "name": "s32",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s11",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s12",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s13",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s14",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s15",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s16",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s17",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s18",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s19",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s20",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s21",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s22",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s23",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s24",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s25",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s26",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s27",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s28",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s29",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s30",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s31",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s32",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: execution is cancelled when \"xxx\" is false and continued (with a copy of input data) when \"xxx\" is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "s1"
+        },
+        {
+          "value": "s2"
+        },
+        {
+          "value": "s3"
+        },
+        {
+          "value": "s4"
+        },
+        {
+          "value": "s5"
+        },
+        {
+          "value": "s6"
+        },
+        {
+          "value": "s7"
+        },
+        {
+          "value": "s8"
+        },
+        {
+          "value": "s9"
+        },
+        {
+          "value": "s10"
+        },
+        {
+          "value": "s11"
+        },
+        {
+          "value": "s12"
+        },
+        {
+          "value": "s13"
+        },
+        {
+          "value": "s14"
+        },
+        {
+          "value": "s15"
+        },
+        {
+          "value": "s16"
+        },
+        {
+          "value": "s17"
+        },
+        {
+          "value": "s18"
+        },
+        {
+          "value": "s19"
+        },
+        {
+          "value": "s20"
+        },
+        {
+          "value": "s21"
+        },
+        {
+          "value": "s22"
+        },
+        {
+          "value": "s23"
+        },
+        {
+          "value": "s24"
+        },
+        {
+          "value": "s25"
+        },
+        {
+          "value": "s26"
+        },
+        {
+          "value": "s27"
+        },
+        {
+          "value": "s28"
+        },
+        {
+          "value": "s29"
+        },
+        {
+          "value": "s30"
+        },
+        {
+          "value": "s31"
+        },
+        {
+          "value": "s32"
+        }
+      ],
+      "default": "s1"
+    }
+  ]
+}

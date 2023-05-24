@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.copying",
+  "name": "Copy matrix",
+  "options": {
+    "behavior": {
+      "copy": true
+    }
+  },
+  "id": "e459a97e-4cc5-4ab7-a5c6-7cff91e20740",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.copying.CopyMatrix"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

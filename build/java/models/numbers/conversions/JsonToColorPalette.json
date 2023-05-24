@@ -1,0 +1,64 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Convert JSON palette with named indexes to numbers",
+  "id": "f5029c75-2943-4a47-80b6-f17ba06884fd",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.JsonToColorPalette"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json_palette",
+      "hint": "JSON, consisting of pairs: \"INDEX\": VALUE or \"nn\": VALUE, where:\nINDEX is a symbolic name from \"json_index_names\";\n\"nn\" is some integer like  \"1\", \"2\", ...;\nVALUE is a string, describing some color like #FFF00,\nor a simple number from 0.0 to 1.0, describing grayscale intensity.\nSupported color formats in a case of string is described in comments to \"Default color\" parameter."
+    },
+    {
+      "value_type": "scalar",
+      "name": "json_named_indexes",
+      "hint": "[Optional] JSON with a table of several numbers (INDEXes in the result), listed by their symbolic names.\nIt consists of pairs:\n\"KEY\": xxx\nwhere KEY is a symbolic name, xxx is an integer non-negative number, represented in keys of \"json_palette\" under this name."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "palette",
+      "hint": "Numeric multi-column table, equivalent to the source \"json_palette\"."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Number of result channels",
+      "name": "numberOfChannels",
+      "description": "Number of columns in the result array. Usually should be 1 (grayscale palette), 3 (RGB-palette) or 4 (RGBA-palette).",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 3
+    },
+    {
+      "name": "defaultColor",
+      "caption": "Default color",
+      "description": "Default color, used for indexes, which are absent in JSON palette, for example, when indexing base is 0, but the minimal index in JSON is 10.\nSupported color formats:\n    #FF0000 — HTML standard RRGGBBB without alpha (red color)\n    #FF000080 — HTML standard RRGGBBBAA with alpha (red color with alpha 0.5)\n    0xFF0000 — hexadecimal RRGGBBB, alpha not allowed (red color)\n    (1.0, 0.0, 0.0, 0.5) — all channels (normalized to 0.0..1.0), alpha allowed (red color with alpha 0.5)\n    [255, 173, 0] — raw (non-normalized) values for each channels, alpha allowed\n    0.5 — grayscale (normalized to 0.0..1.0)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "#000000"
+    },
+    {
+      "caption": "Default value for extra channels",
+      "name": "defaultValueForExtraChannels",
+      "description": "Color format above allows to specify only 1, 3 or 4 channels (including alpha-channel). If you specify number of channels >4, all other channels in the result will be filled by this value.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Indexing base of result palette",
+      "name": "indexingBase",
+      "description": "For every index K in the source \"json_table\", the corresponding value will be stored in the result array in the block (row) #K−B, where B = this parameter.\nNote: indexes in \"json_table\" must not be less than this indexing base.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

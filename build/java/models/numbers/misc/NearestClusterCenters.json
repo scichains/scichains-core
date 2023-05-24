@@ -1,0 +1,104 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Nearest centers of clusters",
+  "id": "807c49cd-bc93-4c6c-a591-996826d040ad",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.NearestClusterCenters"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "values",
+      "hint": "Set of M-dimensional points (block length = M)"
+    },
+    {
+      "value_type": "numbers",
+      "name": "centers",
+      "hint": "Set of M-dimensional centers of clusters"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "indexes",
+      "hint": "Indexes of centers, nearest to every point"
+    },
+    {
+      "value_type": "numbers",
+      "name": "distances",
+      "hint": "Distances to of centers, nearest to every point"
+    }
+  ],
+  "controls": [
+    {
+      "name": "distanceMetric",
+      "caption": "Metric of the distance between points",
+      "descriptions": "Method of calculating result distance between two M-dimensional points (a₁,a₂,...,aₘ) and (b₁,b₂,...,bₘ).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "EUCLIDEAN",
+          "caption": "Euclidean: sqrt((a₁-b₁)²+(a₂-b₂)²+...)"
+        },
+        {
+          "value": "NORMALIZED_EUCLIDEAN",
+          "caption": "Normalized Euclidean: sqrt(((a₁-b₁)²+(a₂-b₂)²+...)/M)"
+        },
+        {
+          "value": "SUM_OF_SQUARES",
+          "caption": "Sum of squares: (a₁-b₁)²+(a₂-b₂)²+..."
+        },
+        {
+          "value": "MEAN_ABSOLUTE_DIFFERENCE",
+          "caption": "Mean absolute difference: (|a₁-b₁|+|a₂-b₂|+...)/M"
+        },
+        {
+          "value": "SUM_OF_ABSOLUTE_DIFFERENCES",
+          "caption": "Sum of absolute differences: |a₁-b₁|+|a₂-b₂|+..."
+        },
+        {
+          "value": "MAX_ABSOLUTE_DIFFERENCE",
+          "caption": "Max absolute difference: max(|a₁-b₁|,|a₂-b₂|,...)"
+        }
+      ],
+      "default": "NORMALIZED_EUCLIDEAN"
+    },
+    {
+      "name": "valuesWeights",
+      "caption": "Coordinate weights",
+      "description": "Several weights w1,w2,..., separated by comma/spaces. When calculating distance between two points, specified by two number arrays (a1,a2,...,aM) and (b1,b2,...,bM), every value aK and bK is multiplied by weight wK before all calculations. For example, for Euclidean distance, we actually calculate sqrt((a1*w1-b1*w1)² + (a2*w2-b2*w2)² + ...). If weights are not specified (this string is empty, or number of weights is less than number of columns in \"objects_values\" array), all skipped weights are considered to be 1.0.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "maxDistance",
+      "caption": "Maximal distance",
+      "description": "If maximal distance is set (some number, not an empty string), and the distance between the given point and all centers is greater than this limit, such a point will be rejected: resulting index will be -1",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Indexing base",
+      "name": "indexingBase",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ONE_BASED"
+    }
+  ]
+}

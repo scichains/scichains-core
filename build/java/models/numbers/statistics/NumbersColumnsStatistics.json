@@ -1,0 +1,187 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.statistics",
+  "name": "Statistics on columns of numbers array",
+  "id": "0097e96d-b5af-49e6-a64c-b4ec61a1971e",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.statistics.NumbersColumnsStatistics"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "histogram"
+    },
+    {
+      "value_type": "numbers",
+      "name": "mean"
+    },
+    {
+      "value_type": "numbers",
+      "name": "sum",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "variance",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "standard_deviation"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentiles"
+    },
+    {
+      "value_type": "numbers",
+      "caption": "percentile_1−percentile_0",
+      "name": "two_percentiles_difference"
+    },
+    {
+      "value_type": "scalar",
+      "name": "number_of_blocks"
+    },
+    {
+      "value_type": "scalar",
+      "name": "block_length"
+    },
+    {
+      "value_type": "scalar",
+      "name": "array_length",
+      "hint": "Array length = number_of_blocks * block_length",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "numberOfHistogramColumns",
+      "caption": "Number of columns in the histogram",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "histogramFrom",
+      "caption": "Histogram \"from\" value",
+      "description": "For example, 0 for histogram of numbers in range 0..255.\nIf not set (an empty string), minimum in the source array is used instead.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "histogramTo",
+      "caption": "Histogram \"to\" value",
+      "description": "For example, 256 for histogram of numbers in range 0..255.\nIf not set (an empty string), maximum in the source array (little increased) is used instead.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "percentileLevels",
+      "caption": "Percentile levels",
+      "description": "Several percentile levels, separated by comma/spaces: 0.0 means minumum, 1.0 means maximum, 0.5 means median etc.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0.0, 1.0, 0.5"
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "histogram"
+        },
+        {
+          "value": "mean"
+        },
+        {
+          "value": "sum"
+        },
+        {
+          "value": "variance"
+        },
+        {
+          "value": "standard_deviation"
+        },
+        {
+          "value": "percentile_1"
+        },
+        {
+          "value": "percentile_2"
+        },
+        {
+          "value": "percentile_3"
+        },
+        {
+          "value": "percentile_4"
+        },
+        {
+          "value": "percentile_5"
+        },
+        {
+          "value": "percentiles"
+        },
+        {
+          "caption": "percentile_1−percentile_0",
+          "value": "two_percentiles_difference"
+        },
+        {
+          "value": "array_length"
+        },
+        {
+          "value": "hash"
+        }
+      ],
+      "default": "mean"
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "First analysed column",
+      "description": "First analysed index in every block, 0..blockLength−1.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of analysed columns",
+      "description": "Length of analysed part in every block; if 0, all array is analysed and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

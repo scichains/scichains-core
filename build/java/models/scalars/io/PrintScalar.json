@@ -1,0 +1,93 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.io",
+  "name": "Print scalar",
+  "id": "c1922bec-4963-4c93-9228-17532f293d7a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.io.PrintScalar"
+  },
+  "in_ports":  [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] When specified, this data is just copied to \"s\" output before all other operations.\nCan be convenient if you need to \"build\" this operation into some chain of other functions for debugging/logging needs.\nOther inputs \"x\", \"m\" are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "String, that has been printed"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] Copy of \"s\" input, when it is specified: see comments to \"s\" input.\nOther outputs \"x\", \"m\" are also copies of the corresponding inputs."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Pattern",
+      "name": "pattern",
+      "description": "This function actually prints and returns this pattern, where $$$ substring is replaced with the input scalar. It is $$$ by default, that means simple printing the scalar. But you can use more complex patterns, like the following:\nThe scalar = \"$$$\"!\nIf the input scalar is not initialized, $$$ is replaced with special message, that there is no scalar.\nNote that substrings \\n and \\r, appeared in this pattern (before replacing $$$), are replaced with the corresponding special characters (line separators).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "$$$"
+    },
+    {
+      "name": "logLevel",
+      "caption": "Logging level",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "TRACE"
+        },
+        {
+          "value": "DEBUG"
+        },
+        {
+          "value": "INFO"
+        },
+        {
+          "value": "PRINTLN_TO_CONSOLE",
+          "caption": "System.out.println"
+        },
+        {
+          "value": "PRINT_TO_CONSOLE",
+          "caption": "System.out.print (from start of the string)"
+        }
+      ],
+      "default": "DEBUG"
+    },
+    {
+      "caption": "File to save result (if non-empty)",
+      "name": "file",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    }
+  ]
+}

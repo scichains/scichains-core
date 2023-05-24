@@ -1,0 +1,82 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].numbers",
+  "name": "Input/create arithmetic progression",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "id": "5dcfb4e9-6f43-45cb-af7d-68925aee176a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateArithmeticProgression"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "name": "numberOfBlocks",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "name": "startValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "increment",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

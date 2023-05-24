@@ -1,0 +1,114 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Difference (elementwise)",
+  "id": "5751611d-7bbc-431e-9440-5e69c71c05f3",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixDifference"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Operation",
+      "name": "operation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_DIFFERENCE",
+          "caption": "absolute difference |x−y|"
+        },
+        {
+          "value": "POSITIVE_DIFFERENCE",
+          "caption": "positive difference max(x−y,0)"
+        },
+        {
+          "value": "SUBTRACT",
+          "caption": "subtraction x−y"
+        },
+        {
+          "value": "REVERSE_SUBTRACT",
+          "caption": "subtraction y−x"
+        },
+        {
+          "value": "RGB_DISTANCE",
+          "caption": "distance in RGB space (grayscale): sqrt((xR-yR)²+(xG-yG)²+(xB-yB)²)"
+        }
+      ],
+      "default": "ABSOLUTE_DIFFERENCE"
+    },
+    {
+      "caption": "Multiplier",
+      "description": "Multiplier: if ≠1.0, the difference above is multiplied by this number (with saturation: byte values >255 are replaced with 255)",
+      "name": "multiplier",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "Postprocessing",
+      "name": "postprocessing",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "none"
+        },
+        {
+          "value": "CONTRAST",
+          "caption": "simply contrast the result"
+        },
+        {
+          "value": "NONZERO_PIXELS",
+          "caption": "return non-zero pixels of the result (binary matrix)"
+        },
+        {
+          "value": "ZERO_PIXELS",
+          "caption": "return zero pixels of the result (binary matrix)"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Dilation size",
+      "description": "If dilation size > 0, the result will be automatically dilated by circle with this diameter (to emphasize possible very little areas).",
+      "name": "dilationSize",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Change precision to float, if elements are not float/double",
+      "name": "floatResult",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, both input ports must contain some initialized matrices; in other case, this function will throw an exception. If this flag is cleared and one of input ports is empty, this function will do nothing and output port will stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

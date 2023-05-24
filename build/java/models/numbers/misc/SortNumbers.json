@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Sort number array",
+  "id": "9c19b7e9-057b-4dec-ad1a-0fc1e7b4dfb2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.SortNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "numbers",
+      "name": "sorted_indexes"
+    },
+    {
+      "value_type": "numbers",
+      "name": "reverse_indexes"
+    }
+  ],
+  "controls": [
+    {
+      "name": "sortedIndexInBlock",
+      "caption": "Sorted index in block",
+      "description": "Index of column: all blocks are sorted by order of value in this column.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "descending",
+      "caption": "Sort by descending",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Indexing base",
+      "name": "indexingBase",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ONE_BASED"
+    }
+  ]
+}

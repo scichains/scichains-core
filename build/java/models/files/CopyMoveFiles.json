@@ -1,0 +1,84 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "files",
+  "name": "Copy/move files",
+  "id": "08928fb7-6fb2-4cf2-86b0-7374fcb8de89",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.files.CopyMoveFiles"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file/folder",
+      "hint": "[Optional] String path to the file or folder.  If specified, it is used instead of \"Source path\" parameter (with all replacements performed in that parameter)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "target_absolute_path",
+      "caption": "target absolute path",
+      "hint": "Actual full absolute path to the target file/folder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "source absolute path",
+      "hint": "Actual full absolute path to the source file/folder"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Do action",
+      "name": "doAction",
+      "description": "If cleared, this function does nothing. You may use this flag if you need to copy/move files not always, but, for example, only in the first or last iteration of some loop.\nNote: the output ports are filled always, regardless on this flag.\nBy default, this flag is set.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "What do to?",
+      "name": "action",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "COPY",
+          "caption": "Copy"
+        },
+        {
+          "value": "MOVE",
+          "caption": "Move"
+        }
+      ],
+      "default": "COPY"
+    },
+    {
+      "caption": "Source path (file/folder)",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Target path (file/folder)",
+      "name": "target",
+      "description": "If the source path is a regular file, copies or moves it to the target file with the name, specified here. For example, if the source file is \"aaa.dat\", the target is \"bbb.dat\" and \"What do to?\" is \"Move\", this function renames \"aaa.dat\" to \"bbb.dat\" in the current directory.\nIf the source path is a folder, copies or moves all files from the source folder, matching the \"Globbing pattern\", to the target folder, without changing their names. Note: in this case, target path MUST specify a folder.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Globbing pattern",
+      "description": "This function copies all files, matching the specified pattern: see \"getPathMatcher\" Java method. This pattern is used only if the source and target paths actually specify folders; it is not used in the case of a regular file.\nNote: this function works only with files and never copies/moves subfolders.",
+      "name": "globPattern",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "*.{dat,tmp}"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Extract layer (with decreasing number of dimensions)",
+  "id": "f24cbd05-397b-4d90-8a19-dccb6a4316a5",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.ExtractLayerWithDecreasingNumberOfDimensions"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "lastCoordinate",
+      "caption": "Last coordinate T",
+      "description": "For N-dimensional source, the result will be (N−1)-dimensional layer of the source, where all last coordinates #(N−1) have the given value T. For example, if N=3 (3D matrix), T specifies the z-coordinate of 2-dimensional layer.\nT value can be negative; in this case, it is added to the last dimension of the matrix. For example, T=−1 means extracting the last (rear) layer of 3D-matrix or the last (bottom) row of 2D-matrix.\nNote: if N=1, the source (1-dimensional array) is returned without changes.",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

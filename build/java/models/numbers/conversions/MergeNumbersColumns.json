@@ -1,0 +1,456 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Merge column(s) of several number arrays",
+  "id": "8b5068ea-fc89-4098-a030-7f02085ed7c7",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.MergeNumbersColumns"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_11",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_12",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_13",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_14",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_15",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_16",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_17",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_18",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_19",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_20",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_21",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_22",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_23",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_24",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_25",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_26",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_27",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_28",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_29",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_30",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_31",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_32",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, at least 1 input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, all input ports may be empty: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Resulting element type",
+      "name": "resultElementType",
+      "description": "\"Common type of all inputs\" variant requires that all input ports must have identical element type.\n\"Type of the 1st input\" leads to automatic cast of all inputs to the element types of 1st initialized input port.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "REQUIRE_IDENTICAL",
+          "caption": "Common type of all inputs"
+        },
+        {
+          "value": "FIRST_INPUT",
+          "caption": "Type of the 1st input"
+        },
+        {
+          "value": "INT",
+          "caption": "\"int\" type"
+        },
+        {
+          "value": "FLOAT",
+          "caption": "\"float\" type"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "\"double\" type"
+        }
+      ],
+      "default": "FIRST_INPUT"
+    },
+    {
+      "name": "numberOfEmptyColumns1",
+      "caption": "Number of columns if no input_1",
+      "description": "If input_1 port is empty (not initialized or not connected), this function inserts this number of \"empty\" columns instead of it. \"Empty\" column means a column, filled by NaN for float/double element types or by 0 for integer types. By default, this value is 0, i.e. this input is just ignored. The further parameters \"Number of columns if no input_X\" have the same sense.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns2",
+      "caption": "Number of columns if no input_2",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns3",
+      "caption": "Number of columns if no input_3",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns4",
+      "caption": "Number of columns if no input_4",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns5",
+      "caption": "Number of columns if no input_5",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns6",
+      "caption": "Number of columns if no input_6",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns7",
+      "caption": "Number of columns if no input_7",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns8",
+      "caption": "Number of columns if no input_8",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns9",
+      "caption": "Number of columns if no input_9",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns10",
+      "caption": "Number of columns if no input_10",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfEmptyColumns11",
+      "caption": "Number of columns if no input_11",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns12",
+      "caption": "Number of columns if no input_12",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns13",
+      "caption": "Number of columns if no input_13",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns14",
+      "caption": "Number of columns if no input_14",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns15",
+      "caption": "Number of columns if no input_15",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns16",
+      "caption": "Number of columns if no input_16",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns17",
+      "caption": "Number of columns if no input_17",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns18",
+      "caption": "Number of columns if no input_18",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns19",
+      "caption": "Number of columns if no input_19",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns20",
+      "caption": "Number of columns if no input_20",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns21",
+      "caption": "Number of columns if no input_21",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns22",
+      "caption": "Number of columns if no input_22",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns23",
+      "caption": "Number of columns if no input_23",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns24",
+      "caption": "Number of columns if no input_24",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns25",
+      "caption": "Number of columns if no input_25",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns26",
+      "caption": "Number of columns if no input_26",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns27",
+      "caption": "Number of columns if no input_27",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns28",
+      "caption": "Number of columns if no input_28",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns29",
+      "caption": "Number of columns if no input_29",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns30",
+      "caption": "Number of columns if no input_30",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns31",
+      "caption": "Number of columns if no input_31",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    },
+    {
+      "name": "numberOfEmptyColumns32",
+      "caption": "Number of columns if no input_32",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "advanced": true
+    }
+  ]
+}

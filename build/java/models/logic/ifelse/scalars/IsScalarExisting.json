@@ -1,0 +1,49 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.scalars",
+  "name": "Is scalar existing/non-empty?",
+  "id": "eab15f73-cb65-40aa-8af6-f1ca8f81f725",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.scalars.IsScalarExisting"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "When not initialized",
+      "name": "whenNonInitialized",
+      "description": "This value is returned when the input scalar is not existing (not initialized)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "false"
+    },
+    {
+      "caption": "When initialized",
+      "name": "whenInitialized",
+      "description": "This value is returned when the input scalar is existing (contains some data)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "true"
+    },
+    {
+      "caption": "Require non-empty",
+      "name": "requireNonEmpty",
+      "description": "If set, an empty scalar (with zero length or containing only white space characters) is considered not existing: this function will return \"When not initialized\". Here \"containing only white space characters\" means condition s.trim().isEmpty(), where s is Java String object with the input scalar.\nIf cleared, the input string is not checked: this function only checks if the input is initialized.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

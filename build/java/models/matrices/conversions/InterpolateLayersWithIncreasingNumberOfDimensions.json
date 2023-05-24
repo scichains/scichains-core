@@ -1,0 +1,39 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Interpolate 2 layers (with increasing number of dimensions)",
+  "id": "1dec0896-9d81-4bfc-af25-f463c0cc5f8f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.InterpolateLayersWithIncreasingNumberOfDimensions"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "front",
+      "hint": "Front matrix"
+    },
+    {
+      "value_type": "mat",
+      "name": "rear",
+      "hint": "[Optional] Rear matrix. If omitted, the front matrix is used instead."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "New dimension",
+      "description": "Added dimension of the matrix (3rd if the sources are 2-dimensional, 4th if 3-dimensional etc.). Default value 2 means creating MxNx2 matrix (in 2-dimensional case), containing copies of front and rear matrices without interpolation.",
+      "name": "newDimension",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 2
+    }
+  ]
+}

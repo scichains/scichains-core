@@ -1,0 +1,143 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Set/align length of number array(s)",
+  "description": "Sets the number of blocks in all input arrays to the same value and returns them. New number of blocks will be equal to maximal number of blocks in all source arrays, maybe, corrected by the parameters below.",
+  "id": "fa48130b-6685-46e9-92f2-a0d05e8bb14d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.SetArrayLength"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_10"
+    }
+  ],
+  "controls": [
+    {
+      "name": "minNumberOfBlocks",
+      "caption": "Minimal number of blocks",
+      "description": "If specified, the number of blocks of all arrays will be ≥this value",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "maxNumberOfBlocks",
+      "caption": "Maximal number of blocks",
+      "description": "If specified, the number of blocks of all arrays, longer than this value, will be reduced to this limit. It the last operation: its priority is higher than the check of minimal number of blocks.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "fillingMode",
+      "caption": "How to fill extra elements?",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZEROS",
+          "caption": "by zeros (0)"
+        },
+        {
+          "value": "NAN",
+          "caption": "by NaN (for float/double)"
+        },
+        {
+          "value": "CUSTOM",
+          "caption": "by custom value below"
+        }
+      ],
+      "default": "NAN"
+    },
+    {
+      "name": "filler",
+      "caption": "Custom filler",
+      "description": "Used to fill extra elements in the last filling mode (\"by custom value below\").",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

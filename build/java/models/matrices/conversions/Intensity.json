@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Intensity",
+  "id": "ee38f9b2-3400-494e-8727-19a2cf0bbae9",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.Intensity"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "RGB result",
+      "description": "If cleared, the result will be 1-channel grayscale matrix, corresponding to visual intensity (brightness) of the source one.\nIf set, the result will be RGB matrix with identical R,G,B components, equal to the result of this function without this flag. Such an image is 3-channel, but looks actually gray.\n",
+      "name": "rgbResult",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

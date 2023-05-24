@@ -1,0 +1,84 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>assembly</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <includes>
+                <include>org.graalvm.js:js</include>
+                <include>org.graalvm.js:js-scriptengine</include>
+            </includes>
+            <outputDirectory>/_global_system_files/lib/common/graalvm</outputDirectory>
+        </dependencySet>
+
+        <dependencySet>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <includes>
+                <include>black.ninia:jep*</include>
+            </includes>
+            <outputDirectory>/_global_system_files/lib/common/jep</outputDirectory>
+        </dependencySet>
+
+        <dependencySet>
+            <includes>
+                <include>net.algart.executors:executors-core*</include>
+                <!-- but Maven does not include tests here -->
+                <include>net.algart:algart*</include>
+                <include>jakarta.json:jakarta.json-api*</include>
+                <include>org.eclipse.parsson:*</include>
+            </includes>
+            <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}
+            </outputFileNameMapping>
+            <outputDirectory>./_global_system_files/lib/common</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <files>
+        <file>
+            <source>${project.basedir}/target/${artifact.artifactId}-${artifact.baseVersion}-tests.jar</source>
+            <!-- add "...-tests.jar" manually, also into system (maybe not too necessary, but more simple) -->
+            <outputDirectory>./_global_system_files/lib/common</outputDirectory>
+        </file>
+        <file>
+            <source>${project.build.directory}/classes/extension.json</source>
+            <!-- appeared here with filtering by resource/includes section in the main pom.xml -->
+            <outputDirectory>./</outputDirectory>
+        </file>
+        <file>
+            <source>${project.basedir}/build/.public</source>
+            <!-- marker for building public distributive -->
+            <outputDirectory>./</outputDirectory>
+        </file>
+    </files>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/classes/_global_system_files/conf</directory>
+            <outputDirectory>./_global_system_files/conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/build/java</directory>
+            <outputDirectory>./java</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/build/python</directory>
+            <outputDirectory>./python</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/build/js</directory>
+            <outputDirectory>./js</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/build/settings</directory>
+            <outputDirectory>./settings</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/build/chain</directory>
+            <outputDirectory>./chain</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

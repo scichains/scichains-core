@@ -1,0 +1,80 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create integer rectangle",
+  "id": "42ce7ce1-9f53-447c-abff-4ef87af82d70",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateIntegerRectangle"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output",
+      "hint": "Rectangle (4 integer 64-bit numbers)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "size_x",
+      "hint": "X-size of created rectangle (see also \"sizeX\" parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "size_y",
+      "hint": "Y-size of created rectangle (see also \"sizeY\" parameter)."
+    }
+  ],
+  "controls": [
+    {
+      "name": "minX",
+      "description": "If not specified, it will be equal to default value −2^62+1, which can play a role of negative infinity in most cases.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "maxX",
+      "description": "If not specified, it will be equal to default value 2^62−1, which can play a role of positive infinity in most cases.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "sizeX",
+      "description": "If specified, the previous parameter is ignored; maxX will be equal to minX+sizeX−1.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "minY",
+      "description": "If not specified, it will be equal to default value −2^62+1, which can play a role of negative infinity in most cases.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "maxY",
+      "description": "If not specified, it will be equal to default value 2^62−1, which can play a role of positive infinity in most cases.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "sizeY",
+      "description": "If specified, the previous parameter is ignored; maxY will be equal to minY+sizeY−1.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

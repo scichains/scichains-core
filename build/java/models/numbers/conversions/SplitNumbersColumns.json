@@ -1,0 +1,284 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Split columns to several number arrays",
+  "id": "b1717f0f-d903-45ba-af27-c43a12757cdf",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.SplitNumbersColumns"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_10"
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_11",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_12",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_13",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_14",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_15",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_16",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_17",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_18",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_19",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_20",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_21",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_22",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_23",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_24",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_25",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_26",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_27",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_28",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_29",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_30",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_31",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "output_32",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output ports will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output_1"
+        },
+        {
+          "value": "output_2"
+        },
+        {
+          "value": "output_3"
+        },
+        {
+          "value": "output_4"
+        },
+        {
+          "value": "output_5"
+        },
+        {
+          "value": "output_6"
+        },
+        {
+          "value": "output_7"
+        },
+        {
+          "value": "output_8"
+        },
+        {
+          "value": "output_9"
+        },
+        {
+          "value": "output_10"
+        },
+        {
+          "value": "output_11"
+        },
+        {
+          "value": "output_12"
+        },
+        {
+          "value": "output_13"
+        },
+        {
+          "value": "output_14"
+        },
+        {
+          "value": "output_15"
+        },
+        {
+          "value": "output_16"
+        },
+        {
+          "value": "output_17"
+        },
+        {
+          "value": "output_18"
+        },
+        {
+          "value": "output_19"
+        },
+        {
+          "value": "output_20"
+        },
+        {
+          "value": "output_21"
+        },
+        {
+          "value": "output_22"
+        },
+        {
+          "value": "output_23"
+        },
+        {
+          "value": "output_24"
+        },
+        {
+          "value": "output_25"
+        },
+        {
+          "value": "output_26"
+        },
+        {
+          "value": "output_27"
+        },
+        {
+          "value": "output_28"
+        },
+        {
+          "value": "output_29"
+        },
+        {
+          "value": "output_30"
+        },
+        {
+          "value": "output_31"
+        },
+        {
+          "value": "output_32"
+        }
+      ],
+      "default": "output_1"
+    }
+  ]
+}

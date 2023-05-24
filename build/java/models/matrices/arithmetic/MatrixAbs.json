@@ -1,0 +1,32 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Absolute value (elementwise)",
+  "id": "573dfe4d-3966-4aaf-a8db-732e7c48a33d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixAbs"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "contrastResult",
+      "caption": "automatically contrast returned image",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

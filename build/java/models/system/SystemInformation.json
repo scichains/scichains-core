@@ -1,0 +1,20 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "System information",
+  "id": "a8b677d0-0c0a-47c6-bed2-7cf5dc7423ef",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.SystemInformation"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

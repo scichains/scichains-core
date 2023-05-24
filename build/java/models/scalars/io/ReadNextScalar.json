@@ -1,0 +1,131 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.io",
+  "name": "Read next scalar from folder",
+  "id": "1de94793-fd7b-474f-bcb7-6e204993c8d6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.io.ReadNextScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition",
+      "hint": "[Optional] Modification for input file name."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_index"
+    },
+    {
+      "value_type": "scalar",
+      "name": "number_of_files"
+    },
+    {
+      "value_type": "scalar",
+      "name": "list_of_files"
+    },
+    {
+      "value_type": "scalar",
+      "hint": "Flag true/false: it will be true while reading the last file from the folder.\nCurrent file index is reset to 0 in this case.",
+      "name": "last"
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Folder",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.txt\" or \"samples/test.txt\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.txt, %TEMP%/my_file.txt or (in Windows) %TEMP%\\my_file.txt.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Globbing pattern",
+      "description": "See \"getPathMatcher\" Java method.\nExample: \"*.{dat,txt}\".",
+      "name": "globPattern",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "*.{txt}"
+    },
+    {
+      "caption": "Recursive scanning",
+      "name": "recursiveScanning",
+      "description": "If set, the folder specified above is scanned recursively. If cleared, subfolders of the specified folder are not scanned.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Requires existing file",
+      "name": "fileExistenceRequired",
+      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in other case, this function will throw an exception.\nIf this flag is cleared and there are not files to read, this function returns non-initialized result.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

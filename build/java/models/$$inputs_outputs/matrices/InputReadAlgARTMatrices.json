@@ -1,0 +1,71 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].matrices",
+  "name": "Input/read AlgART multi-matrix",
+  "id": "eae69bd3-0b41-4026-abd7-c15e4fc2fded",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.io.ReadAlgARTMatrices",
+    "new_instance_method": "getSecureInstance"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this image (other arguments are ignored)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "subfolder",
+      "hint": "[Optional] String path to the folder.  If specified, it is used instead of \"Subfolder\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition",
+      "hint": "[Optional] Modification for input subfolder name."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the subfolder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the subfolder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual subfolder name"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Subfolder",
+      "name": "file",
+      "description": "Subfolder (not file!) containing AlgART multi-matrix.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"images/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": ""
+    }
+  ]
+}

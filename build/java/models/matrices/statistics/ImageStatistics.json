@@ -1,0 +1,129 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.statistics",
+  "name": "Global image statistics",
+  "id": "b02ec253-aa60-4de2-ada9-991df9dffbee",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.statistics.ImageStatistics"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "mat",
+      "name": "mask",
+      "hint": "Statistics is calculated only for non-zero pixels of this mask"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "mean"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_1",
+      "caption": "1st percentile"
+    },
+    {
+      "value_type": "numbers",
+      "name": "percentile_2",
+      "caption": "2nd percentile"
+    },
+    {
+      "value_type": "numbers",
+      "name": "mean_between_percentiles",
+      "caption": "mean between 2 percentiles"
+    },
+    {
+      "value_type": "numbers",
+      "name": "number_of_checked_pixels",
+      "caption": "number of checked pixels",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "histogram",
+      "hint": "Each column contains full histogram, calculated by the corresponding channel (2 elements for bits, 256 for bytes, 256 or 65536 for other types).",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "percentile1",
+      "caption": "Low (1st) percentile level (0..1)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.1
+    },
+    {
+      "name": "percentile2",
+      "caption": "High (2nd) percentile level (0..1)",
+      "hint": "If not set (an empty string), it is replaced with 1 − (low percentile level)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "centeredHistogram",
+      "caption": "Centered histogram",
+      "description": "Centered histogram: we suppose that actual values are distributed around the center of every columns. For example, for byte raw values from 0 to 255 we will return percentiles from −0.5 to 255.5. (Without this flag, percentiles will be from 0.0 to 256.0.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "rawValues",
+      "caption": "Raw values",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "histogramMode",
+      "caption": "How to calculate histogram?",
+      "description": "Usually range-based algorithm provides better precision, but less performance.\nIn uniform mode, this function calculates all results on the base of 256-bar histogram from 0 (inclusive) to MAX (exclusive), where MAX = 1 for bit, float and double elements, 256 for bytes, 2^16 for shorts, 2^31 for ints and 2^47 for longs. All negative elements are counted in the fist (left) bar, all elements >= MAX in the last (right) bar. This mode leads to more stable results, if the source matrix is a usual image (0 means black, MAX means white). But results will be senseless, for example, for 32-bit matrix containing numbers from 1 to 1000, or for floating-point matrix containing numbers not in 0..1 range; range-based algorithm works normally in such cases.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RANGE_BASED",
+          "caption": "range-based histogram"
+        },
+        {
+          "value": "UNIFORM_256",
+          "caption": "uniform 256-bar histogram"
+        }
+      ],
+      "default": "RANGE_BASED"
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "mean"
+        },
+        {
+          "value": "percentile_1",
+          "caption": "1st percentile"
+        },
+        {
+          "value": "percentile_2",
+          "caption": "2nd percentile"
+        },
+        {
+          "value": "mean_between_percentiles",
+          "caption": "mean between 2 percentiles"
+        }
+      ],
+      "default": "mean"
+    }
+  ]
+}

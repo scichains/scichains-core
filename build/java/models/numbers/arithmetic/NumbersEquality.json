@@ -1,0 +1,106 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise equality of 2 number arrays",
+  "description": "Returns TRUE value for every input number <i>x<sub>k<sub></i>, that is equal to the corresponding second number <i>y<sub>k<sub></i>, or FALSE value for all other pairs of numbers.",
+  "id": "722a2ca9-b189-42dd-a5a5-0e7d267259ea",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersEquality"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "numbers",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result elements type",
+      "name": "elementType",
+      "description": "Usually you may specify \"byte\" to save memory, if FALSE/TRUE values are 0/1 or other little integers in 0..255 range.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "TRUE value in the result",
+      "name": "trueValue",
+      "description": "Returned for equal number pairs. Usually 1.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "FALSE value in the result",
+      "description": "Returned for non-equal number pairs. Usually 0.",
+      "name": "falseValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "invert",
+      "caption": "Invert behaviour",
+      "description": "If set, the results described above are inverted: value for TRUE is used for non-equal pairs, value for FALSE is used for equal pairs.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "First X column",
+      "description": "First index of number in the blocks of the array X",
+      "name": "indexInBlockX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "First Y column",
+      "description": "First index of number in the blocks of the array Y",
+      "name": "indexInBlockY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in each block of both arrays; if 0, all arrays are processed and indexes above are ignored",
+      "name": "lengthInBlock",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

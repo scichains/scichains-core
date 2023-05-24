@@ -1,0 +1,82 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Check equality of 2 images (elementwise)",
+  "id": "16c8130a-9a7c-4e78-af4d-acb8a6ab410d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.CheckMatrixEquality"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "operation",
+      "caption": "what to return?",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "E0_N_ASSERTION",
+          "caption": "x=y: 0; x≠y: throws AssertionError"
+        },
+        {
+          "value": "E0_N1",
+          "caption": "x=y: 0; x≠y: 1"
+        },
+        {
+          "value": "E0_NX",
+          "caption": "x=y: 0; x≠y: x"
+        },
+        {
+          "value": "E0_NY",
+          "caption": "x=y: 0; x≠y: y"
+        },
+        {
+          "value": "E1_N0",
+          "caption": "x=y: 1; x≠y: 0"
+        },
+        {
+          "value": "E1_NX",
+          "caption": "x=y: 1; x≠y: x"
+        },
+        {
+          "value": "E1_NY",
+          "caption": "x=y: 1; x≠y: y"
+        },
+        {
+          "value": "EXY_N0",
+          "caption": "x=y: x (and also y); x≠y: 0"
+        },
+        {
+          "value": "EXY_N1",
+          "caption": "x=y: x (and also y); x≠y: 1"
+        }
+      ],
+      "default": "E0_NY"
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, both input ports must contain some initialized matrices; in other case, this function will throw an exception. If this flag is cleared and one of input ports is empty, this function will do nothing and output port will stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

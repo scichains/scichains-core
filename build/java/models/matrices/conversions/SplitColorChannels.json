@@ -1,0 +1,79 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Split color channels",
+  "id": "85605dbe-f732-4b5b-a86f-e9a668b9151f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.SplitColorChannels"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "channel_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "channel_4"
+    }
+  ],
+  "controls": [
+    {
+      "name": "channelsColorSpace",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RGBA"
+        },
+        {
+          "value": "HSV"
+        },
+        {
+          "value": "HLS"
+        }
+      ],
+      "default": "RGBA"
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "first_connected",
+          "caption": "first from channel_1/2/3/4, connected to something"
+        },
+        {
+          "value": "channel_1"
+        },
+        {
+          "value": "channel_2"
+        },
+        {
+          "value": "channel_3"
+        },
+        {
+          "value": "channel_4"
+        }
+      ],
+      "default": "first_connected"
+    }
+  ]
+}

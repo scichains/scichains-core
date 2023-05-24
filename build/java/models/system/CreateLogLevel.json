@@ -1,0 +1,73 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Create logging level",
+  "id": "8eaca014-c736-43d8-b70e-0c3d0f93184c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.CreateLogLevel"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function uses it instead of \"Logging level\" parameter.\nIn any case, it checks whether it is a correct logging level."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Value of the logging level (string constant)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "loggable",
+      "hint": "True/false: whether the result logging level is loggable by standard LOG of the Executor class\n(result of \"Executor.LOG.isLoggable(logLevel)\" call)."
+    }
+  ],
+
+  "controls": [
+    {
+      "caption": "Logging level",
+      "name": "logLevel",
+      "value_type": "String",
+      "description": "Note: if this parameter is specified via an input port, this string must be a correct Java System.Logger level name (TRACE, INFO, ...) or a numeric level value. It is passed as an argument to the standard Level.parse method from Java API.",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "OFF"
+        },
+        {
+          "value": "ERROR"
+        },
+        {
+          "value": "WARNING"
+        },
+        {
+          "value": "INFO"
+        },
+        {
+          "value": "DEBUG"
+        },
+        {
+          "value": "TRACE"
+        },
+        {
+          "value": "ALL"
+        }
+      ],
+      "default": "DEBUG"
+    },
+    {
+      "caption": "Property name to override level",
+      "name": "propertyNameToOverwriteLogLevel",
+      "description": "If specified, it may contain a name of some system property. If this property is found, and if the input port is not specified, this property overrides the \"Logging level\" parameter above. It helps to control over logging without changing settings of this function.\nNote: if there is no system property with this name, but if there is an environment variable with this name (argument of \"System.getenv\" Java function), AND if this variable contains a correct Java logging level, then this environment variable is used instead of system property in the same manner.\nBE CAREFUL: usually you should not allow the end user to customize this argument, because it violates security — allows a user to get some information about current system environment.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

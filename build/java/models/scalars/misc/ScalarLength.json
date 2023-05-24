@@ -1,0 +1,42 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.misc",
+  "name": "Length of string",
+  "id": "9687b655-04be-460c-bc45-fdafc6165ee9",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.misc.ScalarLength"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Length of the input string"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized scalar; in other case, this function will throw an exception. If this flag is cleared, empty input port leads to returning 0.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Trim string",
+      "name": "trim",
+      "description": "If set, the input string is trimmed before returning its length (all leading and trailing space are removed by standard Java String.trim() method).\nIf cleared, the input string is analysed as-is.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

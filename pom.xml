@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.algart.executors</groupId>
+    <artifactId>executors-core</artifactId>
+    <version>4.0.1</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <!-- folder inside "target" to place there all service files of the extension -->
+        <build.directory>${project.build.directory}/build</build.directory>
+
+        <!-- extension folder name -->
+        <extension.name>base-core</extension.name>
+
+        <!-- location of the server -->
+        <home.directory>${env.EXECUTORS_HOME}</home.directory>
+
+        <!-- home folder of extension under the server -->
+        <extension.server.home>${home.directory}/ext/${extension.name}</extension.server.home>
+
+        <graalvm.version>22.2.0</graalvm.version>
+        <jep.version>4.1.0</jep.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.algart</groupId>
+            <artifactId>algart</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>jakarta.json</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>black.ninia</groupId>
+            <artifactId>jep</artifactId>
+            <version>${jep.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>${graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${graalvm.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <includes>
+                    <include>_global_system_files/conf/**</include>
+                    <include>extension.json</include>
+                    <!-- added to perform filtering; note that we need to exclude this later in maven-jar-plugin  -->
+                </includes>
+                <filtering>true</filtering>
+                <directory>build</directory>
+            </resource>
+
+            <resource>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <compress>false</compress>
+                    </archive>
+                    <excludes>
+                        <exclude>_global_system_files/**</exclude>
+                        <exclude>extension.json</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                            <!-- necessary to make JAR also for test classes -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <finalName>build</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>assembly-descriptor.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- deploy current extension only if ${home.directory} exist -->
+        <profile>
+            <id>deploy.extension</id>
+            <activation>
+                <file>
+                    <exists>${home.directory}</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>id.clean</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo level="info"/>
+                                        <echo level="info">DELETING ${extension.server.home}</echo>
+                                        <echo level="info"/>
+                                        <delete dir="${extension.server.home}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>id.install</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo level="info"/>
+                                        <echo level="info">
+                                            INSTALLING core configuration/jars into ${build.directory}
+                                        </echo>
+                                        <echo level="info"/>
+
+                                        <!-- copy configurations -->
+                                        <copy overwrite="true" todir="${home.directory}/conf">
+                                            <fileset dir="${build.directory}/_global_system_files/conf"/>
+                                        </copy>
+
+                                        <!-- copy common libraries for any other java extensions -->
+                                        <copy overwrite="true" todir="${home.directory}/lib">
+                                            <fileset dir="${build.directory}/_global_system_files/lib"/>
+                                        </copy>
+
+                                        <echo level="info"/>
+                                        <echo level="info">INSTALLING jars into ${extension.server.home}</echo>
+                                        <echo level="info"/>
+
+                                        <delete dir="${extension.server.home}"/>
+
+                                        <copy todir="${extension.server.home}/java">
+                                            <fileset dir="${project.build.directory}/build/java"/>
+                                        </copy>
+                                        <copy todir="${extension.server.home}/python">
+                                            <fileset dir="${project.build.directory}/build/python"/>
+                                        </copy>
+                                        <copy todir="${extension.server.home}/js">
+                                            <fileset dir="${project.build.directory}/build/js"/>
+                                        </copy>
+                                        <copy todir="${extension.server.home}/settings">
+                                            <fileset dir="${project.build.directory}/build/settings"/>
+                                        </copy>
+                                        <copy todir="${extension.server.home}/chain">
+                                            <fileset dir="${project.build.directory}/build/chain"/>
+                                        </copy>
+                                        <!-- copy extension specification -->
+                                        <copy todir="${extension.server.home}"
+                                              file="${project.build.directory}/build/extension.json"/>
+                                        <!-- copy public marker -->
+                                        <copy todir="${extension.server.home}"
+                                              file="${project.build.directory}/build/.public"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>${deploy-snapshots-id}</id>
+            <url>${deploy-snapshots-url}</url>
+        </snapshotRepository>
+        <repository>
+            <id>${deploy-id}</id>
+            <url>${deploy-url}</url>
+        </repository>
+    </distributionManagement>
+</project>

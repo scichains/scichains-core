@@ -1,0 +1,61 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise maximum of numbers",
+  "id": "a5e82d5e-fe2a-4fdf-a882-fe108668d5fc",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.MaxNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

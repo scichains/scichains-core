@@ -1,0 +1,87 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Linear function (elementwise): a₁x₁ + a₂x₂ + ... + b",
+  "id": "57fb4aec-c016-48e0-80f4-9b83eac545d0",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixLinearCombination"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input_1",
+      "caption": "x₁"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2",
+      "caption": "x₂"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_3",
+      "caption": "x₃"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_4",
+      "caption": "x₄"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a_1",
+      "caption": "a₁",
+      "description": "multiplier for x₁",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "a_2",
+      "caption": "a₂",
+      "description": "multiplier for x₂",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "a_3",
+      "caption": "a₃",
+      "description": "multiplier for x₃",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "a_4",
+      "caption": "a₄",
+      "description": "multiplier for x₄",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "b",
+      "description": "Summand b. Note: if \"Raw values\" flag is not set, it is automatically multiplied by maximal possible value of elements of x₁  matrix",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "rawValues",
+      "caption": "Raw values",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

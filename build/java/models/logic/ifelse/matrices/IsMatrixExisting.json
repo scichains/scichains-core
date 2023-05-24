@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.matrices",
+  "name": "Is matrix existing?",
+  "id": "ed3c9ee4-1459-49d9-8a59-adcd37180282",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.matrices.IsMatrixExisting"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "When not initialized",
+      "name": "whenNonInitialized",
+      "description": "This value is returned when the input matrix is not initialized",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "false"
+    },
+    {
+      "caption": "When initialized",
+      "name": "whenInitialized",
+      "description": "This value is returned when the input matrix is initialized (contains some data)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "true"
+    }
+  ]
+}

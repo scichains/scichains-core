@@ -1,0 +1,405 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "copy several data",
+  "id": "09e02908-1c83-4bcb-8a94-82228e3fbacb",
+  "description": "Simply copies all inputs (when exist) to the corresponding outputs.<br>It may me useful, for example, when you need to declare that some function <b>F</b> must be executed, though you don't really need its results (like in a case of writing data to file). You insert this copying function <b>C</b> \"between\" some <i>actually necessary</i> result <b>R</b> and its input data <b>S</b>, and then declare some additional input data of <b>C</b> as depending on <b>F</b>. So, you have dependencies <b>S</b>&rarr;<b>C</b>&rarr;<b>R</b> (actually used) and <b>F</b>&rarr;<b>C</b> (simple copying, when the copy in <b>C</b> is just ignored). The copy of <b>F</b> is not used, but, according the functional logic, the result <b>C</b> <b><i>does</i></b> depend on <b>F</b>.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CopySeveral"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m6",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m7",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m8",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m10",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m6",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m7",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m8",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m10",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "s"
+        },
+        {
+          "value": "x"
+        },
+        {
+          "value": "m"
+        },
+        {
+          "value": "s2"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "s3"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "s4"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "s5"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m5"
+        },
+        {
+          "value": "s6"
+        },
+        {
+          "value": "x6"
+        },
+        {
+          "value": "m6"
+        },
+        {
+          "value": "s7"
+        },
+        {
+          "value": "x7"
+        },
+        {
+          "value": "m7"
+        },
+        {
+          "value": "s8"
+        },
+        {
+          "value": "x8"
+        },
+        {
+          "value": "m8"
+        },
+        {
+          "value": "s9"
+        },
+        {
+          "value": "x9"
+        },
+        {
+          "value": "m9"
+        },
+        {
+          "value": "s10"
+        },
+        {
+          "value": "x10"
+        },
+        {
+          "value": "m10"
+        }
+      ],
+      "default": "s"
+    }
+  ]
+}

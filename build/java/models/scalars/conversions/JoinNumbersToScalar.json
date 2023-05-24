@@ -1,0 +1,176 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.conversions",
+  "name": "Join number array to scalar",
+  "id": "17bd9c06-9251-48ef-a622-7ffcbb9d8268",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.conversions.JoinNumbersToScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "The input numbers, separated by \",\""
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockIndex",
+      "caption": "Index of converted block, -1 for all array",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": -1
+    },
+    {
+      "name": "formattingType",
+      "caption": "Formatting type",
+      "description": "Note: \"Simple\" type provides maximal performance, but not too beautiful results. It means default Java string representation of the numbers, used while automatic conversion to strings, like in the following operator: \"Value=\" + 1.345.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "SIMPLE",
+          "caption": "Simple (default Java representation)"
+        },
+        {
+          "value": "PRINTF",
+          "caption": "Printf-style (like in String.format)"
+        },
+        {
+          "value": "DECIMAL_FORMAT",
+          "caption": "Based on DecimalFormat Java class"
+        }
+      ],
+      "default": "SIMPLE"
+    },
+    {
+      "name": "locale",
+      "caption": "Locale",
+      "description": "See Locale.forLanguageTag Java method. If not specified (empty string), default system locale will be use. For example: \"US\", \"de\",...\nIgnored for \"Simple\" formatting type.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "fixedPointFormat",
+      "caption": "Fixed-point format",
+      "description": "Format specification, used for integer numbers.\nIgnored for \"Simple\" formatting type.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "%7d"
+    },
+    {
+      "name": "floatingPointFormat",
+      "caption": "Floating-point format",
+      "description": "Format specification, used for float and double.\nIgnored for \"Simple\" formatting type.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "%10.3f"
+    },
+    {
+      "name": "elementsDelimiter",
+      "caption": "Elements delimiter",
+      "description": "Delimiter between numbers in a single row.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ", "
+    },
+    {
+      "name": "minimalElementLength",
+      "caption": "Minimal element length",
+      "description": "If positive, every element is left-padded by spaces until this length. It is useful in simple and DecimalFormat-based formatting type.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "addLineIndexes",
+      "caption": "Add line indexes",
+      "description": "If set, this function adds line index before every row of the numbers array.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "lineIndexFormat",
+      "caption": "Line index format",
+      "description": "Format specification, used line indexes (if the previous flag is set).\nIgnored for \"Simple\" formatting type.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "%d"
+    },
+    {
+      "name": "lineIndexDelimiter",
+      "caption": "Line-index delimiter",
+      "description": "Delimiter between line index and further numbers.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ": "
+    },
+    {
+      "name": "minimalLineIndexLength",
+      "caption": "Minimal line-index length",
+      "description": "If positive, every line index is left-padded by spaces until this length. It is useful in simple and DecimalFormat-based formatting type.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Indexing base for line indexes",
+      "name": "indexingBase",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ZERO_BASED"
+    },
+    {
+      "name": "linesDelimiter",
+      "caption": "Lines delimiter",
+      "description": "Delimiter between lines. Note that substrings \\n and \\r are interpreted as corresponding special characters (line separators).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "\\n"
+    },
+    {
+      "name": "addEndingLinesDelimiter",
+      "caption": "Add ending lines delimieter",
+      "description": "If set, \"Lines delimiter\" is added also after the final line of the result.\nIf cleared, it is inserted between lines, but not added to the end.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "simpleFormatForIntegers",
+      "caption": "Simple format for integers",
+      "description": "If set and if some element is ACTUALLY integer (either element type of numbers array is integer, or actually stored floating-point element is integer: 3.0, 1235.0 etc., but not 3.2),  this element will be represented as integer number according default Java representation (like for \"Simple\" formatting type).\nThis flag can essentially optimize processing, if integer values are a typical case and if you don't need beautiful formatting for integers (they will have different lengths). For example, it is suitable while writing in CSV-files.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "parallelExecution",
+      "caption": "Parallel execution",
+      "description": "If set, this function uses multi-threading for better performance. But it little increases memory usage and may be not too good solution for VERY large arrays (hundreds of millions numbers).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

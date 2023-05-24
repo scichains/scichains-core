@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.arrays",
+  "name": "redirect (for numbers)",
+  "id": "8bb38ad0-760d-446b-a6ec-885b33f8109a",
+  "description": "Copies the input number array to one of output ports, specified by redirector value.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.numbers.RedirectNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9"
+    }
+  ],
+  "controls": [
+    {
+      "name": "redirector",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "description": "Selecting index of the output port 1..9. Must be positive."
+    }
+  ]
+}

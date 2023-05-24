@@ -1,0 +1,50 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Replace column(s) in number array",
+  "id": "6147110b-9fae-43e0-91c8-5c47fac65744",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.ReplaceNumbersColumns"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "replace_with"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "indexInBlock",
+      "caption": "First index of number in every block of input array, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "indexInReplacer",
+      "caption": "First index of number in every block of replace_with array, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Length of copied part in every block; 0 is interpreted as blockLength of replace_with",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

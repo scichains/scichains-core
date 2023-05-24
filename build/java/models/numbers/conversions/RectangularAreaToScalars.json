@@ -1,0 +1,52 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Parse 2/4/6 numbers to rectangular area (minX/maxX etc.)",
+  "id": "a005f5b5-ab6a-48bc-9964-4c8e962f62a2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.RectangularAreaToScalars"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "hint": "Defines some rectangular area to be parsed.\nFor example, in 2D case, it must be 4 numbers describing a rectangle: min_x, max_x, min_y, max_y;\nin 3D case, it must be 6 numbers, etc."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "min_x",
+      "hint": "1st of input numbers"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_x",
+      "hint": "2nd of input numbers"
+    },
+    {
+      "value_type": "scalar",
+      "name": "min_y",
+      "hint": "3rd of input numbers (if exists)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_y",
+      "hint": "4th of input numbers (if exists)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "min_z",
+      "hint": "5th of input numbers (if exists)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_z",
+      "hint": "6th of input numbers (if exists)"
+    }
+  ],
+  "controls": [
+  ]
+}

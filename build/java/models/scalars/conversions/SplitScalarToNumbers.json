@@ -1,0 +1,40 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.conversions",
+  "name": "Scalar to number array (split)",
+  "id": "c15657d5-be93-4bc1-899e-49b26f2151a6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.conversions.SplitScalarToNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "hint": "Several numbers, separated by characters ; | , | spaces (or their combinations)"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockLength",
+      "hint": "The block length in the result (ignored in singleBlock mode)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "name": "singleBlock",
+      "hint": "If true, the block length will be equal to array length (single block in array)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

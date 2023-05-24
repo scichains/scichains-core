@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/create double scalar",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "id": "9872f46c-d45b-44b9-af9b-0061b4d312b6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateDouble"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

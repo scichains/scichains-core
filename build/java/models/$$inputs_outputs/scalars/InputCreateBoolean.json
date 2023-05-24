@@ -1,0 +1,56 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/create boolean scalar",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "id": "c11cd7e9-cfd6-4fe2-a07e-01f55bf0eb41",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateBoolean"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "How to represent result",
+      "name": "conditionStyle",
+      "description": "How the created boolean value will be represented in the result scalar.\nC-like: true is \"1\", false is \"0\".\nJava-like: true is \"true\" string, false is \"false\" string.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    }
+  ]
+}

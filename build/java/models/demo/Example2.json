@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example 2",
+  "id": "8011bc4b-6d0d-485b-986f-56b069f53333",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.Example2"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "image"
+    }
+  ],
+  "controls": [
+    {
+      "name": "width",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1000
+    },
+    {
+      "name": "height",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1000
+    },
+	{
+		"name": "color",
+		"value_type": "String",
+		"edition_type": "value",
+		"default": "#0000FF"
+	}
+  ]
+}

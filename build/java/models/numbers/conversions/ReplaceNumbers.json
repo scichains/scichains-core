@@ -1,0 +1,50 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Replace blocks in number array",
+  "id": "1153323a-1ce3-40f9-8fcf-f0bb554f0036",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.ReplaceNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "replace_with"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockIndex",
+      "caption": "First block index of input array, 0..N-1 (N is the number of blocks in input)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "blockIndexInReplacer",
+      "caption": "First block index of replace_with array, 0..M-1 (M is the number of blocks in replace_with)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfBlocks",
+      "caption": "Number of copied blocks; 0 is interpreted as M (number of blocks in replace_with)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

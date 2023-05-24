@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.matrices",
+  "name": "redirect (for matrix)",
+  "id": "88faeda1-0de2-4717-901e-816921f91c3b",
+  "description": "Copies the input matrix to one of output ports, specified by redirector value.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.matrices.RedirectMatrix"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4"
+    },
+    {
+      "value_type": "mat",
+      "name": "m5"
+    },
+    {
+      "value_type": "mat",
+      "name": "m6"
+    },
+    {
+      "value_type": "mat",
+      "name": "m7"
+    },
+    {
+      "value_type": "mat",
+      "name": "m8"
+    },
+    {
+      "value_type": "mat",
+      "name": "m9"
+    }
+  ],
+  "controls": [
+    {
+      "name": "redirector",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "description": "Selecting index of the output port 1..9. Must be positive."
+    }
+  ]
+}

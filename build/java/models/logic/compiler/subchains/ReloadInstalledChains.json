@@ -1,0 +1,24 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.subchains",
+  "name": "Reload installed chains",
+  "description": "Reloads all installed sub-chains and multichains. Allows to see changes by reloading a chaing, containing this function, without restarting all the system.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "id": "86dfd012-0abc-4a6a-8a67-7853dcd31e69",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.subchains.ReloadInstalledChains"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

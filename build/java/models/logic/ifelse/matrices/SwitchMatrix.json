@@ -1,0 +1,80 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.matrices",
+  "name": "switch (xxx)... (for matrix)",
+  "id": "05e8e4f6-9924-4c6a-9432-acde27fed1a7",
+  "description": "Copies one of input matrices, specified by the selector, to the output. If the selector is 0, first initialized input will be used.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.matrices.SwitchMatrix"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "selector_input",
+      "caption": "switch (xxx)",
+      "hint": "[Optional] May contain an integer number. In this case, it OVERRIDES the value of \"Selector\" parameter."
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4"
+    },
+    {
+      "value_type": "mat",
+      "name": "m5"
+    },
+    {
+      "value_type": "mat",
+      "name": "m6"
+    },
+    {
+      "value_type": "mat",
+      "name": "m7"
+    },
+    {
+      "value_type": "mat",
+      "name": "m8"
+    },
+    {
+      "value_type": "mat",
+      "name": "m9"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Selector",
+      "name": "selector",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "description": "Selecting index of the input port 1..9. Zero value means selecting first initialized \"mK\" port.\nNote: if the port \"switch (xxx)\" contains non-empty string, this string must be a number, and that number overrides the value of this parameter."
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, and if the selector index is not 0, the input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, empty input port, selected by the previous parameter, doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

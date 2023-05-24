@@ -1,0 +1,37 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Maximum (elementwise)",
+  "id": "3d38bb4a-25a5-4fe9-b9e0-aa051d8f329b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MaxMatrix"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_4"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

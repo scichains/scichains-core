@@ -1,0 +1,76 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Installed executor model specification",
+  "id": "6a19d627-8805-4047-813b-bd2c48083c63",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.InstalledExecutorModel"
+  },
+  "in_ports":  [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Full executor specification (usually JSON)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "platform_id",
+      "hint": "Extension platform ID"
+    },
+    {
+      "value_type": "scalar",
+      "name": "category",
+      "hint": "Executor category"
+    },
+    {
+      "value_type": "scalar",
+      "name": "name",
+      "hint": "Executor name"
+    },
+    {
+      "value_type": "scalar",
+      "name": "description",
+      "hint": "Executor description",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "id",
+      "hint": "Executor ID"
+    },
+    {
+      "value_type": "scalar",
+      "name": "language",
+      "hint": "Executor language",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "built_in",
+      "hint": "Will contain \"true\" if this executor is built-in — it is a Java-executor, available directly after starting JVM.\nWill contain \"false\" for extended executors like Python, JavaScript, sub-chains etc."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Executor ID",
+      "name": "id",
+      "description": "Unique identifier of the executor. Default value corresponds to this function itself.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "6a19d627-8805-4047-813b-bd2c48083c63"
+    },
+    {
+      "caption": "Special search in built-in executors",
+      "name": "specialSearchInBuiltIn",
+      "description": "If set (default behaviour), this function checks built-in executors in the beginning. If cleared, all executors are checked in the same manner. For internal usage.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    }
+  ]
+}

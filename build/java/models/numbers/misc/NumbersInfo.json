@@ -1,0 +1,152 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Common numbers array information",
+  "id": "4ca72ef5-3c81-4127-9030-abc8dd4dee26",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.NumbersInfo"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "n",
+      "hint": "Number of blocks (rows)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "block_length"
+    },
+    {
+      "value_type": "scalar",
+      "name": "array_length",
+      "hint": "Array length = n * block_length"
+    },
+    {
+      "value_type": "scalar",
+      "name": "element_type"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_possible"
+    },
+    {
+      "value_type": "scalar",
+      "name": "mean"
+    },
+    {
+      "value_type": "scalar",
+      "name": "sum"
+    },
+    {
+      "value_type": "scalar",
+      "name": "min"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max"
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_abs",
+      "hint": "Maximum from absolute values of all elements."
+    },
+    {
+      "value_type": "scalar",
+      "name": "min_of_ordinary",
+      "hint": "±∞ and NaN values are ignored."
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_of_ordinary",
+      "hint": "±∞ and NaN values are ignored."
+    },
+    {
+      "value_type": "scalar",
+      "name": "max_abs_of_ordinary",
+      "hint": "±∞ and NaN values are ignored."
+    },
+    {
+      "value_type": "scalar",
+      "name": "hash"
+    }
+  ],
+  "controls": [
+    {
+      "name": "indexInBlock",
+      "caption": "First analysed column",
+      "description": "First analysed index in every block, 0..blockLength−1.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of analysed columns",
+      "description": "Length of analysed part in every block; if 0, all array is analysed and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "caption": "n (number of blocks)",
+          "value": "n"
+        },
+        {
+          "value": "block_length"
+        },
+        {
+          "caption": "array_length (n * block_length)",
+          "value": "array_length"
+        },
+        {
+          "value": "element_type"
+        },
+        {
+          "value": "max_possible"
+        },
+        {
+          "value": "mean"
+        },
+        {
+          "value": "sum"
+        },
+        {
+          "value": "min"
+        },
+        {
+          "value": "max"
+        },
+        {
+          "value": "max_abs"
+        },
+        {
+          "value": "min_of_ordinary"
+        },
+        {
+          "value": "max_of_ordinary"
+        },
+        {
+          "value": "max_abs_of_ordinary"
+        },
+        {
+          "value": "hash"
+        }
+      ],
+      "default": "n"
+    }
+  ]
+}

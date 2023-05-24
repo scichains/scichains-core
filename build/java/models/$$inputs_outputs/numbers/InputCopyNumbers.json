@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].numbers",
+  "name": "Input/copy number array",
+  "options": {
+    "behavior": {
+      "copy": true,
+      "input": true
+    }
+  },
+  "id": "45e594c3-1166-4c82-b3e7-ba7ba3842a70",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.copying.CopyNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

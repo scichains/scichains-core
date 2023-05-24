@@ -1,0 +1,58 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.subchains",
+  "name": "Use multi-chain(s)",
+  "description": "Allows to use the given multi-chain (registers it as a new executor) or a set of multi-chains.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "id": "cb64b942-192b-4aa3-a499-5fb189e59262",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Multi-chain JSON file(s)/folder(s)",
+      "name": "file",
+      "description": "Path(s) to one or several multi-chain JSON file or folders, containing JSON files with models of multi-chains, separated by \";\". In a case of folders, each folder is scanned recursively, and all multi-chain JSONs, found in the folder and its subfolders, become available to use.\nNote: every path is trimmed, i.e. leading/trailing space characters, including line feeds, are removed. Thus, if you need several paths, separated by \";\", you can place each path in a separate line.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "caption": "Requires existing file/folder",
+      "name": "fileExistenceRequired",
+      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Strict mode",
+      "name": "strictMode",
+      "description": "If set, this function checks that all chain variants, implementing a multi-chain, are compatible with the interface specified in multi-chain JSON file, for example, have all declared input/output ports with the same type. We recommended to set it always.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "advanced": true,
+      "default": true
+    },
+    {
+      "caption": "Use also sub-chain(s)",
+      "name": "alsoSubChains",
+      "description": "If set, also executes \"Use sub-chain(s)\" function with the same path(s) and default parameters. In other words, in this mode this function allows to use both multi-chain(s) and sub-chain(s), depending on the file content — is it multi-chain or sub-chain.\nWe recommend to use this flag only with a single or multiple FILES, but not with FOLDERS: in other case, sub-chains, probably located inside folders of multi-chains, will be loaded twice (here and while initializing multi-chains).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

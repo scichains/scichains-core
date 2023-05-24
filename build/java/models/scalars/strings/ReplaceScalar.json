@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.strings",
+  "name": "Replace substring in scalar",
+  "id": "c631d97c-3359-41d9-b0bb-2ae28ec84f3c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.strings.ReplaceScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Pattern",
+      "name": "pattern",
+      "description": "This function replaces the substring, specified in \"What to replace?\" parameter, inside this pattern with the input scalar. If this parameter is equal to \"What to replace?\", it means simple copying the scalar.\nIf the input scalar is not specified, the result also will be empty (non-initialized).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "$$$"
+    },
+    {
+      "caption": "What to replace?",
+      "name": "whatToReplace",
+      "description": "Substring, which is searched inside the pattern and replaced with the input scalar.\nMust not be empty.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "$$$"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/create integer scalar",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "id": "b9586c91-2f4d-496e-8412-8a3c1eed5dbe",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateInteger"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Merge (concatenate) several number arrays",
+  "id": "575d59de-b5a8-41d1-a3e6-7e2331b60ca4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.MergeNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_11",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_12",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_13",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_14",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_15",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_16",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_17",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_18",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_19",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_20",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_21",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_22",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_23",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_24",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_25",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_26",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_27",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_28",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_29",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_30",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_31",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_32",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, at least 1 input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, all input ports may be empty: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Resulting element type",
+      "name": "resultElementType",
+      "description": "\"Common type of all inputs\" variant requires that all input ports must have identical element type.\n\"Type of the 1st input\" leads to automatic cast of all inputs to the element types of 1st initialized input port.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "REQUIRE_IDENTICAL",
+          "caption": "Common type of all inputs"
+        },
+        {
+          "value": "FIRST_INPUT",
+          "caption": "Type of the 1st input"
+        },
+        {
+          "value": "INT",
+          "caption": "\"int\" type"
+        },
+        {
+          "value": "FLOAT",
+          "caption": "\"float\" type"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "\"double\" type"
+        }
+      ],
+      "default": "FIRST_INPUT"
+    }
+  ]
+}

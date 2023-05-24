@@ -1,0 +1,62 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.arithmetic",
+  "name": "max(x1, x2, x3, ...)",
+  "id": "34657bb6-0853-4a91-b567-c72c32f050b9",
+  "description": "Maximum from several numbers or negative infinity if there is no input numbers.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.arithmetic.MaxNumber"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x3"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x4"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x5"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x6"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x7"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x8"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Additional threshold",
+      "name": "threshold",
+      "description": "If specified (contains some non-empty value T), this function maximum from this value and all input numbers:\nmax(T, x1, x2, x3, ...).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

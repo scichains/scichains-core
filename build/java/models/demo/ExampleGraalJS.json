@@ -1,0 +1,25 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example for calling GraalJS",
+  "id": "67cf37b7-984b-4a09-9382-b02f8d8d90ed",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleGraalJS"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

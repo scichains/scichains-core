@@ -1,0 +1,26 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java numbers array test",
+  "id": "5bc808be-9312-4ed7-a68c-7a560186ca2f",
+  "description": "Example of java extension",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.SNumbersTest"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "in"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "out"
+    }
+  ],
+  "controls": [
+  ]
+}

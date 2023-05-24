@@ -1,0 +1,201 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Extract selected columns of number array (by name)",
+  "id": "45ff5e09-52d2-4fd8-bc60-304017eba6d1",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.ExtractNumbersColumnsByNames"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "[Optional] List of names in the previous array, separated by \\n (name of every column in a separate line)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output",
+      "hint": "Result multi-column array. (Calculated on demand)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "List of column names in the result array, separated by \\n (name of every column in a separate line)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_1",
+      "hint": "Column #1 of the result array. (Calculated on demand)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_2",
+      "hint": "Column #2 of the result array. (Calculated on demand)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_3",
+      "hint": "Column #3 of the result array. (Calculated on demand)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_4",
+      "hint": "Column #4 of the result array. (Calculated on demand)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_5",
+      "hint": "Column #5 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_6",
+      "hint": "Column #6 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_7",
+      "hint": "Column #7 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_8",
+      "hint": "Column #8 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_9",
+      "hint": "Column #9 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_10",
+      "hint": "Column #10 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_11",
+      "hint": "Column #11 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_12",
+      "hint": "Column #12 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_13",
+      "hint": "Column #13 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_14",
+      "hint": "Column #14 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_15",
+      "hint": "Column #15 of the result array. (Calculated on demand).",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "column_16",
+      "hint": "Column #16 of the result array. (Calculated on demand).",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Extracted column names",
+      "name": "extractedColumnNames",
+      "description": "List of names of columns, which are extracted from the source arrays according the input \"column_names\". The names in this list must be separated by \\n (one name per string). If empty, the result arrays stays not initialized.\nNote: you may use here integer numbers in a role of the names. Such \"names\" are not searched in \"column_names\" input port. Positive number K=1,2,3... means the column #K of the source array (starting from 1), negative number K means the column #(number_of_columns+1−K), zero index K=0 is prohibited.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 10,
+      "default": ""
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "nothing"
+        },
+        {
+          "value": "output"
+        },
+        {
+          "value": "column_1"
+        },
+        {
+          "value": "column_2"
+        },
+        {
+          "value": "column_3"
+        },
+        {
+          "value": "column_4"
+        },
+        {
+          "value": "column_5"
+        },
+        {
+          "value": "column_6"
+        },
+        {
+          "value": "column_7"
+        },
+        {
+          "value": "column_8"
+        },
+        {
+          "value": "column_9"
+        },
+        {
+          "value": "column_10"
+        },
+        {
+          "value": "column_11"
+        },
+        {
+          "value": "column_12"
+        },
+        {
+          "value": "column_13"
+        },
+        {
+          "value": "column_14"
+        },
+        {
+          "value": "column_15"
+        },
+        {
+          "value": "column_16"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

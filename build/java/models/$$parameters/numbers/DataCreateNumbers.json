@@ -1,0 +1,79 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[parameters].numbers",
+  "name": "Number array parameter",
+  "options": {
+    "behavior": {
+      "data": true
+    }
+  },
+  "id": "c17e63a9-8cd3-4843-ba65-fd0f98a6ba3c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateNumbersFromString"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "external parameter",
+      "hint": "Chain constant or one of external parameters of the chain.\nWhen specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockLength",
+      "hint": "The block length in the result (ignored in singleBlock mode)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "name": "singleBlock",
+      "hint": "If true, the block length will be equal to array length (single block in array)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "0, 1, 2"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Cut to range (elementwise)",
+  "id": "0ce56c64-64d5-43cf-abd2-dbdf1c95ba5f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixCutToRange"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "min",
+      "description": "Every element in the matrix, which is <min, is changed to min. If \"min\" is not set (an empty string), it is considered to be −∞ (not checked).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "max",
+      "description": "Every element in the matrix, which is >max, is changed to max. If \"max\" is not set (an empty string), it is considered to be +∞ (not checked).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

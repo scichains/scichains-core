@@ -1,0 +1,149 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Show status",
+  "id": "57a479cc-9466-4508-8473-2d174c313e9b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.ShowStatus"
+  },
+  "in_ports":  [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] When specified, this data is just copied to \"s\" output before all other operations.\nCan be convenient if you need to \"build\" this operation into some chain of other functions for debugging/logging needs.\nOther inputs \"x\", \"m\", \"s2\", \"x2\", \"m2\" etc. are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "String, that has been shown as the status."
+    },
+    {
+      "value_type": "scalar",
+      "name": "status_json",
+      "hint": "Full JSON status information of this executor or its caller, depending on \"Modify status of caller\" parameter.",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "root_status_json",
+      "hint": "Full JSON status information of the root caller.",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] Copy of \"s\" input, when it is specified: see comments to \"s\" input.\nOther outputs \"x\", \"m\", \"s2\", \"x2\", \"m2\" etc. are also copies of the corresponding inputs."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Do action",
+      "name": "doAction",
+      "description": "If cleared, this function does not modify any status and does not fill \"status_json\" and \"root_status_json\" results. However, the main output port (desired status) is calculated and input ports \"s\", \"x\", \"m\", \"s2\", \"x2\"... are copied to output ports.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Pattern",
+      "name": "pattern",
+      "description": "This function actually shows and returns this pattern, where $$$ substring is replaced with the input scalar. It is $$$ by default, that means simple showing the scalar. But you can use more complex patterns, like the following:\nThe scalar = \"$$$\"!\nIf there is no input scalar, this pattern is shown as-is.\nNote that substrings \\n and \\r, appeared in this pattern (before replacing $$$), are replaced with the corresponding special characters (line separators).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "$$$"
+    },
+    {
+      "caption": "Modify status of caller",
+      "name": "modifyCallerStatus",
+      "description": "If set, this function modifies the status of the CALLER of this function, for example, status of some sub-chain that includes this function as one of its blocks. If there is no caller (this function is executed directly), no any status is modified.\nUsually it is the correct expected behaviour: \"status\" of this function itself has no sense after it will finish execution. i.e. almost immediately. In particular, GUI, actually showing status line, may automatically clear it when this function will finish.\nRecommended value is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "advanced": true,
+      "default": true
+    }
+  ]
+}

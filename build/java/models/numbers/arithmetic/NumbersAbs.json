@@ -1,0 +1,26 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise absolute value",
+  "description": "Returns absolute value|<i>x</i>| (<i>x</i> is the input)",
+  "id": "b2fa0837-46fc-4576-b66e-29e2ce397709",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersAbs"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

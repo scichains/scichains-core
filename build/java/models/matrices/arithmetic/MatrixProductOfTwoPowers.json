@@ -1,0 +1,49 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Product of two powers m·xᵃ·yᵇ (elementwise)",
+  "description": "Returns product of powers <i>m&sdot;x<sup>a</sup></i><i>y<sup>b</sup></i> (multiplied by <i>m</i> parameter). Second argument <i>y</i> is optional: if it is skipped, performs single power operation <i>m&sdot;x<sup>a</sup></i>.",
+  "id": "96241578-2dc8-4567-a7f0-9eb25f8dd8ac",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixProductOfTwoPowers"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "1.0"
+    },
+    {
+      "name": "b",
+      "description": "Note: here and in the previous parameter you can use either a usual real number, or a special string \"A / B\", where A and B are any real numbers (spaces are ignored). The last form means usual division A/B. It can be convenient, for example, for values like 1/3, that cannot be written exactly as a decimal numbers.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "1.0"
+    },
+    {
+      "name": "m",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.js.numbers",
+  "name": "JS example: sum of numbers array",
+  "id": "867d6f7c-c3ee-4921-96db-c68d9bb7a4ad",
+  "language": "js",
+  "js": {
+    "module": "demo/numbers/ExampleArraySum.mjs"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

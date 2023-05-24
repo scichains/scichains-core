@@ -1,0 +1,79 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.arithmetic",
+  "name": "Round scalar (single number)",
+  "id": "d6e43ac8-4799-4540-a63f-888cbba19e3a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.arithmetic.RoundScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "roundingMode",
+      "caption": "Rounding mode",
+      "description": "Specifies how to round the result.\n\n\"Skip operation\" means that the function just returns the input string without changes. Unlike this, \"None\" means that the function try to parse the input as a real (double) value and then converts it back to a string result; invalid string (not a number) will lead to exception.\n\n\"⌊v⌉\" operation (round half to even), when the result is integer (long or int) and the input double value is out of range of integer values, represented by integer type (−2^63..2^63−1 for long, −2^31..2^31−1 for int), returns the nearest boundary of this range. For example, [1e27] will return 2^63−1 for long and 2^31−1 for int (but original 1.0E27 for double result).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "SKIP_OPERATION",
+          "caption": "Skip operation"
+        },
+        {
+          "value": "NONE",
+          "caption": "None"
+        },
+        {
+          "value": "FLOOR_TO_DOUBLE",
+          "caption": "⌊v⌋ = StrictMath.floor(v) (double result)"
+        },
+        {
+          "value": "CEIL_TO_DOUBLE",
+          "caption": "⌈v⌉ = StrictMath.ceil(v) (double result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_DOUBLE",
+          "caption": "⌊v⌉ = StrictMath.rint(v) (round half to even, double result)"
+        },
+        {
+          "value": "CAST_TO_LONG",
+          "caption": "(long) v (standard Java cast to long)"
+        },
+        {
+          "value": "CAST_TO_INT",
+          "caption": "(int) v (standard Java cast to int)"
+        },
+        {
+          "value": "ROUND_TO_LONG",
+          "caption": "StrictMath.round(v) (round to +∞,  long result)"
+        },
+        {
+          "value": "ROUND_TO_INT",
+          "caption": "StrictMath.round(v) (round to +∞,  int result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_LONG",
+          "caption": "⌊v⌉ = (long) StrictMath.rint(value) (round half to even,  long result)"
+        },
+        {
+          "value": "EVEN_ROUND_TO_INT",
+          "caption": "⌊v⌉ = (int) StrictMath.rint(value) (round half to even,  int result)"
+        }
+      ],
+      "default": "EVEN_ROUND_TO_LONG"
+    }
+  ]
+}

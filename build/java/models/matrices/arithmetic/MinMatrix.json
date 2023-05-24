@@ -1,0 +1,37 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Minimum (elementwise)",
+  "id": "1b43c9a2-f83b-41b3-886d-43ee068a32ee",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MinMatrix"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_4"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

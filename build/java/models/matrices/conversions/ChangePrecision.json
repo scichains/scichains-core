@@ -1,0 +1,63 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Change precision",
+  "id": "013b7e15-03b1-4026-9cc9-2b0ccafd1adb",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.ChangePrecision"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "byte"
+    },
+    {
+      "name": "rawCast",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

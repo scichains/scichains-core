@@ -1,0 +1,733 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "copy matrices if requested",
+  "id": "b5aa57c5-1c6d-46e8-a3a0-f3a94a539420",
+  "description": "For each input data checks, if the corresponding condition is fulfilled. If yes, this function copies it (if it exist) into the corresponding output. If not, the corresponding output stays to be non-initialized.<br>This function helps to request calculation of some subset of data, depending on several boolean flags, passed to the condition inputs.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CopyMatricesIfRequested"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m1",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m1",
+      "name": "m1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m2",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m2",
+      "name": "m2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m3",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m3",
+      "name": "m3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m4",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m4",
+      "name": "m4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m5",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m5",
+      "name": "m5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m6",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m6",
+      "name": "m6",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m7",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m7",
+      "name": "m7",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m8",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m8",
+      "name": "m8",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m9",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m9",
+      "name": "m9",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m10",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m10",
+      "name": "m10",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m11",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m11",
+      "name": "m11",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m12",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m12",
+      "name": "m12",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m13",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m13",
+      "name": "m13",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m14",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m14",
+      "name": "m14",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m15",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m15",
+      "name": "m15",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m16",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m16",
+      "name": "m16",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m17",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m17",
+      "name": "m17",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m18",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m18",
+      "name": "m18",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m19",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m19",
+      "name": "m19",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m20",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m20",
+      "name": "m20",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m21",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m21",
+      "name": "m21",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m22",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m22",
+      "name": "m22",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m23",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m23",
+      "name": "m23",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m24",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m24",
+      "name": "m24",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m25",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m25",
+      "name": "m25",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m26",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m26",
+      "name": "m26",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m27",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m27",
+      "name": "m27",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m28",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m28",
+      "name": "m28",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m29",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m29",
+      "name": "m29",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m30",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m30",
+      "name": "m30",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m31",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m31",
+      "name": "m31",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m32",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m32",
+      "name": "m32",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4"
+    },
+    {
+      "value_type": "mat",
+      "name": "m5"
+    },
+    {
+      "value_type": "mat",
+      "name": "m6"
+    },
+    {
+      "value_type": "mat",
+      "name": "m7"
+    },
+    {
+      "value_type": "mat",
+      "name": "m8"
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m11",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m12",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m13",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m14",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m15",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m16",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m17",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m18",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m19",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m20",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m21",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m22",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m23",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m24",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m25",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m26",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m27",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m28",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m29",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m30",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m31",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m32",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: execution is cancelled when \"xxx\" is false and continued (with a copy of input data) when \"xxx\" is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        },
+        {
+          "value": "m6"
+        },
+        {
+          "value": "m7"
+        },
+        {
+          "value": "m8"
+        },
+        {
+          "value": "m9"
+        },
+        {
+          "value": "m10"
+        },
+        {
+          "value": "m11"
+        },
+        {
+          "value": "m12"
+        },
+        {
+          "value": "m13"
+        },
+        {
+          "value": "m14"
+        },
+        {
+          "value": "m15"
+        },
+        {
+          "value": "m16"
+        },
+        {
+          "value": "m17"
+        },
+        {
+          "value": "m18"
+        },
+        {
+          "value": "m19"
+        },
+        {
+          "value": "m20"
+        },
+        {
+          "value": "m21"
+        },
+        {
+          "value": "m22"
+        },
+        {
+          "value": "m23"
+        },
+        {
+          "value": "m24"
+        },
+        {
+          "value": "m25"
+        },
+        {
+          "value": "m26"
+        },
+        {
+          "value": "m27"
+        },
+        {
+          "value": "m28"
+        },
+        {
+          "value": "m29"
+        },
+        {
+          "value": "m30"
+        },
+        {
+          "value": "m31"
+        },
+        {
+          "value": "m32"
+        }
+      ],
+      "default": "m1"
+    }
+  ]
+}

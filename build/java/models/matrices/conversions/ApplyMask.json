@@ -1,0 +1,60 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Apply binary mask",
+  "id": "f4a7311d-4d61-43ca-b473-c7872d1e9b45",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.ApplyMask"
+  },
+  "tags": [
+    "java",
+    "images"
+  ],
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "mat",
+      "name": "mask",
+      "hint": "[Optional] If skipped, the input matrix is returned without changes"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "maskingMode",
+      "caption": "What to do?",
+      "description": "Background consists of all pixels, for which the mask contains 0 (zero values).\nForeground consists of all pixels, for which the mask contains 1 (or any non-zero values).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "FILL_BACKGROUND",
+          "caption": "Fill background"
+        },
+        {
+          "value": "FILL_FOREGROUND",
+          "caption": "Fill foreground"
+        }
+      ],
+      "default": "FILL_BACKGROUND"
+    },
+    {
+      "caption": "Filling color",
+      "name": "filler",
+      "description": "See supported color formats in \"Create constant matrix\" function.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "#000000"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise trigonometric functions",
+  "id": "71aa0a86-b3d0-4462-a36c-cc153aecd5f7",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersTrigonometry"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "sin",
+      "hint": "For every source x it will contain M * sin x (M is \"Result multiplier M\" parameter)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "cos",
+      "hint": "For every source x it will contain M * cos x (M is \"Result multiplier M\" parameter)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "tan",
+      "hint": "For every source x it will contain M * tan x (M is \"Result multiplier M\" parameter)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "asin",
+      "hint": "For every source x it will contain M * asin x (M is \"Result multiplier M\" parameter)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "acos",
+      "hint": "For every source x it will contain M * acos x (M is \"Result multiplier M\" parameter)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "atan",
+      "hint": "For every source x it will contain M * atan x (M is \"Result multiplier M\" parameter)."
+    }
+  ],
+  "controls": [
+    {
+      "name": "degrees",
+      "caption": "Use degrees",
+      "description": "If set, all angles — arguments of sin, cos, tan and results of asin, acos, atan — are measured in degrees. If cleared, they are measured in radians",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Result multiplier M",
+      "name": "resultMultiplier",
+      "description": "See comments to output results.\nNote: it is typically useful only for \"sin\" and \"cos\" results.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "First processed column",
+      "description": "First processed index in every block, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in every block; if 0, all array is filled and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "sin"
+        },
+        {
+          "value": "cos"
+        },
+        {
+          "value": "tan"
+        },
+        {
+          "value": "asin"
+        },
+        {
+          "value": "acos"
+        },
+        {
+          "value": "atan"
+        }
+      ],
+      "default": "sin"
+    }
+  ]
+}

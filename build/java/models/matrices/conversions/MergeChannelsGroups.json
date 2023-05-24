@@ -1,0 +1,130 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Merge channels groups",
+  "id": "2e579392-465b-4e0e-935d-68ed04cc7091",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.MergeChannelsGroups"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_4"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_5"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_6"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_7"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_8"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_11",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_12",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_13",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_14",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_15",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "input_16",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, at least 1 input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, all input ports may be empty: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Resulting element type",
+      "name": "resultElementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "REQUIRE_IDENTICAL",
+          "caption": "element type of all input ports (they must have identical type)"
+        },
+        {
+          "value": "FIRST_INPUT",
+          "caption": "element type of the 1st input port (other inputs are automatically cast to this type)"
+        },
+        {
+          "value": "INT",
+          "caption": "\"int\" type"
+        },
+        {
+          "value": "FLOAT",
+          "caption": "\"float\" type"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "\"double\" type"
+        }
+      ],
+      "default": "FIRST_INPUT"
+    }
+  ]
+}

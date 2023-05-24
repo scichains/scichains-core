@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Non-zero pixels",
+  "id": "2d9b551b-f1ef-4790-92b3-56f4bf29b08e",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.NonZero"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Check only 3 channels (RGB)",
+      "name": "checkOnlyRGBChannels",
+      "description": "If set and the number of matrix channels > 3, this function checks only first 3 channels (usually RGB).\nIf cleared, it checks all channels, regardless on their amount (for example, checks α-channel in RGBA image).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Invert result",
+      "name": "invert",
+      "description": "If set, the result binary matrix will be inverted. In other words, it will contain bit 1 for pixels, for which all channels (or all first 3 channels) in the source matrix are zero, and bit 0 for all non-zero pixels.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

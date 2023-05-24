@@ -1,0 +1,77 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.json",
+  "name": "Set JSON value",
+  "id": "a98c9002-ca34-4765-87c7-7b8e4236f064",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.json.SetJsonValue"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "JSON key",
+      "name": "key",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "jsonKey"
+    },
+    {
+      "caption": "Value",
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "name": "jsonValueType",
+      "caption": "JSON value type",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "STRING",
+          "caption": "String"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "Floating-point number (double)"
+        },
+        {
+          "value": "INTEGER",
+          "caption": "Integer number (long)"
+        },
+        {
+          "value": "BOOLEAN",
+          "caption": "Boolean (true/false)"
+        },
+        {
+          "value": "JSON_OBJECT",
+          "caption": "JSON object"
+        },
+        {
+          "value": "JSON_ARRAY",
+          "caption": "JSON array"
+        },
+        {
+          "value": "NULL",
+          "caption": "Null (\"value\" parameter is ignored)."
+        }
+      ],
+      "default": "STRING"
+    }
+  ]
+}

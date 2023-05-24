@@ -1,0 +1,55 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Set one element of number array",
+  "id": "770beb39-3d9f-4929-83eb-cfc163d1f243",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.SetNumber"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockIndex",
+      "caption": "Index of block",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "Index of column",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "rawIndex",
+      "caption": "Raw index",
+      "description": "If specified, it is the raw index of the modified element, ignoring blocks; in this case the previous two indexes are ignored.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "value",
+      "caption": "Value",
+      "description": "New value of modified element",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

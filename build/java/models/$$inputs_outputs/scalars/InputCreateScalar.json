@@ -1,0 +1,39 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].scalars",
+  "name": "Input/create scalar",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "id": "4fdfcb6c-94bb-4e9e-aa28-865121a462a0",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "New scalar"
+    }
+  ]
+}

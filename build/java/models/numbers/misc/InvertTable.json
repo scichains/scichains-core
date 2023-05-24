@@ -1,0 +1,45 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Invert table of indexes",
+  "id": "f118f283-a771-413b-8867-f8cf69cf137b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.InvertTable"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "table",
+      "hint": "Source table: array of int indexes."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "table",
+      "hint": "Inverse table R. If the source table is S and the indexing base is B,\nthen R[S[k]−B]=B+k.\nElements of R, for which there is no corresponding index S[k]−B, are filled by −1.\nIf several elements S[k] are equal, then R[S[k]−B] will be the minimal from several possible indexes B+k."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Indexing base",
+      "name": "indexingBase",
+      "description": "See comments to the output table",
+      "edition_type": "enum",
+      "value_type": "String",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ONE_BASED"
+    }
+  ]
+}

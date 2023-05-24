@@ -1,0 +1,110 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise difference of 2 number arrays",
+  "id": "47b259af-bcb1-45a4-bfe0-81dbbc170264",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersDifference"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "numbers",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Operation",
+      "name": "operation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_DIFFERENCE",
+          "caption": "absolute difference |x−y|"
+        },
+        {
+          "value": "POSITIVE_DIFFERENCE",
+          "caption": "positive difference max(x−y,0)"
+        },
+        {
+          "value": "REVERSE_POSITIVE_DIFFERENCE",
+          "caption": "positive difference max(y−x,0)"
+        },
+        {
+          "value": "SUBTRACT",
+          "caption": "subtraction x−y"
+        },
+        {
+          "value": "REVERSE_SUBTRACT",
+          "caption": "subtraction y−x"
+        }
+      ],
+      "default": "ABSOLUTE_DIFFERENCE"
+    },
+    {
+      "caption": "Result elements type",
+      "name": "elementType",
+      "description": "Usually you may specify \"byte\" to save memory, if FALSE/TRUE values are 0/1 or other little integers in 0..255 range.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "First X column",
+      "description": "First index of number in the blocks of the array X",
+      "name": "indexInBlockX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "First Y column",
+      "description": "First index of number in the blocks of the array Y",
+      "name": "indexInBlockY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in each block of both arrays; if 0, all arrays are processed and indexes above are ignored",
+      "name": "lengthInBlock",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

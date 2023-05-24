@@ -1,0 +1,92 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Find pixels with given value",
+  "id": "6d278121-8b94-4169-8b43-6cfebb7a0a65",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.FindValue"
+  },
+  "tags": [
+    "java",
+    "images"
+  ],
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "valueKind",
+      "caption": "What to search?",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO",
+          "caption": "zero pixels: all channels =0"
+        },
+        {
+          "value": "NON_ZERO",
+          "caption": "non-zero pixels: at least one of channels ≠0"
+        },
+        {
+          "value": "NAN",
+          "caption": "NaN: at least one of channels is not-a-number (float/double types only)"
+        },
+        {
+          "value": "INFINITY",
+          "caption": "∞: at least one of channels is an infinity (float/double types only)"
+        },
+        {
+          "value": "EQUAL_TO_RAW_CUSTOM",
+          "caption": "equal to raw custom value: all channels =(specified value)"
+        },
+        {
+          "value": "NONEQUAL_TO_RAW_CUSTOM",
+          "caption": "nonequal to raw custom value: at least on of channel ≠(specified value)"
+        },
+        {
+          "value": "EQUAL_TO_NORMALIZED_CUSTOM",
+          "caption": "equal to normalized (0..1) custom value: all channels =(specified value)"
+        },
+        {
+          "value": "NONEQUAL_TO_NORMALIZED_CUSTOM",
+          "caption": "nonequal to normalized (0..1) custom value: at least on of channel ≠(specified value)"
+        }
+      ],
+      "default": "EQUAL_TO_RAW_CUSTOM"
+    },
+    {
+      "caption": "Check maximally first 3 channels (usually RGB); if false, all channels (like 4th Alpha) will be checked",
+      "name": "checkOnlyRGBChannels",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Custom value (for last two search options)",
+      "name": "customValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Dilation size",
+      "description": "If dilation size > 0, the result will be automatically dilated by circle with this diameter (to emphasize possible very little areas).",
+      "name": "dilationSize",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

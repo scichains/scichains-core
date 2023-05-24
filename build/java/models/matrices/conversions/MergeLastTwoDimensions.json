@@ -1,0 +1,25 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Merge last two dimensions (with decreasing number of dimensions)",
+  "id": "d3ad6270-84c7-485b-9d81-4c3d2b39e378",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.MergeLastTwoDimensions"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

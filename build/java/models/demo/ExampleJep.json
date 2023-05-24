@@ -1,0 +1,31 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example for calling Python",
+  "id": "6a68d179-5e14-43a0-83a1-9c38d709d88f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleJep"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "shared",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Arctangent: angle of (x, y) vector",
+  "id": "b43f7bb1-bf12-4b00-8fba-5e6ade7c1f6a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixArctangent"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result angle range",
+      "name": "angleRange",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_2PI_AS_0_1",
+          "caption": "0..1 instead of 0..2π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI_AS_MINUS_HALF_PLUS_HALF",
+          "caption": "−½..+½ instead of −π..+π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI_AS_0_1",
+          "caption": "0..1 instead of −π..+π"
+        }
+      ],
+      "default": "ZERO_2PI_AS_0_1"
+    },
+    {
+      "name": "epsilonForLittleSquare",
+      "caption": "ε² (square of ε)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": -1.0
+    },
+    {
+      "name": "resultForLittleSquare",
+      "caption": "Special result",
+      "description": "If x²+y²≤ε², we return the special result. If ε² is negative, this feature is not used.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

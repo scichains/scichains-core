@@ -1,0 +1,73 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Convert number array / auto-incremented numbers to JSON",
+  "description": "Creates simple JSON, consisting of KEY: N pairs, where KEY is one of the specified string keys, N is the corresponding number from the passed array.",
+  "id": "fd473232-fc30-474d-a7ca-9ff8eb56ec22",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.NumbersToJson"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "hint": "[Optional] Source numbers. Usually should be 1-column array; in other case, row/columns structure is ignored.\nCan be skipped; then the numbers will be a simple arithmetic progression: see \"Start value\" and \"Increment\" parameters."
+    },
+    {
+      "value_type": "scalar",
+      "name": "keys",
+      "hint": "[Optional] List of JSON keys, separated by \\n (name of every column in a separate line)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json",
+      "hint": "Result JSON, combining the specified keys and numberic values"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "JSON value type",
+      "name": "jsonValueType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "DOUBLE",
+          "caption": "Double: floating-point value as-is"
+        },
+        {
+          "value": "INTEGER",
+          "caption": "Integer: double, rounded to the nearest long)"
+        },
+        {
+          "value": "BOOLEAN",
+          "caption": "Boolean: true if ≠0, false if =0"
+        },
+        {
+          "value": "STRING",
+          "caption": "String: number in quotation marks"
+        }
+      ],
+      "default": "DOUBLE"
+    },
+    {
+      "caption": "Start value",
+      "name": "startValue",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Increment",
+      "name": "increment",
+      "description": "If the length (number of elements) of the source array is less than the number of specified keys, or if the source array is not set, the missed values for every key #K (K=0,1,2...) will be equal to start value + K * increment.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1
+    }
+  ]
+}

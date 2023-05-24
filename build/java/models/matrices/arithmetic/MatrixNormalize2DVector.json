@@ -1,0 +1,62 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Normalize 2D vector",
+  "id": "ccf2a903-551f-4fac-be8a-7b168726c08e",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixNormalize2DVector"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    },
+    {
+      "value_type": "mat",
+      "name": "magnitude"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What to return for almost zero vector (x,y)?",
+      "name": "resultForZeroVector",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO",
+          "caption": "zero vector (0,0)"
+        },
+        {
+          "value": "X1_Y0",
+          "caption": "vector (1,0)"
+        },
+        {
+          "value": "X0_Y1",
+          "caption": "vector (0,1)"
+        },
+        {
+          "value": "NAN",
+          "caption": "NaN vector (Float.NaN, Float.NaN)"
+        }
+      ],
+      "default": "X1_Y0"
+    }
+  ]
+}

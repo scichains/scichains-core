@@ -1,0 +1,66 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Check that numbers are in range",
+  "id": "82f2eb89-22e6-4ee6-a1c8-2c31ef45af22",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.CheckNumbersInRange"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "min",
+      "caption": "min value",
+      "hint": "Empty string means −∞",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "max",
+      "caption": "max value",
+      "hint": "Empty string means +∞",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Invert checked set",
+      "name": "invert",
+      "description": "If set, this function checks, whether all numbers are OUT the specified range.\nWarning: it is not equivalent to inverting boolean result!",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "What to do if some number is outside the range (or inside, if \"invert\" flag is set)?",
+      "name": "actionOnFail",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RETURN_FALSE",
+          "caption": "return false (scalar)"
+        },
+        {
+          "value": "THROW_EXCEPTION",
+          "caption": "throw exception (AssertionError)"
+        }
+      ],
+      "default": "THROW_EXCEPTION"
+    }
+  ]
+}

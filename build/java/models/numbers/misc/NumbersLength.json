@@ -1,0 +1,54 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Length of number array",
+  "id": "58bd577e-fade-4140-abd0-4c2b65a7f571",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.NumbersLength"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "block_length"
+    }
+  ],
+  "controls": [
+    {
+      "name": "lengthType",
+      "caption": "What to return?",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NUMBER_OF_BLOCKS",
+          "caption": "Number of blocks"
+        },
+        {
+          "value": "RAW_ARRAY_LENGTH",
+          "caption": "Length of raw array (= number of block * block length)"
+        }
+      ],
+      "default": "NUMBER_OF_BLOCKS"
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, empty input port leads to returning 0 (\"block_length\" output will contain 1).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Merge binary masks",
+  "id": "b776f208-1900-4d97-96f7-2923b2002617",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.MergeBinaryMasks"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_3"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_4"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_5"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_6"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_7"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_8"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_9"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_10"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

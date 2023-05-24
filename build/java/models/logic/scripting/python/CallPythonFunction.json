@@ -1,0 +1,342 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.scripting.python",
+  "name": "Call Python function",
+  "id": "4a2fa4ed-a415-4f0a-90aa-d092a6a362ee",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.scripting.python.CallPythonFunction"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d"
+    },
+    {
+      "value_type": "scalar",
+      "name": "e"
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "supplied_python_roots",
+      "caption": "Supplied Python roots",
+      "hint": "List of Python root folders, supplied by this application and added to Python search paths."
+    }
+  ],
+  "controls": [
+    {
+      "name": "code",
+      "caption": "Main Python code",
+      "description": "This code allows to import some necessary modules, define some functions etc.\nNote: while executing in a loop, this code is performed only once, before 1st execution.\nAlso note: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this code, for example, if you changed import statements or function declaration: it allows to reset environment and remove all previous declarations.\n\nWARNING: the code above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "from java.lang import System \n# - this Python implementation allows to use Java classes\n\ndef execute(params, inputs, outputs):\n    result = \"Hello from Python function!\"\n    print(result)\n    return result\n"
+    },
+    {
+      "name": "mainFunctionName",
+      "caption": "Main function name",
+      "description": "Function that will be called. It can be declared it the code above or imported from some other module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nArguments \"params\", \"inputs\" and \"outputs\" should be instances of some Python classes. By default, we use classes \"SParameters\", \"SInputs\" and \"SOutputs\" from standard Python API.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "execute"
+    },
+    {
+      "name": "paramsClassName",
+      "caption": "Class name for argument \"params\"",
+      "description": "If empty (not specified), the standard class \"algart_api.SInOut.SParameters\" is used.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "inputsClassName",
+      "caption": "Class name for argument \"inputs\"",
+      "description": "If empty (not specified), the standard class \"algart_api.SInOut.SInputs\" is used.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "outputsClassName",
+      "caption": "Class name for argument \"outputs\"",
+      "description": "If empty (not specified), the standard class \"algart_api.SInOut.SOutputs\" is used.\nArguments \"params\", \"inputs\" and \"outputs\" of the main function should be instances of some Python classes, which names (available in current scope) are specified by the last 3 parameters.\nYou may specify them and use any classes for arguments of the main function, like simple empty classes, as declared in the standard \"SInOut\" module. Standard classes are imported automatically. If you will specify non-standard names of these 3 classes, you must import your classes manually or declare them in your  main code, so that they will be available in Python under the specified names.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "e",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "description": "Parameters \"a\"-\"f\" will become string fields of \"params\" object.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "description": "Parameters \"p\"-\"u\" will become number fields of \"params\" object.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "compilerKind",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "JEP_LOCAL",
+          "caption": "Strictly isolated (JEP SubInterpreter)"
+        },
+        {
+          "value": "JEP_SHARED",
+          "caption": "Standard (JEP SharedInterpreter)"
+        }
+      ],
+      "description": "Strictly isolated mode tries to guarantee that any corrections in Python global structures like sys.path etc. will not affect to other Python executors. In this mode you may ignore the warning about global variables for \"Main Python code\".\n\nWARNING: this mode is incompatible with many native libraries like \"numpy\" and may lead to system crash if you will import them. Moreover, it can lead to impossibility to execute any other Python scripts in all the system, until full reloading of the application/server! We strictly recommend to avoid this mode, besides very simple examples written in pure Python, when you fully control the application (single user, single chain).",
+      "default": "JEP_SHARED",
+      "advanced": true
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output"
+        },
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        },
+        {
+          "value": "e"
+        },
+        {
+          "value": "f"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

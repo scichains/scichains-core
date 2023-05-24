@@ -1,0 +1,125 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Contrast and classify numbers by level",
+  "description": "Replaces each number in the array by \"contrasted\" value, scaled so that the \"low limit\" becomes \"result min\" (usually 0.0) and the \"high limit\" becomes \"result max\" (usually 1.0). Also classifies number: for all numbers inside \"low limit\"..\"high limit\" range, returns 1 in the corresponding element of \"selector\", and for all other numbers clears the corresponding element in \"selector\" to 0.",
+  "id": "da1e745b-17d1-4b10-8adb-10c3f0cf18d7",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.ContrastAndClassifyNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "numbers",
+      "name": "selector"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "low limit value",
+      "name": "low_limit_value"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "high limit value",
+      "name": "high_limit_value"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "low limit",
+      "name": "lowLimit",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "high limit",
+      "name": "highLimit",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "interpretation of the low limit",
+      "name": "lowLimitInterpretation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_VALUE",
+          "caption": "raw value"
+        },
+        {
+          "value": "VALUE_BETWEEN_MIN_AND_MAX",
+          "caption": "value (0..1) between global minimum and global maximum at the image"
+        },
+        {
+          "value": "PERCENTILE_BETWEEN_MIN_AND_MAX",
+          "caption": "percentile (0..1) between global minimum and global maximum at the histogram of intensities"
+        }
+      ],
+      "default": "PERCENTILE_BETWEEN_MIN_AND_MAX"
+    },
+    {
+      "caption": "interpretation of the high limit",
+      "name": "highLimitInterpretation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_VALUE",
+          "caption": "raw value"
+        },
+        {
+          "value": "VALUE_BETWEEN_MIN_AND_MAX",
+          "caption": "value (0..1) between global minimum and global maximum at the numbers"
+        },
+        {
+          "value": "PERCENTILE_BETWEEN_MIN_AND_MAX",
+          "caption": "percentile (0..1) between global minimum and global maximum at the histogram of numbers"
+        }
+      ],
+      "default": "PERCENTILE_BETWEEN_MIN_AND_MAX"
+    },
+    {
+      "caption": "result min",
+      "name": "resultMin",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "result max",
+      "name": "resultMax",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "truncate overflow",
+      "name": "truncateOverflow",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "invertSelector",
+      "caption": "invert selector",
+      "description": "If set, the selector described above are inverted: value 0 is used outside the range, value 1 is used inside",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

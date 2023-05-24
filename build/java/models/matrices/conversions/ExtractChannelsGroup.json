@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.conversions",
+  "name": "Extract channels group",
+  "id": "d966fb83-0f62-48a8-bbe1-093d74ec1745",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.conversions.ExtractChannelsGroup"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "First extracted channel",
+      "name": "indexOfFirstChannel",
+      "description": "Index I of the first extracted channel (starting from 0): the channel #K in the result is the channel #K+I in the source, or zero matrix if K+I<0 or K+I≥(number of source channels)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Number of extracted channels",
+      "name": "numberOfExtractedChannels",
+      "description": "Number of channels to extract; if 0, the source image is returned without changes",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    }
+  ]
+}

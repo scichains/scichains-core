@@ -1,0 +1,140 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.io",
+  "name": "Read image",
+  "id": "701ee3e2-56d2-489a-b9ba-d007ee27076f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.io.ReadImage"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition",
+      "hint": "[Optional] Modification for input file name."
+    },
+    {
+      "value_type": "mat",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this image (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_y"
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.jpg\" or \"images/test.jpg\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.jpg, %TEMP%/my_file.jpg or (in Windows) %TEMP%\\my_file.jpg.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Requires existing file",
+      "name": "fileExistenceRequired",
+      "description": "If set, the input file must exist; in other case, this function will throw an exception.\nIf this flag is cleared and the file does not exist, this function does nothing (just returns non-initialized result).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Desired number of channels",
+      "name": "numberOfChannels",
+      "value_type": "int",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": 0,
+          "caption": "0 (original)"
+        },
+        {
+          "value": 1,
+          "caption": "1 (monochrome)"
+        },
+        {
+          "value": 3,
+          "caption": "3 (RGB)"
+        },
+        {
+          "value": 4,
+          "caption": "4 (RGBA)"
+        }
+      ],
+      "default": 0
+    }
+  ]
+}

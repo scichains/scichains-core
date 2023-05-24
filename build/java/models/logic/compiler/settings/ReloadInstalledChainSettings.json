@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.settings",
+  "name": "Reload installed chain main settings",
+  "description": "Special version of \"Use settings\" function, reloading all installed settings combiners, describing settings of the whole chains, in the context of the current chain. It is necessary, if the execution system uses installed chain settings to customize all the chain with help of some special GUI.<br>This function is invoked automatically while using this chain as a sub-chain by \"Use sub-chain\" function.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "id": "26d60191-6fbe-4172-a158-027709f8c4b8",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.settings.ReloadInstalledChainSettings"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "out_ports_hidden": [
+    {
+      "value_type": "scalar",
+      "name": "combine-model"
+    },
+    {
+      "value_type": "scalar",
+      "name": "split-model"
+    },
+    {
+      "value_type": "scalar",
+      "name": "get-names-model"
+    }
+  ],
+  "controls": [
+  ]
+}

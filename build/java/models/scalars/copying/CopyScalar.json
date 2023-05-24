@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.copying",
+  "name": "Copy scalar",
+  "options": {
+    "behavior": {
+      "copy": true
+    }
+  },
+  "id": "ba7fe29b-4b4b-426a-a5b0-58201e8d24d5",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.copying.CopyScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized scalar; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

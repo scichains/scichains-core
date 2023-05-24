@@ -1,0 +1,166 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.geometry",
+  "name": "Crop: submatrix/supermatrix/shift...",
+  "id": "9bdbc1e8-0789-46ab-a4e6-be30b497a863",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.geometry.SubMatrix"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "rectangular_area",
+      "caption": "rectangular area",
+      "hint": "[Optional] If specified, it defines rectangular area to be extracted.\nFor example, in 2D case, it must be 4 numbers describing a rectangle: min_x, max_x, min_y, max_y; in 3D case, it must be 6 numbers, etc.\nAll coordinates, specified in arguments, are ignored."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_y"
+    },
+    {
+      "value_type": "numbers",
+      "name": "rectangular_area",
+      "caption": "rectangular area",
+      "hint": "Rectangular area in the source matrix, that was actually extracted.\nEqual to the source rectangular area, if it was specified."
+    }
+  ],
+  "controls": [
+    {
+      "name": "doAction",
+      "caption": "Do action",
+      "description": "If cleared, this function does nothing and just returns original unchanged matrix. Can be convenient if you want to  disable cropping sometimes.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "percents",
+      "captions": "Percents of all image",
+      "description": "If true, all numbers below are measured in percents of image sizes (right=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "left",
+      "description": "Specifies x₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "top",
+      "description": "Specifies y₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "front",
+      "description": "(For ≥3D) Specifies z₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "right",
+      "description": "Specifies x₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if x₂<0, it is replaced with dimX+x₂ (where dimX is image width); ignored if width>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "bottom",
+      "description": "Specifies y₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if y₂<0, it is replaced with dimY+y₂ (where dimY is image height); ignored if height>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "rear",
+      "description": "(For ≥3D) Specifies z₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if z₂<0, it is replaced with dimZ+z₂; ignored if depth>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "width",
+      "description": "If width>0, it overrides x₂ above and specifies result width x₂−x₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "height",
+      "description": "If height>0, it overrides y₂ above and specifies result height y₂−y₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "depth",
+      "description": "(For ≥3D) If depth>0, it overrides z₂ above and specifies result height z₂−z₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Continuation mode",
+      "name": "continuationMode",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "none (must be submatrix)"
+        },
+        {
+          "value": "CYCLIC",
+          "caption": "cyclic"
+        },
+        {
+          "value": "PSEUDO_CYCLIC",
+          "caption": "pseudo-cyclic"
+        },
+        {
+          "value": "MIRROR_CYCLIC",
+          "caption": "mirror-cyclic"
+        },
+        {
+          "value": "ZERO_CONSTANT",
+          "caption": "0"
+        },
+        {
+          "value": "POSITIVE_INFINITY",
+          "caption": "+∞"
+        },
+        {
+          "value": "NEGATIVE_INFINITY",
+          "caption": "−∞"
+        },
+        {
+          "value": "NAN_CONSTANT",
+          "caption": "NaN"
+        }
+      ],
+      "default": "CYCLIC"
+    }
+  ]
+}

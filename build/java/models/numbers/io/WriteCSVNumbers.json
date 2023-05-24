@@ -1,0 +1,210 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.io",
+  "name": "Write CSV numbers",
+  "id": "99366f3a-b465-4e78-8bd3-1b87ac37834d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.io.WriteCSVNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition"
+    },
+    {
+      "value_type": "scalar",
+      "name": "headers",
+      "hint": "[Optional] List of CSV column headers, separated by \\n, i.e. name of every column in a separate line.\nIf it contains insufficient number of headers or is not passed at all,\nthe missing headers are created automatically as xxx_K, where xxx is the elements type and K is the column index 1,2,...\nNote that such header format allows \"Read CSV numbers\" function to automatically detect\nelements type on the base of the header of the first column."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File (CSV format)",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.csv\" or \"samples/test.csv\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.csv, %TEMP%/my_file.csv or (in Windows) %TEMP%\\my_file.csv.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature, Java system properties and executor system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. Moreover, the path MUST be absolute; it will NOT be resolved relative any \"current\" folder. However, starting %TEMP%/ is allowed.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "requireInput",
+      "caption": "Requires input",
+      "description": "If set, the input port must contain some initialized matrix; in other case, this function will throw an exception or will delete the file (see below). If this flag is cleared, empty input port doesn't lead to any effect.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Clear file on reset",
+      "description": "If set, the file is cleared (deleted) while reset, i.e. before 1st iteration of the loop. It can be useful while using loops in \"Append to the end of file\" mode: file will be created while 1st iteration and appended after all other iterations.\nNote: if there is no loop, the file is deleted always; in other words, this flag just cancel effect of \"Append to the end of file\" flag.",
+      "name": "clearFileOnReset",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "appendToExistingFile",
+      "caption": "Append to the end of file",
+      "description": "Append numbers to the end of the existing file (if it exists); note: the existing file must contain number array with the same format (block length and element type)!",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Delete file for non-initialized",
+      "description": "Delete file if the input port is not initialized (in particular, as a result of an exception in previous blocks). This flag is ignored if \"Requires input\" is not set.",
+      "name": "deleteFileIfNonInitialized",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "advanced": true,
+      "default": false
+    },
+    {
+      "caption": "Where to copy previous file",
+      "description": "Copy of previously existing file, deleted if the input port is not initialized",
+      "name": "copyOfPreviousFileIfNonInitialized",
+      "value_type": "String",
+      "edition_type": "file",
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Delimiter between numbers",
+      "name": "delimiter",
+      "description": "Allowed delimiters for using \"Read numbers\": spaces, ';', ','. For standard CSV, the delimiter should be ','.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": " ",
+          "caption": "space"
+        },
+        {
+          "value": "\t",
+          "caption": "tab character"
+        },
+        {
+          "value": ",",
+          "caption": ","
+        },
+        {
+          "value": ";",
+          "caption": ";"
+        },
+        {
+          "value": ", ",
+          "caption": ", (with space)"
+        },
+        {
+          "value": "; ",
+          "caption": "; (with space)"
+        }
+      ],
+      "default": ","
+    },
+    {
+      "caption": "Delimiter between lines",
+      "name": "lineDelimiter",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "CRLF",
+          "caption": "CR+LF (DOS/Windows style)"
+        },
+        {
+          "value": "LF",
+          "caption": "LF (Unix style)"
+        },
+        {
+          "value": "SYSTEM",
+          "caption": "System default"
+        }
+      ],
+      "default": "CRLF"
+    },
+    {
+      "caption": "Format for every array element",
+      "name": "format",
+      "description": "It is the argument of String.format method for Locale.US. For example: %.5f.\nIf not specified, the numbers are stored with maximal precision.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Simple format for integers",
+      "name": "simpleFormatForIntegers",
+      "description": "If this flag is set, then integer numbers — actually integer, not depending on the element type — are stored in simplest format without decimal point, for example: 56, 23500 etc. (never 56.00 or 235e2).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

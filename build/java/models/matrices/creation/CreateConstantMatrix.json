@@ -1,0 +1,156 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.creation",
+  "name": "Create matrix (constant)",
+  "id": "596f04a1-2224-4acb-85fc-a152b7c94e37",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.creation.CreateConstantMatrix"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "hint": "Up to 20 channels; for creating more channels you may use \"Change number of channels\" function",
+      "caption": "number of channels",
+      "name": "numberOfChannels",
+      "value_type": "int",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": 1,
+          "caption": "1 (monochrome)"
+        },
+        {
+          "value": 2
+        },
+        {
+          "value": 3,
+          "caption": "3 (RGB)"
+        },
+        {
+          "value": 4,
+          "caption": "4 (RGBA)"
+        },
+        {
+          "value": 5
+        },
+        {
+          "value": 6
+        },
+        {
+          "value": 7
+        },
+        {
+          "value": 8
+        },
+        {
+          "value": 9
+        },
+        {
+          "value": 10
+        },
+        {
+          "value": 11
+        },
+        {
+          "value": 12
+        },
+        {
+          "value": 13
+        },
+        {
+          "value": 14
+        },
+        {
+          "value": 15
+        },
+        {
+          "value": 16
+        },
+        {
+          "value": 17
+        },
+        {
+          "value": 18
+        },
+        {
+          "value": 19
+        },
+        {
+          "value": 20
+        }
+      ],
+      "default": 3
+    },
+    {
+      "caption": "dimX (width)",
+      "name": "dimX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "caption": "dimY (height)",
+      "name": "dimY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "caption": "dimZ",
+      "name": "dimZ",
+      "description": "Zero dimZ means 2-dimensional matrix, positive dimZ — 3-dimensional",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "byte"
+    },
+    {
+      "name": "color",
+      "caption": "Color",
+      "description": "Supported color formats:\n    #FF0000 — HTML standard RRGGBBB without alpha (red color)\n    #FF000080 — HTML standard RRGGBBBAA with alpha (red color with alpha 0.5)\n    0xFF0000 — hexadecimal RRGGBBB, alpha not allowed (red color)\n    (1.0, 0.0, 0.0, 0.5) — all channels (normalized to 0.0..1.0), alpha allowed (red color with alpha 0.5)\n    [255, 173, 0] — raw (non-normalized) values for each channels, alpha allowed\n    0.5 — grayscale (normalized to 0.0..1.0)",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#00FF00"
+    }
+  ]
+}

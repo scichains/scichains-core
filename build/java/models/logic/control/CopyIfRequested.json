@@ -1,0 +1,374 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "copy if requested",
+  "id": "bd3069c8-c066-4492-bda3-cc5ec9b6859b",
+  "description": "For each input data checks, if the corresponding condition is fulfilled. If yes, this function copies it (if it exist) into the corresponding output. If not, the corresponding output stays to be non-initialized.<br>This function helps to request calculation of some subset of data, depending on several boolean flags, passed to the condition inputs.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CopyIfRequested"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s1",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s1",
+      "name": "s1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x1",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x1",
+      "name": "x1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m1",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m1",
+      "name": "m1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s2",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s2",
+      "name": "s2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x2",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x2",
+      "name": "x2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m2",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m2",
+      "name": "m2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s3",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s3",
+      "name": "s3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x3",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x3",
+      "name": "x3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m3",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m3",
+      "name": "m3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s4",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s4",
+      "name": "s4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x4",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x4",
+      "name": "x4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m4",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m4",
+      "name": "m4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_s5",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "...then s5",
+      "name": "s5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x5",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x5",
+      "name": "x5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_m5",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "caption": "...then m5",
+      "name": "m5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: execution is cancelled when \"xxx\" is false and continued (with a copy of input data) when \"xxx\" is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "s1"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "s2"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "s3"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "s4"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "s5"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "s1"
+    }
+  ]
+}

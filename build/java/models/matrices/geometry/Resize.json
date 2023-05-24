@@ -1,0 +1,97 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.geometry",
+  "name": "Resize",
+  "id": "a4107893-ee34-4bd7-b807-60de90f775b4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.geometry.Resize"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+   ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "dim_y"
+    }
+  ],
+  "controls": [
+    {
+      "name": "dimX",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "dimY",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "percents",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "resizingMode",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NEAREST",
+          "caption": "nearest pixel"
+        },
+        {
+          "value": "AVERAGING",
+          "caption": "averaging (for compression)"
+        },
+        {
+          "value": "BILINEAR",
+          "caption": "bilinear interpolation (for stretching)"
+        },
+        {
+          "value": "AVERAGING_BILINEAR",
+          "caption": "averaging bilinear"
+        },
+        {
+          "value": "AVERAGING_MIN",
+          "caption": "averaging to minimum (for binary: 2 brightnesses)"
+        },
+        {
+          "value": "AVERAGING_MAX",
+          "caption": "averaging to maximum (for binary: 2 brightnesses)"
+        }
+      ],
+      "default": "AVERAGING_BILINEAR"
+    },
+    {
+      "name": "convertBitToByte",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

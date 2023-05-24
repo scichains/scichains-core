@@ -1,0 +1,79 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Scale/extract columns",
+  "description": "Multiplies all elements of every columns #k by the corresponding weights[k]. If the length of weights array K is less than the number of columns M (block length), then the last missing M−K weights are supposed to be 1.0 (columns stays unchanged). If \"weights_json\" is set, it is used instead of \"weights\" array.<br>After this, some columns may be removed &mdash; see parameters.",
+  "id": "e25e9741-b748-417d-9145-8196fd819076",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.ScaleAndExtractColumns"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "hint": "May be skipped, then the output will stay non-initialized"
+    },
+    {
+      "value_type": "numbers",
+      "name": "weights",
+      "hint": "Array of weights. It is supposed to have 1 row, but if not, its rows/columns structure is ignored.\nMay be skipped, then all weights are supposed to be 1.0 (no scaling)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "[Optional] List of column names, separated by \\n (name of every column in a separate line)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "weights_json",
+      "hint": "[Optional] Table of weights in JSON format: \"NAME\": weight, where NAME is a column name.\nHere weight must be represented in one of following forms:\n1) JSON number; 2) JSON string, actually containing a number; 3) JSON boolean value (false means 0.0, true means 1.0). \nIf specified, \"column_names\" is required and the \"weights\" array above are ignored."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "List of names of columns, which were not removed.\nReturned only if the source \"column_names\" was specified."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Remove columns with weight=0.0",
+      "name": "removeColumnsWithZeroWeight",
+      "description": "If set, this function removes columns, corresponding zero weights. If all weights are zero and the number of weights ≥ number of columns, the result will be empty (non-initialized).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Remove columns, absent in weight JSON",
+      "name": "removeColumnsAbsentInWeightJson",
+      "description": "This flag is used only if \"weights_json\" is specified. If it is set, this function removes  columns, names of which are absent among the keys in \"weights_json\". If not, absent weights are considered to be 1.0 (columns stays unchanged).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Remove columns, filled by NaN",
+      "name": "removeColumnsFilledByNaN",
+      "description": "If set and if the array length > 0, this function removes the columns, where all elements are filled by NaN. If all elements of the array are NaN, the result will be empty (non-initialized).\nThis flag has no effect for integer element types (NaN is possible for float/double values only).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Require non-empty result",
+      "name": "requireNonEmptyResult",
+      "description": "If set and if the result is empty (all columns were removed), this function throws an exception.\nNote: if the source array is not specified (non-initialized), the result will also be empty (non-initialized) regardless this flag.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.creation",
+  "name": "Create JSON",
+  "id": "9710619e-d623-4393-be0a-53f0991b2f21",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreateJson"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this scalar (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+
+  "controls": [
+    {
+      "caption": "JSON",
+      "name": "json",
+      "value_type": "settings",
+      "description": "Note: this text must be a correct JSON.",
+      "edition_type": "value",
+      "multiline": true,
+      "default": {}
+    }
+  ]
+}

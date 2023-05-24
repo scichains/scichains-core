@@ -1,0 +1,36 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "System.gc()",
+  "description": "Performs Java garbage collection.",
+  "id": "3d7fa286-618b-4783-9950-d3bf15fcfacd",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.Gc"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "hint": "This input scalar is ignored."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Contains message about available memory."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Do action",
+      "name": "doAction",
+      "description": "If cleared, this function does nothing.  You may use this flag if you need to run the garbage collector not always, but, for example, only after the last iteration of some loop.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

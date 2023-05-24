@@ -1,0 +1,82 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise m * x^a * y^b",
+  "description": "Returns product of powers <i>m&sdot;x<sup>a</sup></i><i>y<sup>b</sup></i> (multiplied by <i>m</i> parameter). Second argument <i>y</i> is optional: if it is skipped, performs single power operation <i>m&sdot;x<sup>a</sup></i>.",
+  "id": "497255f3-8de3-4ae8-8fe0-d1f89ad80457",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersProductOfTwoPowers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "numbers",
+      "name": "y",
+      "hint": "[Optional] Ignored if skipped (function returns m * x^a)"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "1.0"
+    },
+    {
+      "name": "b",
+      "description": "Note: here and in the previous parameter you can use either a usual real number, or a special string \"A / B\", where A and B are any real numbers (spaces are ignored). The last form means usual division A/B. It can be convenient, for example, for values like 1/3, that cannot be written exactly as a decimal numbers.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "1.0"
+    },
+    {
+      "name": "m",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "First X column",
+      "description": "First index of number in the blocks of the array X",
+      "name": "indexInBlockX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "First Y column",
+      "description": "First index of number in the blocks of the array Y",
+      "name": "indexInBlockY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in each block of both arrays; if 0, all arrays are processed and indexes above are ignored",
+      "name": "lengthInBlock",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Replace processed columns",
+      "description": "Replace processed part in array X with the result and return corrected X",
+      "name": "replaceColumnRangeInInput",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

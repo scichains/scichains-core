@@ -1,0 +1,733 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "copy numbers if requested",
+  "id": "155df889-1335-4a59-8458-a236763e0c1f",
+  "description": "For each input data checks, if the corresponding condition is fulfilled. If yes, this function copies it (if it exist) into the corresponding output. If not, the corresponding output stays to be non-initialized.<br>This function helps to request calculation of some subset of data, depending on several boolean flags, passed to the condition inputs.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CopyNumbersIfRequested"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x1",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x1",
+      "name": "x1",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x2",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x2",
+      "name": "x2",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x3",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x3",
+      "name": "x3",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x4",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x4",
+      "name": "x4",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x5",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x5",
+      "name": "x5",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x6",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x6",
+      "name": "x6",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x7",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x7",
+      "name": "x7",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x8",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x8",
+      "name": "x8",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x9",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x9",
+      "name": "x9",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x10",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x10",
+      "name": "x10",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x11",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x11",
+      "name": "x11",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x12",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x12",
+      "name": "x12",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x13",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x13",
+      "name": "x13",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x14",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x14",
+      "name": "x14",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x15",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x15",
+      "name": "x15",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x16",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x16",
+      "name": "x16",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x17",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x17",
+      "name": "x17",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x18",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x18",
+      "name": "x18",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x19",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x19",
+      "name": "x19",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x20",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x20",
+      "name": "x20",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x21",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x21",
+      "name": "x21",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x22",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x22",
+      "name": "x22",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x23",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x23",
+      "name": "x23",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x24",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x24",
+      "name": "x24",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x25",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x25",
+      "name": "x25",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x26",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x26",
+      "name": "x26",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x27",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x27",
+      "name": "x27",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x28",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x28",
+      "name": "x28",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x29",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x29",
+      "name": "x29",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x30",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x30",
+      "name": "x30",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x31",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x31",
+      "name": "x31",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)...",
+      "name": "if_x32",
+      "hint": "Should contain numbers value, indication true/false condition (see \"What string is true\").",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "caption": "...then x32",
+      "name": "x32",
+      "hint": "If the condition above is fulfilled, this data is copied into the corresponding output.\nIn other case, this data is ignored and not requested to be calculated!",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x10",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x11",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x12",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x13",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x14",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x15",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x16",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x17",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x18",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x19",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x20",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x21",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x22",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x23",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x24",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x25",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x26",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x27",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x28",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x29",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x30",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x31",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x32",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: execution is cancelled when \"xxx\" is false and continued (with a copy of input data) when \"xxx\" is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "x6"
+        },
+        {
+          "value": "x7"
+        },
+        {
+          "value": "x8"
+        },
+        {
+          "value": "x9"
+        },
+        {
+          "value": "x10"
+        },
+        {
+          "value": "x11"
+        },
+        {
+          "value": "x12"
+        },
+        {
+          "value": "x13"
+        },
+        {
+          "value": "x14"
+        },
+        {
+          "value": "x15"
+        },
+        {
+          "value": "x16"
+        },
+        {
+          "value": "x17"
+        },
+        {
+          "value": "x18"
+        },
+        {
+          "value": "x19"
+        },
+        {
+          "value": "x20"
+        },
+        {
+          "value": "x21"
+        },
+        {
+          "value": "x22"
+        },
+        {
+          "value": "x23"
+        },
+        {
+          "value": "x24"
+        },
+        {
+          "value": "x25"
+        },
+        {
+          "value": "x26"
+        },
+        {
+          "value": "x27"
+        },
+        {
+          "value": "x28"
+        },
+        {
+          "value": "x29"
+        },
+        {
+          "value": "x30"
+        },
+        {
+          "value": "x31"
+        },
+        {
+          "value": "x32"
+        }
+      ],
+      "default": "x1"
+    }
+  ]
+}

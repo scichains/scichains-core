@@ -1,0 +1,122 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.arithmetic",
+  "name": "Compare 2 numbers (=, ≠, <, ≤, >, ≥)",
+  "description": "Compare two numbers arithmetically and return results. Both inputs x and y must be correct numbers.",
+  "id": "a76baac4-1947-4471-af26-aebcd72e7d01",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.arithmetic.CompareTwoNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "x = y",
+      "name": "equal"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "x ≠ y",
+      "name": "non_equal"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "x < y",
+      "name": "less"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "x ≤ y",
+      "name": "less_or_equal"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "x > y",
+      "name": "greater"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "x ≥ y",
+      "name": "greater_or_equal"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What output is true",
+      "name": "booleanStyle",
+      "description": "What output strings will be returned for true and what for false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0 or empty string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "x (default value)",
+      "name": "defaultX",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "y (default value)",
+      "name": "defaultY",
+      "description": "Default x/y values are used if the corresponding input ports are empty (non-initialized).",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "caption": "x = y",
+          "value": "equal"
+        },
+        {
+          "caption": "x ≠ y",
+          "value": "non_equal"
+        },
+        {
+          "caption": "x < y",
+          "value": "less"
+        },
+        {
+          "caption": "x ≤ y",
+          "value": "less_or_equal"
+        },
+        {
+          "caption": "x > y",
+          "value": "greater"
+        },
+        {
+          "caption": "x ≥ y",
+          "value": "greater_or_equal"
+        }
+      ],
+      "default": "equal"
+    }
+  ]
+}

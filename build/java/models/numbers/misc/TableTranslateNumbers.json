@@ -1,0 +1,135 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Translate indexes by table",
+  "id": "16f3b03b-9e88-472b-b2b7-20cf7203e25b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.TableTranslateNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "indexes",
+      "hint": "Array of some integer values: they will be used as indexes in the translation table.\nBut see also \"Invert indexes\" parameter"
+    },
+    {
+      "value_type": "numbers",
+      "name": "table",
+      "hint": "1st translation table: 1st result is creating by replacing each index\nwith table[index] or table[index−1] (depending on  \"Indexing base\").\nHere \"table[k]\" means the BLOCK #k in the table (the raw: several numbers for multicolumn table)."
+    },
+    {
+      "value_type": "numbers",
+      "name": "table_2",
+      "hint": "[Optional] 2st translation table for creating 2nd result by the same algorithm."
+    },
+    {
+      "value_type": "numbers",
+      "name": "table_3",
+      "hint": "[Optional] 3rd translation table for creating 3rd result by the same algorithm."
+    },
+    {
+      "value_type": "numbers",
+      "name": "table_4",
+      "hint": "[Optional] 4th translation table for creating 4th result by the same algorithm."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "values",
+      "hint": "1st result: source indexes, translated by the 1st table."
+    },
+    {
+      "value_type": "numbers",
+      "name": "values_2",
+      "hint": "2nd result: source indexes, translated by the 2nd table."
+    },
+    {
+      "value_type": "numbers",
+      "name": "values_3",
+      "hint": "3rd result: source indexes, translated by the 3rd table."
+    },
+    {
+      "value_type": "numbers",
+      "name": "values_4",
+      "hint": "4th result: source indexes, translated by the 4th table."
+    },
+    {
+      "value_type": "scalar",
+      "name": "n",
+      "hint": "Number of blocks in every result array."
+    },
+    {
+      "value_type": "scalar",
+      "name": "changed",
+      "hint": "[Optional] If requested, here will be boolean flag:\nfalse, if the result values are identical to the source indexes,\nor true in other case (at least one index was changed as the result of translation).\nIf result has another element type, or if the table consists of 2 or more columns, it will be true."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Indexing base",
+      "name": "indexingBase",
+      "description": "For every value V in the source array of indexes, the result value after translation will be equal to\ntable[V−B], where B = this indexing base.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ONE_BASED"
+    },
+    {
+      "caption": "Invert indexes",
+      "name": "invertIndexes",
+      "description": "If set, the indexes will be inverted before using for translation by \"Invert table of indexes\" function.\nNote: this mode requires the indexes array to have only one column. In other case, this function will throw an exception.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Replacement for elements outside the table",
+      "name": "replacementForNotExisting",
+      "description": "If not specified, elements outside the table stay unchanged",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Require (1st) table",
+      "name": "requireTable",
+      "description": "If cleared, the 1st source table may be skipped: it is supposed that it is trivial (every index is translated to itself). In other words, the source indexes are returned in the 1st result without changes, if \"Invert indexes\" is cleared, or with inversion, if it is set.\nIf set, this function will throw an exception when the 1st input table is not specified.\nThis flag does not affect processing 2nd and other tables: if they are skipped, the corresponding result just stays non-initialized.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "values"
+        },
+        {
+          "value": "values_2"
+        },
+        {
+          "value": "values_3"
+        },
+        {
+          "value": "values_4"
+        }
+      ],
+      "default": "values"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise logarithm",
+  "id": "4f0d20ef-857a-4d2a-be31-9e81520b9088",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersLogarithm"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Base of the logarithm",
+      "name": "logarithmBase",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "BASE_10",
+          "caption": "10.0"
+        },
+        {
+          "value": "BASE_E",
+          "caption": "e (2.7182818284590452354)"
+        },
+        {
+          "value": "CUSTOM",
+          "caption": "Custom (see below)"
+        }
+      ],
+      "default": "BASE_E"
+    },
+    {
+      "name": "customBase",
+      "caption": "Custom base",
+      "description": "Used in the parameter \"Base of the logarithm\" is \"Custom\".",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 2.0
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "First processed column",
+      "description": "First processed index in every block, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in every block; if 0, all array is filled and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

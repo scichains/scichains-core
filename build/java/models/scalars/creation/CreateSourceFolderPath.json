@@ -1,0 +1,76 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.creation",
+  "name": "Create path to source folder",
+  "id": "1eeb16e7-4e86-4acc-b90f-433b398869b1",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreatePath",
+    "new_instance_method": "getInstanceForSource"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "[Optional] Input path. If specified, it is used instead of \"Path\" parameter."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the specified path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual subfolder name."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Path",
+      "name": "path",
+      "description": "File/folder containing some source data.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.jpg\" or \"images/test.jpg\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": ""
+    },
+    {
+      "caption": "What to do?",
+      "name": "operation",
+      "description": "What to do with the path.\nFor \"check xxx\" operations, this function throws exception if there is no existing file or folder (or if we needs a file, but it is a folder, and vice versa).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "do not anything"
+        },
+        {
+          "value": "CHECK_FOLDER_EXISTENCE",
+          "caption": "check, if the path specifies existing folder"
+        }
+      ],
+      "default": "CHECK_FOLDER_EXISTENCE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

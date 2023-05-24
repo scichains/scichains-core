@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.scalars",
+  "name": "redirect (for scalar)",
+  "id": "3eaede2d-a758-4f17-a42d-f433748a1702",
+  "description": "Copies the input scalar to one of output ports, specified by redirector value.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.scalars.RedirectScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x3"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x4"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x5"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x6"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x7"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x8"
+    },
+    {
+      "value_type": "scalar",
+      "name": "x9"
+    }
+  ],
+  "controls": [
+    {
+      "name": "redirector",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "description": "Selecting index of the output port 1..9. Must be positive."
+    }
+  ]
+}

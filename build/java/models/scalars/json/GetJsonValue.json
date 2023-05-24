@@ -1,0 +1,47 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.json",
+  "name": "Get JSON value",
+  "id": "e2127f39-3f95-4964-8b86-52628baf6462",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.json.GetJsonValue"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "JSON key",
+      "name": "key",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "jsonKey"
+    },
+    {
+      "caption": "Default value",
+      "name": "defaultValue",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Use default value",
+      "name": "useDefaultValue",
+      "description": "This flag defines behaviour in the case, when the source JSON has no value for specified JSON key. If this flag is set, the \"Default value\" will be returned in such situation. If not, the result scalar will stay empty (non-initialized).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

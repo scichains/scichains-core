@@ -1,0 +1,75 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[parameters].scalars",
+  "name": "Scalar source folder parameter (a string)",
+  "options": {
+    "behavior": {
+      "data": true,
+      "data_type": "String",
+      "edition_type": "folder"
+    }
+  },
+  "id": "8d725c7a-5554-4b4b-a4b0-959baf51a231",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.creation.CreatePath",
+    "new_instance_method": "getSecureInstanceForSource"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input",
+      "caption": "external input",
+      "hint": "Chain constant or one of external parameters of the chain: folder containing some source data.\nIf specified, it is used instead of \"Path\" parameter."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the specified path."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual subfolder name."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Path",
+      "name": "path",
+      "description": "Folder containing some source data.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"images/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": ""
+    },
+    {
+      "caption": "What to do?",
+      "name": "operation",
+      "description": "What to do with the path.\nFor \"check xxx\" operations, this function throws exception if there is no existing file or folder (or if we needs a file, but it is a folder, and vice versa).\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a sub-chain from other solutions.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "do not anything"
+        },
+        {
+          "value": "CHECK_FOLDER_EXISTENCE",
+          "caption": "check, if the path specifies existing folder"
+        }
+      ],
+      "default": "CHECK_FOLDER_EXISTENCE"
+    }
+  ]
+}

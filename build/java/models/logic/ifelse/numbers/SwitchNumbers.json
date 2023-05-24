@@ -1,0 +1,80 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.arrays",
+  "name": "switch (xxx)... (for numbers)",
+  "id": "2dd41c4a-bf87-4ec3-ba6a-50bf2793d394",
+  "description": "Copies one of input number arrays, specified by the selector, to the output. If the selector is 0, first initialized input will be used.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.numbers.SwitchNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "selector_input",
+      "caption": "switch (xxx)",
+      "hint": "[Optional] May contain an integer number. In this case, it OVERRIDES the value of \"Selector\" parameter."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Selector",
+      "name": "selector",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0,
+      "description": "Selecting index of the input port 1..9. Zero value means selecting first initialized \"xK\" port.\nNote: if the port \"switch (xxx)\" contains non-empty string, this string must be a number, and that number overrides the value of this parameter."
+    },
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, and if the selector index is not 0, the input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, empty input port, selected by the previous parameter, doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

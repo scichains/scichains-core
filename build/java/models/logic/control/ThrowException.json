@@ -1,0 +1,125 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "if (xxx) throw an exception",
+  "id": "8770c313-f30a-4e8a-b9a2-2791e5d1aca2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.ThrowException"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)",
+      "name": "if",
+      "hint": "Should contain scalar true/false value: whether an exception should be thrown."
+    },
+    {
+      "value_type": "scalar",
+      "name": "reason",
+      "hint": "[Optional] May contain additional information, added to the exception message.\nFor example, it may be some number or string, the value of which becomes illegal."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] When specified, this data is just copied to \"s\" output before all other operations.\nCan be convenient if you need to \"build\" this operation into some chain of other functions.\nOther inputs \"x\", \"m\" are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] Copy of \"s\" input, when it is specified: see comments to \"s\" input.\nOther outputs \"x\", \"m\" are also copies of the corresponding inputs."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: an exception is thrown when \"xxx\" is false.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "What to throw?",
+      "name": "exceptionKind",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NULL_POINTER_EXCEPTION",
+          "caption": "NullPointerException"
+        },
+        {
+          "value": "ILLEGAL_ARGUMENT_EXCEPTION",
+          "caption": "IllegalArgumentException"
+        },
+        {
+          "value": "ILLEGAL_STATE_EXCEPTION",
+          "caption": "IllegalStateException"
+        },
+        {
+          "value": "INDEX_OUT_OF_BOUNDS_EXCEPTION",
+          "caption": "IndexOutOfBoundsException"
+        },
+        {
+          "value": "UNSUPPORTED_OPERATION_EXCEPTION",
+          "caption": "UnsupportedOperationException"
+        },
+        {
+          "value": "ASSERTION_ERROR",
+          "caption": "AssertionError"
+        }
+      ],
+      "default": "ILLEGAL_ARGUMENT_EXCEPTION"
+    },
+    {
+      "caption": "Message",
+      "name": "message",
+      "description": "Main exception message. If the input reason is specified (initialized), it is appended after the main message.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "Something goes wrong"
+    }
+  ]
+}

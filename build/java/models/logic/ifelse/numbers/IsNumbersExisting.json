@@ -1,0 +1,49 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.if/else.arrays",
+  "name": "Is number array existing/non-empty?",
+  "id": "81e3af9f-bdfc-41a7-9e80-2001aa4a9db4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.ifelse.numbers.IsNumbersExisting"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "When not initialized",
+      "name": "whenNonInitialized",
+      "description": "This value is returned when the input array is not existing (not initialized)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "false"
+    },
+    {
+      "caption": "When initialized",
+      "name": "whenInitialized",
+      "description": "This value is returned when the input array is existing (contains some data)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "true"
+    },
+    {
+      "caption": "Require non-empty",
+      "name": "requireNonEmpty",
+      "description": "If set, an empty array (with zero length) is considered not existing: this function will return \"When not initialized\" if array length = 0.\nIf cleared, the length of the input array is not checked: this function only checks if the input is initialized.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

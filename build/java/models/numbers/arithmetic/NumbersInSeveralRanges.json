@@ -1,0 +1,64 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Numbers in several ranges",
+  "description": "Compares input numbers with sequence of <i>m</i> thresholds and replaces them with one of <i>m</i>+1 corresponding values.",
+  "id": "0dd84db6-5584-475c-85ba-bbecd90beef4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersInSeveralRanges"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "thresholds",
+      "description": "Several (m) thresholds t₁,t₂,...,tₘ, separated by comma/space in ascending order.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "values",
+      "description": "Several (m+1) values v₀,v₁,v₂,...,vₘ, separated by comma/space. Each number x in the array is replaced with first vₖ, for which x≥tₖ, or with v₀ if x<t₁.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "1"
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "First processed column",
+      "description": "First processed index in every block, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in every block; if 0, all array is filled and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "replaceColumnRangeInInput",
+      "description": "Replace the specified columns and return the result; in other case, only processed columns will be returned",
+      "caption": "Fill the specified columns",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Double angle of 2D vector",
+  "description": "Let's vector (x,y) = (r&nbsp;cos&nbsp;φ,&nbsp;r&nbsp;sin&nbsp;φ). This function returns other vector (x',y') = (r&nbsp;cos&nbsp;2φ,&nbsp;r&nbsp;sin&nbsp;2φ).",
+  "id": "484b056f-c142-42e8-81de-2869e0ee127d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixDoubleAngleOf2DVector"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "y"
+    },
+    {
+      "value_type": "mat",
+      "name": "magnitude"
+    },
+    {
+      "value_type": "mat",
+      "name": "xy",
+      "hint": "2-channel matrix, where x is the first channel and y is the second channel"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What to return for almost zero vector (x,y)?",
+      "name": "resultForZeroVector",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO",
+          "caption": "zero vector (0,0)"
+        },
+        {
+          "value": "X1_Y0",
+          "caption": "vector (1,0)"
+        },
+        {
+          "value": "X0_Y1",
+          "caption": "vector (0,1)"
+        },
+        {
+          "value": "NAN",
+          "caption": "NaN vector (Float.NaN, Float.NaN)"
+        }
+      ],
+      "default": "X1_Y0"
+    },
+    {
+      "caption": "Normalized source",
+      "description": "If set, we suppose that the source vector (x,y) is already normalized (r=1).",
+      "name": "normalizedSource",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Normalized result",
+      "description": "If set, we return normalized result (cos2φ, sin 2φ) instead of (r cos2φ, r sin 2φ).",
+      "name": "normalizedResult",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

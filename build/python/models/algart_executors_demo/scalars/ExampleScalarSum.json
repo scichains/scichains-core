@@ -1,0 +1,32 @@
+{
+  "app": "executor",
+  "category": "~examples.python.scalars",
+  "name": "Python example: sum a+b",
+  "id": "a8df5a34-35ec-4bda-883d-5a58c1e791f2",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.scalars.ExampleScalarSum"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "b",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    }
+  ]
+}

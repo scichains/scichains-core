@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Repeater" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.modules.core.build.Repeater" />
+    <module name="executors-core" />
+    <option name="PROGRAM_PARAMETERS" value="-trimTrailingWhitespace -warningOnTabs src\main\java\**\*.java src\test\java\**\*.java" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

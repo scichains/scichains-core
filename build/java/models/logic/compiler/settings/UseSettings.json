@@ -1,0 +1,62 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.settings",
+  "name": "Use settings",
+  "description": "Allows to use the given settings combiner: registers it as 3 new executors, 1st to create JSON, 2nd to split settings from JSON and 3rd for getting property names.<br>Note: the 2nd and 3rd executor are optional; they are created only if \"split_id\" / \"get_names_id\", properties exist in the settings combiner JSON. Unlike this, 1st executor is obligatory, and its ID will be extracted from required \"id\" property.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "id": "d9f3cb7f-6cbf-4bb4-b328-5ecdda26c679",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.settings.UseSettings"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "combine-model"
+    },
+    {
+      "value_type": "scalar",
+      "name": "split-model"
+    },
+    {
+      "value_type": "scalar",
+      "name": "get-names-model"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Settings combiner JSON file(s)/folder(s)",
+      "name": "file",
+      "description": "Path(s) to one or several settings combiner model JSON files or folders, containing such JSON files, separated by \";\". In a case of folders, each folder is scanned, and all settings combiner JSONs, found in the folder and its subfolders, become available to use.\nNote: every path is trimmed, i.e. leading/trailing space characters, including line feeds, are removed. Thus, if you need several paths, separated by \";\", you can place each path in a separate line.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "caption": "Recursive scanning",
+      "name": "recursiveScanning",
+      "description": "If set, the path(s) specified above, if they are folders, is scanned recursively. If cleared, subfolders of the specified folders are not scanned.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Settings combiner JSON content",
+      "name": "settingsCombinerJsonContent",
+      "description": "This argument is used only when \"Settings combiner JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire settings combiner model JSON. This settings combiner will become available to use. This variant allows to use only 1 settings combiner (1–3 executors) in a single call.",
+      "value_type": "settings",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    }
+  ]
+}

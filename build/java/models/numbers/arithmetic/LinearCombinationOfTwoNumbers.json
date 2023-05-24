@@ -1,0 +1,90 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise ax + by + Δ",
+  "description": "Returns linear combination <i>ax</i>+<i>by</i>+Δ or (if the flag is set) its absolute value |<i>ax</i>+<i>by</i>+Δ|.  Second argument <i>y</i> is optional: if it is skipped, it is supposed to be zero.",
+  "id": "093b96a7-3ab1-4f56-b70c-bfe8b8c1999b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.LinearCombinationOfTwoNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "numbers",
+      "name": "y",
+      "hint": "[Optional] Ignored if skipped (function returns ax + Δ)"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "a",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "b",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "summand",
+      "caption": "Δ (delta, additional summand)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "absoluteValue",
+      "caption": "Absolute value",
+      "description": "If set, this function returns absolute value |ax + by + Δ| instead of usual result.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "First X column",
+      "description": "First index of number in the blocks of the array X",
+      "name": "indexInBlockX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "First Y column",
+      "description": "First index of number in the blocks of the array Y",
+      "name": "indexInBlockY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Number of processed columns",
+      "description": "Length of processed part in each block of both arrays; if 0, all arrays are processed and indexes above are ignored",
+      "name": "lengthInBlock",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Replace processed columns",
+      "description": "Replace processed part in array X with the result and return corrected X",
+      "name": "replaceColumnRangeInInput",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

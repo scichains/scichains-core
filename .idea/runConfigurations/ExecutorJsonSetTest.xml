@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ExecutorJsonSetTest" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.ExecutorJsonSetTest" />
+    <module name="executors-core" />
+    <option name="PROGRAM_PARAMETERS" value="--resolve --create \SciChains\ext\base-core" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ExecutionBlockInitialization" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.tests.ExecutionBlockInitialization" />
+    <module name="executors-core" />
+    <option name="VM_PARAMETERS" value="-Dnet.algart.executors.api.showInfo=true" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

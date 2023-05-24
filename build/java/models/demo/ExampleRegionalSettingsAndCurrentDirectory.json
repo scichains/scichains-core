@@ -1,0 +1,21 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example for regional settings and current folder",
+  "id": "2cf0f667-eba3-449b-85e2-b27592e3e6b8",
+  "description": "Example of java extension",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleRegionalSettingsAndCurrentDirectory"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

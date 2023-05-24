@@ -1,0 +1,88 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].numbers",
+  "name": "Input/read numbers (raw)",
+  "id": "d08d40a4-8608-4a54-b587-fc818dac7bc0",
+  "options": {
+    "behavior": {
+      "input": true
+    }
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.io.ReadRawNumbers",
+    "new_instance_method": "getSecureInstance"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain.\nWhen specified, this function simply returns a copy of this array (other arguments are ignored)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "List of column headers, separated by \\n (name of every column in a separate line),\nthat was probably written in the accompanying .meta file.\nWill stay empty (non-initialized) if the flag \"Read .meta file\" is not set."
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_indexes",
+      "hint": "JSON map of indexes of column headers,\nthat was probably written in the accompanying .meta file.\nWill stay empty (non-initialized) if the flag \"Read .meta file\" is not set."
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File (raw sequence of bytes)",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Requires existing file",
+      "name": "fileExistenceRequired",
+      "description": "If set, if the file does not exists, this function throws an exception. If cleared and if there is no existing file, output port stays not initialized.\nAll this relates to situation when  \"external input\" is not initialized. If it contains some value, this function returns its copy and ignores this flag.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

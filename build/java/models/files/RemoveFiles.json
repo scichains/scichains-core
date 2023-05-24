@@ -1,0 +1,79 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "files",
+  "name": "Remove files",
+  "id": "d62bdc85-78f2-4980-ac80-1b48b143c6cd",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.files.RemoveFiles"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file/folder",
+      "hint": "[Optional] String path to the file or folder. If specified, it is used instead of \"File/folder\" parameter (with all replacements performed in that parameter)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file/folder."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "When to remove?",
+      "name": "stage",
+      "description": "If set to \"On reset\", this function removes files while reset. It means: when executing in a loop this function is performed only once, before 1st execution.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RESET",
+          "caption": "On reset"
+        },
+        {
+          "value": "EXECUTE",
+          "caption": "On every execution"
+        }
+      ],
+      "default": "EXECUTE"
+    },
+    {
+      "caption": "Do action",
+      "name": "doAction",
+      "description": "If cleared, this function does nothing. You may use this flag if you need to remove files not always, but, for example, only in the first or last iteration of some loop.\nNote: the output port is filled always, regardless on this flag.\nBy default, this flag is set.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "File/folder",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Globbing pattern",
+      "description": "This function removes all files, matching the specified pattern: see \"getPathMatcher\" Java method. This pattern is used ONLY if the file/folder parameter actually specifies a folder; it is not used in the case of a regular file.\nNote: this function removes only files and never removes subfolders.\nAlso note: this function DOES NOT remove subfolders recursively.\n\nBE CAREFUL! WHILE INCORRECT USAGE, THIS FUNCTION CAN REMOVE A LOT OF IMPORTANT FILES FROM YOUR COMPUTER!",
+      "name": "globPattern",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "*.{dat,tmp}"
+    },
+    {
+      "caption": "Requires existing file/folder",
+      "name": "fileExistenceRequired",
+      "description": "If set, the path specified above must correspond to some existing file or folder. If cleared, the path may not exist: in this function will do nothing.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

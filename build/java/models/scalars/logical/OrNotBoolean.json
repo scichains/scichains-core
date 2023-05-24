@@ -1,0 +1,68 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.logical",
+  "name": "x | ~y: logical OR-NOT",
+  "id": "56697ac3-878b-4611-ab20-5a37ad422ba6",
+  "description": "Logical OR of first scalar and inverted (NOT) second scalar.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.logical.OrNotBoolean"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x",
+      "hint": "[Optional] Should contain boolean scalar value, indication true/false condition.\nSee \"What string is true\" and \"Default condition\" parameters."
+    },
+    {
+      "value_type": "scalar",
+      "name": "y",
+      "hint": "[Optional] Should contain boolean scalar value, indication true/false condition.\nSee \"What string is true\" and \"Default condition\" parameters."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "x | ~y",
+      "name": "output",
+      "hint": "Result of OR-NOT operator: x | ~y."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "booleanStyle",
+      "description": "What boolean value \"x\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0 or empty string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Common input format",
+      "name": "commonInputStyle",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "description": "If set, then input \"x\" may be specified both in C-like or in Java-like styles: it will always be recognized correctly.\n\nIn other words, if it is \"true\" or \"false\" string (ignoring case), it will be considered to be true/false correspondingly; if it is a number X, if will be translated to result of comparison X≠0 (false for \"0\" or \"0.0\", true for non-zero numbers); it it is an empty string, it will be considered to false; in any other case (non-empty string, even consisting of spaces only) it will be true."
+    },
+    {
+      "caption": "Default input",
+      "name": "defaultInput",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false,
+      "description": "If one of inputs \"x\", \"y\" is non-initialized, this value is used instead of it."
+    }
+  ]
+}

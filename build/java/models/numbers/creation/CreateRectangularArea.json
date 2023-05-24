@@ -1,0 +1,119 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create rectangular area",
+  "id": "8e55c58f-5801-4924-8490-b6135f5846a0",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateRectangularArea"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output",
+      "hint": "Range (2 numbers), rectangle (4 numbers) or parallelepiped (6 numbers)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "size_x",
+      "hint": "X-size of created rectangular area (see also \"sizeX\" parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "size_y",
+      "hint": "Y-size of created rectangular area (see also \"sizeY\" parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "size_z",
+      "hint": "Z-size of created rectangular area (see also \"sizeZ\" parameter)."
+    }
+  ],
+  "controls": [
+    {
+      "name": "resultElementType",
+      "caption": "Result type",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "LONG",
+          "caption": "integer (64 bit)"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "double"
+        }
+      ],
+      "default": "LONG"
+    },
+    {
+      "name": "minX",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "maxX",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "100"
+    },
+    {
+      "name": "sizeX",
+      "description": "If specified, the previous parameter is ignored; maxX = minX+sizeX−1 for integer result or minX+sizeX for double result.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "minY",
+      "description": "If not specified, the result will be a range minX..maxX (1-dimensional).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "name": "maxY",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "100"
+    },
+    {
+      "name": "sizeY",
+      "description": "If specified, the previous parameter is ignored; maxY = minY+sizeY−1 for integer result or minY+sizeY for double result.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "minZ",
+      "description": "If not specified, the result will be a rectangle (2-dimensional).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "maxZ",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "100"
+    },
+    {
+      "name": "sizeZ",
+      "description": "If specified, the previous parameter is ignored; maxZ = minZ+sizeZ−1 for integer result or minZ+sizeZ for double result.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

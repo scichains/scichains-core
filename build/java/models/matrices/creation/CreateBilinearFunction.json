@@ -1,0 +1,227 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.creation",
+  "name": "Create matrix for bilinear function",
+  "description": "Common bilinear function: r = cx2·(x−x₀)² + 2·cxy·(x−x₀)·(y−y₀) + cy2·(y−y₀)² + cx·(x−x₀) + cy·(y−y₀) + c. If \"Square root from bilinear function\" flag is set, we return  √<span style=\"border-top:1px solid; padding:0 0.1em;\">r</span>.",
+  "id": "b9595fcf-0f84-4512-99c3-2793687575a2",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.creation.CreateBilinearFunction"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "hint": "Up to 20 channels; for creating more channels you may use \"Change number of channels\" function",
+      "caption": "number of channels",
+      "name": "numberOfChannels",
+      "value_type": "int",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": 1,
+          "caption": "1 (monochrome)"
+        },
+        {
+          "value": 2
+        },
+        {
+          "value": 3,
+          "caption": "3 (RGB)"
+        },
+        {
+          "value": 4,
+          "caption": "4 (RGBA)"
+        },
+        {
+          "value": 5
+        },
+        {
+          "value": 6
+        },
+        {
+          "value": 7
+        },
+        {
+          "value": 8
+        },
+        {
+          "value": 9
+        },
+        {
+          "value": 10
+        },
+        {
+          "value": 11
+        },
+        {
+          "value": 12
+        },
+        {
+          "value": 13
+        },
+        {
+          "value": 14
+        },
+        {
+          "value": 15
+        },
+        {
+          "value": 16
+        },
+        {
+          "value": 17
+        },
+        {
+          "value": 18
+        },
+        {
+          "value": 19
+        },
+        {
+          "value": 20
+        }
+      ],
+      "default": 3
+    },
+    {
+      "caption": "dimX (width)",
+      "name": "dimX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 256
+    },
+    {
+      "caption": "dimY (height)",
+      "name": "dimY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 256
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "byte"
+    },
+    {
+      "name": "color",
+      "caption": "Color",
+      "value_type": "String",
+      "description": "See supported color formats in \"Create constant matrix\" function.",
+      "edition_type": "color",
+      "default": "#00FF00"
+    },
+    {
+      "name": "cx2",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.001
+    },
+    {
+      "name": "cxy",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0002
+    },
+    {
+      "name": "cy2",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.001
+    },
+    {
+      "name": "cx",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "cy",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "c",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "sqrtOfResult",
+      "caption": "Square root from bilinear function",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "originX",
+      "caption": "x₀",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 50
+    },
+    {
+      "name": "originY",
+      "caption": "y₀",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 50
+    },
+    {
+      "name": "originInPercent",
+      "caption": "x₀ and y₀ are specified in percents of dimX/dimY",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "remainedOfDivisionByMaxValue",
+      "caption": "Return remainder of division by maximal possible value",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "rawValues",
+      "caption": "Raw values",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

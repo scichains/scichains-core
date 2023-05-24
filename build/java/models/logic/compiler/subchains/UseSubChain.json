@@ -1,0 +1,82 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.subchains",
+  "name": "Use sub-chain(s)",
+  "description": "Allows to use the given sub-chain (registers it as a new executor) or a set of sub-chains.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "id": "1907b22c-c5c5-4d98-833f-20704c39c95a",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Sub-chain JSON file(s)/folder(s)",
+      "name": "file",
+      "description": "Path(s) to one or several sub-chain JSON file or folders, containing sub-chain JSON files, separated by \";\". In a case of folders, each folder is scanned recursively, and all sub-chain JSONs, found in the folder and its subfolders, become available to use.\nNote: every path is trimmed, i.e. leading/trailing space characters, including line feeds, are removed. Thus, if you need several paths, separated by \";\", you can place each path in a separate line.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "caption": "Requires existing file/folder",
+      "name": "fileExistenceRequired",
+      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Sub-chain JSON content",
+      "name": "subChainJsonContent",
+      "description": "This argument is used only when \"Sub-chain JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is either entire sub-chain JSON or a parent JSON, containing sub-chain in the corresponding section. This sub-chain will become available to use. This variant allows to use only 1 sub-chain in a single call.",
+      "value_type": "settings",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "caption": "Execute isolated loading-time functions",
+      "name": "executeIsolatedLoadingTimeFunctions",
+      "description": "If true, this function automatically execute all loading-time functions in the chain, if they have no connected input ports. In particular, it recursively executes all blocks with this function \"Use sub-chain\". It can simplify development of complex sub-chain sets. However, it is not necessary if you stores all sub-chains of your project in some folder; then it is more simple to pass this whole folder in as \"Sub-chain JSON file/folder\".\nNote that the functions \"Use settings\" and \"Use chain settings\" are executed always, regardless this flag.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Override behaviour",
+      "name": "overrideBehaviour",
+      "description": "If true, the following flags will affect the execution. If false, the behaviour is determined by options, stored in JSON file.\nNote: you must reload this chain for the changes to take effect.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Multithreading",
+      "name": "multithreading",
+      "description": "New created sub-chain (executor) will be executed in multithreading mode. (Ignored if \"Override behaviour\" flag is not set.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Execute all blocks",
+      "name": "executeAll",
+      "description": "If set, this chain will be executed completely: all its blocks, even if some blocks are not necessary to make the resulting output. (Ignored if \"Override behaviour\" flag is not set.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

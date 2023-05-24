@@ -1,0 +1,74 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.geometry",
+  "name": "Shift",
+  "id": "6513ba73-4a20-44fb-a543-10cf25d987ee",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.geometry.Shift"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+   ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "shiftX",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "shiftY",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Continuation mode",
+      "name": "continuationMode",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "DEFAULT",
+          "caption": "default (pseudo-cyclic)"
+        },
+        {
+          "value": "CYCLIC",
+          "caption": "cyclic"
+        },
+        {
+          "value": "MIRROR_CYCLIC",
+          "caption": "mirror-cyclic"
+        },
+        {
+          "value": "ZERO_CONSTANT",
+          "caption": "0"
+        },
+        {
+          "value": "POSITIVE_INFINITY",
+          "caption": "+∞"
+        },
+        {
+          "value": "NEGATIVE_INFINITY",
+          "caption": "−∞"
+        },
+        {
+          "value": "NAN_CONSTANT",
+          "caption": "NaN"
+        }
+      ],
+      "default": "DEFAULT"
+    }
+  ]
+}

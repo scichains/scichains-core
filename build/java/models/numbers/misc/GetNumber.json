@@ -1,0 +1,48 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.misc",
+  "name": "Get one element of number array",
+  "id": "59be4ed4-8b86-406a-b20b-8fafc46bbf52",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.misc.GetNumber"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Selected number"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockIndex",
+      "caption": "Index of block",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "indexInBlock",
+      "caption": "Index of column",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "rawIndex",
+      "caption": "Raw index",
+      "description": "If specified, it is the raw index of the returned element, ignoring blocks; in this case the previous two indexes are ignored.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}

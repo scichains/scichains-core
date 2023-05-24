@@ -1,0 +1,270 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.scripting.js",
+  "name": "JavaScript formula",
+  "id": "16803ff9-9c7a-4c2f-8bd4-3458706fce8c",
+  "description": "Simplified version of &quot;Common JavaScript&quot;.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.scripting.js.CommonJS"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\"",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    }
+  ],
+  "in_ports_hidden": [
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4"
+    },
+    {
+      "value_type": "mat",
+      "name": "m5"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "b",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "c",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    }
+  ],
+  "out_ports_hidden": [
+    {
+      "value_type": "scalar",
+      "name": "g"
+    },
+    {
+      "value_type": "scalar",
+      "name": "h"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4"
+    },
+    {
+      "value_type": "mat",
+      "name": "m5"
+    }
+  ],
+  "controls": [
+    {
+      "name": "formula",
+      "caption": "JavaScript formula",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "a + b"
+    },
+    {
+      "name": "resultA",
+      "caption": "Formula for output scalar \"a\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultB",
+      "caption": "Formula for output scalar \"b\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultC",
+      "caption": "Formula for output scalar \"c\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultD",
+      "caption": "Formula for output scalar \"d\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultE",
+      "caption": "Formula for output scalar \"e\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultF",
+      "caption": "Formula for output scalar \"f\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "caption": "a (default value)",
+      "name": "defaultA",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "b (default value)",
+      "name": "defaultB",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "c (default value)",
+      "name": "defaultC",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "d (default value)",
+      "name": "defaultD",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "caption": "e (default value)",
+      "name": "defaultE",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "caption": "f (default value)",
+      "name": "defaultF",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "name": "convertInputArraysToDouble",
+      "caption": "Convert input arrays to double[]",
+      "description": "If set, the input arrays \"x1\", \"x2\", ... are automatically converted to double[] array (SNumbers.toDoubleArray() method). If cleared, they are stored in JavaScript variables \"x1\", \"x2\", ... as original Java arrays (SNumbers.getArray() method).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    }
+  ]
+}

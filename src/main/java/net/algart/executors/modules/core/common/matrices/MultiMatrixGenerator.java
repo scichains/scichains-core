@@ -1,0 +1,117 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017-2023 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package net.algart.executors.modules.core.common.matrices;
+
+import net.algart.multimatrix.MultiMatrix;
+import net.algart.executors.api.Executor;
+
+import java.util.Objects;
+
+public abstract class MultiMatrixGenerator extends Executor {
+    private int numberOfChannels = 1;
+    private long dimX = 100;
+    private long dimY = 100;
+    private long dimZ = 0;
+    private Class<?> elementType = byte.class;
+
+    protected MultiMatrixGenerator() {
+        addOutputMat(DEFAULT_OUTPUT_PORT);
+    }
+
+    public final int getNumberOfChannels() {
+        return numberOfChannels;
+    }
+
+    public final void setNumberOfChannels(int numberOfChannels) {
+        this.numberOfChannels = positive(numberOfChannels);
+    }
+
+    public final long getDimX() {
+        return dimX;
+    }
+
+    public final void setDimX(long dimX) {
+        this.dimX = nonNegative(dimX);
+    }
+
+    public final long getDimY() {
+        return dimY;
+    }
+
+    public final void setDimY(long dimY) {
+        this.dimY = nonNegative(dimY);
+    }
+
+    public long getDimZ() {
+        return dimZ;
+    }
+
+    public void setDimZ(long dimZ) {
+        this.dimZ = nonNegative(dimZ);
+    }
+
+    public final Class<?> getElementType() {
+        return elementType;
+    }
+
+    public final void setElementType(Class<?> elementType) {
+        this.elementType = nonNull(elementType);
+    }
+
+    public final void setElementType(String elementType) {
+        setElementType(elementType(elementType));
+    }
+
+    @Override
+    public void process() {
+        setStartProcessingTimeStamp();
+        final MultiMatrix result = create();
+        setEndProcessingTimeStamp();
+        getMat().setTo(result);
+    }
+
+    public abstract MultiMatrix create();
+
+    public static Class<?> elementType(String primitiveElementTypeName) {
+        Objects.requireNonNull(primitiveElementTypeName, "Null element type name");
+        switch (primitiveElementTypeName) {
+            case "boolean":
+                return boolean.class;
+            case "byte":
+                return byte.class;
+            case "short":
+                return short.class;
+            case "int":
+                return int.class;
+            case "long":
+                return long.class;
+            case "float":
+                return float.class;
+            case "double":
+                return double.class;
+        }
+        throw new IllegalArgumentException("Illegal name of element type");
+    }
+}

@@ -1,0 +1,86 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.strings",
+  "name": "Split scalar",
+  "description": "Splits one scalar, containing several strings separated by some separator, to these strings, like in s.split(\"[\\\\s,;]+\") Java method.<br>Note: for splitting scalar to a number array, please use the function \"Scalar to number array\" from array processing group.",
+  "id": "00931b9c-d24c-48aa-bb93-063b9b057dfc",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.strings.SplitScalar"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s1"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s11"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s12"
+    }
+  ],
+  "controls": [
+    {
+      "name": "separator",
+      "description": "Delimiting regular expression. See comments to standard Java method String.split.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "[\\s,;]+"
+    },
+    {
+      "name": "defaultString",
+      "caption": "Default input",
+      "description": "Used instead of the input string, if it is not specified (non-initialized).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    }
+  ]
+}

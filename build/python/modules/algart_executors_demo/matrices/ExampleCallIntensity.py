@@ -1,0 +1,10 @@
+from net.algart.executors.modules.core.matrices.conversions import Intensity
+from net.algart.bridges.jep.api import Jep2SMat
+
+def execute(params, inputs, outputs):
+    intensity = Intensity()
+    intensity.setRgbResult(params.rgbResult)
+    mat = Jep2SMat.toSMat(inputs.input)
+    result = intensity.process(mat);
+    print("~~~~Example result: " + str(result))
+    return Jep2SMat.toNDArray(result)

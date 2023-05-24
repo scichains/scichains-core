@@ -1,0 +1,63 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.copying",
+  "name": "Fill column(s) of number array (arithmetic progression)",
+  "id": "148a211b-77a6-4205-9728-8336cfdedb02",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.copying.FillNumbersColumnsByArithmeticProgression"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "indexInBlock",
+      "caption": "First filled column",
+      "description": "First filled index in every block, 0..blockLength-1",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Number of filled columns",
+      "description": "Length of filled part in every block; if 0, all array is filled and index above is ignored.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "replaceColumnRangeInInput",
+      "description": "Fill the specified columns and return the result; in other case, only filled columns will be returned",
+      "caption": "Fill the specified columns",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "startValue",
+      "caption": "Start value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "increment",
+      "caption": "Increment of value for each block",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

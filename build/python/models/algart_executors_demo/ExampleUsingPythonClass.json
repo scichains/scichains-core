@@ -1,0 +1,22 @@
+{
+  "app": "executor",
+  "category": "~examples.python",
+  "name": "Python example: using class with state (counter)",
+  "id": "84e39463-1c32-4e57-ad8d-ab17f12c4456",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.ExampleUsingPythonClass",
+    "class": "Counter",
+    "function": "count"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

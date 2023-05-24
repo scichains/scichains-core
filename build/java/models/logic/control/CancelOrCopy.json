@@ -1,0 +1,273 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.control",
+  "name": "cancel execution or copy data",
+  "id": "bad52f03-9a05-402d-88f9-efda2e3215be",
+  "description": "If the condition is fulfilled, this function cancels execution of all functions, that depend on this executor. In a loop, it is equivalent to cancelling current iteration, like the &quot;continue&quot; Java or C operator; in a usual chain it is an analog of the &quot;return&quot; operator from Java or C function.<br>If the condition is not fulfilled, this function just copies all inputs (when exist) to the corresponding outputs.",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.control.CancelOrCopy"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "if (xxx)",
+      "name": "if",
+      "hint": "Should contain scalar value, indication true/false condition (see \"What string is true\")."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "caption": "checked \"xxx\" condition",
+      "name": "checked_condition",
+      "hint": "Boolean condition, actually checked by \"if\" operator: \"true\" means a request to cancel execution.\nNote that it always contains a normal value; unlike this, all other output data\nwill contain special reserved value when the condition is \"true\" —\nthis value leads to cancelling execution of all depending functions."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions."
+    },
+    {
+      "value_type": "mat",
+      "name": "m",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "hint": "Copy of the corresponding input or, if the condition is fulfilled,\na special reserved value, leading to skipping execution of all depending functions.",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "caption": "What string is true",
+      "name": "conditionStyle",
+      "description": "What input condition \"xxx\" is considered to be true and what is false.\n\nC-like: true is non-zero number or non-empty string, containing not a number, false is 0, 0.0, empty, non-initialized string.\n\nJava-like: true is \"true\" string (ignoring case), false is any other string, including non-initialized.\n\nNote that \"true\" string, according these rules, is considered to be true in all modes.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "C_LIKE",
+          "caption": "C-like"
+        },
+        {
+          "value": "JAVA_LIKE",
+          "caption": "Java-like"
+        }
+      ],
+      "default": "JAVA_LIKE"
+    },
+    {
+      "caption": "Invert condition",
+      "name": "invert",
+      "description": "If set, the input condition above is inverted: execution is cancelled when \"xxx\" is false and continued (with a copy of input data) when \"xxx\" is true.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "checked_condition",
+          "caption": "actually checked \"xxx\" condition"
+        },
+        {
+          "value": "s"
+        },
+        {
+          "value": "x"
+        },
+        {
+          "value": "m"
+        },
+        {
+          "value": "s2"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "s3"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "s4"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "s5"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "checked_condition"
+    }
+  ]
+}

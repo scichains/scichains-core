@@ -1,0 +1,113 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Python formula (elementwise) for matrices",
+  "id": "a304c4a6-60f0-404b-bae3-96e1268afbcc",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_core.matrices.ElementwiseFormula"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3"
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m6",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m7",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m8",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m10",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "formula",
+      "caption": "Formula",
+      "description": "This Python formula is evaluated all matrices. Note that in Python operation with whole matrix/array means are performed with all elements.\nThe following packages are imported automatically: math, numpy as np.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "a * m1 + b"
+    },
+    {
+      "name": "a",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.5
+    },
+    {
+      "name": "b",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "c",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "d",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "e",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "f",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java ExampleLoadingStage",
+  "id": "72347b9d-2076-4526-ae43-6db5d86bb2fd",
+  "options": {
+    "stage": "loading_time"
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleLoadingStage"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "name": "output",
+      "value_type": "scalar"
+    }
+  ],
+  "controls": [
+  ]
+}

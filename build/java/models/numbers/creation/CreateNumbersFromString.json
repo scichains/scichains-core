@@ -1,0 +1,78 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create number array from string",
+  "id": "78c30310-9305-4c7c-a8c7-ebbbcdfb4fc6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateNumbersFromString"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "hint": "The block length in the result (ignored in \"Single block\" mode)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Single block",
+      "name": "singleBlock",
+      "hint": "If true, the block length will be equal to array length (single block in array)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "Values",
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "0, 1, 2"
+    }
+  ]
+}

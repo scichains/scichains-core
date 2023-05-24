@@ -1,0 +1,74 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.settings",
+  "name": "Add sub-settings",
+  "description": "Adds into existing settings JSON new sub-JSON for sub-settings.<br>Though we suppose that this function will be used with settings JSONs, it can be applied to any correct JSON.",
+  "id": "178f4421-b367-4555-a0f8-52904109b88d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.compiler.settings.AddSubSettings"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "settings",
+      "hint": "If not specified, an empty JSON is supposed."
+    },
+    {
+      "value_type": "scalar",
+      "name": "sub-settings",
+      "hint": "If not specified, an empty JSON is supposed."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "settings"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Sub-settings name",
+      "name": "subSettingsName",
+      "description": "New sub-settings JSON will be added to existing JSON as JSON section, named \"@\" + this name. For example, sub-settings name \"xxxParameters\" will produce JSON object named \"@xxxParameters\". (Note that usual parameters in the settings combiner cannot start with @ character.)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "subsettings"
+    },
+    {
+      "caption": "What to do if this sub-settings already exists?",
+      "name": "replaceExistingSettingsMode",
+      "description": "Note that all modes are equivalent if existing settings JSON has no sub-section with key name, specified in the previous parameter.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "SIMPLE",
+          "caption": "Simple: existing JSON section is fully replaced"
+        },
+        {
+          "value": "ADD_NEW",
+          "caption": "Preserve existing entries and add new ones"
+        },
+        {
+          "value": "OVERRIDE",
+          "caption": "Override existing entries and add new ones"
+        },
+        {
+          "value": "OVERRIDE_ONLY_EXISTING_IN_BOTH",
+          "caption": "Override existing entries, but not add new ones"
+        }
+      ],
+      "default": "SIMPLE"
+    },
+    {
+      "caption": "Use \"@\" prefix",
+      "name": "useSubSettingsPrefix",
+      "description": "If set, sub-settings with name \"xxxParameters\" are represented by JSON object named \"@xxxParameters\", as described above. If cleared, this function does not add \"@\". It can be useful for processing usual JSON files (not settings).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

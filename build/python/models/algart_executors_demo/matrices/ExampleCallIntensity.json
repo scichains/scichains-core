@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.python.matrices",
+  "name": "Python example: calling \"Intensity\" executor",
+  "id": "5304be0a-ad9d-4fcd-9490-f8f0e99fd495",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.matrices.ExampleCallIntensity"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "RGB result",
+      "description": "This parameter is passed to Java-based executor \"Intensity\".\n",
+      "name": "rgbResult",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

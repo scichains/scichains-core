@@ -1,0 +1,150 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise cartesian x/y → polar r/φ (radius/arctangent)",
+  "id": "b4cf8392-5d1a-41e2-8cd8-39a94c3b1d6d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersCartesianToPolar"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x",
+      "hint": "Can be skipped, then x will be the first column of \"x/y\"."
+    },
+    {
+      "value_type": "numbers",
+      "name": "y",
+      "hint": "Can be skipped, then y will be the second column of \"x/y\"."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "x/y",
+      "name": "x_y",
+      "hint": "2-column array with x/y pairs. Used only if \"x\" and/or \"y\" above is not initialized."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "r",
+      "hint": "Radial polar coordinate r (magnitude: square root from x²+y²)."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "φ",
+      "name": "fi",
+      "hint": "Angle polar coordinate φ (arctangent of y/x, more exactly, atan2(y,x))."
+    },
+    {
+      "value_type": "numbers",
+      "caption": "r/φ",
+      "name": "r_fi",
+      "hint": "2-column array with pairs (r,φ)."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Result angle range",
+      "name": "angleRange",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_2PI",
+          "caption": "0..2π"
+        },
+        {
+          "value": "ZERO_2PI_AS_0_1",
+          "caption": "0..1 instead of 0..2π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI",
+          "caption": "−π..+π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI_AS_MINUS_HALF_PLUS_HALF",
+          "caption": "−½..+½ instead of −π..+π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI_AS_MINUS_1_PLUS_1",
+          "caption": "−1..+1 instead of −π..+π"
+        },
+        {
+          "value": "MINUS_PI_PLUS_PI_AS_0_1",
+          "caption": "0..1 instead of −π..+π"
+        }
+      ],
+      "default": "MINUS_PI_PLUS_PI"
+    },
+    {
+      "name": "angleMultiplier",
+      "caption": "Angle multiplier M",
+      "description": "Actual result angle φ is M*ψ, where ψ is the arctangent, represented in the range specified above. For example, if x=−1 and y=0 (angle 180°) and the angle range is \"−1..+1 instead of −π..+π\", the result angle will be −M. This is convenient to return results in degree: just specify M=180.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "epsilonForLittleSquare",
+      "caption": "ε² (square of ε)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": -1.0
+    },
+    {
+      "name": "angleForLittleSquare",
+      "caption": "Special angle",
+      "description": "If x²+y²≤ε², we return this special angle instead of arctangent (atan2 function becomes unstable for very little x²+y² and has no sense for x=y=0). If ε² is negative, this feature is not used.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "x column",
+      "description": "If the source \"x\" is multi-column, its column with this index will be used as x values.",
+      "name": "indexInBlockX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "y column",
+      "description": "If the source \"y\" is multi-column, its column with this index will be used as y values.",
+      "name": "indexInBlockY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "x/y columns",
+      "description": "If the source \"x/y\" is multi-column, its columns with this and following indexes will be used as x and y values.",
+      "name": "indexInBlockX_y",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "r"
+        },
+        {
+          "value": "fi",
+          "caption": "φ"
+        },
+        {
+          "value": "r_fi",
+          "caption": "r/φ"
+        }
+      ],
+      "default": "r"
+    }
+  ]
+}

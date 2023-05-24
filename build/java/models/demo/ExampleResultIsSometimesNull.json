@@ -1,0 +1,39 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java example: changing result (null or not)",
+  "id": "fbb5be56-8ecb-4113-9a6e-1ed8e9a34673",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleResultIsSometimesNull"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "noResult",
+      "description": "If set, the result is null (non-initialized). If cleared, it will be a copy of the input matrix.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "notClearOutputPort",
+      "description": "If set and if there is a loop, the chain must preserve last non-null result in the output port.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

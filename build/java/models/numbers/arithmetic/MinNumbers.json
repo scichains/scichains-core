@@ -1,0 +1,61 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.arithmetic",
+  "name": "Elementwise minimum of numbers",
+  "id": "3f51c8d7-79a1-4638-ba1a-f6473e6324d1",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.arithmetic.MinNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

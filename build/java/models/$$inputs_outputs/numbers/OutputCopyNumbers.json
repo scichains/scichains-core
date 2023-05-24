@@ -1,0 +1,178 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].numbers",
+  "name": "Output/copy number array",
+  "options": {
+    "behavior": {
+      "copy": true,
+      "output": true
+    }
+  },
+  "id": "3f03db23-a633-4ab3-96d4-f13f7866e63b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.copying.CopyNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Unused] This data is ignored.\nThis and following inputs allows to make this block dependant on some other functions,\n which MUST be executed (like \"repeat... while (xxx)\" or functions that write data to some files),\nbut do not produce useful results for transferring to other blocks.\nOther inputs \"x\", \"m\", \"s1\", \"x1\", \"m1\", etc. are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "scalar",
+      "name": "s3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s5",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s6",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x6",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m6",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s7",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x7",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m7",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s8",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x8",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m8",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s9",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x9",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "s10",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x10",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m10",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output",
+      "caption": "external output",
+      "hint": "One of output ports of the chain: a copy of the input"
+    }
+  ],
+  "controls": [
+  ]
+}

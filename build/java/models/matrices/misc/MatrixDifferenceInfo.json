@@ -1,0 +1,141 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.misc",
+  "name": "Common two-matrix difference information",
+  "id": "90d648f7-29fa-438a-925c-3d8cee255aa9",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.misc.MatrixDifferenceInfo"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input_1"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_2"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "mean"
+    },
+    {
+      "value_type": "numbers",
+      "name": "sum"
+    },
+    {
+      "value_type": "numbers",
+      "name": "min"
+    },
+    {
+      "value_type": "numbers",
+      "name": "max"
+    },
+    {
+      "value_type": "numbers",
+      "name": "min_position"
+    },
+    {
+      "value_type": "numbers",
+      "name": "max_position"
+    },
+    {
+      "value_type": "numbers",
+      "name": "range"
+    },
+    {
+      "value_type": "numbers",
+      "name": "non_zero_range"
+    }
+  ],
+  "out_ports_hidden": [
+    {
+      "value_type": "numbers",
+      "name": "hash"
+    }
+  ],
+  "controls": [
+    {
+      "name": "differenceOperation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ABSOLUTE_DIFFERENCE",
+          "caption": "absolute difference |x−y|"
+        },
+        {
+          "value": "POSITIVE_DIFFERENCE",
+          "caption": "positive difference max(x−y,0)"
+        },
+        {
+          "value": "SUBTRACT",
+          "caption": "subtraction x−y"
+        },
+        {
+          "value": "REVERSE_SUBTRACT",
+          "caption": "subtraction y−x"
+        },
+        {
+          "value": "RGB_DISTANCE",
+          "caption": "distance in RGB space (grayscale): sqrt((xR-yR)²+(xG-yG)²+(xB-yB)²)"
+        }
+      ],
+      "default": "ABSOLUTE_DIFFERENCE"
+    },
+    {
+      "name": "requireSameDimensions",
+      "caption": "Require same dimensions",
+      "description": "If set, two source matrices must have identical dimensions; in other case, this function will throw an exception.\nIf cleared, results will be empty for matrices with different dimensions.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "rawValues",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "mean"
+        },
+        {
+          "value": "sum"
+        },
+        {
+          "value": "min"
+        },
+        {
+          "value": "max"
+        },
+        {
+          "value": "min_position"
+        },
+        {
+          "value": "max_position"
+        },
+        {
+          "value": "range"
+        },
+        {
+          "value": "non_zero_range"
+        },
+        {
+          "value": "hash"
+        }
+      ],
+      "default": "mean"
+    }
+  ]
+}

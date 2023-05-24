@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.python.matrices",
+  "name": "Python example: Gaussian blur",
+  "id": "7e495a21-6737-4c18-9f0e-2be8f1eae7de",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.matrices.ExampleMatBlur"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "kernelSize",
+      "caption": "Kernel size",
+      "description": "If even, it is automatically increased by 1 (OpenCV requires odd values)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 30
+    }
+  ]
+}

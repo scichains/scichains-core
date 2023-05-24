@@ -1,0 +1,154 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Contours inside status test",
+  "id": "8d64d68a-3f67-47d6-8bca-677b8367455b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ContoursInsideStatusTest"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "contours",
+      "hint": "Contours: serialized array of points."
+    },
+    {
+      "value_type": "mat",
+      "name": "background",
+      "hint": "Actually not used."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "status"
+    },
+    {
+      "value_type": "scalar",
+      "name": "point_information"
+    },
+    {
+      "value_type": "scalar",
+      "name": "rounded_point_information"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Process all pixels",
+      "name": "processAllPixels",
+      "description": "If cleared, this function processes only 1  point (x,y), specified below.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Unpack contours (faster mode)",
+      "name": "unpackContours",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Simple check of all contours",
+      "name": "simpleCheckOfAllContours",
+      "description": "If set, we use simple loop for contours (while processing all pixels) instead of optimized analysing class.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "x",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "y",
+      "description": "Coordinates of some point for detailed testing.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Start X",
+      "name": "startX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Start Y",
+      "name": "startY",
+      "description": "Left/top corner of the result image in coordinate system of contours. In other words, start X/Y are subtracted from any segment of the contours before using it.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "X-size (width)",
+      "name": "sizeX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 256
+    },
+    {
+      "caption": "Y-size (height)",
+      "name": "sizeY",
+      "description": "Sizes of result matrix.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 256
+    },
+    {
+      "caption": "Scale",
+      "name": "scale",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "Multiply sizes by the scale",
+      "name": "multiplySizesByScale",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Horizontal boundary code (in matrix)",
+      "name": "horizontalBoundaryCode",
+      "value_type": "float",
+      "edition_type": "value",
+      "default": 1000.5
+    },
+    {
+      "caption": "(Non-horizontal) increment for boundary",
+      "name": "boundaryIncrement",
+      "value_type": "float",
+      "edition_type": "value",
+      "default": 500.5
+    },
+    {
+      "caption": "Find representative (inside) points",
+      "name": "findRepresentatives",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Code for inside representatives",
+      "name": "insideRepresentativeCode",
+      "value_type": "float",
+      "edition_type": "value",
+      "default": 800
+    },
+    {
+      "caption": "Code for boundary representatives (degenerated)",
+      "name": "boundaryRepresentativeCode",
+      "value_type": "float",
+      "edition_type": "value",
+      "default": 900
+    }
+  ]
+}

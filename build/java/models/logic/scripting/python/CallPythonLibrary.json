@@ -1,0 +1,296 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.scripting.python",
+  "name": "Call Python library function",
+  "id": "f7ba3331-b902-4de3-b3c4-04560aa59124",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.scripting.python.CallPythonLibrary"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d"
+    },
+    {
+      "value_type": "scalar",
+      "name": "e"
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "supplied_python_roots",
+      "caption": "Supplied Python roots",
+      "hint": "List of Python root folders, supplied by this application and added to Python search paths."
+    }
+  ],
+  "controls": [
+    {
+      "name": "moduleName",
+      "caption": "External module name",
+      "description": "Full name of some Python module, from which the system will import a function with the name, specified in the following parameter. You can specify here any module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nNote: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this name: it allows to reset environment and remove all previous declarations.\n\nWARNING: the module above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "python_lib_demo_simple.SimpleDemo"
+    },
+    {
+      "name": "mainFunctionName",
+      "caption": "Main function name",
+      "description": "Function that will be called. It must be declared in the module, specified in the previous parameter. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of classes \"SParameters\", \"SInputs\" and \"SOutputs\" from standard Python API.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "execute"
+    },
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "e",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "description": "Parameters \"a\"-\"f\" will become string fields of \"params\" object.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "description": "Parameters \"p\"-\"u\" will become number fields of \"params\" object.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output"
+        },
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        },
+        {
+          "value": "e"
+        },
+        {
+          "value": "f"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.loops",
+  "name": "Iteration count",
+  "id": "24d02c8c-f703-4c44-9b76-0300fdc62a48",
+  "description": "Returns number of full iterations since the loop start.<br>Can be considered as <code>i<code> variable in the usual loop idiom:<br><pre>for (long i = 0; i < n; i++) {\n    ...(this function is called here)...\n}",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.logic.loops.IterationCount"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] When specified, this data is just copied to \"s\" output before all other operations.\nCan be convenient if you need to \"build\" this operation into some chain of other functions.\nOther inputs \"x\", \"m\" are processed in the same way."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "count",
+      "hint": "Counter, starting from 0. Will be 0 while first iteration of the loop, 1 while the second, etc."
+    },
+    {
+      "value_type": "scalar",
+      "name": "count_1",
+      "caption": "counter from 1",
+      "hint": "Counter, starting from 1. Equal to \"count+1\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "is_first",
+      "hint": "Will contain \"true\" if it is the first iteration; in other case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "s",
+      "hint": "[Optional] Copy of \"s\" input, when it is specified: see comments to \"s\" input.\nOther outputs \"x\", \"m\" are also copies of the corresponding inputs."
+    },
+    {
+      "value_type": "numbers",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "m"
+    }
+  ],
+  "controls": [
+    {
+      "name": "throwExceptionIfOverflow",
+      "caption": "Throw exception if overflow",
+      "description": "If set and if the loop was executed 2^63−1=9223372036854775806 times (~9*10^18), this method will throw an exception. Obviously it is almost impossible situation.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

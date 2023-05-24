@@ -1,0 +1,41 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Extract columns of number array",
+  "id": "efc68288-07db-49b4-bc08-9fe331b51025",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.ExtractNumbersColumns"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "indexInBlock",
+      "caption": "First index in block",
+      "description": "First index of number in every block; can be 0..L-1, where L = block length.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "lengthInBlock",
+      "caption": "Length of copied part",
+      "value_type": "int",
+      "description": "Number of copied columns; can be 0..L-1, where L = block length.\n0 values is special and means \"copy until the last column\": the actual block length of the result will be max(1,L−K), where K = first index in block above.\nNote: if K≥L (incorrect values), the result will be filled by zeros.",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "$$[inputs/outputs].matrices",
+  "name": "Input/copy matrix",
+  "id": "f554f7db-f751-4114-b2dc-a694db78707d",
+  "options": {
+    "behavior": {
+      "copy": true,
+      "input": true
+    }
+  },
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.copying.CopyMatrix"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input",
+      "caption": "external input",
+      "hint": "One of input ports of the chain"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

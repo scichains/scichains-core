@@ -1,0 +1,176 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.io",
+  "name": "Multi-file read raw numbers",
+  "id": "e948f0d1-4216-4925-8f3a-9961bbc9229f",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.io.MultiReadRawNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file/folder",
+      "hint": "[Optional] String path to the file or folder. If specified, it is used instead of \"File/folder\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "List of column names, separated by \\n (name of every column in a separate line),\nthat were probably written in the accompanying .meta file.\nAlways stays empty (non-initialized) if the flag \"Read .meta file\" is not set.\nIf more than 1 file was read, the information from the last laded .meta-file is returned."
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_indexes",
+      "hint": "JSON map of indexes of columns,\nthat were probably written in the accompanying .meta file.\nAlways stays empty (non-initialized) if the flag \"Read .meta file\" is not set.\nIf more than 1 file was read, the information from the last laded .meta-file is returned."
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File/folder",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": ""
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Globbing pattern",
+      "description": "This function reads all files, matching the specified pattern: see \"getPathMatcher\" Java method. This pattern is used only if the source path actually specifies a folder; it is not used in the case of a regular file.\nNote: in a case of folder, this function scans it recursively.\nAlso note: this function sorts files by their names before reading and reads them in alphabetical order.",
+      "name": "globPattern",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "*.dat"
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "description": "The block length in the result.\nThis parameter is ignored is \"Read .meta file\" flag is set.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "description": "Element type of the result.\nNote: block length and element type, as well as byte order, is not stored inside the file: you must know this from other ways. The file contains just a sequence of bytes, representing each element of the number array.\nThis parameter is ignored is \"Read .meta file\" flag is set.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "Byte order",
+      "name": "byteOrder",
+      "description": "Note: we recommend to use \"big-endian\" to avoid compatibility problem while transferring the file to other platforms.\nThis parameter is ignored is \"Read .meta file\" flag is set.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "BIG_ENDIAN",
+          "caption": "big-endian"
+        },
+        {
+          "value": "LITTLE_ENDIAN",
+          "caption": "little-endian"
+        },
+        {
+          "value": "NATIVE",
+          "caption": "native (optimal for current computer)"
+        }
+      ],
+      "default": "NATIVE"
+    },
+    {
+      "caption": "Read .meta file",
+      "description": "If set, this function reads JSON metadata file with information about block length (i.e. number of columns), element type, byte order and column names (when they are specified). In this case, the parameters above \"Block length\", \"Elements type\" and \"Byte order\" are ignored.\nThe name of metadata file is the name of main file + \".meta\" suffix. For example, if the main file is \"test.dat\", then the metadata file will be \"test.dat.meta\".",
+      "name": "readMetadataFile",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

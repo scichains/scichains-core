@@ -1,0 +1,55 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.arithmetic",
+  "name": "Difference from 2 images comparison",
+  "description": "Calculates difference in RGB space between image X and two images A and B: |X−A| and |X−B|, and compares them; here |X−Y| means sqrt((X<sub>R</sub>)−Y<sub>R</sub>)²&nbsp;+&nbsp;(X<sub>G</sub>)−Y<sub>G</sub>)²&nbsp;+&nbsp;(X<sub>B</sub>)−Y<sub>B</sub>)²)",
+  "id": "8a2f0f46-b3cd-44e0-b592-78e93b170d03",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixDifferenceFromPair"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "x"
+    },
+    {
+      "value_type": "mat",
+      "name": "a"
+    },
+    {
+      "value_type": "mat",
+      "name": "b"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "operation",
+      "caption": "Result of comparison",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "RGB_DISTANCE_RELATION",
+          "caption": "|x−a| / |x−b|"
+        },
+        {
+          "value": "RGB_DISTANCE_SQUARE_DIVIDED_BY_SUM",
+          "caption": "|x−a|² / (|x−a|² + |x−b|²)"
+        },
+        {
+          "value": "RGB_DISTANCE_DIVIDED_BY_SUM",
+          "caption": "|x−a| / (|x−a| + |x−b|)"
+        }
+      ],
+      "default": "RGB_DISTANCE_SQUARE_DIVIDED_BY_SUM"
+    }
+  ]
+}

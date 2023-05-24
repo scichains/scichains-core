@@ -1,0 +1,536 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Combine named column(s) of several number arrays",
+  "id": "b74ad015-1e29-49be-9641-e908f2a09b47",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.CombineNamedNumbersColumns"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input_1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_3"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_4"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_5"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_6"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_7"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_8"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_9"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_10"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_11",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_12",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_13",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_14",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_15",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_16",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_17",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_18",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_19",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_20",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_21",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_22",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_23",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_24",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_25",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_26",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_27",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_28",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_29",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_30",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_31",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "input_32",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "column_names",
+      "hint": "List of result column names, separated by \\n (the same as \"Result column names\" list)."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires all columns",
+      "name": "requireAllColumns",
+      "description": "If set, every result column name must present among column names of the source arrays. If cleared amd if some result column name is absent, the corresponding result column will be filled by NaN for float/double element types or by 0 for integer types.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Resulting element type",
+      "name": "resultElementType",
+      "description": "\"Common type of all inputs\" variant requires that all input ports must have identical element type.\n\"Type of the 1st input\" leads to automatic cast of all inputs to the element types of 1st initialized input port.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "REQUIRE_IDENTICAL",
+          "caption": "Common type of all inputs"
+        },
+        {
+          "value": "FIRST_INPUT",
+          "caption": "Type of the 1st input"
+        },
+        {
+          "value": "INT",
+          "caption": "\"int\" type"
+        },
+        {
+          "value": "FLOAT",
+          "caption": "\"float\" type"
+        },
+        {
+          "value": "DOUBLE",
+          "caption": "\"double\" type"
+        }
+      ],
+      "default": "FIRST_INPUT"
+    },
+    {
+      "caption": "Result column names",
+      "name": "resultColumnNames",
+      "description": "List of names of columns of the result array, which are extracted from the columns with the same names of the source arrays. The names must be separated by \\n (one name per string). If empty, the result array stays not initialized.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 10,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_1",
+      "name": "columnNames1",
+      "description": "Here and belwoe are the list of column names of the source array #1, #2, #3...  The names must be separated by \\n (one name per string).",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_2",
+      "name": "columnNames2",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_3",
+      "name": "columnNames3",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_4",
+      "name": "columnNames4",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_5",
+      "name": "columnNames5",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_6",
+      "name": "columnNames6",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_7",
+      "name": "columnNames7",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_8",
+      "name": "columnNames8",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_9",
+      "name": "columnNames9",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_10",
+      "name": "columnNames10",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_11",
+      "name": "columnNames11",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_12",
+      "name": "columnNames12",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_13",
+      "name": "columnNames13",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_14",
+      "name": "columnNames14",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_15",
+      "name": "columnNames15",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_16",
+      "name": "columnNames16",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_17",
+      "name": "columnNames17",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_18",
+      "name": "columnNames18",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_19",
+      "name": "columnNames19",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_20",
+      "name": "columnNames20",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_21",
+      "name": "columnNames21",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_22",
+      "name": "columnNames22",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_23",
+      "name": "columnNames23",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_24",
+      "name": "columnNames24",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_25",
+      "name": "columnNames25",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_26",
+      "name": "columnNames26",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_27",
+      "name": "columnNames27",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_28",
+      "name": "columnNames28",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_29",
+      "name": "columnNames29",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_30",
+      "name": "columnNames30",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_31",
+      "name": "columnNames31",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Column names in input_32",
+      "name": "columnNames32",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "lines": 2,
+      "advanced": true,
+      "default": ""
+    }
+  ]
+}

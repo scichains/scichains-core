@@ -1,0 +1,32 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Java scalar example",
+  "id": "efa43f4f-3208-4262-aa2a-27182a26ae2e",
+  "description": "Example of java extension",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.SScalarSimpleTest"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "Scalar"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "Scalar"
+    }
+  ],
+  "controls": [
+    {
+      "name": "value",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "false"
+    }
+  ]
+}

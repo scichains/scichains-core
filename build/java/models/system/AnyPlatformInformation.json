@@ -1,0 +1,80 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Any installed platform information",
+  "id": "8086b9ff-fe09-481f-99a5-41e5bf585ae0",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.AnyPlatformInformation"
+  },
+  "in_ports":  [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Full platform description (JSON)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "id",
+      "hint": "Platform ID"
+    },
+    {
+      "value_type": "scalar",
+      "name": "name",
+      "hint": "Platform name"
+    },
+    {
+      "value_type": "scalar",
+      "name": "description",
+      "hint": "Platform description"
+    },
+    {
+      "value_type": "scalar",
+      "name": "technology",
+      "hint": "Platform technology"
+    },
+    {
+      "value_type": "scalar",
+      "name": "language",
+      "hint": "Platform language"
+    },
+    {
+      "value_type": "scalar",
+      "name": "root_folder",
+      "hint": "Root folder of the extension, containing this platform"
+    },
+    {
+      "value_type": "scalar",
+      "name": "models_folder",
+      "hint": "Platform models folder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "modules_folder",
+      "hint": "Platform modules folder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "libraries_folder",
+      "hint": "Platform libraries folder"
+    },
+    {
+      "value_type": "scalar",
+      "name": "resources_folder",
+      "hint": "Platform resources folder"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Platform ID",
+      "name": "id",
+      "description": "Unique identifier of the platform.\nYou can know IDs all installed platforms via \"System information\" function.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "bac0c56a-a3ca-471c-9352-7e6303148c3b"
+    }
+  ]
+}

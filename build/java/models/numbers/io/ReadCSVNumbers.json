@@ -1,0 +1,151 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.io",
+  "name": "Read CSV numbers",
+  "id": "e39652ea-b7fc-4a86-a0aa-e4b5ea2a2c8c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.io.ReadCSVNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "file",
+      "caption": "file",
+      "hint": "[Optional] String path to the file. If specified, it is used instead of \"File\" parameter (with all replacements performed in that parameter)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name_addition",
+      "caption": "file name addition"
+    },
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "headers",
+      "hint": "List of CSV column headers, separated by \\n, i.e. name of every column in a separate line.\nIf the first line of CSV file can be recognizes as a sequence of numbers, this list will be empty."
+    },
+    {
+      "value_type": "scalar",
+      "name": "absolute_path",
+      "caption": "absolute path",
+      "hint": "Actual full absolute path to the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "caption": "parent folder",
+      "hint": "Absolute path to the parent folder of the file"
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "caption": "file name",
+      "hint": "Actual file name (without folder)"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "File (CSV format)",
+      "name": "file",
+      "description": "You can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.csv\" or \"samples/test.csv\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.csv, %TEMP%/my_file.csv or (in Windows) %TEMP%\\my_file.csv.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "caption": "Requires existing file",
+      "description": "If set and the file does not exists, this function throws an exception. If cleared and if there is no existing file, output port stays not initialized.",
+      "name": "fileExistenceRequired",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "description": "Element type of the result. If \"auto-detect\" is chosen, this function checks the header (name in the first line) of the first column. If this word starts from one of allowed element type names (\"byte\", \"short\" etc. in this list), it the function chooses this element type; in other case, default type \"float\" is used.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "auto",
+          "caption": "auto-detect"
+        },
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "caption": "Number of initial lines to skip",
+      "name": "numberOfSkippedInitialLines",
+      "description": "If contains non-zero number N, first N lines of the text file are skipped and ignored.\nNote: CSV file must contain at least N+1 lines, in other case an exception will be thrown.\nBe careful: first N lines are removed at the very beginning. Thus, this function considers  that the column headers (if present) are located in the line #(N+1).",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

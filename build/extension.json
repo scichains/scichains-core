@@ -1,0 +1,69 @@
+{
+  "app": "executors-extension",
+  "platforms": [
+    {
+      "id": "b58342ef-eaf4-4645-b672-d001f327293f",
+      "name": "Base-core",
+      "category": "core",
+      "description": "Core functionality, Java",
+      "technology": "jvm",
+      "language": "java",
+      "folders": {
+        "models": "java/models",
+        "resources": "java/resources"
+      },
+      "configuration": {
+        "classpath": [
+        ],
+        "vm_options": [
+        ]
+      }
+    },
+    {
+      "id": "310324d9-9dc2-45a1-819a-4fd1b44a6774",
+      "name": "Base-core-Python",
+      "category": "core",
+      "description": "Core functionality, Python",
+      "technology": "jep",
+      "language": "python",
+      "folders": {
+        "models": "python/models",
+        "modules": "python/modules",
+        "libraries": "python/lib"
+      }
+    },
+    {
+      "id": "a89487be-7a18-4dbc-a636-1008e204af76",
+      "name": "Base-core-JavaScript",
+      "category": "core",
+      "description": "Core functionality, JavaScript",
+      "technology": "graal",
+      "language": "js",
+      "folders": {
+        "models": "js/models",
+        "modules": "js/modules"
+      }
+    },
+    {
+      "id": "bac0c56a-a3ca-471c-9352-7e6303148c3b",
+      "name": "Base-core-examples-settings",
+      "category": "core",
+      "description": "Core examples, settings combiners",
+      "technology": "settings",
+      "folders": {
+        "models": "settings/models"
+      }
+    },
+    {
+      "id": "18d3e7bb-e5c0-439f-8d69-62bc245d3615",
+      "name": "Base-core-examples-sub-chains",
+      "category": "core",
+      "description": "Core examples, sub-chains",
+      "technology": "chain",
+      "language": "chain",
+      "folders": {
+        "models": "chain/models"
+      }
+    }
+  ]
+}

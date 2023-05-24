@@ -1,0 +1,24 @@
+{
+  "app": "executor",
+  "category": "~examples.python",
+  "name": "Python example: system information",
+  "id": "503bf4a8-adeb-4769-bbc6-a8a32a05e9fc",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.ExampleSystemInformation"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "model"
+    },
+    {
+      "value_type": "scalar",
+      "name": "platform"
+    }
+  ],
+  "controls": [
+  ]
+}

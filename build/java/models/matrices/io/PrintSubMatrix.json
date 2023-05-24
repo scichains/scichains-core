@@ -1,0 +1,117 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.io",
+  "name": "Print sub-matrix",
+  "id": "7911923c-e774-409f-9585-40afa1438c1c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.io.PrintSubMatrix"
+  },
+  "in_ports":  [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "String, that has been printed"
+    }
+  ],
+  "controls": [
+    {
+      "name": "startX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "startY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "startZ",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "sizeX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 10
+    },
+    {
+      "name": "sizeY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 10
+    },
+    {
+      "name": "sizeZ",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption":" Print line indexes",
+      "name": "printLineIndexes",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Delimiter between numbers",
+      "name": "delimiter",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": " "
+    },
+    {
+      "caption": "Format for every array element",
+      "name": "format",
+      "description": "It is the argument of String.format method for Locale.US",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "%s"
+    },
+    {
+      "name": "logLevel",
+      "caption": "Logging level",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "TRACE"
+        },
+        {
+          "value": "DEBUG"
+        },
+        {
+          "value": "INFO"
+        },
+        {
+          "value": "PRINTLN_TO_CONSOLE",
+          "caption": "System.out.println"
+        },
+        {
+          "value": "PRINT_TO_CONSOLE",
+          "caption": "System.out.print (from start of the string)"
+        }
+      ],
+      "default": "DEBUG"
+    },
+    {
+      "caption": "File to save result (if non-empty)",
+      "name": "file",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.creation",
+  "name": "Create random number array",
+  "id": "906c24b5-84c4-4615-8d0a-9b6d3f11329b",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.creation.CreateRandomNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "caption": "optional input",
+      "hint": "If specified, this function simply returns a copy of this array (other arguments are ignored)."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Number of blocks",
+      "name": "numberOfBlocks",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "float"
+    },
+    {
+      "caption": "Min value",
+      "name": "min",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "caption": "Max value",
+      "name": "max",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "Rand-seed",
+      "name": "randSeed",
+      "description": "0 value is reserved: in this case, a new sequence is generated every time.",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 1
+    }
+  ]
+}

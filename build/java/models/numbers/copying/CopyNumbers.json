@@ -1,0 +1,38 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.copying",
+  "name": "Copy number array",
+  "options": {
+    "behavior": {
+      "copy": true
+    }
+  },
+  "id": "c545d2c9-cece-40b6-a9f2-f392073f2d1d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.copying.CopyNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

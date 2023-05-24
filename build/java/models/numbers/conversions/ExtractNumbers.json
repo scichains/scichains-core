@@ -1,0 +1,40 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Extract blocks of number array",
+  "id": "14094c58-767b-49c2-bea3-0003f161c013",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.ExtractNumbers"
+  },
+  "in_ports":  [
+    {
+      "value_type": "numbers",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "blockIndex",
+      "caption": "First block index",
+     "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfBlocks",
+      "caption": "Number of copied blocks",
+      "value_type": "int",
+      "description": "Number of copied blocks (rows).\n0 values is special and means \"copy until the last block\": the actual number of blocks will be max(0,N−K), where K = first block index above and N is total number of blocks.\nNote: if K + actual number of blocks is ≥N, extra blocks (outside the source array) are just ignored. In particular, if K≥N, the result will be empty.",
+      "edition_type": "value",
+      "default": 0
+    }
+  ]
+}

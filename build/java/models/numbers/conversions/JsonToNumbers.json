@@ -1,0 +1,164 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "numbers.conversions",
+  "name": "Convert JSON with numbers to number array",
+  "description": "Reads some JSON, tries to interpret every value as a number, and returns array of these numbers. If the element is not a number, returns NaN for floating point element type or 0 for integer element type, excepting logical JSON values true/false — they are converted to numbers 1 and 0.",
+  "id": "53f0b840-4966-470a-86f0-15b5417aa89c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.numbers.conversions.JsonToNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "json",
+      "hint": "Some source JSON"
+    },
+    {
+      "value_type": "scalar",
+      "caption": "key-to-flag-name table",
+      "name": "key_to_flag_table_json",
+      "hint": "JSON table of string pairs K: XXX, where K is one of keys in the source JSON\n(matching the filter of \"What values to extract?\" parameter),\nXXX is the name of corresponding flag in \"flags map\" JSON.\nIgnored if \"What keys to extract?\" is \"ALL\"."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "flags map",
+      "name": "flags_json",
+      "hint": "JSON map XXX → flag of pairs XXX: flag, where \"flag\" is true/false boolean value.\nIgnored if \"What keys to extract?\" is \"ALL\"."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "keys",
+      "hint": "Names of all keys, the values of for which are returned in the result number array.\nThese names are separated by \\n."
+    },
+    {
+      "value_type": "scalar",
+      "name": "json",
+      "hint": "Part of the source JSON, corresponding to returned numbers:\nall key/value pairs for keys, returned in \"keys\" result."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Block length",
+      "name": "blockLength",
+      "hint": "The block length in the result (ignored in \"Single block\" mode)",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Single block",
+      "name": "singleBlock",
+      "hint": "If true, the block length will be equal to array length (single block in array)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "byte"
+        },
+        {
+          "value": "short"
+        },
+        {
+          "value": "int"
+        },
+        {
+          "value": "long"
+        },
+        {
+          "value": "float"
+        },
+        {
+          "value": "double"
+        }
+      ],
+      "default": "double"
+    },
+    {
+      "name": "indexOfFirstElement",
+      "caption": "Index of first element",
+      "description": "If it is non-zero value M, first M key/value pairs in JSON are skipped.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "numberOfElements",
+      "caption": "Number of elements",
+      "description": "If specified and contain number N, then only N key/value pairs are analysed, since the index M of first element. If it is not set (an empty string), all values since the key/value pair #M are returned.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "What values to extract?",
+      "name": "extractedTypes",
+      "description": "\"Numbers only\" means that only numeric values (among  N values, selected above) are returned.\n\"Numbers + strings containing numbers\" means that strings, actually containing numbers (in quotation marks), will also be included in the result.\nFor example, the following value — \"someValue\":\"123\" — will be returned in the 2nd case, but not in the 1st case. The following value — \"someValue\":123 — will be returned in all modes excepting \"Boolean values\". The following value — \"someValue\":\"someString\" — will be returned only in the mode \"All values\" (it will be converted to NaN).",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ALL",
+          "caption": "All values"
+        },
+        {
+          "value": "NUMBERS",
+          "caption": "Numbers only"
+        },
+        {
+          "value": "NON_ZERO_NUMBERS",
+          "caption": "Non-zero numbers only"
+        },
+        {
+          "value": "NUMBERS_AND_NUMERIC_STRINGS",
+          "caption": "Numbers + strings containing numbers"
+        },
+        {
+          "value": "NON_ZERO_NUMBERS_AND_NUMERIC_STRINGS",
+          "caption": "Non-zero numbers + strings containing numbers"
+        },
+        {
+          "value": "BOOLEANS",
+          "caption": "Boolean values (true/false)"
+        },
+        {
+          "value": "TRUE_BOOLEANS",
+          "caption": "True boolean values"
+        }
+      ],
+      "default": "ALL"
+    },
+    {
+      "caption": "What keys to extract?",
+      "name": "extractingMode",
+      "description": "If it is \"Selected only\", this function uses 2 additional tables (maps) NAMES, specified in \"key-to-flag-name table\" JSON, and FLAGS, specified in \"flags map\" JSON. Key/value pair K→V from the source JSON is included to the result, only if the value type matches the previous parameter and, at the same time, if FLAGS map contains \"true\" boolean value for a key, calculated as NAMES[K]: FLAGS[NAMES[K]]=true.\nIn other words, you may specify in \"flags map\" some set of boolean flags, indicating whether you want to include the corresponding key/value pairs into the result, and the names of these flags are defined according \"key-to-flag-name table\".",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ALL",
+          "caption": "All keys"
+        },
+        {
+          "value": "SELECTED_ONLY",
+          "caption": "Selected only"
+        }
+      ],
+      "default": "ALL"
+    }
+  ]
+}

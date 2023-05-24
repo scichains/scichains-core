@@ -1,0 +1,125 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.copying",
+  "name": "Fill matrix with constant color",
+  "id": "ba71b289-03d2-424f-b5bf-76dd2ba75ec6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.copying.FillMatrix"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "rectangular_area",
+      "caption": "rect. area",
+      "hint": "[Optional] If specified, it defines rectangular area to be filled:\nall coordinates, specified in arguments, are ignored."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "percents",
+      "description": "If true, all numbers below are measured in percents of image sizes (right=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "left",
+      "description": "Specifies x₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "top",
+      "description": "Specifies y₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "front",
+      "description": "(For ≥3D) Specifies z₁ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "right",
+      "description": "Specifies x₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if x₂<0, it is replaced with dimX+x₂ (where dimX is image width); ignored if width>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "bottom",
+      "description": "Specifies y₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if y₂<0, it is replaced with dimY+y₂ (where dimY is image height); ignored if height>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "rear",
+      "description": "(For ≥3D) Specifies z₂ (in pixels or percents) for submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); if z₂<0, it is replaced with dimZ+z₂; ignored if depth>0",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "width",
+      "description": "If width>0, it overrides x₂ above and specifies result width x₂−x₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "height",
+      "description": "If height>0, it overrides y₂ above and specifies result height y₂−y₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "depth",
+      "description": "(For ≥3D) If depth>0, it overrides z₂ above and specifies result height z₂−z₁+1 (in pixels or percents) of submatrix x₁≤x≤x₂, y₁≤y≤y₂ (and z₁≤z≤z₂ fro ≥3D); ignored if zero",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "color",
+      "caption": "Color",
+      "description": "See supported color formats in \"Create constant matrix\" function.",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#00FF00"
+    },
+    {
+      "name": "grayscaleValue",
+      "caption": "Grayscale value",
+      "description": "Grayscale value is used instead of \"color\", if \"color\" is an empty string.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "rawGrayscaleValue",
+      "caption": "Raw grayscale value",
+      "description": "If true, grayscale value is \"raw\" (not normalized), if false, it should be in 0..1 range",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}
