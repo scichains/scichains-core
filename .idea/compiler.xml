@@ -6,7 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="executors-core" />
+        <module name="scichains-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />
@@ -14,7 +14,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="executors-core" options="" />
+      <module name="scichains-core" options="" />
     </option>
   </component>
 </project>

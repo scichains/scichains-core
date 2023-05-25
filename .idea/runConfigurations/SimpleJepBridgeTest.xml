@@ -4,7 +4,7 @@
       <env name="_PYTHONHOME" value="\tmp1" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.SimpleJepBridgeTest" />
-    <module name="executors-core" />
+    <module name="scichains-core" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="net.algart.bridges.jep.tests.*" />

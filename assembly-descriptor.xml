@@ -27,7 +27,7 @@
 
         <dependencySet>
             <includes>
-                <include>net.algart.executors:executors-core*</include>
+                <include>net.algart.executors:scichains-core*</include>
                 <!-- but Maven does not include tests here -->
                 <include>net.algart:algart*</include>
                 <include>jakarta.json:jakarta.json-api*</include>
