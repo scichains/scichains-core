@@ -7,6 +7,31 @@
     <artifactId>scichains-core</artifactId>
     <version>4.1.0</version>
 
+    <name>SciChains base core</name>
+    <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
+    <url>http://scichains.com/</url>
+
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Daniel Alievsky</name>
+            <email>daniel@iskrael.org</email>
+            <organization>AlgART laboratory</organization>
+            <organizationUrl>http://algart.net</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/scichains/scichains-core.git</connection>
+        <url>https://github.com/scichains/scichains-core.git</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
@@ -110,13 +135,30 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
                             <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -137,6 +179,20 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -238,6 +294,17 @@
 
     <distributionManagement>
         <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    <!--
+    <distributionManagement>
+        <snapshotRepository>
             <id>${deploy-snapshots-id}</id>
             <url>${deploy-snapshots-url}</url>
         </snapshotRepository>
@@ -246,4 +313,5 @@
             <url>${deploy-url}</url>
         </repository>
     </distributionManagement>
+    -->
 </project>
