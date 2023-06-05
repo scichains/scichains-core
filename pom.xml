@@ -183,27 +183,36 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
     <profiles>
-        <!-- deploy current extension only if ${home.directory} exist -->
         <profile>
-            <id>deploy.extension</id>
+            <!-- Signing JARs by GnuPG (requirement of Maven Central) -->
+            <!-- Please ACTIVATE this profile before deployment! -->
+            <id>sonatype-deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- Installing executors extension if ${home.directory} exist -->
+            <id>executors-extension</id>
             <activation>
                 <file>
                     <exists>${home.directory}</exists>
@@ -217,7 +226,7 @@
                         <version>3.1.0</version>
                         <executions>
                             <execution>
-                                <id>id.clean</id>
+                                <id>executors-extension-clean</id>
                                 <phase>clean</phase>
                                 <goals>
                                     <goal>run</goal>
@@ -232,7 +241,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>id.install</id>
+                                <id>executors-extension-install</id>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>run</goal>
@@ -302,7 +311,7 @@
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    <!--
+    <!-- Old scheme: please uncomment if there is an urgent need
     <distributionManagement>
         <snapshotRepository>
             <id>${deploy-snapshots-id}</id>

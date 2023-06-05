@@ -28,8 +28,9 @@ import net.algart.math.IRectangularArea;
 
 public final class ContourHeader {
     /**
-     * If <tt>(x & 0xFF000000) == {@link #RESERVED}</tt>, it means that it is a special element, not a point.
+     * If <code>(x &amp; 0xFF000000) == {@link #RESERVED}</code>, it means that it is a special element, not a point.
      */
+    @SuppressWarnings("JavadocDeclaration")
     public static final int RESERVED = 0x7F000000;
 
     static final int MAX_ALLOWED_HEADER_LENGTH = 512;
