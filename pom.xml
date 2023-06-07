@@ -324,17 +324,4 @@
             </build>
         </profile>
     </profiles>
-
-    <!-- Old scheme: please uncomment if there is an urgent need
-    <distributionManagement>
-        <snapshotRepository>
-            <id>${deploy-snapshots-id}</id>
-            <url>${deploy-snapshots-url}</url>
-        </snapshotRepository>
-        <repository>
-            <id>${deploy-id}</id>
-            <url>${deploy-url}</url>
-        </repository>
-    </distributionManagement>
-    -->
 </project>
