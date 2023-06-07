@@ -1150,7 +1150,7 @@ public final class Contours {
         long n = nonOptimizedContour.length();
         checkContourLength(n);
         n = removeLastIdenticalPoints(nonOptimizedContour, n);
-        resultContour.length(0);
+        resultContour.clear();
         int previousPreviousX = nonOptimizedContour.getInt(0);
         int previousPreviousY = nonOptimizedContour.getInt(1);
         checkPoint(previousPreviousX, previousPreviousY);
@@ -1458,7 +1458,7 @@ public final class Contours {
         long n = optimizedContour.length();
         checkContourLength(n);
         n = removeLastIdenticalPoints(optimizedContour, n);
-        resultContour.length(0);
+        resultContour.clear();
         int lastX = optimizedContour.getInt(n - 2);
         int lastY = optimizedContour.getInt(n - 1);
         checkPoint(lastX, lastY);
@@ -1560,7 +1560,7 @@ public final class Contours {
     public static MutableIntArray reverseContour(MutableIntArray resultContour, IntArray contour) {
         Objects.requireNonNull(resultContour, "Null result contour");
         checkContourLength(contour);
-        resultContour.length(0);
+        resultContour.clear();
         for (long i = contour.length() - 2; i >= 0; i -= 2) {
             resultContour.pushInt(contour.getInt(i));
             resultContour.pushInt(contour.getInt(i + 1));

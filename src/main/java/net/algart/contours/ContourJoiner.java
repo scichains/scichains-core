@@ -1266,7 +1266,7 @@ public final class ContourJoiner {
         // NOTE: we must reallocate it when necessary, because "current"
         // can be exchanged with "joinResult" by exchangeCurrentAndJoinResult()
         System.arraycopy(clusterContours, contourOffset, current, 0, currentLength);
-        currentIndexesOfJoinedContours.length(0);
+        currentIndexesOfJoinedContours.clear();
         currentIndexesOfJoinedContours.pushInt(currentIndex);
     }
 

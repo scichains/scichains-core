@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.algart.executors</groupId>
     <artifactId>scichains-core</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
 
     <name>SciChains base core</name>
     <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
@@ -37,8 +37,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
-        <createChecksum>true</createChecksum>
-        <!-- enforce maven-install-plugin to add .md5 and .sha1 -->
 
         <!-- folder inside "target" to place there all service files of the extension -->
         <build.directory>${project.build.directory}/build</build.directory>
