@@ -29,6 +29,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/scichains/scichains-core.git</connection>
+        <developerConnection>scm:git:https://github.com/scichains/scichains-core.git</developerConnection>
         <url>https://github.com/scichains/scichains-core.git</url>
     </scm>
 
