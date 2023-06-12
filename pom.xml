@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>net.algart.executors</groupId>
     <artifactId>scichains-core</artifactId>
     <version>4.1.2</version>
@@ -256,7 +257,9 @@
                                         <echo level="info"/>
                                         <echo level="info">DELETING ${extension.server.home}</echo>
                                         <delete dir="${extension.server.home}"/>
-                                        <echo level="info">DELETING Python cache files (*.pyc) from ${project.basedir}/build</echo>
+                                        <echo level="info">DELETING Python cache files (*.pyc) from
+                                            ${project.basedir}/build
+                                        </echo>
                                         <delete>
                                             <fileset dir="${project.basedir}/build" includes="**/*.pyc"/>
                                             <dirset dir="${project.basedir}/build" includes="**/__pycache__"/>
