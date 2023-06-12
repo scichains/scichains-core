@@ -40,17 +40,16 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
 
-        <!-- folder inside "target" to place there all service files of the extension -->
-        <build.directory>${project.build.directory}/build</build.directory>
-
-        <!-- extension folder name -->
+        <!-- SciChains extension folder name -->
         <extension.name>base-core</extension.name>
 
-        <!-- location of the server -->
+        <!-- SciChains base folder -->
         <home.directory>${env.EXECUTORS_HOME}</home.directory>
 
-        <!-- home folder of extension under the server -->
+        <!-- Folder of the extension under the base folder -->
         <extension.server.home>${home.directory}/ext/${extension.name}</extension.server.home>
+
+        <build.directory>${project.build.directory}/build</build.directory>
 
         <graalvm.version>22.2.0</graalvm.version>
         <jep.version>4.1.0</jep.version>
