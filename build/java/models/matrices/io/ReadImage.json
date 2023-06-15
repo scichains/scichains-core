@@ -135,6 +135,15 @@
         }
       ],
       "default": 0
+    },
+    {
+      "caption": "Try also helper class",
+      "name": "useHelperClass",
+      "description": "If set and if the standard Java libraries cannot read this image, because its format is not supported by Java API, this function will try to use system-dependent helper class to read the file (usually OpenCV function).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
     }
   ]
 }

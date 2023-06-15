@@ -51,6 +51,7 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     // - currently not used by any executors
     private boolean fileExistenceRequired = true;
     private int numberOfChannels = 0;
+    private boolean useHelperClass = true;
 
     public ReadImage() {
         addFileOperationPorts();
@@ -103,6 +104,15 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
         return this;
     }
 
+    public boolean isUseHelperClass() {
+        return useHelperClass;
+    }
+
+    public ReadImage setUseHelperClass(boolean useHelperClass) {
+        this.useHelperClass = useHelperClass;
+        return this;
+    }
+
     @Override
     public void process() {
         SMat input = getInputMat(defaultInputPortName(), !requireInput);
@@ -138,6 +148,9 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
             result.setTo(bufferedImage);
         } catch (UnsupportedImageFormatException e) {
             // If Java platform imageio failed, try the helper
+            if (!useHelperClass) {
+                throw e;
+            }
             final MatReader helper;
             try {
                 helper = (MatReader) Class.forName(DEFAULT_HELPER_CLASS).getConstructor().newInstance();
