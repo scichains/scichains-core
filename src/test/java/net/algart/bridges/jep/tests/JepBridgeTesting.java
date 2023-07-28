@@ -34,7 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class JepBridgeTest {
+public class JepBridgeTesting {
     static boolean gc = false;
     static boolean free = false;
     private static final String SHARED_SCRIPT =
@@ -133,7 +133,7 @@ public class JepBridgeTest {
     }
 
     public static void callTest(String[] args) throws InterruptedException {
-        final JepBridgeTest test = new JepBridgeTest();
+        final JepBridgeTesting test = new JepBridgeTesting();
         configure(test.localContainer);
         configure(test.sharedContainer);
         // - WARNING! attempt to do this directly in the declaration will lead to error in maven test stage
