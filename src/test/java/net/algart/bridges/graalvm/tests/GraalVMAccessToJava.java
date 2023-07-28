@@ -28,8 +28,8 @@ import net.algart.executors.api.data.SNumbers;
 import org.graalvm.polyglot.Context;
 
 public class GraalVMAccessToJava {
-    public void test() {
-        System.out.println("test");
+    public void testUsual() {
+        System.out.println("testUsual");
     }
 
     public static void testStatic() {
@@ -41,9 +41,9 @@ public class GraalVMAccessToJava {
                 .allowAllAccess(true)
                 .build();
 
-        context.eval("js","java.lang.System.out.println('Hello')");
+        context.eval("js", "java.lang.System.out.println('Hello')");
         context.getBindings("js").putMember("test", new GraalVMAccessToJava());
-        context.eval("js","test.test()");
+        context.eval("js", "test.testUsual()");
         System.out.println("SNumbers: " +
                 context.eval("js",
                         "var SNumbersClass = Java.type('" + SNumbers.class.getName() + "');\n" +
@@ -53,18 +53,19 @@ public class GraalVMAccessToJava {
         context.getBindings("js").putMember("SNUMBERS_CLASS", SNumbers.class);
         System.out.println("SNumbers: " +
                 context.eval("js",
-                                "print(typeof(SNUMBERS_CLASS));\n" +
+                        "print(typeof(SNUMBERS_CLASS));\n" +
                                 "print(new SNUMBERS_CLASS());\n" +
                                 "var SNUMBERS_C = Java.type(SNUMBERS_CLASS.getName());\n" +
                                 "SNUMBERS_C.zeros(Java.type('int'), 50, 2)"));
         System.out.println("SNumbers: " +
                 context.eval("js", "Java.type('" + SNumbers.class.getName() +
                         "').zeros(Java.type('int'), 50, 2)"));
-        System.out.println("SNumbers: " +
-                context.eval("js", "SNUMBERS_CLASS.zeros(Java.type('int'), 50, 2)"));
+//        System.out.println("SNumbers: " +
+//                context.eval("js", "SNUMBERS_CLASS.zeros('int', 50, 2)"));
+        // - does not work
 
         String thisClass = GraalVMAccessToJava.class.getName();
-        context.eval("js","Java.type('" + thisClass + "').testStatic()");
+        context.eval("js", "Java.type('" + thisClass + "').testStatic()");
 //        context.eval("js","'" + thisClass + "'.testStatic()"); // - does not work
     }
 }

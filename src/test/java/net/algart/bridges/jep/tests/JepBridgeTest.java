@@ -34,7 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class JepBridgeTesting {
+public class JepBridgeTest {
     static boolean gc = false;
     static boolean free = false;
     private static final String SHARED_SCRIPT =
@@ -86,7 +86,8 @@ public class JepBridgeTesting {
         }
     }
 
-    public void test() throws InterruptedException {
+    // Note: method should be called "test()" to avoid accidentally run it from maven
+    public void performTesting() throws InterruptedException {
         long t1, t2, t3, t4;
         showMemory("Starting memory");
         for (int test = 1; test <= 4; test++) {
@@ -133,11 +134,11 @@ public class JepBridgeTesting {
     }
 
     public static void callTest(String[] args) throws InterruptedException {
-        final JepBridgeTesting test = new JepBridgeTesting();
+        final JepBridgeTest test = new JepBridgeTest();
         configure(test.localContainer);
         configure(test.sharedContainer);
         // - WARNING! attempt to do this directly in the declaration will lead to error in maven test stage
-        test.test();
+        test.performTesting();
     }
 
     public static JepPerformerContainer configure(JepPerformerContainer performerContainer) {
@@ -167,9 +168,15 @@ public class JepBridgeTesting {
         if (args.length > startArgIndex && args[startArgIndex].equals("-free")) {
             free = true;
         }
+        if (args.length < startArgIndex + 1) {
+            System.out.println("Usage:");
+            System.out.println("    " + JepBridgeTest.class.getName() + " [-gc] [-free] number-of-tests");
+            return;
+        }
+        final int numberOfTests = Integer.parseInt(args[startArgIndex]);
 
         System.out.printf("Number of active threads at the beginning: %d%n", Thread.activeCount());
-        for (int m = 1; m < 10; m++) {
+        for (int m = 1; m < numberOfTests; m++) {
             System.out.printf("%n--------%nTest block #%d; number of active threads: %d%n", m, Thread.activeCount());
             callTest(args);
             if (gc) {
