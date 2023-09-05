@@ -13,7 +13,7 @@
     "lib/common/graalvm/js-scriptengine-${graalvm.version}.jar",
     "lib/common/graalvm/regex-${graalvm.version}.jar",
     "lib/common/graalvm/truffle-api-${graalvm.version}.jar",
-    "lib/common/graalvm/icu4j-71.1.jar",
+    "lib/common/graalvm/icu4j-72.1.jar",
     "lib/common/${artifactId}-${version}.jar",
     "lib/common/${artifactId}-${version}-tests.jar"
   ],

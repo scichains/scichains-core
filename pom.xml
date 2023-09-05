@@ -6,7 +6,7 @@
 
     <groupId>net.algart.executors</groupId>
     <artifactId>scichains-core</artifactId>
-    <version>4.1.2</version>
+    <version>4.2.0</version>
 
     <name>SciChains base core</name>
     <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
@@ -51,7 +51,7 @@
 
         <build.directory>${project.build.directory}/build</build.directory>
 
-        <graalvm.version>22.2.0</graalvm.version>
+        <graalvm.version>23.0.1</graalvm.version>
         <jep.version>4.1.0</jep.version>
     </properties>
 

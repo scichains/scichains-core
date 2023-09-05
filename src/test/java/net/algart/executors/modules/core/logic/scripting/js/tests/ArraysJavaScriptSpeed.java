@@ -74,7 +74,7 @@ public class ArraysJavaScriptSpeed {
         long t1 = System.nanoTime();
         execScript.processNumbers(numbers);
         long t2 = System.nanoTime();
-        System.out.printf("Numbers processed: %s; %.3f ms, %.2f ns / element%n",
+        System.out.printf("Numbers processed: %s; %.3f ms, %.2f ns/element%n",
                 numbers.getValue(1),
                 (t2 - t1) * 1e-6, (double) (t2 - t1) / (double) N);
     }
