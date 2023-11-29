@@ -48,7 +48,7 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     public static final String OUTPUT_DIM_Y = "dim_y";
 
     private boolean requireInput = false;
-    // - currently not used by any executors
+    // - currently not used in any executor models: actually its value is usually false
     private boolean fileExistenceRequired = true;
     private int numberOfChannels = 0;
     private boolean useHelperClass = true;
