@@ -51,8 +51,6 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
             StandardCharsets.UTF_8,
     };
 
-    private boolean requireInput = false;
-    // - currently not used by any executors
     private boolean fileExistenceRequired = true;
     private Class<?> elementType = null;
     private int numberOfSkippedInitialLines = 0;
@@ -83,15 +81,6 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
     @Override
     public ReadCSVNumbers setFile(Path file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isRequireInput() {
-        return requireInput;
-    }
-
-    public ReadCSVNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
         return this;
     }
 
@@ -128,7 +117,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
 
     @Override
     public void process() {
-        SNumbers input = getInputNumbers(defaultInputPortName(), !requireInput);
+        SNumbers input = getInputNumbers(defaultInputPortName(), true);
         if (input.isInitialized()) {
             logDebug(() -> "Copying number array: " + input);
             getNumbers().setTo(input);

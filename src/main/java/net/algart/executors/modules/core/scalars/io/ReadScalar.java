@@ -35,8 +35,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ReadScalar extends FileOperation {
-    private boolean requireInput = false;
-    // - currently not used by any executors
     private boolean fileExistenceRequired = true;
     private String defaultValue = "";
 
@@ -54,15 +52,6 @@ public class ReadScalar extends FileOperation {
         final ReadScalar result = new ReadScalar();
         result.setSecure(true);
         return result;
-    }
-
-    public boolean isRequireInput() {
-        return requireInput;
-    }
-
-    public ReadScalar setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
-        return this;
     }
 
     public boolean isFileExistenceRequired() {
@@ -91,7 +80,7 @@ public class ReadScalar extends FileOperation {
 
     @Override
     public void process() {
-        SScalar input = getInputScalar(defaultInputPortName(), !requireInput);
+        SScalar input = getInputScalar(defaultInputPortName(), true);
         if (input.isInitialized()) {
             logDebug(() -> "Copying scalar");
             getScalar().setTo(checkResult(input.getValue()));

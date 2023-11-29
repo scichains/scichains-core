@@ -48,8 +48,6 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
     public static final String OUTPUT_COLUMN_NAMES = "column_names";
     public static final String OUTPUT_COLUMN_INDEXES = "column_indexes";
 
-    private boolean requireInput = false;
-    // - currently not used by any executors
     private boolean fileExistenceRequired = true;
     private int blockLength = 1;
     private Class<?> elementType = float.class;
@@ -83,15 +81,6 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
     @Override
     public ReadRawNumbers setFile(Path file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isRequireInput() {
-        return requireInput;
-    }
-
-    public ReadRawNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
         return this;
     }
 
@@ -146,7 +135,7 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
 
     @Override
     public void process() {
-        SNumbers input = getInputNumbers(defaultInputPortName(), !requireInput);
+        SNumbers input = getInputNumbers(defaultInputPortName(), true);
         if (input.isInitialized()) {
             logDebug(() -> "Copying number array: " + input);
             getNumbers().setTo(input);

@@ -47,8 +47,6 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     public static final String OUTPUT_DIM_X = "dim_x";
     public static final String OUTPUT_DIM_Y = "dim_y";
 
-    private boolean requireInput = false;
-    // - currently not used in any executor models: actually its value is usually false
     private boolean fileExistenceRequired = true;
     private int numberOfChannels = 0;
     private boolean useHelperClass = true;
@@ -74,15 +72,6 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     @Override
     public ReadImage setFile(String file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isRequireInput() {
-        return requireInput;
-    }
-
-    public ReadImage setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
         return this;
     }
 
@@ -115,7 +104,7 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
 
     @Override
     public void process() {
-        SMat input = getInputMat(defaultInputPortName(), !requireInput);
+        SMat input = getInputMat(defaultInputPortName(), true);
         final SMat result = getMat();
         if (input.isInitialized()) {
             logDebug(() -> "Copying " + input);
