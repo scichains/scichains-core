@@ -779,10 +779,11 @@ public abstract class Executor extends ExecutionBlock {
             setter.set(this);
         } else {
             // don't check loggingEnabled(): it is a probable inconsistency in the programming code
-            LOG.log(System.Logger.Level.WARNING, () -> getClass() + " has no setter for parameter \"" + parameterName + "\" ("
-                    + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
-                    + (getContextPath() == null ? "" : " at " + getContextPath())
-                    + ")");
+            LOG.log(System.Logger.Level.WARNING, () ->
+                    getClass() + " has no setter for parameter \"" + parameterName + "\" ("
+                            + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
+                            + (getContextPath() == null ? "" : " at " + getContextPath())
+                            + ")");
         }
         long t2 = LOGGABLE_TRACE ? System.nanoTime() : 0;
         if (loggingEnabled()) {
