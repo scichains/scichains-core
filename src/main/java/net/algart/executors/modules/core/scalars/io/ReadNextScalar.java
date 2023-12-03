@@ -134,7 +134,9 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
         getScalar(OUTPUT_LIST_OF_FILES).setTo(sortedFilesString);
         getScalar(OUTPUT_LAST).setTo(last);
         if (fileIndex >= numberOfFiles) {
-            // - possible when !fileExistenceRequired
+            // - possible when !fileExistenceRequired;
+            // not necessary to clear main output port for a case of a loop,
+            // because this condition cannot be "false" and then become "true" during the loop
             return;
         }
         final Path fileToRead = sortedFiles.get(fileIndex).toAbsolutePath();
