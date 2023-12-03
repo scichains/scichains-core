@@ -22,31 +22,33 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.matrices.io;
+package net.algart.executors.modules.core.files;
 
-import net.algart.executors.modules.core.files.ListOfFiles;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.executors.modules.core.matrices.io.ReadImage;
 
 import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class ReadNextImage extends FileOperation implements ReadOnlyExecutionInput {
-    public static final String OUTPUT_DIM_X = "dim_x";
-    public static final String OUTPUT_DIM_Y = "dim_y";
+public final class FindNextFile extends FileOperation implements ReadOnlyExecutionInput {
     public static final String OUTPUT_INDEX = "file_index";
     public static final String OUTPUT_NUMBER_OF_FILES = "number_of_files";
     public static final String OUTPUT_LIST_OF_FILES = "list_of_files";
     public static final String OUTPUT_LAST = "last";
 
     private String globPattern = "*.{jpeg,jpg,png,gif,bmp}";
+    private String regularExpression = "";
+    private FileSortOrder sortOrder = FileSortOrder.SUBDIRECTORIES_FIRST;
+    private boolean singlePath = false;
     private boolean recursiveScanning = true;
     private boolean fileExistenceRequired = false;
     private boolean clearFileIndexOnReset = true;
@@ -55,23 +57,47 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
     private String sortedFilesString = "";
     private int currentFileIndex = 0;
 
-    public ReadNextImage() {
-        addFileOperationPorts();
-        addOutputMat(DEFAULT_OUTPUT_PORT);
-        addOutputScalar(OUTPUT_DIM_X);
-        addOutputScalar(OUTPUT_DIM_Y);
-        addOutputScalar(OUTPUT_INDEX);
-        addOutputScalar(OUTPUT_NUMBER_OF_FILES);
-        addOutputScalar(OUTPUT_LIST_OF_FILES);
-        addOutputScalar(OUTPUT_LAST);
+    public FindNextFile() {
+        addInputScalar(INPUT_FILE);
+        setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
+        addOutputScalar(OUTPUT_ABSOLUTE_PATH);
+        addOutputScalar(OUTPUT_PARENT_FOLDER);
+        addOutputScalar(OUTPUT_FILE_NAME);
     }
 
     public String getGlobPattern() {
         return globPattern;
     }
 
-    public ReadNextImage setGlobPattern(String globPattern) {
+    public FindNextFile setGlobPattern(String globPattern) {
         this.globPattern = nonEmpty(globPattern);
+        return this;
+    }
+
+    public String getRegularExpression() {
+        return regularExpression;
+    }
+
+    public FindNextFile setRegularExpression(String regularExpression) {
+        this.regularExpression = nonNull(regularExpression);
+        return this;
+    }
+
+    public FileSortOrder getSortOrder() {
+        return sortOrder;
+    }
+
+    public FindNextFile setSortOrder(FileSortOrder sortOrder) {
+        this.sortOrder = nonNull(sortOrder);
+        return this;
+    }
+
+    public boolean isSinglePath() {
+        return singlePath;
+    }
+
+    public FindNextFile setSinglePath(boolean singlePath) {
+        this.singlePath = singlePath;
         return this;
     }
 
@@ -79,7 +105,7 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         return recursiveScanning;
     }
 
-    public ReadNextImage setRecursiveScanning(boolean recursiveScanning) {
+    public FindNextFile setRecursiveScanning(boolean recursiveScanning) {
         this.recursiveScanning = recursiveScanning;
         return this;
     }
@@ -88,7 +114,7 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         return fileExistenceRequired;
     }
 
-    public ReadNextImage setFileExistenceRequired(boolean fileExistenceRequired) {
+    public FindNextFile setFileExistenceRequired(boolean fileExistenceRequired) {
         this.fileExistenceRequired = fileExistenceRequired;
         return this;
     }
@@ -97,7 +123,7 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         return clearFileIndexOnReset;
     }
 
-    public ReadNextImage setClearFileIndexOnReset(boolean clearFileIndexOnReset) {
+    public FindNextFile setClearFileIndexOnReset(boolean clearFileIndexOnReset) {
         this.clearFileIndexOnReset = clearFileIndexOnReset;
         return this;
     }
@@ -114,10 +140,19 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
     public void initialize() {
         try {
             sortedFiles.clear();
-            final Path path = completeFilePath();
-            ListOfFiles.findFiles(sortedFiles, path, globPattern, null, recursiveScanning);
-            if (fileExistenceRequired && sortedFiles.isEmpty()) {
-                throw new FileNotFoundException("No files in " + path + ", corresponding to pattern " + globPattern);
+            final Path fileOrFolder = completeFilePath();
+            // - this function also fills some result ports by fillOutputFileInformation() method,
+            // but they should be rewritten later in process for every file
+            if (singlePath || Files.isRegularFile(fileOrFolder)) {
+                sortedFiles.add(fileOrFolder);
+            } else {
+                final String regularExpression = this.regularExpression.trim();
+                final Pattern pattern = regularExpression.isEmpty() ? null : Pattern.compile(regularExpression);
+                ListOfFiles.findFiles(sortedFiles, fileOrFolder, globPattern, pattern, recursiveScanning);
+                if (fileExistenceRequired && sortedFiles.isEmpty()) {
+                    throw new FileNotFoundException("No files in " + fileOrFolder
+                            + ", corresponding to pattern " + globPattern);
+                }
             }
         } catch (IOException e) {
             throw new IOError(e);
@@ -128,6 +163,7 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
             currentFileIndex = 0;
         }
     }
+
 
     @Override
     public void process() {
@@ -152,15 +188,12 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         }
         final Path fileToRead = sortedFiles.get(fileIndex).toAbsolutePath();
         final Path absolutePath = fileToRead.toAbsolutePath();
-        getScalar(OUTPUT_ABSOLUTE_PATH).setTo(absolutePath.toString());
+        final String result = absolutePath.toString();
+        getScalar(OUTPUT_ABSOLUTE_PATH).setTo(result);
         getScalar(OUTPUT_PARENT_FOLDER).setTo(absolutePath.getParent().toString());
         getScalar(OUTPUT_FILE_NAME).setTo(absolutePath.getFileName().toString());
         final ReadImage readImage = ReadImage.getInstance();
         readImage.setFile(fileToRead.toString());
-        final SMat result = readImage.readImage();
-        getScalar(OUTPUT_DIM_X).setTo(result.getDimX());
-        getScalar(OUTPUT_DIM_Y).setTo(result.getDimY());
-        getMat().exchange(result);
+        getScalar().setTo(result);
     }
-
 }

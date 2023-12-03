@@ -41,7 +41,7 @@
     {
       "caption": "Path",
       "name": "path",
-      "description": "Folder for the result data.\nNote: it MUST be an absolute path; it will NOT be resolved relative any \"current\" folder. Also and must not contain \"suspicious\" characters/substring like %, ${ etc. (excepting starting %TEMP%), because this can probably mean some \"property\" for further replacement by some functions; it should be a normal usual path.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. So, it is correct to write here\n%TEMP%my_file.dat,\n%TEMP%/my_file.dat\nor (in Windows)\n%TEMP%\\my_file.dat\n.Any other system or executor system properties are not allowed here.",
+      "description": "Folder for the result data.\nNote: it MUST be an absolute path; it will NOT be resolved relative any \"current\" folder. Also and must not contain \"suspicious\" characters/substring like %, $, { etc. (excepting starting %TEMP%), because this can probably mean some \"property\" for further replacement by some functions; it should be a normal usual path.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. So, it is correct to write here\n%TEMP%my_file.dat,\n%TEMP%/my_file.dat\nor (in Windows)\n%TEMP%\\my_file.dat\n.Any other system or executor system properties are not allowed here.",
       "value_type": "String",
       "edition_type": "folder",
       "default": ""
@@ -87,7 +87,7 @@
     {
       "caption": "Secure mode",
       "name": "secure",
-      "description": "If set, Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "description": "If set, Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, $, {. Executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

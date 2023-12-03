@@ -38,6 +38,7 @@ public abstract class FileOperation extends Executor {
     public static final String OUTPUT_ABSOLUTE_PATH = "absolute_path";
     public static final String OUTPUT_PARENT_FOLDER = "parent_folder";
     public static final String OUTPUT_FILE_NAME = "file_name";
+
     public static final String DEFAULT_EMPTY_FILE = "";
 
     public static final String FILE_NAME_ADDITION_PATTERN = "$$$";

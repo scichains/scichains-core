@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "files",
-  "name": "List of files in a folder",
-  "id": "4ae7694d-0070-4644-a96d-5fa5b6414058",
+  "name": "Find next path from list of files",
+  "id": "fc6b1ee7-051b-4f23-840b-9afd95d992da",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.files.ListOfFiles"
+    "class": "net.algart.executors.modules.core.files.FindNextFile"
   },
   "in_ports": [
     {
@@ -20,23 +20,82 @@
     {
       "value_type": "scalar",
       "name": "output",
-      "hint": "Sorted list of all files/subfolders in the folder, specified by \"File/folder\" parameter, separated by \\n,\nor the single line containing this parameter if it is a file or if \"Return 1 path\" is set."
+      "hint": "Actual full absolute path to the next file from the list."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_index"
+    },
+    {
+      "value_type": "scalar",
+      "name": "number_of_files"
+    },
+    {
+      "value_type": "scalar",
+      "name": "list_of_files"
+    },
+    {
+      "value_type": "scalar",
+      "hint": "Flag true/false: it will be true while reading the last file from the folder.\nCurrent file index is reset to 0 in this case.",
+      "name": "last"
     },
     {
       "value_type": "scalar",
       "name": "absolute_path",
-      "caption": "absolute path",
-      "hint": "Actual full absolute path to the file/folder."
-    }
-  ],
+      "hint": "Actual full absolute path to the file. Identical to the content of the main output port."
+    },
+    {
+      "value_type": "scalar",
+      "name": "parent_folder",
+      "hint": "Absolute path to the parent folder of the file."
+    },
+    {
+      "value_type": "scalar",
+      "name": "file_name",
+      "hint": "Actual file name (without folder)."
+    }  ],
   "controls": [
     {
       "caption": "File/folder",
       "name": "file",
-      "description": "Folder to scan or file to return. If it is a folder, this function finds all files/subfolders in this folder, matching \"Globbing pattern\" parameter, and returns them in a list of lines separated by \\n. If it is an existing regular file, this function just returns its name.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"samples/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "description": "Folder to scan or file to return. If it is a folder, this function scans all files/subfolders in this folder, matching \"Globbing pattern\" parameter, and returns them while sequential calls. If it is an existing regular file, this function just returns it.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"samples/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
       "value_type": "String",
       "edition_type": "folder",
       "default": ""
+    },
+    {
+      "name": "fileNameAdditionMode",
+      "caption": "How to add \"file name addition\" (for example XXX.DAT)",
+      "description": "This mode can be used together with input string \"file name addition\"",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "NONE",
+          "caption": "no correction (\"file name addition\" is not used)"
+        },
+        {
+          "value": "AFTER_ALL_PATH",
+          "caption": "after all path: /path => /pathXXX.DAT"
+        },
+        {
+          "value": "REPLACE_IN_PATH",
+          "caption": "replace $$$ in path: /path/name$$$.ext => /path/nameXXX.DAT.ext"
+        },
+        {
+          "value": "REPLACE_IN_PATH_REMOVING_EXTENSION",
+          "caption": "replace $$$ with the addition, but without its extension: /path/name$$$.ext => /path/nameXXX.ext"
+        }
+      ],
+      "default": "NONE"
+    },
+    {
+      "caption": "Secure mode",
+      "name": "secure",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, $, {. Executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
     },
     {
       "caption": "Globbing pattern",
@@ -93,28 +152,12 @@
       "default": false
     },
     {
-      "caption": "Absolute paths",
-      "name": "absolutePaths",
-      "description": "If set, the file names in the returned list will be absolute paths.\nIf cleared and \"File/folder\" is a folder (not a file), returned list will contain file names relative this folder.\nNote: if \"File/folder\" is a regular file or if \"Return 1 path\" is set, the returned paths will be always absolute.",
-      "value_type": "boolean",
-      "edition_type": "value",
-      "default": true
-    },
-    {
-      "caption": "Remove extensions",
-      "name": "removeExtension",
-      "description": "If set, this function automatically removes extensions from every file/folder name in the result list.",
+      "caption": "Requires existing file",
+      "name": "fileExistenceRequired",
+      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in other case, this function will throw an exception.\nIf this flag is cleared and there are no files to read, this function returns non-initialized result.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
-    },
-    {
-      "caption": "Requires existing folder",
-      "name": "folderExistenceRequired",
-      "description": "If set, the path specified above must correspond to some existing file or folder. If cleared, the file/folder may not exist: in this function will return an empty list.\nNote that this function also returns an empty list if there are no files, matching the specified \"Globbing pattern\".",
-      "value_type": "boolean",
-      "edition_type": "value",
-      "default": true
     }
   ]
 }

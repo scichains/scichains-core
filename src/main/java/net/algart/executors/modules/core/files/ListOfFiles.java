@@ -35,36 +35,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class ListOfFiles extends FileOperation implements ReadOnlyExecutionInput {
-    public enum SortOrder {
-        STANDARD(Collections::sort),
-        SUBDIRECTORIES_FIRST(paths -> paths.sort(((o1, o2) -> {
-            final boolean file1 = Files.isRegularFile(o1);
-            final boolean file2 = Files.isRegularFile(o2);
-            return file1 != file2 ? (file2 ? -1 : 1) : o1.compareTo(o2);
-        }))),
-        SUBDIRECTORIES_LAST(paths -> paths.sort(((o1, o2) -> {
-            final boolean file1 = Files.isRegularFile(o1);
-            final boolean file2 = Files.isRegularFile(o2);
-            return file1 != file2 ? (file1 ? -1 : 1) : o1.compareTo(o2);
-        })));
-
-        private final Consumer<List<Path>> sorter;
-
-        SortOrder(Consumer<List<Path>> sorter) {
-            this.sorter = sorter;
-        }
-    }
-
     private String globPattern = "*.{jpeg,jpg,png,gif,bmp}";
     private String regularExpression = "";
-    private SortOrder sortOrder = SortOrder.SUBDIRECTORIES_FIRST;
+    private FileSortOrder sortOrder = FileSortOrder.SUBDIRECTORIES_FIRST;
     private boolean singlePath = false;
     private boolean recursiveScanning = true;
     private boolean absolutePaths = true;
@@ -95,11 +73,11 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
         return this;
     }
 
-    public SortOrder getSortOrder() {
+    public FileSortOrder getSortOrder() {
         return sortOrder;
     }
 
-    public ListOfFiles setSortOrder(SortOrder sortOrder) {
+    public ListOfFiles setSortOrder(FileSortOrder sortOrder) {
         this.sortOrder = nonNull(sortOrder);
         return this;
     }
@@ -173,7 +151,7 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
                 final Pattern pattern = regularExpression.isEmpty() ? null : Pattern.compile(regularExpression);
                 final List<Path> result = new ArrayList<>();
                 findFiles(result, fileOrFolder, globPattern, pattern, recursiveScanning);
-                sortOrder.sorter.accept(result);
+                sortOrder.sort(result);
                 return result.stream().map(path -> correctPath(path, fileOrFolder)).collect(Collectors.toList());
             }
         } catch (IOException e) {

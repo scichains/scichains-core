@@ -107,7 +107,7 @@
     {
       "caption": "Secure mode",
       "name": "secure",
-      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, ${. executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, $, {. Executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
@@ -131,7 +131,7 @@
     {
       "caption": "Requires existing file",
       "name": "fileExistenceRequired",
-      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in other case, this function will throw an exception.\nIf this flag is cleared and there are not files to read, this function returns non-initialized result.",
+      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in other case, this function will throw an exception.\nIf this flag is cleared and there are no files to read, this function returns non-initialized result.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
