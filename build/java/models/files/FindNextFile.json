@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "files",
-  "name": "Find next path from list of files",
+  "name": "Find next one from list of files",
   "id": "fc6b1ee7-051b-4f23-840b-9afd95d992da",
   "language": "java",
   "java": {
@@ -103,7 +103,7 @@
       "description": "This function finds all files/folders, matching the specified pattern: see \"getPathMatcher\" Java method. This pattern is used ONLY if the file/folder parameter actually specifies a folder; it is not used in the case of a regular file.\nTypical examples: * (all files/folders), *.* (file names containing a dot), *.{jpeg,jpg,png,gif,bmp} (files with the specified extensions).",
       "value_type": "String",
       "edition_type": "value",
-      "default": "*"
+      "default": "*.{jpeg,jpg,png,gif,bmp}"
     },
     {
       "caption": "Regular expression",
@@ -158,6 +158,14 @@
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
+    },
+    {
+      "caption": "Clear file index on reset",
+      "name": "clearFileIndexOnReset",
+      "description": "If set (default behaviour), current index of the file to read is cleared to 0 when initializing the loop. If the chain does not contain a loop, it means that this function always reads the first file in the file set.\nYou may clear this flag if you use this function in a chain without loop. In this case, sequential executions of the chain will read sequential files corresponding the pattern. It can be helpful for demonstration or debugging needs. In typical usage, when this function is called in a looped chain, the current index will still be zeroed as a result of finishing the loop, so, clearing this flag will have no effect (if the actual set of files is not changed between runs of the chain).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
     }
   ]
 }
