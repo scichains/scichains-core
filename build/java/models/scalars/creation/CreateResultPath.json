@@ -103,7 +103,7 @@
     {
       "caption": "Secure mode",
       "name": "secure",
-      "description": "If set, \"file name addition\" feature, Java system properties and executor system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, $, {. Moreover, the path MUST be absolute; it will NOT be resolved relative any \"current\" folder. However, starting %TEMP%/ is allowed.",
+      "description": "If set, \"file name addition\" feature, Java system properties and executor system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like % (property?), ${... (variable inside a string?). Moreover, the path MUST be absolute; it will NOT be resolved relative any \"current\" folder. However, starting %TEMP%/ is allowed.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

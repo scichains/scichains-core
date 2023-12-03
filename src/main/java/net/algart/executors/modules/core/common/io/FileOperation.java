@@ -155,9 +155,9 @@ public abstract class FileOperation extends Executor {
         Objects.requireNonNull(filePath, "Null file path");
         filePath = filePath.trim();
         if (processPorts && fileNameAdditionMode != FileNameAdditionMode.NONE) {
-            if (secure ) {
+            if (secure) {
                 throw new SecurityException("File name additions must not be used in secure mode, "
-                    + "but actually " + fileNameAdditionMode + " is selected");
+                        + "but actually " + fileNameAdditionMode + " is selected");
             } else {
                 final String addition = getInputScalar(INPUT_FILE_NAME_ADDITION).getValue();
                 filePath = fileNameAdditionMode.completePath(filePath, addition);

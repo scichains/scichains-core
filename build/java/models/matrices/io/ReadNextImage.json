@@ -107,7 +107,7 @@
     {
       "caption": "Secure mode",
       "name": "secure",
-      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like %, $, {. Executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
+      "description": "If set, \"file name addition\" feature and Java system properties in the path are disabled, and the path is checked that it does not contain \"suspicious\" characters/substring like % (property?), ${... (variable inside a string?). Executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\" and starting %TEMP%/ are enabled.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
@@ -142,6 +142,7 @@
       "description": "If set (default behaviour), current index of the file to read is cleared to 0 when initializing the loop. If the chain does not contain a loop, it means that this function always reads the first file in the file set.\nYou may clear this flag if you use this function in a chain without loop. In this case, sequential executions of the chain will read sequential files corresponding the pattern. It can be helpful for demonstration or debugging needs. In typical usage, when this function is called in a looped chain, the current index will still be zeroed as a result of finishing the loop, so, clearing this flag will have no effect (if the actual set of files is not changed between runs of the chain).",
       "value_type": "boolean",
       "edition_type": "value",
+      "advanced": true,
       "default": true
     }
   ]

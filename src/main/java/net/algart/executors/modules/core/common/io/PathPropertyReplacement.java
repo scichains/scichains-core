@@ -123,7 +123,7 @@ public class PathPropertyReplacement {
         if (hasProbableProperties(path)) {
             throw new SecurityException("Path probably contains some properties"
                     + " for possible replacements, it is dangerous and prohibited: \""
-                    + path + "\" (it contains suspicious characters % or &)");
+                    + path + "\" (it contains suspicious characters/substrings like \"%\" or \"${\")");
         }
     }
 
