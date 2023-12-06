@@ -159,6 +159,10 @@ class SimpleMultiMatrix implements MultiMatrix {
     static void checkNumberOfChannels(List<? extends Matrix<? extends PArray>> channels, boolean illegalState) {
         Objects.requireNonNull(channels, "Null channels");
         final int n = channels.size();
+        checkNumberOfChannels(n, illegalState);
+    }
+
+    static void checkNumberOfChannels(long n, boolean illegalState) {
         if (n <= 0 || n > MAX_NUMBER_OF_CHANNELS) {
             final String message = "Number of channels must be in range 1.." + MAX_NUMBER_OF_CHANNELS
                     + " (for example, 1 for monochrome, 3 for RGB, 4 for RGB+alpha), "

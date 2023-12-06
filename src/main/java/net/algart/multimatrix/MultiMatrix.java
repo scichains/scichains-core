@@ -1,3 +1,4 @@
+
 /*
  * The MIT License (MIT)
  *
@@ -69,6 +70,23 @@ public interface MultiMatrix extends Cloneable {
 
     default PArray channelArray(int channelIndex) {
         return channel(channelIndex).array();
+    }
+
+    default Matrix<UpdatablePArray> packChannels() {
+        final List<Matrix<? extends PArray>> channels = allChannels();
+        Matrix<? extends PArray> channel0 = channels.get(0);
+        final long[] dimensions = java.util.Arrays.copyOf(channel0.dimensions(), channel0.dimCount() + 1);
+        final int numberOfChannels = channels.size();
+        final long numberOfPixels = channel0.size();
+        dimensions[dimensions.length - 1] = numberOfChannels;
+        final Matrix<UpdatablePArray> result = Arrays.SMM.newMatrix(UpdatablePArray.class, elementType(), dimensions);
+        final UpdatablePArray array = result.array();
+        long p = 0;
+        for (Matrix<? extends PArray> channel : channels) {
+            array.subArr(p, numberOfPixels).copy(channel.array());
+            p += numberOfPixels;
+        }
+        return result;
     }
 
     default long[] dimensions() {
@@ -502,6 +520,28 @@ public interface MultiMatrix extends Cloneable {
     static MultiMatrix valueOfMono(Matrix<? extends PArray> singleChannel) {
         Objects.requireNonNull(singleChannel, "Null single-channel matrix");
         return new SimpleMultiMatrix(Collections.singletonList(singleChannel));
+    }
+
+    static MultiMatrix unpackChannels(Matrix<? extends PArray> packedChannels) {
+        Objects.requireNonNull(packedChannels, "Null packedChannels");
+        long[] dimensions = packedChannels.dimensions();
+        if (dimensions.length <= 1) {
+            throw new IllegalArgumentException("Matrix with packed channels must have at least 2 dimensions");
+        }
+        long numberOfChannels = dimensions[dimensions.length - 1];
+        SimpleMultiMatrix.checkNumberOfChannels(numberOfChannels, false);
+        final long[] reducedDimensions = java.util.Arrays.copyOf(dimensions, dimensions.length - 1);
+        dimensions[reducedDimensions.length] = 1;
+        final long[] position = new long[dimensions.length];
+        // - zero-filled by Java
+        List<Matrix<? extends PArray>> channels = new ArrayList<>();
+        for (long k = 0; k < numberOfChannels; k++) {
+            position[position.length - 1] = k;
+            final Matrix<? extends PArray> subMatrix = packedChannels.subMatr(position, dimensions);
+            final Matrix<? extends PArray> reduced = Matrices.matrix(subMatrix.array(), reducedDimensions);
+            channels.add(reduced);
+        }
+        return valueOf(channels);
     }
 
     static MultiMatrix2D newMultiMatrix2D(Class<?> elementType, int numberOfChannels, long dimX, long dimY) {
