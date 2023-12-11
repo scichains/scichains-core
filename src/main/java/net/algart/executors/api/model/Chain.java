@@ -395,8 +395,7 @@ public final class Chain implements AutoCloseable {
     public Collection<ChainBlock> getAllInputs() {
         List<ChainBlock> allInputs = this.allInputs;
         if (allInputs == null) {
-            this.allInputs = allInputs = allBlocks.values().stream().filter(ChainBlock::isStandardInput)
-                    .collect(Collectors.toList());
+            this.allInputs = allInputs = allBlocks.values().stream().filter(ChainBlock::isStandardInput).toList();
         }
         return Collections.unmodifiableList(allInputs);
     }
@@ -404,8 +403,7 @@ public final class Chain implements AutoCloseable {
     public Collection<ChainBlock> getAllOutputs() {
         List<ChainBlock> allOutputs = this.allOutputs;
         if (allOutputs == null) {
-            this.allOutputs = allOutputs = allBlocks.values().stream().filter(ChainBlock::isStandardOutput)
-                    .collect(Collectors.toList());
+            this.allOutputs = allOutputs = allBlocks.values().stream().filter(ChainBlock::isStandardOutput).toList();
         }
         return Collections.unmodifiableList(allOutputs);
     }
@@ -413,8 +411,7 @@ public final class Chain implements AutoCloseable {
     public Collection<ChainBlock> getAllData() {
         List<ChainBlock> allData = this.allData;
         if (allData == null) {
-            this.allData = allData = allBlocks.values().stream().filter(ChainBlock::isStandardData)
-                    .collect(Collectors.toList());
+            this.allData = allData = allBlocks.values().stream().filter(ChainBlock::isStandardData).toList();
         }
         return Collections.unmodifiableList(allData);
     }
