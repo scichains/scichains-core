@@ -59,8 +59,9 @@ public final class NumbersColumnsStatistics extends NumbersFilter implements Rea
         addOutputNumbers(OUTPUT_SUM);
         addOutputNumbers(OUTPUT_VARIANCE);
         addOutputNumbers(OUTPUT_STANDARD_DEVIATION);
-        addOutputNumbers(outputPercentilePortName(0));
-        addOutputNumbers(outputPercentilePortName(1));
+        for (int k = 0; k < 5; k++) {
+            addOutputNumbers(outputPercentilePortName(k));
+        }
         addOutputNumbers(OUTPUT_ALL_PERCENTILES);
         addOutputNumbers(OUTPUT_TWO_PERCENTILES_DIFFERENCE);
         addOutputScalar(OUTPUT_NUMBER_OF_BLOCKS);
@@ -194,6 +195,7 @@ public final class NumbersColumnsStatistics extends NumbersFilter implements Rea
             }
             if (isOutputNecessary(OUTPUT_TWO_PERCENTILES_DIFFERENCE) && percentileLevels.length >= 2) {
                 final SNumbers difference = create(OUTPUT_TWO_PERCENTILES_DIFFERENCE, 1, blockLength);
+                assert difference != null : "illegal change of output necessary flag: parallel thread?";
                 for (int c = 0; c < blockLength; c++) {
                     final double percentile1 = percentileNumbers.getValue(blockLength + c);
                     final double percentile0 = percentileNumbers.getValue(c);
@@ -219,7 +221,7 @@ public final class NumbersColumnsStatistics extends NumbersFilter implements Rea
 
     @Override
     protected IRange selectedColumnRange() {
-        // - we process columns range outselves
+        // - we process columns range ourselves
         return null;
     }
 

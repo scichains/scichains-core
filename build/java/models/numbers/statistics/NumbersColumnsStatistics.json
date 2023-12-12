@@ -65,7 +65,7 @@
     },
     {
       "value_type": "numbers",
-      "caption": "percentile_1−percentile_0",
+      "caption": "percentile_2−percentile_1",
       "name": "two_percentiles_difference"
     },
     {
