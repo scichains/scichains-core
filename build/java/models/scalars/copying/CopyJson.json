@@ -1,0 +1,46 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.copying",
+  "name": "Copy JSON",
+  "options": {
+    "behavior": {
+      "copy": true
+    }
+  },
+  "id": "762741c6-58e8-4908-a769-b07ac141efb9",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.copying.CopyJson"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some correct JSON; in other case, this function will throw an exception. If cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Pretty result",
+      "name": "prettyResult",
+      "description": "If set, the input JSON is always converted to a user-friendly format. If cleared, the input string is returned as is. In both case, the input string (if the input is not empty, see the previous parameter) is checked that it does really contain a correct JSON; otherwise, this function throws an exception.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -82,7 +82,7 @@ public class ReadScalar extends FileOperation {
     public void process() {
         SScalar input = getInputScalar(defaultInputPortName(), true);
         if (input.isInitialized()) {
-            logDebug(() -> "Copying scalar");
+            logDebug(() -> "Reading scalar");
             getScalar().setTo(checkResult(input.getValue()));
         } else {
             getScalar().setTo(checkResult(readString()));
@@ -112,6 +112,6 @@ public class ReadScalar extends FileOperation {
     }
 
     public static String readString(Path file) throws IOException {
-        return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+        return Files.readString(file);
     }
 }

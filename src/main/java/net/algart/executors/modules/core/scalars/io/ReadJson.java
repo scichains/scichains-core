@@ -51,7 +51,7 @@ public class ReadJson extends ReadScalar {
         try {
             json = Jsons.toJson(result);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Illegal JSON", e);
+            throw new IllegalArgumentException("Illegal JSON: " + e.getMessage(), e);
         }
         return Jsons.toPrettyString(json);
     }

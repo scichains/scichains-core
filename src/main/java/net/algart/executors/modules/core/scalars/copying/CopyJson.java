@@ -24,41 +24,35 @@
 
 package net.algart.executors.modules.core.scalars.copying;
 
-import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
+import jakarta.json.JsonObject;
+import net.algart.json.Jsons;
 
-public class CopyScalar extends Executor {
-    private boolean requireInput = false;
+public final class CopyJson extends CopyScalar {
+    private boolean prettyResult = false;
 
-    public CopyScalar() {
-        addInputScalar(DEFAULT_INPUT_PORT);
-        addOutputScalar(DEFAULT_OUTPUT_PORT);
+    public CopyJson() {
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isPrettyResult() {
+        return prettyResult;
     }
 
-    public CopyScalar setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public CopyJson setPrettyResult(boolean prettyResult) {
+        this.prettyResult = prettyResult;
         return this;
     }
 
     @Override
-    public void process() {
-        final SScalar input = getInputScalar(!requireInput);
-        if (input.isInitialized()) {
-            logDebug(() -> "Copying scalar: \"" + input + "\"");
-            // Note: input.toString() returns reduced string for very large scalars
-            getScalar().setTo(checkResult(input.getValue()));
-        } else {
-            getScalar().setTo(input);
-            // - actually copying null value
-        }
-    }
-
     String checkResult(String result) {
-        return result;
+        if (result == null) {
+            return null;
+        }
+        final JsonObject json;
+        try {
+            json = Jsons.toJson(result);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Illegal JSON: " + e.getMessage(), e);
+        }
+        return prettyResult ? Jsons.toPrettyString(json) : result;
     }
-
 }
