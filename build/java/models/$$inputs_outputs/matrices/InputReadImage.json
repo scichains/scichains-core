@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].matrices",
   "name": "Input/read image",
-  "tags": [
-    "input"
-  ],
   "id": "dfb546d3-01dc-4ca2-a9aa-2611ce446585",
   "options": {
     "behavior": {

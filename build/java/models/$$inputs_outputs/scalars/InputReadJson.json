@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].scalars",
   "name": "Input/read JSON",
-  "tags": [
-    "input"
-  ],
   "id": "f64640cf-a18b-4f57-9d7b-60c16277cdde",
   "options": {
     "behavior": {

@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Input/create arithmetic progression",
-  "tags": [
-    "input"
-  ],
   "id": "5dcfb4e9-6f43-45cb-af7d-68925aee176a",
   "options": {
     "behavior": {

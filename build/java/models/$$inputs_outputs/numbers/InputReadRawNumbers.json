@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Input/read numbers (raw)",
-  "tags": [
-    "input"
-  ],
   "id": "d08d40a4-8608-4a54-b587-fc818dac7bc0",
   "options": {
     "behavior": {

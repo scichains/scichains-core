@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].matrices",
   "name": "Input/read AlgART multi-matrix",
-  "tags": [
-    "input"
-  ],
   "id": "eae69bd3-0b41-4026-abd7-c15e4fc2fded",
   "options": {
     "behavior": {

@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Input/copy number array",
-  "tags": [
-    "input"
-  ],
   "id": "45e594c3-1166-4c82-b3e7-ba7ba3842a70",
   "options": {
     "behavior": {

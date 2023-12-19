@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].scalars",
   "name": "Input/read scalar",
-  "tags": [
-    "input"
-  ],
   "id": "4833e803-9a75-461f-ab75-83c65426d98b",
   "options": {
     "behavior": {

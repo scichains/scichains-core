@@ -10,9 +10,6 @@
       "edition_type": "folder"
     }
   },
-  "tags": [
-    "parameter"
-  ],
   "id": "8d725c7a-5554-4b4b-a4b0-959baf51a231",
   "language": "java",
   "java": {
