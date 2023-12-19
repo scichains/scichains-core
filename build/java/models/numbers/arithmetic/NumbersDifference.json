@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise difference of 2 number arrays",
+  "tags": ["numbers"],
   "id": "47b259af-bcb1-45a4-bfe0-81dbbc170264",
   "language": "java",
   "java": {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Scalar ax + by + Δ",
+  "tags": ["scalars"],
   "id": "6b37314e-fdbd-416d-8574-4f48853d60b2",
   "language": "java",
   "java": {

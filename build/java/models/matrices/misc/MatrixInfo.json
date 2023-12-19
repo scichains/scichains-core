@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.misc",
   "name": "Matrix information",
+  "tags": ["matrices"],
   "id": "3d60369f-c8d8-4c84-8e12-1f6ccea3053a",
   "language": "java",
   "java": {

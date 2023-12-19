@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise maximum of numbers",
+  "tags": ["numbers"],
   "id": "a5e82d5e-fe2a-4fdf-a882-fe108668d5fc",
   "language": "java",
   "java": {

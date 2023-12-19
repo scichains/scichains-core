@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example ExecutionBlockSimple",
+  "tags": ["demo"],
   "id": "4fdae5da-9f13-4fc6-9bb7-b5d0a3cf3e39",
   "description": "Example of java extension",
   "language": "java",

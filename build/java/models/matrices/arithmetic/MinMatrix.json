@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Minimum (elementwise)",
+  "tags": ["matrices"],
   "id": "1b43c9a2-f83b-41b3-886d-43ee068a32ee",
   "language": "java",
   "java": {

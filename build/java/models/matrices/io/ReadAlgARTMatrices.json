@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.io",
   "name": "Read AlgART multi-matrix",
+  "tags": ["matrices"],
   "id": "87afbea2-532c-4935-9e0f-c331a6861fb2",
   "language": "java",
   "java": {

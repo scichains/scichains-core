@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Absolute value: |x|",
+  "tags": ["scalars"],
   "id": "e935bbb5-c7f3-4c56-ada5-46b67aa641aa",
   "language": "java",
   "java": {

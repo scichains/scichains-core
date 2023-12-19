@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Find next one from list of files",
+  "tags": ["files"],
   "id": "fc6b1ee7-051b-4f23-840b-9afd95d992da",
   "language": "java",
   "java": {

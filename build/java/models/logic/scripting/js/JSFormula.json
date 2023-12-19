@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.scripting.js",
   "name": "JavaScript formula",
+  "tags": ["logic"],
   "id": "16803ff9-9c7a-4c2f-8bd4-3458706fce8c",
   "description": "Simplified version of &quot;Common JavaScript&quot;.",
   "language": "java",

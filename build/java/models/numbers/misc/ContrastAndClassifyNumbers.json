@@ -4,6 +4,7 @@
   "category": "numbers.misc",
   "name": "Contrast and classify numbers by level",
   "description": "Replaces each number in the array by \"contrasted\" value, scaled so that the \"low limit\" becomes \"result min\" (usually 0.0) and the \"high limit\" becomes \"result max\" (usually 1.0). Also classifies number: for all numbers inside \"low limit\"..\"high limit\" range, returns 1 in the corresponding element of \"selector\", and for all other numbers clears the corresponding element in \"selector\" to 0.",
+  "tags": ["numbers"],
   "id": "da1e745b-17d1-4b10-8adb-10c3f0cf18d7",
   "language": "java",
   "java": {

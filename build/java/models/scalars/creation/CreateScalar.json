@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create scalar",
+  "tags": ["scalars"],
   "id": "78106eb4-cdd2-4082-833c-47dc9b70e215",
   "language": "java",
   "java": {

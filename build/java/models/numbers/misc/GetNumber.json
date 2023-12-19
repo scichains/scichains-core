@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Get one element of number array",
+  "tags": ["numbers"],
   "id": "59be4ed4-8b86-406a-b20b-8fafc46bbf52",
   "language": "java",
   "java": {

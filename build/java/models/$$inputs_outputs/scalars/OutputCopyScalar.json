@@ -9,6 +9,7 @@
       "output": true
     }
   },
+  "tags": ["output"],
   "id": "1b92dce9-38a3-434f-8f69-3cbcb635ab77",
   "language": "java",
   "java": {

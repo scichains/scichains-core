@@ -8,6 +8,7 @@
       "data": true
     }
   },
+  "tags": ["parameter"],
   "id": "9863bb92-aaff-4ffa-a800-1df044f26f50",
   "language": "java",
   "java": {

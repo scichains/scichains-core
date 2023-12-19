@@ -2,6 +2,7 @@
   "app": "executor",
   "category": "~examples.python.scalars",
   "name": "Python example: sum a+b",
+  "tags": ["demo"],
   "id": "a8df5a34-35ec-4bda-883d-5a58c1e791f2",
   "language": "python",
   "python": {

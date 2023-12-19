@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Remove folder",
+  "tags": ["files"],
   "id": "922812ba-11ce-4d07-a645-f940328db7bb",
   "language": "java",
   "java": {

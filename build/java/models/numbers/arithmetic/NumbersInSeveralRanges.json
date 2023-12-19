@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Numbers in several ranges",
   "description": "Compares input numbers with sequence of <i>m</i> thresholds and replaces them with one of <i>m</i>+1 corresponding values.",
+  "tags": ["numbers"],
   "id": "0dd84db6-5584-475c-85ba-bbecd90beef4",
   "language": "java",
   "java": {

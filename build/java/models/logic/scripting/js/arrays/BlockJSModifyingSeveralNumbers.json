@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.scripting.js.arrays",
   "name": "Formula, modifying several multi-column arrays",
+  "tags": ["logic"],
   "id": "4953b383-9c3f-43a6-8e83-631be10cd58c",
   "language": "java",
   "java": {

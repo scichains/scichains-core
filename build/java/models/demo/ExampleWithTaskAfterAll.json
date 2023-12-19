@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example, registering task after executing chain",
+  "tags": ["demo"],
   "id": "4396c0ee-87d4-4f10-8ec9-a2c941854cb7",
   "language": "java",
   "java": {

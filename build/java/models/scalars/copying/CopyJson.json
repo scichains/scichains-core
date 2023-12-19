@@ -8,6 +8,7 @@
       "copy": true
     }
   },
+  "tags": ["scalars"],
   "id": "762741c6-58e8-4908-a769-b07ac141efb9",
   "language": "java",
   "java": {

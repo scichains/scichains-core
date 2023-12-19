@@ -4,6 +4,7 @@
   "category": "matrices.creation",
   "name": "Create matrix for bilinear function",
   "description": "Common bilinear function: r = cx2·(x−x₀)² + 2·cxy·(x−x₀)·(y−y₀) + cy2·(y−y₀)² + cx·(x−x₀) + cy·(y−y₀) + c. If \"Square root from bilinear function\" flag is set, we return  √<span style=\"border-top:1px solid; padding:0 0.1em;\">r</span>.",
+  "tags": ["matrices"],
   "id": "b9595fcf-0f84-4512-99c3-2793687575a2",
   "language": "java",
   "java": {

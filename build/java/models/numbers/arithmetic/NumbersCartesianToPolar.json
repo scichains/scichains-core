@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise cartesian x/y → polar r/φ (radius/arctangent)",
+  "tags": ["numbers"],
   "id": "b4cf8392-5d1a-41e2-8cd8-39a94c3b1d6d",
   "language": "java",
   "java": {

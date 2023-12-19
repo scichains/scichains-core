@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.statistics",
   "name": "Statistics on numbers array",
+  "tags": ["numbers"],
   "id": "2b22aacd-4e6d-47f6-8672-cb02f0f8eb2b",
   "language": "java",
   "java": {

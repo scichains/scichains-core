@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise ax + by + Δ",
   "description": "Returns linear combination <i>ax</i>+<i>by</i>+Δ or (if the flag is set) its absolute value |<i>ax</i>+<i>by</i>+Δ|.  Second argument <i>y</i> is optional: if it is skipped, it is supposed to be zero.",
+  "tags": ["numbers"],
   "id": "093b96a7-3ab1-4f56-b70c-bfe8b8c1999b",
   "language": "java",
   "java": {

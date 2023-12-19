@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Absolute value (elementwise)",
+  "tags": ["matrices"],
   "id": "573dfe4d-3966-4aaf-a8db-732e7c48a33d",
   "language": "java",
   "java": {

@@ -4,6 +4,7 @@
   "category": "numbers.conversions",
   "name": "Extract blocks by range",
   "description": "Extracts blocks of the source array, for which the specified column of the corresponding \"selector\" contains a number in the specified range. If \"selector\" is not specified, the column of the source arrays is used as a selector.",
+  "tags": ["numbers"],
   "id": "d0a58b43-e3b8-4de3-b5bf-87af51ef1e8d",
   "language": "java",
   "java": {

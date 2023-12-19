@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Invert (elementwise)",
+  "tags": ["matrices"],
   "id": "7be43c14-04a7-4def-bfb0-925b385b4050",
   "language": "java",
   "java": {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Python formula (elementwise) for arrays",
+  "tags": ["numbers"],
   "id": "fe8147eb-99ba-4de1-93e6-e95809407151",
   "language": "python",
   "python": {

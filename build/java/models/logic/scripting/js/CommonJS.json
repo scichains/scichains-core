@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.scripting.js",
   "name": "Common JavaScript",
+  "tags": ["logic"],
   "id": "54d4a3bd-d7ab-453a-bc39-08c83dc8f3f4",
   "language": "java",
   "java": {

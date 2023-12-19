@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].matrices",
   "name": "Input/copy matrix",
+  "tags": ["input"],
   "id": "f554f7db-f751-4114-b2dc-a694db78707d",
   "options": {
     "behavior": {

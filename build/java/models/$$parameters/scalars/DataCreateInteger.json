@@ -9,6 +9,7 @@
       "data_type": "long"
     }
   },
+  "tags": ["parameter"],
   "id": "9086631c-e268-4438-a2ee-7c3a9c23bade",
   "language": "java",
   "java": {

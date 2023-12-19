@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Convert JSON index/value map to translation table",
+  "tags": ["numbers"],
   "id": "4faa82b3-3e18-4dc7-bb5b-0abb5a4f9377",
   "language": "java",
   "java": {

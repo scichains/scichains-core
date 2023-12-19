@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.loops",
   "name": "repeat... while (JS)",
+  "tags": ["logic"],
   "id": "c3ba4da2-01ca-4496-b9b9-3bfc8c6b8d27",
   "language": "java",
   "java": {

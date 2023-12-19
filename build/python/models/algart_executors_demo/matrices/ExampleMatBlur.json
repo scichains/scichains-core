@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.python.matrices",
   "name": "Python example: Gaussian blur",
+  "tags": ["demo"],
   "id": "7e495a21-6737-4c18-9f0e-2be8f1eae7de",
   "language": "python",
   "python": {

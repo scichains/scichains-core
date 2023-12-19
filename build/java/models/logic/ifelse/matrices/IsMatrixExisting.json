@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.if/else.matrices",
   "name": "Is matrix existing?",
+  "tags": ["logic"],
   "id": "ed3c9ee4-1459-49d9-8a59-adcd37180282",
   "language": "java",
   "java": {

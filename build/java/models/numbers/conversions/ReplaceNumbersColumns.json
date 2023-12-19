@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Replace column(s) in number array",
+  "tags": ["numbers"],
   "id": "6147110b-9fae-43e0-91c8-5c47fac65744",
   "language": "java",
   "java": {

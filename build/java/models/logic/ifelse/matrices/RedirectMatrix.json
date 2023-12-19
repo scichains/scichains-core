@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.if/else.matrices",
   "name": "redirect (for matrix)",
+  "tags": ["logic"],
   "id": "88faeda1-0de2-4717-901e-816921f91c3b",
   "description": "Copies the input matrix to one of output ports, specified by redirector value.",
   "language": "java",

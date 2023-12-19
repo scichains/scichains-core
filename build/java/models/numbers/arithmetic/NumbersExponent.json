@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise exponent",
+  "tags": ["numbers"],
   "id": "dc24ad21-ae58-42cf-8766-86c18fa8070d",
   "language": "java",
   "java": {

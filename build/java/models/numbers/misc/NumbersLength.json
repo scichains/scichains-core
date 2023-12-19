@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Length of number array",
+  "tags": ["numbers"],
   "id": "58bd577e-fade-4140-abd0-4c2b65a7f571",
   "language": "java",
   "java": {

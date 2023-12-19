@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Merge (concatenate) several number arrays",
+  "tags": ["numbers"],
   "id": "575d59de-b5a8-41d1-a3e6-7e2331b60ca4",
   "language": "java",
   "java": {

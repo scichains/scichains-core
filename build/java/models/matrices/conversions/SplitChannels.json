@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Split channels",
+  "tags": ["matrices"],
   "id": "264a8e7e-4a0a-43e2-8a8c-4642794bf1ed",
   "language": "java",
   "java": {

@@ -4,6 +4,7 @@
   "category": "files",
   "name": "Resolve/create path",
   "description": "Adds child path, if it's specified, then checks or creates result folder/file and return its absolute path. May be used in \"no create anything\" mode only for goal to resolve child path.",
+  "tags": ["files"],
   "id": "f9b1709d-6efe-4e55-ac47-63e3116edc49",
   "language": "java",
   "java": {

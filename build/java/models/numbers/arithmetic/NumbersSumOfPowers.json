@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise (powered) sum of powers",
   "description": "Returns (<i>(a<sub>1</sub><sup>p</sup>+a<sub>2</sub><sup>p</sup>+...) / <i>d</i>)<sup>q</sup></i>.",
+  "tags": ["numbers"],
   "id": "fbff18a0-a43a-424a-9b85-79b50a752ab5",
   "language": "java",
   "java": {

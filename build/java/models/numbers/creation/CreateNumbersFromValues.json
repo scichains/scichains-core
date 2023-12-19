@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create number array from values",
+  "tags": ["numbers"],
   "id": "a69fe1bc-7b70-4382-a58b-f19617ef8a28",
   "language": "java",
   "java": {

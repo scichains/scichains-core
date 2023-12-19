@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Common numbers array information",
+  "tags": ["numbers"],
   "id": "4ca72ef5-3c81-4127-9030-abc8dd4dee26",
   "language": "java",
   "java": {

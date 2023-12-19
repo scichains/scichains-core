@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Change extension in a file name",
+  "tags": ["files"],
   "id": "d31d3767-7df2-4fe1-b144-ff2101d76178",
   "language": "java",
   "java": {

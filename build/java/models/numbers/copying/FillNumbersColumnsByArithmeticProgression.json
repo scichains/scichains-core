@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.copying",
   "name": "Fill column(s) of number array (arithmetic progression)",
+  "tags": ["numbers"],
   "id": "148a211b-77a6-4205-9728-8336cfdedb02",
   "language": "java",
   "java": {

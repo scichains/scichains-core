@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Replace all NaN",
   "description": "Replaces all NaN values in float array with the given value",
+  "tags": ["numbers"],
   "id": "226576e4-14e0-47ba-b9e5-3f5d994c5e24",
   "language": "java",
   "java": {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.creation",
   "name": "Create matrix (constant)",
+  "tags": ["matrices"],
   "id": "596f04a1-2224-4acb-85fc-a152b7c94e37",
   "language": "java",
   "java": {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Change precision",
+  "tags": ["matrices"],
   "id": "013b7e15-03b1-4026-9cc9-2b0ccafd1adb",
   "language": "java",
   "java": {

@@ -2,6 +2,7 @@
   "app": "executor",
   "category": "~examples.python",
   "name": "Python example: using class with state (counter)",
+  "tags": ["demo"],
   "id": "84e39463-1c32-4e57-ad8d-ab17f12c4456",
   "language": "python",
   "python": {

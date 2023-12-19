@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Extract layer (with decreasing number of dimensions)",
+  "tags": ["matrices"],
   "id": "f24cbd05-397b-4d90-8a19-dccb6a4316a5",
   "language": "java",
   "java": {

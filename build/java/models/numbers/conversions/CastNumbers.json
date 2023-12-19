@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Cast precision of number array",
+  "tags": ["numbers"],
   "id": "2b22bc17-d59d-43d0-a976-b2eb08bbd027",
   "language": "java",
   "java": {

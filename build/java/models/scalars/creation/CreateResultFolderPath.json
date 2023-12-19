@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create path to result folder",
+  "tags": ["scalars"],
   "id": "25cb8397-0747-40ea-9459-8e15b85c2ae4",
   "language": "java",
   "java": {

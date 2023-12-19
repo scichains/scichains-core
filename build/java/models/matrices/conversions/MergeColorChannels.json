@@ -4,6 +4,7 @@
   "category": "matrices.conversions",
   "name": "Merge color channels",
   "description": "Merge specified channels into colored image (RGB)",
+  "tags": ["matrices"],
   "id": "bdfe2943-4d75-4811-a31f-4e8fec73e212",
   "language": "java",
   "java": {

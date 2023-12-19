@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise absolute value",
   "description": "Returns absolute value|<i>x</i>| (<i>x</i> is the input)",
+  "tags": ["numbers"],
   "id": "b2fa0837-46fc-4576-b66e-29e2ce397709",
   "language": "java",
   "java": {

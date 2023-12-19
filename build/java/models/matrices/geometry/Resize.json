@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.geometry",
   "name": "Resize",
+  "tags": ["matrices"],
   "id": "a4107893-ee34-4bd7-b807-60de90f775b4",
   "language": "java",
   "java": {

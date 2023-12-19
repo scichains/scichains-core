@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example 3",
+  "tags": ["demo"],
   "id": "79c0d86f-a47b-4fbd-88a7-a6ad7676c76a",
   "language": "java",
   "java": {

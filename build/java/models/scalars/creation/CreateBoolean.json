@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create boolean scalar",
+  "tags": ["scalars"],
   "id": "ac37e341-2be4-4912-987b-704c7433361b",
   "language": "java",
   "java": {

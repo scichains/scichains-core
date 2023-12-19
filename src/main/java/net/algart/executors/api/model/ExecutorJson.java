@@ -1308,6 +1308,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     private String category;
     private String name;
     private String description = null;
+    private Set<String> tags = new LinkedHashSet<>();
     private String executorId;
     private Options options = null;
     private String language = null;
@@ -1339,6 +1340,16 @@ public class ExecutorJson extends AbstractConvertibleToJson {
             this.category = Jsons.reqString(json, "category", file);
             this.name = Jsons.reqString(json, "name", file);
             this.description = json.getString("description", null);
+            JsonArray tags = json.getJsonArray("tags");
+            if (tags != null) {
+                for (JsonValue jsonValue : tags) {
+                    if (!(jsonValue instanceof JsonString)) {
+                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                                + ": \"tags\" array contains non-string element " + jsonValue);
+                    }
+                    this.tags.add(((JsonString) jsonValue).getString());
+                }
+            }
             final JsonObject optionsJson = json.getJsonObject("options");
             if (optionsJson != null) {
                 this.options = new Options(optionsJson, file);
@@ -1504,6 +1515,16 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return this;
     }
 
+    public final Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
+
+    public final ExecutorJson setTags(Set<String> tags) {
+        Objects.requireNonNull(tags, "Null tags");
+        this.tags = new LinkedHashSet<>(tags);
+        return this;
+    }
+
     public final String getExecutorId() {
         return executorId;
     }
@@ -1650,6 +1671,11 @@ public class ExecutorJson extends AbstractConvertibleToJson {
 
     public final void updateCategoryPrefix(String categoryPrefix) {
         this.category = updateCategoryPrefix(this.category, categoryPrefix);
+    }
+
+    public final void addTag(String tag) {
+        Objects.requireNonNull(tag, "Null tag");
+        tags.add(tag);
     }
 
     public final void addInPort(PortConf port) {
@@ -1970,6 +1996,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 ",\n  category='" + category + '\'' +
                 ",\n  name='" + name + '\'' +
                 ",\n  description=" + (description == null ? null : "'" + description + "'") +
+                ",\n  tags=" + tags +
                 ",\n  id='" + executorId + '\'' +
                 ",\n  options=" + options +
                 ",\n  language=" + language +
@@ -2070,6 +2097,13 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         builder.add("name", name);
         if (description != null) {
             builder.add("description", description);
+        }
+        if (!tags.isEmpty()) {
+            final JsonArrayBuilder tagsBuilder = Json.createArrayBuilder();
+            for (String tag : tags) {
+                tagsBuilder.add(tag);
+            }
+            builder.add("tags", tagsBuilder.build());
         }
         builder.add("id", executorId);
         if (COMPATIBILITY_WITH_UUID) {

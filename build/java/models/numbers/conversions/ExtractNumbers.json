@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Extract blocks of number array",
+  "tags": ["numbers"],
   "id": "14094c58-767b-49c2-bea3-0003f161c013",
   "language": "java",
   "java": {

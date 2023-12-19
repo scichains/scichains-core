@@ -4,6 +4,7 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise negative value",
   "description": "Returns negative value &minus;<i>x</i> (<i>x</i> is the input)",
+  "tags": ["numbers"],
   "id": "ae729161-158b-48e0-892d-ddec71bb2b2e",
   "language": "java",
   "java": {

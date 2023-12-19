@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Check equality of 2 images (elementwise)",
+  "tags": ["matrices"],
   "id": "16c8130a-9a7c-4e78-af4d-acb8a6ab410d",
   "language": "java",
   "java": {

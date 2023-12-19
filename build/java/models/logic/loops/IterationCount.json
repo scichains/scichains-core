@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.loops",
   "name": "Iteration count",
+  "tags": ["logic"],
   "id": "24d02c8c-f703-4c44-9b76-0300fdc62a48",
   "description": "Returns number of full iterations since the loop start.<br>Can be considered as <code>i<code> variable in the usual loop idiom:<br><pre>for (long i = 0; i < n; i++) {\n    ...(this function is called here)...\n}",
   "language": "java",

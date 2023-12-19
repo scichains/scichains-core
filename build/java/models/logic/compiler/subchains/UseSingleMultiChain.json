@@ -4,6 +4,7 @@
   "category": "logic.compiler.subchains",
   "name": "Use multi-chain",
   "description": "Allows to use the given multi-chain (registers it as a new executor).<br>Note: this function is identical to \"Use multi-chain(s)\". The only difference is the &quot;file&quot; parameter is edited hear as a path to some single file.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "tags": ["logic"],
   "id": "1c3feaad-bd48-4572-98cf-32068faffdae",
   "options": {
     "stage": "loading_time"

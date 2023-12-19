@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Parse 2/4/6 numbers to rectangular area (minX/maxX etc.)",
+  "tags": ["numbers"],
   "id": "a005f5b5-ab6a-48bc-9964-4c8e962f62a2",
   "language": "java",
   "java": {

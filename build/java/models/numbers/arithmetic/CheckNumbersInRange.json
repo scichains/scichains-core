@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Check that numbers are in range",
+  "tags": ["numbers"],
   "id": "82f2eb89-22e6-4ee6-a1c8-2c31ef45af22",
   "language": "java",
   "java": {

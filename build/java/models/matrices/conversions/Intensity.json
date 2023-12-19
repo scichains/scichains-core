@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Intensity",
+  "tags": ["matrices"],
   "id": "ee38f9b2-3400-494e-8727-19a2cf0bbae9",
   "language": "java",
   "java": {

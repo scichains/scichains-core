@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Sort number array",
+  "tags": ["numbers"],
   "id": "9c19b7e9-057b-4dec-ad1a-0fc1e7b4dfb2",
   "language": "java",
   "java": {

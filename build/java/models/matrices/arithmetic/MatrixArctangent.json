@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Arctangent: angle of (x, y) vector",
+  "tags": ["matrices"],
   "id": "b43f7bb1-bf12-4b00-8fba-5e6ade7c1f6a",
   "language": "java",
   "java": {

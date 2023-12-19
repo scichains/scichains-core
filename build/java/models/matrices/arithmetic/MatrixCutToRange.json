@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Cut to range (elementwise)",
+  "tags": ["matrices"],
   "id": "0ce56c64-64d5-43cf-abd2-dbdf1c95ba5f",
   "language": "java",
   "java": {

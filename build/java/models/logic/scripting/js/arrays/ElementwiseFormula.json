@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.scripting.js.arrays",
   "name": "Elementwise formula for several arrays",
+  "tags": ["logic"],
   "id": "ea0c2dfb-244b-4ff4-ad18-8b16723b5145",
   "language": "java",
   "java": {

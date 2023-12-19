@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Interpolate 2 layers (with increasing number of dimensions)",
+  "tags": ["matrices"],
   "id": "1dec0896-9d81-4bfc-af25-f463c0cc5f8f",
   "language": "java",
   "java": {

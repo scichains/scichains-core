@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.io",
   "name": "Print sub-matrix",
+  "tags": ["matrices"],
   "id": "7911923c-e774-409f-9585-40afa1438c1c",
   "language": "java",
   "java": {

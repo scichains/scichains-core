@@ -4,6 +4,7 @@
   "category": "logic.compiler.settings",
   "name": "Use chain main settings",
   "description": "Special version of \"Use settings\" function, reserved for creating a settings combiner, describing settings of the whole chain, which contains this function.<br>This function is invoked automatically while using this chain as a sub-chain by \"Use sub-chain\" function.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "tags": ["logic"],
   "id": "6534749c-8d07-47fa-8ab5-b80d855a3df3",
   "options": {
     "stage": "loading_time"

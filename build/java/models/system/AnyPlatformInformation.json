@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "system",
   "name": "Any installed platform information",
+  "tags": ["system"],
   "id": "8086b9ff-fe09-481f-99a5-41e5bf585ae0",
   "language": "java",
   "java": {

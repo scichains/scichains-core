@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.geometry",
   "name": "Crop: submatrix/supermatrix/shift...",
+  "tags": ["matrices"],
   "id": "9bdbc1e8-0789-46ab-a4e6-be30b497a863",
   "language": "java",
   "java": {

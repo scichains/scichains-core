@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Linear function (elementwise): a₁x₁ + a₂x₂ + ... + b",
+  "tags": ["matrices"],
   "id": "57fb4aec-c016-48e0-80f4-9b83eac545d0",
   "language": "java",
   "java": {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x | ~y: logical OR-NOT",
+  "tags": ["scalars"],
   "id": "56697ac3-878b-4611-ab20-5a37ad422ba6",
   "description": "Logical OR of first scalar and inverted (NOT) second scalar.",
   "language": "java",

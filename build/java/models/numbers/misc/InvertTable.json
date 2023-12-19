@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Invert table of indexes",
+  "tags": ["numbers"],
   "id": "f118f283-a771-413b-8867-f8cf69cf137b",
   "language": "java",
   "java": {

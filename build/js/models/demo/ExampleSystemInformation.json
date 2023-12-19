@@ -2,6 +2,7 @@
   "app": "executor",
   "category": "~examples.js",
   "name": "JS example: system information",
+  "tags": ["demo"],
   "id": "a3db2d45-ce63-4b04-9b1c-b684572a8da6",
   "language": "js",
   "js": {

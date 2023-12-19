@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create double scalar",
+  "tags": ["scalars"],
   "id": "1ef9205e-94d1-4c93-badc-ebbaa82a7365",
   "language": "java",
   "java": {

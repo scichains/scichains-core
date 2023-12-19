@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Split color channels",
+  "tags": ["matrices"],
   "id": "85605dbe-f732-4b5b-a86f-e9a668b9151f",
   "language": "java",
   "java": {

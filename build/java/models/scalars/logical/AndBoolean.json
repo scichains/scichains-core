@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x1 & x2 ... or ~(x1 & x2 ...): logical AND with possible negation",
+  "tags": ["scalars"],
   "id": "aca1ef12-f939-4e4b-b30f-dd0bb054dc35",
   "description": "Logical AND of several boolean scalars.",
   "language": "java",

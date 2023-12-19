@@ -4,6 +4,7 @@
   "category": "matrices.arithmetic",
   "name": "Double angle of 2D vector",
   "description": "Let's vector (x,y) = (r&nbsp;cos&nbsp;φ,&nbsp;r&nbsp;sin&nbsp;φ). This function returns other vector (x',y') = (r&nbsp;cos&nbsp;2φ,&nbsp;r&nbsp;sin&nbsp;2φ).",
+  "tags": ["matrices"],
   "id": "484b056f-c142-42e8-81de-2869e0ee127d",
   "language": "java",
   "java": {

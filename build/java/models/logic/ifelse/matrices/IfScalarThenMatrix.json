@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.if/else.matrices",
   "name": "if (xxx)... (for matrix)",
+  "tags": ["logic"],
   "id": "a1cdbb1f-b9e9-438c-b9db-0b025e3faeed",
   "description": "Copies one of 2 matrices, depending on \"if\" condition, to the output.",
   "language": "java",

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise logarithm",
+  "tags": ["numbers"],
   "id": "4f0d20ef-857a-4d2a-be31-9e81520b9088",
   "language": "java",
   "java": {

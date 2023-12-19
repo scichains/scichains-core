@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Check existence of file/folder",
+  "tags": ["files"],
   "id": "3f4f277d-db95-4076-8de1-cda1e650fbac",
   "language": "java",
   "java": {

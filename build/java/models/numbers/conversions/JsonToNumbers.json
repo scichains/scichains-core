@@ -4,6 +4,7 @@
   "category": "numbers.conversions",
   "name": "Convert JSON with numbers to number array",
   "description": "Reads some JSON, tries to interpret every value as a number, and returns array of these numbers. If the element is not a number, returns NaN for floating point element type or 0 for integer element type, excepting logical JSON values true/false — they are converted to numbers 1 and 0.",
+  "tags": ["numbers"],
   "id": "53f0b840-4966-470a-86f0-15b5417aa89c",
   "language": "java",
   "java": {

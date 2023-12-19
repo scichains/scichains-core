@@ -4,6 +4,7 @@
   "category": "matrices.arithmetic",
   "name": "Difference from 2 images comparison",
   "description": "Calculates difference in RGB space between image X and two images A and B: |X−A| and |X−B|, and compares them; here |X−Y| means sqrt((X<sub>R</sub>)−Y<sub>R</sub>)²&nbsp;+&nbsp;(X<sub>G</sub>)−Y<sub>G</sub>)²&nbsp;+&nbsp;(X<sub>B</sub>)−Y<sub>B</sub>)²)",
+  "tags": ["matrices"],
   "id": "8a2f0f46-b3cd-44e0-b592-78e93b170d03",
   "language": "java",
   "java": {

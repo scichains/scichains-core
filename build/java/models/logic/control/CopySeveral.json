@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.control",
   "name": "copy several data",
+  "tags": ["logic"],
   "id": "09e02908-1c83-4bcb-8a94-82228e3fbacb",
   "description": "Simply copies all inputs (when exist) to the corresponding outputs.<br>It may me useful, for example, when you need to declare that some function <b>F</b> must be executed, though you don't really need its results (like in a case of writing data to file). You insert this copying function <b>C</b> \"between\" some <i>actually necessary</i> result <b>R</b> and its input data <b>S</b>, and then declare some additional input data of <b>C</b> as depending on <b>F</b>. So, you have dependencies <b>S</b>&rarr;<b>C</b>&rarr;<b>R</b> (actually used) and <b>F</b>&rarr;<b>C</b> (simple copying, when the copy in <b>C</b> is just ignored). The copy of <b>F</b> is not used, but, according the functional logic, the result <b>C</b> <b><i>does</i></b> depend on <b>F</b>.",
   "language": "java",

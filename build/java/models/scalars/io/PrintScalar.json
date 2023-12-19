@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.io",
   "name": "Print scalar",
+  "tags": ["scalars"],
   "id": "c1922bec-4963-4c93-9228-17532f293d7a",
   "language": "java",
   "java": {

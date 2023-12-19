@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.json",
   "name": "Get JSON value",
+  "tags": ["scalars"],
   "id": "e2127f39-3f95-4964-8b86-52628baf6462",
   "language": "java",
   "java": {

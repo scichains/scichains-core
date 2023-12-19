@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create JSON",
+  "tags": ["scalars"],
   "id": "9710619e-d623-4393-be0a-53f0991b2f21",
   "language": "java",
   "java": {

@@ -9,6 +9,7 @@
       "data_type": "boolean"
     }
   },
+  "tags": ["parameter"],
   "id": "cd9253a3-6a39-493e-baff-5d9dc03936d1",
   "language": "java",
   "java": {

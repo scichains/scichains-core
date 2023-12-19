@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.io",
   "name": "Read next scalar from folder",
+  "tags": ["scalars"],
   "id": "1de94793-fd7b-474f-bcb7-6e204993c8d6",
   "language": "java",
   "java": {

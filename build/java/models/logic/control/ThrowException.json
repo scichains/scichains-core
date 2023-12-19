@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "logic.control",
   "name": "if (xxx) throw an exception",
+  "tags": ["logic"],
   "id": "8770c313-f30a-4e8a-b9a2-2791e5d1aca2",
   "language": "java",
   "java": {

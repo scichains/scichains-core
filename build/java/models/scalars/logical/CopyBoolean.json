@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "Copy x (boolean value)",
+  "tags": ["scalars"],
   "id": "58a7c59b-e39e-412a-a996-5b60ab49760d",
   "description": "Copy boolean condition with specified result format.",
   "language": "java",

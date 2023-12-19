@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.io",
   "name": "Read image",
+  "tags": ["matrices"],
   "id": "701ee3e2-56d2-489a-b9ba-d007ee27076f",
   "language": "java",
   "java": {

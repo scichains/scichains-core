@@ -8,6 +8,7 @@
       "copy": true
     }
   },
+  "tags": ["numbers"],
   "id": "c545d2c9-cece-40b6-a9f2-f392073f2d1d",
   "language": "java",
   "java": {

@@ -4,6 +4,7 @@
   "category": "scalars.strings",
   "name": "Concatenate scalars",
   "description": "Returns concatenation of several scalars, like in s1+\", \"+s2+... Java operator.",
+  "tags": ["scalars"],
   "id": "ff94d525-7255-42ba-ba23-38d3a987f869",
   "language": "java",
   "java": {

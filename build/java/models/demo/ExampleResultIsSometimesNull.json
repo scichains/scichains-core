@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example: changing result (null or not)",
+  "tags": ["demo"],
   "id": "fbb5be56-8ecb-4113-9a6e-1ed8e9a34673",
   "language": "java",
   "java": {

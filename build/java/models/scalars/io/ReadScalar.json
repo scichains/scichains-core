@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.io",
   "name": "Read scalar",
+  "tags": ["scalars"],
   "id": "ff69f9e0-88d9-48e1-b305-61180adffcff",
   "language": "java",
   "java": {

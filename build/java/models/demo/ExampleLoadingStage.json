@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java ExampleLoadingStage",
+  "tags": ["demo"],
   "id": "72347b9d-2076-4526-ae43-6db5d86bb2fd",
   "options": {
     "stage": "loading_time"

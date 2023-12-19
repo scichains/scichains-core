@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Merge column(s) of several number arrays",
+  "tags": ["numbers"],
   "id": "8b5068ea-fc89-4098-a030-7f02085ed7c7",
   "language": "java",
   "java": {

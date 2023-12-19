@@ -4,6 +4,7 @@
   "category": "logic.compiler.subchains",
   "name": "Use sub-chain",
   "description": "Allows to use the given sub-chain (registers it as a new executor).<br>Note: this function is identical to \"Use sub-chain(s)\". The only difference is the &quot;file&quot; parameter is edited hear as a path to some single file.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "tags": ["logic"],
   "id": "45fab9e4-b40a-4632-9264-6edc56a7c9e9",
   "options": {
     "stage": "loading_time"

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.js.scalars",
   "name": "JS example: sum a+b",
+  "tags": ["demo"],
   "id": "7eee0571-b76b-4a11-869b-09fdeb9f6d86",
   "language": "js",
   "js": {

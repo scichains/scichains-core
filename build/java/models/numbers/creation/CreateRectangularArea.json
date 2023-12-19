@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create rectangular area",
+  "tags": ["numbers"],
   "id": "8e55c58f-5801-4924-8490-b6135f5846a0",
   "language": "java",
   "java": {

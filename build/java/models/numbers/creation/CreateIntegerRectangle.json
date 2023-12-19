@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create integer rectangle",
+  "tags": ["numbers"],
   "id": "42ce7ce1-9f53-447c-abff-4ef87af82d70",
   "language": "java",
   "java": {

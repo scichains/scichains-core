@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "max(x1, x2, x3, ...)",
+  "tags": ["scalars"],
   "id": "34657bb6-0853-4a91-b567-c72c32f050b9",
   "description": "Maximum from several numbers or negative infinity if there is no input numbers.",
   "language": "java",

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.python.matrices",
   "name": "Python example: calling \"Intensity\" executor",
+  "tags": ["demo"],
   "id": "5304be0a-ad9d-4fcd-9490-f8f0e99fd495",
   "language": "python",
   "python": {

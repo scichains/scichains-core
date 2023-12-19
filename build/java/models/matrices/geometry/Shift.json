@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.geometry",
   "name": "Shift",
+  "tags": ["matrices"],
   "id": "6513ba73-4a20-44fb-a543-10cf25d987ee",
   "language": "java",
   "java": {

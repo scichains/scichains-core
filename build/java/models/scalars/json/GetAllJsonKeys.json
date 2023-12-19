@@ -4,6 +4,7 @@
   "category": "scalars.json",
   "name": "Get all JSON keys",
   "description": "Returns all JSON keys, separated by \\n",
+  "tags": ["scalars"],
   "id": "ecfae1e7-575e-41c3-9cdb-cae2f7ca77f2",
   "language": "java",
   "java": {

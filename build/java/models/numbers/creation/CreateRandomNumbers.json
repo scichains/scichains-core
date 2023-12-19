@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create random number array",
+  "tags": ["numbers"],
   "id": "906c24b5-84c4-4615-8d0a-9b6d3f11329b",
   "language": "java",
   "java": {

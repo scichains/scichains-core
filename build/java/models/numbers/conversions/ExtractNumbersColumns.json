@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Extract columns of number array",
+  "tags": ["numbers"],
   "id": "efc68288-07db-49b4-bc08-9fe331b51025",
   "language": "java",
   "java": {

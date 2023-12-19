@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "matrices.statistics",
   "name": "Global image statistics",
+  "tags": ["matrices"],
   "id": "b02ec253-aa60-4de2-ada9-991df9dffbee",
   "language": "java",
   "java": {

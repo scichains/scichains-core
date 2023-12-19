@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "min(x1, x2, x3, ...)",
+  "tags": ["scalars"],
   "id": "bb8136c8-7609-4817-b9ab-6df083fa1a80",
   "description": "Minimum from several numbers or positive infinity if there is no input numbers.",
   "language": "java",

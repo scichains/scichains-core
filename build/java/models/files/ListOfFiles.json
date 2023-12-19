@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "files",
   "name": "List of files in a folder",
+  "tags": ["files"],
   "id": "4ae7694d-0070-4644-a96d-5fa5b6414058",
   "language": "java",
   "java": {

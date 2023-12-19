@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.io",
   "name": "Print numbers",
+  "tags": ["numbers"],
   "id": "35fe5949-5bc5-4484-b9b2-7afc530fe865",
   "language": "java",
   "java": {

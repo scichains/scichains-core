@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Round numbers to nearest integer",
+  "tags": ["numbers"],
   "id": "d17411fc-4a51-489f-95f6-7e3f9dabcf96",
   "language": "java",
   "java": {

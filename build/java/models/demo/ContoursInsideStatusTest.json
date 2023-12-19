@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Contours inside status test",
+  "tags": ["demo"],
   "id": "8d64d68a-3f67-47d6-8bca-677b8367455b",
   "language": "java",
   "java": {
