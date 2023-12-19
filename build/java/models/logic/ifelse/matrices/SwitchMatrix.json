@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.matrices",
   "name": "switch (xxx)... (for matrix)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "05e8e4f6-9924-4c6a-9432-acde27fed1a7",
   "description": "Copies one of input matrices, specified by the selector, to the output. If the selector is 0, first initialized input will be used.",
   "language": "java",

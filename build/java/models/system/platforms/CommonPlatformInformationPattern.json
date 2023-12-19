@@ -4,13 +4,15 @@
   "category": "system.platforms",
   "name": "$$$ platform information",
   "description": "Detailed information about the platform &ldquo;$$$&rdquo;",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "f14222ec-193b-428c-8e68-ebeab79ba540",
   "language": "java",
   "java": {
     "class": "net.algart.executors.api.CommonPlatformInformation"
   },
-  "in_ports":  [
+  "in_ports": [
   ],
   "out_ports": [
     {

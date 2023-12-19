@@ -4,7 +4,9 @@
   "category": "scalars.strings",
   "name": "Split scalar",
   "description": "Splits one scalar, containing several strings separated by some separator, to these strings, like in s.split(\"[\\\\s,;]+\") Java method.<br>Note: for splitting scalar to a number array, please use the function \"Scalar to number array\" from array processing group.",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "00931b9c-d24c-48aa-bb93-063b9b057dfc",
   "language": "java",
   "java": {

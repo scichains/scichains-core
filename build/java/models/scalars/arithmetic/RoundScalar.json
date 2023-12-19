@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Round scalar (single number)",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "d6e43ac8-4799-4540-a63f-888cbba19e3a",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Python formula (elementwise) for matrices",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "a304c4a6-60f0-404b-bae3-96e1268afbcc",
   "language": "python",
   "python": {
@@ -110,5 +112,5 @@
       "edition_type": "value",
       "default": 0.0
     }
- ]
+  ]
 }

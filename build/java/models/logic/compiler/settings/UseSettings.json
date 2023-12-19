@@ -4,7 +4,9 @@
   "category": "logic.compiler.settings",
   "name": "Use settings",
   "description": "Allows to use the given settings combiner: registers it as 3 new executors, 1st to create JSON, 2nd to split settings from JSON and 3rd for getting property names.<br>Note: the 2nd and 3rd executor are optional; they are created only if \"split_id\" / \"get_names_id\", properties exist in the settings combiner JSON. Unlike this, 1st executor is obligatory, and its ID will be extracted from required \"id\" property.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "d9f3cb7f-6cbf-4bb4-b328-5ecdda26c679",
   "options": {
     "stage": "loading_time"

@@ -4,7 +4,9 @@
   "category": "logic.compiler.settings",
   "name": "Add sub-settings",
   "description": "Adds into existing settings JSON new sub-JSON for sub-settings.<br>Though we suppose that this function will be used with settings JSONs, it can be applied to any correct JSON.",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "178f4421-b367-4555-a0f8-52904109b88d",
   "language": "java",
   "java": {

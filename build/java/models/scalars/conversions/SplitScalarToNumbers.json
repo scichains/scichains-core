@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.conversions",
   "name": "Scalar to number array (split)",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "c15657d5-be93-4bc1-899e-49b26f2151a6",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.arrays",
   "name": "switch (xxx)... (for numbers)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "2dd41c4a-bf87-4ec3-ba6a-50bf2793d394",
   "description": "Copies one of input number arrays, specified by the selector, to the output. If the selector is 0, first initialized input will be used.",
   "language": "java",

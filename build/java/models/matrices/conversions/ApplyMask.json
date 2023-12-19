@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Apply binary mask",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "f4a7311d-4d61-43ca-b473-c7872d1e9b45",
   "language": "java",
   "java": {

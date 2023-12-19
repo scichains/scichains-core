@@ -4,13 +4,15 @@
   "category": "numbers.misc",
   "name": "Set/align length of number array(s)",
   "description": "Sets the number of blocks in all input arrays to the same value and returns them. New number of blocks will be equal to maximal number of blocks in all source arrays, maybe, corrected by the parameters below.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "fa48130b-6685-46e9-92f2-a0d05e8bb14d",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.misc.SetArrayLength"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input_1"

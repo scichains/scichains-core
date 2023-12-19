@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Normalize 2D vector",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "ccf2a903-551f-4fac-be8a-7b168726c08e",
   "language": "java",
   "java": {

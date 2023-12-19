@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Difference (elementwise)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "5751611d-7bbc-431e-9440-5e69c71c05f3",
   "language": "java",
   "java": {

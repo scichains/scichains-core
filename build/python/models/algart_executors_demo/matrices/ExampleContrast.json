@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.python.matrices",
   "name": "Python example: contrast",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "3acf72d3-0d30-458c-bd1a-dc08e5cffe21",
   "language": "python",
   "python": {

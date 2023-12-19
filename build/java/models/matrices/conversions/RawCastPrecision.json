@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Cast precision (raw)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "d5030282-6ca2-40c3-8622-ab3b76110baf",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.matrices.conversions.RawCastPrecision"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "mat",
       "name": "input"

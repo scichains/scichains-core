@@ -4,7 +4,9 @@
   "category": "system",
   "name": "System.gc()",
   "description": "Performs Java garbage collection.",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "3d7fa286-618b-4783-9950-d3bf15fcfacd",
   "language": "java",
   "java": {

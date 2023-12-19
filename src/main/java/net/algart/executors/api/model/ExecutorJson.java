@@ -1340,7 +1340,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
             this.category = Jsons.reqString(json, "category", file);
             this.name = Jsons.reqString(json, "name", file);
             this.description = json.getString("description", null);
-            JsonArray tags = json.getJsonArray("tags");
+            JsonArray tags = Jsons.getJsonArray(json, "tags", file);
             if (tags != null) {
                 for (JsonValue jsonValue : tags) {
                     if (!(jsonValue instanceof JsonString)) {
@@ -1673,9 +1673,9 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         this.category = updateCategoryPrefix(this.category, categoryPrefix);
     }
 
-    public final void addTag(String tag) {
-        Objects.requireNonNull(tag, "Null tag");
-        tags.add(tag);
+    public final void addTags(Collection<String> tags) {
+        Objects.requireNonNull(tags, "Null tags");
+        this.tags.addAll(tags);
     }
 
     public final void addInPort(PortConf port) {

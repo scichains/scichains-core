@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Non-zero pixels",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "2d9b551b-f1ef-4790-92b3-56f4bf29b08e",
   "language": "java",
   "java": {

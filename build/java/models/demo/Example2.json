@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example 2",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "8011bc4b-6d0d-485b-986f-56b069f53333",
   "language": "java",
   "java": {
@@ -29,11 +31,11 @@
       "edition_type": "value",
       "default": 1000
     },
-	{
-		"name": "color",
-		"value_type": "String",
-		"edition_type": "value",
-		"default": "#0000FF"
-	}
+    {
+      "name": "color",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "#0000FF"
+    }
   ]
 }

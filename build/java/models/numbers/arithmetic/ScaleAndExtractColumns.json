@@ -4,13 +4,15 @@
   "category": "numbers.arithmetic",
   "name": "Scale/extract columns",
   "description": "Multiplies all elements of every columns #k by the corresponding weights[k]. If the length of weights array K is less than the number of columns M (block length), then the last missing M−K weights are supposed to be 1.0 (columns stays unchanged). If \"weights_json\" is set, it is used instead of \"weights\" array.<br>After this, some columns may be removed &mdash; see parameters.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "e25e9741-b748-417d-9145-8196fd819076",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.arithmetic.ScaleAndExtractColumns"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input",

@@ -4,7 +4,9 @@
   "category": "numbers.conversions",
   "name": "Convert number array / auto-incremented numbers to JSON",
   "description": "Creates simple JSON, consisting of KEY: N pairs, where KEY is one of the specified string keys, N is the corresponding number from the passed array.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "fd473232-fc30-474d-a7ca-9ff8eb56ec22",
   "language": "java",
   "java": {

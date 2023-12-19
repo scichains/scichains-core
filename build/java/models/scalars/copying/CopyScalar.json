@@ -8,7 +8,9 @@
       "copy": true
     }
   },
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "ba7fe29b-4b4b-426a-a5b0-58201e8d24d5",
   "language": "java",
   "java": {

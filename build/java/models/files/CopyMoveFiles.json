@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Copy/move files",
-  "tags": ["files"],
+  "tags": [
+    "files"
+  ],
   "id": "08928fb7-6fb2-4cf2-86b0-7374fcb8de89",
   "language": "java",
   "java": {

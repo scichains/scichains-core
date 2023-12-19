@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Angle difference of two 2D vectors",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "cce964fd-bdba-4deb-b013-1a33a6fd393a",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.misc",
   "name": "Length of string",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "9687b655-04be-460c-bc45-fdafc6165ee9",
   "language": "java",
   "java": {

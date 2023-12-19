@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Find pixels with given value",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "6d278121-8b94-4169-8b43-6cfebb7a0a65",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.scalars",
   "name": "Is scalar existing/non-empty?",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "eab15f73-cb65-40aa-8af6-f1ca8f81f725",
   "language": "java",
   "java": {

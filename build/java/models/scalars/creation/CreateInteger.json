@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create integer scalar",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "4b0c1d0f-2d8d-405d-acd1-5e2fa5b5ffb2",
   "language": "java",
   "java": {

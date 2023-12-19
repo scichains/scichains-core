@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x ≡ y: logical equivalence",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "1ca2c3a1-b29b-4ab8-9528-15917f077e85",
   "description": "Logical equivalence of two boolean scalars. In other words, returns true if both arguments contain the same logical value (both true or both false).",
   "language": "java",

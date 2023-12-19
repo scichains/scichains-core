@@ -4,7 +4,9 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise m * x^a * y^b",
   "description": "Returns product of powers <i>m&sdot;x<sup>a</sup></i><i>y<sup>b</sup></i> (multiplied by <i>m</i> parameter). Second argument <i>y</i> is optional: if it is skipped, performs single power operation <i>m&sdot;x<sup>a</sup></i>.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "497255f3-8de3-4ae8-8fe0-d1f89ad80457",
   "language": "java",
   "java": {

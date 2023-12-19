@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.arrays",
   "name": "Is number array existing/non-empty?",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "81e3af9f-bdfc-41a7-9e80-2001aa4a9db4",
   "language": "java",
   "java": {

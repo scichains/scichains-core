@@ -4,7 +4,9 @@
   "category": "scalars.arithmetic",
   "name": "Compare 2 numbers (=, ≠, <, ≤, >, ≥)",
   "description": "Compare two numbers arithmetically and return results. Both inputs x and y must be correct numbers.",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "a76baac4-1947-4471-af26-aebcd72e7d01",
   "language": "java",
   "java": {

@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Replace column(s) in number array",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "6147110b-9fae-43e0-91c8-5c47fac65744",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.conversions.ReplaceNumbersColumns"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input"

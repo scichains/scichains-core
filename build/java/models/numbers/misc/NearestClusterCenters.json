@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Nearest centers of clusters",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "807c49cd-bc93-4c6c-a591-996826d040ad",
   "language": "java",
   "java": {

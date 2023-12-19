@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Merge binary masks",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "b776f208-1900-4d97-96f7-2923b2002617",
   "language": "java",
   "java": {

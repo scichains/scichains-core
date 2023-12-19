@@ -4,7 +4,9 @@
   "category": "matrices.arithmetic",
   "name": "Product of two powers m·xᵃ·yᵇ (elementwise)",
   "description": "Returns product of powers <i>m&sdot;x<sup>a</sup></i><i>y<sup>b</sup></i> (multiplied by <i>m</i> parameter). Second argument <i>y</i> is optional: if it is skipped, performs single power operation <i>m&sdot;x<sup>a</sup></i>.",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "96241578-2dc8-4567-a7f0-9eb25f8dd8ac",
   "language": "java",
   "java": {

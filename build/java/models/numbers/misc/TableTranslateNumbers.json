@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.misc",
   "name": "Translate indexes by table",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "16f3b03b-9e88-472b-b2b7-20cf7203e25b",
   "language": "java",
   "java": {

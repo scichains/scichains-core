@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.conversions",
   "name": "Join number array to scalar",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "17bd9c06-9251-48ef-a622-7ffcbb9d8268",
   "language": "java",
   "java": {

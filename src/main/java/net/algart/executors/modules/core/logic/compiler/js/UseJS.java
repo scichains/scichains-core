@@ -124,6 +124,7 @@ public class UseJS extends FileOperation {
                     + "from " + jsCallerJson.getExecutorJsonFile() + "...");
             if (platform != null) {
                 jsCallerJson.updateCategoryPrefix(platform.getCategory());
+                jsCallerJson.addTags(platform.getTags());
                 jsCallerJson.setPlatformId(platform.getId());
             }
             use(jsCallerJson);

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.control",
   "name": "copy scalars if requested",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "780b5cb7-a8bf-4926-99a9-1acba0993473",
   "description": "For each input data checks, if the corresponding condition is fulfilled. If yes, this function copies it (if it exist) into the corresponding output. If not, the corresponding output stays to be non-initialized.<br>This function helps to request calculation of some subset of data, depending on several boolean flags, passed to the condition inputs.",
   "language": "java",

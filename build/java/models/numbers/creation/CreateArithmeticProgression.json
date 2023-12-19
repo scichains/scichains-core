@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create arithmetic progression",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "14e5c1b3-6b54-45c3-bba1-eb6127bcca10",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.creation",
   "name": "Create number array from string",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "78c30310-9305-4c7c-a8c7-ebbbcdfb4fc6",
   "language": "java",
   "java": {

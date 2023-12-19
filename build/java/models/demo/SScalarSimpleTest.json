@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java scalar example",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "efa43f4f-3208-4262-aa2a-27182a26ae2e",
   "description": "Example of java extension",
   "language": "java",

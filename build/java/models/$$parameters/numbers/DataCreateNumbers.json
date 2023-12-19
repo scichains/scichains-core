@@ -8,7 +8,9 @@
       "data": true
     }
   },
-  "tags": ["parameter"],
+  "tags": [
+    "parameter"
+  ],
   "id": "c17e63a9-8cd3-4843-ba65-fd0f98a6ba3c",
   "language": "java",
   "java": {

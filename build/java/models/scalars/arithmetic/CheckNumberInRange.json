@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Check that a number is in range",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "268cdd96-3120-4083-9743-7918efb3abee",
   "language": "java",
   "java": {

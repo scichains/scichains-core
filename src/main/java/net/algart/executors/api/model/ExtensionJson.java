@@ -31,10 +31,7 @@ import net.algart.json.Jsons;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -410,6 +407,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         private String category = null;
         private String name = DEFAULT_NAME;
         private String description = null;
+        private Set<String> tags = new LinkedHashSet<>();
         private String technology;
         private boolean jvmTechnology;
         private String language = null;
@@ -427,6 +425,16 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             setCategory(json.getString("category", null));
             setName(json.getString("name", name));
             setDescription(json.getString("description", null));
+            JsonArray tags = Jsons.getJsonArray(json, "tags", file);
+            if (tags != null) {
+                for (JsonValue jsonValue : tags) {
+                    if (!(jsonValue instanceof JsonString)) {
+                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                                + ": \"tags\" array contains non-string element " + jsonValue);
+                    }
+                    this.tags.add(((JsonString) jsonValue).getString());
+                }
+            }
             setTechnology(Jsons.reqString(json, "technology", file));
             setLanguage(json.getString("language", null));
             final JsonObject foldersJson = json.getJsonObject("folders");
@@ -502,6 +510,16 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         public Platform setDescription(String description) {
             checkImmutable();
             this.description = description;
+            return this;
+        }
+
+        public Set<String> getTags() {
+            return Collections.unmodifiableSet(tags);
+        }
+
+        public Platform setTags(Set<String> tags) {
+            Objects.requireNonNull(tags, "Null tags");
+            this.tags = new LinkedHashSet<>(tags);
             return this;
         }
 
@@ -649,6 +667,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
                     ", category='" + category + '\'' +
                     ", name='" + name + '\'' +
                     ", description='" + description + '\'' +
+                    ", tags=" + tags +
                     ", technology='" + technology + '\'' +
                     ", jvmTechnology=" + jvmTechnology +
                     ", language='" + language + '\'' +
@@ -668,6 +687,13 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             builder.add("name", name);
             if (description != null) {
                 builder.add("description", description);
+            }
+            if (!tags.isEmpty()) {
+                final JsonArrayBuilder tagsBuilder = Json.createArrayBuilder();
+                for (String tag : tags) {
+                    tagsBuilder.add(tag);
+                }
+                builder.add("tags", tagsBuilder.build());
             }
             builder.add("technology", technology);
             if (language != null) {

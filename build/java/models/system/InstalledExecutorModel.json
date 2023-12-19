@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "system",
   "name": "Installed executor model specification",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "6a19d627-8805-4047-813b-bd2c48083c63",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.system.InstalledExecutorModel"
   },
-  "in_ports":  [
+  "in_ports": [
   ],
   "out_ports": [
     {

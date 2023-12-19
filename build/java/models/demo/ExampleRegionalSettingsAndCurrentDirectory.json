@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java example for regional settings and current folder",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "2cf0f667-eba3-449b-85e2-b27592e3e6b8",
   "description": "Example of java extension",
   "language": "java",

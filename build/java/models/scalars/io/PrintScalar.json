@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "scalars.io",
   "name": "Print scalar",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "c1922bec-4963-4c93-9228-17532f293d7a",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.scalars.io.PrintScalar"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "scalar",
       "name": "input"

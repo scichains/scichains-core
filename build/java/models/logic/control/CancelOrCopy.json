@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.control",
   "name": "cancel execution or copy data",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "bad52f03-9a05-402d-88f9-efda2e3215be",
   "description": "If the condition is fulfilled, this function cancels execution of all functions, that depend on this executor. In a loop, it is equivalent to cancelling current iteration, like the &quot;continue&quot; Java or C operator; in a usual chain it is an analog of the &quot;return&quot; operator from Java or C function.<br>If the condition is not fulfilled, this function just copies all inputs (when exist) to the corresponding outputs.",
   "language": "java",

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Sum of powers (elementwise)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "786eef8e-769a-4972-954d-73e42e8cb13f",
   "language": "java",
   "java": {

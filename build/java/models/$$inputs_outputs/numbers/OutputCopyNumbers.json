@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Output/copy number array",
-  "tags": ["output"],
+  "tags": [
+    "output"
+  ],
   "id": "3f03db23-a633-4ab3-96d4-f13f7866e63b",
   "options": {
     "behavior": {

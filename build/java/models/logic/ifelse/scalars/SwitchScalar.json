@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.scalars",
   "name": "switch (xxx)... (for scalar)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "72b83660-f3e3-42b3-8f3a-4d07a12cce09",
   "description": "Copies one of input scalar, specified by the selector, to the output. If the selector is 0, first initialized input will be used.",
   "language": "java",

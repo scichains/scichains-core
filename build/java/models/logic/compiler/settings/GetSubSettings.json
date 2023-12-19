@@ -4,7 +4,9 @@
   "category": "logic.compiler.settings",
   "name": "Get sub-settings",
   "description": "Retrieves sub-JSON (sub-settings) from existing parent JSON (settings).<br>Though we suppose that this function will be used with settings JSONs, it can be applied to any correct JSON.",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "22fe2ce7-c30b-47a7-a352-6b6573b8b10a",
   "language": "java",
   "java": {

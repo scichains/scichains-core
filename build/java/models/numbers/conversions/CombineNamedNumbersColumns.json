@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Combine named column(s) of several number arrays",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "b74ad015-1e29-49be-9641-e908f2a09b47",
   "language": "java",
   "java": {

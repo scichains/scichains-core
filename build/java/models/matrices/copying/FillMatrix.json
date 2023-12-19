@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.copying",
   "name": "Fill matrix with constant color",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "ba71b289-03d2-424f-b5bf-76dd2ba75ec6",
   "language": "java",
   "java": {

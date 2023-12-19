@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.arrays",
   "name": "if (xxx)... (for numbers)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "3951fbe9-2747-4989-99e1-684dfe279019",
   "description": "Copies one of 2 number arrays, depending on \"if\" condition, to the output.",
   "language": "java",

@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Replace blocks in number array",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "1153323a-1ce3-40f9-8fcf-f0bb554f0036",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.conversions.ReplaceNumbers"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input"

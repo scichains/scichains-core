@@ -4,7 +4,9 @@
   "category": "numbers.arithmetic",
   "name": "Elementwise equality of 2 number arrays",
   "description": "Returns TRUE value for every input number <i>x<sub>k<sub></i>, that is equal to the corresponding second number <i>y<sub>k<sub></i>, or FALSE value for all other pairs of numbers.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "722a2ca9-b189-42dd-a5a5-0e7d267259ea",
   "language": "java",
   "java": {

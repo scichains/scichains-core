@@ -87,6 +87,7 @@ public class UsingPython {
                             + "from " + pythonCallerJson.getExecutorJsonFile() + "...");
             if (platform != null) {
                 pythonCallerJson.updateCategoryPrefix(platform.getCategory());
+                pythonCallerJson.addTags(platform.getTags());
                 pythonCallerJson.setPlatformId(platform.getId());
             }
             use(sessionId, pythonCallerJson);

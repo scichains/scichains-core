@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.io",
   "name": "Multi-file read raw numbers",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "e948f0d1-4216-4925-8f3a-9961bbc9229f",
   "language": "java",
   "java": {

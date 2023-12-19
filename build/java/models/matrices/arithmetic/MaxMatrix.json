@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Maximum (elementwise)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "3d38bb4a-25a5-4fe9-b9e0-aa051d8f329b",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.matrices.arithmetic.MaxMatrix"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "mat",
       "name": "input_1"

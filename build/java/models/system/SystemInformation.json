@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "system",
   "name": "System information",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "a8b677d0-0c0a-47c6-bed2-7cf5dc7423ef",
   "language": "java",
   "java": {

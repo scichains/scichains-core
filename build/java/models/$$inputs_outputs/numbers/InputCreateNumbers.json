@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Input/create number array from string",
-  "tags": ["input"],
+  "tags": [
+    "input"
+  ],
   "id": "40132519-48b1-483b-ae16-bba4ad304f79",
   "options": {
     "behavior": {

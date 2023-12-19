@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "system",
   "name": "Show status",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "57a479cc-9466-4508-8473-2d174c313e9b",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.system.ShowStatus"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "scalar",
       "name": "input"

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.io",
   "name": "Write AlgART multi-matrix",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "36be2d93-5e65-4972-b5ad-a7e4d96c0721",
   "language": "java",
   "java": {

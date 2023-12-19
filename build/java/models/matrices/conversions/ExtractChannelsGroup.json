@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Extract channels group",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "d966fb83-0f62-48a8-bbe1-093d74ec1745",
   "language": "java",
   "java": {

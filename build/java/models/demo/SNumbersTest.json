@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.java",
   "name": "Java numbers array test",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "5bc808be-9312-4ed7-a68c-7a560186ca2f",
   "description": "Example of java extension",
   "language": "java",

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.scripting.python",
   "name": "Call Python function",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "4a2fa4ed-a415-4f0a-90aa-d092a6a362ee",
   "language": "java",
   "java": {

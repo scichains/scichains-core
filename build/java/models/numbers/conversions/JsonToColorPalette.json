@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Convert JSON palette with named indexes to numbers",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "f5029c75-2943-4a47-80b6-f17ba06884fd",
   "language": "java",
   "java": {

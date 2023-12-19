@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise polar r/φ → cartesian x/y",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "579ea27e-68a3-4c58-b584-eb1b0a5be0d3",
   "language": "java",
   "java": {

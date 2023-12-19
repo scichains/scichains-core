@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.misc",
   "name": "Common two-matrix difference information",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "90d648f7-29fa-438a-925c-3d8cee255aa9",
   "language": "java",
   "java": {

@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "numbers.statistics",
   "name": "Statistics on columns of numbers array",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "0097e96d-b5af-49e6-a64c-b4ec61a1971e",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.statistics.NumbersColumnsStatistics"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input"

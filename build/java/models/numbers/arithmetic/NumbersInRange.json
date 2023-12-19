@@ -4,13 +4,15 @@
   "category": "numbers.arithmetic",
   "name": "Numbers in range",
   "description": "Returns TRUE value for every input number, that is in the specified range, or FALSE value for all other numbers.",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "a4a32079-ea56-4a44-870c-10c18bd855d2",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersInRange"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input"

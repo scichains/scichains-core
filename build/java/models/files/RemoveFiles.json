@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Remove files",
-  "tags": ["files"],
+  "tags": [
+    "files"
+  ],
   "id": "d62bdc85-78f2-4980-ac80-1b48b143c6cd",
   "language": "java",
   "java": {

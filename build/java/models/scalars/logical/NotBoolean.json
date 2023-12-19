@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "Not x: logical negation",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "6eef94f4-e6e5-41dd-9f02-1730d21735df",
   "description": "Inverts boolean condition and returns the result.",
   "language": "java",

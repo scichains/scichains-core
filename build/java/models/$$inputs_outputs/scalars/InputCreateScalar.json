@@ -8,7 +8,9 @@
       "input": true
     }
   },
-  "tags": ["input"],
+  "tags": [
+    "input"
+  ],
   "id": "4fdfcb6c-94bb-4e9e-aa28-865121a462a0",
   "language": "java",
   "java": {

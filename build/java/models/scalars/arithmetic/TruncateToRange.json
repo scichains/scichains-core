@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Truncate number to range min..max",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "84f70bdc-1b6b-40f7-932b-ae38ef1897fd",
   "description": "If the source number is X, this function returns<br>value < min ? min : value > max ? max : value<br>In other words, truncates the number to the range min..max, if it is a correct range (min≤max).",
   "language": "java",

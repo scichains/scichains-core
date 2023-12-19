@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x & ~y: logical AND-NOT",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "013850e6-f51f-4ef4-a601-21b47d979ddb",
   "description": "Logical AND of first scalar and inverted (NOT) second scalar.",
   "language": "java",

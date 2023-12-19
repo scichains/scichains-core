@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.io",
   "name": "Read CSV numbers",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "e39652ea-b7fc-4a86-a0aa-e4b5ea2a2c8c",
   "language": "java",
   "java": {

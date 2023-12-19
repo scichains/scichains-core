@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "files",
   "name": "Find next one from list of files",
-  "tags": ["files"],
+  "tags": [
+    "files"
+  ],
   "id": "fc6b1ee7-051b-4f23-840b-9afd95d992da",
   "language": "java",
   "java": {
@@ -21,7 +23,8 @@
       "name": "file_name_addition",
       "caption": "file name addition",
       "hint": "[Optional] Modification for input file name."
-    }  ],
+    }
+  ],
   "out_ports": [
     {
       "value_type": "scalar",
@@ -59,7 +62,8 @@
       "value_type": "scalar",
       "name": "file_name",
       "hint": "Actual file name (without folder)."
-    }  ],
+    }
+  ],
   "controls": [
     {
       "caption": "File/folder",

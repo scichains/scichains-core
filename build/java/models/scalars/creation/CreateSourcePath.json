@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.creation",
   "name": "Create path to source file/folder",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "cf52971d-0a0a-4fe2-b473-0c156bff44b3",
   "language": "java",
   "java": {

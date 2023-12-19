@@ -10,7 +10,9 @@
       "edition_type": "file"
     }
   },
-  "tags": ["parameter"],
+  "tags": [
+    "parameter"
+  ],
   "id": "741d8363-d0d6-4a37-a373-560f900a3f8e",
   "language": "java",
   "java": {

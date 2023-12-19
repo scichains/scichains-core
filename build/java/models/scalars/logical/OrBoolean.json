@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x1 | x2 | ... or ~(x1 | x2 | ...): logical OR with possible negation",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "0df292ef-bbcb-4c8e-87db-ba67fc747f64",
   "description": "Logical OR of several boolean scalars.",
   "language": "java",

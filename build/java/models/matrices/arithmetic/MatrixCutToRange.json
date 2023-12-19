@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Cut to range (elementwise)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "0ce56c64-64d5-43cf-abd2-dbdf1c95ba5f",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixCutToRange"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "mat",
       "name": "input"

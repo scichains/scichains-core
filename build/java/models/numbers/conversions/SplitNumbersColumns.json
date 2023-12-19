@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.conversions",
   "name": "Split columns to several number arrays",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "b1717f0f-d903-45ba-af27-c43a12757cdf",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "system",
   "name": "Create logging level",
-  "tags": ["system"],
+  "tags": [
+    "system"
+  ],
   "id": "8eaca014-c736-43d8-b70e-0c3d0f93184c",
   "language": "java",
   "java": {
@@ -29,7 +31,6 @@
       "hint": "True/false: whether the result logging level is loggable by standard LOG of the Executor class\n(result of \"Executor.LOG.isLoggable(logLevel)\" call)."
     }
   ],
-
   "controls": [
     {
       "caption": "Logging level",

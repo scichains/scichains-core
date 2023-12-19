@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Check equality of 2 number arrays (elementwise)",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "627c9697-f195-42b5-95cb-8ce0bba1d65e",
   "language": "java",
   "java": {

@@ -99,6 +99,7 @@ public final class ExecutorJsonSet {
                         executorJson.addSystemExecutorIdPort();
                         if (platform != null) {
                             executorJson.updateCategoryPrefix(platform.getCategory());
+                            executorJson.addTags(platform.getTags());
                             executorJson.setPlatformId(platform.getId());
                             executorJson.addSystemPlatformIdPort();
                             // - but not resource folder: for Java executors it is usually not helpful

@@ -8,7 +8,9 @@
       "copy": true
     }
   },
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "e459a97e-4cc5-4ab7-a5c6-7cff91e20740",
   "language": "java",
   "java": {

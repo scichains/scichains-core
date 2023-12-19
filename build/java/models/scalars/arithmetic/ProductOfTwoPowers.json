@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Scalar m * x^a * y^b",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "d3d0d3e4-58c2-4dac-b338-e2007843b827",
   "language": "java",
   "java": {

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "matrices.conversions",
   "name": "Merge channels groups",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "2e579392-465b-4e0e-935d-68ed04cc7091",
   "language": "java",
   "java": {

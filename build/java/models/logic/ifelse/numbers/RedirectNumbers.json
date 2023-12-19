@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.arrays",
   "name": "redirect (for numbers)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "8bb38ad0-760d-446b-a6ec-885b33f8109a",
   "description": "Copies the input number array to one of output ports, specified by redirector value.",
   "language": "java",

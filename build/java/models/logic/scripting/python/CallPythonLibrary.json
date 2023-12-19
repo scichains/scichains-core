@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.scripting.python",
   "name": "Call Python library function",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "f7ba3331-b902-4de3-b3c4-04560aa59124",
   "language": "java",
   "java": {

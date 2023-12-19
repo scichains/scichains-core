@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "~examples.js.numbers",
   "name": "JS example: sum of numbers array",
-  "tags": ["demo"],
+  "tags": [
+    "demo"
+  ],
   "id": "867d6f7c-c3ee-4921-96db-c68d9bb7a4ad",
   "language": "js",
   "js": {

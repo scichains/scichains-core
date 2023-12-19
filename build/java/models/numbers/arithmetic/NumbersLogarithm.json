@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise logarithm",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "4f0d20ef-857a-4d2a-be31-9e81520b9088",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.numbers.arithmetic.NumbersLogarithm"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "numbers",
       "name": "input"

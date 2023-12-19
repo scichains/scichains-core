@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.scripting.js.arrays",
   "name": "Formula for several multi-column arrays",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "729da55c-6426-4342-8d1b-d28b68a44227",
   "language": "java",
   "java": {

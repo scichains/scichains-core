@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.arithmetic",
   "name": "Check equality of 2 scalars",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "a5bfd500-0c13-431b-a736-13be5e0dfc67",
   "language": "java",
   "java": {

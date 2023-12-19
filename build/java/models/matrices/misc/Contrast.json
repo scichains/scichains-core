@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "matrices.misc",
   "name": "Contrast",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "79cc4e95-d38e-4e20-9bd8-b2a8490185b8",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.matrices.misc.Contrast"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "mat",
       "name": "input"

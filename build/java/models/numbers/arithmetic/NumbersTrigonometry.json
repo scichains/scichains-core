@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "numbers.arithmetic",
   "name": "Elementwise trigonometric functions",
-  "tags": ["numbers"],
+  "tags": [
+    "numbers"
+  ],
   "id": "71aa0a86-b3d0-4462-a36c-cc153aecd5f7",
   "language": "java",
   "java": {

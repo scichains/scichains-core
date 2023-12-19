@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "logic.if/else.scalars",
   "name": "if (xxx)... (for scalar)",
-  "tags": ["logic"],
+  "tags": [
+    "logic"
+  ],
   "id": "118851b3-3c49-48cd-bd07-73a5a0cecbdf",
   "description": "Copies one of 2 scalars, depending on \"if\" condition, to the output.",
   "language": "java",

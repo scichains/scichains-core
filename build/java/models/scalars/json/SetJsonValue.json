@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.json",
   "name": "Set JSON value",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "a98c9002-ca34-4765-87c7-7b8e4236f064",
   "language": "java",
   "java": {

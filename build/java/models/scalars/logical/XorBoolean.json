@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.logical",
   "name": "x ^ y: logical XOR (exclusive OR)",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "b4b1428e-7638-4a29-852b-69f95c660c5f",
   "description": "Logical exclusive disjunction of two boolean scalars. In other words, returns true if two arguments contain different logical values (one if true and another is  false).",
   "language": "java",

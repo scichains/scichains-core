@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "category": "scalars.strings",
   "name": "Replace substring in scalar",
-  "tags": ["scalars"],
+  "tags": [
+    "scalars"
+  ],
   "id": "c631d97c-3359-41d9-b0bb-2ae28ec84f3c",
   "language": "java",
   "java": {

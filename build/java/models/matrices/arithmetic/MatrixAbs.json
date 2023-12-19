@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "category": "matrices.arithmetic",
   "name": "Absolute value (elementwise)",
-  "tags": ["matrices"],
+  "tags": [
+    "matrices"
+  ],
   "id": "573dfe4d-3966-4aaf-a8db-732e7c48a33d",
   "language": "java",
   "java": {
     "class": "net.algart.executors.modules.core.matrices.arithmetic.MatrixAbs"
   },
-  "in_ports":  [
+  "in_ports": [
     {
       "value_type": "mat",
       "name": "input"

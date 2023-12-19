@@ -6,6 +6,9 @@
       "name": "Base-core",
       "category": "core",
       "description": "Core functionality, Java",
+      "tags": [
+        "core"
+      ],
       "technology": "jvm",
       "language": "java",
       "folders": {
@@ -24,6 +27,9 @@
       "name": "Base-core-Python",
       "category": "core",
       "description": "Core functionality, Python",
+      "tags": [
+        "core"
+      ],
       "technology": "jep",
       "language": "python",
       "folders": {
@@ -37,6 +43,9 @@
       "name": "Base-core-JavaScript",
       "category": "core",
       "description": "Core functionality, JavaScript",
+      "tags": [
+        "core"
+      ],
       "technology": "graal",
       "language": "js",
       "folders": {
