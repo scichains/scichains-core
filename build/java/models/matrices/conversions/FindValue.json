@@ -11,10 +11,6 @@
   "java": {
     "class": "net.algart.executors.modules.core.matrices.conversions.FindValue"
   },
-  "tags": [
-    "java",
-    "images"
-  ],
   "in_ports": [
     {
       "value_type": "mat",
