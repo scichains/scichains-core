@@ -4,7 +4,8 @@
   "category": "matrices.io",
   "name": "Write image",
   "tags": [
-    "matrices"
+    "matrices",
+    "i/o"
   ],
   "id": "a3b846f2-68f0-44b9-b689-e8d1d83f6686",
   "language": "java",

@@ -4,7 +4,8 @@
   "category": "matrices.io",
   "name": "Read AlgART multi-matrix",
   "tags": [
-    "matrices"
+    "matrices",
+    "i/o"
   ],
   "id": "87afbea2-532c-4935-9e0f-c331a6861fb2",
   "language": "java",

@@ -4,7 +4,8 @@
   "category": "numbers.io",
   "name": "Write CSV numbers",
   "tags": [
-    "numbers"
+    "numbers",
+    "i/o"
   ],
   "id": "99366f3a-b465-4e78-8bd3-1b87ac37834d",
   "language": "java",

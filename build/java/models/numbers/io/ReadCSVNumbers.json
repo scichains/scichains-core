@@ -4,7 +4,8 @@
   "category": "numbers.io",
   "name": "Read CSV numbers",
   "tags": [
-    "numbers"
+    "numbers",
+    "i/o"
   ],
   "id": "e39652ea-b7fc-4a86-a0aa-e4b5ea2a2c8c",
   "language": "java",

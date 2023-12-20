@@ -4,7 +4,8 @@
   "category": "numbers.io",
   "name": "Multi-file read raw numbers",
   "tags": [
-    "numbers"
+    "numbers",
+    "i/o"
   ],
   "id": "e948f0d1-4216-4925-8f3a-9961bbc9229f",
   "language": "java",

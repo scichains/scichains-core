@@ -4,7 +4,8 @@
   "category": "numbers.io",
   "name": "Read raw numbers",
   "tags": [
-    "numbers"
+    "numbers",
+    "i/o"
   ],
   "id": "a56f3c0a-60c6-4dd7-ab35-540c5fe5e45c",
   "language": "java",

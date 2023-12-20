@@ -25,8 +25,8 @@
 package net.algart.json;
 
 import jakarta.json.JsonObject;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,6 +35,10 @@ public class ReadJsonTest {
     private static final boolean VIA_STRING = true;
 
     public static void main(String[] args) throws IOException {
+        if (args.length < 1) {
+            System.out.printf("Usage: %s some_file.json%n", ReadJsonTest.class);
+            return;
+        }
         Path file = Paths.get(args[0]);
         final JsonObject json;
         if (VIA_STRING) {

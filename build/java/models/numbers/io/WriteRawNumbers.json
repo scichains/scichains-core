@@ -4,7 +4,8 @@
   "category": "numbers.io",
   "name": "Write raw numbers",
   "tags": [
-    "numbers"
+    "numbers",
+    "i/o"
   ],
   "id": "98dd255c-8ae4-4a47-97fb-3060096cdc1f",
   "language": "java",

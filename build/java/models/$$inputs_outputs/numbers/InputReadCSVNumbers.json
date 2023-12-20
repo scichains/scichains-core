@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "category": "$$[inputs/outputs].numbers",
   "name": "Input/read numbers (CSV)",
+  "tags": [
+    "i/o"
+  ],
   "id": "31bcf48a-2a1f-4605-9505-8adf5e0a78d7",
   "options": {
     "behavior": {

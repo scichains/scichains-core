@@ -4,7 +4,8 @@
   "category": "scalars.io",
   "name": "Read scalar",
   "tags": [
-    "scalars"
+    "scalars",
+    "i/o"
   ],
   "id": "ff69f9e0-88d9-48e1-b305-61180adffcff",
   "language": "java",

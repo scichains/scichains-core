@@ -4,7 +4,8 @@
   "category": "scalars.io",
   "name": "Read JSON",
   "tags": [
-    "scalars"
+    "scalars",
+    "i/o"
   ],
   "id": "a31b3d85-467c-46f2-b508-69cf1c525873",
   "language": "java",

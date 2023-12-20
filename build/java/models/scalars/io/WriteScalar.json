@@ -4,7 +4,8 @@
   "category": "scalars.io",
   "name": "Write scalar",
   "tags": [
-    "scalars"
+    "scalars",
+    "i/o"
   ],
   "id": "8ae539d9-928c-475c-a1f3-8eb4a4a25fac",
   "language": "java",

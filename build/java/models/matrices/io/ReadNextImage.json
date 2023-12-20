@@ -5,7 +5,8 @@
   "name": "Read next image from folder",
   "description": "Reads next image from folder according pattern (in alphabetical order). Can be used in a loop by checking output \"last\" flag.",
   "tags": [
-    "matrices"
+    "matrices",
+    "i/o"
   ],
   "id": "d14062f1-485c-485c-8d55-8b81f3af11a1",
   "language": "java",
