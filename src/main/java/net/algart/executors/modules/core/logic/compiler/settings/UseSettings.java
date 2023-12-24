@@ -256,6 +256,7 @@ public class UseSettings extends FileOperation {
             logDebug("Loading settings combiner " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + settingsCombinerJson.getSettingsCombinerJsonFile().toAbsolutePath() + "...");
             if (platform != null) {
+                settingsCombinerJson.addTags(platform.getTags());
                 settingsCombinerJson.setPlatformId(platform.getId());
                 settingsCombinerJson.setPlatformCategory(platform.getCategory());
             }
@@ -517,6 +518,7 @@ public class UseSettings extends FileOperation {
             result.setPlatformId(settingsCombiner.platformId());
         }
         result.setLanguage(SETTINGS_LANGUAGE);
+        result.setTags(settingsCombiner.tags());
         result.setCategory(ExecutorJson.correctDynamicCategory(settingsCombiner.category()));
         result.updateCategoryPrefix(settingsCombiner.platformCategory());
         return result;

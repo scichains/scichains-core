@@ -825,8 +825,9 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private List<ChainBlockConf> blocks = new ArrayList<>();
     private List<ChainLinkConf> links = new ArrayList<>();
 
-    // Following properties are not loaded from JSON-file, but are set later,
+    // The following properties are not loaded from JSON-file, but are set later,
     // while loading all JSON models for some platform
+    private Set<String> tags = new LinkedHashSet<>();;
     private String platformId = null;
     private String platformCategory = null;
 
@@ -989,6 +990,21 @@ public final class ChainJson extends AbstractConvertibleToJson {
     public ChainJson setLinks(List<ChainLinkConf> links) {
         this.links = links;
         return this;
+    }
+
+    public Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
+
+    public ChainJson setTags(Set<String> tags) {
+        Objects.requireNonNull(tags, "Null tags");
+        this.tags = new LinkedHashSet<>(tags);
+        return this;
+    }
+
+    public void addTags(Collection<String> tags) {
+        Objects.requireNonNull(tags, "Null tags");
+        this.tags.addAll(tags);
     }
 
     public String getPlatformId() {

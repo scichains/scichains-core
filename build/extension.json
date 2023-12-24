@@ -7,7 +7,8 @@
       "category": "core",
       "description": "Core functionality, Java",
       "tags": [
-        "core"
+        "$core",
+        "$public"
       ],
       "technology": "jvm",
       "language": "java",
@@ -28,7 +29,8 @@
       "category": "core",
       "description": "Core functionality, Python",
       "tags": [
-        "core"
+        "$core",
+        "$public"
       ],
       "technology": "jep",
       "language": "python",
@@ -44,7 +46,8 @@
       "category": "core",
       "description": "Core functionality, JavaScript",
       "tags": [
-        "core"
+        "$core",
+        "$public"
       ],
       "technology": "graal",
       "language": "js",
@@ -58,6 +61,11 @@
       "name": "Base-core-examples-settings",
       "category": "core",
       "description": "Core examples, settings combiners",
+      "tags": [
+        "$core",
+        "$public",
+        "demo"
+      ],
       "technology": "settings",
       "folders": {
         "models": "settings/models"
@@ -68,6 +76,11 @@
       "name": "Base-core-examples-sub-chains",
       "category": "core",
       "description": "Core examples, sub-chains",
+      "tags": [
+        "$core",
+        "$public",
+        "demo"
+      ],
       "technology": "chain",
       "language": "chain",
       "folders": {

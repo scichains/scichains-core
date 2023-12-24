@@ -158,6 +158,10 @@ public final class SettingsCombiner implements Cloneable {
         return model.hasPlatformId();
     }
 
+    public Set<String> tags() {
+        return model.getTags();
+    }
+
     public String platformId() {
         return model.getPlatformId();
     }

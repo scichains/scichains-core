@@ -1886,6 +1886,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         this.setCategory(chain.category());
         this.setName(chain.name());
         this.setDescription(chain.description());
+        this.setTags(chain.tags());
         this.setExecutorId(chain.id());
         this.setLanguage(ChainJson.CHAIN_LANGUAGE);
         final Map<String, PortConf> inPorts = new LinkedHashMap<>(this.inPorts);

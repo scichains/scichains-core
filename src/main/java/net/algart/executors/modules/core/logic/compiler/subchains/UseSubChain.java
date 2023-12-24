@@ -353,6 +353,7 @@ public final class UseSubChain extends FileOperation {
             ChainJson chainJson = chainJsons.get(i);
             long t1 = infoTime();
             if (platform != null) {
+                chainJson.addTags(platform.getTags());
                 chainJson.setPlatformId(platform.getId());
                 chainJson.setPlatformCategory(platform.getCategory());
             }
