@@ -24,9 +24,10 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.model.ExtensionJson;
-
 public class SystemEnvironment {
+    private SystemEnvironment() {
+    }
+
     /**
      * Name of environment variable (optional), that may refer to the home directory of the full product.
      * Should <b>not</b> be used in the executors or execution system, excepting

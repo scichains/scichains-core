@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-public class ArrayMinMaxFinder {
+public final class ArrayMinMaxFinder {
     public interface Min {
         boolean isMinFound();
 
