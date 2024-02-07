@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example for calling GraalJS",
+  "name": "Example for calling GraalJS",
   "tags": [
     "demo"
   ],

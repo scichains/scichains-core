@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example, registering task after executing chain",
+  "name": "Registering task after executing chain",
   "tags": [
     "demo"
   ],

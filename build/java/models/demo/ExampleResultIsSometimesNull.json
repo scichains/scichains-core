@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example: changing result (null or not)",
+  "name": "Example of changing result (null or not)",
   "tags": [
     "demo"
   ],

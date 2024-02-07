@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java ExampleLoadingStage",
+  "name": "Example of loading stage",
   "tags": [
     "demo"
   ],

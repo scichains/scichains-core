@@ -21,7 +21,7 @@
   "controls": [
     {
       "hint": "Up to 20 channels; for creating more channels you may use \"Change number of channels\" function",
-      "caption": "number of channels",
+      "caption": "Number of channels",
       "name": "numberOfChannels",
       "value_type": "int",
       "edition_type": "enum",

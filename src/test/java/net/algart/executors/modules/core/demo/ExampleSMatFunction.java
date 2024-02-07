@@ -38,7 +38,7 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
 import java.util.AbstractList;
 import java.util.List;
 
-public final class Example3 extends Executor {
+public final class ExampleSMatFunction extends Executor {
     private int width = 1000; // must be >100!
     private int height = 1000;
     private Class<?> elementType = byte.class;
@@ -95,11 +95,11 @@ public final class Example3 extends Executor {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.printf("Usage: %s target_image%n", Example3.class);
+            System.out.printf("Usage: %s target_image%n", ExampleSMatFunction.class);
             return;
         }
         @SuppressWarnings("resource")
-        Example3 e = new Example3();
+        ExampleSMatFunction e = new ExampleSMatFunction();
         e.addPort(Port.newOutput("image", DataType.MAT));
         e.execute();
     }

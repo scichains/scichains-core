@@ -1,0 +1,147 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017-2024 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package net.algart.executors.modules.core.demo;
+
+import net.algart.arrays.*;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
+import net.algart.multimatrix.MultiMatrix;
+
+public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
+    private int shift = 0;
+    private double multiplierForFP = 1.5;
+
+    public ExampleMultiMatrixGradients() {
+    }
+
+    public int getShift() {
+        return shift;
+    }
+
+    public ExampleMultiMatrixGradients setShift(int shift) {
+        this.shift = shift;
+        return this;
+    }
+
+    public double getMultiplierForFP() {
+        return multiplierForFP;
+    }
+
+    public ExampleMultiMatrixGradients setMultiplierForFP(double multiplierForFP) {
+        this.multiplierForFP = multiplierForFP;
+        return this;
+    }
+
+    @Override
+    public MultiMatrix create() {
+        return MultiMatrix.unpackChannels(
+                Matrices.matrix(makeSamples(), getDimX(), getDimY(), getNumberOfChannels()));
+    }
+
+    private PArray makeSamples() {
+        if (getDimX() > Integer.MAX_VALUE || getDimY() > Integer.MAX_VALUE ||
+                getDimX() * getDimY() > Integer.MAX_VALUE) {
+            throw new TooLargeArrayException("Matrix size " + getDimX() + "*" + getDimY() + " > 2^31-1");
+        }
+        final int dimX = (int) getDimX();
+        final int dimY = (int) getDimY();
+        final int numberOfChannels = getNumberOfChannels();
+        final int matrixSize = dimX * dimY;
+        Class<?> elementType = getElementType();
+        if (elementType == boolean.class) {
+            boolean[] channels = new boolean[matrixSize * numberOfChannels];
+            for (int y = 0, disp = 0; y < dimY; y++) {
+                final int c = (y / 32) % numberOfChannels;
+                for (int x = 0; x < dimX; x++, disp++) {
+                    channels[disp + c * matrixSize] = ((shift + x + y) & 0xFF) >= 128;
+                }
+            }
+            return Arrays.SMM.valueOf(channels);
+        } else if (elementType == byte.class) {
+            byte[] channels = new byte[matrixSize * numberOfChannels];
+            for (int y = 0; y < dimY; y++) {
+                int c1 = (y / 32) % (numberOfChannels + 1) - 1;
+                int c2 = c1;
+                if (c1 == -1) {
+                    c1 = 0;
+                    c2 = numberOfChannels - 1;
+                }
+                for (int c = c1; c <= c2; c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        channels[disp + c * matrixSize] = (byte) (shift + x + y);
+                    }
+                }
+            }
+            return SimpleMemoryModel.asUpdatableByteArray(channels);
+        } else if (elementType == short.class) {
+            short[] channels = new short[matrixSize * numberOfChannels];
+            for (int y = 0; y < dimY; y++) {
+                int c1 = (y / 32) % (numberOfChannels + 1) - 1;
+                int c2 = c1;
+                if (c1 == -1) {
+                    c1 = 0;
+                    c2 = numberOfChannels - 1;
+                }
+                for (int c = c1; c <= c2; c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        channels[disp + c * matrixSize] = (short) (157 * (shift + x + y));
+                    }
+                }
+            }
+            return SimpleMemoryModel.asUpdatableShortArray(channels);
+        } else if (elementType == int.class) {
+            int[] channels = new int[matrixSize * numberOfChannels];
+            for (int y = 0, disp = 0; y < dimY; y++) {
+                final int c = (y / 32) % numberOfChannels;
+                for (int x = 0; x < dimX; x++, disp++) {
+                    channels[disp + c * matrixSize] = 157 * 65536 * (shift + x + y);
+                }
+            }
+            return SimpleMemoryModel.asUpdatableIntArray(channels);
+        } else if (elementType == float.class) {
+            float[] channels = new float[matrixSize * numberOfChannels];
+            for (int y = 0, disp = 0; y < dimY; y++) {
+                final int c = (y / 32) % numberOfChannels;
+                for (int x = 0; x < dimX; x++, disp++) {
+                    int v = (shift + x + y) & 0xFF;
+                    channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+                }
+            }
+            return SimpleMemoryModel.asUpdatableFloatArray(channels);
+        } else if (elementType == double.class) {
+            double[] channels = new double[matrixSize * numberOfChannels];
+            for (int y = 0, disp = 0; y < dimY; y++) {
+                final int c = (y / 32) % numberOfChannels;
+                for (int x = 0; x < dimX; x++, disp++) {
+                    int v = (shift + x + y) & 0xFF;
+                    channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+                }
+            }
+            return SimpleMemoryModel.asUpdatableDoubleArray(channels);
+        } else {
+            throw new UnsupportedOperationException("Unsupported sampleType = " + elementType);
+        }
+    }
+
+}

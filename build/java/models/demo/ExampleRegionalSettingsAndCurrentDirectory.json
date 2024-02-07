@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example for regional settings and current folder",
+  "name": "Regional settings and current folder",
   "tags": [
     "demo"
   ],

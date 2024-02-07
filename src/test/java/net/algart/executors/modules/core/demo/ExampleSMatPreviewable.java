@@ -37,14 +37,14 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by Daniel on 29/06/2017.
  */
-public final class Example2 extends Executor implements Previewable {
+public final class ExampleSMatPreviewable extends Executor implements Previewable {
     private int width = 100;
     private int height = 100;
 
     private final AtomicLong executeCount = new AtomicLong();
     private final AtomicLong previewCount = new AtomicLong();
 
-    public Example2() {
+    public ExampleSMatPreviewable() {
         setDefaultOutputMat("image");
     }
 

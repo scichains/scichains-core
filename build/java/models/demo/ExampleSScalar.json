@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java scalar example",
+  "name": "Scalar example",
   "tags": [
     "demo"
   ],
@@ -10,7 +10,7 @@
   "description": "Example of java extension",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.demo.SScalarSimpleTest"
+    "class": "net.algart.executors.modules.core.demo.ExampleSScalar"
   },
   "in_ports": [
     {

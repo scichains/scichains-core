@@ -31,10 +31,10 @@ import net.algart.executors.api.Executor;
  * simple example of simple scalar test
  * Created by semen on 29.08.2017.
  */
-public final class SScalarSimpleTest extends Executor {
+public final class ExampleSScalar extends Executor {
     private String value;
 
-    public SScalarSimpleTest setValue(String value) {
+    public ExampleSScalar setValue(String value) {
         this.value = value;
         return this;
     }

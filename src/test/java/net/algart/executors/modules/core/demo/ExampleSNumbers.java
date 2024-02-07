@@ -32,7 +32,7 @@ import net.algart.executors.api.Executor;
  * Simple java test number arrays ports
  * Created by semen on 12.10.2017.
  */
-public final class SNumbersTest extends Executor {
+public final class ExampleSNumbers extends Executor {
     @Override
     public void process() {
         Data in = getInputPort("in").getData();

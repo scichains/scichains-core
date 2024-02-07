@@ -2,14 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example 3",
+  "name": "Matrix example: low-level filling (SMat, previewable)",
   "tags": [
     "demo"
   ],
-  "id": "79c0d86f-a47b-4fbd-88a7-a6ad7676c76a",
+  "id": "8011bc4b-6d0d-485b-986f-56b069f53333",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.demo.Example3"
+    "class": "net.algart.executors.modules.core.demo.ExampleSMatPreviewable"
   },
   "in_ports": [],
   "out_ports": [
@@ -32,10 +32,10 @@
       "default": 1000
     },
     {
-      "name": "elementType",
+      "name": "color",
       "value_type": "String",
       "edition_type": "value",
-      "default": "byte"
+      "default": "#0000FF"
     }
   ]
 }

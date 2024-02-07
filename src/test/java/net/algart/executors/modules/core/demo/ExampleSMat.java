@@ -30,16 +30,12 @@ import net.algart.executors.api.Executor;
 
 import java.nio.ByteBuffer;
 
-/**
- * @author mnogono
- *         Created on 20.06.2017.
- */
-public final class Example1 extends Executor {
+public final class ExampleSMat extends Executor {
     private int width = 10;
     private int height = 10;
     private byte channels = 1;
 
-    public Example1() {
+    public ExampleSMat() {
 //        throw new AssertionError("Hmm...");
     }
 

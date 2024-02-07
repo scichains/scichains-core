@@ -1,0 +1,91 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Matrix example: gradients (MultiMatrix)",
+  "tags": [
+    "demo"
+  ],
+  "id": "7e89c4df-27c1-48b1-b73e-4811a2f00b36",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleMultiMatrixGradients"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Number of channels",
+      "name": "numberOfChannels",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 3
+    },
+    {
+      "caption": "dimX (width)",
+      "name": "dimX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1007
+    },
+    {
+      "caption": "dimY (height)",
+      "name": "dimY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1011
+    },
+    {
+      "caption": "Elements type",
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "byte"
+    },
+    {
+      "caption": "Shift",
+      "name": "shift",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Multiplier for float/double",
+      "name": "multiplierForFP",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.5
+    }
+  ]
+}

@@ -2,15 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Java example 1",
+  "name": "Matrix example: low-level filling (SMat)",
   "tags": [
     "demo"
   ],
   "id": "8011bc4b-6d0d-485b-986f-56b069f57589",
-  "description": "Example of java extension",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.demo.Example1"
+    "class": "net.algart.executors.modules.core.demo.ExampleSMat"
   },
   "in_ports": [],
   "out_ports": [

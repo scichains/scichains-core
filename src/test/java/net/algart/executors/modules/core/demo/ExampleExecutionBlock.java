@@ -33,16 +33,11 @@ import net.algart.executors.api.data.SMat;
 import java.nio.ByteBuffer;
 
 /**
- * Simple execution block example
- * getting input 'mat' data like a image, and make it copy and return to output
- *
- * @author mnogono
- *         Created on 10.05.2017.
+ * Simple execution block example: copies input image.
  */
-public final class ExecutionBlockSimple extends ExecutionBlock {
-    Double factor = 3.0;
+public final class ExampleExecutionBlock extends ExecutionBlock {
+    private static final System.Logger LOG = System.getLogger(ExampleExecutionBlock.class.getName());
     int operation = 1;
-    String description = "";
 
     @Override
     public void execute() {
@@ -93,6 +88,7 @@ public final class ExecutionBlockSimple extends ExecutionBlock {
                 inSMat.getDimensions(), inSMat.getDepth(), inSMat.getNumberOfChannels(),
                 outByteBuffer, false);
         output.setData(outMat);
+        LOG.log(System.Logger.Level.INFO, "Operation code: " + operation);
     }
 
     @Override
@@ -102,19 +98,11 @@ public final class ExecutionBlockSimple extends ExecutionBlock {
 
     /**
      * example how block properties can be setting from outside (from user interface for instance)
-     * @param name
      */
     @Override
     public void onChangeParameter(String name) {
-        if (name.equals("factor")) {
-            factor = parameters().getDouble(name);
-
-        } else if (name.equals("operation")) {
+        if (name.equals("operation")) {
             operation = parameters().getInteger(name);
-
-        } else if (name.equals("description")) {
-            description = parameters().getString(name);
-
         }
     }
 }
