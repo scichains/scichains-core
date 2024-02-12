@@ -71,23 +71,20 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
         Class<?> elementType = getElementType();
         if (elementType == boolean.class) {
             boolean[] channels = new boolean[matrixSize * numberOfChannels];
-            for (int y = 0, disp = 0; y < dimY; y++) {
-                final int c = (y / 32) % numberOfChannels;
-                for (int x = 0; x < dimX; x++, disp++) {
-                    channels[disp + c * matrixSize] = ((shift + x + y) & 0xFF) >= 128;
+            for (int y = 0; y < dimY; y++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        channels[disp + c * matrixSize] = ((shift + x + y) & 0xFF) >= 128;
+                    }
                 }
             }
             return Arrays.SMM.valueOf(channels);
         } else if (elementType == byte.class) {
             byte[] channels = new byte[matrixSize * numberOfChannels];
             for (int y = 0; y < dimY; y++) {
-                int c1 = (y / 32) % (numberOfChannels + 1) - 1;
-                int c2 = c1;
-                if (c1 == -1) {
-                    c1 = 0;
-                    c2 = numberOfChannels - 1;
-                }
-                for (int c = c1; c <= c2; c++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
                     for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
                         channels[disp + c * matrixSize] = (byte) (shift + x + y);
                     }
@@ -97,13 +94,8 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
         } else if (elementType == short.class) {
             short[] channels = new short[matrixSize * numberOfChannels];
             for (int y = 0; y < dimY; y++) {
-                int c1 = (y / 32) % (numberOfChannels + 1) - 1;
-                int c2 = c1;
-                if (c1 == -1) {
-                    c1 = 0;
-                    c2 = numberOfChannels - 1;
-                }
-                for (int c = c1; c <= c2; c++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
                     for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
                         channels[disp + c * matrixSize] = (short) (157 * (shift + x + y));
                     }
@@ -112,36 +104,56 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return SimpleMemoryModel.asUpdatableShortArray(channels);
         } else if (elementType == int.class) {
             int[] channels = new int[matrixSize * numberOfChannels];
-            for (int y = 0, disp = 0; y < dimY; y++) {
-                final int c = (y / 32) % numberOfChannels;
-                for (int x = 0; x < dimX; x++, disp++) {
-                    channels[disp + c * matrixSize] = 157 * 65536 * (shift + x + y);
+            for (int y = 0; y < dimY; y++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        channels[disp + c * matrixSize] = 157 * 65536 * (shift + x + y);
+                    }
                 }
+
             }
             return SimpleMemoryModel.asUpdatableIntArray(channels);
         } else if (elementType == float.class) {
             float[] channels = new float[matrixSize * numberOfChannels];
-            for (int y = 0, disp = 0; y < dimY; y++) {
-                final int c = (y / 32) % numberOfChannels;
-                for (int x = 0; x < dimX; x++, disp++) {
-                    int v = (shift + x + y) & 0xFF;
-                    channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+            for (int y = 0; y < dimY; y++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        int v = (shift + x + y) & 0xFF;
+                        channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+                    }
                 }
             }
             return SimpleMemoryModel.asUpdatableFloatArray(channels);
         } else if (elementType == double.class) {
             double[] channels = new double[matrixSize * numberOfChannels];
-            for (int y = 0, disp = 0; y < dimY; y++) {
-                final int c = (y / 32) % numberOfChannels;
-                for (int x = 0; x < dimX; x++, disp++) {
-                    int v = (shift + x + y) & 0xFF;
-                    channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+            for (int y = 0; y < dimY; y++) {
+                final ChannelsRange cr = channelsRange(y, numberOfChannels);
+                for (int c = cr.c1(); c <= cr.c2(); c++) {
+                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                        int v = (shift + x + y) & 0xFF;
+                        channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
+                    }
                 }
             }
             return SimpleMemoryModel.asUpdatableDoubleArray(channels);
         } else {
             throw new UnsupportedOperationException("Unsupported sampleType = " + elementType);
         }
+    }
+
+    private static ChannelsRange channelsRange(int y, int numberOfChannels) {
+        int c1 = (y / 32) % (numberOfChannels + 1) - 1;
+        int c2 = c1;
+        if (c1 == -1) {
+            c1 = 0;
+            c2 = numberOfChannels - 1;
+        }
+        return new ChannelsRange(c1, c2);
+    }
+
+    private record ChannelsRange(int c1, int c2) {
     }
 
 }
