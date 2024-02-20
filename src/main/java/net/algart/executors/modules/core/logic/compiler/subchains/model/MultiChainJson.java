@@ -421,7 +421,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     }
 
     public List<Path> resolveChainVariantPaths() {
-        return chainVariantPaths.stream().map(p -> resolve(p, "sub-chain path")).collect(Collectors.toList());
+        return chainVariantPaths.stream().map(p -> resolve(p, "sub-chain path")).toList();
     }
 
     public List<ChainJson> readChainVariants() throws IOException {

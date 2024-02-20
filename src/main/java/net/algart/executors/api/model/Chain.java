@@ -638,6 +638,7 @@ public final class Chain implements AutoCloseable {
         final List<ChainBlock> all = new ArrayList<>(allBlocks.values());
         all.forEach(ChainBlock::analyseTiming);
         final List<ChainBlock> withTiming = all.stream().filter(ChainBlock::hasTiming).collect(Collectors.toList());
+        // - mutable result to allow sorting below
         all.sort(Comparator.comparingInt(ChainBlock::executionOrder));
         withTiming.sort(Comparator.comparingDouble(Chain::averageTime).reversed());
         final double sum = withTiming.stream().mapToDouble(
