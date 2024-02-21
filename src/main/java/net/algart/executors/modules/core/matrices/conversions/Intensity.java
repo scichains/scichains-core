@@ -29,6 +29,7 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class Intensity extends MultiMatrixFilter {
     private boolean rgbResult = false;
+    private boolean requireInput = false;
 
     public boolean isRgbResult() {
         return rgbResult;
@@ -39,8 +40,27 @@ public final class Intensity extends MultiMatrixFilter {
         return this;
     }
 
+    public boolean isRequireInput() {
+        return requireInput;
+    }
+
+    public Intensity setRequireInput(boolean requireInput) {
+        this.requireInput = requireInput;
+        return this;
+    }
+
     @Override
     public MultiMatrix process(MultiMatrix source) {
-        return source.toMonoIfNot().asOtherNumberOfChannels(rgbResult ? 3 : 1);
+        return source == null ? null : source.toMonoIfNot().asOtherNumberOfChannels(rgbResult ? 3 : 1);
+    }
+
+    @Override
+    protected boolean allowUninitializedInput() {
+        return !requireInput;
+    }
+
+    @Override
+    protected boolean resultRequired() {
+        return requireInput;
     }
 }

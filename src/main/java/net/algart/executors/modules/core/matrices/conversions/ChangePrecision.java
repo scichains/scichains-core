@@ -36,6 +36,7 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
 public final class ChangePrecision extends MultiMatrixChannelFilter {
     private boolean rawCast = false;
     private Class<?> elementType = byte.class;
+    private boolean requireInput = false;
 
     public boolean isRawCast() {
         return rawCast;
@@ -59,8 +60,20 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
         return setElementType(MultiMatrixGenerator.elementType(elementType));
     }
 
+    public boolean isRequireInput() {
+        return requireInput;
+    }
+
+    public ChangePrecision setRequireInput(boolean requireInput) {
+        this.requireInput = requireInput;
+        return this;
+    }
+
     @Override
     public MultiMatrix process(MultiMatrix source) {
+        if (source == null) {
+            return null;
+        }
         if (elementType == source.elementType()) {
             return source;
         }
@@ -88,5 +101,15 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
         }
         final Class<PArray> newType = Arrays.type(PArray.class, elementType);
         return Matrices.clone(Matrices.asFuncMatrix(Func.IDENTITY, newType, m));
+    }
+
+    @Override
+    protected boolean allowUninitializedInput() {
+        return !requireInput;
+    }
+
+    @Override
+    protected boolean resultRequired() {
+        return requireInput;
     }
 }

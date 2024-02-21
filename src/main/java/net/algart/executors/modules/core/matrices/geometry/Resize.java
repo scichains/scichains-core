@@ -127,7 +127,7 @@ public final class Resize extends MultiMatrixChannel2DFilter {
 
     @Override
     public MultiMatrix2D process(MultiMatrix2D source) {
-        if (source == null && !requireInput) {
+        if (source == null) {
             return null;
         }
         MultiMatrix2D result = super.process(source);

@@ -29,6 +29,7 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class ChangeNumberOfChannels extends MultiMatrixFilter {
     private int numberOfChannels = 0;
+    private boolean requireInput = false;
 
     public int getNumberOfChannels() {
         return numberOfChannels;
@@ -39,14 +40,36 @@ public final class ChangeNumberOfChannels extends MultiMatrixFilter {
         return this;
     }
 
+    public boolean isRequireInput() {
+        return requireInput;
+    }
+
+    public ChangeNumberOfChannels setRequireInput(boolean requireInput) {
+        this.requireInput = requireInput;
+        return this;
+    }
+
     @Override
     public MultiMatrix process(MultiMatrix source) {
+        if (source == null) {
+            return null;
+        }
         if (numberOfChannels == 0) {
-            // unchanged
+            // - unchanged
             return source;
         }
         logDebug(() -> "Changing number of channels " + source.numberOfChannels()  + " -> "
             + numberOfChannels + " for matrix " + source);
         return source.asOtherNumberOfChannels(numberOfChannels).clone();
+    }
+
+    @Override
+    protected boolean allowUninitializedInput() {
+        return !requireInput;
+    }
+
+    @Override
+    protected boolean resultRequired() {
+        return requireInput;
     }
 }
