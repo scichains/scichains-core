@@ -35,7 +35,6 @@ import net.algart.math.functions.LinearFunc;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 // All channels has the same dimensions and element type.
 public interface MultiMatrix extends Cloneable {
