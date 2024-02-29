@@ -33,7 +33,8 @@ import net.algart.external.MatrixToBufferedImageConverter;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 
-//TODO!! implement this to AlgART libraries
+//TODO!! test new AlgART Packed3DToPackedBGR (including monochrome image)
+@Deprecated
 class BGRMatrixToBufferedImageConverter extends MatrixToBufferedImageConverter.Packed3DToPackedRGB {
     static final BGRMatrixToBufferedImageConverter INSTANCE = new BGRMatrixToBufferedImageConverter();
 
