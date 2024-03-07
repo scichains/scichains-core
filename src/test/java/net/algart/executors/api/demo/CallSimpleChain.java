@@ -67,7 +67,7 @@ public class CallSimpleChain {
 
         ExecutionBlock.initializeExecutionSystem();
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
-//            var model = Executor.executorModel(Executor.GLOBAL_SHARED_SESSION_ID, executor.getExecutorId());
+//            var model = Executor.executorModel(executor.getSessionId(), executor.getExecutorId());
 //            System.out.println(model.jsonString());
             executor.putMat(inputMat);
             if (parameterA != null) {
