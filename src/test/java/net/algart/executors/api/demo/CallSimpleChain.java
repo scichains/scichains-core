@@ -25,8 +25,10 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
+import net.algart.json.Jsons;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -65,6 +67,8 @@ public class CallSimpleChain {
 
         ExecutionBlock.initializeExecutionSystem();
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
+//            var model = Executor.executorModel(Executor.GLOBAL_SHARED_SESSION_ID, executor.getExecutorId());
+//            System.out.println(model.jsonString());
             executor.putMat(inputMat);
             if (parameterA != null) {
                 // - if null, default value should be used
