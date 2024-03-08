@@ -352,9 +352,6 @@ public final class ContoursInsideStatusTest extends Executor {
                     sb.append(", left point, the right end is ")
                             .append(InsideContourStatus.getBoundarySectionSecondEnd(info));
                 } else if (InsideContourStatus.isRightBoundary(info)) {
-                    sb.append(", right point, the left end is ")
-                            .append(InsideContourStatus.getBoundarySectionSecondEnd(info));
-                } else if (InsideContourStatus.isRightBoundary(info)) {
                     sb.append(", degenerated (both left and right)");
                     final double storedX = InsideContourStatus.getBoundarySectionSecondEnd(info);
                     if (storedX != x) {
