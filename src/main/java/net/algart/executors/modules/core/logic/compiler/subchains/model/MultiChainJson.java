@@ -26,10 +26,10 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
 import net.algart.executors.api.model.ExtensionJson;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.external.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ExecutorJson;
@@ -40,7 +40,6 @@ import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class MultiChainJson extends AbstractConvertibleToJson {
     public static final String APP_NAME = "multi-chain";
@@ -157,7 +156,8 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
         this.multiChainJsonFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
-        final String fileName = file == null ? null : FileOperation.removeExtension(file.getFileName().toString());
+        final String fileName;
+        fileName = file == null ? null : MatrixIO.removeExtension(file.getFileName().toString());
         final String recommendedName = ExecutionBlock.recommendedName(fileName);
         final String recommendedCategory = ExecutionBlock.recommendedCategory(fileName);
         this.category = json.getString("category",

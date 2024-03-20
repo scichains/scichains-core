@@ -25,29 +25,29 @@
 package net.algart.multimatrix;
 
 import net.algart.arrays.Matrix;
-import net.algart.arrays.UpdatablePArray;
+import net.algart.arrays.PArray;
 import net.algart.executors.api.data.SMat;
-import net.algart.external.ExternalAlgorithmCaller;
+import net.algart.external.MatrixIO;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
-public class PackUnpackChannelsTest {
+public class MergeSplitChannelsTest {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s some_image.png matrix_folder%n", PackUnpackChannelsTest.class);
+            System.out.printf("Usage: %s some_image.png matrix_folder%n", MergeSplitChannelsTest.class);
             return;
         }
-        final File sourceFile = new File(args[0]);
-        final File matrixFolder = new File(args[1]);
-        BufferedImage image = ImageIO.read(sourceFile);
+        final Path sourceFile = Paths.get(args[0]);
+        final Path matrixFolder = Paths.get(args[1]);
+        BufferedImage image = MatrixIO.readBufferedImage(sourceFile);
         MultiMatrix multiMatrix = SMat.valueOf(image).toMultiMatrix();
-        Matrix<UpdatablePArray> matrix = multiMatrix.packChannels();
-        ExternalAlgorithmCaller.writeAlgARTImage(matrixFolder, List.of(matrix));
-        MultiMatrix unpackedChannels = MultiMatrix.unpackChannels(matrix);
+        Matrix<? extends PArray> matrix = multiMatrix.mergeChannels();
+        MatrixIO.writeAlgARTImage(matrixFolder, List.of(matrix));
+        MultiMatrix unpackedChannels = MultiMatrix.valueOfMerged(matrix);
         if (!unpackedChannels.dimEquals(multiMatrix)) {
             throw new AssertionError("Dimensions mismatch!");
         }

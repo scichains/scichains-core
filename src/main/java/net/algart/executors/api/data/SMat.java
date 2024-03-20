@@ -24,18 +24,16 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.arrays.DataBuffer;
 import net.algart.arrays.*;
-import net.algart.executors.api.SystemEnvironment;
-import net.algart.external.UsedByNativeCode;
-import net.algart.math.functions.LinearFunc;
+import net.algart.external.UsedForExternalCommunication;
+import net.algart.external.awt.BufferedImageToMatrix;
+import net.algart.external.awt.MatrixToBufferedImage;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.nio.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -143,7 +141,7 @@ public final class SMat extends Data {
                 }
                 result = MultiMatrix.valueOfMono(matrix);
             } else {
-                final List<Matrix<? extends PArray>> channels = unpackBandsFromSequentialSamples(m);
+                var channels = Matrices.separate(null, m);
                 result = channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         MultiMatrix.valueOf(channels) :
                         MultiMatrix.valueOfBGRA(channels);
@@ -296,31 +294,31 @@ public final class SMat extends Data {
     private int numberOfChannels;
     private Convertible pointer;
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public SMat() {
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public long[] getDimensions() {
         return this.dimensions.clone();
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public int getDimCount() {
         return this.dimensions.length;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public long getDim(int k) {
         return k < this.dimensions.length ? this.dimensions[k] : 1;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public long getDimX() {
         return dimensions[0];
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public long getDimY() {
         if (dimensions.length <= 1) {
             return 1;
@@ -332,12 +330,12 @@ public final class SMat extends Data {
         return depth;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public int getNumberOfChannels() {
         return numberOfChannels;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public int getDepthCode() {
         return depth.code;
     }
@@ -358,7 +356,7 @@ public final class SMat extends Data {
      *
      * @return content of this matrix.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public ByteBuffer getByteBuffer() {
         return pointer.getCachedByteBuffer(this);
     }
@@ -446,8 +444,10 @@ public final class SMat extends Data {
                 UpdatablePArray.class,
                 multiMatrix.elementType(),
                 newDimensions);
-        packBandsIntoSequentialSamples(
-                packedChannels, channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
+        Matrices.interleave(
+                null,
+                packedChannels,
+                channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
         return setToPackedMatrix(packedChannels);
@@ -466,7 +466,7 @@ public final class SMat extends Data {
         final int dimCount = packedChannels.dimCount();
         if (dimCount < 2) {
             throw new IllegalArgumentException("Packed BGR[A] matrix cannot be 1-dimensional: " + packedChannels
-                + " (the 1st dimension is used to store channels)");
+                    + " (the 1st dimension is used to store channels)");
         }
         final long numberOfChannels = packedChannels.dim(0);
         if (numberOfChannels > MAX_NUMBER_OF_CHANNELS) {
@@ -703,7 +703,11 @@ public final class SMat extends Data {
     }
 
     public static Matrix<? extends PArray> bufferedImageToPackedBGRA(BufferedImage bufferedImage) {
-        //TODO!! move to AlgART
+        return new BufferedImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
+    }
+
+    @Deprecated
+    private static Matrix<? extends PArray> bufferedImageToPackedBGRAOld(BufferedImage bufferedImage) {
         Objects.requireNonNull(bufferedImage, "Null bufferedImage");
         // See implementation of BufferedImageToMatrixConverter.ToPacked3D
         final ColorModel colorModel = bufferedImage.getColorModel();
@@ -758,214 +762,7 @@ public final class SMat extends Data {
     }
 
     public static BufferedImage packedBGRAToBufferedImage(Matrix<? extends PArray> packed3dBGRA) {
-        //TODO!! move to AlgART
-        Objects.requireNonNull(packed3dBGRA, "Null matrix");
-        if (packed3dBGRA.elementType() != byte.class) {
-            double max = packed3dBGRA.array().maxPossibleValue(1.0);
-            packed3dBGRA = Matrices.asFuncMatrix(
-                    LinearFunc.getInstance(0.0, 255.0 / max),
-                    ByteArray.class, packed3dBGRA);
-        }
-        return BGRMatrixToBufferedImageConverter.INSTANCE.toBufferedImageCorrected(packed3dBGRA);
-    }
-
-    public static void packBandsIntoSequentialSamples(
-            Matrix<? extends UpdatablePArray> result,
-            List<? extends Matrix<? extends PArray>> colorBands) {
-        assert colorBands.size() > 0;
-        assert result != null;
-        final PArray[] bandArrays = Matrices.arraysOfParallelMatrices(PArray.class, colorBands);
-        assert bandArrays.length == result.dim(0);
-        for (int k = 0; k < bandArrays.length; k++) {
-            assert bandArrays[k].length() * bandArrays.length == result.size();
-            assert bandArrays[k].elementType() == result.elementType();
-        }
-        UpdatablePArray resultArray = result.array();
-        if (bandArrays.length == 1) {
-            Arrays.copy(null, resultArray, bandArrays[0]);
-            return;
-        }
-        if (OPTIMIZE_PACK_UNPACK) {
-            try (BandsSequentialPacker packer = BandsSequentialPacker.getInstance(bandArrays, resultArray)) {
-                packer.process();
-            }
-        } else {
-            final int m = (AbstractArray.defaultBufferCapacity(resultArray) + bandArrays.length - 1)
-                    / bandArrays.length;
-            final DataBuffer buf = resultArray.buffer(DataBuffer.AccessMode.READ_WRITE, m * bandArrays.length);
-            final Object workArray = resultArray.newJavaArray(m);
-            long bandPos = 0;
-            for (buf.map(0, false); buf.hasData(); buf.mapNext(false), bandPos += m) {
-                int len = (int) Math.min(m, bandArrays[0].length() - bandPos);
-                for (int k = 0; k < bandArrays.length; k++) {
-                    bandArrays[k].getData(bandPos, workArray, 0, len);
-                    if (resultArray instanceof BitArray) {
-                        // improbable case of RGB bit matrix: don't try to optimize
-                        long[] data = (long[]) buf.data();
-                        boolean[] w = (boolean[]) workArray;
-                        int j = 0;
-                        for (long disp = buf.fromIndex() + k; j < len; j++, disp += bandArrays.length) {
-                            PackedBitArrays.setBit(data, disp, w[j]);
-                        }
-                        //[[Repeat() char ==> byte,,short,,int,,long,,float,,double;;
-                        //           Char ==> Byte,,Short,,Int,,Long,,Float,,Double]]
-                    } else if (resultArray instanceof CharArray) {
-                        char[] data = (char[]) buf.data();
-                        char[] w = (char[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                        //[[Repeat.AutoGeneratedStart !! Auto-generated: NOT EDIT !! ]]
-                    } else if (resultArray instanceof ByteArray) {
-                        byte[] data = (byte[]) buf.data();
-                        byte[] w = (byte[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                    } else if (resultArray instanceof ShortArray) {
-                        short[] data = (short[]) buf.data();
-                        short[] w = (short[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                    } else if (resultArray instanceof IntArray) {
-                        int[] data = (int[]) buf.data();
-                        int[] w = (int[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                    } else if (resultArray instanceof LongArray) {
-                        long[] data = (long[]) buf.data();
-                        long[] w = (long[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                    } else if (resultArray instanceof FloatArray) {
-                        float[] data = (float[]) buf.data();
-                        float[] w = (float[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                    } else if (resultArray instanceof DoubleArray) {
-                        double[] data = (double[]) buf.data();
-                        double[] w = (double[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            data[disp] = w[j];
-                        }
-                        //[[Repeat.AutoGeneratedEnd]]
-                    } else {
-                        throw new AssertionError("Must not occur");
-                    }
-                }
-                buf.force();
-            }
-        }
-    }
-
-    public static List<Matrix<? extends PArray>> unpackBandsFromSequentialSamples(
-            Matrix<? extends PArray> packedBands) {
-        assert packedBands != null;
-        assert packedBands.dimCount() >= 2; // even for 1-dimensional multi-matrix there will be 2 dimensions
-        if (packedBands.dim(0) > Integer.MAX_VALUE)
-            throw new IllegalArgumentException("Too large 1st matrix dimension: it must be 31-bit value "
-                    + "(usually 1, 3 or 4)");
-        final UpdatablePArray[] bandArrays = new UpdatablePArray[(int) packedBands.dim(0)];
-        final List<Matrix<? extends PArray>> result = new ArrayList<Matrix<? extends PArray>>();
-        for (int k = 0; k < bandArrays.length; k++) {
-            Matrix<UpdatablePArray> band = Arrays.SMM.newMatrix(
-                    UpdatablePArray.class,
-                    packedBands.elementType(),
-                    removeFirstElement(packedBands.dimensions()));
-            bandArrays[k] = band.array();
-            result.add(band);
-        }
-        if (bandArrays.length == 1) {
-            Arrays.copy(null, bandArrays[0], packedBands.array());
-            return result;
-        }
-        if (OPTIMIZE_PACK_UNPACK) {
-            try (BandsSequentialUnpacker packer = BandsSequentialUnpacker.getInstance(bandArrays, packedBands.array())) {
-                packer.process();
-            }
-        } else {
-            final int defaultCapacity = AbstractArray.defaultBufferCapacity(packedBands.array());
-            final int m = (defaultCapacity + bandArrays.length - 1) / bandArrays.length;
-            final DataBuffer buf = packedBands.array().buffer(DataBuffer.AccessMode.READ, m * bandArrays.length);
-            final Object workArray = packedBands.array().newJavaArray(m);
-            long bandPos = 0;
-            for (buf.map(0); buf.hasData(); buf.mapNext(), bandPos += m) {
-                int len = (int) Math.min(m, bandArrays[0].length() - bandPos);
-                for (int k = 0; k < bandArrays.length; k++) {
-                    if (packedBands.array() instanceof BitArray) {
-                        // improbable case of RGB bit matrix
-                        long[] data = (long[]) buf.data();
-                        boolean[] w = (boolean[]) workArray;
-                        int j = 0;
-                        for (long disp = buf.fromIndex() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = PackedBitArrays.getBit(data, disp);
-                        }
-
-                        //[[Repeat() char ==> byte,,short,,int,,long,,float,,double;;
-                        //           Char ==> Byte,,Short,,Int,,Long,,Float,,Double]]
-                    } else if (packedBands.array() instanceof CharArray) {
-                        char[] data = (char[]) buf.data();
-                        char[] w = (char[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                        //[[Repeat.AutoGeneratedStart !! Auto-generated: NOT EDIT !! ]]
-                    } else if (packedBands.array() instanceof ByteArray) {
-                        byte[] data = (byte[]) buf.data();
-                        byte[] w = (byte[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                    } else if (packedBands.array() instanceof ShortArray) {
-                        short[] data = (short[]) buf.data();
-                        short[] w = (short[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                    } else if (packedBands.array() instanceof IntArray) {
-                        int[] data = (int[]) buf.data();
-                        int[] w = (int[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                    } else if (packedBands.array() instanceof LongArray) {
-                        long[] data = (long[]) buf.data();
-                        long[] w = (long[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                    } else if (packedBands.array() instanceof FloatArray) {
-                        float[] data = (float[]) buf.data();
-                        float[] w = (float[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                    } else if (packedBands.array() instanceof DoubleArray) {
-                        double[] data = (double[]) buf.data();
-                        double[] w = (double[]) workArray;
-                        for (int j = 0, disp = buf.from() + k; j < len; j++, disp += bandArrays.length) {
-                            w[j] = data[disp];
-                        }
-
-                        //[[Repeat.AutoGeneratedEnd]]
-                    } else {
-                        throw new AssertionError("Must not occur");
-                    }
-                    bandArrays[k].setData(bandPos, workArray, 0, len);
-                }
-            }
-        }
-        return result;
+        return new MatrixToBufferedImage.InterleavedBGRToInterleaved().toBufferedImage(packed3dBGRA);
     }
 
     @Override
@@ -979,7 +776,7 @@ public final class SMat extends Data {
         this.numberOfChannels = 0;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setDimensions(long... dimensions) {
         Objects.requireNonNull(dimensions, "Null dimensions array");
         if (dimensions.length == 0) {
@@ -992,7 +789,7 @@ public final class SMat extends Data {
         this.dimensions = dimensions;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setDim(int k, long dimension) {
         checkDimension(k, dimension);
         if (k >= dimensions.length) {
@@ -1011,22 +808,22 @@ public final class SMat extends Data {
      *
      * @param depth byteBuffer depth
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setDepthCode(int depth) {
         this.depth = Depth.valueOf(depth);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setNumberOfChannels(int numberOfChannels) {
         this.numberOfChannels = checkNumberOfChannels(numberOfChannels);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setByteBuffer(ByteBuffer byteBuffer) {
         setPointer(new ConvertibleByteBufferMatrix(byteBuffer));
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setMatrix(long[] dimensions, int numberOfChannels, int depthCode, ByteBuffer byteBuffer) {
         setDimensions(dimensions);
         setNumberOfChannels(numberOfChannels);
@@ -1034,7 +831,7 @@ public final class SMat extends Data {
         setByteBuffer(byteBuffer);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setMatrix(long dimX, long dimY, int numberOfChannels, int depthCode, ByteBuffer byteBuffer) {
         setDimensions(dimX, dimY);
         setNumberOfChannels(numberOfChannels);
@@ -1112,24 +909,25 @@ public final class SMat extends Data {
     }
 
     private static BitArray toBitArray(ByteBuffer byteBuffer, long bitArraySize) {
-        //TODO!! move to AlgART (like asUpdatableByteArray: wrapping existing byteBuffer if possible)
-        final int byteCount = (int) ((bitArraySize + 7L) / 8);
-        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
-        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
-        bb.rewind();
-        LongBuffer lb = bb.asLongBuffer();
-        final int wholeLongCount = byteCount / 8;
-        lb.get(bits, 0, wholeLongCount);
-        if (wholeLongCount < bits.length) {
-            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
-            bb.position(wholeLongCount * 8);
-            eightBytes.put(bb);
-            eightBytes.rewind();
-            lb = eightBytes.asLongBuffer();
-            lb.get(bits, wholeLongCount, 1);
-        }
-        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
-        result.setBits(0, bits, 0, bitArraySize);
-        return result;
+        long[] packed = PackedBitArraysPer8.toLongArray(byteBuffer);
+        return SimpleMemoryModel.asUpdatableBitArray(packed, bitArraySize);
+//        final int byteCount = (int) ((bitArraySize + 7L) / 8);
+//        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
+//        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
+//        bb.rewind();
+//        LongBuffer lb = bb.asLongBuffer();
+//        final int wholeLongCount = byteCount / 8;
+//        lb.get(bits, 0, wholeLongCount);
+//        if (wholeLongCount < bits.length) {
+//            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
+//            bb.position(wholeLongCount * 8);
+//            eightBytes.put(bb);
+//            eightBytes.rewind();
+//            lb = eightBytes.asLongBuffer();
+//            lb.get(bits, wholeLongCount, 1);
+//        }
+//        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
+//        result.setBits(0, bits, 0, bitArraySize);
+//        return result;
     }
 }

@@ -25,7 +25,7 @@
 package net.algart.executors.api;
 
 import net.algart.executors.api.data.DataType;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.executors.api.data.Data;
 
 import jakarta.json.Json;
@@ -82,31 +82,31 @@ public final class Port {
         public abstract Port getPort(ExecutionBlock executionBlock, String name);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private Port() {}
 
     /**
      * port name
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private String name;
 
     /**
      * port data
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private Data data;
 
     /**
      * input / output port
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private Type portType;
 
     /**
      * port data type
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private DataType dataType;
 
     /**
@@ -118,14 +118,14 @@ public final class Port {
      * flag shows does current port has connection with other port(s)
      * connected flag modify by c++ host application
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private boolean connected = false;
 
     public String getName() {
         return name;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Port setName(String name) {
         this.name = Objects.requireNonNull(name, "Null port name");
         return this;
@@ -135,7 +135,7 @@ public final class Port {
         return data;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Port setData(Data portData) {
         this.data = Objects.requireNonNull(portData, "Null port data");
         return this;
@@ -150,7 +150,7 @@ public final class Port {
         return this;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Port setPortTypeCode(int code) {
         this.portType = Type.valueOf(code);
         return this;
@@ -169,7 +169,7 @@ public final class Port {
         return uuid;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Port setUuid(UUID uuid) {
         this.uuid = Objects.requireNonNull(uuid, "Null uuid");
         return this;
@@ -191,7 +191,7 @@ public final class Port {
      * invoked by host application
      * @param connected
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Port setConnected(boolean connected) {
         this.connected = connected;
         return this;

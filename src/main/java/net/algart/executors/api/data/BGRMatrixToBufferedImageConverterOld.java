@@ -28,18 +28,18 @@ import net.algart.arrays.ByteArray;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.arrays.TooLargeArrayException;
-import net.algart.external.MatrixToBufferedImageConverter;
+import net.algart.external.awt.MatrixToBufferedImage;
 
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 
 //TODO!! test new AlgART Packed3DToPackedBGR (including monochrome image)
 @Deprecated
-class BGRMatrixToBufferedImageConverter extends MatrixToBufferedImageConverter.Packed3DToPackedRGB {
-    static final BGRMatrixToBufferedImageConverter INSTANCE = new BGRMatrixToBufferedImageConverter();
+class BGRMatrixToBufferedImageConverterOld extends MatrixToBufferedImage.InterleavedRGBToInterleaved {
+    static final BGRMatrixToBufferedImageConverterOld INSTANCE = new BGRMatrixToBufferedImageConverterOld();
 
-    private BGRMatrixToBufferedImageConverter() {
-        super(false);
+    private BGRMatrixToBufferedImageConverterOld() {
+        super();
     }
 
     public final BufferedImage toBufferedImageCorrected(Matrix<? extends PArray> packedMatrix) {
@@ -108,7 +108,7 @@ class BGRMatrixToBufferedImageConverter extends MatrixToBufferedImageConverter.P
             throw new TooLargeArrayException("Too large packed " + packedMatrix
                     + ": dim(1)/dim(2) must be in <=Integer.MAX_VALUE");
         PArray array = packedMatrix.array();
-        if (!(array instanceof ByteArray) && byteArrayRequired())
+        if (!(array instanceof ByteArray) && bytesRequired())
             throw new IllegalArgumentException("ByteArray required");
     }
 }

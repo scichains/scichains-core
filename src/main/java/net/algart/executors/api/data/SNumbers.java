@@ -27,7 +27,7 @@ package net.algart.executors.api.data;
 import net.algart.arrays.*;
 import net.algart.arrays.Arrays;
 import net.algart.contours.Contours;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.math.*;
 
 import java.lang.reflect.Array;
@@ -472,20 +472,20 @@ public final class SNumbers extends Data implements Cloneable {
         throw new IllegalArgumentException("Illegal or unsupported element type: " + primitiveElementTypeName);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private Object array = null;
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private int blockLength = 1;
     // Length of Java array is always divided by blockLength.
     // The sense on blockLength may be any, but usually it is the size of some
     // little logical unit like point, rectangle, triangle, pair of related value etc.
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public SNumbers() {
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Object getArray() {
         return cloneJavaArray(array);
     }
@@ -514,12 +514,12 @@ public final class SNumbers extends Data implements Cloneable {
         return array == null ? 0 : Array.getLength(array);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public int getBlockLength() {
         return blockLength;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void setBlockLength(int blockLength) {
         if (blockLength <= 0) {
             throw new IllegalArgumentException("Block length " + blockLength + " is not positive");
@@ -894,7 +894,7 @@ public final class SNumbers extends Data implements Cloneable {
      *
      * @return true if container store byte elements otherwise false
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isByteArray() {
         return array instanceof byte[];
     }
@@ -950,7 +950,7 @@ public final class SNumbers extends Data implements Cloneable {
      *
      * @return true if container store byte elements otherwise false
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isShortArray() {
         return array instanceof short[];
     }
@@ -1006,7 +1006,7 @@ public final class SNumbers extends Data implements Cloneable {
      *
      * @return true if container store int elements otherwise false
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isIntArray() {
         return array instanceof int[];
     }
@@ -1063,7 +1063,7 @@ public final class SNumbers extends Data implements Cloneable {
      *
      * @return true if container store long elements otherwise false
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isLongArray() {
         return array instanceof long[];
     }
@@ -1114,7 +1114,7 @@ public final class SNumbers extends Data implements Cloneable {
         }
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isFloatArray() {
         return array instanceof float[];
     }
@@ -1170,7 +1170,7 @@ public final class SNumbers extends Data implements Cloneable {
      *
      * @return true if container store double elements otherwise false
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean isDoubleArray() {
         return array instanceof double[];
     }
@@ -3112,7 +3112,7 @@ public final class SNumbers extends Data implements Cloneable {
         array = null;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setArray(Object javaArray) {
         Objects.requireNonNull(javaArray, "Null java array");
         if (isSupportedJavaArray(javaArray)) {

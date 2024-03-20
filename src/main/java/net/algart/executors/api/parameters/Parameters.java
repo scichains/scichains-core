@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.parameters;
 
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 
 import jakarta.json.Json;
@@ -48,7 +48,7 @@ public interface Parameters extends Map<String, Object> {
 
     boolean getBoolean(String name, boolean defaultValue);
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     void setBoolean(String name, boolean value);
 
     void setBoolean(String name, String value);
@@ -57,7 +57,7 @@ public interface Parameters extends Map<String, Object> {
 
     int getInteger(String name, int defaultValue);
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     void setInteger(String name, int value);
 
     void setInteger(String name, String value);
@@ -66,7 +66,7 @@ public interface Parameters extends Map<String, Object> {
 
     long getLong(String name, long defaultValue);
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     void setLong(String name, long value);
 
     void setLong(String name, String value);
@@ -75,7 +75,7 @@ public interface Parameters extends Map<String, Object> {
 
     double getDouble(String name, double defaultValue);
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     void setDouble(String name, double value);
 
     void setDouble(String name, String value);
@@ -84,7 +84,7 @@ public interface Parameters extends Map<String, Object> {
 
     String getString(String name, String defaultValue);
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     void setString(String name, String value);
 
     default JsonValue getJsonValue(String name) {

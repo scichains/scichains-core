@@ -24,7 +24,7 @@
 
 package net.algart.executors.api;
 
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 
 import jakarta.json.Json;
@@ -48,7 +48,7 @@ public class ExecutionVisibleResultsInformation {
         return ports.length;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final String getModel() {
         return model;
     }
@@ -58,7 +58,7 @@ public class ExecutionVisibleResultsInformation {
         return this;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final Port[] getPorts() {
         return ports.clone();
     }
@@ -78,7 +78,7 @@ public class ExecutionVisibleResultsInformation {
         return this;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public String jsonString() {
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("model", model);

@@ -24,16 +24,16 @@
 
 package net.algart.executors.modules.core.matrices.io;
 
-import net.algart.external.ExternalAlgorithmCaller;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.io.WriteFileOperation;
+import net.algart.external.MatrixIO;
+import net.algart.multimatrix.MultiMatrix;
 
-import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public final class WriteAlgARTMatrices extends WriteFileOperation implements ReadOnlyExecutionInput {
     private boolean requireInput = false;
@@ -67,10 +67,10 @@ public final class WriteAlgARTMatrices extends WriteFileOperation implements Rea
     }
 
     public void writeMat(MultiMatrix m) {
-        final File file = completeFilePath().toAbsolutePath().toFile();
+        final Path file = completeFilePath().toAbsolutePath();
         logDebug(() -> "Writing AlgART " + m + " to file " + file);
         try {
-            ExternalAlgorithmCaller.writeAlgARTImage(file, m.allChannels());
+            MatrixIO.writeAlgARTImage(file, m.allChannels());
         } catch (IOException e) {
             throw new IOError(e);
         }

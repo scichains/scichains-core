@@ -26,6 +26,7 @@ package net.algart.executors.modules.core.files;
 
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.external.MatrixIO;
 
 import java.io.FileNotFoundException;
 import java.io.IOError;
@@ -189,6 +190,6 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
         } else if (root != null) {
             path = root.relativize(path);
         }
-        return removeExtension ? Paths.get(FileOperation.removeExtension(path.toString())) : path;
+        return removeExtension ? Paths.get(MatrixIO.removeExtension(path.toString())) : path;
     }
 }

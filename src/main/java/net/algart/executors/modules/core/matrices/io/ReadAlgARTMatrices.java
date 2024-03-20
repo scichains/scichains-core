@@ -26,15 +26,15 @@ package net.algart.executors.modules.core.matrices.io;
 
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.external.ExternalAlgorithmCaller;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.external.MatrixIO;
+import net.algart.multimatrix.MultiMatrix;
 
-import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 public final class ReadAlgARTMatrices extends FileOperation implements ReadOnlyExecutionInput {
@@ -68,10 +68,10 @@ public final class ReadAlgARTMatrices extends FileOperation implements ReadOnlyE
     }
 
     public MultiMatrix readMultiMatrix() {
-        final File file = completeFilePath().toAbsolutePath().toFile();
+        final Path file = completeFilePath().toAbsolutePath();
         logDebug(() -> "Reading AlgART multi-matrix from " + file);
         try {
-            final List<Matrix<? extends PArray>> matrices = ExternalAlgorithmCaller.readAlgARTImage(file);
+            final List<Matrix<? extends PArray>> matrices = MatrixIO.readAlgARTImage(file);
             final MultiMatrix multiMatrix = MultiMatrix.valueOfRGBA(matrices);
             final MultiMatrix result = multiMatrix.clone();
             multiMatrix.freeResources();

@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.common.io;
 
 import net.algart.executors.api.Executor;
+import net.algart.external.MatrixIO;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,7 +66,7 @@ public abstract class FileOperation extends Executor {
         REPLACE_IN_PATH_REMOVING_EXTENSION(true) {
             @Override
             public String completePath(String path, String fileNameAddition) {
-                return path.replace(FILE_NAME_ADDITION_PATTERN, removeExtension(fileNameAddition.trim()));
+                return path.replace(FILE_NAME_ADDITION_PATTERN, MatrixIO.removeExtension(fileNameAddition.trim()));
             }
         };
 
@@ -235,23 +236,6 @@ public abstract class FileOperation extends Executor {
         return path;
     }
      */
-
-    public static String extension(String fileName, String defaultExtension) {
-        int p = fileName.lastIndexOf('.');
-        if (p == -1) {
-            return defaultExtension;
-
-        }
-        return fileName.substring(p + 1);
-    }
-
-    public static String removeExtension(String fileName) {
-        if (fileName == null) {
-            return null;
-        }
-        final int p = fileName.lastIndexOf('.');
-        return p == -1 ? fileName : fileName.substring(0, p);
-    }
 
     protected final void addFileOperationPorts() {
         addInputScalar(INPUT_FILE);

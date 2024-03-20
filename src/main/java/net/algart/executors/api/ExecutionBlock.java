@@ -36,7 +36,7 @@ import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.PropertyChecker;
 
 import java.io.StringReader;
@@ -136,7 +136,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @param port added port
      * @return success operation flag
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean addPort(Port port) {
         Objects.requireNonNull(port, "Null port");
         return switch (port.getPortType()) {
@@ -175,12 +175,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return DEFAULT_OUTPUT_PORT;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean hasInputPort(String name) {
         return inputPorts.containsKey(name);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean hasOutputPort(String name) {
         return outputPorts.containsKey(name);
     }
@@ -201,13 +201,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return Collections.unmodifiableCollection(outputPorts.values());
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final Port getInputPort(String name) {
         Objects.requireNonNull(name, "Null input port name");
         return inputPorts.get(name);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final Port getOutputPort(String name) {
         Objects.requireNonNull(name, "Null output port name");
         return outputPorts.get(name);
@@ -557,7 +557,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         putDoubleScalar(defaultInputPortName(), value);
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final Parameters parameters() {
         return parameters;
     }
@@ -588,7 +588,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean isVisibleResultNecessary() {
         return visibleResultNecessary;
     }
@@ -599,12 +599,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param visibleResultNecessary new visible result flag.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setVisibleResultNecessary(boolean visibleResultNecessary) {
         this.visibleResultNecessary = visibleResultNecessary;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean isAllOutputsNecessary() {
         return allOutputsNecessary;
     }
@@ -619,7 +619,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param allOutputsNecessary always output necessary flag.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setAllOutputsNecessary(boolean allOutputsNecessary) {
         this.allOutputsNecessary = allOutputsNecessary;
     }
@@ -690,7 +690,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param ownerId unique ID of the "owner" of this executor.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final ExecutionBlock setOwnerId(String ownerId) {
         this.ownerId = ownerId;
         return this;
@@ -727,7 +727,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         this.contextId = contextId;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setContextId(long contextId) {
         setContextId(Long.valueOf(contextId));
     }
@@ -748,7 +748,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param contextName some textual name of the context; may be <tt>null</tt>.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setContextName(String contextName) {
         this.contextName = contextName;
     }
@@ -768,7 +768,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param contextPath the path fo file/folder, storing the context; may be <tt>null</tt>.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setContextPath(String contextPath) {
         this.contextPath = contextPath;
     }
@@ -782,12 +782,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public Object status() {
         return null;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public String statusData(int dataCode) {
         return null;
     }
@@ -796,7 +796,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return interruptionRequested;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void setInterruptionRequested(boolean interruptionRequested) {
         this.interruptionRequested = interruptionRequested;
     }
@@ -811,7 +811,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * Tries to interrupt current executor. May be overridden in some executors to inform more low-level
      * functions about interruption request.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void interrupt() {
         setInterruptionRequested(true);
     }
@@ -830,7 +830,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param name parameter name
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void onChangeParameter(String name) {
     }
 
@@ -842,7 +842,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>You may override this method, but we recommend to override {@link Executor#initialize()} instead.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void reset() {
     }
 
@@ -859,7 +859,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>You may override this method, but we recommend to override {@link Executor#process()} instead.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public abstract void execute();
 
     /**
@@ -869,16 +869,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @return whether the caller should repeat execution.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public boolean needToRepeat() {
         return false;
     }
 
     // Never returns <tt>null</tt>
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public abstract ExecutionVisibleResultsInformation visibleResultsInformation();
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     @Override
     public void close() {
         closed = true;
@@ -889,12 +889,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * This method must be called before <b>any</b> usage of ExecutionBlock instances.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static void initializeExecutionSystem() {
         Initialization.initialize();
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static void beforeExecutingAll() {
         synchronized (tasksBeforeExecutingAll) {
             for (Runnable task : tasksBeforeExecutingAll.values()) {
@@ -903,7 +903,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static void afterExecutingAll() {
         synchronized (oneTimeTasksAfterExecutingAll) {
             for (Runnable task : oneTimeTasksAfterExecutingAll.values()) {
@@ -1003,7 +1003,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                                is not available in the current <tt>classpath</tt> environment.
      * @throws NullPointerException   if <tt>executorId==null</tt> or <tt>executorSpecification==null</tt>.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
@@ -1025,7 +1025,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                 + ": unknown executor model format");
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
         return availableExecutorModelDescriptions(sessionId).values().toArray(new String[0]);
     }
@@ -1088,7 +1088,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @param sessionId unique ID of current session.
      * @throws NullPointerException if <tt>sessionId==null</tt>.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
         Objects.requireNonNull(sessionId, "Null executorId");
         for (ExecutionBlockLoader loader : executionBlockLoaders()) {

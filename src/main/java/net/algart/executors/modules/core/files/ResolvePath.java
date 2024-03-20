@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.files;
 
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
-import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
+import net.algart.external.MatrixIO;
 
 import java.io.FileNotFoundException;
 import java.io.IOError;
@@ -286,7 +286,7 @@ public final class ResolvePath extends Executor implements ReadOnlyExecutionInpu
         if (!childPath.isEmpty()) {
             securityLevel.testChild(childPath);
             if (removeExtension) {
-                childPath = FileOperation.removeExtension(childPath);
+                childPath = MatrixIO.removeExtension(childPath);
             }
             path = path.resolve(childPath);
         }

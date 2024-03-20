@@ -24,10 +24,10 @@
 
 package net.algart.executors.api;
 
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.executors.api.data.Data;
 
 public interface Previewable {
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     Data createPreview();
 }

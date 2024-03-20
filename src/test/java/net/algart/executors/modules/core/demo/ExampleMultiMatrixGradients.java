@@ -55,7 +55,7 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
 
     @Override
     public MultiMatrix create() {
-        return MultiMatrix.unpackChannels(
+        return MultiMatrix.valueOfMerged(
                 Matrices.matrix(makeSamples(), getDimX(), getDimY(), getNumberOfChannels()));
     }
 

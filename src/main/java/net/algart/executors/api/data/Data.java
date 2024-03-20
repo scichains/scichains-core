@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -36,17 +36,17 @@ public abstract class Data implements Cloneable {
 
     long flags = 0L;
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public long getFlags() {
         return flags;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public void setFlags(long flags) {
         this.flags = flags;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final boolean isInitialized() {
         return (this.flags & FLAG_INITIALIZED) != 0L;
     }
@@ -55,7 +55,7 @@ public abstract class Data implements Cloneable {
      * Set's initialized status and <b>frees resources</b> if new value is <tt>false</tt>.
      * @param initialized new initialized status.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final void setInitialized(boolean initialized) {
         if (initialized) {
             this.flags |= FLAG_INITIALIZED;
@@ -90,7 +90,7 @@ public abstract class Data implements Cloneable {
      * Returns type of this data. Never returns <tt>null</tt>.
      * @return type of this data (non-null).
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public abstract DataType type();
 
     /**

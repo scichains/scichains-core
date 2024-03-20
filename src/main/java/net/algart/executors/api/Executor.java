@@ -30,7 +30,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.InstalledExtensions;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.model.ExecutorJson;
@@ -590,7 +590,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 */
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return defaultVisibleResultsInformation(Port.Type.OUTPUT, visibleOutputPortName());
     }

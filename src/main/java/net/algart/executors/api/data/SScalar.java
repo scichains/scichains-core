@@ -27,7 +27,7 @@ package net.algart.executors.api.data;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public final class SScalar extends Data {
     private String value = null;
     // - note: null means "non-initialized"
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public SScalar() {
     }
 
@@ -61,7 +61,7 @@ public final class SScalar extends Data {
      *
      * @return the stored value.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public String getValue() {
         return value;
     }
@@ -472,7 +472,7 @@ public final class SScalar extends Data {
         value = null;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private void setValue(String value) {
         this.value = value;
         setInitializedAndResetFlags(value != null);

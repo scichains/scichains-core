@@ -67,7 +67,7 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
                 multiMatrix.elementType(),
                 newDimensions);
         long t2 = System.nanoTime();
-        SMat.packBandsIntoSequentialSamples(
+        Matrices.interleave(null,
                 packedChannels,
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
@@ -102,7 +102,8 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
                 SimpleMemoryModel.asUpdatableByteArray(result),
                 SMat.addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions()));
         long t2 = System.nanoTime();
-        SMat.packBandsIntoSequentialSamples(
+        Matrices.interleave(
+                null,
                 packedChannels,
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :

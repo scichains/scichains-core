@@ -4,7 +4,7 @@
     "_comment": "Note: variable in round brackets $(running.home.directory) should be replaced at the running stage by the external program that calls JVM"
   },
   "classPath": [
-    "lib/common/algart-1.3.1.jar",
+    "lib/common/algart-${algart.version}.jar",
     "lib/common/jakarta.json-1.1.5.jar",
     "lib/common/jakarta.json-api-2.1.3.jar",
     "lib/common/jep/jep-${jep.version}.jar",

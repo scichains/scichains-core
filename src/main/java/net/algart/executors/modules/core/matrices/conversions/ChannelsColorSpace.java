@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
+import net.algart.arrays.ColorMatrices;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.external.ImageConversions;
 
 import java.util.List;
 
@@ -49,16 +49,16 @@ public enum ChannelsColorSpace {
             Class<? extends PArray> resultType = rgba.get(0).type(PArray.class);
             //Note: in future we will maybe return another element type.
             return Matrices.several(
-                PArray.class,
-                ImageConversions.asHue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
-                ImageConversions.asHSVSaturation(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
-                ImageConversions.asHSVValue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)));
+                    PArray.class,
+                    ColorMatrices.asHue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
+                    ColorMatrices.asHSVSaturation(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
+                    ColorMatrices.asHSVValue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)));
         }
 
         @Override
         List<Matrix<? extends PArray>> merge(List<Matrix<? extends PArray>> channels) {
-            return ImageConversions.asRGBFromHSV(
-                channels.get(0).type(PArray.class), channels.get(0), channels.get(1), channels.get(2));
+            return ColorMatrices.asRGBFromHSV(
+                    channels.get(0).type(PArray.class), channels.get(0), channels.get(1), channels.get(2));
         }
     },
     HLS {
@@ -66,16 +66,16 @@ public enum ChannelsColorSpace {
         List<Matrix<? extends PArray>> split(List<Matrix<? extends PArray>> rgba) {
             Class<? extends PArray> resultType = rgba.get(0).type(PArray.class);
             return Matrices.several(
-                PArray.class,
-                ImageConversions.asHue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
-                ImageConversions.asHSLLightness(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
-                ImageConversions.asHSLSaturation(resultType, rgba.get(0), rgba.get(1), rgba.get(2)));
+                    PArray.class,
+                    ColorMatrices.asHue(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
+                    ColorMatrices.asHSLLightness(resultType, rgba.get(0), rgba.get(1), rgba.get(2)),
+                    ColorMatrices.asHSLSaturation(resultType, rgba.get(0), rgba.get(1), rgba.get(2)));
         }
 
         @Override
         List<Matrix<? extends PArray>> merge(List<Matrix<? extends PArray>> channels) {
-            return ImageConversions.asRGBFromHSL(
-                channels.get(0).type(PArray.class),
+            return ColorMatrices.asRGBFromHSL(
+                    channels.get(0).type(PArray.class),
                     channels.get(0),    // Hue
                     channels.get(2),    // Saturation at index 2 in HLS
                     channels.get(1));   // Lightness at index 1 in HLS

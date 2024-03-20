@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.files;
 
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.scalars.ScalarFilter;
+import net.algart.external.MatrixIO;
 
 public final class ChangeFileExtension extends ScalarFilter implements ReadOnlyExecutionInput {
     private String extension = "";
@@ -72,9 +72,9 @@ public final class ChangeFileExtension extends ScalarFilter implements ReadOnlyE
                         + "\": only latin letters A-Z, a-z, digits 0-9 "
                         + "and characters '_', '-', '.' are permitted");
             }
-            return FileOperation.removeExtension(s) + "." + extension;
+            return MatrixIO.removeExtension(s) + "." + extension;
         } else {
-            return preserveWhenEmpty ? s : FileOperation.removeExtension(s);
+            return preserveWhenEmpty ? s : MatrixIO.removeExtension(s);
         }
     }
 

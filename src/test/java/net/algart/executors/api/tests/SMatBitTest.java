@@ -26,7 +26,7 @@ package net.algart.executors.api.tests;
 
 import net.algart.executors.api.data.SMat;
 import net.algart.arrays.*;
-import net.algart.external.ExternalAlgorithmCaller;
+import net.algart.external.MatrixIO;
 import net.algart.math.functions.RectangularFunc;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
@@ -35,6 +35,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SMatBitTest {
     public static void main(String[] args) throws IOException {
@@ -42,8 +44,8 @@ public class SMatBitTest {
             System.out.printf("Usage: %s source_image%n", SMatBitTest.class);
             return;
         }
-        final File sourceFile = new File(args[0]);
-        final MultiMatrix2D multiMatrix = MultiMatrix.valueOf2DRGBA(ExternalAlgorithmCaller.readImage(sourceFile));
+        final Path sourceFile = Paths.get(args[0]);
+        final MultiMatrix2D multiMatrix = MultiMatrix.valueOf2DRGBA(MatrixIO.readImage(sourceFile));
         final Matrix<? extends PArray> intensity = multiMatrix.intensityChannel();
         Matrix<BitArray> bits = Matrices.asFuncMatrix(
             RectangularFunc.getInstance(
@@ -58,7 +60,7 @@ public class SMatBitTest {
         bits = Matrices.matrix(array, bits.dimensions());
         final MultiMatrix2D bitsMultiMatrix = MultiMatrix.valueOf2DMono(bits);
         System.out.printf("Created MultiMatrix: %s - %s%n", bitsMultiMatrix, bitsMultiMatrix.intensityChannel());
-        ExternalAlgorithmCaller.writeImage(new File(sourceFile + ".aa.bit.png"),
+        MatrixIO.writeImage(Paths.get(sourceFile + ".aa.bit.png"),
             bitsMultiMatrix.allChannelsInRGBAOrder());
 
         assert bitsMultiMatrix.numberOfChannels() == 1;
@@ -68,7 +70,7 @@ public class SMatBitTest {
         // - emulating minimal correct length
         final MultiMatrix2D restoredMultiMatrix = mat.toMultiMatrix2D(true);
         System.out.printf("-> MultiMatrix: %s%n", restoredMultiMatrix);
-        ExternalAlgorithmCaller.writeImage(new File(sourceFile + ".2aa.bit.png"),
+        MatrixIO.writeImage(Paths.get(sourceFile + ".2aa.bit.png"),
             restoredMultiMatrix.allChannelsInRGBAOrder());
 
         if (!bitsMultiMatrix.intensityChannel().equals(restoredMultiMatrix.intensityChannel())) {

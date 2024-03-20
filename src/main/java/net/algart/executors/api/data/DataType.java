@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -72,7 +72,7 @@ public enum DataType {
 
     private final String typeName;
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     private final UUID uuid;
 
     DataType(String name, UUID uuid) {
@@ -80,12 +80,12 @@ public enum DataType {
         this.uuid = Objects.requireNonNull(uuid, "Null uuid");
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final String typeName() {
         return typeName;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public final UUID uuid() {
         return uuid;
     }
@@ -94,7 +94,7 @@ public enum DataType {
 
     public abstract Class<? extends Data> typeClass();
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static DataType valueOfTypeName(String name) {
         final DataType result = valueOfTypeNameOrNull(name);
         if (result == null) {
@@ -113,7 +113,7 @@ public enum DataType {
         return null;
     }
 
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static DataType valueOf(UUID uuid) {
         Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {

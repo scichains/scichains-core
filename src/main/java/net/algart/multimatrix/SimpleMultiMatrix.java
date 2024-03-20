@@ -40,14 +40,8 @@ class SimpleMultiMatrix implements MultiMatrix {
         Objects.requireNonNull(channels, "Null channels");
         this.channels = new ArrayList<>(channels);
         checkNumberOfChannels(channels, false);
-        Matrices.checkDimensionEquality(this.channels);
+        Matrices.checkDimensionEquality(this.channels, true);
         this.elementType = channels.get(0).elementType();
-        for (int i = 1; i < this.channels.size(); i++) {
-            if (this.channels.get(i).elementType() != elementType) {
-                throw new IllegalArgumentException("Different element type of channels: " + elementType
-                        + " and " + this.channels.get(i).elementType());
-            }
-        }
         this.channelArrays = new PArray[channels.size()];
         for (int k = 0; k < channelArrays.length; k++) {
             channelArrays[k] = channels.get(k).array();

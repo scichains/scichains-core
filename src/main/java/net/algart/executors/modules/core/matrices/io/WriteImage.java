@@ -29,6 +29,7 @@ import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.WriteFileOperation;
+import net.algart.external.MatrixIO;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -88,7 +89,7 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
 
     public void writeImage(BufferedImage bufferedImage) throws UnsupportedImageFormatException {
         final File file = completeFilePath().toFile();
-        String formatName = extension(file.getName(), "BMP");
+        String formatName = MatrixIO.extension(file.getName(), "BMP");
         logDebug(() -> "Writing image " + bufferedImage.getWidth() + "x" + bufferedImage.getHeight()
                 + " to file " + file.getAbsolutePath() + " (format " + formatName.toUpperCase() + ")");
         try {

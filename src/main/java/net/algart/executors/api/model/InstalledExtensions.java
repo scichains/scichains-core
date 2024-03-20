@@ -26,7 +26,7 @@ package net.algart.executors.api.model;
 
 import net.algart.executors.api.ExecutionSystemConfigurationException;
 import net.algart.executors.api.SystemEnvironment;
-import net.algart.external.UsedByNativeCode;
+import net.algart.external.UsedForExternalCommunication;
 
 import java.io.File;
 import java.io.IOError;
@@ -49,7 +49,7 @@ public class InstalledExtensions {
      * Used only if {@value #EXTENSIONS_PATH_PROPERTY} property is not defined,
      * in other case it is ignored.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static final String EXTENSIONS_ROOT_PROPERTY = "net.algart.executors.root";
     /**
      * System property {@value}
@@ -57,7 +57,7 @@ public class InstalledExtensions {
      * (usually ";").
      * May be skipped if {@value #EXTENSIONS_ROOT_PROPERTY} property is defined.
      */
-    @UsedByNativeCode
+    @UsedForExternalCommunication
     public static final String EXTENSIONS_PATH_PROPERTY = "net.algart.executors.path";
 
     /**

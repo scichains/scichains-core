@@ -25,7 +25,7 @@
 package net.algart.multimatrix;
 
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.external.MatrixIO;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -68,7 +68,7 @@ public class GetSetPixelsTest {
         final BufferedImage image = SMat.valueOf(m).toBufferedImage();
         System.out.printf("Writing %s%n", fileName);
         assert image != null;
-        ImageIO.write(image, FileOperation.extension(fileName, "png"), new File(fileName));
+        ImageIO.write(image, MatrixIO.extension(fileName, "png"), new File(fileName));
         for (Class<?> elementType : MultiMatrix.SUPPORTED_ELEMENT_TYPES) {
             System.out.printf("Pixel at the center: %s (in %s)%n",
                     m.asPrecision(elementType).getPixel(m.dimX() / 2, m.dimY() / 2), m);
