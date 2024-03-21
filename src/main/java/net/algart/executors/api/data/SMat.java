@@ -706,61 +706,6 @@ public final class SMat extends Data {
         return new BufferedImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
     }
 
-    @Deprecated
-    private static Matrix<? extends PArray> bufferedImageToPackedBGRAOld(BufferedImage bufferedImage) {
-        Objects.requireNonNull(bufferedImage, "Null bufferedImage");
-        // See implementation of BufferedImageToMatrixConverter.ToPacked3D
-        final ColorModel colorModel = bufferedImage.getColorModel();
-        final SampleModel sampleModel = bufferedImage.getSampleModel();
-        final int dimX = bufferedImage.getWidth();
-        final int dimY = bufferedImage.getHeight();
-        final int bandCount = colorModel.hasAlpha() ? 4 : colorModel.getNumComponents() == 1 ? 1 : 3;
-        final boolean gray = bandCount == 1;
-        final boolean banded = sampleModel instanceof BandedSampleModel;
-        long size = Arrays.longMul(dimX, dimY, bandCount);
-        if (size > Integer.MAX_VALUE || size == Long.MIN_VALUE) {
-            throw new IllegalArgumentException("Very strange buffered image: too large");
-        }
-        byte[] bytes = new byte[(int) size];
-        final byte[][] rgbAlpha = new byte[gray && !banded ? 3 : 1][];
-        // even if gray, but not banded, we make full RGB banded image:
-        // if no, ColorSpace.CS_GRAY produces invalid values (too dark)
-        rgbAlpha[0] = bytes;
-        for (int k = 1; k < rgbAlpha.length; k++) {
-            rgbAlpha[k] = new byte[bytes.length]; // avoiding invalid values by creating extra bands
-        }
-        final ColorSpace cs = ColorSpace.getInstance(gray && banded ? ColorSpace.CS_GRAY : ColorSpace.CS_sRGB);
-        final DataBufferByte dataBuffer = new DataBufferByte(rgbAlpha, rgbAlpha[0].length);
-        final WritableRaster wr;
-        final ColorModel cm;
-        if (gray) {
-            int[] indexes = new int[rgbAlpha.length];
-            int[] offsets = new int[rgbAlpha.length]; // zero-filled by Java
-            for (int k = 0; k < indexes.length; k++) {
-                indexes[k] = k;
-                offsets[k] = 0;
-            }
-            wr = Raster.createBandedRaster(dataBuffer, dimX, dimY, dimX, indexes, offsets, null);
-            cm = new ComponentColorModel(cs, null, colorModel.hasAlpha(), false,
-                    ColorModel.OPAQUE, dataBuffer.getDataType());
-        } else {
-            int[] offsets = new int[bandCount];
-            for (int k = 0; k < offsets.length; k++) {
-                offsets[k] = k == 0 ? 2 : k == 2 ? 0 : k; // - BGRA
-            }
-            final int scanlineStride = dimX * bandCount;
-            SampleModel sm = new PixelInterleavedSampleModel(dataBuffer.getDataType(), dimX, dimY,
-                    bandCount, scanlineStride, offsets);
-            wr = Raster.createWritableRaster(sm, dataBuffer, null);
-            boolean hasAlpha = bandCount >= 4;
-            cm = new ComponentColorModel(cs, null, hasAlpha, false,
-                    hasAlpha ? ColorModel.TRANSLUCENT : ColorModel.OPAQUE, dataBuffer.getDataType());
-        }
-        final BufferedImage resultImage = new BufferedImage(cm, wr, false, null);
-        resultImage.getGraphics().drawImage(bufferedImage, 0, 0, null);
-        return Matrices.matrix((UpdatablePArray) SimpleMemoryModel.asUpdatableArray(bytes), bandCount, dimX, dimY);
-    }
-
     public static BufferedImage packedBGRAToBufferedImage(Matrix<? extends PArray> packed3dBGRA) {
         return new MatrixToBufferedImage.InterleavedBGRToInterleaved().toBufferedImage(packed3dBGRA);
     }
