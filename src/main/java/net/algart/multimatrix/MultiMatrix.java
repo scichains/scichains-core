@@ -510,7 +510,7 @@ public interface MultiMatrix extends Cloneable {
 
     static MultiMatrix valueOfMerged(Matrix<? extends PArray> packedChannels) {
         Objects.requireNonNull(packedChannels, "Null packedChannels");
-        return new SimpleMultiMatrix(Matrices.asLayers(packedChannels));
+        return new SimpleMultiMatrix(Matrices.asLayers(packedChannels, MAX_NUMBER_OF_CHANNELS));
     }
 
     static MultiMatrix2D newMultiMatrix2D(Class<?> elementType, int numberOfChannels, long dimX, long dimY) {
@@ -561,7 +561,7 @@ public interface MultiMatrix extends Cloneable {
 
     static MultiMatrix2D valueOf2DMerged(Matrix<? extends PArray> packedChannels) {
         Objects.requireNonNull(packedChannels, "Null packedChannels");
-        return new SimpleMultiMatrix2D(Matrices.asLayers(packedChannels));
+        return new SimpleMultiMatrix2D(Matrices.asLayers(packedChannels, MAX_NUMBER_OF_CHANNELS));
     }
 
     static Matrix<BitArray> nonZeroPixels(Matrix<? extends PArray> matrix) {

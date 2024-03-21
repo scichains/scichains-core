@@ -141,7 +141,7 @@ public final class SMat extends Data {
                 }
                 result = MultiMatrix.valueOfMono(matrix);
             } else {
-                var channels = Matrices.separate(null, m);
+                var channels = Matrices.separate(null, m, MultiMatrix.MAX_NUMBER_OF_CHANNELS);
                 result = channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         MultiMatrix.valueOf(channels) :
                         MultiMatrix.valueOfBGRA(channels);
