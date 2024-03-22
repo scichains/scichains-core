@@ -135,7 +135,7 @@ public final class SMat extends Data {
             final Matrix<? extends PArray> m = thisMat.toPackedMatrix(autoConvertUnsupportedDepth);
             assert m != null : "toPackedMatrix cannot be null for initialized SMat";
             if (m.dim(0) == 1) {
-                Matrix<? extends PArray> matrix = Matrices.matrix(m.array(), removeFirstElement(m.dimensions()));
+                Matrix<? extends PArray> matrix = m.array().matrix(removeFirstElement(m.dimensions()));
                 if (!SimpleMemoryModel.isSimpleArray(matrix.array())) {
                     matrix = matrix.clone();
                 }
@@ -438,7 +438,7 @@ public final class SMat extends Data {
         }
         final long[] newDimensions = addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions());
         if (multiMatrix.numberOfChannels() == 1) {
-            return setToPackedMatrix(Matrices.matrix(multiMatrix.intensityChannel().array(), newDimensions));
+            return setToPackedMatrix(multiMatrix.intensityChannel().array().matrix(newDimensions));
         }
         final Matrix<? extends UpdatablePArray> packedChannels = BufferMemoryModel.getInstance().newMatrix(
                 UpdatablePArray.class,
@@ -600,7 +600,7 @@ public final class SMat extends Data {
             throw new TooLargeArrayException("Too large dimensions: dim[0] * dim[1] * ... > Long.MAX_VALUE");
         }
         if (depth == Depth.BIT) {
-            return Matrices.matrix(toBitArray(getByteBuffer(), size), newDimensions);
+            return toBitArray(getByteBuffer(), size).matrix(newDimensions);
         } else {
             ByteBuffer bb = getByteBuffer();
             Class<?> elementType = depth.elementType(!autoConvertUnsupportedDepth);
@@ -613,7 +613,7 @@ public final class SMat extends Data {
 //            BufferMemoryModel.asUpdatableByteArray(bb), ",", 1000));
 //        System.out.println("Reading data: " + getDepth() +"," + array
 //            + ": " + Arrays.toString(array,",",1000));
-            return Matrices.matrix(array, newDimensions);
+            return array.matrix(newDimensions);
         }
     }
 

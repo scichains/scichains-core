@@ -98,8 +98,8 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
             throw new TooLargeArrayException("Too large matrix: " + multiMatrix);
         }
         byte[] result = new byte[(int) size];
-        final Matrix<? extends UpdatablePArray> packedChannels = Matrices.matrix(
-                SimpleMemoryModel.asUpdatableByteArray(result),
+        final Matrix<? extends UpdatablePArray> packedChannels =  SimpleMemoryModel.asMatrix(
+                result,
                 SMat.addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions()));
         long t2 = System.nanoTime();
         Matrices.interleave(
