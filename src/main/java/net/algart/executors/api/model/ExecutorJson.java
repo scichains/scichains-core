@@ -739,6 +739,12 @@ public class ExecutorJson extends AbstractConvertibleToJson {
             return className;
         }
 
+        /**
+         * Returns the name of instantiation static method.
+         *
+         * <p>Note: usually new executors are created without calling this method,
+         * but via parsing JSON with using {@link #NEW_INSTANCE_METHOD_PROPERTY_NAME} constant.</p>
+         */
         public String getNewInstanceMethod() {
             return newInstanceMethod;
         }

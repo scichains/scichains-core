@@ -55,26 +55,29 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
 
     @Override
     public MultiMatrix create() {
-        return MultiMatrix.valueOfMerged(
-                Matrices.matrix(makeSamples(), getDimX(), getDimY(), getNumberOfChannels()));
+        return create(getDimX(), getDimY(), getNumberOfChannels());
     }
 
-    private PArray makeSamples() {
-        if (getDimX() > Integer.MAX_VALUE || getDimY() > Integer.MAX_VALUE ||
-                getDimX() * getDimY() > Integer.MAX_VALUE) {
-            throw new TooLargeArrayException("Matrix size " + getDimX() + "*" + getDimY() + " > 2^31-1");
+    public MultiMatrix create(long dimX, long dimY, int numberOfChannels) {
+        return MultiMatrix.valueOfMerged(
+                Matrices.matrix(makeSamples(dimX, dimY, numberOfChannels),
+                        dimX, dimY, numberOfChannels));
+    }
+
+    private PArray makeSamples(long dimX, long dimY, int numberOfChannels) {
+        if (dimX > Integer.MAX_VALUE || dimY > Integer.MAX_VALUE || dimX * dimY > Integer.MAX_VALUE) {
+            throw new TooLargeArrayException("Matrix size " + dimX + "*" + dimY + " > 2^31-1");
         }
-        final int dimX = (int) getDimX();
-        final int dimY = (int) getDimY();
-        final int numberOfChannels = getNumberOfChannels();
-        final int matrixSize = dimX * dimY;
+        final int w = (int) dimX;
+        final int h = (int) dimY;
+        final int matrixSize = w * h;
         Class<?> elementType = getElementType();
         if (elementType == boolean.class) {
             boolean[] channels = new boolean[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         channels[disp + c * matrixSize] = ((shift + x + y) & 0xFF) >= 128;
                     }
                 }
@@ -82,10 +85,10 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return Arrays.SMM.valueOf(channels);
         } else if (elementType == byte.class) {
             byte[] channels = new byte[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         channels[disp + c * matrixSize] = (byte) (shift + x + y);
                     }
                 }
@@ -93,10 +96,10 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return SimpleMemoryModel.asUpdatableByteArray(channels);
         } else if (elementType == short.class) {
             short[] channels = new short[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         channels[disp + c * matrixSize] = (short) (157 * (shift + x + y));
                     }
                 }
@@ -104,10 +107,10 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return SimpleMemoryModel.asUpdatableShortArray(channels);
         } else if (elementType == int.class) {
             int[] channels = new int[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         channels[disp + c * matrixSize] = 157 * 65536 * (shift + x + y);
                     }
                 }
@@ -116,10 +119,10 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return SimpleMemoryModel.asUpdatableIntArray(channels);
         } else if (elementType == float.class) {
             float[] channels = new float[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         int v = (shift + x + y) & 0xFF;
                         channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
                     }
@@ -128,10 +131,10 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
             return SimpleMemoryModel.asUpdatableFloatArray(channels);
         } else if (elementType == double.class) {
             double[] channels = new double[matrixSize * numberOfChannels];
-            for (int y = 0; y < dimY; y++) {
+            for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
                 for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * dimX; x < dimX; x++, disp++) {
+                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
                         int v = (shift + x + y) & 0xFF;
                         channels[disp + c * matrixSize] = (float) (0.5 + multiplierForFP * (v / 256.0 - 0.5));
                     }
@@ -155,5 +158,4 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
 
     private record ChannelsRange(int c1, int c2) {
     }
-
 }

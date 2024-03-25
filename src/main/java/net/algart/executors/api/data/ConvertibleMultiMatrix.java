@@ -56,61 +56,39 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
 
     @Override
     public ByteBuffer toByteBuffer(SMat thisMatrix) {
-//        System.out.println("!!! conversion of " + multiMatrix);
-        final long[] newDimensions = SMat.addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions());
-        if (multiMatrix.numberOfChannels() == 1) {
-            return toByteBuffer(Matrices.matrix(multiMatrix.intensityChannel().array(), newDimensions));
-        }
-        long t1 = System.nanoTime();
-        final Matrix<? extends UpdatablePArray> packedChannels = BufferMemoryModel.getInstance().newMatrix(
-                UpdatablePArray.class,
-                multiMatrix.elementType(),
-                newDimensions);
-        long t2 = System.nanoTime();
-        Matrices.interleave(null,
-                packedChannels,
+        final Matrix<PArray> interleave = Matrices.interleave(
+                ArrayContext.getSimpleContext(BufferMemoryModel.getInstance(), false),
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        long t3 = System.nanoTime();
-//        System.out.printf("!!!!!! %.3f allocate + %.3f ms pack%n", (t2 - t1) * 1e-6, (t3 - t2) * 1e-6);
-        return toByteBuffer(packedChannels);
+        return toByteBuffer(interleave);
     }
 
     public byte[] toByteArray(SMat thisMatrix) {
         if (thisMatrix.getDepth().elementType() != byte.class) {
             return super.toByteArray(thisMatrix);
         }
-//        System.out.println("!!! conversion of " + multiMatrix);
         if (multiMatrix.numberOfChannels() == 1) {
             final PArray array = multiMatrix.intensityChannel().array();
-            if (array instanceof DirectAccessible
-                    && ((DirectAccessible) array).hasJavaArray()
-                    && ((DirectAccessible) array).javaArrayOffset() == 0
-                    && ((DirectAccessible) array).javaArrayLength() == array.length()) {
-                return (byte[]) ((DirectAccessible) array).javaArray();
+            if (array instanceof DirectAccessible da && da.hasJavaArray() && da.javaArrayOffset() == 0) {
+                byte[] bytes = (byte[]) da.javaArray();
+                if (bytes.length == array.length()) {
+                    return bytes;
+                }
             }
             return (byte[]) Arrays.toJavaArray(array);
         }
-        long t1 = System.nanoTime();
         final long size = Arrays.longMul(multiMatrix.numberOfChannels(), multiMatrix.size());
-        if (size < 0 || size > Integer.MAX_VALUE) {
-            throw new TooLargeArrayException("Too large matrix: " + multiMatrix);
-        }
-        byte[] result = new byte[(int) size];
-        final Matrix<? extends UpdatablePArray> packedChannels =  SimpleMemoryModel.asMatrix(
-                result,
-                SMat.addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions()));
-        long t2 = System.nanoTime();
-        Matrices.interleave(
-                null,
-                packedChannels,
+        final Matrix<PArray> interleave = Matrices.interleave(
+                ArrayContext.getSimpleContext(Arrays.SMM, false),
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        long t3 = System.nanoTime();
-//        System.out.printf("!!!!!! %.3f + %.3f ms%n", (t2 - t1) * 1e-6, (t3 - t2) * 1e-6);
-        return result;
+        final Object result = interleave.array().quick().orElse(null);
+        if (!(result instanceof byte[] bytes) || bytes.length != size) {
+            throw new AssertionError("Invalid interleave results");
+        }
+        return bytes;
     }
 
     @Override

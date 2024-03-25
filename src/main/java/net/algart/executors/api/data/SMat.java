@@ -50,7 +50,6 @@ import java.util.function.Function;
 public final class SMat extends Data {
     static final int MAX_NUMBER_OF_CHANNELS = MultiMatrix.MAX_NUMBER_OF_CHANNELS;
     private static final boolean OPTIMIZE_COPYING = true;
-    private static final boolean OPTIMIZE_PACK_UNPACK = true;
     // - should be true for better performance
 
     private static final Depth[] CODE_TO_DEPTH = new Depth[512];
@@ -436,21 +435,12 @@ public final class SMat extends Data {
             setInitializedAndResetFlags(true);
             return this;
         }
-        final long[] newDimensions = addFirstElement(multiMatrix.numberOfChannels(), multiMatrix.dimensions());
-        if (multiMatrix.numberOfChannels() == 1) {
-            return setToPackedMatrix(multiMatrix.intensityChannel().array().matrix(newDimensions));
-        }
-        final Matrix<? extends UpdatablePArray> packedChannels = BufferMemoryModel.getInstance().newMatrix(
-                UpdatablePArray.class,
-                multiMatrix.elementType(),
-                newDimensions);
-        Matrices.interleave(
-                null,
-                packedChannels,
+        Matrix<PArray> interleave = Matrices.interleave(
+                ArrayContext.getSimpleContext(BufferMemoryModel.getInstance(), false),
                 channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        return setToPackedMatrix(packedChannels);
+        return setToPackedMatrix(interleave);
     }
 
     /**
