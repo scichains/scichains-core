@@ -45,8 +45,8 @@ public class SimpleConvertibleTest {
         //noinspection resource
         ExampleMultiMatrixGradients e = new ExampleMultiMatrixGradients();
         e.setElementType(byte.class);
-        MultiMatrix mm = e.create(1000, 1000, 3);
-        SMat m = SMat.valueOf(mm, SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER);
+        MultiMatrix mm = e.create(1000, 1000, 1);
+        SMat m = SMat.valueOf(mm, SMat.ChannelOrder.STANDARD);
         ByteBuffer byteBuffer = m.getByteBuffer();
         byte[] array = m.getPointer().toByteArray(m);
         System.out.printf("Multi-matrix: %s%n", mm);

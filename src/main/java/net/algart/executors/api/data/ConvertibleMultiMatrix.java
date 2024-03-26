@@ -69,26 +69,14 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
             return super.toByteArray(thisMatrix);
         }
         if (multiMatrix.numberOfChannels() == 1) {
-            final PArray array = multiMatrix.intensityChannel().array();
-            if (array instanceof DirectAccessible da && da.hasJavaArray() && da.javaArrayOffset() == 0) {
-                byte[] bytes = (byte[]) da.javaArray();
-                if (bytes.length == array.length()) {
-                    return bytes;
-                }
-            }
-            return (byte[]) Arrays.toJavaArray(array);
+            return (byte[]) multiMatrix.channel(0).array().ja();
         }
-        final long size = Arrays.longMul(multiMatrix.numberOfChannels(), multiMatrix.size());
         final Matrix<PArray> interleave = Matrices.interleave(
                 ArrayContext.getSimpleContext(Arrays.SMM, false),
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        final Object result = interleave.array().quick().orElse(null);
-        if (!(result instanceof byte[] bytes) || bytes.length != size) {
-            throw new AssertionError("Invalid interleave results");
-        }
-        return bytes;
+        return (byte[]) interleave.array().ja();
     }
 
     @Override
