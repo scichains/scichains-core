@@ -46,6 +46,7 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
     private String globPattern = "*.{txt}";
     private boolean recursiveScanning = true;
     private boolean fileExistenceRequired = false;
+    private String charset = "UTF-8";
 
     private final List<Path> sortedFiles = new ArrayList<>();
     private String sortedFilesString = "";
@@ -88,6 +89,15 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
 
     public ReadNextScalar setFileExistenceRequired(boolean fileExistenceRequired) {
         this.fileExistenceRequired = fileExistenceRequired;
+        return this;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public ReadNextScalar setCharset(String charset) {
+        this.charset = nonEmpty(charset).trim();
         return this;
     }
 
@@ -145,6 +155,7 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
         getScalar(OUTPUT_PARENT_FOLDER).setTo(absolutePath.getParent().toString());
         getScalar(OUTPUT_FILE_NAME).setTo(absolutePath.getFileName().toString());
         final ReadScalar readScalar = ReadScalar.getInstance();
+        readScalar.setCharset(charset);
         readScalar.setFile(fileToRead.toString());
         final String result = readScalar.readString();
         getScalar().setTo(result);

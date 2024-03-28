@@ -93,6 +93,14 @@
       "default": false
     },
     {
+      "caption": "Charset",
+      "description": "Should contain the name of the Java encoding (charset), in which the text file is written. UTF-8 is most popular encoding. Note that invalid encoding may cause an exception while attempt to read the file.",
+      "name": "charset",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "UTF-8"
+    },
+    {
       "caption": "Scalar content",
       "name": "scalarContent",
       "description": "This argument is used only when the input scalar is not specified (not initialized). In this case, this text argument is written to file instead of input scalar.",

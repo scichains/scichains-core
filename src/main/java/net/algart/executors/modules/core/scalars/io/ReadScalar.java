@@ -30,12 +30,14 @@ import net.algart.executors.modules.core.common.io.FileOperation;
 import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class ReadScalar extends FileOperation {
     private boolean fileExistenceRequired = true;
+    private String charset = "UTF-8";
     private String defaultValue = "";
 
     public ReadScalar() {
@@ -60,6 +62,15 @@ public class ReadScalar extends FileOperation {
 
     public ReadScalar setFileExistenceRequired(boolean fileExistenceRequired) {
         this.fileExistenceRequired = fileExistenceRequired;
+        return this;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public ReadScalar setCharset(String charset) {
+        this.charset = nonEmpty(charset).trim();
         return this;
     }
 
@@ -100,7 +111,7 @@ public class ReadScalar extends FileOperation {
                 return defaultValue.isEmpty() ? null : defaultValue;
             } else {
                 logDebug(() -> "Reading UTF-8 scalar from " + path.toAbsolutePath());
-                return readString(path);
+                return readString(path, charset);
             }
         } catch (IOException e) {
             throw new IOError(e);
@@ -111,7 +122,9 @@ public class ReadScalar extends FileOperation {
         return result;
     }
 
-    public static String readString(Path file) throws IOException {
-        return Files.readString(file);
+    public static String readString(Path file, String charset) throws IOException {
+        Objects.requireNonNull(file, "Null file");
+        Objects.requireNonNull(charset, "Null charset");
+        return Files.readString(file, Charset.forName(charset));
     }
 }

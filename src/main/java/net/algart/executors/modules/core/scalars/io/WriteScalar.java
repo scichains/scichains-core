@@ -30,11 +30,13 @@ import net.algart.executors.modules.core.common.io.WriteFileOperation;
 
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class WriteScalar extends WriteFileOperation {
     private boolean deleteFileIfEmpty = false;
+    private String charset = "UTF-8";
     private String scalarContent = "";
 
     public WriteScalar() {
@@ -52,6 +54,15 @@ public final class WriteScalar extends WriteFileOperation {
 
     public WriteScalar setDeleteFileIfEmpty(boolean deleteFileIfEmpty) {
         this.deleteFileIfEmpty = deleteFileIfEmpty;
+        return this;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public WriteScalar setCharset(String charset) {
+        this.charset = nonEmpty(charset).trim();
         return this;
     }
 
@@ -87,7 +98,7 @@ public final class WriteScalar extends WriteFileOperation {
             } else {
                 logDebug(() -> "Writing UTF-8 scalar (" + s.length() + " characters) to file "
                         + path.toAbsolutePath());
-                writeString(path, s);
+                writeString(path, s, charset);
             }
         } catch (IOException e) {
             throw new IOError(e);
@@ -99,7 +110,7 @@ public final class WriteScalar extends WriteFileOperation {
         return defaultVisibleResultsInformation(Port.Type.INPUT, DEFAULT_INPUT_PORT);
     }
 
-    public static void writeString(Path file, String s) throws IOException {
-        Files.writeString(file, s);
+    public static void writeString(Path file, String s, String charset) throws IOException {
+        Files.writeString(file, s, Charset.forName(charset));
     }
 }

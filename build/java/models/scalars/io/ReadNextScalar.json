@@ -130,6 +130,14 @@
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
+    },
+    {
+      "caption": "Charset",
+      "description": "Should contain the name of the Java encoding (charset), in which the text file is written. UTF-8 is most popular encoding. Note that invalid encoding may cause an exception while attempt to read the file.",
+      "name": "charset",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "UTF-8"
     }
   ]
 }
