@@ -443,19 +443,11 @@ public interface MultiMatrix extends Cloneable {
     }
 
     default int[] channelToIntArray(int channelIndex) {
-        return toIntArray(channel(channelIndex));
+        return Matrices.toIntJavaArray(channel(channelIndex));
     }
 
     default float[] channelToFloatArray(int channelIndex) {
-        return toFloatArray(channel(channelIndex));
-    }
-
-    default int[] channelToIntArray(int channelIndex, IntJArrayHolder arrayHolder) {
-        return toIntArray(channel(channelIndex), arrayHolder);
-    }
-
-    default float[] channelToFloatArray(int channelIndex, FloatJArrayHolder arrayHolder) {
-        return toFloatArray(channel(channelIndex), arrayHolder);
+        return Matrices.toFloatJavaArray(channel(channelIndex));
     }
 
     default boolean dimEquals(MultiMatrix other) {
@@ -606,133 +598,73 @@ public interface MultiMatrix extends Cloneable {
         return result;
     }
 
+    @Deprecated
     static byte[] newCompatibleByteArray(Matrix<?> matrix) {
-        final long size = matrix.size();
-        if (size != (int) size) {
-            throw new TooLargeArrayException("Too large matrix: " + matrix);
-        }
-        return new byte[(int) size];
+        return new byte[matrix.size32()];
     }
 
+    @Deprecated
     static int[] newCompatibleIntArray(Matrix<?> matrix) {
-        final long size = matrix.size();
-        if (size != (int) size) {
-            throw new TooLargeArrayException("Too large matrix: " + matrix);
-        }
-        return new int[(int) size];
+        return new int[matrix.size32()];
     }
 
+    @Deprecated
     static float[] newCompatibleFloatArray(Matrix<?> matrix) {
-        final long size = matrix.size();
-        if (size != (int) size) {
-            throw new TooLargeArrayException("Too large matrix: " + matrix);
-        }
-        return new float[(int) size];
+        return new float[matrix.size32()];
     }
 
+    @Deprecated
     static byte[] toByteArray(Matrix<? extends PArray> matrix) {
-        final byte[] data = newCompatibleByteArray(matrix);
-        toByteArray(data, matrix.array());
-        return data;
+        return Matrices.toByteJavaArray(matrix);
     }
 
     /**
      * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
      */
+    @Deprecated
     static byte[] toByteArrayUnsafe(Matrix<? extends PArray> matrix) {
-        final PArray array = matrix.array();
-        if (array instanceof ByteArray && array instanceof DirectAccessible) {
-            final DirectAccessible directAccessible = (DirectAccessible) array;
-            if (directAccessible.hasJavaArray() && directAccessible.javaArrayOffset() == 0) {
-                // - non-zero offset is very improbable for matrices
-                return (byte[]) directAccessible.javaArray();
-            }
-        }
-        return toByteArray(matrix);
+        return matrix.array().jaByte();
     }
 
+    @Deprecated
     static int[] toIntArray(Matrix<? extends PArray> matrix) {
-        final int[] data = newCompatibleIntArray(matrix);
-        toIntArray(data, matrix.array());
-        return data;
+        return Matrices.toIntJavaArray(matrix);
     }
 
     /**
      * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
      */
+    @Deprecated
     static int[] toIntArrayUnsafe(Matrix<? extends PArray> matrix) {
-        final PArray array = matrix.array();
-        if (array instanceof IntArray && array instanceof DirectAccessible) {
-            final DirectAccessible directAccessible = (DirectAccessible) array;
-            if (directAccessible.hasJavaArray() && directAccessible.javaArrayOffset() == 0) {
-                // - non-zero offset is very improbable for matrices
-                return (int[]) directAccessible.javaArray();
-            }
-        }
-        return toIntArray(matrix);
+        return matrix.array().jaInt();
     }
 
+    @Deprecated
     static float[] toFloatArray(Matrix<? extends PArray> matrix) {
-        final float[] data = newCompatibleFloatArray(matrix);
-        toFloatArray(data, matrix.array());
-        return data;
+        return Matrices.toFloatJavaArray(matrix);
     }
 
     /**
      * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
      */
+    @Deprecated
     static float[] toFloatArrayUnsafe(Matrix<? extends PArray> matrix) {
-        final PArray array = matrix.array();
-        if (array instanceof FloatArray && array instanceof DirectAccessible) {
-            final DirectAccessible directAccessible = (DirectAccessible) array;
-            if (directAccessible.hasJavaArray() && directAccessible.javaArrayOffset() == 0) {
-                // - non-zero offset is very improbable for matrices
-                return (float[]) directAccessible.javaArray();
-            }
-        }
-        return toFloatArray(matrix);
+        return matrix.array().jaFloat();
     }
 
+    @Deprecated
     static byte[] toByteArray(Matrix<? extends PArray> matrix, ByteJArrayHolder arrayHolder) {
-        final byte[] data = arrayHolder.quickNew(matrix.size());
-        toByteArray(data, matrix.array());
-        return data;
+        return Matrices.toByteJavaArray(arrayHolder.quickNew(matrix), matrix);
     }
 
+    @Deprecated
     static int[] toIntArray(Matrix<? extends PArray> matrix, IntJArrayHolder arrayHolder) {
-        final int[] data = arrayHolder.quickNew(matrix.size());
-        toIntArray(data, matrix.array());
-        return data;
+        return Matrices.toIntJavaArray(arrayHolder.quickNew(matrix), matrix);
     }
 
+    @Deprecated
     static float[] toFloatArray(Matrix<? extends PArray> matrix, FloatJArrayHolder arrayHolder) {
-        final float[] data = arrayHolder.quickNew(matrix.size());
-        toFloatArray(data, matrix.array());
-        return data;
-    }
-
-    static void toByteArray(byte[] result, PArray array) {
-        if (array instanceof ByteArray) {
-            array.getData(0, result);
-        } else {
-            Arrays.applyFunc(null, Func.IDENTITY, SimpleMemoryModel.asUpdatableByteArray(result), array);
-        }
-    }
-
-    static void toIntArray(int[] result, PArray array) {
-        if (array instanceof IntArray) {
-            array.getData(0, result);
-        } else {
-            Arrays.applyFunc(null, Func.IDENTITY, SimpleMemoryModel.asUpdatableIntArray(result), array);
-        }
-    }
-
-    static void toFloatArray(float[] result, PArray array) {
-        if (array instanceof FloatArray) {
-            array.getData(0, result);
-        } else {
-            Arrays.applyFunc(null, Func.IDENTITY, SimpleMemoryModel.asUpdatableFloatArray(result), array);
-        }
+        return Matrices.toFloatJavaArray(arrayHolder.quickNew(matrix), matrix);
     }
 
     // Note: returns null if there are no non-zero values
