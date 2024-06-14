@@ -65,7 +65,7 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
             this.comparisonFuncFactory = comparisonFuncFactory;
         }
 
-        interface ComparisonFuncFactory {
+        private interface ComparisonFuncFactory {
             SelectionFuncForEqual getSelectionFuncForEqual(double maxValue);
 
             default Func getSelectionForNonEquals(double maxValue) {

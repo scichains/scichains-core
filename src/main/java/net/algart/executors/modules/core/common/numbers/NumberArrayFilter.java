@@ -47,11 +47,9 @@ public abstract class NumberArrayFilter extends NumbersFilter {
     }
 
     public final Object processJavaArray(Object javaArray, int blockLength, int numberOfBlocks) {
-        final UpdatablePNumberArray array = javaArray == null ?
-                null :
-                (UpdatablePNumberArray) SimpleMemoryModel.asUpdatableArray(javaArray);
+        final UpdatablePNumberArray array = javaArray == null ? null : PNumberArray.as(javaArray);
         final PArray result = process(array, blockLength, numberOfBlocks);
-        return result == null ? null : Arrays.toJavaArray(result);
+        return result == null ? null : result.ja();
     }
 
     // Really result must be one of types, supported by SNumbers

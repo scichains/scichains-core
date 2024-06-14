@@ -26,11 +26,9 @@ package net.algart.executors.modules.core.matrices.arithmetic;
 
 import net.algart.arrays.FloatArray;
 import net.algart.arrays.Matrices;
-import net.algart.arrays.Matrix;
-import net.algart.arrays.PArray;
-import net.algart.math.functions.AbstractFunc;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
+import net.algart.math.functions.Func2;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.List;
 import java.util.Objects;
@@ -100,22 +98,13 @@ public final class MatrixArctangent extends SeveralMultiMatricesOperation {
     @Override
     public MultiMatrix process(List<MultiMatrix> sources) {
         Objects.requireNonNull(sources, "Null sources");
-        Matrix<? extends PArray> x = sources.get(0).asMultiMatrix2D().intensityChannel();
-        Matrix<? extends PArray> y = sources.get(1).asMultiMatrix2D().intensityChannel();
         return MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(
-                new AbstractFunc() {
-                     @Override
-                     public double get(double... x) {
-                         return get(x[1], x[0]);
-                     }
-
-                     @Override
-                     public double get(double x, double y) {
-                         if (x * x + y * y <= epsilonForLittleSquare) {
-                             return resultForLittleSquare;
-                         }
-                         return angleRange.correctAtan2(Math.atan2(y, x));
-                     }
-                 }, FloatArray.class, x, y)).clone();
+                (Func2) (x, y) ->
+                        x * x + y * y <= epsilonForLittleSquare ?
+                                resultForLittleSquare :
+                                angleRange.correctAtan2(Math.atan2(y, x)),
+                FloatArray.class,
+                sources.get(0).asMultiMatrix2D().intensityChannel(),
+                sources.get(1).asMultiMatrix2D().intensityChannel())).clone();
     }
 }

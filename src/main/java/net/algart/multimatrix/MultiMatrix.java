@@ -567,13 +567,6 @@ public interface MultiMatrix extends Cloneable {
         return Matrices.asFuncMatrix(Func.REVERSE, BitArray.class, nonZeroPixels(matrix));
     }
 
-    static UpdatablePArray cloneArray(PArray array) {
-        Objects.requireNonNull(array, "Null array");
-        final UpdatablePArray result = (UpdatablePArray) Arrays.SMM.newUnresizableArray(array);
-        Arrays.copy(null, result, array);
-        return result;
-    }
-
     static List<Matrix<? extends UpdatablePArray>> cloneMatrices(List<Matrix<? extends PArray>> channels) {
         final List<Matrix<? extends UpdatablePArray>> result = new ArrayList<>();
         for (Matrix<? extends PArray> c : channels) {

@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
-import net.algart.math.Range;
-import net.algart.math.functions.AbstractFunc;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
+import net.algart.math.Range;
+import net.algart.math.functions.Func1;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class MatrixCutToRange extends MultiMatrixFilter {
     private double min = Double.NEGATIVE_INFINITY;
@@ -60,21 +60,10 @@ public final class MatrixCutToRange extends MultiMatrixFilter {
         this.max = doubleOrPositiveInfinity(max);
         return this;
     }
-
     @Override
     public MultiMatrix process(MultiMatrix source) {
         final double scale = source.maxPossibleValue();
         final Range range = Range.valueOf(min * scale, max * scale);
-        return source.asFunc(new AbstractFunc() {
-            @Override
-            public double get(double... x) {
-                return get(x[0]);
-            }
-
-            @Override
-            public double get(double x0) {
-                return range.cut(x0);
-            }
-        }).clone();
+        return source.asFunc((Func1) range::cut).clone();
     }
 }

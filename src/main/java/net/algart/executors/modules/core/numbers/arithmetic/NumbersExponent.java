@@ -26,7 +26,6 @@ package net.algart.executors.modules.core.numbers.arithmetic;
 
 import net.algart.arrays.*;
 import net.algart.math.functions.ExpFunc;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 
@@ -73,7 +72,7 @@ public final class NumbersExponent extends NumberArrayFilter implements ReadOnly
     public PArray process(UpdatablePNumberArray array, int blockLength, int numberOfBlocks) {
         final double base = exponentBase.baseProducer.applyAsDouble(customBase);
         // Note: LogFunc.getInstance has special branches for Math.E
-        return MultiMatrix.cloneArray(Arrays.asFuncArray(
+        return Arrays.clone(Arrays.asFuncArray(
                 ExpFunc.getInstance(base), resultClass(array), array));
     }
 

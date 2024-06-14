@@ -239,7 +239,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
         final Class<?> elementType = this.elementType != null ? this.elementType :
                 autoDetectedElementType != null ? autoDetectedElementType : float.class;
         final double[] singleBlock = new double[blockLength];
-        MutablePArray array = (MutablePArray) Arrays.SMM.newArray(elementType, 0);
+        MutablePArray array = MutablePArray.newArray(elementType);
         for (long count = 0; ; count++) {
             final boolean firstLineWithUnknownHeader = count == 0 && !goodHeader.get();
             if (!firstLineWithUnknownHeader) {
@@ -274,7 +274,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
             resultHeaders.clear();
             resultHeaders.addAll(java.util.Arrays.asList(headers));
         }
-        return SNumbers.valueOfArray(Arrays.toJavaArray(array), blockLength);
+        return SNumbers.valueOfArray(array.ja(), blockLength);
     }
 
     private static void skipBOM(Reader reader) throws IOException {

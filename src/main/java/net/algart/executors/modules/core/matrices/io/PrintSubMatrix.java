@@ -191,7 +191,7 @@ public final class PrintSubMatrix extends MultiMatrixToScalar {
                         }
                         final Array array = channel.subMatr(position, sizes,
                                 Matrix.ContinuationMode.NAN_CONSTANT).array();
-                        final Object javaArray = Arrays.toJavaArray(array);
+                        final Object javaArray = array.ja();
                         String s;
                         if (javaArray instanceof int[]) {
                             s = JArrays.toString((int[]) javaArray, Locale.US, format, delimiter, MAX_STRING_LENGTH);

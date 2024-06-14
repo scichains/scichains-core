@@ -27,6 +27,7 @@ package net.algart.executors.api;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExecutorJsonSet;
@@ -72,9 +73,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                 }
             }
             Runtime rt = Runtime.getRuntime();
+            System.out.printf("AlgART version: %s%n", Arrays.SystemSettings.version());
             System.out.printf("Available processors: %d%n", rt.availableProcessors());
-            System.out.printf("Number of processors, used by AlgART: %d%n",
-                    net.algart.arrays.Arrays.SystemSettings.cpuCount());
+            System.out.printf("Number of processors, used by AlgART: %d%n", Arrays.SystemSettings.cpuCount());
             System.out.printf("Maximal available memory: %.2f Mb%n", rt.maxMemory() / 1048576.0);
             // overrideLogLevel(); // - usually very bad idea
         }

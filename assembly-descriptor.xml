@@ -11,8 +11,8 @@
         <dependencySet>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <includes>
-                <include>org.graalvm.js:js</include>
-                <include>org.graalvm.js:js-scriptengine</include>
+                <include>org.graalvm.polyglot:*</include>
+                <include>org.graalvm.js:js-scriptengine:*</include>
             </includes>
             <outputDirectory>/_global_system_files/lib/common/graalvm</outputDirectory>
         </dependencySet>

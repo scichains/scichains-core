@@ -199,8 +199,8 @@ public final class JsonToNumbers extends Executor implements ReadOnlyExecutionIn
             flagsJson = Jsons.toJson(getInputScalar(INPUT_FLAGS_JSON).getValue().trim());
         }
         final MutablePNumberArray values = elementType == double.class || elementType == float.class ?
-                Arrays.SMM.newEmptyDoubleArray() :
-                Arrays.SMM.newEmptyLongArray();
+                MutableDoubleArray.newArray() :
+                MutableLongArray.newArray();
         final List<String> keys = new ArrayList<>();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         int index = 0;

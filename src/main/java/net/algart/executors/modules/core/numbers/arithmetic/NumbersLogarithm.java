@@ -28,7 +28,6 @@ import net.algart.arrays.Arrays;
 import net.algart.arrays.PArray;
 import net.algart.arrays.UpdatablePNumberArray;
 import net.algart.math.functions.LogFunc;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 
@@ -75,7 +74,8 @@ public final class NumbersLogarithm extends NumberArrayFilter implements ReadOnl
     public PArray process(UpdatablePNumberArray array, int blockLength, int numberOfBlocks) {
         final double base = logarithmBase.baseProducer.applyAsDouble(customBase);
         // Note: LogFunc.getInstance has special branches for Math.E and 10.0.
-        return MultiMatrix.cloneArray(Arrays.asFuncArray(
-                LogFunc.getInstance(base), NumbersExponent.resultClass(array), array));
+        PArray array1 = Arrays.asFuncArray(
+                LogFunc.getInstance(base), NumbersExponent.resultClass(array), array);
+        return Arrays.clone(array1);
     }
 }

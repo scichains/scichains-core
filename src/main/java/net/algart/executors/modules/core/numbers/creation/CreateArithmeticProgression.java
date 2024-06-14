@@ -26,10 +26,10 @@ package net.algart.executors.modules.core.numbers.creation;
 
 import net.algart.arrays.Arrays;
 import net.algart.arrays.PArray;
-import net.algart.math.functions.AbstractFunc;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.math.functions.Func1;
 
 public final class CreateArithmeticProgression extends Executor implements ReadOnlyExecutionInput {
     private int blockLength = 1;
@@ -100,17 +100,9 @@ public final class CreateArithmeticProgression extends Executor implements ReadO
             getNumbers().setTo(input);
         } else {
             final Object result = Arrays.toJavaArray(Arrays.asIndexFuncArray(
-                    new AbstractFunc() {
-                        @Override
-                        public double get(double... x) {
-                            return get(x[0]);
-                        }
-
-                        @Override
-                        public double get(double x0) {
-                            final int blockIndex = ((int) x0) / blockLength;
-                            return startValue + (double) blockIndex * increment;
-                        }
+                    (Func1) x0 -> {
+                        final int blockIndex = ((int) x0) / blockLength;
+                        return startValue + (double) blockIndex * increment;
                     },
                     Arrays.type(PArray.class, elementType),
                     (long) blockLength * (long) numberOfBlocks));

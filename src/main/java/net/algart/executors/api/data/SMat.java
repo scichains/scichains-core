@@ -844,8 +844,7 @@ public final class SMat extends Data {
     }
 
     private static BitArray toBitArray(ByteBuffer byteBuffer, long bitArraySize) {
-        long[] packed = PackedBitArraysPer8.toLongArray(byteBuffer);
-        return SimpleMemoryModel.asUpdatableBitArray(packed, bitArraySize);
+        return BitArray.as(PackedBitArraysPer8.toLongArray(byteBuffer), bitArraySize);
 //        final int byteCount = (int) ((bitArraySize + 7L) / 8);
 //        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
 //        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());

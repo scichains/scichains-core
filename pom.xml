@@ -6,7 +6,7 @@
 
     <groupId>net.algart.executors</groupId>
     <artifactId>scichains-core</artifactId>
-    <version>4.4.2</version>
+    <version>4.4.3</version>
 
     <name>SciChains base core</name>
     <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
@@ -51,8 +51,8 @@
 
         <build.directory>${project.build.directory}/build</build.directory>
 
-        <algart.version>1.4.3</algart.version>
-        <graalvm.version>23.0.0</graalvm.version>
+        <algart.version>1.4.11</algart.version>
+        <graalvm.version>24.0.1</graalvm.version>
         <jep.version>4.2.0</jep.version>
     </properties>
 
@@ -78,9 +78,15 @@
             <version>${jep.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.graalvm.js</groupId>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>polyglot</artifactId>
+            <version>${graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
             <artifactId>js</artifactId>
             <version>${graalvm.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
@@ -289,7 +295,10 @@
 
                                         <!-- copy common libraries for any other java extensions -->
                                         <copy overwrite="true" todir="${home.directory}/lib">
-                                            <fileset dir="${build.directory}/_global_system_files/lib"/>
+                                            <fileset dir="${build.directory}/_global_system_files/lib">
+                                                <include name="**/*.jar"/>
+                                                <!-- do not copy .pom files that can appear here -->
+                                            </fileset>
                                         </copy>
 
                                         <echo level="info"/>
