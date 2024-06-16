@@ -59,11 +59,6 @@ public final class ExampleSMat extends Executor {
     }
 
     @Override
-    public String visibleOutputPortName() {
-        return "output";
-    }
-
-    @Override
     public void onChangeParameter(String name) {
         switch (name) {
             case "width" -> {
