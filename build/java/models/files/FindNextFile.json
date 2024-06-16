@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "files",
-  "name": "Find next one from list of files",
+  "name": "Find next file from list of files",
   "tags": [
     "files"
   ],
