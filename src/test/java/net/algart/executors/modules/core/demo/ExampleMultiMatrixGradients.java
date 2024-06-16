@@ -65,25 +65,31 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
     }
 
     private PArray makeSamples(long dimX, long dimY, int numberOfChannels) {
-        if (dimX > Integer.MAX_VALUE || dimY > Integer.MAX_VALUE || dimX * dimY > Integer.MAX_VALUE) {
-            throw new TooLargeArrayException("Matrix size " + dimX + "*" + dimY + " > 2^31-1");
+        if (dimX > Integer.MAX_VALUE || dimY > Integer.MAX_VALUE) {
+            throw new TooLargeArrayException("Matrix sizes " + dimX + "*" + dimY + " > 2^31-1");
         }
         final int w = (int) dimX;
         final int h = (int) dimY;
-        final int matrixSize = w * h;
         Class<?> elementType = getElementType();
         if (elementType == boolean.class) {
-            boolean[] channels = new boolean[matrixSize * numberOfChannels];
+            UpdatableBitArray channels = BitArray.newArray(dimX * dimY * numberOfChannels);
             for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
-                for (int c = cr.c1(); c <= cr.c2(); c++) {
-                    for (int x = 0, disp = y * w; x < w; x++, disp++) {
-                        channels[disp + c * matrixSize] = ((shift + x + y) & 0xFF) >= 128;
+                for (long c = cr.c1(); c <= cr.c2(); c++) {
+                    final long channelDisp = c * dimX * dimY;
+                    for (long x = 0, disp = (long) y * w + channelDisp; x < w; x++, disp++) {
+                        channels.setBitNoSync(disp, ((shift + x + y) & 0xFF) >= 128);
                     }
                 }
             }
-            return Arrays.SMM.valueOf(channels);
-        } else if (elementType == byte.class) {
+            return channels;
+        }
+        if (dimX * dimY > Integer.MAX_VALUE / numberOfChannels) {
+            throw new TooLargeArrayException("Matrix size " + dimX + "*" + dimY + "*" +
+                    numberOfChannels + " > 2^31-1");
+        }
+        final int matrixSize = w * h;
+        if (elementType == byte.class) {
             byte[] channels = new byte[matrixSize * numberOfChannels];
             for (int y = 0; y < h; y++) {
                 final ChannelsRange cr = channelsRange(y, numberOfChannels);
