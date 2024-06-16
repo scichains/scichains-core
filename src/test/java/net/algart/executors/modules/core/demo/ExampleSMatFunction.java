@@ -29,6 +29,7 @@ import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.math.functions.AbstractFunc;
+import net.algart.math.functions.Func2;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
@@ -49,16 +50,13 @@ public final class ExampleSMatFunction extends Executor {
         final List<Matrix<? extends PArray>> m = new AbstractList<>() {
             @Override
             public Matrix<ByteArray> get(int index) {
-                return Matrices.asCoordFuncMatrix(false, new AbstractFunc() {
-                    @Override
-                    public double get(double... x) {
-                        if (x[1] < height / 4.0) {
-                            return x[0];
-                        } else if (x[1] < height / 2.0) {
-                            return index > 0 ? 0 : x[0] / 2;
-                        } else {
-                            return x[0] * x[1] * (index + 1) / 10.0;
-                        }
+                return Matrices.asCoordFuncMatrix(false, (Func2) (x, y) -> {
+                    if (y < height / 4.0) {
+                        return x;
+                    } else if (y < height / 2.0) {
+                        return index > 0 ? 0 : x / 2;
+                    } else {
+                        return x * y * (index + 1) / 10.0;
                     }
                 }, ByteArray.class, width, height);
             }
@@ -69,13 +67,8 @@ public final class ExampleSMatFunction extends Executor {
             }
         };
 
-        getMat("image").setTo(MultiMatrix.valueOf2DRGBA(m).asPrecision(elementType));
+        getMat().setTo(MultiMatrix.valueOf2DRGBA(m).asPrecision(elementType));
 //        throw new AssertionError("some error");
-    }
-
-    @Override
-    public String visibleOutputPortName() {
-        return "image";
     }
 
     @Override
@@ -100,7 +93,7 @@ public final class ExampleSMatFunction extends Executor {
         }
         @SuppressWarnings("resource")
         ExampleSMatFunction e = new ExampleSMatFunction();
-        e.addPort(Port.newOutput("image", DataType.MAT));
+        e.addPort(Port.newOutput(DEFAULT_OUTPUT_PORT, DataType.MAT));
         e.execute();
     }
 }

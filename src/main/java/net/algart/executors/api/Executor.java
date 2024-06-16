@@ -643,10 +643,11 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     public String visibleOutputPortName() {
+        final String defaultResult = defaultOutputPortName();
         if (usingVisibleResultParameter) {
-            return parameters().getString(STANDARD_VISIBLE_RESULT_PARAMETER_NAME);
+            return parameters().getString(STANDARD_VISIBLE_RESULT_PARAMETER_NAME, defaultResult);
         } else {
-            return defaultOutputPortName();
+            return defaultResult;
         }
     }
 

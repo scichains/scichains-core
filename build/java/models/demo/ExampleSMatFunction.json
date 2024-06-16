@@ -15,7 +15,7 @@
   "out_ports": [
     {
       "value_type": "mat",
-      "name": "image"
+      "name": "output"
     }
   ],
   "controls": [

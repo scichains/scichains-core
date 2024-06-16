@@ -15,7 +15,7 @@
   "out_ports": [
     {
       "value_type": "mat",
-      "name": "image"
+      "name": "output"
     }
   ],
   "controls": [
@@ -30,6 +30,12 @@
       "value_type": "int",
       "edition_type": "value",
       "default": 100
+    },
+    {
+      "name": "channels",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 3
     }
   ]
 }

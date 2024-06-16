@@ -33,7 +33,7 @@ import java.nio.ByteBuffer;
 public final class ExampleSMat extends Executor {
     private int width = 10;
     private int height = 10;
-    private byte channels = 1;
+    private int channels = 1;
 
     public ExampleSMat() {
 //        throw new AssertionError("Hmm...");
@@ -41,35 +41,39 @@ public final class ExampleSMat extends Executor {
 
     @Override
     public void process() {
-        Port output = getRequiredOutputPort("image");
+        Port output = getRequiredOutputPort("output");
 
         SMat outMat = (SMat) output.getData();
 
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(height * width * channels);
         byteBuffer.position(0);
 
-        outMat.setAll(new long[] {width, height}, SMat.Depth.U8, channels, byteBuffer, false);
-        for (int i = 0; i < byteBuffer.capacity(); ++i) {
-            byteBuffer.put((byte)i);
+        outMat.setAll(
+                new long[]{width, height},
+                SMat.Depth.U8, channels, byteBuffer, false);
+        for (int i = 0; i < byteBuffer.capacity(); i++) {
+            int c = i % channels;
+            byteBuffer.put((byte) (i * (c + 1)));
         }
         outMat.setInitialized(true);
     }
 
     @Override
     public String visibleOutputPortName() {
-        return "image";
+        return "output";
     }
 
     @Override
     public void onChangeParameter(String name) {
         switch (name) {
-            case "width": {
+            case "width" -> {
                 width = parameters().getInteger(name);
-                break;
             }
-            case "height": {
+            case "height" -> {
                 height = parameters().getInteger(name);
-                break;
+            }
+            case "channels" -> {
+                channels = parameters().getInteger(name);
             }
         }
     }

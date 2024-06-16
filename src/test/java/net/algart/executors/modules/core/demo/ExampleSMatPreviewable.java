@@ -45,7 +45,7 @@ public final class ExampleSMatPreviewable extends Executor implements Previewabl
     private final AtomicLong previewCount = new AtomicLong();
 
     public ExampleSMatPreviewable() {
-        setDefaultOutputMat("image");
+        setDefaultOutputMat("output");
     }
 
     @Override
@@ -53,30 +53,28 @@ public final class ExampleSMatPreviewable extends Executor implements Previewabl
         assert width > 10; // - checking processing "assert" statement by external system
         System.out.println("execute properties.color = " + parameters().getString("color"));
 
-        Port output = getOutputPort("image");
+        Port output = getOutputPort("output");
 
         SMat m = (SMat) output.getData();
-        System.out.println("Example3: execute #" + executeCount.incrementAndGet());
+        System.out.println("ExampleSMatPreviewable: execute #" + executeCount.incrementAndGet());
         createResult(m);
     }
 
     @Override
     public Data createPreview() {
         System.out.println("preview properties.color = " + parameters().getString("color"));
-        System.out.println("Example3: preview #" + previewCount.incrementAndGet());
-        return width < 20 || height < 20 ? null : getOutputPort("image").getData();
+        System.out.println("ExampleSMatPreviewable: preview #" + previewCount.incrementAndGet());
+        return width < 20 || height < 20 ? null : getOutputPort("output").getData();
     }
 
     @Override
     public void onChangeParameter(String name) {
         switch (name) {
-            case "width": {
+            case "width" -> {
                 width = parameters().getInteger(name);
-                break;
             }
-            case "height": {
+            case "height" -> {
                 height = parameters().getInteger(name);
-                break;
             }
         }
     }
