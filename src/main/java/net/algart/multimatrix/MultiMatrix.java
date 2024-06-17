@@ -500,9 +500,9 @@ public interface MultiMatrix extends Cloneable {
         return new SimpleMultiMatrix(Collections.singletonList(singleChannel));
     }
 
-    static MultiMatrix valueOfMerged(Matrix<? extends PArray> packedChannels) {
-        Objects.requireNonNull(packedChannels, "Null packedChannels");
-        return new SimpleMultiMatrix(Matrices.asLayers(packedChannels, MAX_NUMBER_OF_CHANNELS));
+    static MultiMatrix valueOfMerged(Matrix<? extends PArray> mergedChannels) {
+        Objects.requireNonNull(mergedChannels, "Null mergedChannels");
+        return new SimpleMultiMatrix(Matrices.asLayers(mergedChannels, MAX_NUMBER_OF_CHANNELS));
     }
 
     static MultiMatrix2D newMultiMatrix2D(Class<?> elementType, int numberOfChannels, long dimX, long dimY) {
