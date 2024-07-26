@@ -159,7 +159,12 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         getScalar(OUTPUT_FILE_NAME).setTo(absolutePath.getFileName().toString());
         final ReadImage readImage = ReadImage.getInstance();
         readImage.setFile(fileToRead.toString());
-        final SMat result = readImage.readImage();
+        final SMat result;
+        try {
+            result = readImage.readImage();
+        } catch (IOException e) {
+            throw new IOError(e);
+        }
         getScalar(OUTPUT_DIM_X).setTo(result.getDimX());
         getScalar(OUTPUT_DIM_Y).setTo(result.getDimY());
         getMat().exchange(result);

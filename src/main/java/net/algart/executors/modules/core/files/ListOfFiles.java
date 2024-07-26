@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.files;
 
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 
 import java.io.FileNotFoundException;
 import java.io.IOError;

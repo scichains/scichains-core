@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.logic.compiler.settings.model;
 
 import jakarta.json.*;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;

@@ -26,7 +26,7 @@ package net.algart.executors.api.tests;
 
 import net.algart.executors.api.data.SMat;
 import net.algart.arrays.*;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.math.functions.RectangularFunc;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;

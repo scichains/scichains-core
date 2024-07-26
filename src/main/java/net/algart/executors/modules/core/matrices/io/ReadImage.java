@@ -28,6 +28,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.io.UnsupportedImageFormatException;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -110,22 +111,26 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
             logDebug(() -> "Copying " + input);
             result.setTo(input);
         } else {
-            readMat(result);
+            try {
+                readMat(result);
+            } catch (IOException e) {
+                throw new IOError(e);
+            }
         }
         getScalar(OUTPUT_DIM_X).setTo(result.getDimX());
         getScalar(OUTPUT_DIM_Y).setTo(result.getDimY());
     }
 
-    public SMat readImage() throws UnsupportedImageFormatException {
+    public SMat readImage() throws IOException {
         return readMat(new SMat());
     }
 
-    public SMat readMat(SMat result) throws UnsupportedImageFormatException {
+    public SMat readMat(SMat result) throws IOException {
         readMat(result, completeFilePath());
         return result;
     }
 
-    public void readMat(SMat result, Path path) throws UnsupportedImageFormatException {
+    public void readMat(SMat result, Path path) throws IOException {
         Objects.requireNonNull(result, "Null result");
         Objects.requireNonNull(path, "Null path");
         try {
@@ -152,7 +157,8 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
             }
             try {
                 helper.readMat(result, path);
-            } catch (UnsupportedImageFormatException ignored) {
+            } catch (UnsupportedImageFormatException suppressed) {
+                e.addSuppressed(suppressed);
                 throw e;
                 // - prefer to show previous exception
             }
@@ -162,30 +168,26 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
         }
     }
 
-    public BufferedImage readBufferedImage() throws UnsupportedImageFormatException {
+    public BufferedImage readBufferedImage() throws IOException {
         return readBufferedImage(completeFilePath());
     }
 
-    public BufferedImage readBufferedImage(Path path) throws UnsupportedImageFormatException {
+    public BufferedImage readBufferedImage(Path path) throws IOException {
         Objects.requireNonNull(path, "Null path");
         final File file = path.toFile();
-        try {
-            if (!file.isFile()) {
-                if (fileExistenceRequired) {
-                    throw new FileNotFoundException("File not found: " + file);
-                } else {
-                    return null;
-                }
+        if (!file.isFile()) {
+            if (fileExistenceRequired) {
+                throw new FileNotFoundException("File not found: " + file);
+            } else {
+                return null;
             }
-            final BufferedImage bufferedImage = javax.imageio.ImageIO.read(file);
-            logDebug(() -> "Reading image from " + file.getAbsolutePath() + " by Java API (ImageIO)");
-            if (bufferedImage == null) {
-                throw new UnsupportedImageFormatException("Cannot read " + file + ": no suitable reader");
-            }
-            return bufferedImage;
-        } catch (IOException e) {
-            throw new IOError(e);
         }
+        final BufferedImage bufferedImage = javax.imageio.ImageIO.read(file);
+        logDebug(() -> "Reading image from " + file.getAbsolutePath() + " by Java API (ImageIO)");
+        if (bufferedImage == null) {
+            throw new UnsupportedImageFormatException("Cannot read " + file + ": no suitable reader");
+        }
+        return bufferedImage;
     }
 
 }

@@ -26,8 +26,9 @@ package net.algart.executors.modules.core.matrices.io;
 
 import net.algart.executors.api.data.SMat;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 public interface MatReader {
-    void readMat(SMat result, Path path) throws UnsupportedImageFormatException;
+    void readMat(SMat result, Path path) throws IOException;
 }

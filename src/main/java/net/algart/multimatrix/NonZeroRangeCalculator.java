@@ -53,8 +53,8 @@ class NonZeroRangeCalculator extends Arrays.ParallelExecutor {
         this.buffers = new DataBuffer[numberOfTasks()];
         this.threadMin = new double[numberOfTasks()];
         this.threadMax = new double[numberOfTasks()];
-        JArrays.fillDoubleArray(threadMin, Double.POSITIVE_INFINITY);
-        JArrays.fillDoubleArray(threadMax, Double.NEGATIVE_INFINITY);
+        JArrays.fill(threadMin, Double.POSITIVE_INFINITY);
+        JArrays.fill(threadMax, Double.NEGATIVE_INFINITY);
     }
 
     @Override

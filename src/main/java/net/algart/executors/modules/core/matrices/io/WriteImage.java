@@ -29,16 +29,21 @@ import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.WriteFileOperation;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 
+import javax.imageio.ImageWriteParam;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 public final class WriteImage extends WriteFileOperation implements ReadOnlyExecutionInput {
     private boolean requireInput = false;
     private boolean autoContrastBeforeWriting = false;
+    private Double quality = null;
+    private String compressionType = "";
 
     public WriteImage() {
         addFileOperationPorts();
@@ -73,6 +78,24 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
         return this;
     }
 
+    public Double getQuality() {
+        return quality;
+    }
+
+    public WriteImage setQuality(Double quality) {
+        this.quality = quality;
+        return this;
+    }
+
+    public String getCompressionType() {
+        return compressionType;
+    }
+
+    public WriteImage setCompressionType(String compressionType) {
+        this.compressionType = nonNull(compressionType).trim();
+        return this;
+    }
+
     @Override
     public void process() {
         process(getInputMat(!requireInput));
@@ -83,22 +106,55 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
             if (autoContrastBeforeWriting) {
                 inputMat = inputMat.autoContrast();
             }
-            writeImage(inputMat.toBufferedImage());
+            try {
+                writeImage(inputMat.toBufferedImage());
+            } catch (IOException e) {
+                throw new IOError(e);
+            }
         }
     }
 
-    public void writeImage(BufferedImage bufferedImage) throws UnsupportedImageFormatException {
-        final File file = completeFilePath().toFile();
-        String formatName = MatrixIO.extension(file.getName(), "BMP");
+    public void writeImage(BufferedImage bufferedImage) throws IOException {
+        final Path file = completeFilePath();
         logDebug(() -> "Writing image " + bufferedImage.getWidth() + "x" + bufferedImage.getHeight()
-                + " to file " + file.getAbsolutePath() + " (format " + formatName.toUpperCase() + ")");
-        try {
-            if (!javax.imageio.ImageIO.write(bufferedImage, formatName, file)) {
-                // Currently leads to NullPointerException: https://bugs.openjdk.java.net/browse/JDK-8064859
-                throw new UnsupportedImageFormatException("Cannot write " + file + ": no writer for " + formatName);
+                + " to file " + file.toAbsolutePath());
+        MatrixIO.writeBufferedImage(file, bufferedImage, param -> setQuality(param, file));
+    }
+
+    private void setQuality(ImageWriteParam param, Path file) {
+        final String compressionType = this.compressionType;
+        final boolean hasCompression = !compressionType.isEmpty();
+        String[] legalTypes = null;
+        if (quality != null || hasCompression) {
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            legalTypes = param.getCompressionTypes();
+        }
+        if (hasCompression) {
+            if (legalTypes == null) {
+                throw new UnsupportedOperationException("Can't set compression type \"" + compressionType +
+                        "\": there is no allowed compression for the extension of the file " + file);
             }
-        } catch (IOException e) {
-            throw new IOError(e);
+            if (Arrays.stream(legalTypes).noneMatch(compressionType::equals)) {
+                throw new UnsupportedOperationException("Unknown compression type \"" + compressionType +
+                        "\"; you should select one of the following legal compressions: " +
+                        Arrays.toString(legalTypes));
+            }
+            param.setCompressionType(compressionType);
+        }
+        if (quality != null) {
+            if (legalTypes != null && param.getCompressionType() == null) {
+                if (legalTypes.length == 1) {
+                    // - we can help the user a little:
+                    // no need to manually set the compression type, if there is only 1 case
+                    param.setCompressionType(legalTypes[0]);
+                } else {
+                    throw new UnsupportedOperationException("Can't set compression quality to " + quality +
+                            ": there is no default compression type, " +
+                            "you should manually select one of the following legal compressions: " +
+                            Arrays.toString(legalTypes) + ", allowed for the extension of the file " + file);
+                }
+            }
+            param.setCompressionQuality(quality.floatValue());
         }
     }
 

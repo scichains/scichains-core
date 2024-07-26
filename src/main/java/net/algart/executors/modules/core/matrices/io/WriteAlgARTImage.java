@@ -28,23 +28,23 @@ import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.io.WriteFileOperation;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public final class WriteAlgARTMatrices extends WriteFileOperation implements ReadOnlyExecutionInput {
+public final class WriteAlgARTImage extends WriteFileOperation implements ReadOnlyExecutionInput {
     private boolean requireInput = false;
 
-    public WriteAlgARTMatrices() {
+    public WriteAlgARTImage() {
         addFileOperationPorts();
         addInputMat(DEFAULT_INPUT_PORT);
     }
 
     @Override
-    public WriteAlgARTMatrices setFile(String file) {
+    public WriteAlgARTImage setFile(String file) {
         super.setFile(file);
         return this;
     }
@@ -53,7 +53,7 @@ public final class WriteAlgARTMatrices extends WriteFileOperation implements Rea
         return requireInput;
     }
 
-    public WriteAlgARTMatrices setRequireInput(boolean requireInput) {
+    public WriteAlgARTImage setRequireInput(boolean requireInput) {
         this.requireInput = requireInput;
         return this;
     }

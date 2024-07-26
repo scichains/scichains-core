@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.tests;
+package net.algart.misc;
 
 import net.algart.executors.api.Executor;
 

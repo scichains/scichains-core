@@ -26,15 +26,13 @@ package net.algart.executors.api.data;
 
 import net.algart.arrays.*;
 import net.algart.external.UsedForExternalCommunication;
-import net.algart.external.awt.BufferedImageToMatrix;
-import net.algart.external.awt.MatrixToBufferedImage;
+import net.algart.io.awt.BufferedImageToMatrix;
+import net.algart.io.awt.MatrixToBufferedImage;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 
-import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.nio.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -131,8 +129,8 @@ public final class SMat extends Data {
 //                System.out.println("!!! use cached " + cachedMultiMatrix);
                 return result;
             }
-            final Matrix<? extends PArray> m = thisMat.toPackedMatrix(autoConvertUnsupportedDepth);
-            assert m != null : "toPackedMatrix cannot be null for initialized SMat";
+            final Matrix<? extends PArray> m = thisMat.toInterleavedMatrix(autoConvertUnsupportedDepth);
+            assert m != null : "toInterleavedMatrix cannot be null for initialized SMat";
             if (m.dim(0) == 1) {
                 Matrix<? extends PArray> matrix = m.array().matrix(removeFirstElement(m.dimensions()));
                 if (!SimpleMemoryModel.isSimpleArray(matrix.array())) {
@@ -416,7 +414,7 @@ public final class SMat extends Data {
     }
 
     public SMat setTo(BufferedImage bufferedImage) {
-        return setToPackedMatrix(bufferedImageToPackedBGRA(bufferedImage));
+        return setToInterleavedMatrix(bufferedImageToInterleavedBGRA(bufferedImage));
     }
 
     public SMat setTo(MultiMatrix multiMatrix) {
@@ -440,42 +438,42 @@ public final class SMat extends Data {
                 channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        return setToPackedMatrix(interleave);
+        return setToInterleavedMatrix(interleave);
     }
 
     /**
      * Loads data from AlgART matrix in the same elements order. The first dimension <tt>dim(0)</tt>
      * is the number of channels.
      *
-     * @param packedChannels packed matrix; for color matrices, the order must be the same
+     * @param interleavedChannels interleaved matrix; for color matrices, the order must be the same
      *                       as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      * @return the reference to this objects.
      */
-    private SMat setToPackedMatrix(Matrix<? extends PArray> packedChannels) {
-        Objects.requireNonNull(packedChannels, "Null BGR[A] matrix");
-        final int dimCount = packedChannels.dimCount();
+    private SMat setToInterleavedMatrix(Matrix<? extends PArray> interleavedChannels) {
+        Objects.requireNonNull(interleavedChannels, "Null BGR[A] matrix");
+        final int dimCount = interleavedChannels.dimCount();
         if (dimCount < 2) {
-            throw new IllegalArgumentException("Packed BGR[A] matrix cannot be 1-dimensional: " + packedChannels
+            throw new IllegalArgumentException("Interleaved BGR[A] matrix cannot be 1-dimensional: " + interleavedChannels
                     + " (the 1st dimension is used to store channels)");
         }
-        final long numberOfChannels = packedChannels.dim(0);
+        final long numberOfChannels = interleavedChannels.dim(0);
         if (numberOfChannels > MAX_NUMBER_OF_CHANNELS) {
             throw new IllegalArgumentException("Number of channels cannot be >"
-                    + MAX_NUMBER_OF_CHANNELS + ": " + packedChannels);
+                    + MAX_NUMBER_OF_CHANNELS + ": " + interleavedChannels);
         }
-        Array array = packedChannels.array();
+        Array array = interleavedChannels.array();
         if (!(BufferMemoryModel.isBufferArray(array) && BufferMemoryModel.getBufferOffset(array) == 0)) {
             // Important: if offset != 0, it is a subarray, and we must create its copy before storing in SMat!
             array = array.updatableClone(BufferMemoryModel.getInstance());
         }
         assert BufferMemoryModel.isBufferArray(array);
         setNumberOfChannels((int) numberOfChannels);
-        setDimensions(removeFirstElement(packedChannels.dimensions()));
-        setDepth(SMat.Depth.valueOf(packedChannels.elementType()));
+        setDimensions(removeFirstElement(interleavedChannels.dimensions()));
+        setDepth(SMat.Depth.valueOf(interleavedChannels.elementType()));
         setByteBuffer(BufferMemoryModel.getByteBuffer(array));
         setInitializedAndResetFlags(true);
-//        System.out.println("Returning data: " + packedChannels.array() + ": "
-//            + Arrays.toString(packedChannels.array(),",",1000));
+//        System.out.println("Returning data: " + interleavedChannels.array() + ": "
+//            + Arrays.toString(interleavedChannels.array(),",",1000));
 //        System.out.println("Returning bytes: " + byteBuffer.order() + ": " + Arrays.toHexString(
 //            BufferMemoryModel.asUpdatableByteArray(byteBuffer), ",", 1000));
         return this;
@@ -533,7 +531,7 @@ public final class SMat extends Data {
             throw new IllegalStateException("Cannot convert " + dimensions.length + "D matrix to BufferedImage ("
                     + this + "): only 2-dimensional matrices can be converted");
         }
-        return packedBGRAToBufferedImage(toPackedMatrix(false));
+        return interleavedBGRAToBufferedImage(toInterleavedMatrix(false));
     }
 
     public MultiMatrix2D toMultiMatrix2D() {
@@ -577,10 +575,10 @@ public final class SMat extends Data {
      * Return data as AlgART matrix with the same elements order. AlgART matrix will be (n+1)-dimensioal
      * (n = {@link #getDimCount()}); <tt>dim(0)</tt> is the number of channels.
      *
-     * @return packed AlgART matrix; for color matrices, the order will be the same
+     * @return interleaved 3D AlgART matrix; for color matrices, the order will be the same
      * as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      */
-    public Matrix<? extends PArray> toPackedMatrix(boolean autoConvertUnsupportedDepth) {
+    public Matrix<? extends PArray> toInterleavedMatrix(boolean autoConvertUnsupportedDepth) {
         if (!isInitialized()) {
             return null;
         }
@@ -590,7 +588,26 @@ public final class SMat extends Data {
             throw new TooLargeArrayException("Too large dimensions: dim[0] * dim[1] * ... > Long.MAX_VALUE");
         }
         if (depth == Depth.BIT) {
-            return toBitArray(getByteBuffer(), size).matrix(newDimensions);
+            ByteBuffer byteBuffer = getByteBuffer();
+            //        final int byteCount = (int) ((bitArraySize + 7L) / 8);
+//        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
+//        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
+//        bb.rewind();
+//        LongBuffer lb = bb.asLongBuffer();
+//        final int wholeLongCount = byteCount / 8;
+//        lb.get(bits, 0, wholeLongCount);
+//        if (wholeLongCount < bits.length) {
+//            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
+//            bb.position(wholeLongCount * 8);
+//            eightBytes.put(bb);
+//            eightBytes.rewind();
+//            lb = eightBytes.asLongBuffer();
+//            lb.get(bits, wholeLongCount, 1);
+//        }
+//        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
+//        result.setBits(0, bits, 0, bitArraySize);
+//        return result;
+            return ((BitArray) BitArray.as(PackedBitArraysPer8.toLongArray(byteBuffer), size)).matrix(newDimensions);
         } else {
             ByteBuffer bb = getByteBuffer();
             Class<?> elementType = depth.elementType(!autoConvertUnsupportedDepth);
@@ -669,8 +686,8 @@ public final class SMat extends Data {
         return new SMat().setTo(multiMatrix, channelOrder);
     }
 
-    public static SMat valueOfPackedMatrix(Matrix<? extends PArray> packedChannels) {
-        return new SMat().setToPackedMatrix(packedChannels);
+    public static SMat valueOfInterleavedMatrix(Matrix<? extends PArray> interleavedChannels) {
+        return new SMat().setToInterleavedMatrix(interleavedChannels);
     }
 
     public static ByteBuffer cloneByteBuffer(ByteBuffer byteBuffer) {
@@ -692,12 +709,12 @@ public final class SMat extends Data {
         return result;
     }
 
-    public static Matrix<? extends PArray> bufferedImageToPackedBGRA(BufferedImage bufferedImage) {
+    public static Matrix<? extends PArray> bufferedImageToInterleavedBGRA(BufferedImage bufferedImage) {
         return new BufferedImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
     }
 
-    public static BufferedImage packedBGRAToBufferedImage(Matrix<? extends PArray> packed3dBGRA) {
-        return new MatrixToBufferedImage.InterleavedBGRToInterleaved().toBufferedImage(packed3dBGRA);
+    public static BufferedImage interleavedBGRAToBufferedImage(Matrix<? extends PArray> interleavedBGRA) {
+        return new MatrixToBufferedImage.InterleavedBGRToInterleaved().toBufferedImage(interleavedBGRA);
     }
 
     @Override
@@ -841,27 +858,5 @@ public final class SMat extends Data {
                 break;
         }
         return result;
-    }
-
-    private static BitArray toBitArray(ByteBuffer byteBuffer, long bitArraySize) {
-        return BitArray.as(PackedBitArraysPer8.toLongArray(byteBuffer), bitArraySize);
-//        final int byteCount = (int) ((bitArraySize + 7L) / 8);
-//        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
-//        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
-//        bb.rewind();
-//        LongBuffer lb = bb.asLongBuffer();
-//        final int wholeLongCount = byteCount / 8;
-//        lb.get(bits, 0, wholeLongCount);
-//        if (wholeLongCount < bits.length) {
-//            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
-//            bb.position(wholeLongCount * 8);
-//            eightBytes.put(bb);
-//            eightBytes.rewind();
-//            lb = eightBytes.asLongBuffer();
-//            lb.get(bits, wholeLongCount, 1);
-//        }
-//        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
-//        result.setBits(0, bits, 0, bitArraySize);
-//        return result;
     }
 }

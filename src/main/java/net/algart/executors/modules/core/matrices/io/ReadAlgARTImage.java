@@ -29,7 +29,7 @@ import net.algart.arrays.PArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.io.IOError;
@@ -37,21 +37,21 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public final class ReadAlgARTMatrices extends FileOperation implements ReadOnlyExecutionInput {
-    public ReadAlgARTMatrices() {
+public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExecutionInput {
+    public ReadAlgARTImage() {
         addFileOperationPorts();
         addInputMat(DEFAULT_INPUT_PORT);
         addOutputMat(DEFAULT_OUTPUT_PORT);
     }
 
-    public static ReadAlgARTMatrices getSecureInstance() {
-        final ReadAlgARTMatrices result = new ReadAlgARTMatrices();
+    public static ReadAlgARTImage getSecureInstance() {
+        final ReadAlgARTImage result = new ReadAlgARTImage();
         result.setSecure(true);
         return result;
     }
 
     @Override
-    public ReadAlgARTMatrices setFile(String file) {
+    public ReadAlgARTImage setFile(String file) {
         super.setFile(file);
         return this;
     }

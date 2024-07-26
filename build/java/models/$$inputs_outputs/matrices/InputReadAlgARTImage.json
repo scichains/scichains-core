@@ -14,7 +14,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.matrices.io.ReadAlgARTMatrices",
+    "class": "net.algart.executors.modules.core.matrices.io.ReadAlgARTImage",
     "new_instance_method": "getSecureInstance"
   },
   "in_ports": [

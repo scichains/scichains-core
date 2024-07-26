@@ -1,0 +1,24 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.io",
+  "name": "Supported image formats",
+  "tags": [
+    "matrices",
+    "i/o"
+  ],
+  "id": "0d0f0de7-910b-48fd-b803-bb3e4b6436e0",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.io.SupportedImageFormats"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ]
+}

@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.files;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.scalars.ScalarFilter;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 
 public final class ChangeFileExtension extends ScalarFilter implements ReadOnlyExecutionInput {
     private String extension = "";

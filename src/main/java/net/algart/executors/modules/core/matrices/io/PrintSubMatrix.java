@@ -172,7 +172,7 @@ public final class PrintSubMatrix extends MultiMatrixToScalar {
                 long[] position = new long[channel.dimCount()];
                 // - zero-filled by Java
                 long[] sizes = new long[position.length];
-                JArrays.fillLongArray(sizes, 1);
+                JArrays.fill(sizes, 1);
                 position[0] = startX;
                 sizes[0] = sizeX;
                 for (int z = 0; z < sizeZ; z++) {

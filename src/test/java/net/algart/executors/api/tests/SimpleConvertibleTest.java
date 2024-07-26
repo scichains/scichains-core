@@ -26,7 +26,7 @@ package net.algart.executors.api.tests;
 
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.demo.ExampleMultiMatrixGradients;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.awt.image.BufferedImage;
@@ -63,4 +63,3 @@ public class SimpleConvertibleTest {
         System.out.printf("Written to %s%n", resultFile);
     }
 }
-

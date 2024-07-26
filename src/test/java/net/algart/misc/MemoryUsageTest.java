@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.tests;
+package net.algart.misc;
 
 public class MemoryUsageTest {
     private static class SimplestFloat {

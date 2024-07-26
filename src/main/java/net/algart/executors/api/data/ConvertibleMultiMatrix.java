@@ -56,12 +56,12 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
 
     @Override
     public ByteBuffer toByteBuffer(SMat thisMatrix) {
-        final Matrix<PArray> interleave = Matrices.interleave(
+        final Matrix<PArray> interleaved = Matrices.interleave(
                 ArrayContext.getSimpleContext(BufferMemoryModel.getInstance(), false),
                 channelOrder == SMat.ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        return toByteBuffer(interleave);
+        return toByteBuffer(interleaved);
     }
 
     public byte[] toByteArray(SMat thisMatrix) {
@@ -88,19 +88,19 @@ public class ConvertibleMultiMatrix extends SMat.Convertible {
         return "reference to " + multiMatrix;
     }
 
-    public static ByteBuffer toByteBuffer(Matrix<? extends PArray> packedChannels) {
-        Objects.requireNonNull(packedChannels, "Null BGR[A] matrix");
-        final int dimCount = packedChannels.dimCount();
+    public static ByteBuffer toByteBuffer(Matrix<? extends PArray> interleavedChannels) {
+        Objects.requireNonNull(interleavedChannels, "Null BGR[A] matrix");
+        final int dimCount = interleavedChannels.dimCount();
         if (dimCount < 2) {
-            throw new IllegalArgumentException("Packed BGR[A] matrix cannot be 1-dimensional: " + packedChannels
+            throw new IllegalArgumentException("Packed BGR[A] matrix cannot be 1-dimensional: " + interleavedChannels
                     + " (the 1st dimension is used to store channels)");
         }
         // 2-dimensional matrix must be grayscale
-        if (packedChannels.dim(0) > MultiMatrix.MAX_NUMBER_OF_CHANNELS) {
+        if (interleavedChannels.dim(0) > MultiMatrix.MAX_NUMBER_OF_CHANNELS) {
             throw new IllegalArgumentException("Number of channels cannot be >"
-                    + MultiMatrix.MAX_NUMBER_OF_CHANNELS + ": " + packedChannels);
+                    + MultiMatrix.MAX_NUMBER_OF_CHANNELS + ": " + interleavedChannels);
         }
-        Array array = packedChannels.array();
+        Array array = interleavedChannels.array();
         if (!(BufferMemoryModel.isBufferArray(array) && BufferMemoryModel.getBufferOffset(array) == 0)) {
             // Important: if offset != 0, it is a subarray, and we must create its copy before storing in SMat!
             array = array.updatableClone(BufferMemoryModel.getInstance());

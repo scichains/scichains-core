@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
 import net.algart.executors.api.model.ExtensionJson;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
-import net.algart.external.MatrixIO;
+import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;
