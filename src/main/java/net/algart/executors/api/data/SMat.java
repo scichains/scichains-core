@@ -347,7 +347,7 @@ public final class SMat extends Data {
     }
 
     /**
-     * Returns content of this matrix in a form of <tt>ByteBuffer</tt>.
+     * Returns content of this matrix in a form of <code>ByteBuffer</code>.
      *
      * <p>Note: it is considered to be <b>immutable</b>, and you <b>must not write anything to this buffer</b>.
      *
@@ -442,7 +442,7 @@ public final class SMat extends Data {
     }
 
     /**
-     * Loads data from AlgART matrix in the same elements order. The first dimension <tt>dim(0)</tt>
+     * Loads data from AlgART matrix in the same elements order. The first dimension <code>dim(0)</code>
      * is the number of channels.
      *
      * @param interleavedChannels interleaved matrix; for color matrices, the order must be the same
@@ -572,8 +572,8 @@ public final class SMat extends Data {
     }
 
     /**
-     * Return data as AlgART matrix with the same elements order. AlgART matrix will be (n+1)-dimensioal
-     * (n = {@link #getDimCount()}); <tt>dim(0)</tt> is the number of channels.
+     * Return data as AlgART matrix with the same elements order. AlgART matrix will be (n+1)-dimensional
+     * (n = {@link #getDimCount()}); <code>dim(0)</code> is the number of channels.
      *
      * @return interleaved 3D AlgART matrix; for color matrices, the order will be the same
      * as in {@link #getByteBuffer()} (BGR/BGRA for this class).

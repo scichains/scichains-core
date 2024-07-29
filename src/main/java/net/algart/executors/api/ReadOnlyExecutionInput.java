@@ -33,17 +33,17 @@ import net.algart.executors.api.data.Data;
  */
 public interface ReadOnlyExecutionInput {
     /**
-     * If <tt>true</tt>, this executor promises, that it will not try to modify the data, loaded from input ports,
+     * If <code>true</code>, this executor promises, that it will not try to modify the data, loaded from input ports,
      * in any way: correcting content of arrays or matrices, saving {@link Data} back to input ports, etc.
      * Also this executor promises that it will not store the reference to the data from input ports
      * to output ports: all results, stored in the output ports, must be newly created data.
      *
-     * <p>By default, this method returns <tt>true</tt>. So, you should implement this interface,
+     * <p>By default, this method returns <code>true</code>. So, you should implement this interface,
      * only if you are sure that this condition is fulfilled. This can improve performance of using
      * this executor (the client will not need to clone data).
      *
      * <p>If you implement this interface, but override this method, and your version of this method
-     * returns <tt>false</tt>, it means that you don't provide any guarantees.
+     * returns <code>false</code>, it means that you don't provide any guarantees.
      *
      * @return is there a guarantee that this executor will only read the data from input ports
      * and will not try to modify their content.

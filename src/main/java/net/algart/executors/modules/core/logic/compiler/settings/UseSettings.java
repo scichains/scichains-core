@@ -429,7 +429,7 @@ public class UseSettings extends FileOperation {
     // Note: overridden in UseChainSettings (where it always returns true)
 
     /**
-     * Returns <tt>true</tt> if this settings model is <b>main</b> (i.e. a main settings set for some chain).
+     * Returns <code>true</code> if this settings model is <b>main</b> (i.e. a main settings set for some chain).
      * In this case:
      * <ol>
      *     <li>if this function uses a directory, then only "main-settings-combiner" JSONs will be loaded;</li>
@@ -447,8 +447,8 @@ public class UseSettings extends FileOperation {
      *     <li>auto-generated category name will be shorter: "org.algart.ia" instead of "org.algart.ia.frame".</li>
      * </ol>
      * <p>This function (by default) returns a value of internal field, that is loaded from JSON model file
-     * (excepting points 1-3, where this function returns <tt>false</tt>).
-     * In {@link UseChainSettings} class, this function is overridden always returns <tt>true</tt>.
+     * (excepting points 1-3, where this function returns <code>false</code>).
+     * In {@link UseChainSettings} class, this function is overridden always returns <code>true</code>.
      * So, the behaviour is usually uniquely defined by the model file.</p>
      * <p>There is only one exception. If, in some chain A, you call
      * {@link UseChainSettings} for <i>usual</i> (non-main) settings, and also,

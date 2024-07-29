@@ -76,11 +76,11 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * added by this platform (see {@link ExecutorJson}).
              * Usually it is a subfolder of the {@link #getRoot() root folder} of the extension.
              *
-             * <p>Note: this function may return <tt>null</tt>,
+             * <p>Note: this function may return <code>null</code>,
              * if this platform actually adds no new executors.</p>
              *
              * <p>Note: if this string defines a relative path, it should be resolved against
-             * {@link #getRoot() root folder}; in this case, the root folder must not be <tt>null</tt>.</p>
+             * {@link #getRoot() root folder}; in this case, the root folder must not be <code>null</code>.</p>
              *
              * @return folder, containing JSON files with models of the executors.
              */
@@ -99,14 +99,14 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * added by this platform.
              * Usually it is a subfolder of the {@link #getRoot() root folder} of the extension.
              *
-             * <p>Note: this function may return <tt>null</tt>,
+             * <p>Note: this function may return <code>null</code>,
              * if this platform actually adds no new executors or if their implementation
              * are placed inside the {@link #getLibraries() libraries} folder. The latter variant
              * is possible if we don't need to analyse implementation files in some special way,
-             * for example, for Java platform, when all executors are delivered via <tt>.jar</tt>-files.</p>
+             * for example, for Java platform, when all executors are delivered via <code>.jar</code>-files.</p>
              *
              * <p>Note: if this string defines a relative path, it should be resolved against
-             * {@link #getRoot() root folder}; in this case, the root folder must not be <tt>null</tt>.</p>
+             * {@link #getRoot() root folder}; in this case, the root folder must not be <code>null</code>.</p>
              *
              * @return folder, containing implementations of the executors.
              */
@@ -125,11 +125,11 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * added by this platform , which can be used by executors.
              * Usually it is a subfolder of the {@link #getRoot() root folder} of the extension.
              *
-             * <p>Note: this function may return <tt>null</tt>,
+             * <p>Note: this function may return <code>null</code>,
              * if this platform doesn't need any service libraries.
              *
              * <p>Note: if this string defines a relative path, it should be resolved against
-             * {@link #getRoot() root folder}; in this case, the root folder must not be <tt>null</tt>.</p>
+             * {@link #getRoot() root folder}; in this case, the root folder must not be <code>null</code>.</p>
              *
              * @return folder, containing service libraries.
              */
@@ -149,11 +149,11 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * learning, some specific settings in XML or JSON files, demo data etc.
              * Usually it is a subfolder of the {@link #getRoot() root folder} of the extension.
              *
-             * <p>Note: this function may return <tt>null</tt>,
+             * <p>Note: this function may return <code>null</code>,
              * if this platform actually adds no resources.</p>
              *
              * <p>Note: if this string defines a relative path, it should be resolved against
-             * {@link #getRoot() root folder}; in this case, the root folder must not be <tt>null</tt>.</p>
+             * {@link #getRoot() root folder}; in this case, the root folder must not be <code>null</code>.</p>
              *
              * @return folder, containing resource files.
              */
@@ -169,14 +169,14 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             /**
              * Returns an absolute path to the root folder of this platform.
              *
-             * <p>While creating from .json-file (<tt>file</tt> argument
-             * of the constructor is not <tt>null</tt>), it is automatically set by the constructor
+             * <p>While creating from .json-file (<code>file</code> argument
+             * of the constructor is not <code>null</code>), it is automatically set by the constructor
              * to a parent folder of this file (usually the same for all platform of this extension).
              * While creating without .json-file (for example,
-             * by a constructor without arguments), it is <tt>null</tt> by default, but
+             * by a constructor without arguments), it is <code>null</code> by default, but
              * may be set manually by {@link #setRoot(Path)}.</p>
              *
-             * <p>Note: this folder must be specified to non-<tt>null</tt> value, if other sub-folders
+             * <p>Note: this folder must be specified to non-<code>null</code> value, if other sub-folders
              * define relative paths.</p>
              *
              * <p>Note: this property is not included into JSON.</p>
@@ -539,7 +539,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         }
 
         /**
-         * Returns <tt>true</tt> if this platform works from very beginning, without any additional interpreters.
+         * Returns <code>true</code> if this platform works from very beginning, without any additional interpreters.
          *
          * @return whether the platform is built in and its executors can be called directly.
          */

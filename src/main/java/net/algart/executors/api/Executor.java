@@ -316,7 +316,7 @@ public abstract class Executor extends ExecutionBlock {
      * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
      *
      * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
-     * {@link #setCurrentDirectory(Path)} method, this method returns <tt>null</tt>.
+     * {@link #setCurrentDirectory(Path)} method, this method returns <code>null</code>.
      * In this case, relative paths will be resolved in the current system directory.
      *
      * @return current working directory, that was set via parameter {@link SystemParameter#CURRENT_FOLDER}.
@@ -354,7 +354,7 @@ public abstract class Executor extends ExecutionBlock {
      * automatically performs necessary synchronization for the content of all output ports
      * by calling {@link Data#serializeMemory()} method.
      *
-     * <p>By default, this flag contains <tt>false</tt>.
+     * <p>By default, this flag contains <code>false</code>.
      *
      * @param multithreadingEnvironment whether this object is executed in multithreading environment.
      */
@@ -368,8 +368,8 @@ public abstract class Executor extends ExecutionBlock {
 
     /**
      * Enabled / disable accumulating times in {@link #execute()} method.
-     * By default it is <tt>true</tt>.
-     * Should be cleared to <tt>false</tt> if {@link #execute()} method calls the same method
+     * By default it is <code>true</code>.
+     * Should be cleared to <code>false</code> if {@link #execute()} method calls the same method
      * of other objects (to avoid double counting the elapsed time).
      *
      * @param timingEnabled whether {@link #execute()} method counts its time in the global accumulator.
@@ -580,7 +580,8 @@ public abstract class Executor extends ExecutionBlock {
                     return data;
                 } else {
                     if (loggingEnabled()) {
-                        LOG.log(System.Logger.Level.TRACE, () -> "Visible output in " + portName + " is not initialized");
+                        LOG.log(System.Logger.Level.TRACE, () -> "Visible output in " + portName + " is not
+                        initialized");
                     }
                     return null;
                 }
@@ -750,7 +751,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     /**
-     * You may override this method to disable built-in logging. (By default, it returns <tt>true</tt>.)
+     * You may override this method to disable built-in logging. (By default, it returns <code>true</code>.)
      * This method is called also <i>in the constructor</i>, so, it probably will not "see" some
      * object fields, if you use them.
      *
@@ -762,7 +763,7 @@ public abstract class Executor extends ExecutionBlock {
 
 
     /**
-     * If this method returns <tt>true</tt>, {@link #Executor() constructor of this class} will not register
+     * If this method returns <code>true</code>, {@link #Executor() constructor of this class} will not register
      * standard parameters, processed by {@link Executor} itself.
      * It is provided for possible future needs; current version has no standard parameters.
      *
@@ -794,20 +795,22 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     /**
-     * Returns <tt>System.nanoTime()</tt> if <tt>{@link #LOG}.isLoggable(Level.INFO)</tt>, in other case returns 0.
+     * Returns <code>System.nanoTime()</code> if <code>{@link #LOG}.isLoggable(Level.INFO)</code>,
+     * in other case returns 0.
      * Please use this method for time measuring, that will be used only for logging with level {@code <=Level.INFO}.
      *
-     * @return <tt>System.nanoTime()</tt>, if logging level is {@code Level.INFO} or lower.
+     * @return <code>System.nanoTime()</code>, if logging level is {@code Level.INFO} or lower.
      */
     public static long infoTime() {
         return LOGGABLE_INFO ? System.nanoTime() : 0;
     }
 
     /**
-     * Returns <tt>System.nanoTime()</tt> if <tt>{@link #LOG}.isLoggable(Level.DEBUG)</tt>, in other case returns 0.
+     * Returns <code>System.nanoTime()</code> if <code>{@link #LOG}.isLoggable(Level.DEBUG)</code>,
+     * in other case returns 0.
      * Please use this method for time measuring, that will be used only for logging with level {@code <=Level.DEBUG}.
      *
-     * @return <tt>System.nanoTime()</tt>, if logging level is {@code Level.DEBUG} or lower.
+     * @return <code>System.nanoTime()</code>, if logging level is {@code Level.DEBUG} or lower.
      */
     public static long debugTime() {
         return LOGGABLE_DEBUG ? System.nanoTime() : 0;
@@ -880,14 +883,16 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     /**
-     * Analog of {@link Logger.Level#valueOf(String)}, extended for compatibility with <tt>java.util.logging.Level</tt>
+     * Analog of {@link Logger.Level#valueOf(String)}, extended for compatibility with
+     * <code>java.util.logging.Level</code>
      * string constants. In addition to {@link Logger.Level} names, recognizes the following names:
      * <ul>
-     * <li><tt>"SEVERE"</tt> (recognized as {@link Logger.Level#ERROR}),</li>
-     * <li><tt>"CONFIG"</tt>, <tt>"FINE"</tt> (recognized as {@link Logger.Level#DEBUG}),</li>
-     * <li><tt>"FINER"</tt>, <tt>"FINEST"</tt> (recognized as {@link Logger.Level#TRACE}),</li>
-     * <li>numeric values <tt>"1000"</tt>, <tt>"900"</tt>, <tt>"800"</tt>, <tt>"700"</tt>, <tt>"500"</tt>,
-     * <tt>"400"</tt>, <tt>"300"</tt> (see severities of <tt>java.util.logging.Level</tt>).</li>
+     * <li><code>"SEVERE"</code> (recognized as {@link Logger.Level#ERROR}),</li>
+     * <li><code>"CONFIG"</code>, <code>"FINE"</code> (recognized as {@link Logger.Level#DEBUG}),</li>
+     * <li><code>"FINER"</code>, <code>"FINEST"</code> (recognized as {@link Logger.Level#TRACE}),</li>
+     * <li>numeric values <code>"1000"</code>, <code>"900"</code>, <code>"800"</code>, <code>"700"</code>,
+     * <code>"500"</code>, <code>"400"</code>, <code>"300"</code>
+     * (see severities of <code>java.util.logging.Level</code>).</li>
      * </ul>
      *
      * @param name name of logging level.

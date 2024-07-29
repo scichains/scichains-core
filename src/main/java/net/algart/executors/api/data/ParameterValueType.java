@@ -358,12 +358,12 @@ public enum ParameterValueType {
     }
 
     /**
-     * Converts the given JSON value to this type and returns it as primitive type wrapper or <tt>String</tt>.
-     * If the passed value has invalid type, returns <tt>null</tt>.
-     * Note: for {@link #ENUM_STRING}, this method returns <tt>String</tt> (standard enum type name).
+     * Converts the given JSON value to this type and returns it as primitive type wrapper or <code>String</code>.
+     * If the passed value has invalid type, returns <code>null</code>.
+     * Note: for {@link #ENUM_STRING}, this method returns <code>String</code> (standard enum type name).
      *
      * @param jsonValue some JSON value.
-     * @return the corresponding primitive type / String or <tt>null</tt> if it has invalid type.
+     * @return the corresponding primitive type / String or <code>null</code> if it has invalid type.
      */
     public abstract Object toJavaObject(JsonValue jsonValue);
 
@@ -384,7 +384,7 @@ public enum ParameterValueType {
 
     /**
      * Creates JSON value for the simplest default value (zero for numbers, empty for strings).
-     * Note: for {@link #ENUM_STRING}, this method returns <tt>""</tt>, that is usually incorrect
+     * Note: for {@link #ENUM_STRING}, this method returns <code>""</code>, that is usually incorrect
      * for actual enums.
      *
      * @return empty/zero value of this type.
@@ -414,9 +414,9 @@ public enum ParameterValueType {
     public abstract JsonValue toJsonValue(String scalar);
 
     /**
-     * Sets the parameter inside the passed <tt>parameters</tt> object according this parameter type.
-     * This function just calls the corresponding setter with <tt>String</tt> value argument of
-     * <tt>parameters</tt> object.
+     * Sets the parameter inside the passed <code>parameters</code> object according this parameter type.
+     * This function just calls the corresponding setter with <code>String</code> value argument of
+     * <code>parameters</code> object.
      *
      * @param parameters set of parameters.
      * @param name       name of the parameter.

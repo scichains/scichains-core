@@ -140,8 +140,8 @@ public class ExecutionStatus {
     }
 
     /**
-     * Returns root status in the stack of statuses. Will be <tt>null</tt> for closed status
-     * and non-<tt>null</tt> for opened one.
+     * Returns root status in the stack of statuses. Will be <code>null</code> for closed status
+     * and non-<code>null</code> for opened one.
      *
      * @return root status.
      */

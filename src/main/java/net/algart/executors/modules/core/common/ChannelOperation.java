@@ -83,7 +83,7 @@ public interface ChannelOperation {
 
     /**
      * Returns 4 channel values.
-     * <p>Note: if 4th value (alpha) is not specified in the string, it will be equal to <tt>scale</tt>.
+     * <p>Note: if 4th value (alpha) is not specified in the string, it will be equal to <code>scale</code>.
      *
      * @param s     some color.
      * @param scale the decoded values 0.0..1.0., if they represent color, are multiplied by this scale

@@ -62,10 +62,10 @@ public class InstalledExtensions {
 
     /**
      * Boolean value of the system property "net.algart.executors.pathReplacementAllowed".
-     * If it is <tt>true</tt>, {@link #EXTENSIONS_ROOT_PROPERTY} and {@link #EXTENSIONS_PATH_PROPERTY} may
+     * If it is <code>true</code>, {@link #EXTENSIONS_ROOT_PROPERTY} and {@link #EXTENSIONS_PATH_PROPERTY} may
      * contain substring {@value SystemEnvironment#EXECUTORS_HOME_PATTERN_STRING}, which will be automatically
      * replaced with the value of {@link SystemEnvironment#EXECUTORS_HOME_ENV_NAME} environment variable.
-     * Default value is <tt>false</tt>.
+     * Default value is <code>false</code>.
      */
     public static final boolean ENABLE_REPLACEMENT_IN_EXTENSIONS_PROPERTIES = SystemEnvironment.getBooleanProperty(
             "net.algart.executors.pathReplacementAllowed", false);

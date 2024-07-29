@@ -492,10 +492,11 @@ public final class SNumbers extends Data implements Cloneable {
 
     /**
      * Returns a reference to the internal Java array
-     * <tt>byte[]</tt>, <tt>short[]</tt>, <tt>int[]</tt>, <tt>long[]</tt>, <tt>float[]</tt> or <tt>double[]</tt>.
+     * <code>byte[]</code>, <code>short[]</code>, <code>int[]</code>, <code>long[]</code>,
+     * <code>float[]</code> or <code>double[]</code>.
      *
-     * <p>Always returns  <tt>null</tt> for non-{@link #isInitialized() initialized} object
-     * and non-<tt>null</tt> for initialized one.
+     * <p>Always returns  <code>null</code> for non-{@link #isInitialized() initialized} object
+     * and non-<code>null</code> for initialized one.
      *
      * <p>Please use this function carefully, only if you need maximal performance. Usually it is better idea
      * to use one of methods {@link #toIntArray()}, {@link #toFloatArray()} and analogous.</p>
@@ -2654,7 +2655,8 @@ public final class SNumbers extends Data implements Cloneable {
      * Returns some string representation of this numbers array.
      * <p>Note: its exact format is not specified and may vary in future versions.
      *
-     * @param includeNumbersInResults if <tt>true</tt>, the result will contain numeric representation of all numbers.
+     * @param includeNumbersInResults if <code>true</code>,
+     *                                the result will contain numeric representation of all numbers.
      * @return some string representation of this numbers array.
      */
     public String toString(boolean includeNumbersInResults) {

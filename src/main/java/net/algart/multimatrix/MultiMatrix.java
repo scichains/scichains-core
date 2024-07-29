@@ -118,7 +118,7 @@ public interface MultiMatrix extends Cloneable {
      * or throws an exception in other case.
      *
      * @return equivalent {@link MultiMatrix2D}.
-     * @throws IllegalStateException if <tt>{@link #dimCount()}!=2</tt>.
+     * @throws IllegalStateException if <code>{@link #dimCount()}!=2</code>.
      */
     default MultiMatrix2D asMultiMatrix2D() {
         if (this instanceof MultiMatrix2D) {

@@ -56,8 +56,8 @@ public final class SScalar extends Data {
     /**
      * Returns the value of this scalar.
      *
-     * <p>Always returns  <tt>null</tt> for non-{@link #isInitialized() initialized} object
-     * and non-<tt>null</tt> for initialized one.
+     * <p>Always returns  <code>null</code> for non-{@link #isInitialized() initialized} object
+     * and non-<code>null</code> for initialized one.
      *
      * @return the stored value.
      */
@@ -252,7 +252,7 @@ public final class SScalar extends Data {
      * Returns int value, stored in this scalar.
      *
      * <p>Note: this scalar also <b>may</b> contain floating-point double value, if it is actually 32-bit integer,
-     * for example: <tt>2.0</tt>, <tt>15623.0</tt> etc.</p>
+     * for example: <code>2.0</code>, <code>15623.0</code> etc.</p>
      *
      * @return int value, stored in this scalar.
      * @throws NumberFormatException if this scalar cannot be parsed as int value or actually integer double value.
@@ -281,10 +281,10 @@ public final class SScalar extends Data {
      * Returns long value, stored in this scalar.
      *
      * <p>Note: unlike {@link #toInt()}, actually integer floating-point value like
-     * <tt>2.0</tt>, <tt>15623.0</tt> is <b>not</b> allowed.</p>
+     * <code>2.0</code>, <code>15623.0</code> is <b>not</b> allowed.</p>
      *
      * @return long value, stored in this scalar.
-     * @throws NumberFormatException if this scalar cannot be parsed as long value by <tt>Long.parseLong</tt>.
+     * @throws NumberFormatException if this scalar cannot be parsed as long value by <code>Long.parseLong</code>.
      */
     public long toLong() {
         if (value == null) {
@@ -411,12 +411,12 @@ public final class SScalar extends Data {
     }
 
     /**
-     * Note: this method, like usual toString(), never returns <tt>null</tt>,
+     * Note: this method, like usual toString(), never returns <code>null</code>,
      * and also can reduce the stored string!
-     * <p><b>If you need to get exact <tt>String</tt> value, please use {@link #getValue()} method.</b>
+     * <p><b>If you need to get exact <code>String</code> value, please use {@link #getValue()} method.</b>
      *
      * @return scalar value for initialized non-null scalar
-     * or something else for <tt>null</tt> or non-initialized scalars.
+     * or something else for <code>null</code> or non-initialized scalars.
      */
     @Override
     public String toString() {

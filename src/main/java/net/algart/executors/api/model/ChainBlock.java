@@ -237,7 +237,7 @@ public final class ChainBlock {
     }
 
     /**
-     * Returns executor's JSON or <tt>null</tt> if it is unknown (possible for dynamically loaded executors).
+     * Returns executor's JSON or <code>null</code> if it is unknown (possible for dynamically loaded executors).
      *
      * @return description of the executor.
      */

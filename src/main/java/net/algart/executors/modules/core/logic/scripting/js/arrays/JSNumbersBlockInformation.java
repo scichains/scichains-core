@@ -33,12 +33,12 @@ public final class JSNumbersBlockInformation {
     public static final int MIN_BLOCK_DATA_ARRAY_LENGTH = 32;
 
     /**
-     * Contains <tt>true</tt> if this block is created with non-null initialized <tt>SNumbers</tt> array,
-     * or <tt>false</tt> if the constructor argument was null or not-initialized.
+     * Contains <code>true</code> if this block is created with non-null initialized <code>SNumbers</code> array,
+     * or <code>false</code> if the constructor argument was null or not-initialized.
      */
     public final boolean initialized;
     /**
-     * All values in this block or empty array double[MIN_BLOCK_DATA_ARRAY_LENGTH] if <tt>!initialized</tt>.
+     * All values in this block or empty array double[MIN_BLOCK_DATA_ARRAY_LENGTH] if <code>!initialized</code>.
      */
     public final double[] x;
     /**
@@ -50,11 +50,11 @@ public final class JSNumbersBlockInformation {
      */
     public int i = -1;
     /**
-     * Actual block length. (Length of <tt>x</tt> array is usually greater: it is >=MIN_BLOCK_DATA_ARRAY_LENGTH.)
+     * Actual block length. (Length of <code>x</code> array is usually greater: it is >=MIN_BLOCK_DATA_ARRAY_LENGTH.)
      */
     public final int len;
     /**
-     * All numbers in all blocks (<tt>toFloatArray</tt>)  or empty array float[0] if <tt>!initialized</tt>.
+     * All numbers in all blocks (<code>toFloatArray</code>)  or empty array float[0] if <code>!initialized</code>.
      */
     public final float[] all;
 

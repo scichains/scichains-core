@@ -104,11 +104,11 @@ public abstract class GraalSourceContainer {
     }
 
     /**
-     * Returns <tt>true</tt> if some settings were changed after last call of this method
+     * Returns <code>true</code> if some settings were changed after last call of this method
      * or calling {@link #setChanged(boolean) setChanged(false)}.
-     * This method also clears "changed" status to <tt>false</tt>.
+     * This method also clears "changed" status to <code>false</code>.
      *
-     * <p>Note: if this method returns <tt>true</tt>, it may be a reason to create again also the performer,
+     * <p>Note: if this method returns <code>true</code>, it may be a reason to create again also the performer,
      * in particular, in a case of ECMA modules (inside the same context, the content of a module
      * is executed only once).</p>
      *
@@ -138,7 +138,7 @@ public abstract class GraalSourceContainer {
      * <p><b>Note:</b> this method also sets the name!
      *
      * @param origin new script origin.
-     * @return <tt>true</tt> if new origin differs from an existing one; <tt>false</tt> if is not changed.
+     * @return <code>true</code> if new origin differs from an existing one; <code>false</code> if is not changed.
      */
     public GraalSourceContainer setOrigin(Object origin, String name) {
         if (origin != null && !isOriginCorrect(origin)) {

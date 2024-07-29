@@ -67,7 +67,7 @@ public class ExecutionBlockLoader {
 
     /**
      * Actually loads and instantiate new execution block.
-     * Default implementation returns <tt>null</tt>.
+     * Default implementation returns <code>null</code>.
      *
      * <p>Note: if this loader use sessionId, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
@@ -76,9 +76,9 @@ public class ExecutionBlockLoader {
      *                              may be ignored.
      * @param executorId            see the same argument of {@link ExecutionBlock#newExecutionBlock}.
      * @param executorSpecification see the same argument of {@link ExecutionBlock#newExecutionBlock}.
-     * @return newly created executor or <tt>null</tt> if this loader does not "understand" such JSON.
+     * @return newly created executor or <code>null</code> if this loader does not "understand" such JSON.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
-     *                                is not available in the current <tt>classpath</tt> environment.
+     *                                is not available in the current <code>classpath</code> environment.
      */
     public ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
             throws ClassNotFoundException {
@@ -92,7 +92,7 @@ public class ExecutionBlockLoader {
      * Default implementation calls {@link #removeSessionExecutorModels(String)}.
      *
      * @param sessionId unique ID of current session.
-     * @throws NullPointerException if <tt>sessionId==null</tt>.
+     * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public void clearSession(String sessionId) {
         removeSessionExecutorModels(sessionId);
@@ -106,7 +106,7 @@ public class ExecutionBlockLoader {
      *
      * @param sessionId unique ID of current session.
      * @return executors' descriptions for executors, created by this loader.
-     * @throws NullPointerException if <tt>sessionId==null</tt>.
+     * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public final Map<String, String> availableExecutorModelDescriptions(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
@@ -123,7 +123,7 @@ public class ExecutionBlockLoader {
      * @param sessionId  unique ID of current session.
      * @param executorId unique ID of this executor in the system.
      * @return description of this dynamic executor (probably JSON).
-     * @throws NullPointerException if one of arguments is <tt>null</tt>.
+     * @throws NullPointerException if one of arguments is <code>null</code>.
      */
     public final String getExecutorModelDescription(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");

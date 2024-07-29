@@ -462,15 +462,15 @@ public class Jsons {
     }
 
     /**
-     * Analog of <tt>json.getJsonObject(name)</tt> with two differences:
-     * 1) if <tt>json==null</tt>, it returns <tt>null</tt>;
-     * 2) if <tt>json</tt> contains value with a given name, but it is <b>not</b> an object,
-     * it throws detailed {@link JsonException} (instead of <tt>ClassCastException</tt>).
+     * Analog of <code>json.getJsonObject(name)</code> with two differences:
+     * 1) if <code>json==null</code>, it returns <code>null</code>;
+     * 2) if <code>json</code> contains value with a given name, but it is <b>not</b> an object,
+     * it throws detailed {@link JsonException} (instead of <code>ClassCastException</code>).
      *
      * @param json JSON object to by analysed
      * @param name the name whose associated value is to be returned
      * @return the object value to which the specified name is mapped,
-     * or <tt>null</tt> if there is no necessary mapping
+     * or <code>null</code> if there is no necessary mapping
      * @throws JsonException if the value to which the specified name is mapped is not assignable to JsonObject type
      */
     public static JsonObject getJsonObject(JsonObject json, String name) {

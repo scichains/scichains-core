@@ -143,7 +143,7 @@ public abstract class GraalPerformerContainer {
     /**
      * Sets language for bindings. Should be set, if you want to use some predefined bindings.
      *
-     * @param autoBindingLanguage new current language; <tt>null</tt> by default.
+     * @param autoBindingLanguage new current language; <code>null</code> by default.
      * @return reference to this object.
      */
     public GraalPerformerContainer setAutoBindingLanguage(String autoBindingLanguage) {
@@ -209,10 +209,11 @@ public abstract class GraalPerformerContainer {
      * <p>For {@link Local} container, it just frees the only contained performer
      * by the call {@link GraalPerformer#close()}.
      *
-     * <p>For {@link Shared} container, behaviour depends on the argument. If it is <tt>false</tt>, it does nothing;
+     * <p>For {@link Shared} container, behaviour depends on the argument.
+     * If it is <code>false</code>, it does nothing;
      * this may be important, because the same performer may be shared with other containers.
      * Then performers will be automatically closed by Java cleaner in {@link GraalPerformer}.
-     * If it is <tt>true</tt>, this method frees the <b>last</b> performer accessed
+     * If it is <code>true</code>, this method frees the <b>last</b> performer accessed
      * by {@link #performer(Object)} method.
      * It may be suitable if you are sure that after this moment no one can need the same shared performer.
      */

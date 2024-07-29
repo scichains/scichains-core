@@ -52,7 +52,7 @@ public abstract class Data implements Cloneable {
     }
 
     /**
-     * Set's initialized status and <b>frees resources</b> if new value is <tt>false</tt>.
+     * Set's initialized status and <b>frees resources</b> if new value is <code>false</code>.
      * @param initialized new initialized status.
      */
     @UsedForExternalCommunication
@@ -87,14 +87,14 @@ public abstract class Data implements Cloneable {
     }
 
     /**
-     * Returns type of this data. Never returns <tt>null</tt>.
+     * Returns type of this data. Never returns <code>null</code>.
      * @return type of this data (non-null).
      */
     @UsedForExternalCommunication
     public abstract DataType type();
 
     /**
-     * Copies content of <tt>other</tt> to this object. Note: if this object is immutable
+     * Copies content of <code>other</code> to this object. Note: if this object is immutable
      * or considered to be immutable, this method may just copy a reference to data.
      *
      * @param other some other data of the same type.
@@ -104,20 +104,20 @@ public abstract class Data implements Cloneable {
     }
 
     /**
-     * Copies content of <tt>other</tt> to this object. If <tt>cloneData=true</tt>, equivalent to
+     * Copies content of <code>other</code> to this object. If <code>cloneData=true</code>, equivalent to
      * {@link #setTo(Data)} method.
      *
-     * <p><b>Please be very accurate with calling this method with <tt>cloneData=false</tt>.</b>
+     * <p><b>Please be very accurate with calling this method with <code>cloneData=false</code>.</b>
      * It is allowed only if you are sure that the client will not try to modify the content of the data.
      *
      * @param other some other data of the same type.
-     * @param cloneData if <tt>false</tt>, this method performs shallow copying and works as quickly as possible.
+     * @param cloneData if <code>false</code>, this method performs shallow copying and works as quickly as possible.
      */
     public abstract void setTo(Data other, boolean cloneData);
 
     /**
      * Completely exchange content of this and other object of the same type.
-     * Note: this method works very quickly, unlike <tt>setTo</tt> methods (it never performs data copying).
+     * Note: this method works very quickly, unlike <code>setTo</code> methods (it never performs data copying).
      *
      * @param other some other data of the same type.
      * @return      reference to this object.
@@ -130,9 +130,10 @@ public abstract class Data implements Cloneable {
      * that all data, stored in this object, can be freely used in any Java environment, for example, including
      * usage from different Java threads (if they are correctly synchronized by Java synchronization).
      *
-     * <p>For example, if this object contains OpenCV <tt>UMat</tt> object, stored in OpenCL GPU,
-     * this method should replace <tt>UMat</tt> with <tt>Mat</tt> or some equivalent form like <tt>ByteBuffer</tt>:
-     * GPU <tt>UMat</tt>, by default, can be unavailable from other Java threads.
+     * <p>For example, if this object contains OpenCV <code>UMat</code> object, stored in OpenCL GPU,
+     * this method should replace <code>UMat</code> with <code>Mat</code>
+     * or some equivalent form like <code>ByteBuffer</code>:
+     * GPU <code>UMat</code>, by default, can be unavailable from other Java threads.
      */
     public void serializeMemory() {
     }

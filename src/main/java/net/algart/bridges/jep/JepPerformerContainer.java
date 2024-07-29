@@ -77,7 +77,7 @@ public final class JepPerformerContainer implements AutoCloseable {
      * For example, maybe, you need to specify include paths inside {@link JepConfig},
      * but you cannot find this paths without serious disc operations.
      *
-     * @param configSupplier configuration supplier; may be <tt>null</tt>, then will be ignored.
+     * @param configSupplier configuration supplier; may be <code>null</code>, then will be ignored.
      * @return reference to this object.
      */
     public JepPerformerContainer setConfigSupplier(Supplier<JepConfig> configSupplier) {

@@ -1568,7 +1568,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     }
 
     /**
-     * Returns <tt>true</tt> if the current {@link #getLanguage() language} is
+     * Returns <code>true</code> if the current {@link #getLanguage() language} is
      * {@value JavaConf#JAVA_LANGUAGE}.
 
      * @return whether this executor is Java-based.
@@ -1582,10 +1582,10 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     }
 
     /**
-     * Returns configuration of the current Java executor or <tt>null</tt>
+     * Returns configuration of the current Java executor or <code>null</code>
      * if it is not a Java executor.
-     * <p>The result of this function is never <tt>null</tt>, if this model was constructed from JSON
-     * and if {@link #isExecutorJson(JsonObject)} returns <tt>true</tt>. But this can be not so,
+     * <p>The result of this function is never <code>null</code>, if this model was constructed from JSON
+     * and if {@link #isExecutorJson(JsonObject)} returns <code>true</code>. But this can be not so,
      * if this object was constructed manually via setter methods.
      *
      * @return configuration of Java executor.
@@ -1879,7 +1879,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
      * Fills this object to describe a chain as an executor.
      * This method:
      * <ul>
-     * <li>sets id to be equal <tt>chain.getId()</tt>;</li>
+     * <li>sets id to be equal <code>chain.getId()</code>;</li>
      * <li>sets language to {@link ChainJson#CHAIN_LANGUAGE};</li>
      * <li>does not set the name, category and path to source;</li>
      * <li>does not set "java" section.</li>

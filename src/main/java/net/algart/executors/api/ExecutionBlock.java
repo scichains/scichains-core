@@ -237,12 +237,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Returns <tt>true</tt> if and only {@link #getInputPort(String) getInputPort(inputPortName)} returns
-     * non-null value and {@link #checkInputNecessary(Port)} returns <tt>null</tt> or <tt>true</tt> for it.
+     * Returns <code>true</code> if and only {@link #getInputPort(String) getInputPort(inputPortName)} returns
+     * non-null value and {@link #checkInputNecessary(Port)} returns <code>null</code> or <code>true</code> for it.
      *
      * @param inputPortName the name of input port.
      * @return whether this port exists and its content is necessary for calculations.
-     * @throws NullPointerException if the argument is <tt>null</tt>.
+     * @throws NullPointerException if the argument is <code>null</code>.
      */
     public final boolean isInputNecessary(String inputPortName) {
         final Port inputPort = getInputPort(inputPortName);
@@ -258,20 +258,21 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Usually returns <tt>null</tt>; may return <tt>true</tt>/<tt>false</tt> if the content of this input port
-     * is really necessary / not necessary for processing data.
+     * Usually returns <code>null</code>; may return <code>true</code>/<code>false</code> if the content of this
+     * input port is really necessary / not necessary for processing data.
      * May be overridden for better performance of execution system, if some existing ports are actually
      * not used.
      *
      * <p>Note: if this method returns non-null value for some input ports, its result may depend
      * on executor's parameters (available via {@link #parameters()} method) and, maybe,
-     * on the content of other ports, for which this method returns <tt>null</tt>.
+     * on the content of other ports, for which this method returns <code>null</code>.
      * The result of this method <b>must not</b> depend on the content of the ports,
      * for which this method returns non-null value!
      *
-     * <p>Default implementation returns <tt>null</tt> always.
+     * <p>Default implementation returns <code>null</code> always.
      *
-     * <p>If the argument is <tt>null</tt>, the result may be any (<tt>null</tt>, <tt>true</tt> or <tt>false</tt>):
+     * <p>If the argument is <code>null</code>, the result may be any (<code>null</code>,
+     * <code>true</code> or <code>false</code>):
      * it is ignored. An exception is not thrown in this case.
      *
      * @param inputPort the checked input port.
@@ -595,7 +596,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Native code sets visible result to <tt>true</tt> when it is necessary to display result in any way,
+     * Native code sets visible result to <code>true</code> when it is necessary to display result in any way,
      * even if execution block does not have any other connections.
      *
      * @param visibleResultNecessary new visible result flag.
@@ -616,7 +617,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * you can just set all input data and parameters, executor the function and retrieve all results,
      * without separate call of {@link Executor#requestOutput(String...)}
      * or similar methods.
-     * <p>Default value is <tt>false</tt>.
+     * <p>Default value is <code>false</code>.
      *
      * @param allOutputsNecessary always output necessary flag.
      */
@@ -713,16 +714,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>Also note: if the same context frees all its resources ("closing"), but may be used again
      * (reinitialization), then the context ID <b>must be renewed</b> after reinitialization.
-     * It is necessary, for example, if some resources are stored in <tt>WeakHashMap</tt> with context ID
+     * It is necessary, for example, if some resources are stored in <code>WeakHashMap</code> with context ID
      * as its keys or if there are some external resources (files), location of which is based on this ID.
      * When such resources became a garbage, we must not try to use them again.
      *
      * <p>This method should be called after
      * creating instance before first calling {@link #reset()} or {@link #execute()} method.
-     * Note that most executors do not use this ability, and you can stay undefined (<tt>null</tt>)
+     * Note that most executors do not use this ability, and you can stay undefined (<code>null</code>)
      * context ID for them.
      *
-     * @param contextId unique context ID; may be <tt>null</tt>.
+     * @param contextId unique context ID; may be <code>null</code>.
      */
     public final void setContextId(Object contextId) {
         this.contextId = contextId;
@@ -744,10 +745,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>This method should be called after
      * creating instance before first calling {@link #reset()} or {@link #execute()} method.
-     * Note that most executors do not use this ability, and you can stay undefined (<tt>null</tt>)
+     * Note that most executors do not use this ability, and you can stay undefined (<code>null</code>)
      * context name for them.
      *
-     * @param contextName some textual name of the context; may be <tt>null</tt>.
+     * @param contextName some textual name of the context; may be <code>null</code>.
      */
     @UsedForExternalCommunication
     public final void setContextName(String contextName) {
@@ -764,10 +765,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>This method should be called after
      * creating instance before first calling {@link #reset()} or {@link #execute()} method.
-     * Note that most executorы do not use this ability, and you can stay undefined (<tt>null</tt>)
+     * Note that most executorы do not use this ability, and you can stay undefined (<code>null</code>)
      * context path for them.
      *
-     * @param contextPath the path fo file/folder, storing the context; may be <tt>null</tt>.
+     * @param contextPath the path fo file/folder, storing the context; may be <code>null</code>.
      */
     @UsedForExternalCommunication
     public final void setContextPath(String contextPath) {
@@ -864,7 +865,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     public abstract void execute();
 
     /**
-     * If this function returns <tt>true</tt>, it means that calculations
+     * If this function returns <code>true</code>, it means that calculations
      * are not finished and should be repeated (for example, all the chain should be restarted and executed again).
      * Note: this function may be called <b>without</b> {@link #execute()}.
      *
@@ -875,7 +876,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return false;
     }
 
-    // Never returns <tt>null</tt>
+    // Never returns <code>null</code>
     @UsedForExternalCommunication
     public abstract ExecutionVisibleResultsInformation visibleResultsInformation();
 
@@ -980,11 +981,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * <p>Creates new instance of {@link ExecutionBlock} on the base of it's description, usually in JSON format.</p>
      *
-     * <p>This description is passed by <tt>executorSpecification</tt> parameter. It may be the full description
+     * <p>This description is passed by <code>executorSpecification</code> parameter. It may be the full description
      * of executor model (with "app":"executor" and other fields), but may be also its part.
      * In any case it must contain all information, necessary for constructing and initializing Java class
      * of the executor, usually in "java" section.
-     * Below is a minimal example of <tt>executorSpecification</tt> for most standard Java executors:</p>
+     * Below is a minimal example of <code>executorSpecification</code> for most standard Java executors:</p>
      *
      * <pre>
      * {
@@ -995,14 +996,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * </pre>
      *
      * @param sessionId             unique ID of current session while multi-session usage;
-     *                              may be <tt>null</tt> while simple usage.
+     *                              may be <code>null</code> while simple usage.
      * @param executorId            unique ID of this executor in the system (maybe a field inside
-     *                              <tt>executorSpecification</tt>, but it is not necessary).
+     *                              <code>executorSpecification</code>, but it is not necessary).
      * @param executorSpecification specification of the executor, usually JSON.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
-     *                                is not available in the current <tt>classpath</tt> environment.
-     * @throws NullPointerException   if <tt>executorId==null</tt> or <tt>executorSpecification==null</tt>.
+     *                                is not available in the current <code>classpath</code> environment.
+     * @throws NullPointerException   if <code>executorId==null</code> or <code>executorSpecification==null</code>.
      */
     @UsedForExternalCommunication
     public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
@@ -1039,9 +1040,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * Keys in the result are ID of every executor, values are descriptions.
      * May be used for the user interface to show information for available executors.
      *
-     * @param sessionId unique ID of current session; may be <tt>null</tt>, than only global session will be checked.
+     * @param sessionId unique ID of current session; may be <code>null</code>,
+     *                  then only global session will be checked.
      * @return all available executors' descriptions for dynamically created executors.
-     * @throws NullPointerException if <tt>sessionId==null</tt>.
+     * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public static Map<String, String> availableExecutorModelDescriptions(String sessionId) {
         final Map<String, String> result = new LinkedHashMap<>();
@@ -1060,10 +1062,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * availableExecutorModelDescriptions}(sessionId).get(executorId)</tt>,
      * but works quickly (without creating new map).
      *
-     * @param sessionId  unique ID of current session; may be <tt>null</tt>, than only global session will be checked.
+     * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
+     *                   checked.
      * @param executorId unique ID of this executor in the system.
-     * @return description of this dynamic executor (probably JSON) or <tt>null</tt> if there is not such executor.
-     * @throws NullPointerException if one of arguments is <tt>null</tt>.
+     * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
+     * @throws NullPointerException if one of arguments is <code>null</code>.
      */
     public static String getExecutorModelDescription(String sessionId, String executorId) {
         synchronized (executionBlockLoaders) {
@@ -1087,7 +1090,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * Removes all executors, dynamically created for the given session.
      *
      * @param sessionId unique ID of current session.
-     * @throws NullPointerException if <tt>sessionId==null</tt>.
+     * @throws NullPointerException if <code>sessionId==null</code>.
      */
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {

@@ -108,10 +108,10 @@ public class PathPropertyReplacement {
 
     /**
      * Whether the given string contains probable properties, that will be probably detected in future versions
-     * or in other system. Returns <tt>true</tt> if the string contains "%" character or "${" combination.
+     * or in other system. Returns <code>true</code> if the string contains "%" character or "${" combination.
      *
      * @param s some string.
-     * @return <tt>true</tt> if this string, probably, contain a property or something like this.
+     * @return <code>true</code> if this string, probably, contain a property or something like this.
      */
     public static boolean hasProbableProperties(String s) {
         Objects.requireNonNull(s, "Null string");
