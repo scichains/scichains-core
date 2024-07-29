@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.math.functions.Func;
+import net.algart.arrays.*;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
-import net.algart.arrays.*;
+import net.algart.math.functions.Func;
 import net.algart.math.functions.LinearFunc;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public final class LinearCombinationOfTwoNumbers extends SeveralNumberArraysOper
         return summand;
     }
 
-    public LinearCombinationOfTwoNumbers  setSummand(double summand) {
+    public LinearCombinationOfTwoNumbers setSummand(double summand) {
         this.summand = summand;
         return this;
     }

@@ -24,13 +24,13 @@
 
 package net.algart.executors.modules.core.numbers.creation;
 
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.SNumbers;
 import net.algart.math.IRange;
 import net.algart.math.IRectangularArea;
 import net.algart.math.Range;
 import net.algart.math.RectangularArea;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 public final class CreateRectangularArea extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_SIZE_X = "size_x";

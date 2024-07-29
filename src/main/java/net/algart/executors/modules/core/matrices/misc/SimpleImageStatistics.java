@@ -70,41 +70,32 @@ public enum SimpleImageStatistics {
 
     public double[] statistics(Matrix<? extends PArray> m, boolean rawValues) {
         double scale = rawValues ? 1.0 : m.array().maxPossibleValue(1.0);
-        switch (this) {
-            case MEAN:
-                return new double[] {Arrays.sumOf(m.array()) / ((double) m.size() * scale)};
-            case SUM:
-                return new double[] {Arrays.sumOf(m.array()) / scale};
-            case MIN:
-                return new double[] {findMin(m.array()) / scale};
-            case MAX:
-                return new double[] {findMax(m.array()) / scale};
-            case RANGE: {
+        return switch (this) {
+            case MEAN -> new double[]{Arrays.sumOf(m.array()) / ((double) m.size() * scale)};
+            case SUM -> new double[]{Arrays.sumOf(m.array()) / scale};
+            case MIN -> new double[]{findMin(m.array()) / scale};
+            case MAX -> new double[]{findMax(m.array()) / scale};
+            case RANGE -> {
                 final double[] range = findRange(m.array());
-                return new double[] {range[0] / scale, range[1] / scale};
+                yield new double[]{range[0] / scale, range[1] / scale};
             }
-            case NONZERO_RANGE: {
+            case NONZERO_RANGE -> {
                 final Range range = MultiMatrix.nonZeroRangeOf(null, m.array());
-                return range != null ?
-                        new double[] {range.min() / scale, range.max() / scale} :
-                        new double[] {Double.NaN, Double.NaN};
+                yield range != null ?
+                        new double[]{range.min() / scale, range.max() / scale} :
+                        new double[]{Double.NaN, Double.NaN};
             }
-            default:
-                throw new UnsupportedOperationException("Unknown double statistics " + this);
-        }
+            default -> throw new UnsupportedOperationException("Unknown double statistics " + this);
+        };
     }
 
     public long[] longStatistics(Matrix<? extends PArray> m) {
-        switch (this) {
-            case MIN_POSITION:
-                return findPositionOfMin(m);
-            case MAX_POSITION:
-                return findPositionOfMax(m);
-            case HASH:
-                return new long[] {m.hashCode()};
-            default:
-                throw new UnsupportedOperationException("Unknown long statistics " + this);
-        }
+        return switch (this) {
+            case MIN_POSITION -> findPositionOfMin(m);
+            case MAX_POSITION -> findPositionOfMax(m);
+            case HASH -> new long[]{m.hashCode()};
+            default -> throw new UnsupportedOperationException("Unknown long statistics " + this);
+        };
     }
 
     public Object allChannelsStatistics(MultiMatrix multiMatrix, boolean rawValues) {
@@ -225,6 +216,6 @@ public enum SimpleImageStatistics {
                 }
             }
         }
-        return new double[] {min, max};
+        return new double[]{min, max};
     }
 }

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.logical;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
 import net.algart.executors.api.Executor;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 abstract class AndOrBoolean extends Executor {
     public static final String INPUT_PORT_PREFIX = "x";
@@ -76,7 +76,7 @@ abstract class AndOrBoolean extends Executor {
             if (!hasInputPort(portName)) {
                 break;
             }
-            final String input = getInputScalar(portName,true).getValue();
+            final String input = getInputScalar(portName, true).getValue();
             result = combine(result, toBoolean(input));
         }
         if (invert) {

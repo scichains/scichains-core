@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.arithmetic;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
 import net.algart.executors.api.Executor;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 import java.util.Objects;
 

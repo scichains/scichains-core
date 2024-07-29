@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.logic.ifelse.numbers;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 public final class IsNumbersExisting extends Executor implements ReadOnlyExecutionInput {
     private String whenNonInitialized = "0";

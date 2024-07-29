@@ -27,9 +27,9 @@ package net.algart.executors.modules.core.matrices.misc;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.math.Range;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class Contrast extends MultiMatrixFilter {
 
@@ -78,16 +78,16 @@ public final class Contrast extends MultiMatrixFilter {
     public MultiMatrix process(MultiMatrix source) {
         if (lowLimit < 0.0 || highLimit > 1.0 || lowLimit >= highLimit) {
             throw new IllegalArgumentException("Illegal low (" + lowLimit + ") or high (" + highLimit
-                + ") limits: must be 0 <= low < high <= 1");
+                    + ") limits: must be 0 <= low < high <= 1");
         }
         final Matrix<? extends PArray> intensityChannel = source.intensityChannelOrNull();
         final Range rangeToContrast = rangeToContrast(intensityChannel);
         logDebug(() -> "Contrast of "
-            + (lowLimitInterpretation == LimitInterpretation.PERCENTILE_BETWEEN_MIN_AND_MAX ?
-            "percentile" : "value")
-            + " " + lowLimit + ".." + highLimit
-            + " for " + sourceMultiMatrix()
-            + " (range to contrast " +  rangeToContrast + ")");
+                + (lowLimitInterpretation == LimitInterpretation.PERCENTILE_BETWEEN_MIN_AND_MAX ?
+                "percentile" : "value")
+                + " " + lowLimit + ".." + highLimit
+                + " for " + sourceMultiMatrix()
+                + " (range to contrast " + rangeToContrast + ")");
         return source.contrast(rangeToContrast, true);
     }
 

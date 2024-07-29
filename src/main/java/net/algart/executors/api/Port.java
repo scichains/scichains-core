@@ -24,19 +24,19 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.data.DataType;
-import net.algart.external.UsedForExternalCommunication;
-import net.algart.executors.api.data.Data;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.data.Data;
+import net.algart.executors.api.data.DataType;
+import net.algart.external.UsedForExternalCommunication;
+
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * @author mnogono
- *         Created on 11.05.2017.
+ * Created on 11.05.2017.
  */
 public final class Port {
     public enum Type {
@@ -83,7 +83,8 @@ public final class Port {
     }
 
     @UsedForExternalCommunication
-    private Port() {}
+    private Port() {
+    }
 
     /**
      * port name
@@ -187,10 +188,6 @@ public final class Port {
         return portType == Type.OUTPUT;
     }
 
-    /**
-     * invoked by host application
-     * @param connected
-     */
     @UsedForExternalCommunication
     public Port setConnected(boolean connected) {
         this.connected = connected;
@@ -206,19 +203,19 @@ public final class Port {
         final Data result = getData();
         if (result == null) {
             throw new IllegalArgumentException("The " + portType.typeName + " port \""
-                + name + "\" has no data container");
+                    + name + "\" has no data container");
             // External execution system should set up both input and output for any execution block
             // with suitable data type. Note: Data is only a container, that is usually filled
             // by actual data in execute() method.
         }
         if (!allowUninitializedData && !result.isInitialized()) {
             throw new IllegalArgumentException("The " + portType.typeName + " port \""
-                + name + "\" has no initialized data");
+                    + name + "\" has no initialized data");
         }
         if (!dataClass.isInstance(result)) {
             throw new IllegalArgumentException("Data in the " + portType.typeName + " port \""
-                + name + "\" is not an instance of " + dataClass.getSimpleName()
-                + " (it is " + result.getClass().getSimpleName() + ")");
+                    + name + "\" is not an instance of " + dataClass.getSimpleName()
+                    + " (it is " + result.getClass().getSimpleName() + ")");
         }
         return dataClass.cast(result);
     }
@@ -276,19 +273,19 @@ public final class Port {
         return builder.build();
     }
 
-        @Override
+    @Override
     public String toString() {
         return "Port \"" + name + "\" [" + portType + " for " + dataType + "], "
-            + (connected ? "connected" : "unconnected")
-            + ": " + data
-            + (uuid == null ? "" : " [uuid " + uuid + "]");
+                + (connected ? "connected" : "unconnected")
+                + ": " + data
+                + (uuid == null ? "" : " [uuid " + uuid + "]");
     }
 
     public static Port newInput(String name, Data data) {
         Objects.requireNonNull(name, "Null port name");
         Objects.requireNonNull(name, "Null port data");
         return new Port().setPortType(Type.INPUT).setName(name)
-            .setDataType(data.type()).setData(data);
+                .setDataType(data.type()).setData(data);
     }
 
     public static Port newInput(String name, DataType dataType) {
@@ -301,6 +298,6 @@ public final class Port {
         Objects.requireNonNull(name, "Null port name");
         Objects.requireNonNull(dataType, "Null data type");
         return new Port().setPortType(Type.OUTPUT).setName(name)
-            .setDataType(dataType).setData(dataType.createEmpty());
+                .setDataType(dataType).setData(dataType.createEmpty());
     }
 }

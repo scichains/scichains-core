@@ -25,8 +25,8 @@
 package net.algart.executors.modules.core.numbers.misc;
 
 import net.algart.arrays.Arrays;
-import net.algart.math.IRange;
 import net.algart.executors.api.data.SNumbers;
+import net.algart.math.IRange;
 
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;

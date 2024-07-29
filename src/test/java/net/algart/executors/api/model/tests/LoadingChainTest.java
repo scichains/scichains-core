@@ -24,9 +24,9 @@
 
 package net.algart.executors.api.model.tests;
 
+import jakarta.json.JsonException;
 import net.algart.executors.api.model.*;
 
-import jakarta.json.JsonException;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -37,6 +37,7 @@ public class LoadingChainTest {
     boolean detailed = false;
     boolean initialize = true;
     boolean stopOnError = false;
+
     private void processChain(final Path chainFile, ExecutorProvider executorProvider) throws IOException {
         try {
             System.out.printf("Reading %s... ", chainFile);
@@ -99,8 +100,8 @@ public class LoadingChainTest {
             startArgIndex++;
         }
         if (args.length < startArgIndex + 2) {
-                System.out.printf("Usage: %s [-detailed] [-onlyLoad] [-stopOnError] "
-                                + "executors_folder chain.json/folder%n",
+            System.out.printf("Usage: %s [-detailed] [-onlyLoad] [-stopOnError] "
+                            + "executors_folder chain.json/folder%n",
                     LoadingChainTest.class.getName());
             return;
         }

@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 public final class ReplaceNumbers extends Executor implements ReadOnlyExecutionInput {
     public static final String INPUT_REPLACE_WITH = "replace_with";
@@ -75,7 +75,7 @@ public final class ReplaceNumbers extends Executor implements ReadOnlyExecutionI
         final int numberOfBlocks = this.numberOfBlocks == 0 ?
                 inputPortNumbersReplacer.n() :
                 this.numberOfBlocks;
-        logDebug(() -> "Replacing blocks #"  + blockIndex
+        logDebug(() -> "Replacing blocks #" + blockIndex
                 + (numberOfBlocks == 1 ? "" : ".." + (blockIndex + numberOfBlocks - 1))
                 + " of input number array " + inputPortNumbers
                 + " with blocks #" + blockIndexInReplacer

@@ -40,6 +40,7 @@ public class SystemEnvironment {
      * Value of the environment variable {@link #EXECUTORS_HOME_ENV_NAME} or <code>null</code> if it is not specified.
      */
     public static final String EXECUTORS_HOME;
+
     static {
         String executorsHome = null;
         try {

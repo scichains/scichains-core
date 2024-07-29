@@ -24,11 +24,10 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.external.UsedForExternalCommunication;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.external.UsedForExternalCommunication;
 
 public abstract class Data implements Cloneable {
     public static final long FLAG_INITIALIZED = 0x1L;
@@ -53,6 +52,7 @@ public abstract class Data implements Cloneable {
 
     /**
      * Set's initialized status and <b>frees resources</b> if new value is <code>false</code>.
+     *
      * @param initialized new initialized status.
      */
     @UsedForExternalCommunication
@@ -88,6 +88,7 @@ public abstract class Data implements Cloneable {
 
     /**
      * Returns type of this data. Never returns <code>null</code>.
+     *
      * @return type of this data (non-null).
      */
     @UsedForExternalCommunication
@@ -110,7 +111,7 @@ public abstract class Data implements Cloneable {
      * <p><b>Please be very accurate with calling this method with <code>cloneData=false</code>.</b>
      * It is allowed only if you are sure that the client will not try to modify the content of the data.
      *
-     * @param other some other data of the same type.
+     * @param other     some other data of the same type.
      * @param cloneData if <code>false</code>, this method performs shallow copying and works as quickly as possible.
      */
     public abstract void setTo(Data other, boolean cloneData);
@@ -120,7 +121,7 @@ public abstract class Data implements Cloneable {
      * Note: this method works very quickly, unlike <code>setTo</code> methods (it never performs data copying).
      *
      * @param other some other data of the same type.
-     * @return      reference to this object.
+     * @return reference to this object.
      */
     public abstract Data exchange(Data other);
 

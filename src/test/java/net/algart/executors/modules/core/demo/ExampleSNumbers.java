@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.demo;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 /**
  * Simple java test number arrays ports
@@ -39,31 +39,31 @@ public final class ExampleSNumbers extends Executor {
         SNumbers data;
         if (in == null) {
             data = new SNumbers();
-            data.setTo(new float[]{1,2,3,4,5}, 1);
+            data.setTo(new float[]{1, 2, 3, 4, 5}, 1);
             in = data;
         } else if (!in.isInitialized()) {
             data = (SNumbers) in;
-            data.setTo(new int[]{1,2,3,4,5}, 1);
+            data.setTo(new int[]{1, 2, 3, 4, 5}, 1);
         } else {
-            data = (SNumbers)in;
+            data = (SNumbers) in;
             if (data.isIntArray()) {
-                int []ints = (int[]) data.getArray();
+                int[] ints = (int[]) data.getArray();
                 for (int i = 0; i < ints.length; ++i) {
                     ints[i] *= 2;
                 }
             } else if (data.isFloatArray()) {
-                float []floats = (float[]) data.getArray();
+                float[] floats = (float[]) data.getArray();
                 for (int i = 0; i < floats.length; ++i) {
                     floats[i] *= 2;
                 }
 
             } else if (data.isLongArray()) {
-                long []longs = (long[]) data.getArray();
+                long[] longs = (long[]) data.getArray();
                 for (int i = 0; i < longs.length; ++i) {
                     longs[i] *= 2;
                 }
             } else if (data.isDoubleArray()) {
-                double []doubles = (double[]) data.getArray();
+                double[] doubles = (double[]) data.getArray();
                 for (int i = 0; i < doubles.length; ++i) {
                     doubles[i] *= 2;
                 }

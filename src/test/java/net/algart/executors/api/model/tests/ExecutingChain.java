@@ -27,15 +27,15 @@ package net.algart.executors.api.model.tests;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.JArrays;
 import net.algart.arrays.PArray;
-import net.algart.executors.api.model.*;
-import net.algart.multimatrix.MultiMatrix2D;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.executors.api.model.*;
 import net.algart.executors.modules.core.common.TimingStatistics;
+import net.algart.multimatrix.MultiMatrix2D;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -51,7 +51,7 @@ import java.util.Map;
 public class ExecutingChain {
     public static final String SESSION_ID = "~~DUMMY_SESSION";
 
-    static  {
+    static {
         String property = System.getProperty("java.util.logging.config.file");
         if (property != null) {
             property = SystemEnvironment.replaceHomeEnvironmentVariable(property);
@@ -103,10 +103,10 @@ public class ExecutingChain {
             startArgIndex++;
         }
         if (args.length < startArgIndex + 3) {
-                System.out.printf("Usage: "
-                                + "%s [-mono] ]-clean] [-all] [-multithreading] [-ignoreExceptions] [-gc] "
-                                + "chain.json some_image_file result_folder [number_of_tests]%n",
-                        ExecutingChain.class.getName());
+            System.out.printf("Usage: "
+                            + "%s [-mono] ]-clean] [-all] [-multithreading] [-ignoreExceptions] [-gc] "
+                            + "chain.json some_image_file result_folder [number_of_tests]%n",
+                    ExecutingChain.class.getName());
             System.out.println("Also please specify the following system variables:");
             System.out.println("    -Dnet.algart.executors.path=folder_with_all_executor_JSONs");
             System.out.println("    -Dnet.algart.executors.logic.compiler.subchains.path="
@@ -206,9 +206,8 @@ public class ExecutingChain {
                     if (checkStability && data instanceof SMat) {
                         final MultiMatrix2D multiMatrix2D = ((SMat) data).toMultiMatrix2D();
                         final PArray halftone = multiMatrix2D.intensityChannel().array();
-                        text = multiMatrix2D.toString() + ": data hash=" + halftone.hashCode()
-                            + ", mean="
-                                + Arrays.sumOf(halftone) / halftone.length()
+                        text = multiMatrix2D + ": data hash=" + halftone.hashCode()
+                                + ", mean=" + Arrays.sumOf(halftone) / halftone.length()
                                 / halftone.maxPossibleValue(1.0);
                     } else {
                         text = data instanceof SNumbers ?

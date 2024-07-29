@@ -25,8 +25,8 @@
 package net.algart.bridges.standard;
 
 import javax.script.*;
-import java.util.Objects;
 import java.lang.System.Logger;
+import java.util.Objects;
 
 public final class JavaScriptPerformer {
     private static final boolean OPTIMIZE_SEVERAL_COMPILATION_OF_SAME_FORMULA = true;

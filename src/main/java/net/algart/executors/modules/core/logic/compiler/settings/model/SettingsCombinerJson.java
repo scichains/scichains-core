@@ -25,15 +25,15 @@
 package net.algart.executors.modules.core.logic.compiler.settings.model;
 
 import jakarta.json.*;
-import net.algart.io.MatrixIO;
-import net.algart.json.AbstractConvertibleToJson;
-import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
+import net.algart.io.MatrixIO;
+import net.algart.json.AbstractConvertibleToJson;
+import net.algart.json.Jsons;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOError;
@@ -169,7 +169,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
 
     // The following properties are not loaded from JSON-file, but are set later,
     // while loading all JSON models for some platform
-    private Set<String> tags = new LinkedHashSet<>();;
+    private Set<String> tags = new LinkedHashSet<>();
     private String platformId = null;
     private String platformCategory = null;
 
@@ -724,7 +724,9 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
     private static int settingsCombinerType(JsonObject settingsCombinerJson) {
         Objects.requireNonNull(settingsCombinerJson, "Null settings combiner JSON");
         final String app = settingsCombinerJson.getString("app", null);
-        return APP_NAME.equals(app) ? CODE_FOR_ORDINARY : APP_NAME_FOR_MAIN.equals(app) ? CODE_FOR_MAIN : CODE_FOR_INVALID;
+        return APP_NAME.equals(app) ?
+                CODE_FOR_ORDINARY : APP_NAME_FOR_MAIN.equals(app) ?
+                CODE_FOR_MAIN : CODE_FOR_INVALID;
     }
 
     private static void checkSettingsName(String name, Path file) throws JsonException {

@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 import java.util.Locale;
 
@@ -74,7 +74,7 @@ public final class ExtractNumbersColumns extends Executor implements ReadOnlyExe
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Extracting column%s (elements #%d%s from each block) of number array %s: "
-                + "%.3f ms (%.1f ns/block)",
+                        + "%.3f ms (%.1f ns/block)",
                 lengthInBlock == 1 ? "" : "s",
                 indexInBlock,
                 lengthInBlock == 1 ? "" : ".." + (indexInBlock + lengthInBlock - 1),

@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.logic.ifelse.matrices;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.Executor;
 
 public final class SwitchMatrix extends Executor {
     public static final String INPUT_SELECTOR = "selector_input";
@@ -59,7 +59,7 @@ public final class SwitchMatrix extends Executor {
 
     @Override
     public void process() {
-        final int selector = nonNegative(selector(), "selector index");        ;
+        final int selector = nonNegative(selector(), "selector index");
         getMat().exchange(selector == 0 ?
                 firstInitialized() :
                 getInputMat(portName(selector), !requireInput));

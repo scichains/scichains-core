@@ -25,9 +25,10 @@
 package net.algart.executors.modules.core.matrices.arithmetic;
 
 import net.algart.arrays.*;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
+import net.algart.executors.modules.core.scalars.arithmetic.ProductOfTwoPowers;
 import net.algart.math.functions.MultiplyingFunc;
 import net.algart.math.functions.PowerFunc;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public final class MatrixProductOfTwoPowers extends SeveralMultiMatricesChannelO
     }
 
     public void setA(String a) {
-        setA(MatrixSumOfPowers.smartParseDouble(a));
+        setA(ProductOfTwoPowers.smartParseDouble(a));
     }
 
     public double getB() {
@@ -64,7 +65,7 @@ public final class MatrixProductOfTwoPowers extends SeveralMultiMatricesChannelO
     }
 
     public void setB(String b) {
-        setB(MatrixSumOfPowers.smartParseDouble(b));
+        setB(ProductOfTwoPowers.smartParseDouble(b));
     }
 
     public double getM() {

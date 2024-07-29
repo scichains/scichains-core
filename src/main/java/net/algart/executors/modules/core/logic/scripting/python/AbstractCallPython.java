@@ -28,8 +28,8 @@ import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
-import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.bridges.jep.api.JepAPI;
+import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 
@@ -360,8 +360,8 @@ public abstract class AbstractCallPython extends Executor {
     @Override
     public final void close() {
         super.close();
-        sharedContainer.close();;
-        localContainer.close();;
+        sharedContainer.close();
+        localContainer.close();
     }
 
     protected abstract String code();

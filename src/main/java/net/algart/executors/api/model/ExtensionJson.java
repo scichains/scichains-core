@@ -333,7 +333,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             }
 
             public Dependency(JsonObject json, Path file) {
-                setId(Jsons.reqString(json,"id", file));
+                setId(Jsons.reqString(json, "id", file));
                 setName(json.getString("name", null));
                 setDescription(json.getString("description", null));
             }

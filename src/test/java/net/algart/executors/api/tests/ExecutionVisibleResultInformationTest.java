@@ -29,7 +29,7 @@ import net.algart.executors.modules.core.numbers.arithmetic.NumbersAbs;
 
 public final class ExecutionVisibleResultInformationTest {
     public static void main(String[] args) {
-        for (Executor executor : new Executor[] {
+        for (Executor executor : new Executor[]{
                 new NumbersAbs()
         }) {
             System.out.println("Executor " + executor.getClass().getSimpleName() + ":");

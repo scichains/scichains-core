@@ -25,11 +25,11 @@
 package net.algart.executors.modules.core.numbers.arithmetic;
 
 import net.algart.arrays.*;
-import net.algart.math.functions.MultiplyingFunc;
-import net.algart.math.functions.PowerFunc;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
 import net.algart.executors.modules.core.scalars.arithmetic.ProductOfTwoPowers;
+import net.algart.math.functions.MultiplyingFunc;
+import net.algart.math.functions.PowerFunc;
 
 import java.util.List;
 

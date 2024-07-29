@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.ifelse.numbers;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 public final class SwitchNumbers extends Executor implements ReadOnlyExecutionInput {
     public static final String INPUT_SELECTOR = "selector_input";
@@ -60,7 +60,7 @@ public final class SwitchNumbers extends Executor implements ReadOnlyExecutionIn
 
     @Override
     public void process() {
-        final int selector = nonNegative(selector(), "selector index");        ;
+        final int selector = nonNegative(selector(), "selector index");
         getNumbers().setTo(selector == 0 ?
                 firstInitialized() :
                 getInputNumbers(portName(selector), !requireInput));

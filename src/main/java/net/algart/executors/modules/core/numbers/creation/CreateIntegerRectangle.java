@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.numbers.creation;
 
-import net.algart.math.IRange;
-import net.algart.math.IRectangularArea;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.math.IRange;
+import net.algart.math.IRectangularArea;
 
 public final class CreateIntegerRectangle extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_SIZE_X = "size_x";

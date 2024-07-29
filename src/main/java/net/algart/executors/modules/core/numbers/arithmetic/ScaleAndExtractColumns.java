@@ -24,12 +24,12 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.json.Jsons;
+import jakarta.json.*;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.NumbersFilter;
+import net.algart.json.Jsons;
 
-import jakarta.json.*;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 

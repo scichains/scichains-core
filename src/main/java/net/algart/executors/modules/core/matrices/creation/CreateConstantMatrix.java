@@ -48,8 +48,8 @@ public final class CreateConstantMatrix extends MultiMatrixChannelGenerator {
         double maxPossibleValue = Arrays.maxPossibleValue(destType, 1.0);
         double value = colorChannel(color, maxPossibleValue);
         logDebug(() -> "Creating constant " + getElementType() + "["
-            + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
-            + "], channel " + currentChannel() + ": filler " + value);
+                + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
+                + "], channel " + currentChannel() + ": filler " + value);
         final Matrix<? extends PArray> result =
                 getDimZ() > 0 ?
                         Matrices.constantMatrix(value, destType, getDimX(), getDimY(), getDimZ()) :

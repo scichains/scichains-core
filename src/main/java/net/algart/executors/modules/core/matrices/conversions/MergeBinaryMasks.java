@@ -28,9 +28,9 @@ import net.algart.arrays.IntArray;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 import net.algart.math.functions.AbstractFunc;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,16 +52,16 @@ public final class MergeBinaryMasks extends SeveralMultiMatricesOperation {
             a[k] = aForNonNull.get(k);
         }
         return MultiMatrix.valueOfMono(
-            Matrices.asFuncMatrix(new AbstractFunc() {
-                @Override
-                public double get(double... x) {
-                    for (int index = x.length - 1; index >= 0; index--) {
-                        if (x[index] != 0.0) {
-                            return a[index];
+                Matrices.asFuncMatrix(new AbstractFunc() {
+                    @Override
+                    public double get(double... x) {
+                        for (int index = x.length - 1; index >= 0; index--) {
+                            if (x[index] != 0.0) {
+                                return a[index];
+                            }
                         }
+                        return 0.0;
                     }
-                    return 0.0;
-                }
-            }, IntArray.class, mNonNull));
+                }, IntArray.class, mNonNull));
     }
 }

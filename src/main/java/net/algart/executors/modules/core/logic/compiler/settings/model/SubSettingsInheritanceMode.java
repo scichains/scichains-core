@@ -24,12 +24,12 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.model;
 
-import net.algart.json.Jsons;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonValue;
+import net.algart.json.Jsons;
+
 import java.util.Map;
 
 public enum SubSettingsInheritanceMode {

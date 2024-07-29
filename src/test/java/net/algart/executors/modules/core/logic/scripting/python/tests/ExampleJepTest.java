@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.scripting.python.tests;
 
-import net.algart.executors.modules.core.demo.ExampleJep;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.modules.core.demo.ExampleJep;
 
 public class ExampleJepTest {
     public static void main(String[] args) {

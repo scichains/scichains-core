@@ -26,12 +26,12 @@ package net.algart.bridges.graalvm;
 
 import org.graalvm.polyglot.Context;
 
+import java.lang.System.Logger;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.function.Supplier;
-import java.lang.System.Logger;
 
 public abstract class GraalPerformerContainer {
     public enum ActionOnChangeContextId {
@@ -65,7 +65,8 @@ public abstract class GraalPerformerContainer {
     private GraalContextCustomizer customizer = GraalContextCustomizer.DEFAULT;
     private Path workingDirectory = null;
     private String autoBindingLanguage = null;
-    private GraalPerformerConfigurator configurator = performer -> {};
+    private GraalPerformerConfigurator configurator = performer -> {
+    };
 
     GraalPerformerContainer() {
         resetSupplier();
@@ -120,7 +121,7 @@ public abstract class GraalPerformerContainer {
 
     public GraalContextCustomizer getCustomizer() {
         return customizer;
-    };
+    }
 
     public GraalPerformerContainer setCustomizer(GraalContextCustomizer customizer) {
         this.customizer = Objects.requireNonNull(customizer, "Null customizer");
@@ -405,8 +406,7 @@ public abstract class GraalPerformerContainer {
         }
 
         /**
-         * @apiNote
-         * Will be automatically revived while usage after closing.
+         * @apiNote Will be automatically revived while usage after closing.
          */
 
         @Override

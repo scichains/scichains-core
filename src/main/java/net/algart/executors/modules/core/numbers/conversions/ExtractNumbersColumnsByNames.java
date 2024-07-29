@@ -25,10 +25,10 @@
 package net.algart.executors.modules.core.numbers.conversions;
 
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
 
 import java.util.*;
 import java.util.stream.Collectors;

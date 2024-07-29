@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.numbers.io;
 
+import net.algart.executors.api.LogLevel;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.LogLevel;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.scalars.conversions.JoinNumbersToScalar;
 import net.algart.executors.modules.core.scalars.io.PrintScalar;

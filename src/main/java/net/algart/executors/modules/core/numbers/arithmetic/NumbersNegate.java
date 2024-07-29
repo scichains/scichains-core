@@ -24,11 +24,14 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.arrays.*;
-import net.algart.math.functions.Func;
-import net.algart.math.functions.LinearFunc;
+import net.algart.arrays.Arrays;
+import net.algart.arrays.FloatArray;
+import net.algart.arrays.PArray;
+import net.algart.arrays.UpdatablePNumberArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
+import net.algart.math.functions.Func;
+import net.algart.math.functions.LinearFunc;
 
 public final class NumbersNegate extends NumberArrayFilter implements ReadOnlyExecutionInput {
     public static final Func NEGATE = LinearFunc.getInstance(0.0, -1.0);

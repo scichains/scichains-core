@@ -24,11 +24,10 @@
 
 package net.algart.executors.modules.core.scalars.json;
 
-import net.algart.json.Jsons;
+import jakarta.json.JsonObject;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.scalars.ScalarFilter;
-
-import jakarta.json.JsonObject;
+import net.algart.json.Jsons;
 
 public final class GetAllJsonKeys extends ScalarFilter {
     public static final String INPUT_JSON = "json";

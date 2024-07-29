@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.executors.api.data.SMat;
 import net.algart.arrays.ByteArray;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.api.data.SMat;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public final class MergeColorChannels extends ColorSpaceConversion {
     public static final long DEFAULT_DIM_X_WHEN_NO_SOURCE = 512;
     public static final long DEFAULT_DIM_Y_WHEN_NO_SOURCE = 512;
 
-    private double defaultFillerForChannels[] = new double[] {1.0, 1.0, 1.0};
+    private double defaultFillerForChannels[] = new double[]{1.0, 1.0, 1.0};
 
     public MergeColorChannels() {
         addOutputMat(DEFAULT_OUTPUT_PORT);
@@ -82,7 +82,7 @@ public final class MergeColorChannels extends ColorSpaceConversion {
             if (channel.isInitialized()) {
                 final Matrix<? extends PArray> m = channel.toMultiMatrix2D().intensityChannel();
                 logDebug(() -> "Merging channel #" + (channelIndex + 1) + " -> "
-                    + "color matrix " + m.dimX() + "x" + m.dimY());
+                        + "color matrix " + m.dimX() + "x" + m.dimY());
                 channels.add(m);
                 initialized.add(m);
             } else {
@@ -91,7 +91,7 @@ public final class MergeColorChannels extends ColorSpaceConversion {
                     // - alpha is optional
                 }
                 logDebug(() -> "Merged channel #" + (channelIndex + 1)
-                    + " is empty: it will be filled by default value " + defaultFillerForChannels[channelIndex]);
+                        + " is empty: it will be filled by default value " + defaultFillerForChannels[channelIndex]);
                 channels.add(null);
             }
         }

@@ -30,9 +30,9 @@ public class SMatElementTypeTest {
     public static void main(String[] args) {
         for (SMat.Depth depth : SMat.Depth.values()) {
             System.out.printf("%s; reverse valueOf is the same: %s, %s%n",
-                depth,
-                SMat.Depth.valueOf(depth.code()) == depth,
-                SMat.Depth.valueOf(depth.elementType(), depth.isUnsigned()) == depth);
+                    depth,
+                    SMat.Depth.valueOf(depth.code()) == depth,
+                    SMat.Depth.valueOf(depth.elementType(), depth.isUnsigned()) == depth);
         }
         System.out.println();
         for (int code = -5; code <= 199; code++) {

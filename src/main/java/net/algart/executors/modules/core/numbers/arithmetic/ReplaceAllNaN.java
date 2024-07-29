@@ -28,9 +28,9 @@ import net.algart.arrays.Arrays;
 import net.algart.arrays.FloatArray;
 import net.algart.arrays.PArray;
 import net.algart.arrays.UpdatablePNumberArray;
-import net.algart.math.functions.AbstractFunc;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
+import net.algart.math.functions.AbstractFunc;
 
 public final class ReplaceAllNaN extends NumberArrayFilter implements ReadOnlyExecutionInput {
     private double valueToReplace = 0.0;

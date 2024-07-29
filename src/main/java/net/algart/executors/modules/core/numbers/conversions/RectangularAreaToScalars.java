@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.math.RectangularArea;
-import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.math.RectangularArea;
 
 public final class RectangularAreaToScalars extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_MIN_X = "min_x";

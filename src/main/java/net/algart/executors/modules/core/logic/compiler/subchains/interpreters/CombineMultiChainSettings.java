@@ -24,15 +24,14 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains.interpreters;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineChainSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
 import net.algart.json.Jsons;
-import net.algart.executors.api.model.ChainJson;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 
 // Must be public with public constructor without arguments to be created by external systems.
 public class CombineMultiChainSettings extends CombineChainSettings {
@@ -50,7 +49,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
         final String chainId = settings.getString(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME, null);
         if (chainId == null) {
             throw new AssertionError("Invalid usage of " + this + ": no "
-                + MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME + " parameter");
+                    + MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME + " parameter");
         }
 //        System.out.println("!!!" + chainId + "; " + multiChain);
         final JsonObjectBuilder builder = Json.createObjectBuilder();

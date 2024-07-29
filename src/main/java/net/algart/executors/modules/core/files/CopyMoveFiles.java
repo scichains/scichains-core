@@ -31,7 +31,10 @@ import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public final class CopyMoveFiles extends FileOperation implements ReadOnlyExecutionInput {
     public static final String OUTPUT_TARGET_ABSOLUTE_PATH = "target_absolute_path";

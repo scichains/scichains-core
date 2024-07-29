@@ -25,8 +25,8 @@
 package net.algart.executors.modules.core.matrices.conversions;
 
 import net.algart.arrays.*;
-import net.algart.math.functions.LinearFunc;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
+import net.algart.math.functions.LinearFunc;
 
 import java.util.List;
 import java.util.stream.IntStream;

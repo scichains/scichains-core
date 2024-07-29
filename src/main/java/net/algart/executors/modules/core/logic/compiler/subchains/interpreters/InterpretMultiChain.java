@@ -145,12 +145,12 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
                     (t7 - t1) * 1e-6,
                     (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6,
                     (t5 - t4) * 1e-6, (t6 - t5) * 1e-6, (t7 - t6) * 1e-6,
-                    file == null ? "n/a" : "\""+ file + "\"",
+                    file == null ? "n/a" : "\"" + file + "\"",
                     selectedChain.timingInfo(),
                     multiChain.name(), timing));
         }
         final Level settingsLogLevel = parameters().getBoolean(
-                UseMultiChain.LOG_SETTINGS_PARAMETER_NAME,false) ?
+                UseMultiChain.LOG_SETTINGS_PARAMETER_NAME, false) ?
                 Level.WARNING :
                 Level.DEBUG;
         LOG.log(settingsLogLevel, () -> String.format(Locale.US,

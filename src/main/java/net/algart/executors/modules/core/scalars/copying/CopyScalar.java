@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.copying;
 
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 
 public class CopyScalar extends Executor {
     private boolean requireInput = false;

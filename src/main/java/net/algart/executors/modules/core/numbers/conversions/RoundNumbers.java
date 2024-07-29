@@ -27,10 +27,10 @@ package net.algart.executors.modules.core.numbers.conversions;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.PArray;
 import net.algart.arrays.UpdatablePNumberArray;
-import net.algart.math.functions.AbstractFunc;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
+import net.algart.math.functions.AbstractFunc;
 
 public final class RoundNumbers extends NumberArrayFilter implements ReadOnlyExecutionInput {
     private Class<?> elementType = int.class;

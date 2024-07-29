@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.math.IRange;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.SeveralNumbersOperation;
+import net.algart.math.IRange;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,10 +44,10 @@ public final class NumbersPolarToCartesian extends SeveralNumbersOperation imple
 
     public enum AngleMultiplier {
         NONE((angle, custom) -> angle),
-        MULTIPLIER_TO_RADIANS((angle, custom) ->  Math.toRadians(angle)),
+        MULTIPLIER_TO_RADIANS((angle, custom) -> Math.toRadians(angle)),
         MULTIPLIER_PI((angle, custom) -> Math.PI * angle),
         MULTIPLIER_2PI((angle, custom) -> PI_2 * angle),
-        CUSTOM((angle, custom) ->  angle * custom);
+        CUSTOM((angle, custom) -> angle * custom);
 
         private final DoubleBinaryOperator multiplier;
 

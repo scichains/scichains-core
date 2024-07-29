@@ -24,11 +24,10 @@
 
 package net.algart.executors.modules.core.scalars.creation;
 
-import net.algart.json.Jsons;
-import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
-
 import jakarta.json.JsonObject;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
+import net.algart.json.Jsons;
 
 public final class CreateJson extends Executor {
     private String json = "";

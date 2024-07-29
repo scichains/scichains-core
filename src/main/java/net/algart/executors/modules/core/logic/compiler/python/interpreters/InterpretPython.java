@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.logic.compiler.python.interpreters;
 
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepPlatforms;
-import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
-import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCaller;
 
 import java.util.Locale;
@@ -49,8 +49,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     @Override
     public void process() {
         long t1 = System.nanoTime(), t2, t3, t4;
-        @SuppressWarnings("resource")
-        final PythonCaller pythonCaller = pythonCaller();
+        @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
         try (AtomicPyObject params = pythonCaller.loadParameters(this);
              AtomicPyObject inputs = pythonCaller.readInputPorts(this);
              AtomicPyObject outputs = pythonCaller.createOutputs()) {

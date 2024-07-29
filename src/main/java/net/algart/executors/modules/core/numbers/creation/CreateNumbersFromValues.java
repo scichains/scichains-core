@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.numbers.creation;
 
 import net.algart.arrays.TooLargeArrayException;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,7 +87,7 @@ public final class CreateNumbersFromValues extends Executor implements ReadOnlyE
     }
 
     public double getValue(int index) {
-        return values.getOrDefault(index,  0.0);
+        return values.getOrDefault(index, 0.0);
     }
 
     public CreateNumbersFromValues setValue(int index, double value) {

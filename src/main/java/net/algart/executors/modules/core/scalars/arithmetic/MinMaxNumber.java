@@ -52,7 +52,7 @@ abstract class MinMaxNumber extends Executor {
             if (!hasInputPort(portName)) {
                 break;
             }
-            final String input = getInputScalar(portName,true).getValue();
+            final String input = getInputScalar(portName, true).getValue();
             if (input != null) {
                 result = combine(result, Double.parseDouble(input));
             }

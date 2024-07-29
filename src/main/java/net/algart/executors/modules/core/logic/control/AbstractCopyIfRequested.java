@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.logic.control;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.Port;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 abstract class AbstractCopyIfRequested extends Executor {
     public static final String IF_PREFIX = "if_";

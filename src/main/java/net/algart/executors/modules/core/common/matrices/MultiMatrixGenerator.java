@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.Executor;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.Objects;
 

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.scripting.js.tests;
 
-import net.algart.executors.api.data.SNumbers;
 import net.algart.bridges.standard.JavaScriptPerformer;
+import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.logic.scripting.js.arrays.BlockJSModifyingNamedNumbers;
 import net.algart.executors.modules.core.numbers.creation.CreateRandomNumbers;
 import org.graalvm.polyglot.Context;
@@ -43,6 +43,7 @@ public class ArraysJavaScriptSpeed {
     private static final int N = 1000_000;
 
     final ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
+
     {
         Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("polyglot.js.allowHostAccess", true);

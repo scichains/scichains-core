@@ -92,7 +92,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
                     model = ExecutorJson.valueOf(modelDescription);
                 } catch (JsonException e) {
                     throw new IllegalStateException("Standard executor provider cannot be used with executor "
-                        + executorId + ": it is registered with unsupported format of model description", e);
+                            + executorId + ": it is registered with unsupported format of model description", e);
                 }
             }
             dynamicExecutorsCache.add(executorId, model);

@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.matrices.conversions;
 
 import net.algart.arrays.*;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -46,10 +46,10 @@ public class SScalarTest {
             toDoubles3 = "{{EXCEPTION: " + e.getMessage() + "}}";
         }
         System.out.printf("Scalar value: %s;%n  toString(): \"%s\";%n  toDoubles(): %s;%n  toDoubles(3): %s%n",
-            scalar.getValue() == null ? "<<null>>" : "\"" + scalar.getValue() + "\"",
-            scalar.toString(),
-            toDoubles,
-            toDoubles3);
+                scalar.getValue() == null ? "<<null>>" : "\"" + scalar.getValue() + "\"",
+                scalar.toString(),
+                toDoubles,
+                toDoubles3);
     }
 
     public static void main(String[] args) {
@@ -63,7 +63,7 @@ public class SScalarTest {
         show(scalar);
         scalar.setTo(Arrays.asList("A", "B", "C"));
         show(scalar);
-        scalar.setTo(new double[] {255, 255, 0});
+        scalar.setTo(new double[]{255, 255, 0});
         show(scalar);
         scalar.setToNull();
         show(scalar);

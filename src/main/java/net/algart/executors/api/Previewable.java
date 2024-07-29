@@ -24,8 +24,8 @@
 
 package net.algart.executors.api;
 
-import net.algart.external.UsedForExternalCommunication;
 import net.algart.executors.api.data.Data;
+import net.algart.external.UsedForExternalCommunication;
 
 public interface Previewable {
     @UsedForExternalCommunication

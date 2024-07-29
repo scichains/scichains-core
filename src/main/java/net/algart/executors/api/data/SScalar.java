@@ -183,6 +183,7 @@ public final class SScalar extends Data {
 
     /**
      * Makes this scalar non-initialized (null).
+     *
      * @return a reference to this object.
      */
     public SScalar setToNull() {

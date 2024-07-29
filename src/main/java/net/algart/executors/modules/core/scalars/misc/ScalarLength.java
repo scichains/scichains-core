@@ -60,7 +60,7 @@ public final class ScalarLength extends Executor implements ReadOnlyExecutionInp
         final SScalar input = getInputScalar(!requireInput);
         final String s = input.getValue();
 
-        final int length = s == null ? 0 : (trim? s.trim() : s).length();
+        final int length = s == null ? 0 : (trim ? s.trim() : s).length();
         getScalar().setTo(length);
     }
 }

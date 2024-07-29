@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.scalars.arithmetic;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.HighLevelException;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 public final class CheckNumberInRange extends Executor {
     private double min = Double.NEGATIVE_INFINITY;
@@ -104,9 +104,9 @@ public final class CheckNumberInRange extends Executor {
         } catch (NumberFormatException e) {
             throw new HighLevelException(new IllegalArgumentException(
                     "Input value " + scalar + " is not a number " +
-                    "(it must be a number " +
-                    (!invert ? "inside" : "outside") + " the range "
-                    + min + ".." + max + ")"));
+                            "(it must be a number " +
+                            (!invert ? "inside" : "outside") + " the range "
+                            + min + ".." + max + ")"));
         }
         boolean result = min <= value && value <= max;
         if (invert) {
@@ -116,8 +116,8 @@ public final class CheckNumberInRange extends Executor {
         if (!result && actionOnFail == CheckScalarsEquality.ActionOnFail.THROW_EXCEPTION) {
             throw new HighLevelException(new IllegalArgumentException(
                     "Input number " + value + " is "
-                    + (invert ? "inside" : "outside") + " the range "
-                    + min + ".." + max));
+                            + (invert ? "inside" : "outside") + " the range "
+                            + min + ".." + max));
         }
     }
 }

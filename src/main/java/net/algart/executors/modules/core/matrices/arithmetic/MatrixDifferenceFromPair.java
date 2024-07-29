@@ -25,10 +25,10 @@
 package net.algart.executors.modules.core.matrices.arithmetic;
 
 import net.algart.arrays.*;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 import net.algart.math.functions.DividingFunc;
 import net.algart.math.functions.Func;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 
 import java.util.List;
 

@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.scalars.creation;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 public final class CreateBoolean extends Executor {
     private boolean value = false;

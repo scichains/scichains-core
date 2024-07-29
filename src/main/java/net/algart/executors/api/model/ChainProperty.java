@@ -24,9 +24,9 @@
 
 package net.algart.executors.api.model;
 
+import jakarta.json.JsonValue;
 import net.algart.executors.api.data.ParameterValueType;
 
-import jakarta.json.JsonValue;
 import java.util.Objects;
 
 public final class ChainProperty {

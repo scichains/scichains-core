@@ -33,7 +33,6 @@ import net.algart.io.MatrixIO;
 
 import javax.imageio.ImageWriteParam;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;

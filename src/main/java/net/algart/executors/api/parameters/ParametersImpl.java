@@ -29,7 +29,7 @@ import java.util.*;
 
 /**
  * @author mnogono
- *         Created on 31.05.2017.
+ * Created on 31.05.2017.
  */
 class ParametersImpl implements Parameters {
     private final Map<String, Object> properties = Collections.synchronizedMap(new LinkedHashMap<>());

@@ -66,7 +66,7 @@ public class GraalBindingTest {
         Value func = context.eval(code);
         Value creator = context.eval(creation);
         Value obj = creator.execute();
-        obj.putMember("a", new double [] {1.2, 10.0});
+        obj.putMember("a", new double[]{1.2, 10.0});
         obj.putMember("b", 100.0);
         obj.putMember("c1", new SMat());
         obj.putMember("c2", "JavaString");

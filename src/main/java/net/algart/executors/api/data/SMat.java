@@ -31,7 +31,7 @@ import net.algart.io.awt.MatrixToBufferedImage;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 import java.nio.*;
 import java.util.Objects;
 import java.util.function.Function;
@@ -446,7 +446,7 @@ public final class SMat extends Data {
      * is the number of channels.
      *
      * @param interleavedChannels interleaved matrix; for color matrices, the order must be the same
-     *                       as in {@link #getByteBuffer()} (BGR/BGRA for this class).
+     *                            as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      * @return the reference to this objects.
      */
     private SMat setToInterleavedMatrix(Matrix<? extends PArray> interleavedChannels) {

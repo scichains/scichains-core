@@ -43,8 +43,8 @@ abstract class BitMultiMatrixProcessing extends SeveralMultiMatricesProcessing {
     public Matrix<? extends PArray> extend(Matrix<? extends PArray> matrix) {
         final int d = zeroExtendingValue();
         return d == 0 ? matrix :
-            matrix.subMatrix(-d, -d, matrix.dimX() + d, matrix.dimY() + d,
-                    Matrix.ContinuationMode.ZERO_CONSTANT);
+                matrix.subMatrix(-d, -d, matrix.dimX() + d, matrix.dimY() + d,
+                        Matrix.ContinuationMode.ZERO_CONSTANT);
         // - important: after toBit call this constant stays zero
     }
 
@@ -110,9 +110,9 @@ abstract class BitMultiMatrixProcessing extends SeveralMultiMatricesProcessing {
 
     // Some of bitMatrices will be null, if !bitInput(index)
     abstract Object process(
-        List<Matrix<? extends UpdatablePArray>> bitMatrices,
-        List<MultiMatrix2D> sources,
-        boolean resultRequired);
+            List<Matrix<? extends UpdatablePArray>> bitMatrices,
+            List<MultiMatrix2D> sources,
+            boolean resultRequired);
 
     public static Matrix<UpdatableBitArray> toBit(final Matrix<? extends PArray> intensity) {
         if (intensity == null) {

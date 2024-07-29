@@ -57,7 +57,7 @@ public final class GetNumber extends NumbersToScalar implements ReadOnlyExecutio
     }
 
     public GetNumber setRawIndex(Integer rawIndex) {
-        this.rawIndex = rawIndex == null? null : nonNegative(rawIndex);
+        this.rawIndex = rawIndex == null ? null : nonNegative(rawIndex);
         return this;
     }
 

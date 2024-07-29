@@ -34,8 +34,9 @@ import java.util.Objects;
  * Actually we do not override any methods in most cases.
  * This loader is used only for adding model descriptions (registerWorker method);
  * standard execution block loader (for usual Java classes) is used for loading workers.
+ *
  * @param <W> some object ("worker") that actually perform all work of the executor;
- *           should implement {@link AutoCloseable}, if is has some resources that must be freed after usage.
+ *            should implement {@link AutoCloseable}, if is has some resources that must be freed after usage.
  */
 public class SimpleExecutionBlockLoader<W> extends ExecutionBlockLoader {
     public SimpleExecutionBlockLoader(String name) {

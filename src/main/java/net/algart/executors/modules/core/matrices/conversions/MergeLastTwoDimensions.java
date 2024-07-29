@@ -24,7 +24,10 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.arrays.*;
+import net.algart.arrays.JArrays;
+import net.algart.arrays.Matrices;
+import net.algart.arrays.Matrix;
+import net.algart.arrays.PArray;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelFilter;
 
 public final class MergeLastTwoDimensions extends MultiMatrixChannelFilter {

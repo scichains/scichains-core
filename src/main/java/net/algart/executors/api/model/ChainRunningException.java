@@ -37,9 +37,9 @@ public class ChainRunningException extends RuntimeException {
     }
 
     private static String correctMessage(String message, Throwable cause) {
-            return (cause instanceof InterruptionException ?
-                    "INTERRUPTING\n" :
-                    "[caused by " + cause + "]\n")
-                    + message;
+        return (cause instanceof InterruptionException ?
+                "INTERRUPTING\n" :
+                "[caused by " + cause + "]\n")
+                + message;
     }
 }

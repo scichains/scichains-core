@@ -31,7 +31,7 @@ import java.util.UUID;
 
 /**
  * @author mnogono
- *         Created on 11.05.2017.
+ * Created on 11.05.2017.
  */
 public enum DataType {
     MAT("mat", UUID.fromString("031FC202-0193-4933-AB2E-D81492CE67E0")) {

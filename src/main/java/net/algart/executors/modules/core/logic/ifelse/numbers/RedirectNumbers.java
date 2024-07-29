@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.ifelse.numbers;
 
-import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 
 public final class RedirectNumbers extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_PORT_PREFIX = "x";

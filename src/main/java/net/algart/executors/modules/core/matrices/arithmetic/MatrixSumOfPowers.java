@@ -24,9 +24,10 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
+import net.algart.arrays.*;
 import net.algart.executors.modules.core.common.OptionalArguments;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
-import net.algart.arrays.*;
+import net.algart.executors.modules.core.scalars.arithmetic.ProductOfTwoPowers;
 import net.algart.math.functions.LinearFunc;
 import net.algart.math.functions.PowerFunc;
 
@@ -56,7 +57,7 @@ public final class MatrixSumOfPowers extends SeveralMultiMatricesChannelOperatio
     }
 
     public void setPower(String power) {
-        setPower(smartParseDouble(power));
+        setPower(ProductOfTwoPowers.smartParseDouble(power));
     }
 
     public double getPowerOfSum() {
@@ -68,7 +69,7 @@ public final class MatrixSumOfPowers extends SeveralMultiMatricesChannelOperatio
     }
 
     public void setPowerOfSum(String powerOfSum) {
-        setPowerOfSum(smartParseDouble(powerOfSum));
+        setPowerOfSum(ProductOfTwoPowers.smartParseDouble(powerOfSum));
     }
 
     public Mode getMode() {
@@ -94,31 +95,20 @@ public final class MatrixSumOfPowers extends SeveralMultiMatricesChannelOperatio
         final int n = nonNull.size();
         final PowerFunc powerFunc = PowerFunc.getInstance(power, 1.0 / StrictMath.pow(scale, power));
         final double mult = mode == Mode.SUM ? 1.0
-            : mode == Mode.MEAN ? 1.0 / n
-            : 1.0 / customDividerOfSum;
+                : mode == Mode.MEAN ? 1.0 / n
+                : 1.0 / customDividerOfSum;
         final LinearFunc averagingFunc = LinearFunc.getInstance(0.0,
-            DoubleStream.generate(() -> mult).limit(n).toArray());
+                DoubleStream.generate(() -> mult).limit(n).toArray());
         final PowerFunc sumPowerFunc = PowerFunc.getInstance(powerOfSum, scale);
         if (currentChannel() == 0) {
             logDebug(() -> "Sum of powers "
-                + "((m1^" + power + "+...+mN^" + power + ") * " + mult + ")^" + powerOfSum
-                + ", " + "N=" + n + " for matrices "
-                + numberOfChannels() + "x" + nonNull.get(0).dimX() + "x" + nonNull.get(0).dimY());
+                    + "((m1^" + power + "+...+mN^" + power + ") * " + mult + ")^" + powerOfSum
+                    + ", " + "N=" + n + " for matrices "
+                    + numberOfChannels() + "x" + nonNull.get(0).dimX() + "x" + nonNull.get(0).dimY());
         }
         final List<Matrix<? extends PArray>> powered = nonNull.stream().map(
-            matrix -> Matrices.asFuncMatrix(powerFunc, DoubleArray.class, matrix)).collect(Collectors.toList());
+                matrix -> Matrices.asFuncMatrix(powerFunc, DoubleArray.class, matrix)).collect(Collectors.toList());
         final Matrix<? extends PArray> sum = Matrices.asFuncMatrix(averagingFunc, DoubleArray.class, powered);
         return Matrices.clone(Matrices.asFuncMatrix(sumPowerFunc, sampleType(), sum));
-    }
-
-    static double smartParseDouble(String s) {
-        s = s.trim();
-        final int p = s.indexOf("/");
-        if (p == -1) {
-            return Double.parseDouble(s);
-        }
-        final String left = s.substring(0, p).trim();
-        final String right = s.substring(p + 1).trim();
-        return Double.parseDouble(left) / Double.parseDouble(right);
     }
 }

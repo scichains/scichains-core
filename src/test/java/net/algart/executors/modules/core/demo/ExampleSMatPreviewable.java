@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.demo;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.Previewable;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.Executor;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -87,7 +87,7 @@ public final class ExampleSMatPreviewable extends Executor implements Previewabl
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(height * width * channels);
         byteBuffer.position(0);
 
-        m.setAll(new long[] {width, height}, SMat.Depth.U8, channels, byteBuffer, false);
+        m.setAll(new long[]{width, height}, SMat.Depth.U8, channels, byteBuffer, false);
 
         for (int i = 0; i < byteBuffer.capacity() / 3; i++) {
             int r = (byte) i * color.getRed() / 255;

@@ -27,17 +27,16 @@ package net.algart.executors.modules.core.common.matrices;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.math.functions.LinearFunc;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.ChannelOperation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SeveralMultiMatricesChannelOperation
-    extends SeveralMultiMatricesOperation
-    implements ChannelOperation
-{
+        extends SeveralMultiMatricesOperation
+        implements ChannelOperation {
     private int minimalRequiredNumberOfChannels = 0;
 
     private MultiMatrix sampleMultiMatrix = null;
@@ -89,7 +88,7 @@ public abstract class SeveralMultiMatricesChannelOperation
         this.sampleMultiMatrix = sources.get(indexOfSampleInputForEqualizing);
         if (sampleMultiMatrix == null) {
             throw new IllegalArgumentException("The input matrix #" + indexOfSampleInputForEqualizing
-                + " is not initialized, but it is required");
+                    + " is not initialized, but it is required");
         }
         try {
             this.numberOfChannels = Math.max(sampleMultiMatrix.numberOfChannels(), minimalRequiredNumberOfChannels);
@@ -121,7 +120,7 @@ public abstract class SeveralMultiMatricesChannelOperation
                         if (equalize && elementType != resultElementType) {
                             // - important: we need to do this even when max==resultMax (for example, float/double)
                             sourceMatrix = Matrices.asFuncMatrix(
-                                LinearFunc.getInstance(0.0, resultMax / max), sampleType, sourceMatrix);
+                                    LinearFunc.getInstance(0.0, resultMax / max), sampleType, sourceMatrix);
                         }
                         sourceMatrices.add(sourceMatrix);
                     }

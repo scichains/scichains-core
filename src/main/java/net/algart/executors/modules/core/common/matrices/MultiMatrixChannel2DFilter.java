@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
-import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 

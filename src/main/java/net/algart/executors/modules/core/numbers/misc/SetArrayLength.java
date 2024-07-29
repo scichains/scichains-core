@@ -26,10 +26,10 @@ package net.algart.executors.modules.core.numbers.misc;
 
 import net.algart.arrays.Arrays;
 import net.algart.arrays.PNumberArray;
-import net.algart.math.functions.ConstantFunc;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.math.functions.ConstantFunc;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.numbers.creation;
 
 import net.algart.arrays.TooLargeArrayException;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 import java.util.Arrays;
 import java.util.Locale;

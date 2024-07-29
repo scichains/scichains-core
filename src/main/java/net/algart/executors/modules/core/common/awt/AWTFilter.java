@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.common.awt;
 
-import net.algart.multimatrix.MultiMatrix2D;
-import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SMat;
+import net.algart.multimatrix.MultiMatrix2D;
 
 import java.awt.image.BufferedImage;
 

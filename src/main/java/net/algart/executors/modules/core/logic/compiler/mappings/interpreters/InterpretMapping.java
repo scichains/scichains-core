@@ -24,14 +24,14 @@
 
 package net.algart.executors.modules.core.logic.compiler.mappings.interpreters;
 
+import jakarta.json.JsonObject;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.logic.compiler.mappings.UseMapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingJson;
 import net.algart.json.Jsons;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.Executor;
 
-import jakarta.json.JsonObject;
 import java.util.Locale;
 
 public class InterpretMapping extends Executor implements ReadOnlyExecutionInput {

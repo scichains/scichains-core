@@ -46,8 +46,7 @@ public abstract class BitMultiMatrixOperationWithRequiredResult extends BitMulti
     protected final Matrix<? extends PArray> processMatrix(
             List<Matrix<? extends UpdatablePArray>> bitMatrices,
             List<MultiMatrix2D> sources,
-            boolean resultRequired)
-    {
+            boolean resultRequired) {
         assert resultRequired;
         return processMatrix(bitMatrices, sources);
     }

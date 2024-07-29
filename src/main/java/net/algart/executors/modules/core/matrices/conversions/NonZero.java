@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class NonZero extends MultiMatrixFilter {
     private boolean checkOnlyRGBChannels = true;

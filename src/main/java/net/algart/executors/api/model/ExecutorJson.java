@@ -25,13 +25,13 @@
 package net.algart.executors.api.model;
 
 import jakarta.json.*;
-import net.algart.json.AbstractConvertibleToJson;
-import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionStage;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.Executor;
+import net.algart.json.AbstractConvertibleToJson;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -628,6 +628,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
 
         public SourceInfo() {
         }
+
         private SourceInfo(JsonObject json, Path file) {
             this.languageName = json.getString("language_name", null);
             this.modelPath = json.getString("model_path", null);
@@ -1570,7 +1571,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     /**
      * Returns <code>true</code> if the current {@link #getLanguage() language} is
      * {@value JavaConf#JAVA_LANGUAGE}.
-
+     *
      * @return whether this executor is Java-based.
      */
     public final boolean isJavaExecutor() {

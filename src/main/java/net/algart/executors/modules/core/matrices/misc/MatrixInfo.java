@@ -25,10 +25,10 @@
 package net.algart.executors.modules.core.matrices.misc;
 
 import net.algart.arrays.JArrays;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixToSeveralScalars;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.Locale;
 import java.util.Map;

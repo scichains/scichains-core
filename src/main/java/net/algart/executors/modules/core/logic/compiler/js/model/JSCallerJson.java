@@ -28,10 +28,10 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.graalvm.GraalSourceContainer;
-import net.algart.json.AbstractConvertibleToJson;
-import net.algart.json.Jsons;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
+import net.algart.json.AbstractConvertibleToJson;
+import net.algart.json.Jsons;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class JSCallerJson extends ExecutorJson {
         }
 
         private JSConf(JsonObject json, Path file) {
-            this.module = Jsons.reqString(json,"module", file);
+            this.module = Jsons.reqString(json, "module", file);
             this.function = json.getString("function", function);
         }
 

@@ -79,7 +79,8 @@ public final class JavaScriptContextContainer {
             synchronized (contexts) {
                 return contexts.computeIfAbsent(this, k -> {
                     final ScriptEngine context = ScriptEngineTools.doNewEngine();
-                    JavaScriptPerformer.LOG.log(System.Logger.Level.INFO, "Creating new shared JavaScript engine for context #"
+                    JavaScriptPerformer.LOG.log(System.Logger.Level.INFO,
+                            "Creating new shared JavaScript engine for context #"
                             + contextId + ": " + context.getClass());
                     return context;
                 });

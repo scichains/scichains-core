@@ -24,6 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
+import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.GetNamesOfSettings;
@@ -31,7 +32,6 @@ import net.algart.executors.modules.core.logic.compiler.settings.interpreters.Sp
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.subchains.interpreters.CombineMultiChainSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
-import net.algart.executors.api.model.ExecutorJson;
 
 // Note: it is not an executor, it is an internal class for usage inside UseMultiChain and MultiChain
 public class UseMultiChainSettings extends UseSettings {

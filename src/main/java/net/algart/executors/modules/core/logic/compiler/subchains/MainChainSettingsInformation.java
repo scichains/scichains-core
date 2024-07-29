@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainBlock;
 import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 
 import java.util.Objects;
 

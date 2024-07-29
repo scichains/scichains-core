@@ -168,11 +168,11 @@ public final class CreateBilinearFunction extends MultiMatrixChannelGenerator {
         Class<? extends PArray> destType = Arrays.type(PArray.class, getElementType());
         final double maxPossibleValue = Arrays.maxPossibleValue(destType, 1.0);
         final double channelValue = colorChannel(color, rawValues ? 1.0 : maxPossibleValue);
-        final double x0 = originInPercent ?  originX * getDimX() / 100.0 : originX;
-        final double y0 = originInPercent ?  originY * getDimY() / 100.0 : originY;
+        final double x0 = originInPercent ? originX * getDimX() / 100.0 : originX;
+        final double y0 = originInPercent ? originY * getDimY() / 100.0 : originY;
         logDebug(() -> "Creating bilinear " + getElementType() + "["
-            + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
-            + "], channel " + currentChannel() + ": channelValue " + channelValue);
+                + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
+                + "], channel " + currentChannel() + ": channelValue " + channelValue);
         return Matrices.asCoordFuncMatrix(new AbstractFunc() {
             @Override
             public double get(double... x) {

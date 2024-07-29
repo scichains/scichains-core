@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
+import net.algart.arrays.SizeMismatchException;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.Executor;
-import net.algart.arrays.SizeMismatchException;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.util.ArrayList;
@@ -65,8 +65,8 @@ abstract class SeveralMultiMatricesProcessing extends Executor implements ReadOn
                 }
                 final SMat input = getInputMat(portName, allowUninitializedInput(k));
                 this.sourceMultiMatrices.add(input.isInitialized() ?
-                    input.toMultiMatrix(allowInputNonAlgartDepth(k)) :
-                    null);
+                        input.toMultiMatrix(allowInputNonAlgartDepth(k)) :
+                        null);
             }
             if (dimensionsEqualityRequired()) {
                 checkDimensionOfNonNullEquality(sourceMultiMatrices);
@@ -141,7 +141,7 @@ abstract class SeveralMultiMatricesProcessing extends Executor implements ReadOn
                 firstIndex = index;
             } else if (!m.dimEquals(first)) {
                 throw new SizeMismatchException("The multi-matrix #" + index + " and #" + firstIndex
-                    + " dimensions mismatch: #" + index + " is " + m + ", #" + firstIndex + " is " + first);
+                        + " dimensions mismatch: #" + index + " is " + m + ", #" + firstIndex + " is " + first);
             }
         }
     }

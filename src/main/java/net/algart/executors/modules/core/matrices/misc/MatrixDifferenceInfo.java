@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.misc;
 
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesToSeveralScalars;
 import net.algart.executors.modules.core.matrices.arithmetic.MatrixDifference;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.List;
 import java.util.Map;

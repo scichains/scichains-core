@@ -28,10 +28,10 @@ import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.math.functions.Func;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelFilter;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
+import net.algart.math.functions.Func;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class ChangePrecision extends MultiMatrixChannelFilter {
     private boolean rawCast = false;

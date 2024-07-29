@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.logic.ifelse.matrices;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.Port;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 public final class IfScalarThenMatrix extends Executor {
     public static final String INPUT_CONDITION = "if";

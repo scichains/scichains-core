@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.ifelse.scalars;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
 
 public final class SwitchScalar extends Executor implements ReadOnlyExecutionInput {
     public static final String INPUT_SELECTOR = "selector_input";
@@ -60,7 +60,7 @@ public final class SwitchScalar extends Executor implements ReadOnlyExecutionInp
 
     @Override
     public void process() {
-        final int selector = nonNegative(selector(), "selector index");        ;
+        final int selector = nonNegative(selector(), "selector index");
         getScalar().setTo(selector == 0 ?
                 firstInitialized() :
                 getInputScalar(portName(selector), !requireInput));

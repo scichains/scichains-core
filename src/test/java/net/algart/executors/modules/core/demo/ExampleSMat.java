@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.demo;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.Executor;
 
 import java.nio.ByteBuffer;
 

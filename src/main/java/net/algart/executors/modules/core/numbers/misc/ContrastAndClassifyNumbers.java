@@ -25,13 +25,13 @@
 package net.algart.executors.modules.core.numbers.misc;
 
 import net.algart.arrays.*;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 import net.algart.executors.modules.core.matrices.misc.LimitInterpretation;
 import net.algart.math.Range;
 import net.algart.math.functions.AbstractFunc;
 import net.algart.math.functions.LinearFunc;
 import net.algart.math.functions.RectangularFunc;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 
 public final class ContrastAndClassifyNumbers extends NumberArrayFilter implements ReadOnlyExecutionInput {
     public static final String OUTPUT_SELECTOR = "selector";

@@ -25,13 +25,13 @@
 package net.algart.executors.modules.core.numbers.statistics;
 
 import net.algart.arrays.*;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.SScalar;
+import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 import net.algart.math.Range;
 import net.algart.math.functions.Func;
 import net.algart.math.functions.LinearFunc;
 import net.algart.math.functions.PowerFunc;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SScalar;
-import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
 
 import java.util.Locale;
 
@@ -207,7 +207,7 @@ public final class NumbersStatistics extends NumberArrayFilter implements ReadOn
         for (int k = 0; k < percentileLevels.length; k++) {
             if (percentileLevels[k] < 0.0 || percentileLevels[k] > 1.0) {
                 throw new IllegalArgumentException("Illegal percentile level #" + k + " = "
-                    + percentileLevels[k] + ": it is out of range 0..1");
+                        + percentileLevels[k] + ": it is out of range 0..1");
             }
         }
         final double[] result = new double[percentileLevels.length];

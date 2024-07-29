@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.Executor;
 import net.algart.multimatrix.MultiMatrix2D;
 
 public abstract class MultiMatrix2DFilter extends Executor implements ReadOnlyExecutionInput {

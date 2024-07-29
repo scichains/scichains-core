@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.matrices.io;
 
-import net.algart.executors.modules.core.files.ListOfFiles;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.executors.modules.core.files.ListOfFiles;
 
 import java.io.FileNotFoundException;
 import java.io.IOError;

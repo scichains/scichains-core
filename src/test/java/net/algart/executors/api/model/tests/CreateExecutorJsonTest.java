@@ -24,18 +24,21 @@
 
 package net.algart.executors.api.model.tests;
 
-import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ControlEditionType;
 import net.algart.executors.api.model.ExecutorJson;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CreateExecutorJsonTest {
     public static class TestExecutor extends Executor {
@@ -77,7 +80,7 @@ public class CreateExecutorJsonTest {
         items.add(new ExecutorJson.ControlConf.EnumItem().setValue("MODE_1").setCaption("mode 2"));
         items.add(new ExecutorJson.ControlConf.EnumItem().setValue("MODE_2").setCaption("mode 2"));
         controls.put("mode", new ExecutorJson.ControlConf().setName("mode").setValueType(ParameterValueType.STRING)
-            .setCaption("Mode").setEditionType(ControlEditionType.ENUM)
+                .setCaption("Mode").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultStringValue("MODE_1"));
         items = new ArrayList<>();
         items.add(new ExecutorJson.ControlConf.EnumItem().setValue(Jsons.toJsonIntValue(1)).setCaption("m_1"));

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class ChangeNumberOfChannels extends MultiMatrixFilter {
     private int numberOfChannels = 0;
@@ -58,8 +58,8 @@ public final class ChangeNumberOfChannels extends MultiMatrixFilter {
             // - unchanged
             return source;
         }
-        logDebug(() -> "Changing number of channels " + source.numberOfChannels()  + " -> "
-            + numberOfChannels + " for matrix " + source);
+        logDebug(() -> "Changing number of channels " + source.numberOfChannels() + " -> "
+                + numberOfChannels + " for matrix " + source);
         return source.asOtherNumberOfChannels(numberOfChannels).clone();
     }
 

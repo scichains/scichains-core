@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.demo;
 
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 
 /**
  * simple example of simple scalar test

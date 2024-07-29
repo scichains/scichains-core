@@ -24,12 +24,12 @@
 
 package net.algart.executors.api;
 
-import net.algart.external.UsedForExternalCommunication;
-import net.algart.json.Jsons;
-
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.external.UsedForExternalCommunication;
+import net.algart.json.Jsons;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;

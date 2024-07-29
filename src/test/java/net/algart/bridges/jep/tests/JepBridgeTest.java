@@ -111,7 +111,7 @@ public class JepBridgeTest {
             }
             t4 = System.nanoTime();
             System.out.printf(Locale.US, "Executing Python: %s (%s), %.3f + %.3f + %.3f mcs; " +
-                                         "number of active threads: %d%n",
+                            "number of active threads: %d%n",
                     result instanceof int[] ? Arrays.toString((int[]) result) : result,
                     result.getClass().getCanonicalName(),
                     (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, Thread.activeCount());

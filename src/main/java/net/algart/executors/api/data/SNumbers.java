@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.arrays.*;
 import net.algart.arrays.Arrays;
+import net.algart.arrays.*;
 import net.algart.contours.Contours;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.math.*;

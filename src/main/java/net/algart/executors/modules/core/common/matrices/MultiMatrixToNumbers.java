@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
-import net.algart.multimatrix.MultiMatrix;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.multimatrix.MultiMatrix;
 
 public abstract class MultiMatrixToNumbers extends Executor implements ReadOnlyExecutionInput {
     private MultiMatrix sourceMultiMatrix = null;

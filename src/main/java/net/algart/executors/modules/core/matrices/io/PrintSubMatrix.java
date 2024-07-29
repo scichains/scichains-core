@@ -25,12 +25,12 @@
 package net.algart.executors.modules.core.matrices.io;
 
 import net.algart.arrays.*;
-import net.algart.math.functions.Func;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.LogLevel;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixToScalar;
 import net.algart.executors.modules.core.scalars.io.WriteScalar;
+import net.algart.math.functions.Func;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.List;
 import java.util.Locale;

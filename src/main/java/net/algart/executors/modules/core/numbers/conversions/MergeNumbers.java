@@ -29,7 +29,8 @@ import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.SeveralNumbersOperation;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 public final class MergeNumbers extends SeveralNumbersOperation implements ReadOnlyExecutionInput {
     public enum ResultElementType {

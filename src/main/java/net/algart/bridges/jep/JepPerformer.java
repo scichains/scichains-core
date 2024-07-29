@@ -30,8 +30,8 @@ import net.algart.bridges.jep.additions.AtomicPyCallable;
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.additions.JepSingleThreadInterpreter;
 
-import java.util.Objects;
 import java.lang.System.Logger;
+import java.util.Objects;
 
 public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());

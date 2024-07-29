@@ -24,10 +24,10 @@
 
 package net.algart.executors.api.tests;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class AddPortTest {
         };
         boolean a;
         a = executor.addPort(Port.newInput("input", DataType.SCALAR)
-            .setData(new SScalar().setTo("Some")));
+                .setData(new SScalar().setTo("Some")));
         System.out.printf("Adding input: %s%n", a);
         a = executor.addPort(Port.newOutput("output", DataType.MAT));
         System.out.printf("Adding output: %s%n", a);

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.creation;
 
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 
 public final class CreateInteger extends Executor {
     private long value = 0;

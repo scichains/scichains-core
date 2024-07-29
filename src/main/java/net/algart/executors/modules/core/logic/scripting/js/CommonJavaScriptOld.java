@@ -24,13 +24,13 @@
 
 package net.algart.executors.modules.core.logic.scripting.js;
 
+import net.algart.bridges.standard.JavaScriptContextContainer;
+import net.algart.bridges.standard.JavaScriptPerformer;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.bridges.standard.JavaScriptPerformer;
-import net.algart.bridges.standard.JavaScriptContextContainer;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.model.ExecutorNotFoundException;
 import net.algart.executors.api.model.ExecutorProvider;
 
@@ -584,9 +584,10 @@ public final class CommonJavaScriptOld extends Executor {
         uploadOutputMat(OUTPUT_M5, javaScriptResultM5);
         long t5 = debugTime();
         logDebug(() -> String.format(Locale.US,
-                "JavaScript \"%s\" executed in %.5f ms:"
-                        + " %.2f mcs compiling + %.2f mcs adding vars + %.2f mcs main script + %.2f mcs additional outputs"
-                        + " (%d stored actual script engines)",
+                "JavaScript \"%s\" executed in %.5f ms:" +
+                        " %.2f mcs compiling + %.2f mcs adding vars + %.2f mcs main script + " +
+                        "%.2f mcs additional " +
+                        "outputs (%d stored actual script engines)",
                 scriptToShortString(formula),
                 (t5 - t1) * 1e-6,
                 (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, (t5 - t4) * 1e-3,

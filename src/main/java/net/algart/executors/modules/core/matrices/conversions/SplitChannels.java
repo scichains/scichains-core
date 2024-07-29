@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class SplitChannels extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_PORT_PREFIX = "output_";

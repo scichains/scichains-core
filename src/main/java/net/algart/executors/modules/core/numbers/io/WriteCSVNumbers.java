@@ -228,8 +228,8 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
             writer.write(makeHeader(numbers, headers));
         }
         final SNumbers.Formatter formatter = numbers.getFormatter(
-                format.isEmpty() ? SNumbers.FormattingType.SIMPLE : SNumbers.FormattingType.PRINTF,
-                Locale.US)
+                        format.isEmpty() ? SNumbers.FormattingType.SIMPLE : SNumbers.FormattingType.PRINTF,
+                        Locale.US)
                 .setSimpleFormatForIntegers(simpleFormatForIntegers)
                 .setLinesDelimiter(lineDelimiter.delimiter)
                 .setElementsFormat(format)

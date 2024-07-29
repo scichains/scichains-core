@@ -73,7 +73,7 @@ public class ExecutionStatusTest {
         child1.setMessage(() -> "child1 again");
 
         for (int test = 1; test <= 16; test++) {
-            System.out.printf("Test #%d...%n", test);;
+            System.out.printf("Test #%d...%n", test);
             final int n = 1000000;
             long t1 = System.nanoTime();
             for (int k = 0; k < n; k++) {

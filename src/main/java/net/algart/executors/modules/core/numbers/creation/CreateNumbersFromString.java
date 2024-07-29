@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.creation;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.Executor;
 
 public final class CreateNumbersFromString extends Executor implements ReadOnlyExecutionInput {
     private int blockLength = 1;

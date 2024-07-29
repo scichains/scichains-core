@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.numbers.misc;
 
-import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SNumbers;
 
 public final class SetNumber extends Executor {
     private int blockIndex = 0;
@@ -56,7 +56,7 @@ public final class SetNumber extends Executor {
     }
 
     public SetNumber setRawIndex(Integer rawIndex) {
-        this.rawIndex = rawIndex == null? null : nonNegative(rawIndex);
+        this.rawIndex = rawIndex == null ? null : nonNegative(rawIndex);
         return this;
     }
 

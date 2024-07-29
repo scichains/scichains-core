@@ -27,9 +27,9 @@ package net.algart.executors.modules.core.numbers.arithmetic;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.BitArray;
 import net.algart.arrays.PNumberArray;
-import net.algart.math.functions.RectangularFunc;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayToScalar;
+import net.algart.math.functions.RectangularFunc;
 
 public final class CheckNumbersInRange extends NumberArrayToScalar implements ReadOnlyExecutionInput {
     private double min = 0.0;

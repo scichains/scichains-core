@@ -24,15 +24,15 @@
 
 package net.algart.bridges.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.api.GraalSafety;
-import net.algart.bridges.graalvm.GraalPerformer;
-import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.GraalJSType;
+import net.algart.bridges.graalvm.GraalPerformer;
+import net.algart.bridges.graalvm.GraalPerformerContainer;
+import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalAPI;
+import net.algart.bridges.graalvm.api.GraalSafety;
 import org.graalvm.polyglot.Value;
 
-import javax.script.*;
+import javax.script.ScriptException;
 
 public class GraalPerformerContainerTest {
     static GraalPerformerContainerTest test = new GraalPerformerContainerTest();

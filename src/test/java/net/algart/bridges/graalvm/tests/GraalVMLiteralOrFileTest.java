@@ -55,7 +55,7 @@ public class GraalVMLiteralOrFileTest {
         System.out.printf("Evaluating literal:%n*****%n%s%n*****%n", sourceLiteral.getCharacters());
         System.out.println("Name: " + sourceLiteral.getName());
         System.out.println("Language: " + sourceLiteral.getLanguage());
-        Source sourceLiteralOther= Source.newBuilder("js", src, "test.js").buildLiteral();
+        Source sourceLiteralOther = Source.newBuilder("js", src, "test.js").buildLiteral();
         System.out.println("Equality to other literal: " + sourceLiteral.equals(sourceLiteralOther));
         System.out.println();
 

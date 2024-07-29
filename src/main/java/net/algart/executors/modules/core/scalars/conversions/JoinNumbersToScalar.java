@@ -27,8 +27,8 @@ package net.algart.executors.modules.core.scalars.conversions;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.modules.core.common.numbers.NumbersToScalar;
 import net.algart.executors.modules.core.common.numbers.IndexingBase;
+import net.algart.executors.modules.core.common.numbers.NumbersToScalar;
 
 import java.util.Locale;
 

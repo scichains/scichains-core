@@ -24,13 +24,13 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 
+import jakarta.json.JsonObject;
+import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
 import net.algart.json.Jsons;
-import net.algart.executors.api.data.SScalar;
 
-import jakarta.json.JsonObject;
 import java.util.Locale;
 
 public class CombineSettings extends AbstractInterpretSettings {
@@ -64,7 +64,7 @@ public class CombineSettings extends AbstractInterpretSettings {
                 parameters().getString(UseSettings.ALL_SETTINGS_PARAMETER_NAME, "").trim() :
                 inputSettings.getValue();
         final JsonObject executorSettings = combiner.createSettings(this);
-        final JsonObject parentSettings =  Jsons.toJson(allSettings, true);
+        final JsonObject parentSettings = Jsons.toJson(allSettings, true);
         final JsonObject overriddenSettings = combiner.overrideSettings(executorSettings, parentSettings);
         final JsonObject resultSettings = correctSettings(overriddenSettings, combiner);
         combiner.splitSettings(this, resultSettings);

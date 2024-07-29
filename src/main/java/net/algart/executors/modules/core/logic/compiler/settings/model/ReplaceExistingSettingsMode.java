@@ -24,9 +24,8 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.model;
 
-import net.algart.json.Jsons;
-
 import jakarta.json.JsonObject;
+import net.algart.json.Jsons;
 
 public enum ReplaceExistingSettingsMode {
     SIMPLE() {

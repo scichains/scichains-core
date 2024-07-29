@@ -24,11 +24,13 @@
 
 package net.algart.executors.modules.core.matrices.statistics;
 
-import net.algart.arrays.*;
 import net.algart.additions.arrays.UniformHistogram256Finder;
-import net.algart.multimatrix.MultiMatrix;
+import net.algart.arrays.BitArray;
+import net.algart.arrays.Matrix;
+import net.algart.arrays.PArray;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixToSeveralNumbers;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.List;
 import java.util.Locale;

@@ -24,19 +24,10 @@
 
 package net.algart.executors.modules.core.system;
 
-import jakarta.json.JsonException;
-import jakarta.json.JsonObject;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
-import net.algart.json.Jsons;
 
 import java.io.File;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 public class CheckClassExistence extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_IS_EXISTING_CLASS = "is_existing_class";

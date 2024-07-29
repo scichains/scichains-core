@@ -350,7 +350,7 @@ public final class RepeatJSOld extends Executor {
     @Override
     public boolean needToRepeat() {
         logDebug(() -> (!isLastIteration ? "Repeating loop" : "FINISHING loop")
-            + " according formula \"" + whileCondition + "\"");
+                + " according formula \"" + whileCondition + "\"");
         return !isLastIteration;
     }
 

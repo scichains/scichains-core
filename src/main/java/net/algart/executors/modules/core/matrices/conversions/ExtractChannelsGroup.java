@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.matrices.conversions;
 
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public final class ExtractChannelsGroup extends MultiMatrixFilter {
         final List<Matrix<? extends PArray>> channels = source.allChannels();
         for (int k = 0; k < numberOfExtractedChannels; k++) {
             final int i = k + indexOfFirstChannel;
-            result.add(i >= 0 && i < channels.size()? channels.get(i) : zeroConstant);
+            result.add(i >= 0 && i < channels.size() ? channels.get(i) : zeroConstant);
             // note that (impossible) overflow in k+indexOfFirstChannel is also processed correctly (i<0)
         }
         return MultiMatrix.valueOf(result);

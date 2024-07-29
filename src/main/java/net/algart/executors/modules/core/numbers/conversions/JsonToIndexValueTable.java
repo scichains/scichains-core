@@ -28,11 +28,11 @@ import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
-import net.algart.json.Jsons;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 import net.algart.executors.modules.core.common.numbers.IndexingBase;
+import net.algart.json.Jsons;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -212,7 +212,8 @@ public final class JsonToIndexValueTable extends Executor implements ReadOnlyExe
                 return Double.parseDouble(name);
             } catch (NumberFormatException ignored) {
                 throw new IllegalArgumentException("There is a symbolic name \"" + name + "\", but JSON names map \""
-                        + namesJsonName + "\" " + (namesToNumber.isEmpty() ? "is empty" : "does not contain this name"));
+                        + namesJsonName + "\" " +
+                        (namesToNumber.isEmpty() ? "is empty" : "does not contain this name"));
             }
         }
         return value.doubleValue();
@@ -225,7 +226,8 @@ public final class JsonToIndexValueTable extends Executor implements ReadOnlyExe
                 return Long.parseLong(name);
             } catch (NumberFormatException ignored) {
                 throw new IllegalArgumentException("There is a symbolic name \"" + name + "\", but JSON names map \""
-                        + namesJsonName + "\" " + (namesToNumber.isEmpty() ? "is empty" : "does not contain this name"));
+                        + namesJsonName + "\" " +
+                        (namesToNumber.isEmpty() ? "is empty" : "does not contain this name"));
             }
         }
         return value.longValueExact();

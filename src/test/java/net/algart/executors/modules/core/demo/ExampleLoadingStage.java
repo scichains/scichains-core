@@ -75,7 +75,7 @@ public final class ExampleLoadingStage extends Executor {
         public void process() {
             getScalar().setTo("Called from " + this +
                     "\nexecutorId=" + getExecutorId()
-                    +"\nsessionId=" + getSessionId());
+                    + "\nsessionId=" + getSessionId());
         }
 
         @Override
@@ -90,6 +90,7 @@ public final class ExampleLoadingStage extends Executor {
 
     private static final ExecutionBlockLoader MY_LOADER =
             new ExecutionBlockLoader("test loader");
+
     static {
         ExecutionBlock.registerExecutionBlockLoader(MY_LOADER);
     }

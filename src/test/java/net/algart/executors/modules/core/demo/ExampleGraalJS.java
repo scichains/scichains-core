@@ -63,14 +63,14 @@ public class ExampleGraalJS extends Executor {
                             "'  aa'");
             return value == null ?
                     result + "\n" +
-                            "Number of stored performers: " + GraalPerformerContainer.numberOfStoredPerformers():
+                            "Number of stored performers: " + GraalPerformerContainer.numberOfStoredPerformers() :
                     value;
         }
     }
 
     public static void main(String[] args) {
         try (ExampleGraalJS test = new ExampleGraalJS()) {
-            final Object  result = test.testGraal(null);
+            final Object result = test.testGraal(null);
             System.out.println();
             System.out.println(result);
         }

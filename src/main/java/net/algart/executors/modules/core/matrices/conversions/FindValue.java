@@ -27,6 +27,7 @@ package net.algart.executors.modules.core.matrices.conversions;
 import net.algart.arrays.DoubleArray;
 import net.algart.arrays.FloatArray;
 import net.algart.arrays.Matrix;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.math.Point;
 import net.algart.math.functions.AbstractFunc;
 import net.algart.math.functions.Func;
@@ -37,7 +38,6 @@ import net.algart.matrices.morphology.BasicMorphology;
 import net.algart.matrices.morphology.ContinuedMorphology;
 import net.algart.matrices.morphology.Morphology;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class FindValue extends MultiMatrixFilter {
     public enum ValueKind {

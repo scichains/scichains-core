@@ -24,7 +24,9 @@
 
 package net.algart.executors.modules.core.common.numbers;
 
-import net.algart.arrays.*;
+import net.algart.arrays.PArray;
+import net.algart.arrays.PNumberArray;
+import net.algart.arrays.UpdatablePNumberArray;
 import net.algart.executors.api.data.SNumbers;
 
 public abstract class NumberArrayFilter extends NumbersFilter {

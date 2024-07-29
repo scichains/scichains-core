@@ -25,12 +25,12 @@
 package net.algart.executors.api.model;
 
 import jakarta.json.*;
-import net.algart.json.AbstractConvertibleToJson;
-import net.algart.json.Jsons;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutionStage;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
+import net.algart.json.AbstractConvertibleToJson;
+import net.algart.json.Jsons;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -827,7 +827,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
 
     // The following properties are not loaded from JSON-file, but are set later,
     // while loading all JSON models for some platform
-    private Set<String> tags = new LinkedHashSet<>();;
+    private Set<String> tags = new LinkedHashSet<>();
     private String platformId = null;
     private String platformCategory = null;
 

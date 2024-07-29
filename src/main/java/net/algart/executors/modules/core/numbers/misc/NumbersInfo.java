@@ -81,7 +81,7 @@ public final class NumbersInfo extends NumbersToScalar implements ReadOnlyExecut
         int indexInBlock = this.lengthInBlock > 0 ? this.indexInBlock : 0;
         int lengthInBlock = this.lengthInBlock > 0 ? this.lengthInBlock : source.getBlockLength();
         final boolean allQuick = Arrays.stream(SimpleArrayStatistics.values()).filter(
-                statistics -> isOutputNecessary(statistics.statisticsName()))
+                        statistics -> isOutputNecessary(statistics.statisticsName()))
                 .allMatch(SimpleArrayStatistics::isQuickRangeInBlockProcessing);
         if (!allQuick && (indexInBlock != 0 || lengthInBlock != source.getBlockLength())) {
             source = source.columnRange(indexInBlock, lengthInBlock);

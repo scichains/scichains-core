@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.matrices.statistics;
 
+import net.algart.additions.arrays.UniformHistogram256Finder;
 import net.algart.arrays.*;
 import net.algart.math.Range;
-import net.algart.additions.arrays.UniformHistogram256Finder;
 
 abstract class HistogramFinder {
     final PArray array;

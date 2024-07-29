@@ -24,11 +24,11 @@
 
 package net.algart.executors.api.tests;
 
+import net.algart.executors.api.data.SNumbers;
 import net.algart.math.IRange;
 import net.algart.math.IRectangularArea;
 import net.algart.math.Range;
 import net.algart.math.RectangularArea;
-import net.algart.executors.api.data.SNumbers;
 
 public class SNumbersRectangularAreasTest {
     private static void test(IRectangularArea area) {

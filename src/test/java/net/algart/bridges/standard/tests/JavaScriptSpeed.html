@@ -39,6 +39,7 @@
             const t2 = performance.now();
             return "Time " + (t2 - t1) + " ms = " + ((t2 - t1) * 1e6 / n) + " ns/iteration (" + sum + ")<br>";
         }
+
         function test() {
             document.querySelector("#results").innerHTML = "";
             for (let test = 1; test <= 10; test++) {

@@ -47,6 +47,7 @@ public class PathPropertyReplacement {
     private static final String[] TMP_DIR_PREFIXES = {
             TMP_DIR_PREFIX + "/", TMP_DIR_PREFIX + File.separator, TMP_DIR_PREFIX
     };
+
     public enum Property {
         FILE_PATH("path.name", path -> removeExtension(path.toAbsolutePath()), Executor::contextPath),
         FILE_PATH_EXT("path.name.ext", Path::toAbsolutePath, Executor::contextPath),
@@ -165,7 +166,7 @@ public class PathPropertyReplacement {
                 }
             }
             throw new IllegalArgumentException("Path \"" + s + "\" starts with " + TMP_DIR_PREFIX_COMMON_START
-                + ", but this keyword is not finished properly: one of prefixes "
+                    + ", but this keyword is not finished properly: one of prefixes "
                     + String.join(", ", TMP_DIR_PREFIXES) + " expected");
         }
         return s;

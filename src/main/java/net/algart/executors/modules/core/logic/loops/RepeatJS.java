@@ -24,9 +24,12 @@
 
 package net.algart.executors.modules.core.logic.loops;
 
-import net.algart.bridges.graalvm.*;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.bridges.graalvm.GraalPerformer;
+import net.algart.bridges.graalvm.GraalPerformerContainer;
+import net.algart.bridges.graalvm.GraalSourceContainer;
+import net.algart.bridges.graalvm.GraalValues;
 import net.algart.bridges.graalvm.api.GraalAPI;
+import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import org.graalvm.polyglot.Value;
@@ -399,7 +402,7 @@ public final class RepeatJS extends Executor {
     @Override
     public boolean needToRepeat() {
         logDebug(() -> (!isLastIteration ? "Repeating loop" : "FINISHING loop")
-            + " according formula \"" + whileCondition + "\"");
+                + " according formula \"" + whileCondition + "\"");
         return !isLastIteration;
     }
 

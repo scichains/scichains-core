@@ -28,9 +28,12 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
-import java.lang.ref.Cleaner;
-import java.util.*;
 import java.lang.System.Logger;
+import java.lang.ref.Cleaner;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class GraalPerformer implements AutoCloseable {
     private static final Logger LOG = System.getLogger(GraalPerformer.class.getName());
@@ -221,7 +224,7 @@ public class GraalPerformer implements AutoCloseable {
         private String toBriefString() {
             return "Graal performer " +
                     "of " + contextString +
-                    (customizerToString == null ? "" : " (customization: " + customizerToString) + ")"+
+                    (customizerToString == null ? "" : " (customization: " + customizerToString) + ")" +
                     (contextId == null ? "" : " in context #" + contextId);
         }
 

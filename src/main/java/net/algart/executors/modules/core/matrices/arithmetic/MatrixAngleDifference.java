@@ -27,8 +27,8 @@ package net.algart.executors.modules.core.matrices.arithmetic;
 import net.algart.arrays.FloatArray;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
+import net.algart.multimatrix.MultiMatrix;
 
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +62,7 @@ public final class MatrixAngleDifference extends SeveralMultiMatricesOperation {
         final Matrix<? extends PArray> x2 = sources.get(2).asMultiMatrix2D().asFloatingPoint().intensityChannel();
         final Matrix<? extends PArray> y2 = sources.get(3).asMultiMatrix2D().asFloatingPoint().intensityChannel();
         return MultiMatrix.valueOf2DMono(
-                angleDistanceMetric.asAngleDifference(x1, y1, x2, y2, FloatArray.class))
+                        angleDistanceMetric.asAngleDifference(x1, y1, x2, y2, FloatArray.class))
                 .clone();
     }
 

@@ -25,8 +25,6 @@
 package net.algart.additions.arrays;
 
 import net.algart.arrays.*;
-import net.algart.arrays.DirectAccessible;
-import net.algart.arrays.PArray;
 
 import java.util.Arrays;
 import java.util.Objects;

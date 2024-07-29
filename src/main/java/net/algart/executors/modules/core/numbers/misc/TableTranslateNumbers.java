@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.misc;
 
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 import net.algart.executors.modules.core.common.numbers.IndexingBase;
 
 import java.util.Arrays;

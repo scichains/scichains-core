@@ -31,10 +31,10 @@ import net.algart.contours.ContourHeader;
 import net.algart.contours.ContourNestingAnalyser;
 import net.algart.contours.Contours;
 import net.algart.contours.InsideContourStatus;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SNumbers;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
-import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
 
 import java.awt.geom.Point2D;
 import java.util.Locale;

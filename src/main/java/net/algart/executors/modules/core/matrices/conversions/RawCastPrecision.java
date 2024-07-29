@@ -28,9 +28,9 @@ import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.math.functions.Func;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelFilter;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
+import net.algart.math.functions.Func;
 
 public final class RawCastPrecision extends MultiMatrixChannelFilter {
     private Class<?> elementType = byte.class;
@@ -54,9 +54,9 @@ public final class RawCastPrecision extends MultiMatrixChannelFilter {
             return m;
         }
         if (currentChannel() == 0) {
-            logDebug(() -> "Cast precision " + m.elementType().getSimpleName()  + " -> "
-                + elementType.getSimpleName() + " for matrix "
-                + numberOfChannels() + "x" + m.dimX() + "x" + m.dimY());
+            logDebug(() -> "Cast precision " + m.elementType().getSimpleName() + " -> "
+                    + elementType.getSimpleName() + " for matrix "
+                    + numberOfChannels() + "x" + m.dimX() + "x" + m.dimY());
         }
         final Class<PArray> newType = Arrays.type(PArray.class, elementType);
         return Matrices.clone(Matrices.asFuncMatrix(Func.IDENTITY, newType, m));

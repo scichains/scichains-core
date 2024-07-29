@@ -24,12 +24,12 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.modules.core.common.OptionalArguments;
-import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.PArray;
 import net.algart.arrays.PNumberArray;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.modules.core.common.OptionalArguments;
+import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
 import net.algart.math.functions.Func;
 
 import java.util.List;

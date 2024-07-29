@@ -24,12 +24,14 @@
 
 package net.algart.executors.modules.core.numbers.statistics;
 
-import net.algart.arrays.*;
-import net.algart.math.IRange;
+import net.algart.arrays.Arrays;
+import net.algart.arrays.SimpleMemoryModel;
+import net.algart.arrays.UpdatablePArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.numbers.NumbersFilter;
+import net.algart.math.IRange;
 
 import java.util.Locale;
 import java.util.stream.IntStream;
@@ -199,7 +201,7 @@ public final class NumbersColumnsStatistics extends NumbersFilter implements Rea
                 for (int c = 0; c < blockLength; c++) {
                     final double percentile1 = percentileNumbers.getValue(blockLength + c);
                     final double percentile0 = percentileNumbers.getValue(c);
-                    difference.setValue(c,percentile1 - percentile0);
+                    difference.setValue(c, percentile1 - percentile0);
                 }
             }
         }

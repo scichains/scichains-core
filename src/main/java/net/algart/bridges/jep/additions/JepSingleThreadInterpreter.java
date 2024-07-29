@@ -29,13 +29,13 @@ import jep.JepException;
 import jep.python.PyCallable;
 import jep.python.PyObject;
 
+import java.lang.System.Logger;
 import java.lang.ref.Cleaner;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.lang.System.Logger;
 
 public class JepSingleThreadInterpreter implements Interpreter {
     static final Logger LOG = System.getLogger(JepSingleThreadInterpreter.class.getName());

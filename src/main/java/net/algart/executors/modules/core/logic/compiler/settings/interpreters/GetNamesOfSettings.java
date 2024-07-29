@@ -24,13 +24,13 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.json.Jsons;
-import net.algart.executors.api.model.ExecutorJson;
-
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
+import net.algart.json.Jsons;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

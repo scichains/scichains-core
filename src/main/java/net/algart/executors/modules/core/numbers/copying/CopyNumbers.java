@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.numbers.copying;
 
-import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SNumbers;
 
 public final class CopyNumbers extends Executor {
     private boolean requireInput = false;

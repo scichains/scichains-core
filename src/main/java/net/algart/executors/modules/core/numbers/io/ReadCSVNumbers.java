@@ -24,7 +24,6 @@
 
 package net.algart.executors.modules.core.numbers.io;
 
-import net.algart.arrays.Arrays;
 import net.algart.arrays.MutablePArray;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.ReadOnlyExecutionInput;

@@ -24,13 +24,13 @@
 
 package net.algart.executors.modules.core.logic.compiler.python.model;
 
-import net.algart.executors.api.Port;
-import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.JepPerformer;
+import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.AtomicPyCallable;
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.Port;
 
 import java.util.Objects;
 
@@ -85,8 +85,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public void initialize() {
-        @SuppressWarnings("resource")
-        final JepPerformer performer = performer();
+        @SuppressWarnings("resource") final JepPerformer performer = performer();
         if (pythonConf.isClassMethod()) {
             final String className = pythonConf.getClassName();
             performer.perform(JepPerformer.importCode(pythonConf.getModule(), className));
@@ -136,8 +135,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public Object callPython(AtomicPyObject params, AtomicPyObject inputs, AtomicPyObject outputs) {
         if (pythonConf.isClassMethod()) {
-            @SuppressWarnings("resource")
-            final AtomicPyObject instance = pythonInstance();
+            @SuppressWarnings("resource") final AtomicPyObject instance = pythonInstance();
             if (instance == null) {
                 throw new IllegalStateException("initialize() was not called correcly");
             }
@@ -148,8 +146,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
                         outputs.pyObject());
             }
         } else {
-            @SuppressWarnings("resource")
-            final JepPerformer performer = performer();
+            @SuppressWarnings("resource") final JepPerformer performer = performer();
             return performer.invokeFunction(pythonConf.getFunction(),
                     params.pyObject(),
                     inputs.pyObject(),

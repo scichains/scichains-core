@@ -107,7 +107,6 @@ public enum GraalSafety implements GraalContextCustomizer {
     }
 
 
-
     public String safetyName() {
         return safetyName;
     }

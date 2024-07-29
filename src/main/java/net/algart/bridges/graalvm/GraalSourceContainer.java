@@ -31,12 +31,12 @@ import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.System.Logger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
-import java.lang.System.Logger;
 
 public abstract class GraalSourceContainer {
     public static final String JAVASCRIPT_LANGUAGE = "js";

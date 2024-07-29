@@ -28,12 +28,12 @@ import net.algart.executors.api.Executor;
 
 import java.io.IOError;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.*;
-import java.lang.System.Logger;
 
 public final class ExecutorJsonSet {
     private static final Logger LOG = System.getLogger(Executor.class.getName());
@@ -106,9 +106,11 @@ public final class ExecutorJsonSet {
                             // (PathPropertyReplacement works better)
                         }
                         add(executorJson.getExecutorId(), executorJson, file);
-                        LOG.log(System.Logger.Level.TRACE, () -> "Executor " + executorJson.getExecutorId() + " loaded from " + file);
+                        LOG.log(System.Logger.Level.TRACE,
+                                () -> "Executor " + executorJson.getExecutorId() + " loaded from " + file);
                     } else {
-                        LOG.log(System.Logger.Level.TRACE, () -> "File " + file + " skipped: it is not an executor's JSON");
+                        LOG.log(System.Logger.Level.TRACE,
+                                () -> "File " + file + " skipped: it is not an executor's JSON");
                     }
                 }
             }

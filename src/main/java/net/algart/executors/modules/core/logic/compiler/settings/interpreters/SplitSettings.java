@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.json.Jsons;
 
-import jakarta.json.JsonObject;
 import java.util.Locale;
 
 public class SplitSettings extends AbstractInterpretSettings {

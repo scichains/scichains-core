@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.numbers.arithmetic;
 
 import net.algart.arrays.*;
-import net.algart.math.functions.ExpFunc;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
+import net.algart.math.functions.ExpFunc;
 
 import java.util.function.DoubleUnaryOperator;
 

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 
 public class JepExtendedConfig extends JepConfig {
     @FunctionalInterface
@@ -41,7 +40,7 @@ public class JepExtendedConfig extends JepConfig {
          * Executed once to check possible installation problems. Should throw an exception in a case of problems
          *
          * @param jepInterpreter JEP interpreter; can be not used (if this code creates its own interpreter)
-         * @param config JEP configuration
+         * @param config         JEP configuration
          */
         void verify(Interpreter jepInterpreter, JepConfig config) throws JepException;
     }

@@ -28,10 +28,10 @@ import net.algart.arrays.FloatArray;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 import net.algart.math.functions.AbstractFunc;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +44,8 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
     public static final String OUTPUT_MAGNITUDE = "magnitude";
     public static final String OUTPUT_XY = "xy";
 
-    private MatrixNormalize2DVector.ResultForZeroVector resultForZeroVector = MatrixNormalize2DVector.ResultForZeroVector.X0_Y1;
+    private MatrixNormalize2DVector.ResultForZeroVector resultForZeroVector =
+            MatrixNormalize2DVector.ResultForZeroVector.X0_Y1;
     private boolean normalizedSource = false;
     private boolean normalizedResult = false;
 

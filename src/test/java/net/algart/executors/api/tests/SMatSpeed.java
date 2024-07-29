@@ -32,7 +32,7 @@ public class SMatSpeed {
     private static void test() {
         final SMat mat = new SMat();
         mat.setAll(
-                new long[] {10, 10},
+                new long[]{10, 10},
                 SMat.Depth.S8, 1, ByteBuffer.allocate(100), false);
         System.out.printf("Testing %s...%n", mat);
 

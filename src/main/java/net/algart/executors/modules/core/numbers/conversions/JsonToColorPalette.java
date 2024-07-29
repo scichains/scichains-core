@@ -24,16 +24,16 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.json.Jsons;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.modules.core.common.ChannelOperation;
-import net.algart.executors.api.Executor;
-
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.SNumbers;
+import net.algart.executors.modules.core.common.ChannelOperation;
+import net.algart.json.Jsons;
+
 import java.util.Map;
 import java.util.Objects;
 

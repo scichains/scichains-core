@@ -31,8 +31,8 @@ import net.algart.executors.api.Port;
 import net.algart.executors.api.data.*;
 import org.graalvm.polyglot.Value;
 
-import java.util.*;
 import java.lang.System.Logger;
+import java.util.*;
 
 public class GraalAPI {
     public static final String STANDARD_API_PARAMETER = "_sys";
@@ -340,9 +340,9 @@ public class GraalAPI {
                 if (!SNumbers.isSupportedJavaArray(object)) {
                     throw new IllegalArgumentException(
                             "Illegal type for output \"" + port.getName() +
-                            "\": JavaScript code must return java-array of primitive types or " +
-                            SMat.class.getCanonicalName()
-                            + ", but it returned " + object.getClass().getCanonicalName());
+                                    "\": JavaScript code must return java-array of primitive types or " +
+                                    SMat.class.getCanonicalName()
+                                    + ", but it returned " + object.getClass().getCanonicalName());
                 }
                 data.setToArray(object, defaultBlockLength);
             }
@@ -397,8 +397,8 @@ public class GraalAPI {
             if (!(object instanceof SMat)) {
                 throw new IllegalStateException(
                         "Illegal type for of output \"" + port.getName() +
-                        "\": JavaScript code must return " + SMat.class.getCanonicalName()
-                        + ", but it returned " + object.getClass().getCanonicalName());
+                                "\": JavaScript code must return " + SMat.class.getCanonicalName()
+                                + ", but it returned " + object.getClass().getCanonicalName());
             }
             data.setTo((SMat) object);
         }

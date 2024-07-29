@@ -27,10 +27,10 @@ package net.algart.executors.modules.core.numbers.arithmetic;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.PArray;
 import net.algart.arrays.PNumberArray;
-import net.algart.math.functions.Func;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
+import net.algart.math.functions.Func;
 
 import java.util.List;
 

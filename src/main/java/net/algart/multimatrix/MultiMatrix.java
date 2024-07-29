@@ -411,9 +411,9 @@ public interface MultiMatrix extends Cloneable {
         }
         if (n == 1) {
             return MultiMatrix.valueOfMono(Matrices.asFuncMatrix(
-                            intensityCorrectingFunctionOfOneArgument,
-                            channel(0).type(PArray.class),
-                            channel(0)));
+                    intensityCorrectingFunctionOfOneArgument,
+                    channel(0).type(PArray.class),
+                    channel(0)));
         }
         final Matrix<? extends PArray> i = intensityChannel();
         final List<Matrix<? extends PArray>> channels = new ArrayList<Matrix<? extends PArray>>(allChannels());

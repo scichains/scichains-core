@@ -24,10 +24,10 @@
 
 package net.algart.executors.api.model.tests;
 
-import net.algart.json.Jsons;
-import net.algart.executors.api.model.ChainJson;
-
 import jakarta.json.JsonException;
+import net.algart.executors.api.model.ChainJson;
+import net.algart.json.Jsons;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -37,6 +37,7 @@ import java.nio.file.Paths;
 public class ReplaceChainsInFolder {
     boolean doChanges = false;
     int count = 0;
+
     private void replace(Path f) throws IOException {
         ChainJson model = null;
         try {

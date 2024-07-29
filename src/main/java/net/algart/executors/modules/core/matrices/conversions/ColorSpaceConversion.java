@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 
 abstract class ColorSpaceConversion extends Executor implements ReadOnlyExecutionInput {
     private ChannelsColorSpace channelsColorSpace = ChannelsColorSpace.RGBA;

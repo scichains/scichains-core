@@ -25,8 +25,7 @@
 package net.algart.executors.modules.core.logic.scripting.python;
 
 public final class CallPythonFunction extends AbstractCallPython {
-    private String code =
-            "def execute(params, inputs, outputs):\n" +
+    private String code = "def execute(params, inputs, outputs):\n" +
             "    return \"Hello from Python function!\"\n";
 
     public CallPythonFunction() {

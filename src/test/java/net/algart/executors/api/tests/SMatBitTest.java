@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.tests;
 
-import net.algart.executors.api.data.SMat;
 import net.algart.arrays.*;
+import net.algart.executors.api.data.SMat;
 import net.algart.io.MatrixIO;
 import net.algart.math.functions.RectangularFunc;
 import net.algart.multimatrix.MultiMatrix;
@@ -48,12 +48,12 @@ public class SMatBitTest {
         final MultiMatrix2D multiMatrix = MultiMatrix.valueOf2DRGBA(MatrixIO.readImage(sourceFile));
         final Matrix<? extends PArray> intensity = multiMatrix.intensityChannel();
         Matrix<BitArray> bits = Matrices.asFuncMatrix(
-            RectangularFunc.getInstance(
-                0.0, intensity.array().maxPossibleValue(1.0) / 2,
-                0.0, 1.0),
-            BitArray.class, intensity);
+                RectangularFunc.getInstance(
+                        0.0, intensity.array().maxPossibleValue(1.0) / 2,
+                        0.0, 1.0),
+                BitArray.class, intensity);
         final UpdatableBitArray container = BufferMemoryModel.getInstance().newBitArray(
-            2 * bits.array().length());
+                2 * bits.array().length());
         final UpdatableBitArray array = container.subArr(bits.array().length() / 3, bits.array().length());
         array.copy(bits.array());
         // - specific situation: matrix based on ByteBuffer, but not from very beginning
@@ -61,7 +61,7 @@ public class SMatBitTest {
         final MultiMatrix2D bitsMultiMatrix = MultiMatrix.valueOf2DMono(bits);
         System.out.printf("Created MultiMatrix: %s - %s%n", bitsMultiMatrix, bitsMultiMatrix.intensityChannel());
         MatrixIO.writeImage(Paths.get(sourceFile + ".aa.bit.png"),
-            bitsMultiMatrix.allChannelsInRGBAOrder());
+                bitsMultiMatrix.allChannelsInRGBAOrder());
 
         assert bitsMultiMatrix.numberOfChannels() == 1;
         final SMat mat = new SMat().setTo(bitsMultiMatrix);
@@ -71,7 +71,7 @@ public class SMatBitTest {
         final MultiMatrix2D restoredMultiMatrix = mat.toMultiMatrix2D(true);
         System.out.printf("-> MultiMatrix: %s%n", restoredMultiMatrix);
         MatrixIO.writeImage(Paths.get(sourceFile + ".2aa.bit.png"),
-            restoredMultiMatrix.allChannelsInRGBAOrder());
+                restoredMultiMatrix.allChannelsInRGBAOrder());
 
         if (!bitsMultiMatrix.intensityChannel().equals(restoredMultiMatrix.intensityChannel())) {
             throw new AssertionError("Error while restoring multi-matrix");

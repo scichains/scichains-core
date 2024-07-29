@@ -283,7 +283,7 @@ public class JepAPI {
             // In a case of scalar, we should also to convert it into String.
             try (AtomicPyObject atomicObject = performer.wrapObject(pyObject)) {
                 value = atomicObject.toString();
-                    // - avoid further calling "toString" for pyObject (will lead to "Invalid thread access")
+                // - avoid further calling "toString" for pyObject (will lead to "Invalid thread access")
             } // correctly closes PyObject (inside its thread)
         }
         return value;

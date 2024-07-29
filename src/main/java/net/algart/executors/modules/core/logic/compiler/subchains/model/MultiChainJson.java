@@ -24,21 +24,24 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
+import jakarta.json.*;
+import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
-import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
-import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorJson;
 
-import jakarta.json.*;
 import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public final class MultiChainJson extends AbstractConvertibleToJson {

@@ -24,18 +24,17 @@
 
 package net.algart.executors.modules.core.common.matrices;
 
-import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.ChannelOperation;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MultiMatrixChannelGenerator
-    extends MultiMatrixGenerator
-    implements ChannelOperation
-{
+        extends MultiMatrixGenerator
+        implements ChannelOperation {
     private int currentChannel = 0;
 
     protected MultiMatrixChannelGenerator() {
@@ -52,8 +51,8 @@ public abstract class MultiMatrixChannelGenerator
     @Override
     public MultiMatrix create() {
         logDebug(() -> "Creating image " + getElementType() + "["
-            + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
-            + "], creator \"" + getClass().getSimpleName() + "\"");
+                + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
+                + "], creator \"" + getClass().getSimpleName() + "\"");
         final List<Matrix<? extends PArray>> result = new ArrayList<>();
         for (this.currentChannel = 0; this.currentChannel < numberOfChannels(); this.currentChannel++) {
             result.add(createChannel());

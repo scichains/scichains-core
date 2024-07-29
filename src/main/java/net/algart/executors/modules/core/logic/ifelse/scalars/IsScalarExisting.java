@@ -26,7 +26,6 @@ package net.algart.executors.modules.core.logic.ifelse.scalars;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 
 public final class IsScalarExisting extends Executor implements ReadOnlyExecutionInput {

@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.system;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.ExecutionStatus;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.scalars.ScalarFilter;
 
 public final class ShowStatus extends ScalarFilter {

@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.logic.scripting.js.arrays;
 
 import net.algart.arrays.SizeMismatchException;
-import net.algart.executors.api.data.SNumbers;
 import net.algart.bridges.standard.JavaScriptPerformer;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SNumbers;
 
 // Note: it does not implement ReadOnlyExecutionInput!
 public final class BlockJSModifyingSeveralNumbers extends Executor {

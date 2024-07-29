@@ -24,13 +24,16 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.arrays.*;
-import net.algart.json.Jsons;
+import jakarta.json.*;
+import net.algart.arrays.Arrays;
+import net.algart.arrays.MutableDoubleArray;
+import net.algart.arrays.MutableLongArray;
+import net.algart.arrays.MutablePNumberArray;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
+import net.algart.json.Jsons;
 
-import jakarta.json.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +94,7 @@ public final class JsonToNumbers extends Executor implements ReadOnlyExecutionIn
                 final String flagName = keyToFlagTableJson.getString(key, null);
                 if (flagName == null) {
                     throw new JsonException("Key-to-flag table does not contain flag name (string value) "
-                        + "for the key \"" + key + "\"");
+                            + "for the key \"" + key + "\"");
                 }
                 return flagsJson.getBoolean(flagName, false);
             }

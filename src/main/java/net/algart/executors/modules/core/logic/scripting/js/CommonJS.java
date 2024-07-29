@@ -24,9 +24,11 @@
 
 package net.algart.executors.modules.core.logic.scripting.js;
 
-import net.algart.bridges.graalvm.*;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.bridges.graalvm.GraalPerformer;
+import net.algart.bridges.graalvm.GraalPerformerContainer;
+import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalAPI;
+import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.bridges.standard.JavaScriptContextContainer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
@@ -597,8 +599,7 @@ public final class CommonJS extends Executor {
     @Override
     public void process() {
         long t1 = debugTime();
-        @SuppressWarnings("resource")
-        final GraalPerformer performer = performerContainer().performer(getContextId());
+        @SuppressWarnings("resource") final GraalPerformer performer = performerContainer().performer(getContextId());
 //        System.out.println("!!! " + graalAPI.createEmptyObjectJSFunction(performer).execute());
         javaScriptFormula.setCommonJS(formula);
         javaScriptResultA.setCommonJS(resultA);
@@ -640,9 +641,9 @@ public final class CommonJS extends Executor {
         graalAPI.storeMat(this, OUTPUT_M5, performer.perform(javaScriptResultM5));
         long t5 = debugTime();
         logDebug(() -> String.format(Locale.US,
-                "JavaScript \"%s\" executed in %.5f ms:"
-                        + " %.2f mcs compiling + %.2f mcs adding vars + %.2f mcs main script + %.2f mcs additional outputs"
-                        + " (%d stored actual script engines)",
+                "JavaScript \"%s\" executed in %.5f ms:" +
+                        " %.2f mcs compiling + %.2f mcs adding vars + %.2f mcs main script + " +
+                        "%.2f mcs additional outputs (%d stored actual script engines)",
                 scriptToShortString(formula),
                 (t5 - t1) * 1e-6,
                 (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, (t5 - t4) * 1e-3,

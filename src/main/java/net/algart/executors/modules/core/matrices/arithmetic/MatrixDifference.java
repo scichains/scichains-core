@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.matrices.arithmetic;
 
 import net.algart.arrays.*;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.math.Point;
 import net.algart.math.functions.Func;
 import net.algart.math.functions.LinearFunc;
@@ -34,7 +35,6 @@ import net.algart.math.patterns.Patterns;
 import net.algart.matrices.morphology.BasicMorphology;
 import net.algart.matrices.morphology.Morphology;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 
 import java.util.List;
 import java.util.stream.DoubleStream;

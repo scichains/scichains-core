@@ -28,10 +28,10 @@ import net.algart.arrays.BitArray;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 import net.algart.math.functions.AbstractFunc;
 import net.algart.math.functions.Func;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +123,7 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
             // - actually it is 1 if x!=y or 0 if x==y
         }
         final Matrix<BitArray> nonEquals = Matrices.clone(
-                Matrices.asFuncMatrix(Func.MAX, BitArray.class, nonEqualBitChannels))
+                        Matrices.asFuncMatrix(Func.MAX, BitArray.class, nonEqualBitChannels))
                 .cast(BitArray.class);
         final List<Matrix<? extends PArray>> channels = new ArrayList<>();
         for (int k = 0; k < n; k++) {

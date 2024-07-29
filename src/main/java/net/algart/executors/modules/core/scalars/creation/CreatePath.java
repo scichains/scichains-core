@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.scalars.creation;
 
-import net.algart.executors.modules.core.files.ResolvePath;
 import net.algart.executors.api.Executor;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
+import net.algart.executors.modules.core.files.ResolvePath;
 
 import java.io.IOError;
 import java.io.IOException;

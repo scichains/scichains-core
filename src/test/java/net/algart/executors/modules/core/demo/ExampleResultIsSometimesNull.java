@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.demo;
 
-import net.algart.multimatrix.MultiMatrix;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
+import net.algart.multimatrix.MultiMatrix;
 
 public final class ExampleResultIsSometimesNull extends MultiMatrixFilter {
 

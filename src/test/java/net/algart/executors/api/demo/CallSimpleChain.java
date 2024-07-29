@@ -25,10 +25,8 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
-import net.algart.json.Jsons;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

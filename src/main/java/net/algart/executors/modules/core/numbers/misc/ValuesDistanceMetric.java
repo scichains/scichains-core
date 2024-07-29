@@ -57,7 +57,7 @@ public enum ValuesDistanceMetric {
             check(a, b, valuesWeights);
             double sum = 0.0;
             for (int k = 0; k < a.length; k++) {
-                final double d  = (a[k] - b[k]) * valuesWeights[k];
+                final double d = (a[k] - b[k]) * valuesWeights[k];
                 sum += d * d;
             }
             return sum;
@@ -75,7 +75,7 @@ public enum ValuesDistanceMetric {
             check(a, b, valuesWeights);
             double sum = 0.0;
             for (int k = 0; k < a.length; k++) {
-                final double d  = (a[k] - b[k]) * valuesWeights[k];
+                final double d = (a[k] - b[k]) * valuesWeights[k];
                 sum += Math.abs(d);
             }
             return sum;
@@ -87,7 +87,7 @@ public enum ValuesDistanceMetric {
             check(a, b, valuesWeights);
             double max = 0.0;
             for (int k = 0; k < a.length; k++) {
-                final double d  = Math.abs(a[k] - b[k]) * valuesWeights[k];
+                final double d = Math.abs(a[k] - b[k]) * valuesWeights[k];
                 if (d > max) {
                     max = d;
                 }

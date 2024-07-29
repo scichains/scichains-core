@@ -26,6 +26,8 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.*;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
@@ -33,10 +35,8 @@ import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsC
 import net.algart.executors.modules.core.logic.compiler.subchains.MainChainSettingsInformation;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChainSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
-import net.algart.json.Jsons;
-import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.logic.compiler.subchains.interpreters.InterpretSubChain;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;

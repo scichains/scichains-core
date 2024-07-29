@@ -32,12 +32,12 @@ import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExecutorJsonSet;
 
 import java.io.StringReader;
+import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.lang.System.Logger;
 
 /**
  * Loader of {@link ExecutionBlock executors}. Every kinds of executors, like sub-chains, settings combiners,

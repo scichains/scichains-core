@@ -88,7 +88,7 @@ public final class SortNumbers extends NumbersFilter implements ReadOnlyExecutio
                     final double v1 = r.getValue(firstIndex, sortedIndexInBlock);
                     final double v2 = r.getValue(secondIndex, sortedIndexInBlock);
                     return descending ?
-                            v1 > v2 || (v1 == v2 && indexes[firstIndex] > indexes[secondIndex]):
+                            v1 > v2 || (v1 == v2 && indexes[firstIndex] > indexes[secondIndex]) :
                             v1 < v2 || (v1 == v2 && indexes[firstIndex] < indexes[secondIndex]);
                 },
                 (firstIndex, secondIndex) -> {

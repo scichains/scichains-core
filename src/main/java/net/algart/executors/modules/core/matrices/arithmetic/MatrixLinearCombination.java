@@ -24,12 +24,12 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
-import net.algart.executors.modules.core.common.OptionalArguments;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.OptionalArguments;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.math.functions.LinearFunc;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public final class MatrixLinearCombination extends SeveralMultiMatricesChannelOp
     private boolean rawValues = false;
 
     public double getA(int index) {
-        return a.getOrDefault(index,  0.0);
+        return a.getOrDefault(index, 0.0);
     }
 
     public void setA(int index, double a) {

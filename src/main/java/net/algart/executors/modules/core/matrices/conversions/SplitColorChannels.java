@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.conversions;
 
-import net.algart.executors.api.Port;
-import net.algart.executors.api.data.SMat;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.api.Port;
+import net.algart.executors.api.data.SMat;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 

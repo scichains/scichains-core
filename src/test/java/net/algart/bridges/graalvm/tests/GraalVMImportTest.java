@@ -97,7 +97,7 @@ public class GraalVMImportTest {
 //        final String jsObjectScript = "c = {a: 1, b: 'bb'}";
         final String jsObjectScript = "new Object()";
         final Value jsObject = context.eval(Source.create("js", jsObjectScript));
-        jsObject.putMember("c", new double[] {111.0,111.1});
+        jsObject.putMember("c", new double[]{111.0, 111.1});
         jsObject.putMember("d", "Java-string");
         System.out.println(jsObject);
         System.out.println("Caling function");

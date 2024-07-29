@@ -24,9 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.io;
 
-import net.algart.json.Jsons;
-
 import jakarta.json.JsonObject;
+import net.algart.json.Jsons;
 
 public class ReadJson extends ReadScalar {
     public ReadJson() {

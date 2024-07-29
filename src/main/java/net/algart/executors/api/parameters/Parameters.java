@@ -24,13 +24,12 @@
 
 package net.algart.executors.api.parameters;
 
-import net.algart.external.UsedForExternalCommunication;
-import net.algart.json.Jsons;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonValue;
+import net.algart.external.UsedForExternalCommunication;
+import net.algart.json.Jsons;
 
 import java.util.Map;
 import java.util.Objects;
@@ -130,7 +129,7 @@ public interface Parameters extends Map<String, Object> {
         }
     }
 
-    static long smartParseLong(String s) throws NumberFormatException  {
+    static long smartParseLong(String s) throws NumberFormatException {
         NumberFormatException exception;
         try {
             return Long.parseLong(s);

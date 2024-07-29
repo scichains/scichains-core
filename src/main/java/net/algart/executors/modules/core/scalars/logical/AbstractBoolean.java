@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.scalars.logical;
 
-import net.algart.executors.modules.core.logic.ConditionStyle;
 import net.algart.executors.api.Executor;
+import net.algart.executors.modules.core.logic.ConditionStyle;
 
 abstract class AbstractBoolean extends Executor {
     private ConditionStyle booleanStyle = ConditionStyle.JAVA_LIKE;

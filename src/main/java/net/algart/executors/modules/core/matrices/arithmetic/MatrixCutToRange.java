@@ -60,6 +60,7 @@ public final class MatrixCutToRange extends MultiMatrixFilter {
         this.max = doubleOrPositiveInfinity(max);
         return this;
     }
+
     @Override
     public MultiMatrix process(MultiMatrix source) {
         final double scale = source.maxPossibleValue();

@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.compiler.js.interpreters;
 
-import net.algart.executors.modules.core.logic.compiler.js.UseJS;
-import net.algart.executors.modules.core.logic.compiler.js.model.JSCaller;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.modules.core.logic.compiler.js.UseJS;
+import net.algart.executors.modules.core.logic.compiler.js.model.JSCaller;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;

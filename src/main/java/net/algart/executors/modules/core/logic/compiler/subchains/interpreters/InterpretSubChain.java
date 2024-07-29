@@ -131,7 +131,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                     (t6 - t5) * 1e-3,
                     (t7 - t6) * 1e-3, (t8 - t7) * 1e-3,
                     chain.contextId(), System.identityHashCode(chain),
-                    file == null ? "n/a" : "\""+ file + "\"",
+                    file == null ? "n/a" : "\"" + file + "\"",
                     chain.timingInfo(),
                     name, timing));
         }

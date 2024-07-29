@@ -60,18 +60,18 @@ public class CommonJsonTest {
         builder.add("boolean", true);
         json = builder.build();
         System.out.println(Jsons.toPrettyString(json));
-        System.out.println(Jsons.getDouble(json,"negative_infinity", -1.0));
-        System.out.println(Jsons.reqDouble(json,"negative_infinity"));
-        System.out.println(Jsons.getDouble(json,"positive_infinity", -1.0));
-        System.out.println(Jsons.reqDouble(json,"positive_infinity"));
-        System.out.println(Jsons.getDouble(json,"mot-a-number", -1.0));
-        System.out.println(Jsons.reqDouble(json,"mot-a-number"));
-        System.out.println(Jsons.getDouble(json,"157", -1.0));
-        System.out.println(Jsons.reqDouble(json,"157"));
-        System.out.println(Jsons.getDouble(json,"max_value", -1.0));
-        System.out.println(Jsons.reqDouble(json,"max_value"));
-        System.out.println(Jsons.getDouble(json,"xxxxxxxxx", -1.0));
-        System.out.println(Jsons.getDouble(json,"boolean", -1.0));
+        System.out.println(Jsons.getDouble(json, "negative_infinity", -1.0));
+        System.out.println(Jsons.reqDouble(json, "negative_infinity"));
+        System.out.println(Jsons.getDouble(json, "positive_infinity", -1.0));
+        System.out.println(Jsons.reqDouble(json, "positive_infinity"));
+        System.out.println(Jsons.getDouble(json, "mot-a-number", -1.0));
+        System.out.println(Jsons.reqDouble(json, "mot-a-number"));
+        System.out.println(Jsons.getDouble(json, "157", -1.0));
+        System.out.println(Jsons.reqDouble(json, "157"));
+        System.out.println(Jsons.getDouble(json, "max_value", -1.0));
+        System.out.println(Jsons.reqDouble(json, "max_value"));
+        System.out.println(Jsons.getDouble(json, "xxxxxxxxx", -1.0));
+        System.out.println(Jsons.getDouble(json, "boolean", -1.0));
 //        System.out.println(Jsons.reqDouble(json,"boolean"));
     }
 }

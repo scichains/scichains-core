@@ -24,11 +24,14 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.arrays.*;
-import net.algart.math.functions.RectangularFunc;
+import net.algart.arrays.Arrays;
+import net.algart.arrays.BitArray;
+import net.algart.arrays.PArray;
+import net.algart.arrays.SimpleMemoryModel;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.NumbersFilter;
+import net.algart.math.functions.RectangularFunc;
 
 public final class ExtractNumbersInRange extends NumbersFilter implements ReadOnlyExecutionInput {
     public static final String INPUT_SELECTOR = "selector";

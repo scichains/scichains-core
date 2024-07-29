@@ -24,14 +24,13 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.json.Jsons;
-import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.Executor;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.SNumbers;
+import net.algart.json.Jsons;
 
 public final class NumbersToJson extends Executor implements ReadOnlyExecutionInput {
     public static final String INPUT_KEYS = "keys";
@@ -60,7 +59,7 @@ public final class NumbersToJson extends Executor implements ReadOnlyExecutionIn
             @Override
             void add(JsonObjectBuilder builder, String key, double value) {
                 final long longValue = (long) value;
-                builder.add(key, value == longValue ? String.valueOf(longValue): String.valueOf(value));
+                builder.add(key, value == longValue ? String.valueOf(longValue) : String.valueOf(value));
             }
         };
 

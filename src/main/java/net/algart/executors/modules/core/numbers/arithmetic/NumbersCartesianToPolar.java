@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.arithmetic;
 
-import net.algart.math.IRange;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.SeveralNumbersOperation;
+import net.algart.math.IRange;
 
 import java.util.List;
 import java.util.Objects;
