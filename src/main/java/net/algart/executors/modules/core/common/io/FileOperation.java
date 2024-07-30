@@ -204,9 +204,7 @@ public abstract class FileOperation extends Executor {
 
     public void fillOutputFileInformation(Path path) {
         final Path absolutePath = path.toAbsolutePath();
-        if (hasOutputPort(OUTPUT_ABSOLUTE_PATH)) {
-            getScalar(OUTPUT_ABSOLUTE_PATH).setTo(absolutePath.toString());
-        }
+        setOutputScalar(OUTPUT_ABSOLUTE_PATH, absolutePath::toString);
         if (hasOutputPort(OUTPUT_PARENT_FOLDER)) {
             final Path parent = absolutePath.getParent();
             if (parent != null) {

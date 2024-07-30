@@ -418,19 +418,13 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     public final void fillSystemOutputs() {
-        if (hasOutputPort(OUTPUT_EXECUTOR_ID_NAME)) {
-            getScalar(OUTPUT_EXECUTOR_ID_NAME).setTo(getExecutorId());
-        }
+        setOutputScalar(OUTPUT_EXECUTOR_ID_NAME, this::getExecutorId);
         final boolean platformNecessary = isOutputNecessary(OUTPUT_PLATFORM_ID_NAME)
                 || isOutputNecessary(OUTPUT_RESOURCE_FOLDER_NAME);
         // - not always: parsing executorSpecification may require some time
         if (platformNecessary) {
-            if (hasOutputPort(OUTPUT_PLATFORM_ID_NAME)) {
-                getScalar(OUTPUT_PLATFORM_ID_NAME).setTo(getPlatformId());
-            }
-            if (hasOutputPort(OUTPUT_RESOURCE_FOLDER_NAME)) {
-                getScalar(OUTPUT_RESOURCE_FOLDER_NAME).setTo(executorResourceFolder());
-            }
+            setOutputScalar(OUTPUT_PLATFORM_ID_NAME, getPlatformId());
+            setOutputScalar(OUTPUT_RESOURCE_FOLDER_NAME, this::executorResourceFolder);
         }
     }
 

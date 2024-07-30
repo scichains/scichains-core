@@ -45,6 +45,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class ExecutionBlock extends PropertyChecker implements AutoCloseable {
     public static String DEFAULT_INPUT_PORT = "input";
@@ -334,6 +335,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return getRequiredOutputPort(name).getData(Data.class, true);
     }
 
+    public final Data getData() {
+        return getData(defaultOutputPortName());
+    }
+
+    public final void removeData(String name) {
+        if (hasOutputPort(name)) {
+            getData(name).remove();
+        }
+    }
+
     public final Data getInputData() {
         return getInputData(defaultInputPortName());
     }
@@ -344,10 +355,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     public final Data getInputDataContainer() {
         return getInputDataContainer(defaultInputPortName());
-    }
-
-    public final Data getData() {
-        return getData(defaultOutputPortName());
     }
 
     public final SMat getInputMat(String name) {
@@ -471,6 +478,19 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     public final double getDoubleScalar(String name) {
         return getScalar(name).toDouble();
+    }
+
+    public final void setOutputScalar(String name, String value) {
+        if (hasOutputPort(name)) {
+            getScalar(name).setTo(value);
+        }
+    }
+
+    public final void setOutputScalar(String name, Supplier<?> value) {
+        Objects.requireNonNull(value, "Null value supplier");
+        if (hasOutputPort(name)) {
+            getScalar(name).setTo(value.get());
+        }
     }
 
     public final void putScalar(String name, SScalar scalar) {
