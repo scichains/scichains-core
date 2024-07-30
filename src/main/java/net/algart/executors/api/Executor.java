@@ -501,7 +501,8 @@ public abstract class Executor extends ExecutionBlock {
             t2Processing = System.nanoTime();
         } catch (RuntimeException | Error e) {
             if (!silentMode) {
-                LOG.log(System.Logger.Level.ERROR, "Cannot execute " + getClass().getSimpleName() + " due to: " + e);
+                LOG.log(System.Logger.Level.ERROR, "Cannot execute " +
+                        getClass().getSimpleName() + " due to: " + e);
             }
             throw e;
         } finally {
