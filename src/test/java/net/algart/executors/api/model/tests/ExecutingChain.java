@@ -231,6 +231,7 @@ public class ExecutingChain {
                                 + (changed ? ".changed" : "") + ".bmp");
                         final BufferedImage bufferedImage = ((SMat) data).toBufferedImage();
                         assert bufferedImage != null;
+                        System.out.printf("Saving result in %s%n", imageFile);
                         ImageIO.write(bufferedImage, "bmp", imageFile.toFile());
                     }
                 } else {
