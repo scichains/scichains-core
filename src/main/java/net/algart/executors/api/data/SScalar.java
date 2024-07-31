@@ -83,6 +83,11 @@ public final class SScalar extends Data {
         return this;
     }
 
+    public SScalar setTo(boolean value) {
+        setValue(String.valueOf(value));
+        return this;
+    }
+
     public SScalar setTo(int value) {
         setValue(String.valueOf(value));
         return this;
@@ -181,6 +186,19 @@ public final class SScalar extends Data {
         return this;
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public SScalar setTo(Optional<?> optional) {
+        Objects.requireNonNull(optional, "Null optional value");
+        if (optional.isEmpty()) {
+            setToNull();
+        } else {
+            Object subValue = optional.get();
+            setTo(subValue);
+            // - for Optional<Optional<X>> it will be not be recognized as X
+        }
+        return this;
+    }
+
     /**
      * Makes this scalar non-initialized (null).
      *
@@ -194,26 +212,20 @@ public final class SScalar extends Data {
     public SScalar setTo(Object value) {
         if (value == null) {
             setToNull();
-        } else if (value instanceof Data) {
-            setTo((Data) value);
-        } else if (value instanceof int[]) {
-            setTo((int[]) value);
-        } else if (value instanceof long[]) {
-            setTo((long[]) value);
-        } else if (value instanceof float[]) {
-            setTo((float[]) value);
-        } else if (value instanceof double[]) {
-            setTo((double[]) value);
-        } else if (value instanceof Collection<?>) {
-            setTo((Collection<?>) value);
+        } else if (value instanceof Data data) {
+            setTo(data);
+        } else if (value instanceof int[] v) {
+            setTo(v);
+        } else if (value instanceof long[] v) {
+            setTo(v);
+        } else if (value instanceof float[] v) {
+            setTo(v);
+        } else if (value instanceof double[] v) {
+            setTo(v);
+        } else if (value instanceof Collection<?> collection) {
+            setTo(collection);
         } else if (value instanceof Optional<?> optional) {
-            if (optional.isEmpty()) {
-                setToNull();
-            } else {
-                Object subValue = optional.get();
-                setTo(subValue);
-                // - for Optional<Optional<X>> it will be not be recognized as X
-            }
+            setTo(optional);
         } else {
             setValue(String.valueOf(value));
             // - note: setTo(double), setTo(long), setTo(int) are equivalent to this code
