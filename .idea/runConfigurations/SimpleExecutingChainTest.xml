@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ExecutingChain" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.ExecutingChain" />
+  <configuration default="false" name="SimpleExecutingChainTest" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.SimpleExecutingChainTest" />
     <module name="scichains-core" />
+    <option name="PROGRAM_PARAMETERS" value=" -lowLevel build\java\resources\demo\chains\chain_from_java\scalar_sum.chain" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext" />
     <extension name="coverage">
       <pattern>
