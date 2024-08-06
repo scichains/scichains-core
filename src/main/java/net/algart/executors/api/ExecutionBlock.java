@@ -830,7 +830,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * <p>This method should be called after
      * creating instance before first calling {@link #reset()} or {@link #execute()} method.
-     * Note that most executorы do not use this ability, and you can stay undefined (<code>null</code>)
+     * Note that most executors do not use this ability, and you can stay undefined (<code>null</code>)
      * context path for them.
      *
      * @param contextPath the path fo file/folder, storing the context; may be <code>null</code>.

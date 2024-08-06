@@ -69,7 +69,7 @@ public abstract class Executor extends ExecutionBlock {
         }
 
         public static boolean isSystemParameter(String parameterName) {
-            Objects.requireNonNull(parameterName, "Null parameterName");
+            Objects.requireNonNull(parameterName, "Null parameter name");
             return parameterName.startsWith("$__");
         }
     }
@@ -649,10 +649,19 @@ public abstract class Executor extends ExecutionBlock {
 
     @Override
     public void onChangeParameter(String name) {
-        final SystemParameter systemParameter = SYSTEM_PARAMETERS.get(name);
-        if (systemParameter != null) {
-            final String value = parameters().getString(name);
-            systemParameter.update(this, value);
+        if (SystemParameter.isSystemParameter(name)) {
+            // - also checks null
+            final SystemParameter systemParameter = SYSTEM_PARAMETERS.get(name);
+            if (systemParameter != null) {
+                final String value = parameters().getString(name);
+                systemParameter.update(this, value);
+            } else {
+                LOG.log(System.Logger.Level.WARNING, () ->
+                        getClass() + ": attempt to set unknown system parameter \"" + name + "\" ("
+                                + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
+                                + (getContextPath() == null ? "" : " at " + getContextPath())
+                                + ")");
+            }
         } else if (automaticUpdateParameters && !automaticUpdateDisabledParameters.contains(name)) {
             onChangeParameterAutomatic(name);
         }
@@ -769,15 +778,15 @@ public abstract class Executor extends ExecutionBlock {
         return false;
     }
 
-    protected final void onChangeParameterAutomatic(String parameterName) {
+    protected final void onChangeParameterAutomatic(String name) {
         long t1 = LOGGABLE_TRACE ? System.nanoTime() : 0;
-        final ParameterSetter setter = parameterSetters.get(parameterName);
+        final ParameterSetter setter = parameterSetters.get(name);
         if (setter != null) {
             setter.set(this);
         } else {
             // don't check loggingEnabled(): it is a probable inconsistency in the programming code
             LOG.log(System.Logger.Level.WARNING, () ->
-                    getClass() + " has no setter for parameter \"" + parameterName + "\" ("
+                    getClass() + " has no setter for parameter \"" + name + "\" ("
                             + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
                             + (getContextPath() == null ? "" : " at " + getContextPath())
                             + ")");
@@ -785,7 +794,7 @@ public abstract class Executor extends ExecutionBlock {
         long t2 = LOGGABLE_TRACE ? System.nanoTime() : 0;
         if (loggingEnabled()) {
             LOG.log(System.Logger.Level.TRACE, () -> Executor.this.getClass()
-                    + " set parameter \"" + parameterName + "\": " + (t2 - t1) * 1e-3 + " mcs");
+                    + " set parameter \"" + name + "\": " + (t2 - t1) * 1e-3 + " mcs");
         }
     }
 
