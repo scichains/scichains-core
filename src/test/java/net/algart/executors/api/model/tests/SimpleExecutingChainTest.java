@@ -62,7 +62,9 @@ public class SimpleExecutingChainTest {
             startArgIndex++;
         }
         if (args.length < startArgIndex + 1) {
-            System.out.printf("Usage: %s [-lowLevel] some_chain.json",
+            System.out.printf("Usage: %s [-lowLevel] some_chain.json%n" +
+                            "The chain should not require any input data: " +
+                            "this test does not set inputs and does not analyse outputs.",
                     SimpleExecutingChainTest.class.getName());
             return;
         }
