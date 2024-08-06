@@ -35,7 +35,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SimpleExecutingChainTest {
-
     private static void executeChainAsExecutor(Path chainPath) throws IOException {
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
             executor.setAllOutputsNecessary(true);
