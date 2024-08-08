@@ -181,16 +181,12 @@ public class Jsons {
 
     public static String toPrettyString(JsonValue jsonValue) {
         Objects.requireNonNull(jsonValue, "Null jsonValue");
-        switch (jsonValue.getValueType()) {
-            case STRING:
-                return ((JsonString) jsonValue).getString();
-            case OBJECT:
-                return toPrettyString((JsonObject) jsonValue);
-            case ARRAY:
-                return toPrettyString((JsonArray) jsonValue);
-            default:
-                return jsonValue.toString();
-        }
+        return switch (jsonValue.getValueType()) {
+            case STRING -> ((JsonString) jsonValue).getString();
+            case OBJECT -> toPrettyString((JsonObject) jsonValue);
+            case ARRAY -> toPrettyString((JsonArray) jsonValue);
+            default -> jsonValue.toString();
+        };
     }
 
     public static String toPrettyString(JsonObject json) {

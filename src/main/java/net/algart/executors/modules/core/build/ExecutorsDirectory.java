@@ -38,9 +38,6 @@ import java.util.*;
 import java.util.stream.StreamSupport;
 
 public final class ExecutorsDirectory {
-    private static final List<String> POSSIBLE_BLOCK_KINDS = Collections.unmodifiableList(Arrays.asList(
-            "function", "input", "output", "data"));
-
     private final Set<String> ids = new HashSet<>();
     private final Set<String> instantiationNames = new HashSet<>();
 
@@ -106,5 +103,4 @@ public final class ExecutorsDirectory {
             System.out.println();
         }
     }
-
 }

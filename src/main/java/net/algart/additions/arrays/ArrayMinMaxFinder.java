@@ -261,39 +261,25 @@ public final class ArrayMinMaxFinder {
         }
         if (elementType == char.class) {
             final CharArray array = (CharArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForChars(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForChars(array, rangeIndex, needMin, needMax));
         } else if (elementType == byte.class) {
             final ByteArray array = (ByteArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForBytes(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForBytes(array, rangeIndex, needMin, needMax));
         } else if (elementType == short.class) {
             final ShortArray array = (ShortArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForShorts(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForShorts(array, rangeIndex, needMin, needMax));
         } else if (elementType == int.class) {
             final IntArray array = (IntArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForInts(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForInts(array, rangeIndex, needMin, needMax));
         } else if (elementType == long.class) {
             final LongArray array = (LongArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForLongs(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForLongs(array, rangeIndex, needMin, needMax));
         } else if (elementType == float.class) {
             final FloatArray array = (FloatArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForFloats(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForFloats(array, rangeIndex, needMin, needMax));
         } else if (elementType == double.class) {
             final DoubleArray array = (DoubleArray) data;
-            stream.forEach(rangeIndex -> {
-                minMaxForDoubles(array, rangeIndex, needMin, needMax);
-            });
+            stream.forEach(rangeIndex -> minMaxForDoubles(array, rangeIndex, needMin, needMax));
         } else {
             throw new AssertionError("Impossible element type " + elementType);
         }

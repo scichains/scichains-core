@@ -45,36 +45,30 @@ public abstract class FileOperation extends Executor {
     public static final String FILE_NAME_ADDITION_PATTERN = "$$$";
 
     public enum FileNameAdditionMode {
-        NONE(false) {
+        NONE() {
             @Override
             public String completePath(String path, String fileNameAddition) {
                 return path;
             }
         },
-        AFTER_ALL_PATH(false) {
+        AFTER_ALL_PATH() {
             @Override
             public String completePath(String path, String fileNameAddition) {
                 return path + fileNameAddition.trim();
             }
         },
-        REPLACE_IN_PATH(true) {
+        REPLACE_IN_PATH() {
             @Override
             public String completePath(String path, String fileNameAddition) {
                 return path.replace(FILE_NAME_ADDITION_PATTERN, fileNameAddition.trim());
             }
         },
-        REPLACE_IN_PATH_REMOVING_EXTENSION(true) {
+        REPLACE_IN_PATH_REMOVING_EXTENSION() {
             @Override
             public String completePath(String path, String fileNameAddition) {
                 return path.replace(FILE_NAME_ADDITION_PATTERN, MatrixIO.removeExtension(fileNameAddition.trim()));
             }
         };
-
-        private final boolean needToRepeatAfterCorrection;
-
-        FileNameAdditionMode(boolean needToRepeatAfterCorrection) {
-            this.needToRepeatAfterCorrection = needToRepeatAfterCorrection;
-        }
 
         public abstract String completePath(String path, String fileNameAddition);
     }

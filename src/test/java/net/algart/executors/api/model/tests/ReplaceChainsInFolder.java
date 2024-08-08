@@ -43,7 +43,7 @@ public class ReplaceChainsInFolder {
         try {
             model = ChainJson.readIfValid(f);
         } catch (JsonException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return;
         }
         if (model == null) {

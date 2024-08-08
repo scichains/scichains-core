@@ -223,8 +223,7 @@ public final class NumbersStatistics extends NumberArrayFilter implements ReadOn
     }
 
     private static void sort(UpdatablePArray array) {
-        if (array instanceof DirectAccessible && ((DirectAccessible) array).hasJavaArray()) {
-            final DirectAccessible da = (DirectAccessible) array;
+        if (array instanceof DirectAccessible da && ((DirectAccessible) array).hasJavaArray()) {
             final int offset = da.javaArrayOffset();
             final int length = da.javaArrayLength();
             if (array instanceof ByteArray) {

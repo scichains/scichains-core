@@ -48,13 +48,8 @@ import java.util.stream.IntStream;
  * resources. It is important while using inside user-defined scripts.
  */
 public final class SNumbers extends Data implements Cloneable {
-    public static List<Class<?>> SUPPORTED_ELEMENT_TYPES = Collections.unmodifiableList(java.util.Arrays.asList(
-            byte.class,
-            short.class,
-            int.class,
-            long.class,
-            float.class,
-            double.class));
+    public static List<Class<?>> SUPPORTED_ELEMENT_TYPES = List.of(
+            byte.class, short.class, int.class, long.class, float.class, double.class);
 
     public enum FormattingType {
         SIMPLE(Formatter::createSimpleElementFormatter),
@@ -455,21 +450,17 @@ public final class SNumbers extends Data implements Cloneable {
 
     public static Class<?> elementType(String primitiveElementTypeName) {
         Objects.requireNonNull(primitiveElementTypeName, "Null element type name");
-        switch (primitiveElementTypeName) {
-            case "byte":
-                return byte.class;
-            case "short":
-                return short.class;
-            case "int":
-                return int.class;
-            case "long":
-                return long.class;
-            case "float":
-                return float.class;
-            case "double":
-                return double.class;
-        }
-        throw new IllegalArgumentException("Illegal or unsupported element type: " + primitiveElementTypeName);
+        return switch (primitiveElementTypeName) {
+            case "byte" -> byte.class;
+            case "short" -> short.class;
+            case "int" -> int.class;
+            case "long" -> long.class;
+            case "float" -> float.class;
+            case "double" -> double.class;
+            default ->
+                    throw new IllegalArgumentException(
+                            "Illegal or unsupported element type: " + primitiveElementTypeName);
+        };
     }
 
     @UsedForExternalCommunication
@@ -4668,7 +4659,7 @@ public final class SNumbers extends Data implements Cloneable {
         }
     }
 
-    private abstract class ElementFormatter {
+    private abstract static class ElementFormatter {
         abstract int length();
 
         abstract void append(String s);

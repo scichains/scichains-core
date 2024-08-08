@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class MatrixLinearCombination extends SeveralMultiMatricesChannelOperation {
-    private Map<Integer, Double> a = new HashMap<>();
+    private final Map<Integer, Double> a = new HashMap<>();
     private double b = 0.0;
     private boolean rawValues = false;
 

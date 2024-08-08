@@ -219,7 +219,7 @@ public final class Mapping implements Cloneable {
 
     public static String readNames(Path file) throws IOException {
         Objects.requireNonNull(file, "Null file");
-        return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+        return Files.readString(file);
     }
 
     private static JsonValue getJsonValue(

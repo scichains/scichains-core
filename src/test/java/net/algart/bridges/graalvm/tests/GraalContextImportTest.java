@@ -121,7 +121,8 @@ public class GraalContextImportTest {
             System.out.println();
             System.out.println("Caling function");
             t1 = System.nanoTime();
-            Value execute = func.execute(new int[]{11, 12, 13});
+            Object intArray = new int[] {11, 12, 13};
+            Value execute = func.execute(intArray);
             t2 = System.nanoTime();
             System.out.printf(Locale.US, "Calling function: %.3f mcs%n",
                     (t2 - t1) * 1e-3);

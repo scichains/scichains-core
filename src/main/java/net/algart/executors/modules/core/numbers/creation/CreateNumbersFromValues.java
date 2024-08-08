@@ -40,7 +40,7 @@ public final class CreateNumbersFromValues extends Executor implements ReadOnlyE
     private boolean singleBlock = false;
     private int numberOfBlocks = 100;
     private Class<?> elementType = double.class;
-    private Map<Integer, Double> values = new HashMap<>();
+    private final Map<Integer, Double> values = new HashMap<>();
 
     public CreateNumbersFromValues() {
         addOutputNumbers(DEFAULT_OUTPUT_PORT);

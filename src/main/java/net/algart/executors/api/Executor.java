@@ -144,7 +144,7 @@ public abstract class Executor extends ExecutionBlock {
 
     private volatile long startProcessingTimeStamp = Long.MIN_VALUE;
     private volatile long endProcessingTimeStamp = Long.MIN_VALUE;
-    private AtomicLong serviceTime = new AtomicLong(0);
+    private final AtomicLong serviceTime = new AtomicLong(0);
     private boolean timingEnabled = true;
 
     private volatile boolean cancellingFurtherExecutionRequested = false;

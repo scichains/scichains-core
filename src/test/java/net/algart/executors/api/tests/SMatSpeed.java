@@ -50,7 +50,7 @@ public class SMatSpeed {
         width = mat.getDimX();
         height = mat.getDimY();
         t2 = System.nanoTime();
-        System.out.printf("getDimX-2: %d ns%n", t2 - t1, t1, t2);
+        System.out.printf("getDimX-2: %d ns%n", t2 - t1);
 
         t1 = System.nanoTime();
         for (int k = 0; k < 1000000; k++) {

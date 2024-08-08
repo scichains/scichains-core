@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
 // in several ports.
 public class ExecutorJson extends AbstractConvertibleToJson {
-    private static boolean COMPATIBILITY_WITH_UUID = false;
+    private static final boolean COMPATIBILITY_WITH_UUID = false;
 
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";

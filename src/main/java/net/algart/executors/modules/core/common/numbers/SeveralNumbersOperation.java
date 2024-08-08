@@ -37,7 +37,7 @@ public abstract class SeveralNumbersOperation extends Executor {
 
     private final String[] predefinedInputPortNames;
 
-    private Map<Integer, Integer> indexInBlock = new HashMap<>();
+    private final Map<Integer, Integer> indexInBlock = new HashMap<>();
     private int lengthInBlock = 0;
     private boolean replaceColumnRangeInInput = false;
 

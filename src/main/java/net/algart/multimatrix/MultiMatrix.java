@@ -49,15 +49,8 @@ public interface MultiMatrix extends Cloneable {
     int DEFAULT_B_CHANNEL = 2;
     int DEFAULT_ALPHA_CHANNEL = 3;
 
-    List<Class<?>> SUPPORTED_ELEMENT_TYPES = Collections.unmodifiableList(java.util.Arrays.asList(
-            byte.class,
-            short.class,
-            int.class,
-            long.class,
-            float.class,
-            double.class,
-            boolean.class,
-            char.class));
+    List<Class<?>> SUPPORTED_ELEMENT_TYPES = List.of(
+            byte.class, short.class, int.class, long.class, float.class, double.class, boolean.class, char.class);
 
     List<Matrix<? extends PArray>> allChannels();
 
@@ -416,7 +409,7 @@ public interface MultiMatrix extends Cloneable {
                     channel(0)));
         }
         final Matrix<? extends PArray> i = intensityChannel();
-        final List<Matrix<? extends PArray>> channels = new ArrayList<Matrix<? extends PArray>>(allChannels());
+        final List<Matrix<? extends PArray>> channels = new ArrayList<>(allChannels());
         final double a = intensityCorrectingFunctionOfOneArgument.a(0);
         final double b = intensityCorrectingFunctionOfOneArgument.b();
         for (int k = 0; k < 3; k++) {
@@ -694,29 +687,21 @@ public interface MultiMatrix extends Cloneable {
 
         static PixelValue valueOf(Object channelsJavaArray, boolean doClone) {
             Objects.requireNonNull(channelsJavaArray, "Null channels java array");
-            if (channelsJavaArray instanceof boolean[]) {
-                final boolean[] channels = (boolean[]) channelsJavaArray;
+            if (channelsJavaArray instanceof boolean[] channels) {
                 return new Bit(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof char[]) {
-                final char[] channels = (char[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof char[] channels) {
                 return new Char(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof byte[]) {
-                final byte[] channels = (byte[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof byte[] channels) {
                 return new Byte(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof short[]) {
-                final short[] channels = (short[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof short[] channels) {
                 return new Short(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof int[]) {
-                final int[] channels = (int[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof int[] channels) {
                 return new Int(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof long[]) {
-                final long[] channels = (long[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof long[] channels) {
                 return new Long(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof float[]) {
-                final float[] channels = (float[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof float[] channels) {
                 return new Float(doClone ? channels.clone() : channels);
-            } else if (channelsJavaArray instanceof double[]) {
-                final double[] channels = (double[]) channelsJavaArray;
+            } else if (channelsJavaArray instanceof double[] channels) {
                 return new Double(doClone ? channels.clone() : channels);
             } else {
                 throw new IllegalArgumentException("The passed java-array argument is not boolean[], char[], "

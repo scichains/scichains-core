@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class GraalBindingSpeed {
-    private static int N = 1000;
+    private static final int N = 1000;
 
     Context safe = GraalSafety.SAFE.newBuilder().build();
     Context pure = GraalSafety.PURE.newBuilder().build();

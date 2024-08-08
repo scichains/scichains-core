@@ -91,7 +91,8 @@ public class GraalVMImportTest {
 
         System.out.println();
         System.out.println("Caling function");
-        Value execute = func.execute(new int[]{11, 12, 13});
+        Object intArray = new int[] {11, 12, 13};
+        Value execute = func.execute(intArray);
         System.out.println(execute);
 
 //        final String jsObjectScript = "c = {a: 1, b: 'bb'}";

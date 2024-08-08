@@ -177,25 +177,16 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
     }
 
     private boolean isMatched(ExecutorJson.ControlConf controlConf) {
-        switch (controlConf.getValueType()) {
-            case INT:
-                return extractIntType;
-            case LONG:
-                return extractLongType;
-            case FLOAT:
-                return extractFloatType;
-            case DOUBLE:
-                return extractDoubleType;
-            case BOOLEAN:
-                return extractBooleanType;
-            case STRING:
-                return extractStringType;
-            case ENUM_STRING:
-                return extractEnumType;
-            case SETTINGS:
-                return extractSettingsType;
-            default:
-                return false;
-        }
+        return switch (controlConf.getValueType()) {
+            case INT -> extractIntType;
+            case LONG -> extractLongType;
+            case FLOAT -> extractFloatType;
+            case DOUBLE -> extractDoubleType;
+            case BOOLEAN -> extractBooleanType;
+            case STRING -> extractStringType;
+            case ENUM_STRING -> extractEnumType;
+            case SETTINGS -> extractSettingsType;
+            default -> false;
+        };
     }
 }

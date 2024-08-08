@@ -41,7 +41,7 @@ public class SScalarMultiLineTest {
             return;
         }
 
-        final String s = new String(Files.readAllBytes(Paths.get(args[0])), StandardCharsets.UTF_8);
+        final String s = Files.readString(Paths.get(args[0]));
         final List<String> trimmedLines = SScalar.splitJsonOrTrimmedLines(s);
         System.out.printf("trimmedLines: <<<%s>>>%n%n",
                 String.join(String.format(">%n<"), trimmedLines));

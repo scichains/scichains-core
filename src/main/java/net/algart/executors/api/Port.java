@@ -70,13 +70,11 @@ public final class Port {
         }
 
         public static Type valueOf(int code) {
-            switch (code) {
-                case 1:
-                    return INPUT;
-                case 2:
-                    return OUTPUT;
-            }
-            throw new IllegalArgumentException("Unsupported type code: " + code);
+            return switch (code) {
+                case 1 -> INPUT;
+                case 2 -> OUTPUT;
+                default -> throw new IllegalArgumentException("Unsupported type code: " + code);
+            };
         }
 
         public abstract Port getPort(ExecutionBlock executionBlock, String name);

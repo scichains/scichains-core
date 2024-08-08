@@ -96,22 +96,15 @@ public abstract class MultiMatrixGenerator extends Executor {
 
     public static Class<?> elementType(String primitiveElementTypeName) {
         Objects.requireNonNull(primitiveElementTypeName, "Null element type name");
-        switch (primitiveElementTypeName) {
-            case "boolean":
-                return boolean.class;
-            case "byte":
-                return byte.class;
-            case "short":
-                return short.class;
-            case "int":
-                return int.class;
-            case "long":
-                return long.class;
-            case "float":
-                return float.class;
-            case "double":
-                return double.class;
-        }
-        throw new IllegalArgumentException("Illegal name of element type");
+        return switch (primitiveElementTypeName) {
+            case "boolean" -> boolean.class;
+            case "byte" -> byte.class;
+            case "short" -> short.class;
+            case "int" -> int.class;
+            case "long" -> long.class;
+            case "float" -> float.class;
+            case "double" -> double.class;
+            default -> throw new IllegalArgumentException("Illegal name of element type");
+        };
     }
 }

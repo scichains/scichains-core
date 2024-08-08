@@ -154,8 +154,8 @@ public final class ContrastAndClassifyNumbers extends NumberArrayFilter implemen
             result = Arrays.asFuncArray(
                     truncateOverflow ?
                             new AbstractFunc() {
-                                double mult = destRange.size() / rangeToContrast.size();
-                                double b = destRange.min() - rangeToContrast.min() * mult;
+                                final double mult = destRange.size() / rangeToContrast.size();
+                                final double b = destRange.min() - rangeToContrast.min() * mult;
 
                                 @Override
                                 public double get(double... x) {

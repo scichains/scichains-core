@@ -45,7 +45,7 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
     private String resultColumnNames = "";
     private List<String> resultColumnNamesList = Collections.emptyList();
     private Set<String> resultColumnNamesSet = Collections.emptySet();
-    private Map<Integer, List<String>> columnNames = new HashMap<>();
+    private final Map<Integer, List<String>> columnNames = new HashMap<>();
 
     public CombineNamedNumbersColumns() {
         addOutputScalar(OUTPUT_COLUMN_NAMES);

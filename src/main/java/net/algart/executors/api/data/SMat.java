@@ -169,12 +169,12 @@ public final class SMat extends Data {
         U8(0, byte.class, 8, false, bb -> bb),
         S8(1, byte.class, 8, false, bb -> bb),
         // - incompatible with AlgART
-        U16(2, short.class, 16, false, bb -> bb.asShortBuffer()),
-        S16(3, short.class, 16, false, bb -> bb.asShortBuffer()),
+        U16(2, short.class, 16, false, ByteBuffer::asShortBuffer),
+        S16(3, short.class, 16, false, ByteBuffer::asShortBuffer),
         // - incompatible with AlgART
-        S32(4, int.class, 32, false, bb -> bb.asIntBuffer()),
-        F32(5, float.class, 32, true, bb -> bb.asFloatBuffer()),
-        F64(6, double.class, 64, true, bb -> bb.asDoubleBuffer()),
+        S32(4, int.class, 32, false, ByteBuffer::asIntBuffer),
+        F32(5, float.class, 32, true, ByteBuffer::asFloatBuffer),
+        F64(6, double.class, 64, true, ByteBuffer::asDoubleBuffer),
         BIT(101, boolean.class, 1, false, bb -> bb);
         // - incompatible with OpenCV
 
@@ -490,10 +490,9 @@ public final class SMat extends Data {
     @Override
     public SMat exchange(Data other) {
         Objects.requireNonNull(other, "Null other objects");
-        if (!(other instanceof SMat)) {
+        if (!(other instanceof SMat otherMat)) {
             throw new IllegalArgumentException("Cannot exchange with another data type: " + other.getClass());
         }
-        SMat otherMat = (SMat) other;
         final long tempFlags = this.flags;
         final long[] tempDimensions = this.dimensions;
         final Depth tempDepth = this.depth;

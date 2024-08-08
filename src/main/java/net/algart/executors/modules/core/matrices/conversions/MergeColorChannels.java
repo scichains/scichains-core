@@ -39,7 +39,7 @@ public final class MergeColorChannels extends ColorSpaceConversion {
     public static final long DEFAULT_DIM_X_WHEN_NO_SOURCE = 512;
     public static final long DEFAULT_DIM_Y_WHEN_NO_SOURCE = 512;
 
-    private double defaultFillerForChannels[] = new double[]{1.0, 1.0, 1.0};
+    private final double[] defaultFillerForChannels = new double[]{1.0, 1.0, 1.0};
 
     public MergeColorChannels() {
         addOutputMat(DEFAULT_OUTPUT_PORT);

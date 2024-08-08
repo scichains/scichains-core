@@ -69,7 +69,7 @@ public class ExecutionBlockLoader {
      * Actually loads and instantiate new execution block.
      * Default implementation returns <code>null</code>.
      *
-     * <p>Note: if this loader use sessionId, if MUST always check also
+     * <p>Note: if this loader uses sessionId, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
      *
      * @param sessionId             see the same argument of {@link ExecutionBlock#newExecutionBlock};
@@ -87,7 +87,7 @@ public class ExecutionBlockLoader {
 
     /**
      * Removes all executors, dynamically created for the given session,
-     * probably stored in some tables by this loaders for dynamic usage,
+     * probably stored in some tables by this loader for dynamic usage,
      * and frees some caches, necessary for such executors.
      * Default implementation calls {@link #removeSessionExecutorModels(String)}.
      *

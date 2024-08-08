@@ -38,12 +38,12 @@ public class ThrowException extends Executor {
     public static final String M = "m";
 
     public enum ExceptionKind {
-        NULL_POINTER_EXCEPTION(s -> new NullPointerException(s)),
-        ILLEGAL_ARGUMENT_EXCEPTION(s -> new IllegalArgumentException(s)),
-        ILLEGAL_STATE_EXCEPTION(s -> new IllegalStateException(s)),
-        INDEX_OUT_OF_BOUNDS_EXCEPTION(s -> new IndexOutOfBoundsException(s)),
-        UNSUPPORTED_OPERATION_EXCEPTION(s -> new UnsupportedOperationException(s)),
-        ASSERTION_ERROR(s -> new AssertionError(s));
+        NULL_POINTER_EXCEPTION(NullPointerException::new),
+        ILLEGAL_ARGUMENT_EXCEPTION(IllegalArgumentException::new),
+        ILLEGAL_STATE_EXCEPTION(IllegalStateException::new),
+        INDEX_OUT_OF_BOUNDS_EXCEPTION(IndexOutOfBoundsException::new),
+        UNSUPPORTED_OPERATION_EXCEPTION(UnsupportedOperationException::new),
+        ASSERTION_ERROR(AssertionError::new);
 
         private final Function<String, Throwable> exception;
 

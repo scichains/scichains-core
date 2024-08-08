@@ -586,7 +586,7 @@ public final class SScalar extends Data {
 
         public List<String> comments() {
             assert comments != null : "comments cannot be null outside this class";
-            return Collections.unmodifiableList(Arrays.asList(comments));
+            return List.of(comments);
         }
 
         @Override

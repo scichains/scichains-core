@@ -44,9 +44,7 @@ public final class SplitColorChannels extends ColorSpaceConversion {
 
     public static final String VISIBLE_RESULT_IS_FIRST_CONNECTED = "first_connected";
 
-    public static final List<String> CHANNEL_PORTS = Collections.unmodifiableList(Arrays.asList(
-            CHANNEL_1, CHANNEL_2, CHANNEL_3, CHANNEL_4
-    ));
+    public static final List<String> CHANNEL_PORTS = List.of(CHANNEL_1, CHANNEL_2, CHANNEL_3, CHANNEL_4);
 
     public SplitColorChannels() {
         useVisibleResultParameter();

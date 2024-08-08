@@ -42,7 +42,7 @@ public final class ReadCSVNumbersTest {
                 System.out.printf("%s written to %s%n", numbers, fileCopy);
             } catch (Exception e) {
                 System.err.println("Cannot read " + file);
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
     }

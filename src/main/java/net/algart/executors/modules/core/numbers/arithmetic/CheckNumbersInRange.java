@@ -87,20 +87,16 @@ public final class CheckNumbersInRange extends NumberArrayToScalar implements Re
         if (allInRange) {
             return true;
         } else {
-            switch (actionOnFail) {
-                case RETURN_FALSE: {
-                    return false;
-                }
-                case THROW_EXCEPTION: {
+            return switch (actionOnFail) {
+                case RETURN_FALSE -> false;
+                case THROW_EXCEPTION -> {
                     getScalar().setTo(false);
                     throw new AssertionError("Input array contains numbers "
                             + (invert ? "inside" : "outside") + " the range "
                             + min + ".." + max + ": " + Arrays.toString(array, ", ", 1000));
                 }
-                default: {
-                    throw new UnsupportedOperationException("Invalid " + actionOnFail);
-                }
-            }
+                default -> throw new UnsupportedOperationException("Invalid " + actionOnFail);
+            };
         }
     }
 }

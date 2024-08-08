@@ -64,7 +64,8 @@ public class GraalVMLiteralOrFileTest {
         System.out.println();
 
         System.out.println("Caling function");
-        Value execute = func.execute(new int[]{11, 12, 13});
+        Object intArray = new int[] {11, 12, 13};
+        Value execute = func.execute(intArray);
         System.out.println("Function result: " + execute);
 
         System.out.println();

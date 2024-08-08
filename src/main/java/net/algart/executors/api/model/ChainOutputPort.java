@@ -33,7 +33,7 @@ import net.algart.executors.api.data.SScalar;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ChainOutputPort extends ChainPort<ChainInputPort> {
-    private AtomicInteger countOfConnectedInputs = new AtomicInteger(0);
+    private final AtomicInteger countOfConnectedInputs = new AtomicInteger(0);
     private volatile boolean hasConnectedReadOnlyExecutors = false;
 
     private ChainOutputPort(ChainBlock block, String id, String name, ChainPortType portType, DataType dataType) {

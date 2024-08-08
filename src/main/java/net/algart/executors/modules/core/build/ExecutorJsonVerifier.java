@@ -49,8 +49,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public final class ExecutorJsonVerifier {
-    private static final List<String> POSSIBLE_BLOCK_KINDS = Collections.unmodifiableList(Arrays.asList(
-            "function", "input", "output", "data"));
+    private static final List<String> POSSIBLE_BLOCK_KINDS = List.of("function", "input", "output", "data");
 
     private final Set<String> ids = new HashSet<>();
     private final Set<String> instantiationNames = new HashSet<>();
@@ -329,10 +328,9 @@ public final class ExecutorJsonVerifier {
             throw new JsonException("No \"" + portArrayName + "\" section in " + f);
         }
         for (JsonValue value : ports) {
-            if (!(value instanceof JsonObject)) {
+            if (!(value instanceof JsonObject port)) {
                 throw new JsonException("One of ports is not Json object: " + value);
             }
-            final JsonObject port = (JsonObject) value;
             final String name = port.getString("name");
             final DataType dataType = DataType.valueOfTypeName(port.getString("value_type"));
             if (result.put(name, dataType) != null) {

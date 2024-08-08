@@ -57,7 +57,7 @@ public abstract class GraalSourceContainer {
         }
     }
 
-    private AtomicBoolean changed = new AtomicBoolean(false);
+    private final AtomicBoolean changed = new AtomicBoolean(false);
     private volatile String language = null;
     private volatile Object origin = null;
     private volatile String name = null;

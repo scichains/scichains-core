@@ -35,7 +35,7 @@ public final class MergeNumbersColumns extends SeveralNumbersOperation implement
 
     private boolean requireInput = true;
     private MergeNumbers.ResultElementType resultElementType = MergeNumbers.ResultElementType.FIRST_INPUT;
-    private Map<Integer, Integer> numberOfEmptyColumnsForNonInitialized = new HashMap<>();
+    private final Map<Integer, Integer> numberOfEmptyColumnsForNonInitialized = new HashMap<>();
 
     public boolean requireInput() {
         return requireInput;

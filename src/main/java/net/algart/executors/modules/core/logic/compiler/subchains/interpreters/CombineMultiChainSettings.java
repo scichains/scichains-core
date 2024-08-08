@@ -41,11 +41,10 @@ public class CombineMultiChainSettings extends CombineChainSettings {
     @Override
     protected JsonObject correctSettings(JsonObject settings, SettingsCombiner combiner) {
         final Object customSettingsInformation = combiner.getCustomSettingsInformation();
-        if (!(customSettingsInformation instanceof MultiChain)) {
+        if (!(customSettingsInformation instanceof MultiChain multiChain)) {
             throw new AssertionError("Invalid usage of " + this
                     + ": combiner does not contain parent MultiChain");
         }
-        final MultiChain multiChain = (MultiChain) customSettingsInformation;
         final String chainId = settings.getString(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME, null);
         if (chainId == null) {
             throw new AssertionError("Invalid usage of " + this + ": no "

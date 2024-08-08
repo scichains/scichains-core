@@ -63,7 +63,7 @@ abstract class BitMultiMatrixProcessing extends SeveralMultiMatricesProcessing {
         }
         final long dimY = matrix.dimY();
         final long dimX = matrix.dimX();
-        if (dimX < 2 * d || dimY < 2 * d) {
+        if (dimX < 2L * d || dimY < 2L * d) {
             throw new IllegalArgumentException("The matrix was not extended by " + d + " pixels - " + matrix);
         }
         Arrays.zeroFill(matrix.subMatrix(0, 0, dimX, d).array());

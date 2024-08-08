@@ -113,44 +113,28 @@ public final class UniformHistogram256Finder {
         }
         if (elementType == char.class) {
             final CharArray array = (CharArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfChars(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfChars(array, mask, rangeIndex));
         } else if (elementType == boolean.class) {
             final BitArray array = (BitArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfBits(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfBits(array, mask, rangeIndex));
         } else if (elementType == byte.class) {
             final ByteArray array = (ByteArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfBytes(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfBytes(array, mask, rangeIndex));
         } else if (elementType == short.class) {
             final ShortArray array = (ShortArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfShorts(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfShorts(array, mask, rangeIndex));
         } else if (elementType == int.class) {
             final IntArray array = (IntArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfInts(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfInts(array, mask, rangeIndex));
         } else if (elementType == long.class) {
             final LongArray array = (LongArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfLongs(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfLongs(array, mask, rangeIndex));
         } else if (elementType == float.class) {
             final FloatArray array = (FloatArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfFloats(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfFloats(array, mask, rangeIndex));
         } else if (elementType == double.class) {
             final DoubleArray array = (DoubleArray) data;
-            stream.forEach(rangeIndex -> {
-                histogramOfDoubles(array, mask, rangeIndex);
-            });
+            stream.forEach(rangeIndex -> histogramOfDoubles(array, mask, rangeIndex));
         } else {
             throw new AssertionError("Impossible element type " + elementType);
         }
