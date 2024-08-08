@@ -186,13 +186,18 @@ public abstract class GraalPerformerContainer {
     /**
      * Returns performer, stored in this container for the given context ID.
      *
+     * <p><b>Important:</b> usually you <b>should not</b> close the returned performed, for example,
+     * via <code>try-with-resources</code> statement. Instead, you should use {@link #freeResources(boolean)} method
+     * of this container.</p>
+     *
      * <p>Note: this performer will be shared (under the same ID) among <b>all</b> containers, created in this JVM.
-     * If a performer with this ID was already created by any container, it will be returned.
-     * So, we recommend to guarantee, by external logic, that all containers, that create performers
-     * by this method with the same ID, will have identical settings
+     * If there is a performer with this ID, already created by any container, it will be returned.
+     * So, we recommend guaranteeing (by the external logic) that all containers that create performers
+     * by this method with the same ID will have identical settings
      * (like {@link #setCustomizer(GraalContextCustomizer) customizer}).
      *
      * <p>Note: for local container the argument will be ignored.
+     *
      *
      * @param contextId ID of the context.
      * @return stored performer.
@@ -210,7 +215,7 @@ public abstract class GraalPerformerContainer {
      * <p>For {@link Local} container, it just frees the only contained performer
      * by the call {@link GraalPerformer#close()}.
      *
-     * <p>For {@link Shared} container, behaviour depends on the argument.
+     * <p>For {@link Shared} container, behavior depends on the argument.
      * If it is <code>false</code>, it does nothing;
      * this may be important, because the same performer may be shared with other containers.
      * Then performers will be automatically closed by Java cleaner in {@link GraalPerformer}.

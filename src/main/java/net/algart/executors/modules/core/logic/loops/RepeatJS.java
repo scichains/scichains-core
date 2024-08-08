@@ -342,13 +342,12 @@ public final class RepeatJS extends Executor {
     @Override
     public void initialize() {
         isFirstIteration = true;
-        try (GraalPerformer performer = performerContainer().performer(getContextId())) {
-            final Value bindings = performer.bindingsJS();
-            if (!initializingOperator.isEmpty()) {
-                javaScriptInitializingOperator.setCommonJS(initializingOperator);
-                putAllInputs(bindings, true);
-                performer.perform(javaScriptInitializingOperator);
-            }
+        @SuppressWarnings("resource") final GraalPerformer performer = performerContainer().performer(getContextId());
+        final Value bindings = performer.bindingsJS();
+        if (!initializingOperator.isEmpty()) {
+            javaScriptInitializingOperator.setCommonJS(initializingOperator);
+            putAllInputs(bindings, true);
+            performer.perform(javaScriptInitializingOperator);
         }
     }
 
