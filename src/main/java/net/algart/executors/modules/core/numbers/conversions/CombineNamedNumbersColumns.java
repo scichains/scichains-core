@@ -129,7 +129,7 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
             return new SNumbers();
         }
         if (sources.stream().noneMatch(Objects::nonNull)) {
-            // - no inputs: we cannot create even empty result, because we don't know array length
+            // - no inputs: we cannot create an even empty result, because we don't know array length
             if (requireAllColumns) {
                 throw new IllegalArgumentException("There are no initialized input arrays");
             } else {

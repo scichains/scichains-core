@@ -68,7 +68,7 @@ public class GraalAPI {
     private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER = GraalSourceContainer
             .newLiteral()
             .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE, "__S_service");
-    // - note: creating container is very "light" operation, not leading to using any Graal code
+    // - note: creating container is a very "light" operation, not leading to using any Graal code
 
     private static final Logger LOG = System.getLogger(GraalAPI.class.getName());
     private static final java.util.logging.Logger JAVA_LOG =
@@ -139,7 +139,7 @@ public class GraalAPI {
     }
 
     // Unlike loadParameters, we use here usual Map (instead of Value):
-    // it allows to avoid creating special empty object with name
+    // it allows avoiding creating a special empty object with name
     // STANDARD_API_PARAMETER inside "parameters" object
     public void loadSystemParameters(Executor executor, Value parameters) {
         Objects.requireNonNull(executor, "Null executor");
@@ -155,9 +155,9 @@ public class GraalAPI {
         loadParameters(executor.parameters(), parameters);
     }
 
-    // Note: Graal allows to use Map directly inside JavaScript or other languages,
+    // Note: Graal allows using Map directly inside JavaScript or other languages,
     // but we prefer to work with "native" language-dependent object Value.
-    // In particular, it allows to use very pure mode without any access permissions (for strings and numbers).
+    // In particular, it allows using very pure mode without any access permissions (for strings and numbers).
     public void loadParameters(Map<String, Object> parametersMap, Value parameters) {
         Objects.requireNonNull(parametersMap, "Null parametersMap");
         Objects.requireNonNull(parameters, "Null parameters");
@@ -196,7 +196,6 @@ public class GraalAPI {
                 case SCALAR -> loadScalar(port);
                 case NUMBERS -> loadNumbers(port);
                 case MAT -> loadMat(port);
-                default -> throw new UnsupportedOperationException("Unsupported data type: " + data.type());
             };
         }
         return value;

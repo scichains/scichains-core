@@ -213,7 +213,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
         return !requireInput;
     }
 
-    // Note: if sqrtFromResult, 1-channel matrix is supposed to be nonnegative
+    // Note: if sqrtFromResult, 1-channel matrix is supposed to be non-negative
     static Matrix<? extends PArray> sumOfChannelsSquares(MultiMatrix matrix, boolean sqrtFromResult) {
         if (matrix.numberOfChannels() == 1) {
             return sqrtFromResult ?

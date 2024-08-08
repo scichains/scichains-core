@@ -31,7 +31,7 @@
     {
       "caption": "Class name",
       "name": "className",
-      "description": "Full exact name of Java class. It it is found in the current Java class path, \"is_existing_class\" output will contain true, in other case it will be false.",
+      "description": "Full exact name of Java class. It it is found in the current Java class path, \"is_existing_class\" output will contain true, in another case it will be false.",
       "value_type": "String",
       "edition_type": "value",
       "default": "java.lang.System"

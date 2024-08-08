@@ -114,7 +114,7 @@
     {
       "caption": "Elements type",
       "name": "elementType",
-      "description": "Element type of the result. If \"auto-detect\" is chosen, this function checks the header (name in the first line) of the first column. If this word starts from one of allowed element type names (\"byte\", \"short\" etc. in this list), it the function chooses this element type; in other case, default type \"float\" is used.",
+      "description": "Element type of the result. If \"auto-detect\" is chosen, this function checks the header (name in the first line) of the first column. If this word starts from one of allowed element type names (\"byte\", \"short\" etc. in this list), it the function chooses this element type; in another case, default type \"float\" is used.",
       "value_type": "String",
       "edition_type": "enum",
       "items": [
@@ -146,7 +146,7 @@
     {
       "caption": "Number of initial lines to skip",
       "name": "numberOfSkippedInitialLines",
-      "description": "If contains non-zero number N, first N lines of the text file are skipped and ignored.\nNote: CSV file must contain at least N+1 lines, in other case an exception will be thrown.\nBe careful: first N lines are removed at the very beginning. Thus, this function considers  that the column headers (if present) are located in the line #(N+1).",
+      "description": "If contains non-zero number N, first N lines of the text file are skipped and ignored.\nNote: CSV file must contain at least N+1 lines, in another case an exception will be thrown.\nBe careful: first N lines are removed at the very beginning. Thus, this function considers  that the column headers (if present) are located in the line #(N+1).",
       "value_type": "int",
       "edition_type": "value",
       "default": 0

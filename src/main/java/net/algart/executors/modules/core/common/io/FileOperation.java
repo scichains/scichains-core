@@ -137,7 +137,7 @@ public abstract class FileOperation extends Executor {
     }
 
     // Note: this function does not work too good with OUTPUT_XXX ports:
-    // it will return only the LAST from several path
+    // it will return only the LAST from several paths
     public final List<Path> completeSeveralFilePaths() {
         return completeSeveralFilePaths(filePath());
     }
@@ -218,9 +218,9 @@ public abstract class FileOperation extends Executor {
     /*
      // Obsolete ability: never used
      * May be overridden to provide another path in the result ports.
-     * It is called at the end of {@link #completeFilePath(String, boolean)} to return result
+     * It is called at the end of {@link #completeFilePath(String, boolean)} to return a result
      * of this method.
-     * Default implementation just returns its argument without changes.
+     * The Default implementation just returns its argument without changes.
      *
      * @param path source path after all translations.
      * @return result path.

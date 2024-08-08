@@ -31,7 +31,7 @@
     {
       "caption": "What to check?",
       "name": "comparisonMode",
-      "description": "When checking equality (x = y), result will be true if both strings x and y are identical or if both are not specified (ports are not initialized), or false in other case (in particular, if one of x or y is specified, but the other is not).\nWhen checking inequality x ≠ y), result is opposite.",
+      "description": "When checking equality (x = y), result will be true if both strings x and y are identical or if both are not specified (ports are not initialized), or false in another case (in particular, if one of x or y is specified, but the other is not).\nWhen checking inequality x ≠ y), result is opposite.",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

@@ -40,12 +40,12 @@ import java.util.stream.Collectors;
 public final class Chain implements AutoCloseable {
     private static final AtomicLong CURRENT_CONTEXT_ID = new AtomicLong(99000000000L);
     // - Some magic value helps to reduce the chance of accidental coincidence with other contextIDs,
-    // probable used in the system in other ways (99 is an ASCII-code of letter 'c').
+    // probably used in the system in other ways (99 is an ASCII code of letter 'c').
 
     private volatile long contextId;
     // - Unique ID for every chain
     private final Executor executionContext;
-    // - May be null. When non-null, may be used, for example, for customizing some future system parameters.
+    // - Can be null. When non-null, may be used, for example, for customizing some future system parameters.
     private final String id;
     private final ExecutorProvider executorProvider;
     // - Usually should be not-null. If null, the chain will be unable to create executors.
@@ -71,7 +71,7 @@ public final class Chain implements AutoCloseable {
     private volatile boolean timingByExecutorsEnabled = false;
     // - This flag enables executors, called from the chain, to collect statistics about their timing.
     // By default, disabled: measuring time while multithreading execution cannot be correct;
-    // instead, we will measure the time of SubChain executor, that execute this chain.
+    // instead, we will measure the time of SubChain executor, which executes this chain.
     // But this flag can be set by debugging applications, like ExecutingChain class.
     private volatile Object customChainInformation = null;
 
@@ -178,7 +178,8 @@ public final class Chain implements AutoCloseable {
         result.platformCategory = chainJson.getPlatformCategory();
         result.chainJsonPath = chainJson.getChainJsonFile();
         // result.chainJson = chainJson;
-        // - it is not safe, because ChainJson is mutable and can be modifying outside; not used in current version
+        // - it is not safe, because ChainJson is mutable and can be modifying outside;
+        // not used in the current version
         final ChainJson.Executor.Options.Execution execution = executor.getOptions().getExecution();
         result.setExecuteAll(execution.isAll());
         result.setMultithreading(execution.isMultithreading());
@@ -202,7 +203,7 @@ public final class Chain implements AutoCloseable {
     }
 
     public long contextId() {
-        // Note: it will be another for result of cleanCopy!
+        // Note: it will be another for the result of cleanCopy!
         return contextId;
     }
 
@@ -305,7 +306,7 @@ public final class Chain implements AutoCloseable {
 
     /**
      * Sets some additional data, that can be useful while executing the chain.
-     * You can call this method, for example, at the stage of loading and analysing the chain,
+     * You can call this method, for example, at the stage of loading and analyzing the chain
      * if it requires essential time &mdash; and then use this information via {@link #getCustomChainInformation()}
      * at the stage of executing the chain.
      *
@@ -491,10 +492,10 @@ public final class Chain implements AutoCloseable {
                     continue;
                 }
                 final String value = parameters.getString(subChainParameterName, null);
-                // - should be called after checking for scalar type: for other types,
+                // - should be called after checking for a scalar type: for other types,
                 // ExecutorJson.setTo(Chain) does not add parameters
                 if (value != null) {
-                    // - if null, let the parameter to have its default value
+                    // - if null, let the parameter have its default value
                     ((SScalar) data).setTo(value);
                 }
             }
@@ -584,7 +585,7 @@ public final class Chain implements AutoCloseable {
                 this.needToRepeat = false;
                 Collection<ChainBlock> blocksToExecute = executeAll ? all :
                         executor == null || executor.isAllOutputsNecessary() ?
-                                // This executor (like SubChain from the extensions) probably don't know
+                                // This executor (like SubChain from the extensions) probably doesn't know
                                 // its output ports yet: they will be added dynamically by this sub-chain.
                                 // So, if it wants to receive ALL results, we should use ALL outputs of this chain.
                                 getAllOutputs() :
@@ -619,7 +620,7 @@ public final class Chain implements AutoCloseable {
         ExecutionBlock result;
         try {
             result = executorProvider.newExecutor(id());
-            // - we suppose that someone has registered executor, which execute this chain
+            // - we suppose that someone has a registered executor, which execute this chain
         } catch (ClassNotFoundException | ExecutorNotFoundException e) {
             throw new IllegalStateException("Chain with ID " + id + " was not successfully registered", e);
         }
@@ -638,7 +639,7 @@ public final class Chain implements AutoCloseable {
         final List<ChainBlock> all = new ArrayList<>(allBlocks.values());
         all.forEach(ChainBlock::analyseTiming);
         final List<ChainBlock> withTiming = all.stream().filter(ChainBlock::hasTiming).collect(Collectors.toList());
-        // - mutable result to allow sorting below
+        // - mutable result to allow the sorting below
         all.sort(Comparator.comparingInt(ChainBlock::executionOrder));
         withTiming.sort(Comparator.comparingDouble(Chain::averageTime).reversed());
         final double sum = withTiming.stream().mapToDouble(

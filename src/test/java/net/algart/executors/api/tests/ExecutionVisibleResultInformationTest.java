@@ -29,6 +29,7 @@ import net.algart.executors.modules.core.numbers.arithmetic.NumbersAbs;
 
 public final class ExecutionVisibleResultInformationTest {
     public static void main(String[] args) {
+        //noinspection resource
         for (Executor executor : new Executor[]{
                 new NumbersAbs()
         }) {

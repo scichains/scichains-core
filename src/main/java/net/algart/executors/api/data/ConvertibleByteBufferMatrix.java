@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class ConvertibleByteBufferMatrix extends SMat.Convertible {
     /**
-     * Format of this byte buffer is compatible with opencv matrix bytes array.
+     * The format of this byte buffer is compatible with opencv matrix bytes array.
      * BGR/BGRA order is supposed for color matrices.
      */
     final ByteBuffer byteBuffer;

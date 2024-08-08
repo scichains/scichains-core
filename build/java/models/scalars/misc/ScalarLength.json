@@ -28,7 +28,7 @@
     {
       "caption": "Requires input",
       "name": "requireInput",
-      "description": "If set, the input port must contain some initialized scalar; in other case, this function will throw an exception. If this flag is cleared, empty input port leads to returning 0.",
+      "description": "If set, the input port must contain some initialized scalar; in another case, this function will throw an exception. If this flag is cleared, empty input port leads to returning 0.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

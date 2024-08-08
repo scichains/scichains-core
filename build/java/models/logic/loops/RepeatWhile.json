@@ -35,22 +35,22 @@
     {
       "value_type": "scalar",
       "name": "is_first",
-      "hint": "Will contain \"true\" if it is the first iteration; in other case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
+      "hint": "Will contain \"true\" if it is the first iteration; in another case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
     },
     {
       "value_type": "scalar",
       "name": "is_last",
-      "hint": "Will contain \"true\" if it is the last iteration of the loop; in other case will contain \"false\".\nActually it is the inverted input \"while\" condition."
+      "hint": "Will contain \"true\" if it is the last iteration of the loop; in another case will contain \"false\".\nActually it is the inverted input \"while\" condition."
     },
     {
       "value_type": "scalar",
       "name": "is_not_first",
-      "hint": "Will contain \"false\" if it is the first iteration of the loop; in other case will contain \"true\"."
+      "hint": "Will contain \"false\" if it is the first iteration of the loop; in another case will contain \"true\"."
     },
     {
       "value_type": "scalar",
       "name": "is_not_last",
-      "hint": "Will contain \"false\" if it is the last iteration of the loop; in other case will contain \"true\".\nActually it is the input \"while\" condition."
+      "hint": "Will contain \"false\" if it is the last iteration of the loop; in another case will contain \"true\".\nActually it is the input \"while\" condition."
     },
     {
       "value_type": "scalar",

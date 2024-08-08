@@ -34,7 +34,7 @@
     {
       "caption": "Requires input",
       "name": "requireInput",
-      "description": "If set, the input port must contain some initialized matrix; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "description": "If set, the input port must contain some initialized matrix; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

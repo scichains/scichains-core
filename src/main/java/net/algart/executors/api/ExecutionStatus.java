@@ -445,7 +445,7 @@ public class ExecutionStatus {
             return "<closed status>";
         }
         // - important to avoid possible infinite loop while calling in invalid state,
-        // for example while throwing exceptions
+        // for example, while throwing exceptions
         return joinAll(false);
     }
 
@@ -544,7 +544,7 @@ public class ExecutionStatus {
 
         private final LogLevel level;
         private long lastTime = Long.MAX_VALUE;
-        // - note: it is actual only while the very beginning usage of this class in whole JVM
+        // - note: it is actual only while the very beginning usage of this class in the whole JVM
         private String lastString = null;
 
         private DelayingLogger(LogLevel level) {

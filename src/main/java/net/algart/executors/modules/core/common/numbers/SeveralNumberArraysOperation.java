@@ -70,7 +70,7 @@ public abstract class SeveralNumberArraysOperation extends SeveralNumbersOperati
 
     protected abstract PArray process(List<PNumberArray> sources, int... blockLengths);
 
-    // Override this to specify custom resulting block length (in other case, block length of the
+    // Override this to specify custom resulting block length (in another case, block length of the
     // first argument will be used).
     protected Integer resultBlockLength() {
         return null;

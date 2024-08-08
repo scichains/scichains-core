@@ -40,8 +40,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Loader of {@link ExecutionBlock executors}. Every kinds of executors, like sub-chains, settings combiners,
- * Python function use their own loaders.
+ * Loader of {@link ExecutionBlock executors}. Every kind of executors, like sub-chains, settings combiners,
+ * Python function uses their own loaders.
  *
  * <p>In current version, all they are instances of {@link SimpleExecutionBlockLoader}.
  */
@@ -118,7 +118,7 @@ public class ExecutionBlockLoader {
     /**
      * Returns <tt>{@link #availableExecutorModelDescriptions(String)
      * availableExecutorModelDescriptions}(sessionId).get(executorId)</tt>,
-     * but works quickly (without creating new map).
+     * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session.
      * @param executorId unique ID of this executor in the system.

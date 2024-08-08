@@ -179,7 +179,7 @@ public final class ExecutorJsonSet {
         private static ExecutorJsonSet installedSet = null;
 
         static synchronized ExecutorJsonSet builtInSet() throws IOException {
-            // It is better than static initialization: this solution allows to see possible exceptions
+            // It is better than static initialization: this solution allows seeing possible exceptions
             // (static initialization will lead to very "strange" exceptions like NoClassDefFound error,
             // because this class will stay not initialized)
             if (installedSet == null) {
@@ -189,7 +189,7 @@ public final class ExecutorJsonSet {
                 final SpecialModelsBuilder builder = new SpecialModelsBuilder(newSet);
                 builder.addSpecialModels();
                 // - adding special models, which have no explicitly specified JSONs,
-                // like executors, describing each platform - "clones" of CommonPlatformInformation
+                // like executors, describing each platform - "clone" of CommonPlatformInformation
                 newSet.immutable = true;
                 installedSet = newSet;
             }

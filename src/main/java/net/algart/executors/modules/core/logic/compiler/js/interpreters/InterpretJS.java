@@ -77,7 +77,7 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
             this.jsCaller = jsCaller;
             // - the order is important for multithreading: local jsCaller is assigned first,
             // this.jsCaller is assigned to it;
-            // cloning is not necessary in current version, but added for possible future extensions
+            // cloning is not necessary in the current version, but added for possible future extensions
         }
         return jsCaller;
     }
@@ -98,6 +98,6 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
     }
 
     private void setSystemOutputs() {
-        // nothing in current version
+        // nothing in the current version
     }
 }

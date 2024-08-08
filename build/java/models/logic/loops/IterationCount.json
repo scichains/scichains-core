@@ -42,7 +42,7 @@
     {
       "value_type": "scalar",
       "name": "is_first",
-      "hint": "Will contain \"true\" if it is the first iteration; in other case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
+      "hint": "Will contain \"true\" if it is the first iteration; in another case will contain \"false\".\nIn other words, returns result of condition \"count==0\"."
     },
     {
       "value_type": "scalar",

@@ -127,9 +127,10 @@ public final class BlockJSModifyingSeveralNumbers extends Executor {
         final SNumbers bArray = getInputNumbers(IN_OUT_B, true);
         final SNumbers cArray = getInputNumbers(IN_OUT_C, true);
         final SNumbers dArray = getInputNumbers(IN_OUT_D, true);
-        checkNEqulaity(aArray, bArray, "a", "b");
-        checkNEqulaity(aArray, cArray, "a", "c");
-        checkNEqulaity(aArray, dArray, "a", "d");
+        checkNEquality(aArray, bArray, "a", "b");
+        checkNEquality(aArray, cArray, "a", "c");
+        checkNEquality(aArray, dArray, "a", "d");
+        //noinspection NonAtomicOperationOnVolatileField
         javaScript = JavaScriptPerformer.newInstanceIfChanged(javaScriptCode, javaScript);
         javaScript.putVariable("p", p);
         javaScript.putVariable("q", q);
@@ -179,7 +180,7 @@ public final class BlockJSModifyingSeveralNumbers extends Executor {
         }
     }
 
-    private static void checkNEqulaity(SNumbers first, SNumbers second, String firstName, String secondName) {
+    private static void checkNEquality(SNumbers first, SNumbers second, String firstName, String secondName) {
         if (first != null && first.isInitialized() && second != null && second.isInitialized()) {
             if (second.n() != first.n()) {
                 throw new SizeMismatchException("The number arrays' \"" + firstName + "\" and \"" + secondName

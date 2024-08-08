@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.common.io;
 
 import net.algart.executors.api.data.SNumbers;
 
-// Executor, that writes something to disk, may have a "side-effect" executor: it has no obvious result.
+// Executor that writes something to disk may have a "side effect" executor: it has no obvious result.
 // So, it is convenient to add copying some data to this operation: it will be its "result".
-// But usually  this technique is not a good idea; if you do not want it, just don't call copyAdditionalData.
+// But usually this technique is not a good idea; if you do not want it, just don't call copyAdditionalData.
 public abstract class WriteFileOperation extends FileOperation {
     public static final String S1 = "s";
     public static final String X1 = "x";

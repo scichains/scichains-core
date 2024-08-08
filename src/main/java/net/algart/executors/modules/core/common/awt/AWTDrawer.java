@@ -92,6 +92,6 @@ public abstract class AWTDrawer extends AWTFilter {
     public abstract void process(Graphics2D g, int dimX, int dimY);
 
     public static float truncateColor01(float v) {
-        return v < 0f ? 0f : v > 1f ? 1f : v;
+        return v < 0f ? 0f : Math.min(v, 1f);
     }
 }

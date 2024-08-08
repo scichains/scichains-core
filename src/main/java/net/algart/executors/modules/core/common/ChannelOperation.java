@@ -83,10 +83,10 @@ public interface ChannelOperation {
 
     /**
      * Returns 4 channel values.
-     * <p>Note: if 4th value (alpha) is not specified in the string, it will be equal to <code>scale</code>.
+     * <p>Note: if fourth value (alpha) is not specified in the string, it will be equal to <code>scale</code>.
      *
      * @param s     some color.
-     * @param scale the decoded values 0.0..1.0., if they represent color, are multiplied by this scale
+     * @param scale the decoded values 0.0..1.0, if they represent color, are multiplied by this scale
      *              (for example, 255.0 or 65535.0)
      * @return decoded channels (the length of returned array is always 4).
      */
@@ -136,17 +136,17 @@ public interface ChannelOperation {
             final int r = (int) (i >>> 16) & 0xFF;
             final int g = (int) (i >>> 8) & 0xFF;
             final int b = (int) i & 0xFF;
-            // - Note: we allow to specify alpha in this format ONLY with help of 8 hexadecimal digits after #,
+            // - Note: we allow specifying alpha in this format ONLY with the help of 8 hexadecimal digits after #,
             // and it is RRGGBBAA, NOT AARRGGBB!
             // In other words:
             //     #FF0000 means RED with alpha=255,
             //     #00FF0000 means GREEN with alpha=0,
             //     0x00FF0000 = 0xFF0000 means RED with alpha=255.
             // It helps to avoid possible mistake: alpha = 0, probable in AARRGGBB format
-            // (mathematically, 00FF0000 = FF0000 in hexadecimal system).
-            // It is important, because in other case we will produce zero-alpha by mistake.
+            // (mathematically, 00FF0000 = FF0000 in a hexadecimal system).
+            // It is important, because in another case, we will produce zero-alpha by mistake.
             // Zero-alpha pixels work fine in AlgART and OpenCV functions, but may lead to problems
-            // while using Java AWT: attempt to draw such image on Graphics2D will not modify R, G, B
+            // while using Java AWT: attempt to draw such an image on Graphics2D will not modify R, G, B
             // components of the result, if alpha=0 in the source. As a result, in particular,
             // SMat.bufferedImageToPackedBGRA method will work incorrectly with such BufferedImage.
             return new double[]{

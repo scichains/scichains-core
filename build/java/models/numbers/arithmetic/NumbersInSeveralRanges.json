@@ -57,7 +57,7 @@
     },
     {
       "name": "replaceColumnRangeInInput",
-      "description": "Replace the specified columns and return the result; in other case, only processed columns will be returned",
+      "description": "Replace the specified columns and return the result; in another case, only processed columns will be returned",
       "caption": "Fill the specified columns",
       "value_type": "boolean",
       "edition_type": "value",

@@ -34,7 +34,7 @@ import java.util.Map;
 
 public final class CreateNumbersFromValues extends Executor implements ReadOnlyExecutionInput {
     public static final String INPUT_PORT_PREFIX = "v";
-    // Note: other port names MUST NOT starts with this prefix!
+    // Note: other port names MUST NOT start with this prefix!
 
     private int blockLength = 1;
     private boolean singleBlock = false;
@@ -104,6 +104,7 @@ public final class CreateNumbersFromValues extends Executor implements ReadOnlyE
             } catch (NumberFormatException ignored) {
                 return;
             }
+            //noinspection resource
             setValue(index, parameters().getDouble(name));
             return;
         }

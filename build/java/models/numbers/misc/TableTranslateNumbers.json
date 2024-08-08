@@ -67,7 +67,7 @@
     {
       "value_type": "scalar",
       "name": "changed",
-      "hint": "[Optional] If requested, here will be boolean flag:\nfalse, if the result values are identical to the source indexes,\nor true in other case (at least one index was changed as the result of translation).\nIf result has another element type, or if the table consists of 2 or more columns, it will be true."
+      "hint": "[Optional] If requested, here will be boolean flag:\nfalse, if the result values are identical to the source indexes,\nor true in another case (at least one index was changed as the result of translation).\nIf result has another element type, or if the table consists of 2 or more columns, it will be true."
     }
   ],
   "controls": [

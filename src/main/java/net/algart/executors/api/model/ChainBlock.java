@@ -44,7 +44,7 @@ public final class ChainBlock {
 
     private static final boolean ANALYSE_CONDITIONAL_INPUTS = SystemEnvironment.getBooleanProperty(
             "net.algart.executors.api.analyseConditionalInputs", true);
-    // - can be set to false for debugging needs; it will decrease speed of executing some sub-chains
+    // - can be set to false for debugging needs; it will decrease the speed of executing some sub-chains
     // and will lead to stack overflow in recursive sub-chains
 
     private static final Logger LOG = System.getLogger(ChainBlock.class.getName());
@@ -53,7 +53,7 @@ public final class ChainBlock {
     final String id;
     private final String executorId;
     final ExecutorJson executorJson;
-    // - The last field MAY stay to be null, if it refers to a dynamic executor (like another sub-chain).
+    // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
     // But we almost don't use information from it! We use it:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
     // and (for standard data) for their getDataType() in setTo(Chain) method;
@@ -109,7 +109,7 @@ public final class ChainBlock {
         this.executorJson = executorProvider == null ? null : executorProvider.executorJson(executorId);
         // - Note: executorJson MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
-        // We must be able to CREATE a new chain, when some executors are not registered yet:
+        // We must be able to CREATE a new chain when some executors are not registered yet:
         // we do it, for example, while registering new sub-chains-as-executors
         // (see comments inside StandardExecutorProvider.executorJson).
         // But we can delay actual assigning correct executorJson until reinitialize method.
@@ -122,8 +122,8 @@ public final class ChainBlock {
         this.chain = newChain;
     }
 
-    // Classic copy constructor: we create it (in addition to previous one) to help IDEs
-    // to check correctness of copying all fields.
+    // Classic copy constructor: we create it (in addition to the previous one) to help IDEs
+    // to check the correctness of copying all fields.
     private ChainBlock(ChainBlock block) {
         Objects.requireNonNull(block, "Null chain block");
         this.chain = block.chain;
@@ -144,17 +144,17 @@ public final class ChainBlock {
         this.executor = null;
         // - IMPORTANT: executor must not be shallow-cloned here!
         // Executors almost always are not thread-safe: they store some information in output ports.
-        // If the same executor instance will do this in parallel in different threads
+        // If the same executor instance does this in parallel in different threads
         // (that is possible in multithreading recursive chains),
         // the result will be chaos in output ports.
-        // Results may be even worse if an executor has non-trivial internal state.
+        // Results may be even worse if an executor has a non-trivial internal state.
         //
-        // Note: this problem occurs not often, because usually the cloned chain contain
+        // Note: this problem rarely occurs because usually the cloned chain contains
         // non-initialized executors (created by UseSubChain or UseMultiChain).
         // But here is an important exception: method ExecutorJson.setTo(Chain chain),
-        // used inside UseSubChain to build chain executor model,
-        // initializes data blocks (with options.behavior.data = true) to know default value of
-        // the corresponding parameters of the sub-chain executor.
+        // used inside UseSubChain to build a chain executor model,
+        // initializes data blocks (with options.behavior.data = true) to know the default
+        // corresponding parameters values of the sub-chain executor.
         // This situation really can lead to bug in recursive chains.
 
         initialize();
@@ -366,7 +366,7 @@ public final class ChainBlock {
     }
 
     /**
-     * Returns the name of input/output argument of the whole chain, recommended while using the chain
+     * Returns the input/output argument nameof the whole chain, recommended while using the chain
      * as a single function. Should be customized, for example, by {@link Chain#setAllDefaultInputNames()}
      * and {@link Chain#setAllDefaultOutputNames()} methods.
      *
@@ -386,11 +386,11 @@ public final class ChainBlock {
     }
 
     /**
-     * Returns the name of the customization parameter of the whole chain, recommended while using the chain
+     * Returns the customization parameter name of the whole chain, recommended while using the chain
      * as a single function. Cannot be customized in the current version: it is always equal to
      * {@link #getSystemName()}.
      *
-     * @return the name of customization parameter , to which this block corresponds while using the chain
+     * @return the name of customization parameter, to which this block corresponds while using the chain
      * as a function.
      */
     public String getStandardParameterName() {
@@ -603,7 +603,7 @@ public final class ChainBlock {
                             }
                             status = executor.status();
                             if (status != null) {
-                                // - note that executor.status() cannot be null in current version
+                                // - note that executor.status() cannot be null in the current version
                                 status.setExecutorClassId(executorId);
                                 status.setExecutorInstanceId(id);
                             }
@@ -637,7 +637,7 @@ public final class ChainBlock {
                 } finally {
                     ready = true;
                     // - it is important to set "ready" also after any exception,
-                    // in other case we will have an assertion due to numberOfExecutionsForAssertion
+                    // in another case we will have an assertion due to numberOfExecutionsForAssertion
                 }
             }
         }
@@ -668,7 +668,7 @@ public final class ChainBlock {
                 if (!readyAlwaysNecessaryInputs) {
                     // - Important! While multithreading, it could become ready while executing
                     // connected blocks above, as a result of some parallel execution.
-                    // In this case, we must not to call copyFromConnectedPort() again:
+                    // In this case, we must not call copyFromConnectedPort() again:
                     // it will lead to IllegalStateException in reduceCountOfConnectedInputs() call.
                     copyFromConnectedPorts(necessaryAlways);
                     copyInputPortsToExecutor(necessaryAlways);
@@ -831,11 +831,11 @@ public final class ChainBlock {
 
     public static boolean isHighLevelException(Throwable e) {
         return e instanceof HighLevelException || e instanceof InterruptionException;
-        // - actually InterruptionException is also high-level: it does not mean an error in algorihtm,
-        // it is just a signal that program was stopper
+        // - actually InterruptionException is also high-level: it does not mean an error in algorithm,
+        // it is just a signal that the program was stopped
     }
 
-    // This method must not be called in multithreading mode, unlike execute
+    // This method must not be called in multithreading mode, unlike execute() method
     void checkRecursiveDependencies() {
         if (ready) {
             return;
@@ -917,7 +917,7 @@ public final class ChainBlock {
             try {
                 chainInputPort.copyToExecutorPort();
                 // - do this even if the port is not connected;
-                // actually it allows to use data, manually written into the global chain input ports
+                // actually it allows using data, manually written into the global chain input ports
             } catch (RuntimeException | AssertionError e) {
                 throw new ChainRunningException("Occurred while copying input port of "
                         + executor.getClass().getName() + " from "
@@ -1012,13 +1012,13 @@ public final class ChainBlock {
             }
         }
         // Now input/output ports are loaded from executor's JSON without any ID.
-        // It can be important to provide correct set of ports (even if chain's JSON doesn't specify all ports).
+        // It can be important to provide a correct set of ports (even if chain's JSON doesn't specify all ports).
         final Map<ChainPortKey, ChainInputPort> chainInputPorts = new LinkedHashMap<>();
         final Map<ChainPortKey, ChainOutputPort> chainOutputPorts = new LinkedHashMap<>();
         for (ChainJson.ChainBlockConf.PortConf portConf : blockConf.getUuidToPortMap().values()) {
             switch (portConf.getPortType().actualPortType()) {
                 // We must add here both actual and virtual ports;
-                // we distinguish them by ChainPort.key (i.e. by name + type)
+                // we distinguish them by ChainPort.key (i.e., by name + type)
                 case INPUT -> {
                     final ChainInputPort inputPort = ChainInputPort.valueOf(this, portConf);
                     if (chainInputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
@@ -1044,9 +1044,9 @@ public final class ChainBlock {
     private void initializePortsSpecifiedInChainConf(Executor executor) {
         for (ChainInputPort chainInputPort : inputPorts.values()) {
             if (chainInputPort.portType.isActual()) {
-                // - virtual ports do not correspond to any Executor's PORTS, they corresponds to its PARAMETERS
-                // (without this check we have a risk to overwrite correct actual port with incorrect virtual one
-                // with the same name - there was such bug in previous versions)
+                // - Virtual ports do not correspond to any Executor's PORTS, they correspond to its PARAMETERS.
+                // Without this check, we have a risk to overwrite correct actual port with incorrect virtual one
+                // with the same name - there was such a bug in previous versions.
                 final Port port = Port.newInput(chainInputPort.name, chainInputPort.dataType);
                 port.setConnected(chainInputPort.isConnected());
                 executor.replacePort(port);
@@ -1055,7 +1055,7 @@ public final class ChainBlock {
         }
         for (ChainOutputPort chainOutputPort : outputPorts.values()) {
             if (chainOutputPort.portType.isActual()) {
-                // - virtual ports do not correspond to any Executor's PORTS, they corresponds to its PARAMETERS
+                // - virtual ports do not correspond to any Executor's PORTS, they correspond to its PARAMETERS
                 final Port port = Port.newOutput(chainOutputPort.name, chainOutputPort.dataType);
                 port.setConnected(chainOutputPort.isConnected());
                 executor.replacePort(port);

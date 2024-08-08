@@ -57,7 +57,7 @@ public class JepGlobalConfig extends PyConfig {
             }
             if (pythonHome == null) {
                 assert systemEnvironmentDisabled;
-                // - in other case, we should make this record with !used
+                // - in another case, we should make this record with !used
                 return true;
             }
             return false;

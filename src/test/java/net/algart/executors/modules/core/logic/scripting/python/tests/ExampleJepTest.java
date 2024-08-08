@@ -30,9 +30,10 @@ import net.algart.executors.modules.core.demo.ExampleJep;
 public class ExampleJepTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
-        final ExampleJep e = new ExampleJep();
-        e.setShared(false);
-        e.reset();
-        e.execute();
+        try (ExampleJep e = new ExampleJep()) {
+            e.setShared(false);
+            e.reset();
+            e.execute();
+        }
     }
 }

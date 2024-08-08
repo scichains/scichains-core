@@ -61,7 +61,7 @@ public final class InterpolateLayersWithIncreasingNumberOfDimensions extends Sev
         Matrix<? extends UpdatablePArray> result = Arrays.SMM.newMatrix(
                 UpdatablePArray.class, front.elementType(), newDimensions);
         assert newDimension == (int) newDimension;
-        // - in other case, SMM cannot create a matrix
+        // - in another case, SMM cannot create a matrix
         final long step = front.size();
         IntStream.range(0, (int) newDimension).parallel().forEach(coord -> {
             final long p = coord * step;

@@ -61,7 +61,7 @@ public class JepAPI {
             "import " + STANDARD_API_JEP_VERIFIER + "\n\n");
 
 
-    // In current version, this class has not any settings, but maybe they will be added in future
+    // In the current version, this class has not any settings, but maybe they will be added in future
     private JepAPI() {
     }
 
@@ -115,7 +115,7 @@ public class JepAPI {
         }
     }
 
-    // performer is not used in current version
+    // performer is not used in the current version
     public Object readInputPort(JepPerformer performer, Port port) {
         Objects.requireNonNull(port, "Null port");
         if (!port.isInput()) {
@@ -130,7 +130,6 @@ public class JepAPI {
                 case SCALAR -> loadScalar(performer, port);
                 case NUMBERS -> loadNumbers(performer, port);
                 case MAT -> loadMat(performer, port);
-                default -> throw new UnsupportedOperationException("Unsupported data type: " + data.type());
             };
         }
         return value;
@@ -243,7 +242,7 @@ public class JepAPI {
     }
 
     public static void verifyLocal(Interpreter jepInterpreter, JepConfig config) {
-        // does nothing in current version
+        // does nothing in the current version
     }
 
     public static void verifyShared(Interpreter jepInterpreter, JepConfig config) {
@@ -278,9 +277,9 @@ public class JepAPI {
 
     private static Object closePyObject(JepPerformer performer, Object value) {
         if (value instanceof final PyObject pyObject) {
-            // - if Python function returned PyObject/PyCallable, we should close it immediately -  it cannot be used
+            // - if Python function returned PyObject/PyCallable, we should close it immediately - it cannot be used
             // outside the single thread (any attempt will lead to JepException "Invalid thread access").
-            // In a case of scalar, we should also to convert it into String.
+            // In the case of scalar, we should also to convert it into String.
             try (AtomicPyObject atomicObject = performer.wrapObject(pyObject)) {
                 value = atomicObject.toString();
                 // - avoid further calling "toString" for pyObject (will lead to "Invalid thread access")

@@ -79,7 +79,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
             this.pythonCaller = pythonCaller;
             // - the order is important for multithreading: local pythonCaller is assigned first,
             // this.pythonCaller is assigned to it;
-            // cloning is not necessary in current version, but added for possible future extensions
+            // cloning is not necessary in the current version, but added for possible future extensions
         }
         return pythonCaller;
     }

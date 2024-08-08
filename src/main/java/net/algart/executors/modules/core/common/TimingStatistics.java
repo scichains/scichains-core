@@ -190,7 +190,7 @@ public abstract class TimingStatistics {
     }
 
     public String toSimpleString(Double totalTimeOfLastAnalysedCalls) {
-        final StringBuilder sb = new StringBuilder("");
+        final StringBuilder sb = new StringBuilder();
         if (minIndex != -1 && maxIndex != -1) {
             sb.append(leftPad(String.format(Locale.US, "%.6f..%.6f, ",
                     percentiles[minIndex] * 1e-6, percentiles[maxIndex] * 1e-6), 26));
@@ -215,7 +215,7 @@ public abstract class TimingStatistics {
         if (numberOfAnalysedTimes == 0) {
             return "not analysed yet";
         }
-        final StringBuilder sb = new StringBuilder("");
+        final StringBuilder sb = new StringBuilder();
         if (percentileLevels.length > 0) {
             sb.append(" [");
             for (int k = 0; k < percentiles.length; k++) {

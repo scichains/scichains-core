@@ -22,12 +22,12 @@
     {
       "value_type": "scalar",
       "name": "false",
-      "hint": "This scalar is used when \"if\" value is false.\nNote: in other case this data is not requested to be calculated!"
+      "hint": "This scalar is used when \"if\" value is false.\nNote: in another case this data is not requested to be calculated!"
     },
     {
       "value_type": "scalar",
       "name": "true",
-      "hint": "This scalar is used when \"if\" value is true.\nNote: in other case this data is not requested to be calculated!"
+      "hint": "This scalar is used when \"if\" value is true.\nNote: in another case this data is not requested to be calculated!"
     }
   ],
   "out_ports": [
@@ -88,7 +88,7 @@
     {
       "caption": "Requires input",
       "name": "requireInput",
-      "description": "If set, the input port \"true\" or \"false\" (selected according \"xxx\" input condition) must contain some initialized scalar; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "description": "If set, the input port \"true\" or \"false\" (selected according \"xxx\" input condition) must contain some initialized scalar; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

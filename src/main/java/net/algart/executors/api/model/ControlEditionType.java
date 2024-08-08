@@ -64,7 +64,7 @@ public enum ControlEditionType {
 
     public boolean isPath() {
         return isResources();
-        // - in current version it is the same thing
+        // - in the current version it is the same thing
     }
 
     public boolean isEnum() {

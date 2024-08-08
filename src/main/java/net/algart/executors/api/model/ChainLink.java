@@ -26,7 +26,7 @@ package net.algart.executors.api.model;
 
 import java.util.Objects;
 
-// Note: this class is useful for enumerating links in the chain.
+// Note: this class is useful for listing links in the chain.
 // It is actually used in Chain.cleanCopy method only.
 public final class ChainLink {
     final String srcPortId;

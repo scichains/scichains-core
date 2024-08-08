@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public enum GraalJSType {
     /**
-     * Common behaviour. However, if it is a file with name, ending by ".mjs", or if you manually specify name
+     * Common behavior. However, if it is a file with name, ending by ".mjs", or if you manually specify name
      * ending with ".mjs", it will work as a module.
      */
     COMMON("common") {

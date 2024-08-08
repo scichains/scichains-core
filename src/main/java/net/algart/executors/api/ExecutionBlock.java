@@ -144,7 +144,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return switch (port.getPortType()) {
             case INPUT -> inputPorts.putIfAbsent(port.getName(), port) == null;
             case OUTPUT -> outputPorts.putIfAbsent(port.getName(), port) == null;
-            default -> throw new AssertionError("Unsupported port type");
         };
     }
 
@@ -153,7 +152,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return switch (port.getPortType()) {
             case INPUT -> inputPorts.put(port.getName(), port) == null;
             case OUTPUT -> outputPorts.put(port.getName(), port) == null;
-            default -> throw new AssertionError("Unsupported port type");
         };
     }
 
@@ -261,7 +259,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Usually returns <code>null</code>; may return <code>true</code>/<code>false</code> if the content of this
      * input port is really necessary / not necessary for processing data.
-     * May be overridden for better performance of execution system, if some existing ports are actually
+     * May be overridden for better performance of an execution system if some existing ports are actually
      * not used.
      *
      * <p>Note: if this method returns non-null value for some input ports, its result may depend
@@ -661,7 +659,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Native code sets visible result to <code>true</code> when it is necessary to display result in any way,
+     * Native code sets visible result to <code>true</code> when it is necessary to display the result in any way,
      * even if execution block does not have any other connections.
      *
      * @param visibleResultNecessary new visible result flag.
@@ -679,12 +677,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * If this flag is set, all output ports are considered always necessary, even when they are not connected.
      * It can be useful to simplify using executors from Java or other programming languages:
-     * you can just set all input data and parameters, executor the function and retrieve all results,
+     * you can set all input data and parameters, executor the function and retrieve all results,
      * without separate call of {@link Executor#requestOutput(String...)}
      * or similar methods.
      * <p>Default value is <code>false</code>.
      *
-     * @param allOutputsNecessary always output necessary flag.
+     * @param allOutputsNecessary always-necessary flag.
      */
     @UsedForExternalCommunication
     public final void setAllOutputsNecessary(boolean allOutputsNecessary) {
@@ -703,7 +701,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * Sets caller of this executor (optional). Used for managing status:
      * setting status of this object, by default, affects the status of the caller.
      *
-     * @param caller some another executor, that probably calls this one as a part.
+     * @param caller some another executor that probably calls this one as a part.
      */
     public final void setCaller(ExecutionBlock caller) {
         this.caller = caller;
@@ -716,8 +714,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Sets ID of the session, in which this executor works. Called automatically while creating by
-     * {@link #newExecutionBlock(String, String, String)}. Can be useful in executors,
-     * that compiles new functions and changes the current session environment.
+     * {@link #newExecutionBlock(String, String, String)}. This can be useful in executors
+     * that compile new functions and change the current session environment.
      *
      * @param sessionId unique session ID (1st argument of {@link #newExecutionBlock(String, String, String)}).
      */
@@ -752,10 +750,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Sets the unique ID of some other executor or essence, to which this executor "belongs".
-     * It is optional ID. For example, for executor, customizing main settings of some chain,
+     * It is optional ID. For example, for executor, customizing the main settings of some chain,
      * it can be executor ID of this chain.
      *
-     * @param ownerId unique ID of the "owner" of this executor.
+     * @param ownerId unique ID of this executor "owner".
      */
     @UsedForExternalCommunication
     public final ExecutionBlock setOwnerId(String ownerId) {
@@ -769,8 +767,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Sets unique ID of the context, in which this executor works.
-     * It defines the scope of variables and other objects, that should be shared between
-     * several executors. For example, if it is an element of some chain, it can be an unique ID
+     * It defines the scope of variables and other objects that should be shared between
+     * several executors. For example, if it is an element of some chain, it can be a unique ID
      * of this chain in the memory.
      *
      * <p>Note: unlike ID, returned by {@link #getExecutorId()} method, this identifier should be
@@ -781,7 +779,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * (reinitialization), then the context ID <b>must be renewed</b> after reinitialization.
      * It is necessary, for example, if some resources are stored in <code>WeakHashMap</code> with context ID
      * as its keys or if there are some external resources (files), location of which is based on this ID.
-     * When such resources became a garbage, we must not try to use them again.
+     * When such resources become garbage, we must not try to use them again.
      *
      * <p>This method should be called after
      * creating instance before first calling {@link #reset()} or {@link #execute()} method.
@@ -870,12 +868,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     public boolean isInterrupted() {
         return interruptionRequested || rootCaller.interruptionRequested;
-        // - usually rootCaller.interruptionRequested is enough;
-        // but interruptionRequested is also checked - for situation, when we (maybe) ignore logic of "caller"
+        /*
+         - usually rootCaller.interruptionRequested is enough;
+         but interruptionRequested is also checked - for a situation, when we (maybe) ignore the logic of "caller"
+        */
     }
 
     /**
-     * Tries to interrupt current executor. May be overridden in some executors to inform more low-level
+     * Tries to interrupt the current executor. May be overridden in some executors to inform more low-level
      * functions about interruption request.
      */
     @UsedForExternalCommunication
@@ -1103,7 +1103,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * for all executors, dynamically created by some Java functions for the given session
      * <b>and</b> for global session {@link #GLOBAL_SHARED_SESSION_ID}.
      * Keys in the result are ID of every executor, values are descriptions.
-     * May be used for the user interface to show information for available executors.
+     * This may be used for the user interface to show information for available executors.
      *
      * @param sessionId unique ID of current session; may be <code>null</code>,
      *                  then only global session will be checked.
@@ -1125,7 +1125,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Returns <tt>{@link #availableExecutorModelDescriptions(String)
      * availableExecutorModelDescriptions}(sessionId).get(executorId)</tt>,
-     * but works quickly (without creating new map).
+     * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
      *                   checked.
@@ -1201,7 +1201,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         private static boolean initialized = false;
 
         // Usually called only once. So, it is better to provide an explicit function instead of
-        // static initialization block: it allows to avoid strange exception ExceptionInInitializerError
+        // static initialization block: it allows avoiding strange exception ExceptionInInitializerError
         private static synchronized void initialize() {
             if (!initialized) {
                 try {
@@ -1214,7 +1214,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                     UseSubChain.useAllInstalledInSharedContext();
                     UseMultiChain.useAllInstalledInSharedContext();
                     initialized = true;
-                    // - in a case of any error, next initialization will raise an error again
+                    // - in the case of any error, next initialization will raise an error again
                 } catch (ExecutionSystemConfigurationException e) {
                     throw e;
                 } catch (Exception e) {

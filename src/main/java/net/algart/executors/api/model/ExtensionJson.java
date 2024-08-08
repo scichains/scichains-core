@@ -844,19 +844,20 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         return result;
     }
 
-// Not too good idea
+// (not too good idea)
 //    /**
-//     * Returns default version of extension JSON, that should be supposed
+//     * Returns a default version of extension JSON, that should be supposed
 //     * if there is no necessary .json file in the specified extension folder.
 //     *
 //     * <p>This method is necessary for old or very simple Java extensions,
-//     * which do not use extension JSON file. Result of this method describe
+//     * which do not use an extension JSON file. The Result of this method describes
 //     * a Java extension, containing JSON files with models of executors in
 //     * {@value Platform.Folders#DEFAULT_MODELS_SUBFOLDER} subfolder.</p>
 //     *
 //     * @param extensionFolder
 //     * @return default (Java-based) variant of extension JSON.
 //     */
+
 //    public static ExtensionJson newDefaultInstance(Path extensionFolder) {
 //        return new ExtensionJson()
 //                .setPlatforms(List.of(Platform.newDefaultInstance(extensionFolder)));

@@ -140,6 +140,7 @@ public final class BlockFormulaForSeveralNumbers extends SeveralNumbersOperation
             throw new IllegalArgumentException("At least one array must be initialized");
             // - check it for a case of calling from Java application
         }
+        //noinspection NonAtomicOperationOnVolatileField
         javaScript = JavaScriptPerformer.newInstanceIfChanged(formula, javaScript);
         final SNumbers result = SNumbers.zeros(resultElementType.elementType(), n, 1);
         javaScript.putVariable("p", p);

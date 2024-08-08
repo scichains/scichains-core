@@ -47,7 +47,7 @@ public class InstalledExtensions {
      * must contain a root path to all extensions, where they will be searched recursively
      * (by a criteria that the subdirectory contains {@value ExtensionJson#DEFAULT_EXTENSION_FILE_NAME} file).
      * Used only if {@value #EXTENSIONS_PATH_PROPERTY} property is not defined,
-     * in other case it is ignored.
+     * in another case it is ignored.
      */
     @UsedForExternalCommunication
     public static final String EXTENSIONS_ROOT_PROPERTY = "net.algart.executors.root";

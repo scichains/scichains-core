@@ -126,7 +126,7 @@
     {
       "caption": "Requires existing file",
       "name": "fileExistenceRequired",
-      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in other case, this function will throw an exception.\nIf this flag is cleared and there are no files to read, this function returns non-initialized result.",
+      "description": "If set, at least 1 file, corresponding the pattern, must exist in the folder; in another case, this function will throw an exception.\nIf this flag is cleared and there are no files to read, this function returns non-initialized result.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

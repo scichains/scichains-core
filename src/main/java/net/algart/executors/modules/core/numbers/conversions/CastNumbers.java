@@ -41,8 +41,8 @@ public final class CastNumbers extends NumberArrayFilter implements ReadOnlyExec
         return this;
     }
 
-    public void setElementType(String elementType) {
-        setElementType(SNumbers.elementType(elementType));
+    public CastNumbers setElementType(String elementType) {
+        return setElementType(SNumbers.elementType(elementType));
     }
 
     @Override

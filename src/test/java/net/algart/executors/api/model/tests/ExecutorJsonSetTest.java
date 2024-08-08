@@ -107,6 +107,7 @@ public class ExecutorJsonSetTest {
 //                    }
                         final String id = model.getExecutorId();
                         final String javaConfiguration = model.minimalConfigurationJsonString();
+                        //noinspection resource
                         ExecutionBlock.newExecutionBlock(null, id, javaConfiguration);
                     }
                 }

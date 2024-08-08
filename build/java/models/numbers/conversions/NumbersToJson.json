@@ -16,7 +16,7 @@
     {
       "value_type": "numbers",
       "name": "input",
-      "hint": "[Optional] Source numbers. Usually should be 1-column array; in other case, row/columns structure is ignored.\nCan be skipped; then the numbers will be a simple arithmetic progression: see \"Start value\" and \"Increment\" parameters."
+      "hint": "[Optional] Source numbers. Usually should be 1-column array; in another case, row/columns structure is ignored.\nCan be skipped; then the numbers will be a simple arithmetic progression: see \"Start value\" and \"Increment\" parameters."
     },
     {
       "value_type": "scalar",

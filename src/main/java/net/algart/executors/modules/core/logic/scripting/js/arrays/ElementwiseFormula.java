@@ -213,6 +213,7 @@ public final class ElementwiseFormula extends SeveralNumberArraysOperation imple
                 sources.set(k, Arrays.asIndexFuncArray(constant, DoubleArray.class, length));
             }
         }
+        //noinspection NonAtomicOperationOnVolatileField
         javaScript = JavaScriptPerformer.newInstanceIfChanged(formula, javaScript);
         javaScript.putVariable("p", p);
         javaScript.putVariable("q", q);
@@ -237,6 +238,7 @@ public final class ElementwiseFormula extends SeveralNumberArraysOperation imple
             f = new AbstractFunc() {
                 @Override
                 public double get(double... x) {
+                    //noinspection SynchronizeOnNonFinalField
                     synchronized (javaScript) {
                         javaScript.putVariable("a", x[0]);
                         javaScript.putVariable("b", x[1]);
@@ -255,7 +257,7 @@ public final class ElementwiseFormula extends SeveralNumberArraysOperation imple
                 sources.toArray(new PArray[0]));
         final UpdatablePArray result = (UpdatablePArray) Arrays.SMM.newUnresizableArray(array);
         Arrays.copy(null, result, array, 1);
-        // - multithreading disabled: it requires more complex solution with Invocable.getInterface
+        // - multithreading disabled: it requires a more complex solution with Invocable.getInterface
         return result;
     }
 

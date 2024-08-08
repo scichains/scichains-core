@@ -33,6 +33,7 @@ import java.util.UUID;
 
 public class AddPortTest {
     public static void main(String[] args) {
+        @SuppressWarnings("resource")
         final Executor executor = new Executor() {
             @Override
             public void process() {

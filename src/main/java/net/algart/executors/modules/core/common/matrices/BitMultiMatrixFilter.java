@@ -36,7 +36,7 @@ public abstract class BitMultiMatrixFilter extends BitMultiMatrixOperationWithRe
         super(DEFAULT_INPUT_PORT);
         // - Providing correct requiredNumberOfInputs()=1 and creating default input port.
         // The value is not too important, because inputPortName is overridden.
-        // Note that overriding allows to use defaultInputPortName() method (that also
+        // Note that overriding allows using defaultInputPortName() method (that also
         // can be overridden); here, in the constructor, we have no such ability.
     }
 

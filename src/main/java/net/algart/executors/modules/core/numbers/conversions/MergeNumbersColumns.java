@@ -77,6 +77,7 @@ public final class MergeNumbersColumns extends SeveralNumbersOperation implement
                 return;
             }
             final int value = parameters().getInteger(name);
+            //noinspection resource
             setNumberOfEmptyColumnsForNonInitialized(index, nonNegative(value, "number of empty columns"));
             return;
         }

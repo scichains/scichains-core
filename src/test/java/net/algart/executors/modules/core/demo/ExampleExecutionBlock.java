@@ -53,35 +53,35 @@ public final class ExampleExecutionBlock extends ExecutionBlock {
             throw new IllegalArgumentException("unsupported output data type");
         }
 
-        //getting container with data
+        // getting container with data
         Data inData = input.getData();
         Data outData = output.getData();
 
-        //also type of data container can be received
+        // also, a type of data container can be received
         if (!inData.type().typeName().equals("mat")) {
             throw new IllegalArgumentException("unsupported input data type");
         }
 
-        //because of data type already checked, we can cast Data into special case of data type
+        // because of data type already checked, we can cast Data into a special case of the data type
         SMat inSMat = (SMat) inData;
 
-        //extract byte buffer from data container
+        // extract byte buffer from data container
         ByteBuffer inByteBuffer = inSMat.getByteBuffer();
         if (inByteBuffer == null) {
             throw new IllegalArgumentException("input byte buffer is null");
         }
 
-        //finally make some logic operations over input data and put result into output
+        // finally, make some logic operations over input data and put the result into output
 
         inByteBuffer.rewind();
 
-        //here we just make a copy of input data and store it into output
+        // here we just make a copy of input data and store it into output
         ByteBuffer outByteBuffer = ByteBuffer.allocateDirect(inSMat.getByteBuffer().capacity());
         while (inByteBuffer.position() < inByteBuffer.limit()) {
             outByteBuffer.put(inByteBuffer.get());
         }
 
-        //fill output port data, and this data can be passed to other execution block
+        // fill output port data, and this data can be passed to another execution block
 
         SMat outMat = (SMat) outData;
         outMat.setAll(

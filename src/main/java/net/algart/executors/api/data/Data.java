@@ -117,7 +117,7 @@ public abstract class Data implements Cloneable {
     public abstract void setTo(Data other, boolean cloneData);
 
     /**
-     * Completely exchange content of this and other object of the same type.
+     * Completely exchange content of this and another object of the same type.
      * Note: this method works very quickly, unlike <code>setTo</code> methods (it never performs data copying).
      *
      * @param other some other data of the same type.
@@ -127,7 +127,7 @@ public abstract class Data implements Cloneable {
 
     /**
      * If this data or part of this data is stored not in usual RAM (for example, in GPU memory),
-     * this method must copies it into usual memory. More precisely, this method guarantees
+     * this method must copy it into usual memory. More precisely, this method guarantees
      * that all data, stored in this object, can be freely used in any Java environment, for example, including
      * usage from different Java threads (if they are correctly synchronized by Java synchronization).
      *

@@ -761,7 +761,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
             this.uuid = json.getString("uuid", null);
             this.srcPortUuid = json.getString("src_port_uuid", null);
             this.destPortUuid = json.getString("dest_port_uuid", null);
-            // - in some "damaged" files links without necessary fields can appear
+            // - in some "damaged" files, links without necessary fields can appear
         }
 
         private boolean isValid() {
@@ -825,7 +825,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private List<ChainBlockConf> blocks = new ArrayList<>();
     private List<ChainLinkConf> links = new ArrayList<>();
 
-    // The following properties are not loaded from JSON-file, but are set later,
+    // The following properties are not loaded from JSON file, but are set later,
     // while loading all JSON models for some platform
     private Set<String> tags = new LinkedHashSet<>();
     private String platformId = null;

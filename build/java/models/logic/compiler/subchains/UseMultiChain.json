@@ -52,7 +52,7 @@
     {
       "caption": "Use also sub-chain(s)",
       "name": "alsoSubChains",
-      "description": "If set, also executes \"Use sub-chain(s)\" function with the same path(s) and default parameters. In other words, in this mode this function allows to use both multi-chain(s) and sub-chain(s), depending on the file content — is it multi-chain or sub-chain.\nWe recommend to use this flag only with a single or multiple FILES, but not with FOLDERS: in other case, sub-chains, probably located inside folders of multi-chains, will be loaded twice (here and while initializing multi-chains).",
+      "description": "If set, also executes \"Use sub-chain(s)\" function with the same path(s) and default parameters. In other words, in this mode this function allows to use both multi-chain(s) and sub-chain(s), depending on the file content — is it multi-chain or sub-chain.\nWe recommend to use this flag only with a single or multiple FILES, but not with FOLDERS: in another case, sub-chains, probably located inside folders of multi-chains, will be loaded twice (here and while initializing multi-chains).",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

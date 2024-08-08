@@ -57,7 +57,7 @@ public abstract class NumberArrayFilter extends NumbersFilter {
     // Really result must be one of types, supported by SNumbers
     public abstract PArray process(UpdatablePNumberArray array, int blockLength, int numberOfBlocks);
 
-    // Override this to specify custom resulting block length (in other case, block length of the
+    // Override this to specify custom resulting block length (in another case, block length of the
     // first argument will be used).
     protected Integer resultBlockLength() {
         return null;

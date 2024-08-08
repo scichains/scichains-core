@@ -42,7 +42,7 @@
     },
     {
       "name": "replaceColumnRangeInInput",
-      "description": "Fill the specified columns and return the result; in other case, only filled columns will be returned",
+      "description": "Fill the specified columns and return the result; in another case, only filled columns will be returned",
       "caption": "Fill the specified columns",
       "value_type": "boolean",
       "edition_type": "value",

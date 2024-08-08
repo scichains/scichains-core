@@ -40,7 +40,7 @@ abstract class ChainPort<REVERSE extends ChainPort<?>> {
     Data data;
     // - never null
     final String id;
-    // - may be null, if this port is not used in any links in the chain
+    // - may be null if this port is not used in any links in the chain
     final ChainPortType portType;
     final DataType dataType;
     final ChainPortKey key;

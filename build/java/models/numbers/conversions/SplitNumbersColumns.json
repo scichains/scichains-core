@@ -173,7 +173,7 @@
     {
       "caption": "Requires input",
       "name": "requireInput",
-      "description": "If set, the input port must contain some initialized number array; in other case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output ports will still stay empty.",
+      "description": "If set, the input port must contain some initialized number array; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output ports will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

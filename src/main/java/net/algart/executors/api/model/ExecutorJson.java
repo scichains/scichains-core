@@ -64,17 +64,17 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Role extends AbstractConvertibleToJson {
             private String name = null;
-            // - Some "name" of this role. For example, for settings combiners it can be a name of this type
-            // of settings (for main chain settings it is usually just the name of the chain, like Owner.name).
+            // - Some "name" of this role. For example, for settings combiners it can be a name of this setting type
+            // (for main chain settings it is usually just the name of the chain, like Owner.name).
             private String resultPort = null;
             // - Port, containing the main results of this executor.
             // Not important for usual executors, but can be useful for special roles like "settings",
-            // where the external client should know something about executor behaviour.
+            // where the external client should know something about executor behavior.
             // In particular, if "settings" flag is true, this string should contain the name of
             // the output JSON/XML port, where the source parameters are combined.
             private boolean settings = false;
             private boolean main = false;
-            // - Together with settings, means that this executor customize the main settings of the chain/
+            // - Together with settings, means that the executor customizes the main settings of the chain.
 
             public Role() {
             }
@@ -971,11 +971,11 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         private String hint = null;
         private ParameterValueType valueType;
         private String valueClass = null;
-        // - may be the name of some class of similar values; for example,
+        // - can be the name of some class of similar values; for example,
         // for value-type "settings" it may be the name of the settings model
         private ControlEditionType editionType = ControlEditionType.VALUE;
         private String builderId = null;
-        // - may be executor ID of some executor, that can create this parameter (usually value-type "settings"),
+        // - can be executor ID of some executor, that can create this parameter (usually value-type "settings"),
         // for example, may be ID of some settings combiner
         private String groupId = null;
         // - if controls are grouped into some logical groups, here may be ID of the group, containing this control
@@ -983,7 +983,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         private Integer lines = null;
         // - recommended number of lines in "multiline" mode
         private boolean resources = false;
-        // - note: by default it is true if editionType.isResources() is true
+        // - note: by default, it is true if editionType.isResources() is true
         private boolean advanced = false;
         private List<EnumItem> items = null;
         private JsonValue defaultJsonValue = null;
@@ -1586,7 +1586,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
      * Returns configuration of the current Java executor or <code>null</code>
      * if it is not a Java executor.
      * <p>The result of this function is never <code>null</code>, if this model was constructed from JSON
-     * and if {@link #isExecutorJson(JsonObject)} returns <code>true</code>. But this can be not so,
+     * and if {@link #isExecutorJson(JsonObject)} returns <code>true</code>. But this can be not so
      * if this object was constructed manually via setter methods.
      *
      * @return configuration of Java executor.
@@ -1969,7 +1969,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                     // we will try to execute it to get the default value.
                     // It should not be a problem, because data block usually corresponds to
                     // a very simple executor, that just copy their arguments into the scalar port.
-                    // Note: getExecutor will throw an exception, if setStandardData was not called properly
+                    // Note: getExecutor will throw an exception if setStandardData was not called properly
                     // (usually it should not be set for disabled blocks and LOADING_TIME-blocks)
                     block.copyInputPortsToExecutor();
                     executor.execute();
@@ -2173,7 +2173,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         if (standardCaption != null && !standardCaption.equals(customCaption)) {
             assert block.getSystemName() != null : "getStandardInputOutputPortCaption() returns non-null "
                     + standardCaption + " for null system name";
-            // Note: we don't set specific caption, if the corresponding block
+            // Note: we don't set specific caption if the corresponding block
             // has no system name or has standard caption like "[labels]",
             // formed on the base of system name;
             return customCaption;

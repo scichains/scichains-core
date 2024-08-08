@@ -119,7 +119,7 @@ public class GraalContextImportTest {
             performer.perform(sourceContainer);
 
             System.out.println();
-            System.out.println("Caling function");
+            System.out.println("Calling function");
             t1 = System.nanoTime();
             Object intArray = new int[] {11, 12, 13};
             Value execute = func.execute(intArray);

@@ -143,7 +143,7 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
             final SNumbers result = readRaw();
             if (result != null) {
                 getNumbers().setTo(result);
-            } // in other case, stay non-initialized output container
+            } // in another case, stay non-initialized output container
         }
     }
 

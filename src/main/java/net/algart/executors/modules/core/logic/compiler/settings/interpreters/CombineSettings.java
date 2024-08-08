@@ -46,7 +46,7 @@ public class CombineSettings extends AbstractInterpretSettings {
     public void process() {
         setSystemOutputs();
         // - important to do this before other operations, for an improbable case
-        // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
+        // when there is a user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
         final SettingsCombiner combiner = settingsCombiner();
         final SScalar inputSettings = getInputScalar(SETTINGS, true);

@@ -468,7 +468,7 @@ public final class SNumbers extends Data implements Cloneable {
 
     @UsedForExternalCommunication
     private int blockLength = 1;
-    // Length of Java array is always divided by blockLength.
+    // The length of Java array is always divided by blockLength.
     // The sense on blockLength may be any, but usually it is the size of some
     // little logical unit like point, rectangle, triangle, pair of related value etc.
 
@@ -915,7 +915,7 @@ public final class SNumbers extends Data implements Cloneable {
             final long[] a = (long[]) array;
             final byte[] result = new byte[a.length];
             for (int k = 0; k < a.length; k++) {
-                result[k] = (byte) (a[k] < 0 ? 0 : a[k] > 255 ? 255 : a[k]);
+                result[k] = (byte) (a[k] < 0 ? 0 : a[k] > 255L ? 255L : a[k]);
             }
             return result;
         } else if (isFloatArray()) {
@@ -2595,7 +2595,6 @@ public final class SNumbers extends Data implements Cloneable {
             int startIndexInEachBlock,
             int lengthInEachBlock,
             boolean strictlyInside) {
-        Objects.requireNonNull(this, "Null otherNumbers");
         if (!isInitialized()) {
             throw new IllegalArgumentException("Cannot process uninitialized numbers array");
         }

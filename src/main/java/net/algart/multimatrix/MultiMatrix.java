@@ -108,7 +108,7 @@ public interface MultiMatrix extends Cloneable {
 
     /**
      * Returns equivalent {@link MultiMatrix2D} if this matrix is actually 2-dimensional
-     * or throws an exception in other case.
+     * or throws an exception in another case.
      *
      * @return equivalent {@link MultiMatrix2D}.
      * @throws IllegalStateException if <code>{@link #dimCount()}!=2</code>.
@@ -322,7 +322,7 @@ public interface MultiMatrix extends Cloneable {
     }
 
     /**
-     * Returns the only channel if {@link #numberOfChannels()}==1, in other case returns
+     * Returns the only channel if {@link #numberOfChannels()}==1, in another case returns
      * lazy intensity matrix created from R, G, B channels.
      *
      * @return intensity grays-scale matrix equivalent to this multi-matrix.

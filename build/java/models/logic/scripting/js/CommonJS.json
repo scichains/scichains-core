@@ -432,7 +432,7 @@
     {
       "name": "safety",
       "caption": "Safety level",
-      "description": "Note: if you set the following flag \"Share namespace\", please be sure that all JavaScript executors inside the chain, having this parameter, use the same safety level. If you change this level for one of executors, you MUST reload all the chain, in other case the results of execution will be unpredictable.\n\nWARNING! If you choose \"All access\" mode, please DO NOT PROVIDE the end user of your solution an ability to edit any JavaScript code, executed by this function, including formulas for outputs! In this mode, this function will execute JavaScript WITHOUT ANY SECURITY RESTRICTIONS and allow it accessing to all computer, in particular, to the file system.",
+      "description": "Note: if you set the following flag \"Share namespace\", please be sure that all JavaScript executors inside the chain, having this parameter, use the same safety level. If you change this level for one of executors, you MUST reload all the chain, in another case the results of execution will be unpredictable.\n\nWARNING! If you choose \"All access\" mode, please DO NOT PROVIDE the end user of your solution an ability to edit any JavaScript code, executed by this function, including formulas for outputs! In this mode, this function will execute JavaScript WITHOUT ANY SECURITY RESTRICTIONS and allow it accessing to all computer, in particular, to the file system.",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

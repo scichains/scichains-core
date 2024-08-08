@@ -124,7 +124,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
             final SNumbers result = readCSV();
             if (result != null) {
                 getNumbers().setTo(result);
-            } // in other case, stay non-initialized output container
+            } // in another case, stay non-initialized output container
         }
     }
 
@@ -242,7 +242,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
         for (long count = 0; ; count++) {
             final boolean firstLineWithUnknownHeader = count == 0 && !goodHeader.get();
             if (!firstLineWithUnknownHeader) {
-                // in other case, maybe the 1st line contains numbers
+                // in another case, maybe the 1st line contains numbers
                 line = reader.readLine();
             }
             if (line == null) {

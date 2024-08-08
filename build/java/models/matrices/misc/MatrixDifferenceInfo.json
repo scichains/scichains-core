@@ -93,7 +93,7 @@
     {
       "name": "requireSameDimensions",
       "caption": "Require same dimensions",
-      "description": "If set, two source matrices must have identical dimensions; in other case, this function will throw an exception.\nIf cleared, results will be empty for matrices with different dimensions.",
+      "description": "If set, two source matrices must have identical dimensions; in another case, this function will throw an exception.\nIf cleared, results will be empty for matrices with different dimensions.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

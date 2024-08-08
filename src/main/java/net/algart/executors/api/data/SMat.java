@@ -68,7 +68,7 @@ public final class SMat extends Data {
         private volatile MultiMatrix cachedMultiMatrix = null;
 
         /**
-         * Returns this object, if it is immutable or supposed to be immutable, or a deep clone in other case.
+         * Returns this object if it is immutable or supposed to be immutable, or a deep clone in another case.
          *
          * @return a copy of this object.
          */

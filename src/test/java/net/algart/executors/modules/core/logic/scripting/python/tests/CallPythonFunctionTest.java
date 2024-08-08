@@ -31,9 +31,10 @@ import net.algart.executors.modules.core.logic.scripting.python.CallPythonFuncti
 public class CallPythonFunctionTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
-        final CallPythonFunction e = new CallPythonFunction();
-        e.setCompilerKind(AbstractCallPython.CompilerKind.JEP_LOCAL);
-        e.reset();
-        e.execute();
+        try (CallPythonFunction e = new CallPythonFunction()) {
+            e.setCompilerKind(AbstractCallPython.CompilerKind.JEP_LOCAL);
+            e.reset();
+            e.execute();
+        }
     }
 }

@@ -110,7 +110,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                 final ChainProperty chainProperty = block.properties.get(this.name);
                 if (chainProperty == null) {
                     // - abnormal situation: virtual port without actual control;
-                    // we prefer not to disable this in the constructor, but just to set usual scalar value
+                    // we prefer not to disable this in the constructor, but just to set the usual scalar value
                     executor.parameters().put(this.name, value);
                 } else {
                     chainProperty.getType().setParameter(executor.parameters(), this.name, value);
@@ -141,9 +141,9 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                 // Note: if connected source port has connected read-only executors,
                 // we must not use this "exchange" technique at all.
                 // In this case, we will copy the reference for some links (shallow copy without cloning),
-                // and exchanging last link with non-read-only executor will lead to damaging data
+                // and exchanging the last link with non-read-only executor will lead to damaging data
                 // while multithreading execution.
-                // Also note: we need to preserve all standard outputs, if they are connected (abnormal,
+                // Also note: we need to preserve all standard outputs if they are connected (abnormal,
                 // but possible situation): they are the final results of the chain and will
                 // be read from "standard-output" ports.
 //                System.out.println("!!! Exchange with " + block.getExecutor().getClass().getSimpleName());
@@ -151,7 +151,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
             } else {
                 final boolean shallowCopy = OPTIMIZE_COPYING_DATA
                         && block.getExecutor().isReadOnlyInput() && hasConnectedReadOnlyExecutors;
-                // We can skip cloning for read-only executors. But we must be sure,
+                // We can skip cloning for read-only executors. But we must be sure
                 // that "hasConnectedReadOnlyExecutors" flag is also set: it disables
                 // final data exchange for the last connection (when countOfConnectedInputs == 0).
                 // Of course, "hasConnectedReadOnlyExecutors" should be true if this block

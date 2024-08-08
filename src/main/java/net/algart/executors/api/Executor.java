@@ -346,9 +346,9 @@ public abstract class Executor extends ExecutionBlock {
      * native-code or other non-Java resources, like GPU memory: then, maybe, it will
      * make efforts to correctly synchronize or serialize external resources, that cannot be
      * synchronized by standard Java synchronization mechanism.
-     * (For example, it is possible, that the object, created in GPU memory and stored
-     * in the external port, will be unavailable from other Java threads, if the executor
-     * will not call special native methods before finishing execution.)
+     * (For example, it is possible that the object, created in GPU memory and stored
+     * in the external port, will be unavailable from other Java threads if the executor
+     * does not call special native methods before finishing execution.)
      *
      * <p>Default implementation of {@link #postprocess()} method (called from {@link #execute()})
      * automatically performs necessary synchronization for the content of all output ports
@@ -368,7 +368,7 @@ public abstract class Executor extends ExecutionBlock {
 
     /**
      * Enabled / disable accumulating times in {@link #execute()} method.
-     * By default it is <code>true</code>.
+     * By default, it is <code>true</code>.
      * Should be cleared to <code>false</code> if {@link #execute()} method calls the same method
      * of other objects (to avoid double counting the elapsed time).
      *
@@ -404,7 +404,7 @@ public abstract class Executor extends ExecutionBlock {
         cancellingFurtherExecutionRequested = true;
         for (Port port : allOutputPorts()) {
             if (port.isConnected()) {
-                // - no sense to set cancellation flag in output ports, that are not connected to anything
+                // - no sense to set a cancellation flag in output ports, that are not connected to anything
                 port.requestCancellingExecution();
             }
         }
@@ -619,14 +619,14 @@ public abstract class Executor extends ExecutionBlock {
 
     /**
      * Called from {@link #reset()}.
-     * We recommend to override this method instead of {@link #reset()}.
+     * We recommend overriding this method instead of {@link #reset()}.
      */
     public void initialize() {
     }
 
     /**
      * Called from {@link #execute()}.
-     * We recommend to override this method instead of {@link #execute()}.
+     * We recommend overriding this method instead of {@link #execute()}.
      */
     public abstract void process();
 
@@ -739,7 +739,7 @@ public abstract class Executor extends ExecutionBlock {
      */
     public final void setEndProcessingTimeStamp() {
         if (endProcessingTimeStamp == Long.MIN_VALUE) {
-            // only last setStartProcessingTimeStamp() and first setEndProcessingTimeStamp() will be considered
+            // only the last setStartProcessingTimeStamp() and first setEndProcessingTimeStamp() will be considered
             endProcessingTimeStamp = System.nanoTime();
         }
     }
@@ -759,7 +759,7 @@ public abstract class Executor extends ExecutionBlock {
      * This method is called also <i>in the constructor</i>, so, it probably will not "see" some
      * object fields, if you use them.
      *
-     * @return whether some not-important operations should be logged (object creation, closing, execution time etc.)
+     * @return whether some not-important operations should be logged (object creation, closing, execution time, etc.)
      */
     protected boolean loggingEnabled() {
         return true;
@@ -769,7 +769,7 @@ public abstract class Executor extends ExecutionBlock {
     /**
      * If this method returns <code>true</code>, {@link #Executor() constructor of this class} will not register
      * standard parameters, processed by {@link Executor} itself.
-     * It is provided for possible future needs; current version has no standard parameters.
+     * It is provided for possible future needs; the current version has no standard parameters.
      *
      * <p>Note: for correct work, this method must return <b>constant</b> (the same value for
      * all instances of the inheritor).
@@ -800,7 +800,7 @@ public abstract class Executor extends ExecutionBlock {
 
     /**
      * Returns <code>System.nanoTime()</code> if <code>{@link #LOG}.isLoggable(Level.INFO)</code>,
-     * in other case returns 0.
+     * in another case returns 0.
      * Please use this method for time measuring, that will be used only for logging with level {@code <=Level.INFO}.
      *
      * @return <code>System.nanoTime()</code>, if logging level is {@code Level.INFO} or lower.
@@ -811,7 +811,7 @@ public abstract class Executor extends ExecutionBlock {
 
     /**
      * Returns <code>System.nanoTime()</code> if <code>{@link #LOG}.isLoggable(Level.DEBUG)</code>,
-     * in other case returns 0.
+     * in another case returns 0.
      * Please use this method for time measuring, that will be used only for logging with level {@code <=Level.DEBUG}.
      *
      * @return <code>System.nanoTime()</code>, if logging level is {@code Level.DEBUG} or lower.
@@ -1013,7 +1013,7 @@ public abstract class Executor extends ExecutionBlock {
                 finishTimeStamp = System.nanoTime();
                 // - Unlike clearTiming(), we should not skip this if "active" is set:
                 // the following call of "finish()" will rewrite this value.
-                // (If we will not set this value, the logging in executor() will show invalid elapsed time.)
+                // (If we do not set this value, the logging in executor() will show invalid elapsed time.)
             }
         }
 
