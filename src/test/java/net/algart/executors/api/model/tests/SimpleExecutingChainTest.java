@@ -49,7 +49,7 @@ public class SimpleExecutingChainTest {
         try (Chain chain = Chain.valueOf(null, executorProvider, chainJson)) {
             chain.reinitializeAll();
             chain.execute();
-            System.out.println("Chain finished: " + chain.name());
+            System.out.println("Chain finished: " + chain);
         }
     }
 

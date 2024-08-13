@@ -634,7 +634,7 @@ public final class Chain implements AutoCloseable {
     public String timingInfo() {
         final StringBuilder sb = new StringBuilder(String.format(
                 "  Detailed timing of chain%s (id=%s, %d blocks)%n"
-                        + "Sorted by time (only summary time for each block):%n",
+                        + "  Sorted by time (only summary time for each block):%n",
                 name == null ? "" : " " + name, id, numberOfBlocks()));
         final List<ChainBlock> all = new ArrayList<>(allBlocks.values());
         all.forEach(ChainBlock::analyseTiming);
@@ -654,16 +654,23 @@ public final class Chain implements AutoCloseable {
         return sb.toString();
     }
 
+    public String toString(boolean detailed) {
+        final StringBuilder sb = new StringBuilder("Chain"
+                + (name == null ? "" : " \"" + name + "\"")
+                + (category == null ? "" : ", category \"" + category + "\""));
+        if (detailed) {
+            sb.append(" {\n  id=").append(id).append("\n  blocks=[\n");
+            for (ChainBlock block : allBlocks.values()) {
+                sb.append("    ").append(block).append('\n');
+            }
+            sb.append("  ]\n}\n");
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Chain"
-                + (name == null ? "" : " " + name + " ")
-                + "{\n  id=" + id + "\n  blocks=[\n");
-        for (ChainBlock block : allBlocks.values()) {
-            sb.append("    ").append(block).append('\n');
-        }
-        sb.append("  ]\n}\n");
-        return sb.toString();
+        return toString(false);
     }
 
     @Override

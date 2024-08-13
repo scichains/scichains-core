@@ -52,15 +52,16 @@ public class LoadingChainTest {
                 System.out.println(chainJson);
             }
 
-            Chain chain = Chain.valueOf(null, executorProvider, chainJson);
-            if (detailed) {
-                System.out.printf("%nFull chain:%n");
-                System.out.println(chain);
-                System.out.println();
-            }
+            try (Chain chain = Chain.valueOf(null, executorProvider, chainJson)) {
+                if (detailed) {
+                    System.out.printf("%nFull chain:%n");
+                    System.out.println(chain.toString(true));
+                    System.out.println();
+                }
 
-            if (initialize) {
-                chain.reinitializeAll();
+                if (initialize) {
+                    chain.reinitializeAll();
+                }
             }
             System.out.println("O'k");
         } catch (JsonException e) {

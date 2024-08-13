@@ -53,14 +53,15 @@ public class SimpleChainTest {
         }
 
         long t1 = System.nanoTime();
+        //noinspection resource
         Chain chain = Chain.valueOf(null, null, chainJson);
         long t2 = System.nanoTime();
         System.out.printf("%nFull chain created in %.3f ms:%n", (t2 - t1) * 1e-6);
-        System.out.println(chain);
+        System.out.println(chain.toString(true));
         t1 = System.nanoTime();
         chain = chain.cleanCopy();
         t2 = System.nanoTime();
         System.out.printf("%nClean copy created in %.3f ms:%n", (t2 - t1) * 1e-6);
-        System.out.println(chain);
+        System.out.println(chain.toString(true));
     }
 }

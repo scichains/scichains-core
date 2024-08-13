@@ -143,9 +143,10 @@ public class ExecutingChain {
         originalChain.reinitializeAll();
         t2 = System.nanoTime();
         System.out.printf(" done (%.3f ms)%n", (t2 - t1) * 1e-6);
+        System.out.printf("Chain to execute: %s%n", originalChain);
         if (detailed) {
-            System.out.printf("%nFull chain:%n");
-            System.out.println(originalChain);
+            System.out.printf("Detailed chain:%n");
+            System.out.println(originalChain.toString(true));
         }
 
         SMat sourceMat = SMat.valueOf(ImageIO.read(sourceFile));
@@ -239,6 +240,7 @@ public class ExecutingChain {
                     System.out.printf("WARNING: output block \"%s\" has no initialized data%n", name);
                 }
             }
+            System.out.println();
             System.out.printf(Locale.US, "Executed %d/%d blocks%n",
                     chain.numberOfReadyBlocks(), chain.numberOfBlocks());
             if (unstable) {
