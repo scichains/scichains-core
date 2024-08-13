@@ -27,6 +27,7 @@ package net.algart.executors.api.demo;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
+import net.algart.io.MatrixIO;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -36,12 +37,6 @@ import java.nio.file.Paths;
 
 public class CallSimpleChain {
     public static final String SESSION_ID = "~~DUMMY_SESSION";
-
-    private static String getFileExtension(String fileName) {
-        int p = fileName.lastIndexOf(".");
-        return p == -1 ? "jpeg" : fileName.substring(p + 1);
-    }
-
 
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
@@ -82,8 +77,7 @@ public class CallSimpleChain {
             if (result == null) {
                 throw new IllegalArgumentException("Chain " + chainPath + " did not create output image");
             }
-            final String outputFormat = getFileExtension(outputImagePath.getFileName().toString());
-            ImageIO.write(result, outputFormat, outputImagePath.toFile());
+            MatrixIO.writeBufferedImage(outputImagePath, result);
             System.out.println("O'k: results saved in " + outputImagePath);
         }
     }

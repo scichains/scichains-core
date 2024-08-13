@@ -79,6 +79,7 @@ public class SMatBitTest {
 
         final BufferedImage bufferedImage = mat.toBufferedImage();
         System.out.printf("-> bufferedImage: %s%n", bufferedImage);
+        assert bufferedImage != null;
         ImageIO.write(bufferedImage, "png", new File(sourceFile + "2bb.bit.png"));
     }
 }

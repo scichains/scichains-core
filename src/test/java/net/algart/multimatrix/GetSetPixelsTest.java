@@ -31,6 +31,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class GetSetPixelsTest {
     public static void main(String[] args) throws IOException {
@@ -68,7 +69,7 @@ public class GetSetPixelsTest {
         final BufferedImage image = SMat.valueOf(m).toBufferedImage();
         System.out.printf("Writing %s%n", fileName);
         assert image != null;
-        ImageIO.write(image, MatrixIO.extension(fileName, "png"), new File(fileName));
+        MatrixIO.writeBufferedImage(Path.of(fileName), image);
         for (Class<?> elementType : MultiMatrix.SUPPORTED_ELEMENT_TYPES) {
             System.out.printf("Pixel at the center: %s (in %s)%n",
                     m.asPrecision(elementType).getPixel(m.dimX() / 2, m.dimY() / 2), m);

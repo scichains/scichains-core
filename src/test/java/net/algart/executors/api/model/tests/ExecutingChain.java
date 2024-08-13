@@ -35,6 +35,7 @@ import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.model.*;
 import net.algart.executors.modules.core.common.TimingStatistics;
+import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix2D;
 
 import javax.imageio.ImageIO;
@@ -232,7 +233,7 @@ public class ExecutingChain {
                         final BufferedImage bufferedImage = ((SMat) data).toBufferedImage();
                         assert bufferedImage != null;
                         System.out.printf("Saving result in %s%n", imageFile);
-                        ImageIO.write(bufferedImage, "bmp", imageFile.toFile());
+                        MatrixIO.writeBufferedImage(imageFile, bufferedImage);
                     }
                 } else {
                     System.out.printf("WARNING: output block \"%s\" has no initialized data%n", name);
