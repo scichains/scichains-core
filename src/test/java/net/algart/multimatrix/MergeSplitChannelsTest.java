@@ -38,15 +38,15 @@ import java.util.List;
 public class MergeSplitChannelsTest {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s some_image.png matrix_folder%n", MergeSplitChannelsTest.class);
+            System.out.printf("Usage: %s some_image.png image_folder%n", MergeSplitChannelsTest.class);
             return;
         }
         final Path sourceFile = Paths.get(args[0]);
-        final Path matrixFolder = Paths.get(args[1]);
+        final Path imageFolder = Paths.get(args[1]);
         BufferedImage image = MatrixIO.readBufferedImage(sourceFile);
         MultiMatrix multiMatrix = SMat.valueOf(image).toMultiMatrix();
         Matrix<? extends PArray> matrix = multiMatrix.mergeChannels();
-        MatrixIO.writeAlgARTImage(matrixFolder, List.of(matrix));
+        MatrixIO.writeImageFolder(imageFolder, List.of(matrix));
         MultiMatrix unpackedChannels = MultiMatrix.valueOfMerged(matrix);
         if (!unpackedChannels.dimEquals(multiMatrix)) {
             throw new AssertionError("Dimensions mismatch!");

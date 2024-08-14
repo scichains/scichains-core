@@ -57,6 +57,29 @@ public interface ExecutorProvider {
 
     ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException;
 
+    /**
+     * Creates new executor provider with standard behavior, based on the executor set
+     * {@link ExecutorJsonSet#allBuiltIn()}.
+     *
+     * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
+     * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
+     * to execute executors like sub-chains, which dynamically create other executors,
+     * probably having equal executor IDs. Executor providers with different <code>sessionID</code>
+     * are isolated from each other and can be used simultaneously.</p>
+     *
+     * <p>If you want to work with executors shared across all sessions, please use
+     * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.</p>
+     *
+     * <p>If you need only one set of executors, you can specify any <code>sessionID</code> like
+     * <code>"MySession"</code>.</p>
+     *
+     * @param sessionId unique session ID (1st argument of
+     * {@link ExecutionBlock#newExecutionBlock(String, String, String)}).
+     * @return a new standard executor provider.
+     *
+     * @see ExecutionBlock#setSessionId(String)
+     * @see ExecutionBlock#newExecutionBlock(String, String, String)
+     */
     static ExecutorProvider newStandardInstance(String sessionId) {
         return StandardExecutorProvider.newInstance(ExecutorJsonSet.allBuiltIn(), sessionId);
     }

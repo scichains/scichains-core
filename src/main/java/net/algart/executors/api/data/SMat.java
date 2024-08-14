@@ -26,8 +26,8 @@ package net.algart.executors.api.data;
 
 import net.algart.arrays.*;
 import net.algart.external.UsedForExternalCommunication;
-import net.algart.io.awt.BufferedImageToMatrix;
-import net.algart.io.awt.MatrixToBufferedImage;
+import net.algart.io.awt.ImageToMatrix;
+import net.algart.io.awt.MatrixToImage;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 
@@ -709,11 +709,11 @@ public final class SMat extends Data {
     }
 
     public static Matrix<? extends PArray> bufferedImageToInterleavedBGRA(BufferedImage bufferedImage) {
-        return new BufferedImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
+        return new ImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
     }
 
     public static BufferedImage interleavedBGRAToBufferedImage(Matrix<? extends PArray> interleavedBGRA) {
-        return new MatrixToBufferedImage.InterleavedBGRToInterleaved().toBufferedImage(interleavedBGRA);
+        return new MatrixToImage.InterleavedBGRToInterleaved().toBufferedImage(interleavedBGRA);
     }
 
     @Override

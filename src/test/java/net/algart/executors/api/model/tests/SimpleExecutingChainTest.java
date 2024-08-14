@@ -36,7 +36,7 @@ import java.nio.file.Paths;
 
 public class SimpleExecutingChainTest {
     private static void executeChainAsExecutor(Path chainPath) throws IOException {
-        try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
+        try (ExecutionBlock executor = UseSubChain.getSessionInstance("MySession").toExecutor(chainPath)) {
             executor.setAllOutputsNecessary(true);
             executor.execute();
             System.out.println("Executor finished: " + executor);

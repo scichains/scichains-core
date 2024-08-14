@@ -435,14 +435,6 @@ public interface MultiMatrix extends Cloneable {
 
     }
 
-    default int[] channelToIntArray(int channelIndex) {
-        return Matrices.toIntJavaArray(channel(channelIndex));
-    }
-
-    default float[] channelToFloatArray(int channelIndex) {
-        return Matrices.toFloatJavaArray(channel(channelIndex));
-    }
-
     default boolean dimEquals(MultiMatrix other) {
         Objects.requireNonNull(other, "Null multi-matrix");
         int dimCount = dimCount();
@@ -582,75 +574,6 @@ public interface MultiMatrix extends Cloneable {
             result.add(m == null ? null : m.asMultiMatrix2D());
         }
         return result;
-    }
-
-    @Deprecated
-    static byte[] newCompatibleByteArray(Matrix<?> matrix) {
-        return new byte[matrix.size32()];
-    }
-
-    @Deprecated
-    static int[] newCompatibleIntArray(Matrix<?> matrix) {
-        return new int[matrix.size32()];
-    }
-
-    @Deprecated
-    static float[] newCompatibleFloatArray(Matrix<?> matrix) {
-        return new float[matrix.size32()];
-    }
-
-    @Deprecated
-    static byte[] toByteArray(Matrix<? extends PArray> matrix) {
-        return Matrices.toByteJavaArray(matrix);
-    }
-
-    /**
-     * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
-     */
-    @Deprecated
-    static byte[] toByteArrayUnsafe(Matrix<? extends PArray> matrix) {
-        return matrix.array().jaByte();
-    }
-
-    @Deprecated
-    static int[] toIntArray(Matrix<? extends PArray> matrix) {
-        return Matrices.toIntJavaArray(matrix);
-    }
-
-    /**
-     * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
-     */
-    @Deprecated
-    static int[] toIntArrayUnsafe(Matrix<? extends PArray> matrix) {
-        return matrix.array().jaInt();
-    }
-
-    @Deprecated
-    static float[] toFloatArray(Matrix<? extends PArray> matrix) {
-        return Matrices.toFloatJavaArray(matrix);
-    }
-
-    /**
-     * Note: this method can be used only for read-only needs! Please never try to modify elements of returned array.
-     */
-    @Deprecated
-    static float[] toFloatArrayUnsafe(Matrix<? extends PArray> matrix) {
-        return matrix.array().jaFloat();
-    }
-
-    @Deprecated
-    static byte[] toByteArray(Matrix<? extends PArray> matrix, ByteJArrayHolder arrayHolder) {
-        return Matrices.toByteJavaArray(arrayHolder.quickNew(matrix), matrix);
-    }
-
-    @Deprecated
-    static int[] toIntArray(Matrix<? extends PArray> matrix, IntJArrayHolder arrayHolder) {
-        return Matrices.toIntJavaArray(arrayHolder.quickNew(matrix), matrix);
-    }
-
-    @Deprecated
-    static float[] toFloatArray(Matrix<? extends PArray> matrix, FloatJArrayHolder arrayHolder) {
-        return Matrices.toFloatJavaArray(arrayHolder.quickNew(matrix), matrix);
     }
 
     // Note: returns null if there are no non-zero values

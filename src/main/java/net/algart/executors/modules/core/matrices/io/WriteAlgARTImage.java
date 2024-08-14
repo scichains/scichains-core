@@ -70,7 +70,7 @@ public final class WriteAlgARTImage extends WriteFileOperation implements ReadOn
         final Path file = completeFilePath().toAbsolutePath();
         logDebug(() -> "Writing AlgART " + m + " to file " + file);
         try {
-            MatrixIO.writeAlgARTImage(file, m.allChannels());
+            MatrixIO.writeImageFolder(file, m.allChannels());
         } catch (IOException e) {
             throw new IOError(e);
         }

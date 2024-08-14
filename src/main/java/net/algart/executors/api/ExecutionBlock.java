@@ -958,7 +958,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static void initializeExecutionSystem() {
-        Initialization.initialize();
+        Initialization.initializeExecutionSystem();
     }
 
     @UsedForExternalCommunication
@@ -1202,7 +1202,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
         // Usually called only once. So, it is better to provide an explicit function instead of
         // static initialization block: it allows avoiding strange exception ExceptionInInitializerError
-        private static synchronized void initialize() {
+        private static synchronized void initializeExecutionSystem() {
             if (!initialized) {
                 try {
                     ExecutorJsonSet.findAllBuiltIn();

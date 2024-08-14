@@ -129,10 +129,14 @@ public final class UseSubChain extends FileOperation {
         return new UseSubChain();
     }
 
-    public static UseSubChain getShared() {
+    public static UseSubChain getSessionInstance(String sessionId) {
         final UseSubChain result = new UseSubChain();
-        result.setSessionId(GLOBAL_SHARED_SESSION_ID);
+        result.setSessionId(sessionId);
         return result;
+    }
+
+    public static UseSubChain getShared() {
+        return getSessionInstance(GLOBAL_SHARED_SESSION_ID);
     }
 
     public static SimpleExecutionBlockLoader<Chain> subChainLoader() {
@@ -310,17 +314,21 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public static ExecutionBlock createExecutor(ChainJson chainJson) {
+    public static Executor createExecutor(ChainJson chainJson) {
         return getShared().toExecutor(chainJson);
     }
 
-    public static ExecutionBlock createExecutor(Path containingJsonFile) throws IOException {
+    public static Executor createExecutor(Path containingJsonFile) throws IOException {
         return createExecutor(ChainJson.read(containingJsonFile));
     }
 
-    public ExecutionBlock toExecutor(ChainJson chainJson) {
+    public Executor toExecutor(ChainJson chainJson) {
         //noinspection resource
         return use(chainJson).toExecutor();
+    }
+
+    public Executor toExecutor(Path containingJsonFile) throws IOException {
+        return toExecutor(ChainJson.read(containingJsonFile));
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
