@@ -355,7 +355,7 @@ public interface MultiMatrix extends Cloneable {
                         isFloatingPoint() ? 0.0 : 0.5,
                         INTENSITY_R_WEIGHT, INTENSITY_G_WEIGHT, INTENSITY_B_WEIGHT),
                 resultType, r, g, b);
-        // - for integer matrices we prefer roundind (by adding 0.5)
+        // - for integer matrices, we prefer rounding (by adding 0.5)
     }
 
     default Range rangeOfIntensityOrNull() {
@@ -589,8 +589,8 @@ public interface MultiMatrix extends Cloneable {
     }
 
     /**
-     * Pixel value: primitive Java array of channel + hashCode/equals.
-     * Note that this class is partially mutable: it allows to modify elements of channels.
+     * Pixel value: primitive Java array of a channel + hashCode/equals.
+     * Note that this class is partially mutable: it allows modifying elements of channels.
      * If you modify them, multithreaded usage requires external synchronization.
      */
     abstract class PixelValue {
@@ -674,7 +674,7 @@ public interface MultiMatrix extends Cloneable {
          * Reads this pixel value from the specified multi-matrix at the given array position.
          *
          * @param multiMatrix  some multi-matrix
-         * @param indexInArray in in the built-in matrix array.
+         * @param indexInArray in the built-in matrix array.
          * @throws IndexOutOfBoundsException if this {@link #numberOfChannels()} is less than
          *                                   number of channels in the multi-matrix.
          * @throws ClassCastException        if this {@link #elementType()} differs from
@@ -687,12 +687,12 @@ public interface MultiMatrix extends Cloneable {
          * All channels in the multi-matrix must be updatable ({@code Matrix<? extends UpdatablePArray>}).
          *
          * @param multiMatrix  some multi-matrix
-         * @param indexInArray in in the built-in matrix array.
+         * @param indexInArray in the built-in matrix array.
          * @throws IndexOutOfBoundsException if this {@link #numberOfChannels()} is less than
          *                                   number of channels in the multi-matrix.
          * @throws ClassCastException        if this {@link #elementType()} differs from
          *                                   the element type of the multi-matrix
-         *                                   or if some of channels of the multi-matrix is not updatable.
+         *                                   or if some channels of the multi-matrix are not updatable.
          */
         public abstract void write(MultiMatrix multiMatrix, long indexInArray);
 
