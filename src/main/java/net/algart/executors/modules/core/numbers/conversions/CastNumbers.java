@@ -24,7 +24,10 @@
 
 package net.algart.executors.modules.core.numbers.conversions;
 
-import net.algart.arrays.*;
+import net.algart.arrays.PArray;
+import net.algart.arrays.PNumberArray;
+import net.algart.arrays.SimpleMemoryModel;
+import net.algart.arrays.UpdatablePNumberArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.NumberArrayFilter;
@@ -53,7 +56,7 @@ public final class CastNumbers extends NumberArrayFilter implements ReadOnlyExec
 
     @Override
     public PArray process(UpdatablePNumberArray array, int blockLength, int numberOfBlocks) {
-        SNumbers numbers = SNumbers.valueOfArray(Arrays.toJavaArray(array), 1);
+        SNumbers numbers = SNumbers.valueOfArray(array.toJavaArray(), 1);
         numbers = numbers.toPrecision(elementType);
         return (PNumberArray) SimpleMemoryModel.asUpdatableArray(numbers.getArray());
     }

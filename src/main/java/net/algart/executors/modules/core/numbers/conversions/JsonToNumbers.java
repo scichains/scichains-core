@@ -25,7 +25,6 @@
 package net.algart.executors.modules.core.numbers.conversions;
 
 import jakarta.json.*;
-import net.algart.arrays.Arrays;
 import net.algart.arrays.MutableDoubleArray;
 import net.algart.arrays.MutableLongArray;
 import net.algart.arrays.MutablePNumberArray;
@@ -274,8 +273,7 @@ public final class JsonToNumbers extends Executor implements ReadOnlyExecutionIn
         getScalar(OUTPUT_JSON).setTo(Jsons.toPrettyString(builder.build()));
         try (CastNumbers castNumbers = new CastNumbers()) {
             getNumbers().setToArray(
-                    castNumbers.setElementType(elementType).processUnstructuredJavaArray(
-                            Arrays.toJavaArray(values)),
+                    castNumbers.setElementType(elementType).processUnstructuredJavaArray(values.toJavaArray()),
                     singleBlock ? (int) values.length() : blockLength);
         }
     }

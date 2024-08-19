@@ -99,13 +99,14 @@ public final class CreateArithmeticProgression extends Executor implements ReadO
             logDebug(() -> "Copying number array: " + input);
             getNumbers().setTo(input);
         } else {
-            final Object result = Arrays.toJavaArray(Arrays.asIndexFuncArray(
-                    (Func1) x0 -> {
-                        final int blockIndex = ((int) x0) / blockLength;
-                        return startValue + (double) blockIndex * increment;
-                    },
-                    Arrays.type(PArray.class, elementType),
-                    (long) blockLength * (long) numberOfBlocks));
+            final Object result = Arrays.asIndexFuncArray(
+                            (Func1) x0 -> {
+                                final int blockIndex = ((int) x0) / blockLength;
+                                return startValue + (double) blockIndex * increment;
+                            },
+                            Arrays.type(PArray.class, elementType),
+                            (long) blockLength * (long) numberOfBlocks)
+                    .toJavaArray();
             setEndProcessingTimeStamp();
             getNumbers().setToArray(result, blockLength);
         }

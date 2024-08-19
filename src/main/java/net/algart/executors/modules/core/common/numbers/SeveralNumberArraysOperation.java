@@ -24,10 +24,7 @@
 
 package net.algart.executors.modules.core.common.numbers;
 
-import net.algart.arrays.Arrays;
-import net.algart.arrays.PArray;
-import net.algart.arrays.PNumberArray;
-import net.algart.arrays.SimpleMemoryModel;
+import net.algart.arrays.*;
 import net.algart.executors.api.data.SNumbers;
 
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ public abstract class SeveralNumberArraysOperation extends SeveralNumbersOperati
         final PArray array = process(sourceList, blockLengthsArray);
         final Integer resultBlockLength = resultBlockLength();
         return SNumbers.valueOfArray(
-                Arrays.toJavaArray(array),
+                array.toJavaArray(),
                 resultBlockLength == null ? firstBlockLength : resultBlockLength);
     }
 

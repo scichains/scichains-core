@@ -2473,7 +2473,7 @@ public final class SNumbers extends Data implements Cloneable {
             throw new IllegalArgumentException("The element type of passed array is not supported (it is "
                     + array + ")");
         }
-        return setToArray(Arrays.toJavaArray(array), blockLength, false);
+        return setToArray(array.toJavaArray(), blockLength, false);
     }
 
     public SNumbers setTo(IPoint point) {
