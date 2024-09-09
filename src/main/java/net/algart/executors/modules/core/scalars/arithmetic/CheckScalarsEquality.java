@@ -38,7 +38,7 @@ public final class CheckScalarsEquality extends Executor {
         THROW_EXCEPTION
     }
 
-    private enum ComparisonMode {
+    public enum ComparisonMode {
         EQUAL() {
             @Override
             public boolean compare(String x, String y) {

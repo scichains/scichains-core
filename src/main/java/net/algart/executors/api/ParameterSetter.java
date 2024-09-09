@@ -49,7 +49,7 @@ abstract class ParameterSetter {
         this.priority = priority;
         this.parameterType = parameterType;
         final String parameterName = method.getName().substring("set".length());
-        assert parameterName.length() >= 1;
+        assert !parameterName.isEmpty();
         this.parameterName = parameterName.substring(0, 1).toLowerCase() + parameterName.substring(1);
     }
 
@@ -369,12 +369,13 @@ abstract class ParameterSetter {
             assert enumClass.isEnum();
             assert Enum.class.isAssignableFrom(enumClass);
             this.enumClass = enumClass.asSubclass(Enum.class);
+            checkPublicAccessToEnumClass(this.enumClass);
             Method valueOfNameCustomMethod = null;
             try {
                 valueOfNameCustomMethod = this.enumClass.getMethod(
                         Executor.ENUM_VALUE_OF_NAME_CUSTOM_METHOD, String.class);
-                final int modifiers = valueOfNameCustomMethod.getModifiers();
-                if (!(Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers))) {
+                final int methodModifiers = valueOfNameCustomMethod.getModifiers();
+                if (!(Modifier.isStatic(methodModifiers) && Modifier.isPublic(methodModifiers))) {
                     throw new IllegalStateException("Method " + valueOfNameCustomMethod + " must be public static");
                 }
             } catch (NoSuchMethodException ignored) {
@@ -412,8 +413,24 @@ abstract class ParameterSetter {
         ParameterValueType getControlValueType() {
             return ParameterValueType.ENUM_STRING;
             // Note: EnumSetter is used only for String controls.
-            // For comparison, enum control for int type does not require Java enum in setXxx method,
+            // For comparison, enum control for the int type does not require Java enum in "setXxx" method;
             // it uses usual Java int (setXxx(int)).
+        }
+
+        // Note: although ParameterSetter can still work even for non-public enum classes
+        // (via Enum.valueOf call), this is a bad idea to provide such classes: the user
+        // will not be able to access to enum constants using standard Java syntax.
+        // Therefore, we require that both the enum class and its containing class
+        // (if it exists) MUST be public.
+        private static void checkPublicAccessToEnumClass(Class<?> enumClass) {
+            if (!(Modifier.isPublic(enumClass.getModifiers()))) {
+                throw new IllegalStateException("Enum " + enumClass + " must be public");
+            }
+            final Class<?> enclosingClass = enumClass.getEnclosingClass();
+            if (enclosingClass != null && !(Modifier.isPublic(enclosingClass.getModifiers()))) {
+                throw new IllegalStateException("Enum " + enumClass + " is an inner class of the " +
+                        enclosingClass + ", which must be public");
+            }
         }
     }
 }
