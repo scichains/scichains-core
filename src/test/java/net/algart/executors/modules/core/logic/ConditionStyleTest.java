@@ -45,15 +45,15 @@ public class ConditionStyleTest {
     }
 
     public static void main(String[] args) {
-        test((scalar8, defaultCondition8) -> SScalar.toCommonBoolean(scalar8, defaultCondition8), "1", true);
-        test((scalar7, defaultCondition7) -> SScalar.toCommonBoolean(scalar7, defaultCondition7), "0", false);
-        test((scalar6, defaultCondition6) -> SScalar.toCommonBoolean(scalar6, defaultCondition6), "0.00", false);
-        test((scalar5, defaultCondition5) -> SScalar.toCommonBoolean(scalar5, defaultCondition5), "0.01", true);
-        test((scalar4, defaultCondition4) -> SScalar.toCommonBoolean(scalar4, defaultCondition4), "true", true);
-        test((scalar3, defaultCondition3) -> SScalar.toCommonBoolean(scalar3, defaultCondition3), "False", false);
-        test((scalar2, defaultCondition2) -> SScalar.toCommonBoolean(scalar2, defaultCondition2), "false", false);
-        test((scalar1, defaultCondition1) -> SScalar.toCommonBoolean(scalar1, defaultCondition1), "", false);
-        test((scalar, defaultCondition) -> SScalar.toCommonBoolean(scalar, defaultCondition), " ", true);
+        test(SScalar::toCommonBoolean, "1", true);
+        test(SScalar::toCommonBoolean, "0", false);
+        test(SScalar::toCommonBoolean, "0.00", false);
+        test(SScalar::toCommonBoolean, "0.01", true);
+        test(SScalar::toCommonBoolean, "true", true);
+        test(SScalar::toCommonBoolean, "False", false);
+        test(SScalar::toCommonBoolean, "false", false);
+        test(SScalar::toCommonBoolean, "", false);
+        test(SScalar::toCommonBoolean, " ", true);
 
         test(ConditionStyle.C_LIKE::toBoolean, "1", true);
         test(ConditionStyle.C_LIKE::toBoolean, "0", false);
