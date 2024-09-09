@@ -261,6 +261,17 @@ public final class SScalar extends Data {
         return this;
     }
 
+    public boolean toBoolean() {
+        if (value == null) {
+            throw new IllegalStateException("Non-initialized scalar cannot be converted to boolean");
+        }
+        return toCommonBoolean(value);
+    }
+
+    public boolean toBoolean(boolean defaultValue) {
+        return toCommonBoolean(value, defaultValue);
+    }
+
     /**
      * Returns int value, stored in this scalar.
      *
@@ -480,17 +491,19 @@ public final class SScalar extends Data {
         return new MultiLineOrJsonSplitter(multiLines).extractComments(false);
     }
 
-    public static boolean toCLikeBoolean(String scalar, boolean defaultCondition) {
-        return scalar == null ?
-                defaultCondition :
-                Boolean.parseBoolean(scalar) || doubleToBoolean(scalar);
+    public static boolean toCLikeBoolean(String scalar) {
+        Objects.requireNonNull(scalar, "Null scalar value");
+        return Boolean.parseBoolean(scalar) || doubleToBoolean(scalar);
+    }
+
+    public static boolean toCommonBoolean(String scalar) {
+        Objects.requireNonNull(scalar, "Null scalar value");
+        return !scalar.equalsIgnoreCase("false") &&
+                        (Boolean.parseBoolean(scalar) || doubleToBoolean(scalar));
     }
 
     public static boolean toCommonBoolean(String scalar, boolean defaultCondition) {
-        return scalar == null ?
-                defaultCondition :
-                !scalar.equalsIgnoreCase("false") &&
-                        (Boolean.parseBoolean(scalar) || doubleToBoolean(scalar));
+        return scalar == null ? defaultCondition : toCommonBoolean(scalar);
     }
 
     @Override

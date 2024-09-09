@@ -30,7 +30,7 @@ public enum ConditionStyle {
     C_LIKE() {
         @Override
         public boolean toBoolean(String scalar, boolean defaultCondition) {
-            return SScalar.toCLikeBoolean(scalar, defaultCondition);
+            return scalar == null ? defaultCondition : SScalar.toCLikeBoolean(scalar);
         }
 
         @Override
