@@ -480,6 +480,19 @@ public final class SScalar extends Data {
         return new MultiLineOrJsonSplitter(multiLines).extractComments(false);
     }
 
+    public static boolean toCLikeBoolean(String scalar, boolean defaultCondition) {
+        return scalar == null ?
+                defaultCondition :
+                Boolean.parseBoolean(scalar) || doubleToBoolean(scalar);
+    }
+
+    public static boolean toCommonBoolean(String scalar, boolean defaultCondition) {
+        return scalar == null ?
+                defaultCondition :
+                !scalar.equalsIgnoreCase("false") &&
+                        (Boolean.parseBoolean(scalar) || doubleToBoolean(scalar));
+    }
+
     @Override
     protected void freeResources() {
         value = null;
@@ -491,6 +504,15 @@ public final class SScalar extends Data {
         setInitializedAndResetFlags(value != null);
         // - no sense to keep uninitialized state
     }
+
+    private static boolean doubleToBoolean(String scalar) {
+        try {
+            return Double.parseDouble(scalar) != 0.0;
+        } catch (NumberFormatException e) {
+            return !scalar.isEmpty();
+        }
+    }
+
 
     public static class MultiLineOrJsonSplitter {
         private final String[] lines;

@@ -30,9 +30,7 @@ public enum ConditionStyle {
     C_LIKE() {
         @Override
         public boolean toBoolean(String scalar, boolean defaultCondition) {
-            return scalar == null ?
-                    defaultCondition :
-                    Boolean.parseBoolean(scalar) || ConditionStyle.doubleToBoolean(scalar);
+            return SScalar.toCLikeBoolean(scalar, defaultCondition);
         }
 
         @Override
@@ -55,20 +53,5 @@ public enum ConditionStyle {
 
     public abstract boolean toBoolean(String scalar, boolean defaultCondition);
 
-    public static boolean toCommonBoolean(String scalar, boolean defaultCondition) {
-        return scalar == null ?
-                defaultCondition :
-                !scalar.equalsIgnoreCase("false") &&
-                        (Boolean.parseBoolean(scalar) || ConditionStyle.doubleToBoolean(scalar));
-    }
-
     public abstract void setScalar(SScalar result, boolean value);
-
-    private static boolean doubleToBoolean(String scalar) {
-        try {
-            return Double.parseDouble(scalar) != 0.0;
-        } catch (NumberFormatException e) {
-            return !scalar.isEmpty();
-        }
-    }
 }

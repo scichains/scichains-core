@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.scalars.logical;
 
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.logic.ConditionStyle;
 
 abstract class AbstractBoolean extends Executor {
@@ -70,7 +71,7 @@ abstract class AbstractBoolean extends Executor {
 
     public boolean toBoolean(String inputString) {
         return commonInputStyle ?
-                ConditionStyle.toCommonBoolean(inputString, defaultInput) :
+                SScalar.toCommonBoolean(inputString, defaultInput) :
                 booleanStyle.toBoolean(inputString, defaultInput);
     }
 
