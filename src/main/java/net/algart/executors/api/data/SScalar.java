@@ -505,23 +505,72 @@ public final class SScalar extends Data {
         return new MultiLineOrJsonSplitter(multiLines).extractComments(false);
     }
 
+    /**
+     * Returns <code>true</code> if the passed string is equal to "true" (ignoring case).
+     * Equivalent to <code>Boolean.parseBoolean(scalar)</code>, excepting that this method
+     * throws exception for <code>null</code> argument.
+     *
+     * @param scalar some string.
+     * @return whether it describes <code>true</code> value in terms of Java.
+     * @throws NullPointerException if the argument is <code>null</code>.
+     */
     public static boolean toJavaLikeBoolean(String scalar) {
         Objects.requireNonNull(scalar, "Null scalar value");
         return Boolean.parseBoolean(scalar);
     }
 
+    /**
+     * Returns <code>true</code> if the passed string is some non-empty string,
+     * excepting cases when it is a correct string representation of an integer zero (0)
+     * or <code>double</code> zero (0.0). For empty string "" and for strings like "0", "00", "0.0"
+     * this method returns <code>false</code>.
+     *
+     * <p>More precisely, this method is equivalent to the following code:</p>
+     * <pre>
+     *         if (scalar.isEmpty()) {
+     *             return false;
+     *         }
+     *         try {
+     *             return Double.parseDouble(scalar) != 0.0;
+     *         } catch (NumberFormatException e) {
+     *             return true;
+     *         }
+     * </pre>
+     *
+     * @param scalar some string.
+     * @return whether it describes <code>true</code> value in terms of С/C++ languages.
+     * @throws NullPointerException if the argument is <code>null</code>.
+     */
     public static boolean toCLikeBoolean(String scalar) {
         Objects.requireNonNull(scalar, "Null scalar value");
         return doubleToBoolean(scalar);
     }
 
+    /**
+     * Returns the same result as {@link #toCLikeBoolean(String)}, excepting that it returns <code>false</code>
+     * for "false" string (ignoring case).
+     * Equivalent to<br>
+     * <code>!scalar.equalsIgnoreCase("false") && {@link #toCLikeBoolean(String) toCLikeBoolean}(scalar)</code>
+     *
+     * @param scalar some string.
+     * @return whether it describes <code>true</code> value.
+     * @throws NullPointerException if the argument is <code>null</code>.
+     */
     public static boolean toCommonBoolean(String scalar) {
         Objects.requireNonNull(scalar, "Null scalar value");
         return !scalar.equalsIgnoreCase("false") && doubleToBoolean(scalar);
     }
 
-    public static boolean toCommonBoolean(String scalar, boolean defaultCondition) {
-        return scalar == null ? defaultCondition : toCommonBoolean(scalar);
+    /**
+     * Equivalent to {@link #toCommonBoolean(String)} method, excepting that it returns
+     * <code>defaultValue</code> for <code>null</code> scalar.
+     *
+     * @param scalar       some string.
+     * @param defaultValue the value returned when <code>scalar==null</code>
+     * @return whether it describes <code>true</code> value.
+     */
+    public static boolean toCommonBoolean(String scalar, boolean defaultValue) {
+        return scalar == null ? defaultValue : toCommonBoolean(scalar);
     }
 
     @Override
@@ -537,10 +586,13 @@ public final class SScalar extends Data {
     }
 
     private static boolean doubleToBoolean(String scalar) {
+        if (scalar.isEmpty()) {
+            return false;
+        }
         try {
             return Double.parseDouble(scalar) != 0.0;
         } catch (NumberFormatException e) {
-            return !scalar.isEmpty();
+            return true;
         }
     }
 

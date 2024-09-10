@@ -74,5 +74,6 @@ public class ConditionStyleTest {
         test(ConditionStyle.JAVA_LIKE::toBoolean, "false", false);
         test(ConditionStyle.JAVA_LIKE::toBoolean, " ", false);
         test(ConditionStyle.JAVA_LIKE::toBoolean, "", false);
+        System.out.println("O'k");
     }
 }
