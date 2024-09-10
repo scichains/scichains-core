@@ -30,17 +30,20 @@ import java.util.function.BiFunction;
 
 public class ConditionStyleTest {
     private static void test(BiFunction<String, Boolean, Boolean> converter, String s, boolean expected) {
+        if (SScalar.toJavaLikeBoolean(s) && !SScalar.toCLikeBoolean(s)) {
+            throw new AssertionError("If Java-like is true, C-Like also must be true! " + s);
+        }
         if (converter.apply(s, false) != expected) {
-            throw new AssertionError();
+            throw new AssertionError(s);
         }
         if (converter.apply(s, true) != expected) {
-            throw new AssertionError();
+            throw new AssertionError(s);
         }
         if (converter.apply(null, false)) {
-            throw new AssertionError();
+            throw new AssertionError(s);
         }
         if (!converter.apply(null, true)) {
-            throw new AssertionError();
+            throw new AssertionError(s);
         }
     }
 

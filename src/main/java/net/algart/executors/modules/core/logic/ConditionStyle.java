@@ -42,7 +42,7 @@ public enum ConditionStyle {
     JAVA_LIKE() {
         @Override
         public boolean toBoolean(String scalar, boolean defaultCondition) {
-            return scalar == null ? defaultCondition : Boolean.parseBoolean(scalar);
+            return scalar == null ? defaultCondition : SScalar.toJavaLikeBoolean(scalar);
         }
 
         @Override

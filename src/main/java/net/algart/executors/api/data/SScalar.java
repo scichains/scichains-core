@@ -261,14 +261,28 @@ public final class SScalar extends Data {
         return this;
     }
 
-    public boolean toBoolean() {
+    public boolean toJavaLikeBoolean() {
+        if (value == null) {
+            throw new IllegalStateException("Non-initialized scalar cannot be converted to boolean");
+        }
+        return toJavaLikeBoolean(value);
+    }
+
+    public boolean toCLikeBoolean() {
+        if (value == null) {
+            throw new IllegalStateException("Non-initialized scalar cannot be converted to boolean");
+        }
+        return toCLikeBoolean(value);
+    }
+
+    public boolean toCommonBoolean() {
         if (value == null) {
             throw new IllegalStateException("Non-initialized scalar cannot be converted to boolean");
         }
         return toCommonBoolean(value);
     }
 
-    public boolean toBoolean(boolean defaultValue) {
+    public boolean toCommonBoolean(boolean defaultValue) {
         return toCommonBoolean(value, defaultValue);
     }
 
@@ -491,15 +505,19 @@ public final class SScalar extends Data {
         return new MultiLineOrJsonSplitter(multiLines).extractComments(false);
     }
 
+    public static boolean toJavaLikeBoolean(String scalar) {
+        Objects.requireNonNull(scalar, "Null scalar value");
+        return Boolean.parseBoolean(scalar);
+    }
+
     public static boolean toCLikeBoolean(String scalar) {
         Objects.requireNonNull(scalar, "Null scalar value");
-        return Boolean.parseBoolean(scalar) || doubleToBoolean(scalar);
+        return doubleToBoolean(scalar);
     }
 
     public static boolean toCommonBoolean(String scalar) {
         Objects.requireNonNull(scalar, "Null scalar value");
-        return !scalar.equalsIgnoreCase("false") &&
-                        (Boolean.parseBoolean(scalar) || doubleToBoolean(scalar));
+        return !scalar.equalsIgnoreCase("false") && doubleToBoolean(scalar);
     }
 
     public static boolean toCommonBoolean(String scalar, boolean defaultCondition) {
