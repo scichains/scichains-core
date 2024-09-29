@@ -550,7 +550,8 @@ public final class SScalar extends Data {
      * Returns the same result as {@link #toCLikeBoolean(String)}, excepting that it returns <code>false</code>
      * for "false" string (ignoring case).
      * Equivalent to<br>
-     * <code>!scalar.equalsIgnoreCase("false") && {@link #toCLikeBoolean(String) toCLikeBoolean}(scalar)</code>
+     * <code>!scalar.equalsIgnoreCase("false") &amp;&amp;
+     * {@link #toCLikeBoolean(String) toCLikeBoolean}(scalar)</code>
      *
      * @param scalar some string.
      * @return whether it describes <code>true</code> value.
