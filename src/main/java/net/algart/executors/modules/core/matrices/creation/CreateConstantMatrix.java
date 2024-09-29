@@ -45,15 +45,13 @@ public final class CreateConstantMatrix extends MultiMatrixChannelGenerator {
     @Override
     protected Matrix<? extends PArray> createChannel() {
         Class<? extends PArray> destType = Arrays.type(PArray.class, getElementType());
-        double maxPossibleValue = Arrays.maxPossibleValue(destType, 1.0);
-        double value = colorChannel(color, maxPossibleValue);
+        final double maxPossibleValue = Arrays.maxPossibleValue(destType, 1.0);
+        final double value = colorChannel(color, maxPossibleValue);
         logDebug(() -> "Creating constant " + getElementType() + "["
                 + getNumberOfChannels() + "x" + getDimX() + "x" + getDimY()
                 + "], channel " + currentChannel() + ": filler " + value);
-        final Matrix<? extends PArray> result =
-                getDimZ() > 0 ?
-                        Matrices.constantMatrix(value, destType, getDimX(), getDimY(), getDimZ()) :
-                        Matrices.constantMatrix(value, destType, getDimX(), getDimY());
-        return result;
+        return getDimZ() > 0 ?
+                Matrices.constantMatrix(value, destType, getDimX(), getDimY(), getDimZ()) :
+                Matrices.constantMatrix(value, destType, getDimX(), getDimY());
     }
 }

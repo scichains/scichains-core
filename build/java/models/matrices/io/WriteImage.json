@@ -103,10 +103,19 @@
     },
     {
       "name": "autoContrastBeforeWriting",
-      "caption": "Auto contrast image before writing (usually for debugging needs)",
+      "caption": "Auto contrast before writing",
+      "description": "Auto contrast image before writing (usually for debugging needs)",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
+    },
+    {
+      "name": "convertAllElementTypesToByte",
+      "caption": "Convert all element types to \"byte\"",
+      "description": "If set, and if the element type of the source matrix is different from byte (8-bit), the source matrix will be automatically converted to an 8-bit unsigned matrix, as in the \"Change precision\" function.\nBy default this flag is set: this ensures maximal compatibility (almost all image file formats support 8-bit data). You can clear it if you have an image with 16-bit precision and you are sure that the format determined by the file extension supports this bit depth. For example, PNG-files can store 16-bit color images.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
     },
     {
       "caption": "Quality",

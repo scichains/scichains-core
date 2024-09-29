@@ -285,6 +285,8 @@ public final class SMat extends Data {
         }
     }
 
+    private boolean allowed63BitDimensions = false;
+
     private long[] dimensions = new long[2];
     // - cannot be null or long[0]
     private Depth depth;
@@ -293,6 +295,29 @@ public final class SMat extends Data {
 
     @UsedForExternalCommunication
     public SMat() {
+    }
+
+    public boolean isAllowed63BitDimensions() {
+        return allowed63BitDimensions;
+    }
+
+    /**
+     * May be called with <code>true</code> argument
+     * if the libraries using this object support the situation where one of the dimensions
+     * or the product of all dimensions is greater than <code>Integer.MAX_VALUE</code>.
+     *
+     * <p>By default, this flag is <code>false</code>. In this case, attempting to set dimensions
+     * whose product is &gt;<code>Integer.MAX_VALUE</code> (&ge;2<sup>31</sup>) results in an exception.
+     * This behavior protects against some low-level errors in native code
+     * that may use this object.
+     *
+     * @param allowed63BitDimensions whether this matrix can have sizes greater than 2<sup>31</sup>&minus;1.
+     * @return a reference to this object.
+     */
+    @UsedForExternalCommunication
+    public SMat setAllowed63BitDimensions(boolean allowed63BitDimensions) {
+        this.allowed63BitDimensions = allowed63BitDimensions;
+        return this;
     }
 
     @UsedForExternalCommunication
@@ -414,7 +439,8 @@ public final class SMat extends Data {
     }
 
     public SMat setTo(BufferedImage bufferedImage) {
-        return setToInterleavedMatrix(bufferedImageToInterleavedBGRA(bufferedImage));
+        final Matrix<? extends PArray> interleaved = new ImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
+        return setToInterleavedMatrix(interleaved);
     }
 
     public SMat setTo(MultiMatrix multiMatrix) {
@@ -519,18 +545,25 @@ public final class SMat extends Data {
     }
 
     public BufferedImage toBufferedImage() {
+        return toBufferedImage(true);
+    }
+
+    public BufferedImage toBufferedImage(boolean convertAllElementTypesToByte) {
         if (!isInitialized()) {
             return null;
-        }
-        if (numberOfChannels != 1 && numberOfChannels != 3 && numberOfChannels != 4) {
-            throw new IllegalStateException("Cannot convert " + numberOfChannels + "-channel matrix to BufferedImage ("
-                    + this + "): number of channels must be 1, 3 or 4, but it is " + numberOfChannels);
         }
         if (dimensions.length != 2) {
             throw new IllegalStateException("Cannot convert " + dimensions.length + "D matrix to BufferedImage ("
                     + this + "): only 2-dimensional matrices can be converted");
         }
-        return interleavedBGRAToBufferedImage(toInterleavedMatrix(false));
+        final Matrix<? extends PArray> interleaved = toInterleavedMatrix(false);
+        if (interleaved == null) {
+            // - already checked by isInitialized(): modification from a parallel thread?
+            return null;
+        }
+        return new MatrixToImage.InterleavedBGRToInterleaved()
+                .setBytesRequired(convertAllElementTypesToByte)
+                .toBufferedImage(interleaved);
     }
 
     public MultiMatrix2D toMultiMatrix2D() {
@@ -708,14 +741,6 @@ public final class SMat extends Data {
         return result;
     }
 
-    public static Matrix<? extends PArray> bufferedImageToInterleavedBGRA(BufferedImage bufferedImage) {
-        return new ImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
-    }
-
-    public static BufferedImage interleavedBGRAToBufferedImage(Matrix<? extends PArray> interleavedBGRA) {
-        return new MatrixToImage.InterleavedBGRToInterleaved().toBufferedImage(interleavedBGRA);
-    }
-
     @Override
     protected void freeResources() {
         if (this.pointer != null) {
@@ -737,10 +762,22 @@ public final class SMat extends Data {
         for (int k = 0; k < dimensions.length; k++) {
             checkDimension(k, dimensions[k]);
         }
+        final long product = Arrays.longMul(dimensions);
+        if (product == Long.MIN_VALUE) {
+            throw new IllegalArgumentException("Too large matrix [" +
+                    JArrays.toString(dimensions, "x", 1000) +
+                    "]: the number of element >2^63-1 (" + Long.MAX_VALUE + ")");
+        }
+        if (!allowed63BitDimensions && product > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Too large matrix [" +
+                    JArrays.toString(dimensions, "x", 1000) +
+                    "]: the number of element >2^31-1 (" + Integer.MAX_VALUE + "), this is not allowed");
+        }
         this.dimensions = dimensions;
     }
 
-    @UsedForExternalCommunication
+    // Calls of this method were removed from native code in the version 4.4.8
+    @Deprecated(forRemoval = true)
     private void setDim(int k, long dimension) {
         checkDimension(k, dimension);
         if (k >= dimensions.length) {
@@ -796,6 +833,22 @@ public final class SMat extends Data {
         this.pointer = pointer;
     }
 
+    private long checkDimension(int k, long dimension) {
+        if (k < 0) {
+            throw new IllegalArgumentException("Negative dimension index " + k);
+        }
+        // OpenCV can create Mat with zero sizes, but work with it is not comfortable: data will be null.
+        if (dimension <= 0) {
+            throw new IllegalArgumentException("Zero or negative matrix dimension #" + k + " = " + dimension);
+        }
+        // We work with long dimensions, but actually most external libraries
+        if (!allowed63BitDimensions && dimension > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Too large matrix dimension #" + k + " = " + dimension +
+                    " >= 2^31: this is not allowed");
+        }
+        return dimension;
+    }
+
     static long[] addFirstElement(long newFirstElement, long[] values) {
         final long[] result = new long[values.length + 1];
         System.arraycopy(values, 0, result, 1, values.length);
@@ -805,17 +858,6 @@ public final class SMat extends Data {
 
     static long[] removeFirstElement(long[] values) {
         return java.util.Arrays.copyOfRange(values, 1, values.length);
-    }
-
-    private static long checkDimension(int k, long dimension) {
-        if (k < 0) {
-            throw new IllegalArgumentException("Negative dimension index " + k);
-        }
-        // OpenCV can create Mat with zero sizes, but work with it is not comfortable: data will be null.
-        if (dimension <= 0) {
-            throw new IllegalArgumentException("Zero or negative dim[" + k + "] = " + dimension);
-        }
-        return dimension;
     }
 
     private static int checkNumberOfChannels(int numberOfChannels) {

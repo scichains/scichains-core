@@ -41,6 +41,7 @@ import java.util.Arrays;
 public final class WriteImage extends WriteFileOperation implements ReadOnlyExecutionInput {
     private boolean requireInput = false;
     private boolean autoContrastBeforeWriting = false;
+    private boolean convertAllElementTypesToByte = true;
     private Double quality = null;
     private String compressionType = "";
 
@@ -77,6 +78,15 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
         return this;
     }
 
+    public boolean isConvertAllElementTypesToByte() {
+        return convertAllElementTypesToByte;
+    }
+
+    public WriteImage setConvertAllElementTypesToByte(boolean convertAllElementTypesToByte) {
+        this.convertAllElementTypesToByte = convertAllElementTypesToByte;
+        return this;
+    }
+
     public Double getQuality() {
         return quality;
     }
@@ -106,7 +116,7 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
                 inputMat = inputMat.autoContrast();
             }
             try {
-                writeImage(inputMat.toBufferedImage());
+                writeImage(inputMat.toBufferedImage(convertAllElementTypesToByte));
             } catch (IOException e) {
                 throw new IOError(e);
             }
