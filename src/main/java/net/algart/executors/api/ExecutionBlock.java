@@ -235,6 +235,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return result;
     }
 
+    public final void requestDefaultOutput() {
+        requestOutput(defaultOutputPortName());
+    }
+
+    public final void requestOutput(String... portNames) {
+        for (String portName : portNames) {
+            getRequiredOutputPort(portName).setConnected(true);
+        }
+    }
+
     /**
      * Returns <code>true</code> if and only {@link #getInputPort(String) getInputPort(inputPortName)} returns
      * non-null value and {@link #checkInputNecessary(Port)} returns <code>null</code> or <code>true</code> for it.

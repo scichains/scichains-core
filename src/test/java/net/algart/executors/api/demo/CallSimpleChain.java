@@ -36,8 +36,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CallSimpleChain {
-    public static final String SESSION_ID = "~~DUMMY_SESSION";
-
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
             System.out.printf("Usage: " +

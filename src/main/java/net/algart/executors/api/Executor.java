@@ -238,12 +238,6 @@ public abstract class Executor extends ExecutionBlock {
         setDefaultOutputPort(newDefaultOutputPortName, DataType.SCALAR);
     }
 
-    public final void requestOutput(String... portNames) {
-        for (String portName : portNames) {
-            getRequiredOutputPort(portName).setConnected(true);
-        }
-    }
-
     public final <T extends Data> Map<String, T> allOutputContainers(
             Class<? extends T> dataClass,
             boolean onlyRequested) {
