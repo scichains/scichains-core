@@ -59,6 +59,7 @@ public class CallSimpleChain {
         final SMat inputMat = SMat.valueOf(ImageIO.read(inputImagePath.toFile()));
 
         ExecutionBlock.initializeExecutionSystem();
+        System.out.println("Loading " + chainPath.toAbsolutePath() + "...");
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
 //            var model = Executor.executorModel(executor.getSessionId(), executor.getExecutorId());
 //            System.out.println(model.jsonString());
