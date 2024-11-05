@@ -306,7 +306,7 @@ public abstract class Executor extends ExecutionBlock {
      * It is supposed that the external program sets some "current folder" in this parameter.
      *
      * <p>It is used for all relative paths. For example, when
-     * {@link FileOperation#getFile() the file} parameter in file operatations is
+     * {@link FileOperation#getFile() the file} parameter in file operations is
      * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
      *
      * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
