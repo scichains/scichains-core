@@ -27,10 +27,7 @@
   ],
   "properties": [
     "-Xmx8G",
-    "-ea",
-    "-esa",
     "-Dnet.algart.executors.api.showInfo=true",
-    "-D_net.algart.executors.api.showLibraryPath=true",
     "-D_net.algart.arrays.CPUCount=1",
     "-Djep.config.pythonHome=$(running.home.directory)/python",
     "-D_polyglot.js.nashorn-compat=true",
@@ -40,7 +37,6 @@
     "-Djava.util.logging.config.file=$(running.home.directory)/conf/logging.properties",
     "-D_net.algart.executors.api.loggingStatusLevel=print",
     "-Dnet.algart.executors.api.loggingStatusKind=INFORMATION",
-    "-D_executors.timing.logging.level=INFO",
-    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+    "-D_executors.timing.logging.level=INFO"
   ]
 }
