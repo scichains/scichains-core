@@ -3,6 +3,6 @@
     "-ea",
     "-esa",
     "-D_net.algart.executors.api.showLibraryPath=true",
-    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
   ]
 }
