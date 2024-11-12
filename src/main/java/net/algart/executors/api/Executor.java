@@ -138,7 +138,6 @@ public abstract class Executor extends ExecutionBlock {
     private String defaultOutputPortName = DEFAULT_OUTPUT_PORT;
 
     private final ExecutionStatus status = ExecutionStatus.newNamedInstance(getClass().getName());
-    private Path currentDirectory = null;
 
     private boolean multithreadingEnvironment = false;
 
@@ -298,29 +297,6 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void showStatus(Supplier<String> message) {
         this.status().setMessage(message);
-    }
-
-    /**
-     * Returns the current folder, passed to this executor via parameter
-     * {@link SystemParameter#CURRENT_FOLDER}.
-     * It is supposed that the external program sets some "current folder" in this parameter.
-     *
-     * <p>It is used for all relative paths. For example, when
-     * {@link FileOperation#getFile() the file} parameter in file operations is
-     * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
-     *
-     * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
-     * {@link #setCurrentDirectory(Path)} method, this method returns <code>null</code>.
-     * In this case, relative paths will be resolved in the current system directory.
-     *
-     * @return current working directory, that was set via parameter {@link SystemParameter#CURRENT_FOLDER}.
-     */
-    public final Path getCurrentDirectory() {
-        return currentDirectory;
-    }
-
-    public final void setCurrentDirectory(Path currentDirectory) {
-        this.currentDirectory = currentDirectory;
     }
 
     /**
@@ -667,13 +643,6 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void disableOnChangeParameterAutomatic(String parameterName) {
         this.automaticUpdateDisabledParameters.add(parameterName);
-    }
-
-    public final Path translateCurrentDirectory(Path path) {
-        Objects.requireNonNull(path, "Null path");
-        return !path.isAbsolute() && currentDirectory != null ?
-                currentDirectory.resolve(path).toAbsolutePath() :
-                path;
     }
 
     public void freeAllInputPortData() {

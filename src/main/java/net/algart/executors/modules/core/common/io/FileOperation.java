@@ -37,6 +37,10 @@ public abstract class FileOperation extends Executor {
     public static final String INPUT_FILE = "file";
     public static final String INPUT_FILE_NAME_ADDITION = "file_name_addition";
     public static final String OUTPUT_ABSOLUTE_PATH = "absolute_path";
+    /**
+     * The path, produced by {@link #currentOSPath()} method, if it was used.
+     */
+    public static final String OUTPUT_OS_PATH = "os_path";
     public static final String OUTPUT_PARENT_FOLDER = "parent_folder";
     public static final String OUTPUT_FILE_NAME = "file_name";
 
@@ -132,12 +136,25 @@ public abstract class FileOperation extends Executor {
         return nonEmpty(result.trim(), "file");
     }
 
+    public Path completeOSFilePath(boolean relativize) {
+        return completeOSFilePath(filePath(), relativize, true);
+    }
+
+    public Path completeOSFilePath(String filePath, boolean relativize, boolean processPorts) {
+        final Path completed = completeFilePath(filePath, processPorts);
+        final Path result = simplifyOSPath(completed, relativize);
+        if (processPorts) {
+            setOutputScalar(OUTPUT_OS_PATH, () -> result);
+        }
+        return result;
+    }
+
     public Path completeFilePath() {
         return completeFilePath(filePath());
     }
 
-    // Note: this function does not work too good with OUTPUT_XXX ports:
-    // it will return only the LAST from several paths
+    // Note: this function does not work too well with OUTPUT_XXX ports:
+    // it will fill out only the LAST from several paths
     public final List<Path> completeSeveralFilePaths() {
         return completeSeveralFilePaths(filePath());
     }
@@ -213,27 +230,54 @@ public abstract class FileOperation extends Executor {
         }
     }
 
-
-
-    /*
-     // Obsolete ability: never used
-     * May be overridden to provide another path in the result ports.
-     * It is called at the end of {@link #completeFilePath(String, boolean)} to return a result
-     * of this method.
-     * The Default implementation just returns its argument without changes.
-     *
-     * @param path source path after all translations.
-     * @return result path.
-    public Path modifyResultPath(Path path) {
-        return path;
-    }
-     */
-
     protected final void addFileOperationPorts() {
         addInputScalar(INPUT_FILE);
         addInputScalar(INPUT_FILE_NAME_ADDITION);
         addOutputScalar(OUTPUT_ABSOLUTE_PATH);
         addOutputScalar(OUTPUT_PARENT_FOLDER);
         addOutputScalar(OUTPUT_FILE_NAME);
+    }
+
+    /**
+     * Returns absolute current OS path. Equivalent to <code>Paths.get("").toAbsolutePath()</code>.
+     *
+     * @return current OS path (absolute form of the empty path "").
+     */
+    public static Path currentOSPath() {
+        return Paths.get("").toAbsolutePath();
+    }
+
+    /**
+     * Returns the relative form of the specified absolute path if it is a sub-path of the current OS directory,
+     * or the source argument in the other case.
+     * Equivalent to<pre>
+     *      absolutePath.startsWith({@link #currentOSPath()}) ?
+     *          {@link #currentOSPath()}.{@link Path#relativize(Path) relativize}(absolutePath) :
+     *          absolutePath;
+     * </pre>
+     *
+     * @param absolutePath the path to relativize.
+     * @return a shortened form of the given path when it is located inside the current OS directory.
+     */
+    public static Path relativizePathInsideCurrent(Path absolutePath) {
+        Objects.requireNonNull(absolutePath, "Null absolutePath");
+        final Path osPath = currentOSPath();
+        return absolutePath.startsWith(osPath) ? osPath.relativize(absolutePath) : absolutePath;
+    }
+
+    /**
+     * Equivalent to <pre>
+     * relativize ? {@link #relativizePathInsideCurrent
+     * relativizePathInsideCurrent}(path.toAbsolutePath()) : path.toAbsolutePath()
+     * </pre>
+     *
+     * @param path       the path to simplify.
+     * @param relativize whether we need to shorten the path when it is located inside the current OS directory.
+     * @return a shortened form of the given path if the second argument is <code>true</code>,
+     * or the absolute path if it is <code>false</code>.
+     */
+    public static Path simplifyOSPath(Path path, boolean relativize) {
+        Objects.requireNonNull(path, "Null path");
+        return relativize ? relativizePathInsideCurrent(path.toAbsolutePath()) : path.toAbsolutePath();
     }
 }

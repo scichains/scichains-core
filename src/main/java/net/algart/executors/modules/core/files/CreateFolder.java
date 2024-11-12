@@ -111,7 +111,7 @@ public final class CreateFolder extends WriteFileOperation implements ReadOnlyEx
     }
 
     private Path completeFilePathAndResultFolder() {
-        final Path path = completeFilePath(filePath());
+        final Path path = completeFilePath();
         String absolute = path.toAbsolutePath().toString();
         if (!(absolute.endsWith("/") || absolute.endsWith(File.separator))) {
             // - to be on the safe side
