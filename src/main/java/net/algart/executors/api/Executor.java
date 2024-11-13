@@ -32,7 +32,6 @@ import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
 import net.algart.executors.api.model.InstalledExtensions;
-import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 
@@ -52,8 +51,8 @@ public abstract class Executor extends ExecutionBlock {
             void update(Executor executor, String value) {
                 executor.setCurrentDirectory(Paths.get(value));
             }
-        },
-        ENABLED("$__system.enabled");
+        };
+//        ENABLED("$__system.enabled");
 
         final String parameterName;
 
@@ -118,10 +117,10 @@ public abstract class Executor extends ExecutionBlock {
             "setStringParameter",
             "setVisibleResultNecessary",
             "setAllOutputsNecessary",
-            "setCurrentDirectory",
             "setMultithreadingEnvironment",
             "setTimingEnabled",
             "setSessionId",
+            "setCurrentDirectory",
             "setOwnerId",
             "setContextId",
             "setContextName",
