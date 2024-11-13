@@ -120,13 +120,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private ExecutionBlock rootCaller = this;
     private String sessionId = null;
     private String executorId = null;
-    private Path currentDirectory = null;
     private String executorSpecification = null;
     private JsonObject executorSpecificationJson = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
     private String contextPath = null;
+    private Path currentDirectory = null;
     private volatile boolean interruptionRequested = false;
     private volatile boolean closed = false;
 
@@ -751,37 +751,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return executorSpecification;
     }
 
-    /**
-     * Returns the current folder, passed to this executor via parameter
-     * {@link Executor.SystemParameter#CURRENT_FOLDER}.
-     * It is supposed that the external program sets some "current folder" in this parameter.
-     *
-     * <p>It is used for all relative paths. For example, when
-     * {@link FileOperation#getFile() the file} parameter in file operations is
-     * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
-     *
-     * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
-     * {@link #setCurrentDirectory(Path)} method, this method returns <code>null</code>.
-     * In this case, relative paths will be resolved in the current system directory.
-     *
-     * @return current working directory, that was set via parameter {@link Executor.SystemParameter#CURRENT_FOLDER}.
-     */
-    public final Path getCurrentDirectory() {
-        return currentDirectory;
-    }
-
-    @UsedForExternalCommunication
-    public final void setCurrentDirectory(Path currentDirectory) {
-        this.currentDirectory = currentDirectory;
-    }
-
-    public final Path translateCurrentDirectory(Path path) {
-        Objects.requireNonNull(path, "Null path");
-        return !path.isAbsolute() && currentDirectory != null ?
-                currentDirectory.resolve(path).toAbsolutePath() :
-                path;
-    }
-
     public final String getPlatformId() {
         final JsonObject specification = executorSpecificationJson();
         return specification == null ? null : specification.getString("platform_id", null);
@@ -888,6 +857,41 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             // - unlikely case of error in Paths.get
             return null;
         }
+    }
+
+    /**
+     * Returns the current folder, passed to this executor via parameter
+     * {@link Executor.SystemParameter#CURRENT_FOLDER}.
+     * It is supposed that the external program sets some "current folder" in this parameter.
+     *
+     * <p>It is used for all relative paths. For example, when
+     * {@link FileOperation#getFile() the file} parameter in file operations is
+     * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
+     *
+     * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
+     * {@link #setCurrentDirectory(Path)} method, this method returns <code>null</code>.
+     * In this case, relative paths will be resolved in the current system directory.
+     *
+     * @return current working directory, that was set via parameter {@link Executor.SystemParameter#CURRENT_FOLDER}.
+     */
+    public final Path getCurrentDirectory() {
+        return currentDirectory;
+    }
+
+    @UsedForExternalCommunication
+    public final void setCurrentDirectory(String currentDirectory) {
+        setCurrentDirectory(Path.of(currentDirectory));
+    }
+
+    public final void setCurrentDirectory(Path currentDirectory) {
+        this.currentDirectory = currentDirectory;
+    }
+
+    public final Path translateCurrentDirectory(Path path) {
+        Objects.requireNonNull(path, "Null path");
+        return !path.isAbsolute() && currentDirectory != null ?
+                currentDirectory.resolve(path).toAbsolutePath() :
+                path;
     }
 
     @UsedForExternalCommunication

@@ -120,11 +120,11 @@ public abstract class Executor extends ExecutionBlock {
             "setMultithreadingEnvironment",
             "setTimingEnabled",
             "setSessionId",
-            "setCurrentDirectory",
             "setOwnerId",
             "setContextId",
             "setContextName",
             "setContextPath",
+            "setCurrentDirectory",
             "setInterruptionRequested"
     ));
 
