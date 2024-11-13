@@ -859,25 +859,23 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    /**
-     * Returns the current folder, passed to this executor via parameter
-     * {@link Executor.SystemParameter#CURRENT_FOLDER}.
-     * It is supposed that the external program sets some "current folder" in this parameter.
-     *
-     * <p>It is used for all relative paths. For example, when
-     * {@link FileOperation#getFile() the file} parameter in file operations is
-     * "images/test.png" and current working folder is "c:\tmp", the actual file will be "c:\tmp\images\test.png".
-     *
-     * <p>If this parameter was not set via {@link #onChangeParameter(String)} or
-     * {@link #setCurrentDirectory(Path)} method, this method returns <code>null</code>.
-     * In this case, relative paths will be resolved in the current system directory.
-     *
-     * @return current working directory, that was set via parameter {@link Executor.SystemParameter#CURRENT_FOLDER}.
-     */
     public final Path getCurrentDirectory() {
         return currentDirectory;
     }
 
+    /**
+     * Sets the current working folder for this executor.
+     *
+     * <p>It is used for all relative paths. For example, when
+     * {@link FileOperation#getFile() the file} parameter in file operations is
+     * "images/test.png" and the current working folder is "c:\tmp\my_project",
+     * the actual file will be "c:\tmp\my_project\images\test.png".
+     *
+     * <p>If this parameter has not been set, it has a default value <code>null</code>.
+     * In this case, relative paths are resolved against the current OS directory.
+     *
+     * @param currentDirectory current working directory of this executor.
+     */
     @UsedForExternalCommunication
     public final void setCurrentDirectory(String currentDirectory) {
         setCurrentDirectory(Path.of(currentDirectory));
