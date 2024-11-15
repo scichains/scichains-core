@@ -859,6 +859,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
+    @UsedForExternalCommunication
     public final Path getCurrentDirectory() {
         return currentDirectory;
     }
@@ -877,10 +878,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @param currentDirectory current working directory of this executor.
      */
     @UsedForExternalCommunication
-    public final void setCurrentDirectory(String currentDirectory) {
-        setCurrentDirectory(Path.of(currentDirectory));
-    }
-
     public final void setCurrentDirectory(Path currentDirectory) {
         this.currentDirectory = currentDirectory;
     }
