@@ -60,5 +60,4 @@ public class CopyScalar extends Executor {
     String checkResult(String result) {
         return result;
     }
-
 }

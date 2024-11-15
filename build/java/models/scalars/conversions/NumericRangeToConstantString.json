@@ -1,0 +1,56 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "scalars.conversions",
+  "name": "Replace number in range with constant string",
+  "tags": [
+    "scalars"
+  ],
+  "id": "fb74d61f-8fbe-478a-aaec-65adddbe587d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.scalars.conversions.NumericRangeToConstantString"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized scalar; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "min",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "max",
+      "description": "If the input port contains a number V and if min≤V≤max, this function replaces it with \"replacement\" argument and returns \"replacement\" value. In the other case, this function copies the input port to the output.\nIf both \"min\" and \"max\" values are empty strings, or if the input port contains not a number, this function copies the input port to the output.\nIf \"min\" is a correct number, but \"max\" is not specified (an empty string), this function performs replacement when V≥min and copies the input to the output of V<min.\nIf \"max\" is a correct number, but \"min\" is not specified (an empty string), this function performs replacement when V≤max and copies the input to the output of V<min.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0.0"
+    },
+    {
+      "name": "replacement",
+      "description": "This string is returned instead of the input scalar if it is a number in min..max range.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    }
+  ]
+}
