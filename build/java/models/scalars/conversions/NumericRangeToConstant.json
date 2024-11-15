@@ -2,14 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "scalars.conversions",
-  "name": "Replace number in range with constant string",
+  "name": "Replace number in range with constant",
   "tags": [
     "scalars"
   ],
   "id": "fb74d61f-8fbe-478a-aaec-65adddbe587d",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.scalars.conversions.NumericRangeToConstantString"
+    "class": "net.algart.executors.modules.core.scalars.conversions.NumericRangeToConstant"
   },
   "in_ports": [
     {

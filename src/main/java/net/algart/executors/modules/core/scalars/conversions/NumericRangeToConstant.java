@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.scalars.conversions;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.scalars.copying.CopyScalar;
 
-public class NumericRangeToConstantString extends CopyScalar {
+public class NumericRangeToConstant extends CopyScalar {
     private Double min = 0.0;
     private Double max = 0.0;
     private String replacement = "";
@@ -36,7 +36,7 @@ public class NumericRangeToConstantString extends CopyScalar {
         return min;
     }
 
-    public NumericRangeToConstantString setMin(Double min) {
+    public NumericRangeToConstant setMin(Double min) {
         this.min = min;
         return this;
     }
@@ -45,7 +45,7 @@ public class NumericRangeToConstantString extends CopyScalar {
         return max;
     }
 
-    public NumericRangeToConstantString setMax(Double max) {
+    public NumericRangeToConstant setMax(Double max) {
         this.max = max;
         return this;
     }
@@ -54,7 +54,7 @@ public class NumericRangeToConstantString extends CopyScalar {
         return replacement;
     }
 
-    public NumericRangeToConstantString setReplacement(String replacement) {
+    public NumericRangeToConstant setReplacement(String replacement) {
         this.replacement = nonNull(replacement);
         return this;
     }
