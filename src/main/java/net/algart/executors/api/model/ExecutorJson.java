@@ -890,6 +890,8 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     }
 
     public static final class ControlConf extends AbstractConvertibleToJson implements Cloneable {
+        public static final String SUPPESS_WARNING_NO_SETTER = "no_setter";
+
         public static final class EnumItem extends AbstractConvertibleToJson implements Cloneable {
             private JsonValue value;
             private String caption = null;
@@ -986,6 +988,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         // - note: by default, it is true if editionType.isResources() is true
         private boolean advanced = false;
         private List<EnumItem> items = null;
+        private List<String> suppressWarnings = null;
         private JsonValue defaultJsonValue = null;
 
         public ControlConf() {
@@ -1035,6 +1038,19 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                                 + jsonValue);
                     }
                     this.items.add(new EnumItem((JsonObject) jsonValue, file));
+                }
+            }
+            final JsonArray suppressWarningsJson = json.getJsonArray("suppress_warnings");
+            if (suppressWarningsJson != null) {
+                this.suppressWarnings = new ArrayList<>();
+                for (JsonValue jsonValue : suppressWarningsJson) {
+                    if (!(jsonValue instanceof JsonString jsonString)) {
+                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                                + ": in control \"" + name +
+                                "\", \"suppress_warnings\" array contains non-string element "
+                                + jsonValue);
+                    }
+                    this.suppressWarnings.add(jsonString.getString());
                 }
             }
             try {
@@ -1174,6 +1190,15 @@ public class ExecutorJson extends AbstractConvertibleToJson {
             return this;
         }
 
+        public List<String> getSuppressWarnings() {
+            return suppressWarnings == null ? null : Collections.unmodifiableList(suppressWarnings);
+        }
+
+        public ControlConf setSuppressWarnings(List<String> suppressWarnings) {
+            this.suppressWarnings = suppressWarnings == null ? null : new ArrayList<>(suppressWarnings);
+            return this;
+        }
+
         public JsonValue getDefaultJsonValue() {
             return defaultJsonValue;
         }
@@ -1243,6 +1268,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                     ", resources=" + resources +
                     ", advanced=" + advanced +
                     ", items=" + items +
+                    ", suppressWarnings=" + suppressWarnings +
                     ", defaultJsonValue=" + defaultJsonValue +
                     '}';
         }
@@ -1253,6 +1279,9 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 final ControlConf result = (ControlConf) super.clone();
                 if (this.items != null) {
                     result.items = this.items.stream().map(EnumItem::clone).collect(Collectors.toList());
+                }
+                if (this.suppressWarnings != null) {
+                    result.suppressWarnings = new ArrayList<>(this.suppressWarnings);
                 }
                 return result;
             } catch (CloneNotSupportedException e) {
@@ -1296,11 +1325,18 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 builder.add("advanced", advanced);
             }
             if (items != null) {
-                final JsonArrayBuilder itemsBuilder = Json.createArrayBuilder();
-                for (EnumItem item : items) {
-                    itemsBuilder.add(item.toJson());
+                final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                for (EnumItem value : items) {
+                    arrayBuilder.add(value.toJson());
                 }
-                builder.add("items", itemsBuilder.build());
+                builder.add("items", arrayBuilder.build());
+            }
+            if (suppressWarnings != null) {
+                final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                for (String value : suppressWarnings) {
+                    arrayBuilder.add(value);
+                }
+                builder.add("suppress_warnings", arrayBuilder.build());
             }
             if (defaultJsonValue != null) {
                 builder.add("default", defaultJsonValue);

@@ -516,11 +516,11 @@ public final class MappingJson extends AbstractConvertibleToJson {
             return null;
         }
         for (JsonValue value : names) {
-            if (!(value instanceof JsonString)) {
+            if (!(value instanceof JsonString jsonString)) {
                 throw new JsonException("Illegal value \"" + value + "\" in the list \""
                         + whatList + "\": it is not JSON string");
             }
-            result.add(((JsonString) value).getString());
+            result.add(jsonString.getString());
         }
         return result;
     }

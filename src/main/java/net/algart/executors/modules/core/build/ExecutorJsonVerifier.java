@@ -24,10 +24,7 @@
 
 package net.algart.executors.modules.core.build;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonException;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
@@ -235,9 +232,23 @@ public final class ExecutorJsonVerifier {
                 if (items == null) {
                     throw new JsonException("Enum control has no \"items\" in " + f + " (" + control + ")");
                 }
-                for (JsonValue item : items) {
-                    if (!(item instanceof JsonObject)) {
-                        throw new JsonException("One of items is not Json object in " + f + " (" + item + ")");
+                for (JsonValue value : items) {
+                    if (!(value instanceof JsonObject)) {
+                        throw new JsonException("One of items is not Json object in " + f + " (" + value + ")");
+                    }
+                }
+                boolean suppressNoSetter = Executor.STANDARD_VISIBLE_RESULT_PARAMETER_NAME.equals(name);
+                // - visible result property usually has no setter, this is normal
+                final JsonArray suppressWarnings = control.getJsonArray("suppress_warnings");
+                if (suppressWarnings != null) {
+                    for (JsonValue value : suppressWarnings) {
+                        if (!(value instanceof JsonString jsonString)) {
+                            throw new JsonException("One of suppress_warnings is not string in " + f +
+                                    " (" + value + ")");
+                        }
+                        if (ExecutorJson.ControlConf.SUPPESS_WARNING_NO_SETTER.equals(jsonString.getString())) {
+                            suppressNoSetter = true;
+                        }
                     }
                 }
                 if (valueType.equals("String")) {
@@ -266,10 +277,10 @@ public final class ExecutorJsonVerifier {
                         if (executionBlock instanceof Executor) {
                             final Class<?> type = ((Executor) executionBlock).parameterJavaType(name);
                             if (type == null) {
-                                if (!Executor.STANDARD_VISIBLE_RESULT_PARAMETER_NAME.equals(name)) {
+                                if (!suppressNoSetter) {
                                     // - visible result property usually has no setter, it is normal
                                     System.out.printf("There is no automatic property setter " +
-                                            "for enum string control %s in %s%n", name, f);
+                                            "for enum string control \"%s\" in %s%n", name, f);
                                 }
                             } else if (type.isEnum()) {
                                 // Json enums may be used for elementType, visibleResult etc. - not enums in Java
