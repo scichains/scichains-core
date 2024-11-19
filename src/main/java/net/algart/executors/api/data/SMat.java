@@ -776,17 +776,6 @@ public final class SMat extends Data {
         this.dimensions = dimensions;
     }
 
-    // Calls of this method were removed from native code in the version 4.4.8
-    @Deprecated(forRemoval = true)
-    private void setDim(int k, long dimension) {
-        checkDimension(k, dimension);
-        if (k >= dimensions.length) {
-            throw new IndexOutOfBoundsException("Dimension index "
-                    + k + " >= number of dimension " + dimensions.length);
-        }
-        dimensions[k] = dimension;
-    }
-
     private void setDepth(Depth depth) {
         this.depth = Objects.requireNonNull(depth, "Null depth");
     }
