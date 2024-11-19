@@ -10,12 +10,12 @@
 
     <name>SciChains base core</name>
     <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
-    <url>http://scichains.com/</url>
+    <url>https://scichains.com/</url>
 
     <licenses>
         <license>
             <name>The MIT License (MIT)</name>
-            <url>http://opensource.org/licenses/MIT</url>
+            <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
 
@@ -24,7 +24,7 @@
             <name>Daniel Alievsky</name>
             <email>daniel@iskrael.org</email>
             <organization>AlgART laboratory</organization>
-            <organizationUrl>http://algart.net</organizationUrl>
+            <organizationUrl>https://algart.net</organizationUrl>
         </developer>
     </developers>
 
