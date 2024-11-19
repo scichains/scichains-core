@@ -1264,7 +1264,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                             + "please check configuration files"
                             + (e instanceof NoSuchFileException ?
                             " (no such file/folder: " + ((NoSuchFileException) e).getFile() + ")" :
-                            ""),
+                            " (" + e.getMessage() + ")"),
                             e);
                 }
             }
