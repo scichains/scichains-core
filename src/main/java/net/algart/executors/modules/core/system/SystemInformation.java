@@ -81,14 +81,20 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("%nInstalled platforms:%n"));
         final StringJoiner joiner = new StringJoiner(String.format(",%n"));
         for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
-            joiner.add(String.format("%s    [[ %s"
-                            + "supposed models / modules / libraries / resources folder: %s / %s / %s / %s ]]",
+            joiner.add(String.format("%s%n[[%s%n" +
+                            "    models folder: %s%n" +
+                            "    modules folder: %s%n" +
+                            "    libraries folder: %s%n" +
+                            "    resources folder: %s%n" +
+                            "    resolved classpath: [%s]%n" +
+                            "]]",
                     platform.jsonString(),
-                    platform.isBuiltIn() ? "built-in, " : "",
+                    platform.isBuiltIn() ? "  built-in," : "",
                     folderToString(platform.modelsFolderOrNull()),
                     folderToString(platform.modulesFolderOrNull()),
                     folderToString(platform.librariesFolderOrNull()),
-                    folderToString(platform.resourcesFolderOrNull())));
+                    folderToString(platform.resourcesFolderOrNull()),
+                    pathsToString(platform.classPaths())));
         }
         sb.append(joiner);
 
@@ -107,6 +113,18 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
     private static String folderToString(Path folder) {
         return folder == null ? "N/A" :
                 Files.exists(folder) ? folder.toString() : folder + " - NOT exists!";
+    }
+
+    private static String pathsToString(Collection<Path> paths) {
+        if (paths.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Path path : paths) {
+            sb.append(String.format("%n        %s", path));
+        }
+        sb.append(String.format("%n    "));
+        return sb.toString();
     }
 
     public static void main(String[] args) {

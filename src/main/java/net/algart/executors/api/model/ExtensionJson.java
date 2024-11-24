@@ -177,7 +177,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * may be set manually by {@link #setRoot(Path)}.</p>
              *
              * <p>Note: this folder must be specified to non-<code>null</code> value, if other sub-folders
-             * define relative paths.</p>
+             * define relative paths, or if you want to use {@link Platform#classPaths()} method.</p>
              *
              * <p>Note: this property is not included into JSON.</p>
              *
@@ -232,11 +232,16 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
                 }
             }
 
-            private Path resolve(String path, String folderName) {
+            private Path resolve(String path, String folderNameForExceptionMessageForNullPath) {
                 if (path == null) {
-                    throw new IllegalStateException("Folder \"" + folderName
+                    throw new IllegalStateException("Folder \"" + folderNameForExceptionMessageForNullPath
                             + "\" is not specified in this platform");
                 }
+                return resolve(path);
+            }
+
+            private Path resolve(String path) {
+                Objects.requireNonNull(path, "Null path");
                 final Path p = Paths.get(path);
                 if (p.isAbsolute()) {
                     return p;
@@ -254,7 +259,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
 
         /**
          * Custom platform configuration, depending on technology.
-         * For example, for JVM contains "classpath" and "vm_options" (JSON array).
+         * For example, in the case of JVM it contains "classpath" and "vm_options" (JSON array).
          * Used by an external system, for example, while staring JVM from native code or from OS command script.
          */
         public static final class Configuration {
@@ -263,7 +268,9 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             private Path file;
             private JsonObject json = Jsons.newEmptyJson();
             // - Added to preserve original JSON (which can contain some additional fields)
-            private List<String> classpath = null;
+            private List<String> classpath = Collections.emptyList();
+            // - Cannot be null; if not-applicable, should be empty
+            private boolean requireExistingPaths = false;
             private List<String> vmOptions = null;
             // - May be null, for example, if non-applicable to technology (for example, for Python)
 
@@ -271,8 +278,9 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             }
 
             public Configuration(JsonObject json, Path file) {
-                this.file = file;
                 setJson(json);
+                this.file = file;
+                // - note: this should be AFTER setJson, which sets this.file = null
             }
 
 
@@ -284,8 +292,9 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
                 this.json = Objects.requireNonNull(json, "Null json");
                 final JsonArray classPathJson = Jsons.getJsonArray(json, "classpath", file);
                 this.classpath = classPathJson == null ?
-                        null :
+                        Collections.emptyList() :
                         Jsons.toStrings(classPathJson, "classpath", file);
+                this.requireExistingPaths = json.getBoolean("require_existing_paths", false);
                 final JsonArray vmOptionsJson = Jsons.getJsonArray(json, "vm_options", file);
                 this.vmOptions = vmOptionsJson == null ?
                         null :
@@ -302,14 +311,38 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
                 return Collections.unmodifiableList(classpath);
             }
 
+            public Configuration setClasspath(List<String> classpath) {
+                this.classpath = new ArrayList<>(classpath);
+                return this;
+            }
+
+            public boolean isRequireExistingPaths() {
+                return requireExistingPaths;
+            }
+
+            public Configuration setRequireExistingPaths(boolean requireExistingPaths) {
+                this.requireExistingPaths = requireExistingPaths;
+                return this;
+            }
+
             public List<String> getVmOptions() {
                 return Collections.unmodifiableList(vmOptions);
+            }
+
+            public Configuration setVmOptions(List<String> vmOptions) {
+                this.vmOptions = vmOptions == null ? null : new ArrayList<>(vmOptions);
+                return this;
             }
 
             public void checkCompleteness() {
                 AbstractConvertibleToJson.checkNull(json, "json", getClass());
             }
 
+            /**
+             * Note: this method always returns original JSON, passed to the constructor.
+             *
+             * @return JSON representation of this object.
+             */
             public JsonObject toJson() {
                 checkCompleteness();
                 return json;
@@ -317,7 +350,12 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
 
             @Override
             public String toString() {
-                return "<<<" + json + ">>>";
+                return "Configuration{" +
+                        "json=<<<" + json +
+                        ">>>, classpath=" + classpath +
+                        ", requireExistingPaths=" + requireExistingPaths +
+                        ", vmOptions=" + vmOptions +
+                        '}';
             }
         }
 
@@ -402,7 +440,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
 
         }
 
-
+        private Path file;
         private String id = makeUniqueId();
         private String category = null;
         private String name = DEFAULT_NAME;
@@ -421,6 +459,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         }
 
         public Platform(JsonObject json, Path file) {
+            this.file = file;
             setId(json.getString("id", id));
             setCategory(json.getString("category", null));
             setName(json.getString("name", name));
@@ -635,6 +674,14 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             return hasResources() ? resourcesFolder() : null;
         }
 
+        public List<Path> classPaths() {
+            final List<Path> result = new ArrayList<>();
+            for (String singleClassPath : configuration.getClasspath()) {
+                result.add(folders.resolve(singleClassPath));
+            }
+            return result;
+        }
+
         /**
          * Makes this object immutable.
          *
@@ -654,6 +701,24 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             }
             this.dependencies.forEach(dependency -> dependency.immutable = true);
         }
+
+        // Note: we throw IOException instead of NoSuchFileException to provide
+        // more detailed error message in ExecutionBlock.initializeExecutionSystem method
+        public void checkExistingClassPathsIfRequired() throws IOException {
+            if (!configuration.isRequireExistingPaths()) {
+                return;
+            }
+            for (Path path : classPaths()) {
+                if (!Files.exists(path)) {
+                    throw new IOException("Invalid Java classpath" +
+                            (file == null ? "" : " in " + file) +
+                            ": it contains non-existing path \"" + path.toAbsolutePath() +
+                            "\" in the full paths list " + configuration.getClasspath());
+                }
+            }
+        }
+
+
 
         @Override
         public void checkCompleteness() {

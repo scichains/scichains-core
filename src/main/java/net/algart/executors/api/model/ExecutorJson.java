@@ -1347,7 +1347,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     private Path executorJsonFile = null;
     private String version = CURRENT_VERSION;
     private String platformId = null;
-    // - usually not loaded from JSON-file, but set later, while loading all JSON models for some platform
+    // - usually not loaded from JSON file, but set later, while loading all JSON models for some platform
     private String category;
     private String name;
     private String description = null;

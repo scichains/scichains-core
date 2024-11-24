@@ -184,6 +184,7 @@ public class InstalledExtensions {
                         final ExtensionJson extension = ExtensionJson.readFromFolder(path);
                         extensions.add(extension);
                         for (ExtensionJson.Platform platform : extension.getPlatforms()) {
+                            platform.checkExistingClassPathsIfRequired();
                             platform.setImmutable();
                             final ExtensionJson.Platform existing = platformsMap.put(platform.getId(), platform);
                             if (existing != null) {
