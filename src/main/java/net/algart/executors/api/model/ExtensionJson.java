@@ -674,10 +674,18 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             return hasResources() ? resourcesFolder() : null;
         }
 
-        public List<Path> classPaths() {
+        public List<Path> validClassPaths() {
             final List<Path> result = new ArrayList<>();
             for (String singleClassPath : configuration.getClasspath()) {
-                result.add(folders.resolve(singleClassPath));
+                if (singleClassPath != null) {
+                    // - null is possible after manual setting classpath
+                    try {
+                        result.add(folders.resolve(singleClassPath));
+                    } catch (InvalidPathException e) {
+                        // - classpath can contain usual files, but also MAY contain
+                        // "strange" strings like "lib/*" (for java "-cp" parameter)
+                    }
+                }
             }
             return result;
         }
@@ -708,7 +716,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
             if (!configuration.isRequireExistingPaths()) {
                 return;
             }
-            for (Path path : classPaths()) {
+            for (Path path : validClassPaths()) {
                 if (!Files.exists(path)) {
                     throw new IOException("Invalid Java classpath" +
                             (file == null ? "" : " in " + file) +

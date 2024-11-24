@@ -86,7 +86,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
                             "    modules folder: %s%n" +
                             "    libraries folder: %s%n" +
                             "    resources folder: %s%n" +
-                            "    resolved classpath: [%s]%n" +
+                            "    resolved valid paths in classpath: [%s]%n" +
                             "]]",
                     platform.jsonString(),
                     platform.isBuiltIn() ? "  built-in," : "",
@@ -94,7 +94,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
                     folderToString(platform.modulesFolderOrNull()),
                     folderToString(platform.librariesFolderOrNull()),
                     folderToString(platform.resourcesFolderOrNull()),
-                    pathsToString(platform.classPaths())));
+                    pathsToString(platform.validClassPaths())));
         }
         sb.append(joiner);
 
