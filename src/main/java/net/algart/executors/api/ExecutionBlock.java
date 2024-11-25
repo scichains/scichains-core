@@ -59,10 +59,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     public static final boolean SHOW_INFO_ON_STARTUP = SystemEnvironment.getBooleanProperty(
             "net.algart.executors.api.showInfo", false);
+    public static final boolean EXTENDED_MODE = SystemEnvironment.getBooleanProperty(
+            "net.algart.executors.api.extended", false);
 
     static {
         if (SHOW_INFO_ON_STARTUP) {
-            System.out.printf("%nJava executors system started%n");
+            System.out.printf("%nJava executors system started%s%n", EXTENDED_MODE ? " in extended mode" : "");
             System.out.printf("Java version: %s%n", SystemEnvironment.getStringProperty("java.version"));
             String arch = SystemEnvironment.getStringProperty("os.arch");
             boolean java32 = arch != null && !arch.contains("64") && arch.toLowerCase().contains("x86");
