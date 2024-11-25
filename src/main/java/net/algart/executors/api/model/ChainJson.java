@@ -50,14 +50,16 @@ public final class ChainJson extends AbstractConvertibleToJson {
     public static final String CHAIN_LANGUAGE = "chain";
     public static final String CHAIN_FILE_PATTERN = ".*\\.(json|chain)$";
 
-    public static final String CHAIN_SECTION = "stare_chain";
-    public static final String CHAIN_APP_NAME = "stare-chain";
-    public static final String CHAIN_CURRENT_VERSION = "1.0";
+    public static final String CHAIN_SECTION = "chain";
+    public static final String CHAIN_APP_NAME = "chain";
+    public static final String CHAIN_CURRENT_VERSION = "1.1";
 
     public static final String DEFAULT_CHAIN_CATEGORY = "subchains";
     public static final String DEFAULT_CHAIN_NAME = "Sub-chain";
     public static final char CATEGORY_SEPARATOR = '.';
 
+    private static final String CHAIN_SECTION_ALIAS = "stare_chain";
+    private static final String CHAIN_APP_NAME_ALIAS = "stare-chain";
     private static final Pattern COMPILED_CHAIN_FILE_PATTERN = Pattern.compile(CHAIN_FILE_PATTERN);
 
     public static final class Executor extends AbstractConvertibleToJson {
@@ -899,7 +901,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         final LinkedHashMap<String, JsonValue> clone;
         if (Files.exists(containingJsonFile)) {
             final JsonObject existingJson = Jsons.readJson(containingJsonFile);
-            Jsons.reqJsonObject(existingJson, CHAIN_SECTION);
+            Jsons.reqJsonObjectWithAlias(existingJson, CHAIN_SECTION, CHAIN_SECTION_ALIAS, containingJsonFile);
             clone = new LinkedHashMap<>(existingJson);
         } else {
             clone = new LinkedHashMap<>();
@@ -919,14 +921,30 @@ public final class ChainJson extends AbstractConvertibleToJson {
     }
 
     public static boolean isChainJson(JsonObject chainJson) {
-        return chainJson != null && CHAIN_APP_NAME.equals(chainJson.getString("app", null));
+        if (chainJson == null) {
+            return false;
+        }
+        final String appName = chainJson.getString("app", null);
+        return CHAIN_APP_NAME.equals(appName) || CHAIN_APP_NAME_ALIAS.equals(appName);
+    }
+
+    public static JsonObject getChainJson(JsonObject json) {
+        Objects.requireNonNull(json, "Null json");
+        if (json.containsKey(CHAIN_SECTION)) {
+            return Jsons.getJsonObject(json, CHAIN_SECTION, null);
+        } else if (json.containsKey(CHAIN_SECTION_ALIAS)) {
+            return Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, null);
+        }
+        return null;
+    }
+
+    public static JsonObject getChainJson(JsonObject json, JsonObject defaultValue) {
+        final JsonObject chainJson = getChainJson(json);
+        return chainJson != null ? chainJson : defaultValue;
     }
 
     public static boolean isChainJsonContainer(JsonObject json) {
-        if (json.containsKey(CHAIN_SECTION)) {
-            json = Jsons.getJsonObject(json, CHAIN_SECTION, null);
-        }
-        return isChainJson(json);
+        return isChainJson(getChainJson(json, json));
     }
 
     public static void checkIdDifference(Collection<ChainJson> chains) {
@@ -1081,9 +1099,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private static ChainJson valueOf(String chainJsonString, boolean requireValid) {
         Objects.requireNonNull(chainJsonString, "Null chainJsonString");
         JsonObject json = Jsons.toJson(chainJsonString);
-        if (json.containsKey(CHAIN_SECTION)) {
-            json = Jsons.getJsonObject(json, CHAIN_SECTION, null);
-        }
+        json = getChainJson(json, json);
         if (!ChainJson.isChainJson(json) && !requireValid) {
             return null;
         }
@@ -1093,7 +1109,10 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private static ChainJson read(Path containingJsonFile, boolean requireValid) throws IOException {
         Objects.requireNonNull(containingJsonFile, "Null containingJsonFile");
         final JsonObject json = Jsons.readJson(containingJsonFile);
-        final JsonObject chainJson = Jsons.getJsonObject(json, CHAIN_SECTION, containingJsonFile);
+        JsonObject chainJson = Jsons.getJsonObject(json, CHAIN_SECTION, containingJsonFile);
+        if (chainJson == null) {
+            chainJson = Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, containingJsonFile);
+        }
         if (!ChainJson.isChainJson(chainJson) && !requireValid) {
             return null;
         }

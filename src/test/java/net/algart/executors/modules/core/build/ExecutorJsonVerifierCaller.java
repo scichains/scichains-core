@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.build;
 
 import java.io.IOException;
 
-// This class has an access also to test classpath (in IDEA)
+// This class has access also to test classpath (in IDEA)
 public final class ExecutorJsonVerifierCaller {
     public static void main(String[] args) throws IOException, InterruptedException {
         ExecutorJsonVerifier.main(args);

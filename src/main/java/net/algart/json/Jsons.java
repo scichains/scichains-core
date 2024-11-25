@@ -447,8 +447,15 @@ public class Jsons {
     }
 
     public static JsonObject reqJsonObject(JsonObject json, String name, Path file) {
+        return reqJsonObjectWithAlias(json, name, null, file);
+    }
+
+    public static JsonObject reqJsonObjectWithAlias(JsonObject json, String name, String aliasName, Path file) {
         Objects.requireNonNull(json, "Null json");
         JsonObject result = getJsonObject(json, name, file);
+        if (result == null && aliasName != null) {
+            result = getJsonObject(json, aliasName, file);
+        }
         if (result == null) {
             throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
                     + ": \"" + name + "\" JSON object required"

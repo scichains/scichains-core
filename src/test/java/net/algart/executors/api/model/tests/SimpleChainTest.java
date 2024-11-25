@@ -34,7 +34,7 @@ import java.nio.file.Paths;
 public class SimpleChainTest {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s chain.json result_1.json [result_2.json]%n",
+            System.out.printf("Usage: %s chain.chain result_1.chain [result_2.chain]%n",
                     ChainJson.class.getName());
             return;
         }
