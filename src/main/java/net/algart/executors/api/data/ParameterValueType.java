@@ -254,7 +254,7 @@ public enum ParameterValueType {
         }
     },
     /**
-     * Actually it is also String type, but in Java we have enum.
+     * Actually, it is also String type, but in Java we have enum.
      */
     ENUM_STRING("String", Enum.class, "scalar") {
         @Override
