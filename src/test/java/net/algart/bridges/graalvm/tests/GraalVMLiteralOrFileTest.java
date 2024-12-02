@@ -47,6 +47,7 @@ public class GraalVMLiteralOrFileTest {
         String src = "import {test} from '" + moduleFile + "';\n" +
                 "test";
 
+        @SuppressWarnings("resource")
         Context context = Context.newBuilder("js")
                 .allowAllAccess(true)
                 .currentWorkingDirectory(currentDirectory.toAbsolutePath()).build();

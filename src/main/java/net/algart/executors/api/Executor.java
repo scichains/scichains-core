@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 public abstract class Executor extends ExecutionBlock {
-    private static final boolean USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY = true;
+    private static final boolean USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY = false;
     // - Deprecated (can be false) since 4.4.9
 
     /*

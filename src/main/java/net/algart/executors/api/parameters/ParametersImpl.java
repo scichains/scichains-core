@@ -36,10 +36,7 @@ class ParametersImpl implements Parameters {
 
     @Override
     public boolean getBoolean(String name) throws NoValidParameterException {
-        final Object o = get(name);
-        if (o == null) {
-            throw new NoValidParameterException("No required boolean parameter \"" + name + "\"");
-        }
+        final Object o = getAndCheckNull(name, "boolean");
         final String s = o.toString();
         final Boolean result = Parameters.smartParseBoolean(s);
         if (result != null) {
@@ -84,10 +81,7 @@ class ParametersImpl implements Parameters {
 
     @Override
     public int getInteger(String name) throws NoValidParameterException {
-        final Object o = get(name);
-        if (o == null) {
-            throw new NoValidParameterException("No required integer parameter \"" + name + "\"");
-        }
+        final Object o = getAndCheckNull(name, "integer");
         if (o instanceof Integer) {
             return (Integer) o;
         }
@@ -140,10 +134,7 @@ class ParametersImpl implements Parameters {
 
     @Override
     public long getLong(String name) throws NoValidParameterException {
-        final Object o = get(name);
-        if (o == null) {
-            throw new NoValidParameterException("No required long integer parameter \"" + name + "\"");
-        }
+        final Object o = getAndCheckNull(name, "long integer");
         if (o instanceof Long) {
             return (Long) o;
         }
@@ -196,10 +187,7 @@ class ParametersImpl implements Parameters {
 
     @Override
     public double getDouble(String name) throws NoValidParameterException {
-        final Object o = get(name);
-        if (o == null) {
-            throw new NoValidParameterException("No required double parameter \"" + name + "\"");
-        }
+        final Object o = getAndCheckNull(name, "double");
         if (o instanceof Double) {
             return (Double) o;
         }
@@ -252,10 +240,7 @@ class ParametersImpl implements Parameters {
 
     @Override
     public String getString(String name) throws NoValidParameterException {
-        final Object o = get(name);
-        if (o == null) {
-            throw new NoValidParameterException("No required parameter \"" + name + "\"");
-        }
+        final Object o = getAndCheckNull(name, "string");
         return o.toString();
     }
 
@@ -345,5 +330,18 @@ class ParametersImpl implements Parameters {
 
     public int hashCode() {
         return properties.hashCode();
+    }
+
+    private Object getAndCheckNull(String name, String typeTitle) {
+        final Object result = get(name);
+        if (result == null) {
+            if (!containsKey(name)) {
+                throw new NoValidParameterException("No required " + typeTitle + " parameter \"" + name + "\"");
+            } else {
+                throw new NoValidParameterException("Parameter \"" +
+                        name + "\" is null, it is not a valid " + typeTitle + " value");
+            }
+        }
+        return result;
     }
 }
