@@ -54,14 +54,15 @@ public final class ChainBlock {
     private final String executorId;
     final ExecutorJson executorJson;
     // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
-    // But we almost don't use information from it! We use it:
+    // We use this information:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
     // and (for standard data) for their getDataType() in setTo(Chain) method;
     // so, we require that such special types of executors MUST be static (available while loading the chain);
     // 2) for creating additional "dynamic" ports (not specified in the chain JSON-file) in loadPorts() method;
     // so, we require that the behaviour of dynamic executors must not depend on the set of existing ports
     // (like in some static Java executors, inherited from SeveralMultiMatricesProcessing);
-    // 3) for diagnostic messages.
+    // 3) for loading default values in the properties in ChainProperty.valueOf();
+    // 4) for diagnostic messages.
 
     ChainJson.ChainBlockConf blockConfJson = null;
     // - Correctly filled while typical usage, but not necessary for this technology.

@@ -226,6 +226,12 @@ public enum ParameterValueType {
         public Object toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonString) {
                 return ((JsonString) jsonValue).getString();
+            } else if (jsonValue.getValueType() == JsonValue.ValueType.FALSE) {
+                return "false";
+            } else if (jsonValue.getValueType() == JsonValue.ValueType.TRUE) {
+                return "true";
+            } else if (jsonValue instanceof JsonNumber) {
+                return jsonValue.toString();
             } else {
                 return null;
             }
