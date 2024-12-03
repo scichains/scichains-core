@@ -37,9 +37,9 @@ import java.util.Objects;
 public enum ParameterValueType {
     INT("int", int.class, "int32") {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            if (jsonValue instanceof JsonNumber) {
-                return ((JsonNumber) jsonValue).intValue();
+        public Integer toJavaObject(JsonValue jsonValue) {
+            if (jsonValue instanceof JsonNumber jsonNumber) {
+                return jsonNumber.intValue();
             } else {
                 return null;
             }
@@ -75,9 +75,9 @@ public enum ParameterValueType {
     },
     LONG("long", long.class, "int64") {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            if (jsonValue instanceof JsonNumber) {
-                return ((JsonNumber) jsonValue).longValue();
+        public Long toJavaObject(JsonValue jsonValue) {
+            if (jsonValue instanceof JsonNumber jsonNumber) {
+                return jsonNumber.longValue();
             } else {
                 return null;
             }
@@ -113,9 +113,9 @@ public enum ParameterValueType {
     },
     FLOAT("float", float.class) {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            if (jsonValue instanceof JsonNumber) {
-                final double doubleValue = ((JsonNumber) jsonValue).doubleValue();
+        public Float toJavaObject(JsonValue jsonValue) {
+            if (jsonValue instanceof JsonNumber jsonNumber) {
+                final double doubleValue = jsonNumber.doubleValue();
                 return (float) doubleValue;
             } else {
                 return null;
@@ -146,9 +146,9 @@ public enum ParameterValueType {
     },
     DOUBLE("double", double.class) {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            if (jsonValue instanceof JsonNumber) {
-                return ((JsonNumber) jsonValue).doubleValue();
+        public Double toJavaObject(JsonValue jsonValue) {
+            if (jsonValue instanceof JsonNumber jsonNumber) {
+                return jsonNumber.doubleValue();
             } else {
                 return null;
             }
@@ -184,7 +184,7 @@ public enum ParameterValueType {
     },
     BOOLEAN("boolean", boolean.class) {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
+        public Boolean toJavaObject(JsonValue jsonValue) {
             if (jsonValue == null) {
                 return null;
             } else if (jsonValue.getValueType() == JsonValue.ValueType.FALSE) {
@@ -224,9 +224,11 @@ public enum ParameterValueType {
     },
     STRING("String", String.class, "scalar") {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            if (jsonValue instanceof JsonString) {
-                return ((JsonString) jsonValue).getString();
+        public String toJavaObject(JsonValue jsonValue) {
+            if (jsonValue == null) {
+                return null;
+            } else if (jsonValue instanceof JsonString jsonString) {
+                return jsonString.getString();
             } else if (jsonValue.getValueType() == JsonValue.ValueType.FALSE) {
                 return "false";
             } else if (jsonValue.getValueType() == JsonValue.ValueType.TRUE) {
@@ -296,8 +298,8 @@ public enum ParameterValueType {
         public Object toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonObject) {
                 return jsonValue;
-            } else if (jsonValue instanceof JsonString) {
-                return ((JsonString) jsonValue).getString();
+            } else if (jsonValue instanceof JsonString jsonString) {
+                return jsonString.getString();
             } else {
                 return null;
             }
@@ -430,7 +432,7 @@ public enum ParameterValueType {
      */
     public abstract void setParameter(Parameters parameters, String name, String value);
 
-    // Note: in the future, some types, that are not currently allowed, can become allowed (supported).
+    // Note: in the future, some types that are not currently allowed can become allowed (supported).
     public boolean isAllowedInExecutor() {
         return this != SETTINGS;
     }

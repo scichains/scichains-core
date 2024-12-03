@@ -1098,6 +1098,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         }
 
         public ParameterValueType getValueType() {
+            assert valueType != null : "valueType cannot be null";
             return valueType;
         }
 

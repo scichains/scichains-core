@@ -28,6 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
 
 public final class ChainInputPort extends ChainPort<ChainOutputPort> {
@@ -84,6 +85,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
 
     public void copyToExecutorPort() {
         final ExecutionBlock executor = block.getExecutor();
+        assert executor != null;
         switch (portType) {
             case INPUT_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
@@ -113,7 +115,10 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     // we prefer not to disable this in the constructor, but just to set the usual scalar value
                     executor.parameters().put(this.name, value);
                 } else {
-                    chainProperty.getType().setParameter(executor.parameters(), this.name, value);
+                    final ParameterValueType valueType = chainProperty.probableType(block, ParameterValueType.STRING);
+                    // - if there is no information about executor control, we treat the values as strings:
+                    // this is a suitable variant for string, boolean, integer and floating-point values
+                    valueType.setParameter(executor.parameters(), this.name, value);
                 }
                 executor.onChangeParameter(this.name);
             }

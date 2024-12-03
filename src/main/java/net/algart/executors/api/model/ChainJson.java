@@ -376,7 +376,6 @@ public final class ChainJson extends AbstractConvertibleToJson {
 
         public static final class PropertyConf extends AbstractConvertibleToJson {
             private String name;
-            private ParameterValueType type;
             private JsonValue value = null;
 
             public PropertyConf() {
@@ -384,9 +383,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
 
             private PropertyConf(JsonObject json, Path file) {
                 this.name = Jsons.reqString(json, "name", file);
-                this.type = ParameterValueType.valueOfTypeNameOrNull(Jsons.reqString(json, "type", file));
-                Jsons.requireNonNull(type, json, "type", file);
-                setValue(json.get("value"));
+                this.value = json.get("value");
             }
 
             public String getName() {
@@ -398,23 +395,11 @@ public final class ChainJson extends AbstractConvertibleToJson {
                 return this;
             }
 
-            public ParameterValueType getType() {
-                return type;
-            }
-
-            public PropertyConf setType(ParameterValueType type) {
-                this.type = Objects.requireNonNull(type, "Null type");
-                return this;
-            }
-
             public JsonValue getValue() {
                 return value;
             }
 
             public PropertyConf setValue(JsonValue value) {
-                if (value != null && type != null) {
-                    type.toJavaObject(value); // - check the value
-                }
                 this.value = value;
                 return this;
             }
@@ -422,14 +407,12 @@ public final class ChainJson extends AbstractConvertibleToJson {
             @Override
             public void checkCompleteness() {
                 checkNull(name, "name");
-                checkNull(type, "type");
             }
 
             @Override
             public String toString() {
                 return "Property{" +
                         "name='" + name + '\'' +
-                        ", type=" + type +
                         ", value=" + value +
                         '}';
             }
@@ -437,7 +420,6 @@ public final class ChainJson extends AbstractConvertibleToJson {
             @Override
             public void buildJson(JsonObjectBuilder builder) {
                 builder.add("name", name);
-                builder.add("type", type.typeName());
                 if (value != null) {
                     builder.add("value", value);
                 }

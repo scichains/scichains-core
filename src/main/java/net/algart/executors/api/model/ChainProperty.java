@@ -31,23 +31,20 @@ import java.util.Objects;
 
 public final class ChainProperty {
     private final String name;
-    private final ParameterValueType type;
     private Object value = null;
 
-    private ChainProperty(String name, ParameterValueType type) {
+    private ChainProperty(String name) {
         this.name = Objects.requireNonNull(name, "Null name");
-        this.type = Objects.requireNonNull(type, "Null property value type");
     }
 
-    public static ChainProperty newInstance(String name, ParameterValueType type) {
-        return new ChainProperty(name, type);
+    public static ChainProperty newInstance(String name) {
+        return new ChainProperty(name);
     }
 
     public static ChainProperty valueOf(ChainBlock block, ChainJson.ChainBlockConf.PropertyConf propertyConf) {
-        final ChainProperty result = newInstance(propertyConf.getName(), propertyConf.getType());
+        final ChainProperty result = newInstance(propertyConf.getName());
         assert result.value == null : "newInstance must set null value";
-        final JsonValue propertyValue = propertyConf.getValue();
-        result.loadValue(block.executorJson, propertyValue);
+        result.loadValue(block, propertyConf.getValue());
         return result;
     }
 
@@ -55,12 +52,14 @@ public final class ChainProperty {
         return name;
     }
 
-    public ParameterValueType getType() {
-        return type;
-    }
-
     public Object getValue() {
         return value;
+    }
+
+    public ParameterValueType probableType(ChainBlock block, ParameterValueType defaultType) {
+        Objects.requireNonNull(block, "Null block");
+        final ExecutorJson.ControlConf control = findControl(block);
+        return control != null ? control.getValueType() : defaultType;
     }
 
     public String toScalar() {
@@ -71,46 +70,38 @@ public final class ChainProperty {
     public String toString() {
         return "ChainProperty{" +
                 "name='" + name + '\'' +
-                ", type=" + type +
                 ", value=" + value +
                 '}';
     }
 
-    private void loadValue(ExecutorJson executorJson, JsonValue propertyJsonValue) {
-        if (executorJson != null) {
-            final ExecutorJson.ControlConf control = executorJson.getControl(this.name);
-            if (control != null) {
-                // can be null, for example, for system property (obsolete concept)
-                final ParameterValueType valueType = control.getValueType();
-                final JsonValue defaultJsonValue = control.getDefaultJsonValue();
-                final Object defaultValue = valueType.toJavaObject(defaultJsonValue);
-                // - null when defaultJsonValue=null
-                if (defaultValue != null) {
-                    this.value = defaultValue;
-                }
-                final Object propertyValue = valueType.toJavaObject(propertyJsonValue);
-                // - null when propertyJsonValue=null
-                if (propertyValue != null) {
-                    // - if the property has a correctly written value, it overrides the default value
-                    this.value = propertyValue;
-                }
+    private void loadValue(ChainBlock block, JsonValue propertyJsonValue) {
+        ExecutorJson.ControlConf control = findControl(block);
+        if (control != null) {
+            // can be null, for example, for system property (obsolete concept)
+            final ParameterValueType valueType = control.getValueType();
+            final JsonValue defaultJsonValue = control.getDefaultJsonValue();
+            final Object defaultValue = valueType.toJavaObject(defaultJsonValue);
+            if (defaultValue != null) {
+                this.value = defaultValue;
+            }
+            final Object propertyValue = valueType.toJavaObject(propertyJsonValue);
+            if (propertyValue != null) {
+                // - if the property has a correctly written value, it is returned
+                this.value = propertyValue;
                 return;
             }
         }
-        this.value = ParameterValueType.STRING.toJavaObject(propertyJsonValue);
-        // - if there is no information about executor control, we load the value as a string:
+        // - if there is no information (from executor control) to set non-null value
+        // with properly (efficient) type, we will treat the value as a string:
         // this is a suitable variant for string, boolean, integer and floating-point values
+        Object stringValue = ParameterValueType.STRING.toJavaObject(propertyJsonValue);
+        if (stringValue != null) {
+            this.value = stringValue;
+        }
+        // - but if it is null, we keep the default value
     }
 
-    // Deprecated
-    private void loadValue(ChainJson.ChainBlockConf.PropertyConf propertyConf) {
-        final JsonValue jsonValue = propertyConf.getValue();
-        Object value = type.toJavaObject(jsonValue);
-        if (value != null) {
-            this.value = value;
-        }
-        // Note: for ENUM_STRING we will have String property.
-        // It is normal behavior: setter for enum should automatically convert String to enum,
-        // like PropertySetter.EnumSetter class.
+    private ExecutorJson.ControlConf findControl(ChainBlock block) {
+        return block.executorJson != null ? block.executorJson.getControl(this.name) : null;
     }
 }

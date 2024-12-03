@@ -591,8 +591,10 @@ public class Jsons {
         if (jsonValue.getValueType() == JsonValue.ValueType.STRING) {
             final String s = ((JsonString) jsonValue).getString();
             if ("\u2212\u221E".equals(s)) {
+                // - characters: "minus" and "infinity"
                 return Double.NEGATIVE_INFINITY;
             } else if ("+\u221E".equals(s)) {
+                // - characters: "+" and "infinity"
                 return Double.POSITIVE_INFINITY;
             } else if ("NaN".equals(s)) {
                 return Double.NaN;

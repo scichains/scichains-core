@@ -61,7 +61,8 @@ public final class ChainBlock {
     // 2) for creating additional "dynamic" ports (not specified in the chain JSON-file) in loadPorts() method;
     // so, we require that the behaviour of dynamic executors must not depend on the set of existing ports
     // (like in some static Java executors, inherited from SeveralMultiMatricesProcessing);
-    // 3) for loading default values in the properties in ChainProperty.valueOf();
+    // 3) for loading values in the properties in ChainProperty.valueOf()
+    // (but if there is no executorJson, they are still loaded as strings);
     // 4) for diagnostic messages.
 
     ChainJson.ChainBlockConf blockConfJson = null;
