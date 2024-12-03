@@ -115,7 +115,8 @@ public enum ParameterValueType {
         @Override
         public Object toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber) {
-                return (float) ((JsonNumber) jsonValue).doubleValue();
+                final double doubleValue = ((JsonNumber) jsonValue).doubleValue();
+                return (float) doubleValue;
             } else {
                 return null;
             }
@@ -367,8 +368,8 @@ public enum ParameterValueType {
      * If the passed value has invalid type, returns <code>null</code>.
      * Note: for {@link #ENUM_STRING}, this method returns <code>String</code> (standard enum type name).
      *
-     * @param jsonValue some JSON value.
-     * @return the corresponding primitive type / String or <code>null</code> if it has invalid type.
+     * @param jsonValue some JSON value; can be <code>null</code>, then the result will be <code>null</code>.
+     * @return the corresponding primitive type / String, or <code>null</code> if it has invalid type.
      */
     public abstract Object toJavaObject(JsonValue jsonValue);
 

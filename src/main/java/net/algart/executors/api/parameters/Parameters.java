@@ -31,70 +31,326 @@ import jakarta.json.JsonValue;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-/**
- * @author mnogono
- * Created on 31.05.2017.
- */
-public interface Parameters extends Map<String, Object> {
-    static Parameters newInstance() {
-        return new ParametersImpl();
+public class Parameters implements Map<String, Object> {
+    private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<>());
+
+    public boolean getBoolean(String name) throws NoValidParameterException {
+        final Object o = getAndCheckNull(name, "boolean");
+        final String s = o.toString();
+        final Boolean result = Parameters.smartParseBoolean(s);
+        if (result != null) {
+            return result;
+        } else {
+            throw new NoValidParameterException("Parameter \""
+                    + name + "\" is not a boolean: \"" + s + "\"");
+        }
     }
 
-    boolean getBoolean(String name) throws NoValidParameterException;
-
-    boolean getBoolean(String name, boolean defaultValue);
-
-    @UsedForExternalCommunication
-    void setBoolean(String name, boolean value);
-
-    void setBoolean(String name, String value);
-
-    int getInteger(String name) throws NoValidParameterException;
-
-    int getInteger(String name, int defaultValue);
+    public boolean getBoolean(String name, boolean defaultValue) {
+        final Object o = get(name);
+        if (o == null) {
+            return defaultValue;
+        }
+        final String s = o.toString();
+        final Boolean result = Parameters.smartParseBoolean(s);
+        return result != null ? result : defaultValue;
+    }
 
     @UsedForExternalCommunication
-    void setInteger(String name, int value);
+    public void setBoolean(String name, boolean value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        put(name, value);
+    }
 
-    void setInteger(String name, String value);
+    public void setBoolean(String name, String value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot set boolean parameter \"" + name + "\" to null value");
+        }
+        final Boolean booleanValue = Parameters.smartParseBoolean(value);
+        if (booleanValue != null) {
+            setBoolean(name, booleanValue);
+        } else {
+            throw new NoValidParameterException("Cannot set boolean parameter \""
+                    + name + "\" to non-boolean value \"" + value + "\"");
+        }
+    }
 
-    long getLong(String name) throws NoValidParameterException;
+    public int getInteger(String name) throws NoValidParameterException {
+        final Object o = getAndCheckNull(name, "integer");
+        if (o instanceof Integer) {
+            return (Integer) o;
+        }
+        final String s = o.toString();
+        try {
+            return Parameters.smartParseInt(s);
+        } catch (NumberFormatException e) {
+            throw new NoValidParameterException("Parameter \""
+                    + name + "\" is not a valid integer value: \"" + s + "\"");
+        }
+    }
 
-    long getLong(String name, long defaultValue);
+    public int getInteger(String name, int defaultValue) {
+        final Object o = get(name);
+        if (o == null) {
+            return defaultValue;
+        }
+        if (o instanceof Integer) {
+            return (Integer) o;
+        }
+        final String s = o.toString();
+        try {
+            return Parameters.smartParseInt(s);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 
     @UsedForExternalCommunication
-    void setLong(String name, long value);
+    public void setInteger(String name, int value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        put(name, value);
+    }
 
-    void setLong(String name, String value);
+    public void setInteger(String name, String value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot set int parameter \"" + name + "\" to null value");
+        }
+        try {
+            final int integerValue = Parameters.smartParseInt(value);
+            setInteger(name, integerValue);
+        } catch (NumberFormatException e) {
+            throw new NoValidParameterException("Cannot set int parameter \""
+                    + name + "\" to non-integer value \"" + value + "\"");
+        }
+    }
 
-    double getDouble(String name) throws NoValidParameterException;
+    public long getLong(String name) throws NoValidParameterException {
+        final Object o = getAndCheckNull(name, "long integer");
+        if (o instanceof Long) {
+            return (Long) o;
+        }
+        final String s = o.toString();
+        try {
+            return Parameters.smartParseLong(s);
+        } catch (NumberFormatException e) {
+            throw new NoValidParameterException("Parameter \""
+                    + name + "\" is not a valid long integer value: \"" + s + "\"");
+        }
+    }
 
-    double getDouble(String name, double defaultValue);
+    public long getLong(String name, long defaultValue) {
+        final Object o = get(name);
+        if (o == null) {
+            return defaultValue;
+        }
+        if (o instanceof Long) {
+            return (Long) o;
+        }
+        final String s = o.toString();
+        try {
+            return Parameters.smartParseLong(s);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 
     @UsedForExternalCommunication
-    void setDouble(String name, double value);
+    public void setLong(String name, long value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        put(name, value);
+    }
 
-    void setDouble(String name, String value);
+    public void setLong(String name, String value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot set long parameter \"" + name + "\" to null value");
+        }
+        try {
+            final long longValue = Parameters.smartParseLong(value);
+            setLong(name, longValue);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Cannot set long parameter \""
+                    + name + "\" to non-long value \"" + value + "\"");
+        }
+    }
 
-    String getString(String name) throws NoValidParameterException;
+    public double getDouble(String name) throws NoValidParameterException {
+        final Object o = getAndCheckNull(name, "double");
+        if (o instanceof Double) {
+            return (Double) o;
+        }
+        final String s = o.toString();
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            throw new NoValidParameterException("Parameter \""
+                    + name + "\" is not a valid double value: \"" + s + "\"");
+        }
+    }
 
-    String getString(String name, String defaultValue);
+    public double getDouble(String name, double defaultValue) {
+        final Object o = get(name);
+        if (o == null) {
+            return defaultValue;
+        }
+        if (o instanceof Double) {
+            return (Double) o;
+        }
+        final String s = o.toString();
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 
     @UsedForExternalCommunication
-    void setString(String name, String value);
+    public void setDouble(String name, double value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        put(name, value);
+    }
 
-    default JsonValue getJsonValue(String name) {
+    public void setDouble(String name, String value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot set double parameter \"" + name + "\" to null value");
+        }
+        try {
+            final double doubleValue = Double.parseDouble(value);
+            setDouble(name, doubleValue);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Cannot set double parameter \""
+                    + name + "\" to non-double value \"" + value + "\"");
+        }
+    }
+
+    public String getString(String name) throws NoValidParameterException {
+        final Object o = getAndCheckNull(name, "string");
+        return o.toString();
+    }
+
+    public String getString(String name, String defaultValue) {
+        final Object o = get(name);
+        if (o == null) {
+            return defaultValue;
+        }
+        return o.toString();
+    }
+
+    @UsedForExternalCommunication
+    public void setString(String name, String value) {
+        Objects.requireNonNull(name, "Null parameter name");
+        put(name, value);
+    }
+
+    @Override
+    public int size() {
+        return map.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return map.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return map.containsValue(value);
+    }
+
+    @Override
+    public Object get(Object key) {
+        return map.get(key);
+    }
+
+    @Override
+    public Object put(String key, Object value) {
+        return map.put(key, value);
+    }
+
+    @Override
+    public Object remove(Object key) {
+        return map.remove(key);
+    }
+
+    @Override
+    public void putAll(Map<? extends String, ?> m) {
+        map.putAll(m);
+    }
+
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Collection<Object> values() {
+        return map.values();
+    }
+
+    @Override
+    public Set<Entry<String, Object>> entrySet() {
+        return map.entrySet();
+    }
+
+    @Override
+    public String toString() {
+        return map.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Parameters that = (Parameters) o;
+        return Objects.equals(map, that.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(map);
+    }
+
+    public JsonValue getJsonValue(String name) {
         return smartParseValue(get(name));
     }
 
-    default JsonObject toJson() {
+    public JsonObject toJson() {
         return toJson(this);
     }
 
-    static JsonObject toJson(Map<String, Object> parameters) {
+    private Object getAndCheckNull(String name, String typeTitle) {
+        final Object result = get(name);
+        if (result == null) {
+            if (!containsKey(name)) {
+                throw new NoValidParameterException("No required " + typeTitle + " parameter \"" + name + "\"");
+            } else {
+                throw new NoValidParameterException("Parameter \"" +
+                        name + "\" is null, it is not a valid " + typeTitle + " value");
+            }
+        }
+        return result;
+    }
+
+    public static JsonObject toJson(Map<String, Object> parameters) {
         Objects.requireNonNull(parameters, "Null parameters");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
@@ -103,7 +359,7 @@ public interface Parameters extends Map<String, Object> {
         return builder.build();
     }
 
-    static JsonValue smartParseValue(Object o) {
+    public static JsonValue smartParseValue(Object o) {
         if (o == null) {
             return JsonValue.NULL;
         }
@@ -119,7 +375,7 @@ public interface Parameters extends Map<String, Object> {
         return Jsons.toJsonStringValue(o.toString());
     }
 
-    static Boolean smartParseBoolean(String s) {
+    public static Boolean smartParseBoolean(String s) {
         if (s.equalsIgnoreCase("true")) {
             return true;
         } else if (s.equalsIgnoreCase("false")) {
@@ -129,7 +385,7 @@ public interface Parameters extends Map<String, Object> {
         }
     }
 
-    static long smartParseLong(String s) throws NumberFormatException {
+    public static long smartParseLong(String s) throws NumberFormatException {
         NumberFormatException exception;
         try {
             return Long.parseLong(s);
@@ -145,7 +401,7 @@ public interface Parameters extends Map<String, Object> {
         }
     }
 
-    static int smartParseInt(String s) throws NumberFormatException {
+    public static int smartParseInt(String s) throws NumberFormatException {
         NumberFormatException exception;
         try {
             return Integer.parseInt(s);

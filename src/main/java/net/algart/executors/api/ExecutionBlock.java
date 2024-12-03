@@ -114,7 +114,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Parameters, updated automatically by host application.
      */
-    private final Parameters parameters = Parameters.newInstance();
+    private final Parameters parameters = new Parameters();
 
     private boolean visibleResultNecessary = false;
     private boolean allOutputsNecessary = false;
@@ -134,7 +134,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     protected ExecutionBlock() {
     }
-
 
     /**
      * Add in/out port only if absent

@@ -29,7 +29,9 @@ import net.algart.executors.api.parameters.Parameters;
 
 public class ParametersTest {
     private static void show(Parameters p, String name) {
-        System.out.printf("%n%s: [%s] = %s = %s = %s = %s = %s = %s [type: %s]%n",
+        System.out.printf(
+                "%n%s: [%s] = \"%s\" (string) = %s (int) = %s (long) = %s (double) = %s (boolean) = " +
+                        "%s (json) [type: %s]%n",
                 name,
                 p.get(name),
                 p.getString(name, null),
@@ -77,7 +79,7 @@ public class ParametersTest {
     }
 
     public static void main(String[] args) {
-        Parameters p = Parameters.newInstance();
+        Parameters p = new Parameters();
         System.out.println("Testing normal setters:");
         p.setLong("a", 123);
         p.setInteger("b", 124);
@@ -93,7 +95,7 @@ public class ParametersTest {
         System.out.println();
         System.out.println();
         System.out.println("Testing string-value setters:");
-        p = Parameters.newInstance();
+        p = new Parameters();
         p.setLong("a", "123.00");
         p.setInteger("b", "12422222");
         p.setBoolean("c", "True");

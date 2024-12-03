@@ -31,8 +31,8 @@ import java.util.Objects;
 
 public abstract class MultiMatrixGenerator extends Executor {
     private int numberOfChannels = 1;
-    private long dimX = 100;
-    private long dimY = 100;
+    private long dimX = 64;
+    private long dimY = 64;
     private long dimZ = 0;
     private Class<?> elementType = byte.class;
 
