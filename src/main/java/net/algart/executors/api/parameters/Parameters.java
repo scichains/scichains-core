@@ -61,7 +61,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setBoolean(String name, boolean value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, value);
+        put(name, (Boolean) value);
     }
 
     public void setBoolean(String name, String value) {
@@ -111,7 +111,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setInteger(String name, int value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, value);
+        put(name, (Integer) value);
     }
 
     public void setInteger(String name, String value) {
@@ -161,7 +161,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setLong(String name, long value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, value);
+        put(name, (Long) value);
     }
 
     public void setLong(String name, String value) {
@@ -211,7 +211,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setDouble(String name, double value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, value);
+        put(name, (Double) value);
     }
 
     public void setDouble(String name, String value) {
@@ -377,9 +377,9 @@ public class Parameters implements Map<String, Object> {
 
     public static Boolean smartParseBoolean(String s) {
         if (s.equalsIgnoreCase("true")) {
-            return true;
+            return Boolean.TRUE;
         } else if (s.equalsIgnoreCase("false")) {
-            return false;
+            return Boolean.FALSE;
         } else {
             return null;
         }
