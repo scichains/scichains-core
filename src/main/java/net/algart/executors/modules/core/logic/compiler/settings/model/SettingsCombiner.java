@@ -219,8 +219,8 @@ public final class SettingsCombiner implements Cloneable {
                             .inherit(settings, subSettings);
                     value = Jsons.toPrettyString(subSettings);
                 } else {
-                    value = valueType.toSmartJavaObject(jsonValue);
-                    // - note: we don't insist to return value of correct type, because SScalar
+                    value = valueType.toSmartParameter(jsonValue);
+                    // - note: we don't insist on returning value of a correct type, because SScalar
                     // does not distinguish types
                 }
                 executor.getScalar(name).setTo(value);

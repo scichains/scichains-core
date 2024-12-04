@@ -95,7 +95,7 @@ public final class MappingJson extends AbstractConvertibleToJson {
         public ControlConfTemplate setDefaultJsonValue(JsonValue defaultJsonValue) {
             assert valueType != null;
             if (defaultJsonValue != null) {
-                if (valueType.toJavaObject(defaultJsonValue) == null) {
+                if (valueType.toParameter(defaultJsonValue) == null) {
                     throw new IllegalArgumentException("Incorrect default JSON value \"" + defaultJsonValue
                             + "\": it is not " + valueType);
                 }

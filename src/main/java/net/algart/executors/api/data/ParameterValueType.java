@@ -37,9 +37,9 @@ import java.util.Objects;
 public enum ParameterValueType {
     INT("int", int.class, "int32") {
         @Override
-        public Integer toJavaObject(JsonValue jsonValue) {
+        public Integer toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return (Integer) jsonNumber.intValue();
+                return jsonNumber.intValue();
             } else {
                 return null;
             }
@@ -75,9 +75,9 @@ public enum ParameterValueType {
     },
     LONG("long", long.class, "int64") {
         @Override
-        public Long toJavaObject(JsonValue jsonValue) {
+        public Long toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return (Long) jsonNumber.longValue();
+                return jsonNumber.longValue();
             } else {
                 return null;
             }
@@ -112,10 +112,9 @@ public enum ParameterValueType {
     },
     FLOAT("float", float.class) {
         @Override
-        public Float toJavaObject(JsonValue jsonValue) {
+        public Float toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                final float floatValue = (float) jsonNumber.doubleValue();
-                return (Float) floatValue;
+                return (float) jsonNumber.doubleValue();
             } else {
                 return null;
             }
@@ -144,9 +143,9 @@ public enum ParameterValueType {
     },
     DOUBLE("double", double.class) {
         @Override
-        public Double toJavaObject(JsonValue jsonValue) {
+        public Double toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return (Double) jsonNumber.doubleValue();
+                return jsonNumber.doubleValue();
             } else {
                 return null;
             }
@@ -182,7 +181,7 @@ public enum ParameterValueType {
     },
     BOOLEAN("boolean", boolean.class) {
         @Override
-        public Boolean toJavaObject(JsonValue jsonValue) {
+        public Boolean toParameter(JsonValue jsonValue) {
             if (jsonValue == null) {
                 return null;
             } else if (jsonValue.getValueType() == JsonValue.ValueType.FALSE) {
@@ -221,7 +220,7 @@ public enum ParameterValueType {
     },
     STRING("String", String.class, "scalar") {
         @Override
-        public String toJavaObject(JsonValue jsonValue) {
+        public String toParameter(JsonValue jsonValue) {
             if (jsonValue == null) {
                 return null;
             } else if (jsonValue instanceof JsonString jsonString) {
@@ -264,8 +263,8 @@ public enum ParameterValueType {
      */
     ENUM_STRING("String", Enum.class, "scalar") {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
-            return STRING.toJavaObject(jsonValue);
+        public Object toParameter(JsonValue jsonValue) {
+            return STRING.toParameter(jsonValue);
         }
 
         @Override
@@ -292,7 +291,7 @@ public enum ParameterValueType {
     },
     SETTINGS("settings", JsonObject.class) {
         @Override
-        public Object toJavaObject(JsonValue jsonValue) {
+        public Object toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonObject) {
                 return jsonValue;
             } else if (jsonValue instanceof JsonString jsonString) {
@@ -370,16 +369,16 @@ public enum ParameterValueType {
      * @param jsonValue some JSON value; can be <code>null</code>, then the result will be <code>null</code>.
      * @return the corresponding primitive type / String, or <code>null</code> if it has invalid type.
      */
-    public abstract Object toJavaObject(JsonValue jsonValue);
+    public abstract Object toParameter(JsonValue jsonValue);
 
-    public Object toSmartJavaObject(JsonValue jsonValue) {
-        Object probe = toJavaObject(jsonValue);
+    public Object toSmartParameter(JsonValue jsonValue) {
+        Object probe = toParameter(jsonValue);
         if (probe != null) {
             return probe;
         }
         for (ParameterValueType parameterValueType : FOR_SUITABLE_JAVA_OBJECT) {
             // note: for example, we should not check LONG before DOUBLE
-            probe = parameterValueType.toJavaObject(jsonValue);
+            probe = parameterValueType.toParameter(jsonValue);
             if (probe != null) {
                 return probe;
             }

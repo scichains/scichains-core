@@ -80,11 +80,11 @@ public final class ChainProperty {
             // can be null, for example, for system property (obsolete concept)
             final ParameterValueType valueType = control.getValueType();
             final JsonValue defaultJsonValue = control.getDefaultJsonValue();
-            final Object defaultValue = valueType.toJavaObject(defaultJsonValue);
+            final Object defaultValue = valueType.toParameter(defaultJsonValue);
             if (defaultValue != null) {
                 this.value = defaultValue;
             }
-            final Object propertyValue = valueType.toJavaObject(propertyJsonValue);
+            final Object propertyValue = valueType.toParameter(propertyJsonValue);
             if (propertyValue != null) {
                 // - if the property has a correctly written value, it is returned
                 this.value = propertyValue;
@@ -94,7 +94,7 @@ public final class ChainProperty {
         // - if there is no information (from executor control) to set non-null value
         // with properly (efficient) type, we will treat the value as a string:
         // this is a suitable variant for string, boolean, integer and floating-point values
-        Object stringValue = ParameterValueType.STRING.toJavaObject(propertyJsonValue);
+        Object stringValue = ParameterValueType.STRING.toParameter(propertyJsonValue);
         if (stringValue != null) {
             this.value = stringValue;
         }

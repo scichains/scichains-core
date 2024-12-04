@@ -61,7 +61,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setBoolean(String name, boolean value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, (Boolean) value);
+        put(name, value);
     }
 
     public void setBoolean(String name, String value) {
@@ -111,7 +111,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setInteger(String name, int value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, (Integer) value);
+        put(name, value);
     }
 
     public void setInteger(String name, String value) {
@@ -161,7 +161,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setLong(String name, long value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, (Long) value);
+        put(name, value);
     }
 
     public void setLong(String name, String value) {
@@ -211,7 +211,7 @@ public class Parameters implements Map<String, Object> {
     @UsedForExternalCommunication
     public void setDouble(String name, double value) {
         Objects.requireNonNull(name, "Null parameter name");
-        put(name, (Double) value);
+        put(name, value);
     }
 
     public void setDouble(String name, String value) {
