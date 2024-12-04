@@ -39,7 +39,7 @@ public enum ParameterValueType {
         @Override
         public Integer toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return jsonNumber.intValue();
+                return (Integer) jsonNumber.intValue();
             } else {
                 return null;
             }
@@ -77,7 +77,7 @@ public enum ParameterValueType {
         @Override
         public Long toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return jsonNumber.longValue();
+                return (Long) jsonNumber.longValue();
             } else {
                 return null;
             }
@@ -108,15 +108,14 @@ public enum ParameterValueType {
         public void setParameter(Parameters parameters, String name, String value) {
             Objects.requireNonNull(parameters, "Null parameters");
             parameters.setLong(name, value);
-
         }
     },
     FLOAT("float", float.class) {
         @Override
         public Float toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                final double doubleValue = jsonNumber.doubleValue();
-                return (float) doubleValue;
+                final float floatValue = (float) jsonNumber.doubleValue();
+                return (Float) floatValue;
             } else {
                 return null;
             }
@@ -141,14 +140,13 @@ public enum ParameterValueType {
         public void setParameter(Parameters parameters, String name, String value) {
             Objects.requireNonNull(parameters, "Null parameters");
             parameters.setDouble(name, value);
-
         }
     },
     DOUBLE("double", double.class) {
         @Override
         public Double toJavaObject(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
-                return jsonNumber.doubleValue();
+                return (Double) jsonNumber.doubleValue();
             } else {
                 return null;
             }
@@ -188,9 +186,9 @@ public enum ParameterValueType {
             if (jsonValue == null) {
                 return null;
             } else if (jsonValue.getValueType() == JsonValue.ValueType.FALSE) {
-                return false;
+                return Boolean.FALSE;
             } else if (jsonValue.getValueType() == JsonValue.ValueType.TRUE) {
-                return true;
+                return Boolean.TRUE;
             } else {
                 return null;
             }
@@ -219,7 +217,6 @@ public enum ParameterValueType {
         public void setParameter(Parameters parameters, String name, String value) {
             Objects.requireNonNull(parameters, "Null parameters");
             parameters.setBoolean(name, value);
-
         }
     },
     STRING("String", String.class, "scalar") {
@@ -412,7 +409,7 @@ public enum ParameterValueType {
 
     /**
      * Creates JSON value for the given scalar string or {@link #emptyJsonValue()},
-     * if this scalar has invalid format.
+     * if this scalar has an invalid format.
      * Note: for {@link #ENUM_STRING}, this method returns a usual string value, that can be incorrect
      * for actual enums.
      *
