@@ -86,7 +86,7 @@ public final class ExampleLowLevelParameters extends ExecutionBlock {
             final Object value = entry.getValue();
             sb.append(entry.getKey()).append("=").append(value);
             if (value != null) {
-                sb.append(" - ").append(value.getClass().getName());
+                sb.append(" - type ").append(value.getClass().getName());
             }
             sb.append("\n");
             checkParameter(sb, entry.getKey());
@@ -99,6 +99,8 @@ public final class ExampleLowLevelParameters extends ExecutionBlock {
      */
     @Override
     public void onChangeParameter(String name) {
-        LOG.log(System.Logger.Level.INFO, "Setting parameter " + name + " to " + parameters().get(name));
+        final Object value = parameters().get(name);
+        LOG.log(System.Logger.Level.INFO, "Setting parameter " + name + " to " + value +
+                (value == null ? "" : " - " + value.getClass()));
     }
 }

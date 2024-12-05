@@ -95,7 +95,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                 }
             }
             case INPUT_CONTROL_AS_PORT -> {
-                final String value;
+                final String stringValue;
                 synchronized (chain.blocksInteractionLock) {
                     if (!(data instanceof SScalar)) {
                         throw new IllegalArgumentException("Invalid port: virtual data port contains "
@@ -107,18 +107,31 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                         // don't try to override parameter from non-initialized port
                         break;
                     }
-                    value = ((SScalar) data).getValue();
+                    stringValue = ((SScalar) data).getValue();
                 }
                 final ChainProperty chainProperty = block.properties.get(this.name);
                 if (chainProperty == null) {
                     // - abnormal situation: virtual port without actual control;
                     // we prefer not to disable this in the constructor, but just to set the usual scalar value
-                    executor.parameters().put(this.name, value);
+                    executor.parameters().put(this.name, stringValue);
                 } else {
                     final ParameterValueType valueType = chainProperty.probableType(block, ParameterValueType.STRING);
                     // - if there is no information about executor control, we treat the values as strings:
                     // this is a suitable variant for string, boolean, integer and floating-point values
-                    valueType.setParameter(executor.parameters(), this.name, value);
+                    Object value = valueType.toParameter(stringValue);
+                    // - when possible, we convert string value to the appropriate primitive type:
+                    // we should "help" the executor in every possible way
+                    if (value == null) {
+                        // - however, if this value cannot be converted to necessary type, we store string value:
+                        // an executor theoretically can somehow work with such "incorrect" parameter,
+                        // even though they are not written correctly
+                        // (example: ExampleLowLevelParameters)
+                        value = stringValue;
+                    }
+                    executor.parameters().put(this.name, value);
+
+                    // - Deprecated solution: too strict restriction here
+                    // valueType.setParameter(executor.parameters(), this.name, stringValue);
                 }
                 executor.onChangeParameter(this.name);
             }

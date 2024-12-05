@@ -37,6 +37,18 @@ import java.util.Objects;
 public enum ParameterValueType {
     INT("int", int.class, "int32") {
         @Override
+        public Integer toParameter(String stringValue) {
+            if (stringValue == null) {
+                return null;
+            }
+            try {
+                return Parameters.smartParseInt(stringValue);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+        @Override
         public Integer toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
                 return jsonNumber.intValue();
@@ -66,14 +78,19 @@ public enum ParameterValueType {
             return Jsons.toJsonIntValue(v);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setInteger(name, value);
-
-        }
     },
     LONG("long", long.class, "int64") {
+        @Override
+        public Long toParameter(String stringValue) {
+            if (stringValue == null) {
+                return null;
+            }
+            try {
+                return Parameters.smartParseLong(stringValue);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
         @Override
         public Long toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
@@ -104,13 +121,20 @@ public enum ParameterValueType {
             return Jsons.toJsonLongValue(v);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setLong(name, value);
-        }
     },
     FLOAT("float", float.class) {
+        @Override
+        public Float toParameter(String stringValue) {
+            if (stringValue == null) {
+                return null;
+            }
+            try {
+                return (float) Double.parseDouble(stringValue);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
         @Override
         public Float toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
@@ -135,13 +159,20 @@ public enum ParameterValueType {
             return DOUBLE.toJsonValue(scalar);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setDouble(name, value);
-        }
     },
     DOUBLE("double", double.class) {
+        @Override
+        public Double toParameter(String stringValue) {
+            if (stringValue == null) {
+                return null;
+            }
+            try {
+                return Double.parseDouble(stringValue);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
         @Override
         public Double toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonNumber jsonNumber) {
@@ -172,14 +203,16 @@ public enum ParameterValueType {
             return Jsons.toJsonDoubleValue(v);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setDouble(name, value);
-
-        }
     },
     BOOLEAN("boolean", boolean.class) {
+        @Override
+        public Boolean toParameter(String stringValue) {
+            if (stringValue == null) {
+                return null;
+            }
+            return Parameters.smartParseBoolean(stringValue);
+        }
+
         @Override
         public Boolean toParameter(JsonValue jsonValue) {
             if (jsonValue == null) {
@@ -212,13 +245,13 @@ public enum ParameterValueType {
             return Jsons.toJsonBooleanValue(v);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setBoolean(name, value);
-        }
     },
     STRING("String", String.class, "scalar") {
+        @Override
+        public String toParameter(String stringValue) {
+            return stringValue;
+        }
+
         @Override
         public String toParameter(JsonValue jsonValue) {
             if (jsonValue == null) {
@@ -251,17 +284,16 @@ public enum ParameterValueType {
             return Jsons.toJsonStringValue(scalar);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setString(name, value);
-
-        }
     },
     /**
      * Actually, it is also String type, but in Java we have enum.
      */
     ENUM_STRING("String", Enum.class, "scalar") {
+        @Override
+        public String toParameter(String stringValue) {
+            return stringValue;
+        }
+
         @Override
         public Object toParameter(JsonValue jsonValue) {
             return STRING.toParameter(jsonValue);
@@ -282,14 +314,13 @@ public enum ParameterValueType {
             return STRING.toJsonValue(scalar);
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setString(name, value);
-
-        }
     },
     SETTINGS("settings", JsonObject.class) {
+        @Override
+        public String toParameter(String stringValue) {
+            return stringValue;
+        }
+
         @Override
         public Object toParameter(JsonValue jsonValue) {
             if (jsonValue instanceof JsonObject) {
@@ -321,12 +352,6 @@ public enum ParameterValueType {
             }
         }
 
-        @Override
-        public void setParameter(Parameters parameters, String name, String value) {
-            Objects.requireNonNull(parameters, "Null parameters");
-            parameters.setString(name, value);
-
-        }
     };
 
     private final String typeName;
@@ -360,6 +385,16 @@ public enum ParameterValueType {
     public Class<?> javaType() {
         return javaType;
     }
+
+    /**
+     * Converts the given string to this type and returns it as primitive type wrapper or <code>String</code>.
+     * If the passed value has invalid type, returns <code>null</code>.
+     * Note: for {@link #ENUM_STRING}, this method returns <code>String</code> (standard enum type name).
+     *
+     * @param stringValue some String value; can be <code>null</code>, then the result will be <code>null</code>.
+     * @return the corresponding primitive type / String, or <code>null</code> if it has invalid type.
+     */
+    public abstract Object toParameter(String stringValue);
 
     /**
      * Converts the given JSON value to this type and returns it as primitive type wrapper or <code>String</code>.
@@ -416,17 +451,6 @@ public enum ParameterValueType {
      * @return JSON value of the scalar.
      */
     public abstract JsonValue toJsonValue(String scalar);
-
-    /**
-     * Sets the parameter inside the passed <code>parameters</code> object according this parameter type.
-     * This function just calls the corresponding setter with <code>String</code> value argument of
-     * <code>parameters</code> object.
-     *
-     * @param parameters set of parameters.
-     * @param name       name of the parameter.
-     * @param value      value to set.
-     */
-    public abstract void setParameter(Parameters parameters, String name, String value);
 
     // Note: in the future, some types that are not currently allowed can become allowed (supported).
     public boolean isAllowedInExecutor() {

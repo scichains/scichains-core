@@ -83,7 +83,7 @@
           "caption": "System.out.print (from start of the string)"
         }
       ],
-      "default": "DEBUG"
+      "default": "PRINTLN_TO_CONSOLE"
     },
     {
       "caption": "File to save result (if non-empty)",
