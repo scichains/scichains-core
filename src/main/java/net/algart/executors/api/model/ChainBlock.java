@@ -79,7 +79,7 @@ public final class ChainBlock {
     private boolean standardData = false;
     private String standardInputOutputPortName = null;
 
-    volatile Executor executor = null;
+    volatile ExecutionBlock executor = null;
 
     private final Object lock = new Object();
 
@@ -331,7 +331,7 @@ public final class ChainBlock {
         return this;
     }
 
-    public Executor getExecutor() {
+    public ExecutionBlock getExecutor() {
         synchronized (lock) {
             if (executor == null) {
                 throw new IllegalStateException("Executor is not initialized for " + this);
@@ -514,15 +514,14 @@ public final class ChainBlock {
                 // This execution algorithm does not use them, but they can become necessary
                 // for some external clients.
                 if (this.executor == null) {
-                    final ExecutionBlock executionBlock;
+                    final ExecutionBlock executor;
                     try {
                         ExecutorProvider executorProvider = chain.getExecutorProvider();
                         if (executorProvider == null) {
                             throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                     + ": executor provider is not set");
                         }
-                        //noinspection resource
-                        executionBlock = executorProvider.newExecutor(executorId);
+                        executor = executorProvider.newExecutor(executorId);
                     } catch (ClassNotFoundException | ExecutorNotFoundException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                 + (this.blockConfJson == null ?
@@ -536,23 +535,28 @@ public final class ChainBlock {
                                 e);
                     }
                     // - calling constructor; maybe, some ports are created here
-                    if (!(executionBlock instanceof final Executor newExecutor)) {
-                        throw new IllegalStateException("Unsupported executor class "
-                                + executionBlock.getClass().getName() + ": it must be subclass of "
-                                + Executor.class.getName() + " in " + this);
-                    }
-                    initializePortsSpecifiedInChainConf(newExecutor);
-                    newExecutor.setOwnerId(chain.id());
-                    newExecutor.setContextId(chain.contextId());
-                    newExecutor.setContextName(chain.name());
+
+                    // Deprecated restriction:
+//                    if (!(executor instanceof Executor)) {
+//                        throw new IllegalStateException("Unsupported executor class "
+//                                + executor.getClass().getName() + ": it must be subclass of "
+//                                + Executor.class.getName() + " in " + this);
+//                    }
+
+                    initializePortsSpecifiedInChainConf(executor);
+                    executor.setOwnerId(chain.id());
+                    executor.setContextId(chain.contextId());
+                    executor.setContextName(chain.name());
                     final Path path = chain.chainJsonPath();
                     if (path != null) {
-                        newExecutor.setContextPath(path.toAbsolutePath().toString());
+                        executor.setContextPath(path.toAbsolutePath().toString());
                     }
-                    updateSystemProperties(newExecutor);
-                    updateProperties(newExecutor);
-                    newExecutor.setTimingEnabled(chain.isTimingByExecutorsEnabled());
-                    this.executor = newExecutor;
+                    updateSystemProperties(executor);
+                    updateProperties(executor);
+                    if (executor instanceof Executor e) {
+                        e.setTimingEnabled(chain.isTimingByExecutorsEnabled());
+                    }
+                    this.executor = executor;
                     // - it must be the LAST operation: if previous initialization threw an exception,
                     // this.executor should stay be null (block was NOT correctly initialized)
                 }
@@ -595,7 +599,7 @@ public final class ChainBlock {
             if (!ready) {
                 try {
                     if (isExecutedAtRunTime()) {
-                        final Executor executor = getExecutor();
+                        final ExecutionBlock executor = getExecutor();
                         copyInputPortsToExecutor();
                         try {
                             final Executor caller = chain.getCaller();
@@ -603,11 +607,13 @@ public final class ChainBlock {
                             if (status != null) {
                                 status.setComment(this::friendlyCaption);
                             }
-                            status = executor.status();
-                            if (status != null) {
-                                // - note that executor.status() cannot be null in the current version
-                                status.setExecutorClassId(executorId);
-                                status.setExecutorInstanceId(id);
+                            if (executor instanceof Executor e) {
+                                status = e.status();
+                                if (status != null) {
+                                    // - note that executor.status() cannot be null in the current version
+                                    status.setExecutorClassId(executorId);
+                                    status.setExecutorInstanceId(id);
+                                }
                             }
                             final long t1 = timing.currentTime();
                             if (caller != null && caller.isInterrupted()) {
@@ -727,7 +733,7 @@ public final class ChainBlock {
         synchronized (lock) {
             prepareExecution();
             freeData();
-            Executor executor = this.executor;
+            final var executor = this.executor;
             if (executor != null) {
                 this.executor = null;
                 // - for a case of recursive calls
@@ -1043,7 +1049,7 @@ public final class ChainBlock {
         this.outputPorts.putAll(chainOutputPorts);
     }
 
-    private void initializePortsSpecifiedInChainConf(Executor executor) {
+    private void initializePortsSpecifiedInChainConf(ExecutionBlock executor) {
         for (ChainInputPort chainInputPort : inputPorts.values()) {
             if (chainInputPort.portType.isActual()) {
                 // - Virtual ports do not correspond to any Executor's PORTS, they correspond to its PARAMETERS.
@@ -1066,7 +1072,7 @@ public final class ChainBlock {
         }
     }
 
-    private void updateProperties(Executor executor) {
+    private void updateProperties(ExecutionBlock executor) {
         final Parameters executorProperties = executor.parameters();
         for (ChainProperty property : this.properties.values()) {
             executorProperties.put(property.getName(), property.getValue());
@@ -1076,9 +1082,11 @@ public final class ChainBlock {
         }
     }
 
-    private void updateSystemProperties(Executor executor) {
+    private void updateSystemProperties(ExecutionBlock executor) {
         executor.setCurrentDirectory(chain.getCurrentDirectory());
-        executor.setMultithreadingEnvironment(chain.isMultithreading());
+        if (executor instanceof Executor) {
+            ((Executor) executor).setMultithreadingEnvironment(chain.isMultithreading());
+        }
     }
 
     // Calling only in the constructor and in clone() method

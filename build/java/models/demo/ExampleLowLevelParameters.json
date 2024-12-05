@@ -1,0 +1,60 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Low-level example: access to ExecutionBlock parameters without strict type check",
+  "tags": [
+    "demo"
+  ],
+  "id": "fea21a85-494f-465f-916c-6ad54a8a7a00",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleLowLevelParameters"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "StringParameter",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "string"
+    },
+    {
+      "name": "intParameter",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 12
+    },
+    {
+      "name": "longParameter",
+      "value_type": "long",
+      "edition_type": "value",
+      "default": 9000000000000
+    },
+    {
+      "name": "doubleParameter",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.11
+    },
+    {
+      "name": "floatParameter",
+      "value_type": "float",
+      "edition_type": "value",
+      "default": 0.11
+    },
+    {
+      "name": "booleanParameter",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

@@ -582,7 +582,7 @@ public final class UseSubChain extends FileOperation {
                     // Note: we do not execute loading-time SUBCHAINS,
                     // only isolated blocks without input ports.
                     // It is enough for most needs.
-                    final Executor executor = block.getExecutor();
+                    final var executor = block.getExecutor();
                     if (executeIsolatedLoadingTimeFunctions || executor instanceof UseSettings) {
                         // Note: UseSettings and UseChainSettings are executed always
                         try {

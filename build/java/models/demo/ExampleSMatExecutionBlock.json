@@ -1,0 +1,42 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Low-level example: copy matrix, direct subclass of ExecutionBlock",
+  "tags": [
+    "demo"
+  ],
+  "id": "4fdae5da-9f13-4fc6-9bb7-b5d0a3cf3e39",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleSMatExecutionBlock"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "image"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "image"
+    }
+  ],
+  "controls": [
+    {
+      "name": "operation",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "zeros"
+        },
+        {
+          "value": "copy"
+        }
+      ],
+      "default": "zeros"
+    }
+  ]
+}

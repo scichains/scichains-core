@@ -28,6 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.Data;
+import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.SMat;
 
 import java.nio.ByteBuffer;
@@ -35,9 +36,9 @@ import java.nio.ByteBuffer;
 /**
  * Simple execution block example: copies input image.
  */
-public final class ExampleExecutionBlock extends ExecutionBlock {
-    private static final System.Logger LOG = System.getLogger(ExampleExecutionBlock.class.getName());
-    int operation = 1;
+public final class ExampleSMatExecutionBlock extends ExecutionBlock {
+    private static final System.Logger LOG = System.getLogger(ExampleSMatExecutionBlock.class.getName());
+    private String operation = "zeros";
 
     @Override
     public void execute() {
@@ -58,15 +59,15 @@ public final class ExampleExecutionBlock extends ExecutionBlock {
         Data outData = output.getData();
 
         // also, a type of data container can be received
-        if (!inData.type().typeName().equals("mat")) {
-            throw new IllegalArgumentException("unsupported input data type");
+        if (inData.type() != DataType.MAT) {
+            throw new IllegalArgumentException("Unsupported input data type");
         }
 
         // because of data type already checked, we can cast Data into a special case of the data type
-        SMat inSMat = (SMat) inData;
+        SMat mat = (SMat) inData;
 
         // extract byte buffer from data container
-        ByteBuffer inByteBuffer = inSMat.getByteBuffer();
+        ByteBuffer inByteBuffer = mat.getByteBuffer();
         if (inByteBuffer == null) {
             throw new IllegalArgumentException("input byte buffer is null");
         }
@@ -76,16 +77,17 @@ public final class ExampleExecutionBlock extends ExecutionBlock {
         inByteBuffer.rewind();
 
         // here we just make a copy of input data and store it into output
-        ByteBuffer outByteBuffer = ByteBuffer.allocateDirect(inSMat.getByteBuffer().capacity());
-        while (inByteBuffer.position() < inByteBuffer.limit()) {
-            outByteBuffer.put(inByteBuffer.get());
+        ByteBuffer outByteBuffer = ByteBuffer.allocateDirect(mat.getByteBuffer().capacity());
+        if (operation.equals("copy")) {
+            while (inByteBuffer.position() < inByteBuffer.limit()) {
+                outByteBuffer.put(inByteBuffer.get());
+            }
         }
 
         // fill output port data, and this data can be passed to another execution block
-
         SMat outMat = (SMat) outData;
         outMat.setAll(
-                inSMat.getDimensions(), inSMat.getDepth(), inSMat.getNumberOfChannels(),
+                mat.getDimensions(), mat.getDepth(), mat.getNumberOfChannels(),
                 outByteBuffer, false);
         output.setData(outMat);
         LOG.log(System.Logger.Level.INFO, "Operation code: " + operation);
@@ -96,13 +98,10 @@ public final class ExampleExecutionBlock extends ExecutionBlock {
         return new ExecutionVisibleResultsInformation().setPorts(getOutputPort("image"));
     }
 
-    /**
-     * example how block properties can be setting from outside (from user interface for instance)
-     */
     @Override
     public void onChangeParameter(String name) {
         if (name.equals("operation")) {
-            operation = parameters().getInteger(name);
+            operation = parameters().getString(name);
         }
     }
 }

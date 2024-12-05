@@ -972,6 +972,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     @UsedForExternalCommunication
     public abstract void execute();
 
+    public void execute(boolean silentMode) {
+        execute();
+    }
+
     /**
      * If this function returns <code>true</code>, it means that calculations
      * are not finished and should be repeated (for example, all the chain should be restarted and executed again).
@@ -986,7 +990,26 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     // Never returns <code>null</code>
     @UsedForExternalCommunication
-    public abstract ExecutionVisibleResultsInformation visibleResultsInformation();
+    public ExecutionVisibleResultsInformation visibleResultsInformation() {
+        return new ExecutionVisibleResultsInformation().setPorts(getOutputPort(defaultOutputPortName()));
+    }
+
+    public void freeAllInputPortData() {
+        for (Port port : allInputPorts()) {
+            port.removeData();
+        }
+    }
+
+    public void freeAllOutputPortData() {
+        for (Port port : allOutputPorts()) {
+            port.removeData();
+        }
+    }
+
+    public void freeAllPortData() {
+        freeAllInputPortData();
+        freeAllOutputPortData();
+    }
 
     @UsedForExternalCommunication
     @Override

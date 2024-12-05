@@ -433,6 +433,7 @@ public abstract class Executor extends ExecutionBlock {
         execute(false);
     }
 
+    @Override
     public void execute(boolean silentMode) {
 //        System.out.println("Executing...");
         long t1 = System.nanoTime(), t1Processing, t2Processing;
@@ -650,23 +651,6 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void disableOnChangeParameterAutomatic(String parameterName) {
         this.automaticUpdateDisabledParameters.add(parameterName);
-    }
-
-    public void freeAllInputPortData() {
-        for (Port port : allInputPorts()) {
-            port.removeData();
-        }
-    }
-
-    public void freeAllOutputPortData() {
-        for (Port port : allOutputPorts()) {
-            port.removeData();
-        }
-    }
-
-    public void freeAllPortData() {
-        freeAllInputPortData();
-        freeAllOutputPortData();
     }
 
     @Override

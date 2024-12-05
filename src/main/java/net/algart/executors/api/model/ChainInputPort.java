@@ -72,7 +72,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
         if (portType.isVirtual()) {
             return null;
         }
-        final Executor executor = block.executor;
+        final var executor = block.executor;
         // Here we use executor directly to allow calling this method
         // even when executors are not available. It cannot lead to any problems:
         // optimization, provided by this flag, cannot be used without actual executors in any case.

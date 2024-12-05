@@ -2001,7 +2001,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 if (chain.getExecutorProvider() != null
                         && outputPort != null && outputPort.getDataType() == DataType.SCALAR) {
                     block.reinitialize(false);
-                    final Executor executor = block.getExecutor();
+                    final var executor = block.getExecutor();
                     // - If we have an executor, and we have a simple standard output scalar port,
                     // we will try to execute it to get the default value.
                     // It should not be a problem, because data block usually corresponds to

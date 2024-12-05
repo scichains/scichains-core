@@ -211,7 +211,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                 // function UseChainSettings, but also h simple UseSettings
             }
         }
-        final Executor settingsExecutor = settingsBlock.getExecutor();
+        final var settingsExecutor = settingsBlock.getExecutor();
         if (!(settingsExecutor instanceof CombineSettings)) {
             throw new AssertionError("Dynamic executor '" + settingsExecutor.getExecutorId()
                     + "' must be an instance of CombineSettings, but it is " + settingsExecutor);

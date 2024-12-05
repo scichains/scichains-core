@@ -100,7 +100,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
         int count = 0;
         for (ChainInputPort inputPort : connected.values()) {
             if (inputPort.block.isExecutedAtRunTime()) {
-                final Executor executor = inputPort.block.executor;
+                final var executor = inputPort.block.executor;
                 // Here we use executor directly to allow calling this method
                 // even when executors are not available. It cannot lead to any problems:
                 // we will just set hasConnectedReadOnlyExecutors to false (this optimization
