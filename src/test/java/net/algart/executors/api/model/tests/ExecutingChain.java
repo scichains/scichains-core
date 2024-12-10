@@ -103,10 +103,10 @@ public class ExecutingChain {
             checkStability = true;
             startArgIndex++;
         }
-        if (args.length < startArgIndex + 3) {
+        if (args.length < startArgIndex + 1) {
             System.out.printf("Usage: "
                             + "%s [-mono] ]-clean] [-all] [-multithreading] [-ignoreExceptions] [-gc] "
-                            + "chain.json some_image_file result_folder [number_of_tests]%n",
+                            + "chain.json [some_image_file result_folder [number_of_tests]]%n",
                     ExecutingChain.class.getName());
             System.out.println("Also please specify the following system variables:");
             System.out.println("    -Dnet.algart.executors.path=folder_with_all_executor_JSONs");
@@ -116,9 +116,9 @@ public class ExecutingChain {
             return;
         }
         final Path chainFile = Paths.get(args[startArgIndex]);
-        final File sourceFile = new File(args[startArgIndex + 1]);
-        final Path resultFolder = Paths.get(args[startArgIndex + 2]);
-        final int numberOfTests = args.length > startArgIndex + 3 ? Integer.parseInt(args[startArgIndex + 3]) : 1;
+        final Path sourceFile = startArgIndex + 1 < args.length ? Path.of(args[startArgIndex + 1]) : null;
+        final Path resultFolder = startArgIndex + 2 < args.length ? Path.of(args[startArgIndex + 2]) : null;
+        final int numberOfTests = startArgIndex + 3 < args.length ? Integer.parseInt(args[startArgIndex + 3]) : 1;
 
         System.out.printf("Reading%n    %s%n...", JArrays.toString(
                 InstalledExtensions.installedExtensionsPaths().toArray(),
@@ -149,27 +149,26 @@ public class ExecutingChain {
             System.out.println(originalChain.toString(true));
         }
 
-        SMat sourceMat = SMat.valueOf(ImageIO.read(sourceFile));
-        if (monochrome) {
-            sourceMat = SMat.valueOf(sourceMat.toMultiMatrix2D().asMono().clone());
+        SMat sourceMat = sourceFile == null ? null : SMat.valueOf(ImageIO.read(sourceFile.toFile()));
+        final Map<String, Data> inputs = new HashMap<>();
+        if (sourceMat != null) {
+            if (monochrome) {
+                sourceMat = SMat.valueOf(sourceMat.toMultiMatrix2D().asMono().clone());
+            }
+            System.out.printf("Reading source image %s%s: %s%n",
+                    monochrome ? "(monochrome) " : "", sourceFile, sourceMat);
+            inputs.put(Executor.DEFAULT_INPUT_PORT, sourceMat);
         }
-        System.out.printf("Reading source image %s%s: %s%n",
-                monochrome ? "(monochrome) " : "", sourceFile, sourceMat);
-        Map<String, Data> inputs = new HashMap<>();
-        inputs.put(Executor.DEFAULT_INPUT_PORT, sourceMat);
-        try {
-            originalChain.setInputData(inputs);
-        } catch (RuntimeException e) {
-            System.err.printf("Problem with setting input data: %s.%n"
-                    + "Attempt to execute without input data...%n%n", e);
-        }
+        originalChain.setInputData(inputs);
 
         System.out.printf("%nExecuting %s blocks, %s mode...%n",
                 executeAll ? "all" : "output and dependent",
                 multithreading ? "multithreading" : "single-thread");
 
-        if (!Files.exists(resultFolder)) {
-            Files.createDirectory(resultFolder);
+        if (resultFolder != null) {
+            if (!Files.exists(resultFolder)) {
+                Files.createDirectory(resultFolder);
+            }
         }
         for (int test = 1; test <= numberOfTests; test++) {
             System.out.printf("%nTest #%d/%d...%n", test, numberOfTests);
@@ -202,7 +201,7 @@ public class ExecutingChain {
                 final String name = block.getStandardInputOutputName();
                 final String nameForFile = name.replaceAll("[\\/\\\\]", "_");
                 System.out.printf("Output block \"%s\" result: %s%n", name, data);
-                if (data.isInitialized()) {
+                if (data.isInitialized() && resultFolder != null) {
                     final Path textFile = resultFolder.resolve(nameForFile + ".txt");
                     final String text;
                     if (checkStability && data instanceof SMat) {

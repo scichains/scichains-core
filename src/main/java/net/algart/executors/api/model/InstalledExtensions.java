@@ -51,6 +51,7 @@ public class InstalledExtensions {
      */
     @UsedForExternalCommunication
     public static final String EXTENSIONS_ROOT_PROPERTY = "net.algart.executors.root";
+
     /**
      * System property {@value}
      * must contain a list of paths to all extensions, separated by the path separator
@@ -59,6 +60,17 @@ public class InstalledExtensions {
      */
     @UsedForExternalCommunication
     public static final String EXTENSIONS_PATH_PROPERTY = "net.algart.executors.path";
+
+    /**
+     * System property {@value}
+     * may contain "false" if you want to skip checking class-paths forced in the extensions
+     * by the JSON option "require_existing_paths".
+     * This can be useful if you are sure that you provide the correct class-paths when starting JVM,
+     * but the necessary JAR-files are located in a different location than specified in "extension.json" files.
+     */
+    @UsedForExternalCommunication
+    public static final String EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY =
+            "net.algart.executors.check.existing.paths";
 
     /**
      * Boolean value of the system property "net.algart.executors.pathReplacementAllowed".
@@ -74,7 +86,8 @@ public class InstalledExtensions {
             SystemEnvironment.getStringProperty(EXTENSIONS_ROOT_PROPERTY));
     public static final String EXTENSIONS_PATH = replaceHome(
             SystemEnvironment.getStringProperty(EXTENSIONS_PATH_PROPERTY));
-
+    public static final boolean CHECK_EXISTING_PATHS =
+            SystemEnvironment.getBooleanProperty(EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY, true);
 
     public static Collection<Path> installedExtensionsPaths() {
         try {
@@ -184,7 +197,9 @@ public class InstalledExtensions {
                         final ExtensionJson extension = ExtensionJson.readFromFolder(path);
                         extensions.add(extension);
                         for (ExtensionJson.Platform platform : extension.getPlatforms()) {
-                            platform.checkExistingClassPathsIfRequired();
+                            if (CHECK_EXISTING_PATHS) {
+                                platform.checkExistingPathsIfRequired();
+                            }
                             platform.setImmutable();
                             final ExtensionJson.Platform existing = platformsMap.put(platform.getId(), platform);
                             if (existing != null) {

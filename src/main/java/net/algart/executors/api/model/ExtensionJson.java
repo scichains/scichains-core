@@ -177,7 +177,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
              * may be set manually by {@link #setRoot(Path)}.</p>
              *
              * <p>Note: this folder must be specified to non-<code>null</code> value, if other sub-folders
-             * define relative paths, or if you want to use {@link Platform#classPaths()} method.</p>
+             * define relative paths, or if you want to use {@link Platform#validClassPaths()} method.</p>
              *
              * <p>Note: this property is not included into JSON.</p>
              *
@@ -712,7 +712,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
 
         // Note: we throw IOException instead of NoSuchFileException to provide
         // more detailed error message in ExecutionBlock.initializeExecutionSystem method
-        public void checkExistingClassPathsIfRequired() throws IOException {
+        public void checkExistingPathsIfRequired() throws IOException {
             if (!configuration.isRequireExistingPaths()) {
                 return;
             }
