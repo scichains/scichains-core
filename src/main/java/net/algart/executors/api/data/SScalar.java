@@ -268,11 +268,19 @@ public final class SScalar extends Data {
         return toJavaLikeBoolean(value);
     }
 
+    public boolean toJavaLikeBoolean(boolean defaultValue) {
+        return value != null ? toJavaLikeBoolean(value) : defaultValue;
+    }
+
     public boolean toCLikeBoolean() {
         if (value == null) {
             throw new IllegalStateException("Non-initialized scalar cannot be converted to boolean");
         }
         return toCLikeBoolean(value);
+    }
+
+    public boolean toCLikeBoolean(boolean defaultValue) {
+        return value != null ? toCLikeBoolean(value) : defaultValue;
     }
 
     public boolean toCommonBoolean() {
