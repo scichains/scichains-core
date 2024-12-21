@@ -35,7 +35,8 @@ import java.nio.file.Paths;
 public class ExecutorJsonTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 4) {
-            System.out.printf("Usage: %s executor_model.json result_1.json result_2.json result_3.json%n",
+            System.out.printf("Usage: %s executor_model.json " +
+                            "result_1.json result_2.json result_3.json%n",
                     ExecutorJson.class.getName());
             return;
         }
@@ -68,6 +69,9 @@ public class ExecutorJsonTest {
                 model.write(resultFile3);
                 System.out.printf("%nModel, created from executor:%n");
                 System.out.println(model);
+
+                System.out.printf("%nExecutor specification:%n");
+                System.out.println(executionBlock.getExecutorSpecification());
             }
         } catch (ClassNotFoundException e) {
             System.out.printf("Cannot load required class: %s%n", e);

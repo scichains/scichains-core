@@ -48,42 +48,7 @@ public abstract class Executor extends ExecutionBlock {
     private static final boolean USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY = false;
     // - Deprecated (can be false) since 4.4.9
 
-    /*
-    public enum SystemParameter {
-        CURRENT_FOLDER("$__system.working_directory") {
-            @Override
-            void update(Executor executor, String value) {
-                executor.setCurrentDirectory(Paths.get(value));
-            }
-        };
-//        ENABLED("$__system.enabled");
-
-        final String parameterName;
-
-        public String parameterName() {
-            return parameterName;
-        }
-
-        SystemParameter(String parameterName) {
-            this.parameterName = parameterName;
-        }
-
-        void update(Executor executor, String value) {
-        }
-
-        public static boolean isSystemParameter(String parameterName) {
-            Objects.requireNonNull(parameterName, "Null parameter name");
-            return parameterName.startsWith("$__");
-        }
-    }
-
-    private static final Map<String, SystemParameter> SYSTEM_PARAMETERS = new HashMap<>();
-    */
-
     static {
-//        for (SystemParameter parameter : SystemParameter.values()) {
-//            SYSTEM_PARAMETERS.put(parameter.parameterName, parameter);
-//        }
         addTaskBeforeExecutingAll(Executor::startTimingOfExecutingAll);
         addTaskAfterExecutingAll(Executor::finishTimingOfExecutingAll);
     }
@@ -627,19 +592,6 @@ public abstract class Executor extends ExecutionBlock {
         Objects.requireNonNull(name, "Null parameter name");
         if (USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY && name.equals("$__system.working_directory")) {
             setCurrentDirectory(Paths.get(parameters().getString(name)));
-        // Deprecated solution:
-//        } else if (SystemParameter.isSystemParameter(name)) {
-//            final SystemParameter systemParameter = SYSTEM_PARAMETERS.get(name);
-//            if (systemParameter != null) {
-//                final String value = parameters().getString(name);
-//                systemParameter.update(this, value);
-//            } else {
-//                LOG.log(System.Logger.Level.WARNING, () ->
-//                        getClass() + ": attempt to set unknown system parameter \"" + name + "\" ("
-//                                + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
-//                                + (getContextPath() == null ? "" : " at " + getContextPath())
-//                                + ")");
-//            }
         } else if (automaticUpdateParameters && !automaticUpdateDisabledParameters.contains(name)) {
             onChangeParameterAutomatic(name);
         }

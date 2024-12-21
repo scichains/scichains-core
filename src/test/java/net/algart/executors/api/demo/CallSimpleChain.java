@@ -61,6 +61,7 @@ public class CallSimpleChain {
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
 //            var model = Executor.executorModel(executor.getSessionId(), executor.getExecutorId());
 //            System.out.println(model.jsonString());
+            System.out.println(executor.getExecutorSpecification());
             executor.putMat(inputMat);
             if (parameterA != null) {
                 // - if null, default value should be used

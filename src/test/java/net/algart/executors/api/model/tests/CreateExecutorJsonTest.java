@@ -106,6 +106,9 @@ public class CreateExecutorJsonTest {
                 Thread.sleep(100);
                 System.out.println(executionBlock);
                 executionBlock.execute();
+                System.out.println();
+                System.out.println("Specification:");
+                System.out.println(Jsons.toPrettyString(executionBlock.getExecutorSpecificationJson()));
             } catch (ClassNotFoundException e) {
                 System.out.printf("Cannot load required class: %s%n", e);
             }

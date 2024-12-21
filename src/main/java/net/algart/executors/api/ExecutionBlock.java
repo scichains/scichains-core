@@ -747,13 +747,45 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Gets the specification of this executor, which was set while creating by
      * {@link #newExecutionBlock(String, String, String)}.
+     *
+     * @return the specification of this executor, probably JSON.
      */
     public final String getExecutorSpecification() {
         return executorSpecification;
     }
 
+    /**
+     * Gets the specification, returned by {@link #getExecutorSpecification()}, parsed into JSON.
+     * If this is not a correct JSON, in particular if {@link #getExecutorSpecification()} is <code>null</code>,
+     * this method returns <code>null</code>.
+     * The returned result is cached: the next calls of this method will work quickly.
+     *
+     * @return the specification of this executor, parsed into JSON object.
+     */
+    public JsonObject getExecutorSpecificationJson() {
+        final String executorSpecification = this.executorSpecification;
+        if (executorSpecification == null) {
+            return null;
+        }
+        JsonObject executorSpecificationJson = this.executorSpecificationJson;
+        if (executorSpecificationJson == null) {
+            try (final JsonReader reader = Json.createReader(new StringReader(executorSpecification))) {
+                executorSpecificationJson = reader.readObject();
+            } catch (RuntimeException e) {
+                return null;
+//                executorSpecificationJson = Json.createObjectBuilder()
+//                        .add("exception", e.getMessage())
+//                        .build();
+                // - bad idea: non-obvious behavior
+            }
+            this.executorSpecificationJson = executorSpecificationJson;
+        }
+        return executorSpecificationJson;
+    }
+
+
     public final String getPlatformId() {
-        final JsonObject specification = executorSpecificationJson();
+        final JsonObject specification = getExecutorSpecificationJson();
         return specification == null ? null : specification.getString("platform_id", null);
     }
 
@@ -1110,11 +1142,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * <p>Creates new instance of {@link ExecutionBlock} on the base of it's description, usually in JSON format.</p>
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification, usually in JSON format.</p>
      *
-     * <p>This description is passed by <code>executorSpecification</code> parameter. It may be the full description
-     * of executor model (with "app":"executor" and other fields), but may be also its part.
-     * In any case it must contain all information, necessary for constructing and initializing Java class
+     * <p>This specification is passed by <code>executorSpecification</code> parameter. It may be the full description
+     * of the executor model (with "app":"executor" and other fields), but may be also its part.
+     * In any case, it must contain all information, necessary for constructing and initializing the Java class
      * of the executor, usually in "java" section.
      * Below is a minimal example of <code>executorSpecification</code> for most standard Java executors:</p>
      *
@@ -1135,6 +1167,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>executorSpecification==null</code>.
+     * @see #getExecutorModelDescription(String, String) (String, String)
      */
     @UsedForExternalCommunication
     public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
@@ -1235,26 +1268,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         synchronized (executionBlockLoaders) {
             executionBlockLoaders.add(loader);
         }
-    }
-
-    private JsonObject executorSpecificationJson() {
-        final String executorSpecification = this.executorSpecification;
-        if (executorSpecification == null) {
-            return null;
-        }
-        JsonObject executorSpecificationJson = this.executorSpecificationJson;
-        if (executorSpecificationJson == null) {
-            try (final JsonReader reader = Json.createReader(new StringReader(executorSpecification))) {
-                executorSpecificationJson = reader.readObject();
-            } catch (RuntimeException e) {
-                executorSpecificationJson = Json.createObjectBuilder()
-                        .add("exception", e.getMessage())
-                        .build();
-            }
-            this.executorSpecificationJson = executorSpecificationJson;
-        }
-        return executorSpecificationJson;
-
     }
 
     private static List<ExecutionBlockLoader> executionBlockLoaders() {
