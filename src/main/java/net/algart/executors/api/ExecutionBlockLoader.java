@@ -24,14 +24,12 @@
 
 package net.algart.executors.api;
 
-import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.json.Jsons;
 
-import java.io.StringReader;
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
@@ -243,36 +241,35 @@ public class ExecutionBlockLoader {
         }
 
         private static Executable getNewInstance(String executorJsonString) throws ClassNotFoundException {
-            try (final JsonReader reader = Json.createReader(new StringReader(executorJsonString))) {
-                final JsonObject executorJson = reader.readObject();
-                final JsonObject javaConf = executorJson.getJsonObject(ExecutorJson.JavaConf.JAVA_CONF_NAME);
-                if (javaConf == null) {
-                    return null; // unknown format
-                }
-                // We prefer not to use ExecutorJson.JavaConf class:
-                // this method is very low-level
-                final String className = javaConf.getString(
-                        ExecutorJson.JavaConf.CLASS_PROPERTY_NAME, null);
-                if (className == null) {
-                    return null; // unknown format
-                }
-                final Class<?> executorClass = Class.forName(className);
-                final String newInstanceMethodName = javaConf.getString(
-                        ExecutorJson.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
-                try {
-                    if (newInstanceMethodName != null) {
-                        return executorClass.getMethod(newInstanceMethodName);
-                    } else {
-                        return executorClass.getConstructor();
-                    }
-                } catch (NoSuchMethodException e) {
-                    throw new JsonException("Cannot find "
-                            + (newInstanceMethodName != null ?
-                            "public static method " + newInstanceMethodName + "() without parameters"
-                            : "default public constructor")
-                            + " in class " + className + " <<<" + executorJsonString + ">>>", e);
-                }
+            final JsonObject executorJson = Jsons.toJson(executorJsonString);
+            final JsonObject javaConf = executorJson.getJsonObject(ExecutorJson.JavaConf.JAVA_CONF_NAME);
+            if (javaConf == null) {
+                return null; // unknown format
             }
+            // We prefer not to use ExecutorJson.JavaConf class:
+            // this method is very low-level
+            final String className = javaConf.getString(
+                    ExecutorJson.JavaConf.CLASS_PROPERTY_NAME, null);
+            if (className == null) {
+                return null; // unknown format
+            }
+            final Class<?> executorClass = Class.forName(className);
+            final String newInstanceMethodName = javaConf.getString(
+                    ExecutorJson.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
+            try {
+                if (newInstanceMethodName != null) {
+                    return executorClass.getMethod(newInstanceMethodName);
+                } else {
+                    return executorClass.getConstructor();
+                }
+            } catch (NoSuchMethodException e) {
+                throw new JsonException("Cannot find "
+                        + (newInstanceMethodName != null ?
+                        "public static method " + newInstanceMethodName + "() without parameters"
+                        : "default public constructor")
+                        + " in class " + className + " <<<" + executorJsonString + ">>>", e);
+            }
+
         }
     }
 }

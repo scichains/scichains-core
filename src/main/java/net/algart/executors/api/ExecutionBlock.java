@@ -1142,7 +1142,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification, usually in JSON format.</p>
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.
+     * The specification must be represented in JSON format.</p>
      *
      * <p>This specification is passed by <code>executorSpecification</code> parameter. It may be the full description
      * of the executor model (with "app":"executor" and other fields), but may be also its part.
@@ -1162,7 +1163,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                              may be <code>null</code> while simple usage.
      * @param executorId            unique ID of this executor in the system (maybe a field inside
      *                              <code>executorSpecification</code>, but it is not necessary).
-     * @param executorSpecification specification of the executor, usually JSON.
+     * @param executorSpecification specification of the executor, JSON format.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
