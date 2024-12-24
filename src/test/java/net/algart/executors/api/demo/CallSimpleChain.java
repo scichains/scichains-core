@@ -59,9 +59,7 @@ public class CallSimpleChain {
         ExecutionBlock.initializeExecutionSystem();
         System.out.println("Loading " + chainPath.toAbsolutePath() + "...");
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
-//            var model = Executor.executorModel(executor.getSessionId(), executor.getExecutorId());
-//            System.out.println(model.jsonString());
-            System.out.println(executor.getExecutorSpecification());
+//            System.out.println(executor.getExecutorSpecification().jsonString());
             executor.putMat(inputMat);
             if (parameterA != null) {
                 // - if null, default value should be used
