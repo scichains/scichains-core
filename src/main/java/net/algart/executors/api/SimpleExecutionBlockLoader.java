@@ -47,9 +47,9 @@ public class SimpleExecutionBlockLoader<W> extends ExecutionBlockLoader {
     private final Object lock = new Object();
 
     @Override
-    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification) {
+    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification) {
         return null;
-        // - the same behaviour as in the superclass: just skip loading and pass executorId to the standard loader
+        // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
     }
 
     public boolean registerWorker(String sessionId, String id, W worker, ExecutorJson executorModel) {

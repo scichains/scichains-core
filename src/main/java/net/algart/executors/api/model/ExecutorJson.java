@@ -1366,7 +1366,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
     private boolean javaExecutor = false;
     private boolean chainExecutor = false;
 
-    private volatile String minimalConfigurationJsonString = null;
+    private volatile String minimalSpecification = null;
 
     public ExecutorJson() {
     }
@@ -1405,17 +1405,23 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                         + ": \"" + JavaConf.JAVA_CONF_NAME + "\" section required when \"language\" is \"java\"");
             }
             this.java = javaJson == null ? null : new JavaConf(javaJson, file);
-            for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
-                final PortConf port = new PortConf(jsonObject, file);
-                putOrException(inPorts, port.name, port, file, "in_ports");
+            if (json.containsKey("in_ports")) {
+                for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
+                    final PortConf port = new PortConf(jsonObject, file);
+                    putOrException(inPorts, port.name, port, file, "in_ports");
+                }
             }
-            for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "out_ports", file)) {
-                final PortConf port = new PortConf(jsonObject, file);
-                putOrException(outPorts, port.name, port, file, "out_ports");
+            if (json.containsKey("out_ports")) {
+                for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "out_ports", file)) {
+                    final PortConf port = new PortConf(jsonObject, file);
+                    putOrException(outPorts, port.name, port, file, "out_ports");
+                }
             }
-            for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
-                final ControlConf control = new ControlConf(jsonObject, file);
-                putOrException(controls, control.name, control, file, "controls");
+            if (json.containsKey("controls")) {
+                for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
+                    final ControlConf control = new ControlConf(jsonObject, file);
+                    putOrException(controls, control.name, control, file, "controls");
+                }
             }
             final JsonObject sourceJson = json.getJsonObject("source");
             if (sourceJson != null) {
@@ -1460,15 +1466,6 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject executorJson = Jsons.toJson(executorJsonString);
         return new ExecutorJson(executorJson, null);
-    }
-
-    public static ExecutorJson valueOfIfValid(String executorJsonString) {
-        Objects.requireNonNull(executorJsonString, "Null executorJsonString");
-        final JsonObject json = Jsons.toJson(executorJsonString);
-        if (!isExecutorJson(json)) {
-            return null;
-        }
-        return new ExecutorJson(json, null);
     }
 
     public static ExecutorJson valueOf(Executor executor, String executorId) {
@@ -1825,19 +1822,23 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return isData() ? options.behavior.editionType : null;
     }
 
-    public final String minimalConfigurationJsonString() {
-        String minimalConfigurationJsonString = this.minimalConfigurationJsonString;
-        if (minimalConfigurationJsonString == null) {
+    public final String minimalSpecification() {
+        String minimalSpecification = this.minimalSpecification;
+        if (minimalSpecification == null) {
             final JsonObjectBuilder builder = Json.createObjectBuilder();
+            builder.add("app", APP_NAME);
+            builder.add("category", category);
+            builder.add("name", name);
+            builder.add("id", executorId);
             if (java != null) {
                 builder.add(JavaConf.JAVA_CONF_NAME, java.toJson());
             }
             if (platformId != null) {
                 builder.add("platform_id", platformId);
             }
-            this.minimalConfigurationJsonString = minimalConfigurationJsonString = builder.build().toString();
+            this.minimalSpecification = minimalSpecification = builder.build().toString();
         }
-        return minimalConfigurationJsonString;
+        return minimalSpecification;
     }
 
     /**

@@ -70,15 +70,15 @@ public class ExecutionBlockLoader {
      * <p>Note: if this loader uses sessionId, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
      *
-     * @param sessionId             see the same argument of {@link ExecutionBlock#newExecutionBlock};
-     *                              may be ignored.
-     * @param executorId            see the same argument of {@link ExecutionBlock#newExecutionBlock}.
-     * @param executorSpecification see the same argument of {@link ExecutionBlock#newExecutionBlock}.
+     * @param sessionId     see the same argument of {@link ExecutionBlock#newExecutionBlock};
+     *                      may be ignored.
+     * @param executorId    see the same argument of {@link ExecutionBlock#newExecutionBlock}.
+     * @param specification see the same argument of {@link ExecutionBlock#newExecutionBlock}.
      * @return newly created executor or <code>null</code> if this loader does not "understand" such JSON.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
+    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification)
             throws ClassNotFoundException {
         return null;
     }
@@ -189,14 +189,11 @@ public class ExecutionBlockLoader {
         }
 
         @Override
-        public ExecutionBlock newExecutionBlock(
-                String ignoredSessionId,
-                String executorId,
-                String executorSpecification)
+        public ExecutionBlock newExecutionBlock(String ignoredSessionId, String executorId, ExecutorJson specification)
                 throws ClassNotFoundException {
             Objects.requireNonNull(executorId, "Null executorId");
-            Objects.requireNonNull(executorSpecification, "Null executorJson");
-            final Executable newInstance = findNewInstance(executorId, executorSpecification);
+            Objects.requireNonNull(specification, "Null specification");
+            final Executable newInstance = findNewInstance(executorId, specification);
             if (newInstance == null) {
                 return null;
             }
@@ -211,7 +208,7 @@ public class ExecutionBlockLoader {
                 throw new JsonException(
                         (newInstance instanceof Method ? newInstance.getName() + "() method" : "Constructor")
                                 + " of " + newInstance.getDeclaringClass()
-                                + " cannot create new instance <<<" + executorSpecification + ">>>", e);
+                                + " cannot create new instance <<<" + specification + ">>>", e);
             }
             if (!(result instanceof ExecutionBlock)) {
                 throw new JsonException("Object, created by "
@@ -219,7 +216,7 @@ public class ExecutionBlockLoader {
                         + " of " + newInstance.getDeclaringClass()
                         + ", is NOT AN EXECUTOR\n    (it is "
                         + (result == null ? "null" : result.getClass().getName())
-                        + " and does not extend ExecutionBlock class)\n    <<<" + executorSpecification + ">>>");
+                        + " and does not extend ExecutionBlock class)\n    <<<" + specification + ">>>");
             }
             return (ExecutionBlock) result;
         }
@@ -229,33 +226,32 @@ public class ExecutionBlockLoader {
             // No sense to free the cache, because it corresponds to system class loader and cannot become obsolete.
         }
 
-        private Executable findNewInstance(String executorId, String executorJsonString) throws ClassNotFoundException {
+        private Executable findNewInstance(String executorId, ExecutorJson executorJson) throws ClassNotFoundException {
             synchronized (newInstanceMakers) {
                 if (newInstanceMakers.containsKey(executorId)) {
                     return newInstanceMakers.get(executorId);
                 }
-                Executable executable = getNewInstance(executorJsonString);
+                Executable executable = getNewInstance(executorJson);
                 newInstanceMakers.put(executorId, executable);
                 return executable;
             }
         }
 
-        private static Executable getNewInstance(String executorJsonString) throws ClassNotFoundException {
-            final JsonObject executorJson = Jsons.toJson(executorJsonString);
-            final JsonObject javaConf = executorJson.getJsonObject(ExecutorJson.JavaConf.JAVA_CONF_NAME);
+        private static Executable getNewInstance(ExecutorJson executorJson) throws ClassNotFoundException {
+            // Note: we do not require executorJson.isJavaExecutor()
+            // This allows to minimize requirements to a minimal JSON specification
+            ExecutorJson.JavaConf javaConf = executorJson.getJava();
             if (javaConf == null) {
-                return null; // unknown format
+                return null;
             }
-            // We prefer not to use ExecutorJson.JavaConf class:
-            // this method is very low-level
-            final String className = javaConf.getString(
-                    ExecutorJson.JavaConf.CLASS_PROPERTY_NAME, null);
+            final String className = javaConf.getClassName();
             if (className == null) {
-                return null; // unknown format
+                return null;
             }
             final Class<?> executorClass = Class.forName(className);
-            final String newInstanceMethodName = javaConf.getString(
-                    ExecutorJson.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
+            // - We cannot use javaConf.executorClass(): that method catches ClassNotFoundException,
+            // but we must not do this here
+            final String newInstanceMethodName = javaConf.getNewInstanceMethod();
             try {
                 if (newInstanceMethodName != null) {
                     return executorClass.getMethod(newInstanceMethodName);
@@ -267,7 +263,7 @@ public class ExecutionBlockLoader {
                         + (newInstanceMethodName != null ?
                         "public static method " + newInstanceMethodName + "() without parameters"
                         : "default public constructor")
-                        + " in class " + className + " <<<" + executorJsonString + ">>>", e);
+                        + " in class " + className + " <<<" + executorJson + ">>>", e);
             }
 
         }

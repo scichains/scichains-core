@@ -108,10 +108,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
             if (executorJson == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return ExecutionBlock.newExecutionBlock(
-                    sessionId,
-                    executorId,
-                    executorJson.minimalConfigurationJsonString());
+            return ExecutionBlock.newExecutionBlock(sessionId, executorId, executorJson);
         }
     }
 }

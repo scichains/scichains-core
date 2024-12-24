@@ -106,7 +106,7 @@ public class ExecutorJsonSetTest {
 //                    } catch (Exception e) {
 //                    }
                         final String id = model.getExecutorId();
-                        final String javaConfiguration = model.minimalConfigurationJsonString();
+                        final String javaConfiguration = model.minimalSpecification();
                         //noinspection resource
                         ExecutionBlock.newExecutionBlock(null, id, javaConfiguration);
                     }
@@ -123,7 +123,7 @@ public class ExecutorJsonSetTest {
                 if (model.isJavaExecutor()) {
                     System.out.printf("Creating executor %s.%s...%n", model.getCategory(), model.getName());
                     final ExecutionBlock executionBlock = ExecutionBlock.newExecutionBlock(
-                            null, model.getExecutorId(), model.minimalConfigurationJsonString());
+                            null, model.getExecutorId(), model.minimalSpecification());
                     System.out.printf("  %s [id=%s]%n", executionBlock, executionBlock.getExecutorId());
                 }
             }

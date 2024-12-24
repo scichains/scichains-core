@@ -24,9 +24,7 @@
 
 package net.algart.executors.api;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
 import net.algart.executors.api.model.ExecutorJson;
@@ -41,7 +39,6 @@ import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.PropertyChecker;
 
-import java.io.StringReader;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -122,8 +119,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private ExecutionBlock rootCaller = this;
     private String sessionId = null;
     private String executorId = null;
-    private String executorSpecification = null;
-    private JsonObject executorSpecificationJson = null;
+    private ExecutorJson executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -746,47 +742,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Gets the specification of this executor, which was set while creating by
-     * {@link #newExecutionBlock(String, String, String)}.
+     * {@link #newExecutionBlock(String, String, ExecutorJson)}.
      *
-     * @return the specification of this executor, probably JSON.
+     * @return the specification of this executor.
      */
-    public final String getExecutorSpecification() {
+    public final ExecutorJson getExecutorSpecification() {
         return executorSpecification;
     }
 
-    /**
-     * Gets the specification, returned by {@link #getExecutorSpecification()}, parsed into JSON.
-     * If this is not a correct JSON, in particular if {@link #getExecutorSpecification()} is <code>null</code>,
-     * this method returns <code>null</code>.
-     * The returned result is cached: the next calls of this method will work quickly.
-     *
-     * @return the specification of this executor, parsed into JSON object.
-     */
-    public JsonObject getExecutorSpecificationJson() {
-        final String executorSpecification = this.executorSpecification;
-        if (executorSpecification == null) {
-            return null;
-        }
-        JsonObject executorSpecificationJson = this.executorSpecificationJson;
-        if (executorSpecificationJson == null) {
-            try (final JsonReader reader = Json.createReader(new StringReader(executorSpecification))) {
-                executorSpecificationJson = reader.readObject();
-            } catch (RuntimeException e) {
-                return null;
-//                executorSpecificationJson = Json.createObjectBuilder()
-//                        .add("exception", e.getMessage())
-//                        .build();
-                // - bad idea: non-obvious behavior
-            }
-            this.executorSpecificationJson = executorSpecificationJson;
-        }
-        return executorSpecificationJson;
-    }
-
-
     public final String getPlatformId() {
-        final JsonObject specification = getExecutorSpecificationJson();
-        return specification == null ? null : specification.getString("platform_id", null);
+        return executorSpecification == null ? null : executorSpecification.getPlatformId();
     }
 
     public final String getOwnerId() {
@@ -1142,54 +1107,65 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.
-     * The specification must be represented in JSON format.</p>
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.</p>
      *
-     * <p>This specification is passed by <code>executorSpecification</code> parameter. It may be the full description
-     * of the executor model (with "app":"executor" and other fields), but may be also its part.
-     * In any case, it must contain all information, necessary for constructing and initializing the Java class
-     * of the executor, usually in "java" section.
-     * Below is a minimal example of <code>executorSpecification</code> for most standard Java executors:</p>
+     * <p>The specification must contain all information, necessary for constructing and initializing the Java class
+     * of the executor, in its {@link ExecutorJson#getJava() Java configuration}.
      *
-     * <pre>
-     * {
-     *     "java": {
-     *         "class": "net.algart.executors.modules.core.system.SystemInformation"
-     *     }
-     * }
-     * </pre>
-     *
-     * @param sessionId             unique ID of current session while multi-session usage;
-     *                              may be <code>null</code> while simple usage.
-     * @param executorId            unique ID of this executor in the system (maybe a field inside
-     *                              <code>executorSpecification</code>, but it is not necessary).
-     * @param executorSpecification specification of the executor, JSON format.
+     * @param sessionId     unique ID of current session while multi-session usage;
+     *                      may be <code>null</code> while simple usage.
+     * @param executorId    unique ID of this executor in the system (probably equal to
+     *                      <code>specification.{@link ExecutorJson#getExecutorId()
+     *                      getExecutorId()}</code>).
+     * @param specification JSON specification of the executor.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
-     * @throws NullPointerException   if <code>executorId==null</code> or <code>executorSpecification==null</code>.
+     * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      * @see #getExecutorModelDescription(String, String) (String, String)
      */
-    @UsedForExternalCommunication
-    public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String executorSpecification)
+    public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(executorSpecification, "Null executorSpecification");
+        Objects.requireNonNull(specification, "Null specification");
         final List<ExecutionBlockLoader> loaders = executionBlockLoaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
             final ExecutionBlockLoader loader = loaders.get(k);
-            final ExecutionBlock executor = loader.newExecutionBlock(sessionId, executorId, executorSpecification);
+            final ExecutionBlock executor = loader.newExecutionBlock(sessionId, executorId, specification);
             if (executor != null) {
                 executor.sessionId = sessionId;
                 executor.executorId = executorId;
-                executor.executorSpecification = executorSpecification;
-//                System.out.println("Specification: " + executorSpecification);
+                executor.executorSpecification = specification;
+//                System.out.println("Specification: " + specification);
                 return executor;
             }
         }
         throw new IllegalArgumentException("Cannot create executor with ID " + executorId
                 + ": unknown executor model format");
+    }
+
+    /**
+     * <p>Equivalent to
+     * <code>{@link #newExecutionBlock(String, String, ExecutorJson)
+     * newExecutionBlock}(sessionId, executorId, {@link ExecutorJson#valueOf(String)
+     * ExecutorJson.valueOf}(specification))</code>.
+     *
+     * @param sessionId     unique ID of current session while multi-session usage;
+     *                      may be <code>null</code> while simple usage.
+     * @param executorId    unique ID of this executor in the system.
+     * @param specification specification of the executor, JSON format.
+     * @return newly created executor.
+     * @throws ClassNotFoundException if Java class, required for creating executing block,
+     *                                is not available in the current <code>classpath</code> environment.
+     * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
+     */
+    @UsedForExternalCommunication
+    public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String specification)
+            throws ClassNotFoundException {
+        Objects.requireNonNull(executorId, "Null executorId");
+        Objects.requireNonNull(specification, "Null specification");
+        return newExecutionBlock(sessionId, executorId, ExecutorJson.valueOf(specification));
     }
 
     @UsedForExternalCommunication

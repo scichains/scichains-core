@@ -44,7 +44,7 @@ public interface ExecutorProvider {
      *
      * <p>Note that the main goal of this function
      * is only to return minimal description, enough for building new executor by {@link #newExecutor(String)} method;
-     * in current it is enough to return {@link ExecutorJson#minimalConfigurationJsonString()}.
+     * in current it is enough to return {@link ExecutorJson#minimalSpecification()}.
      * But this function <b>may</b> return full JSON; it is used, in particular, by {@link Chain} class.
      *
      * <p>The main source of information about all JSON models is another:

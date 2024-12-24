@@ -93,7 +93,7 @@ public class CreateExecutorJsonTest {
         final String jsonString = model.jsonString();
         java.nio.file.Files.writeString(resultFile, jsonString);
         System.out.printf("Minimal configuration:%n");
-        System.out.println(model.minimalConfigurationJsonString());
+        System.out.println(model.minimalSpecification());
         System.out.printf("%nFull model:%n");
         System.out.println(model);
         if (model.isJavaExecutor()) {
@@ -102,13 +102,13 @@ public class CreateExecutorJsonTest {
             final ExecutionBlock executionBlock;
             try {
                 executionBlock = ExecutionBlock.newExecutionBlock(
-                        "some_session", model.getExecutorId(), model.minimalConfigurationJsonString());
+                        "some_session", model.getExecutorId(), model.minimalSpecification());
                 Thread.sleep(100);
                 System.out.println(executionBlock);
                 executionBlock.execute();
                 System.out.println();
                 System.out.println("Specification:");
-                System.out.println(Jsons.toPrettyString(executionBlock.getExecutorSpecificationJson()));
+                System.out.println(executionBlock.getExecutorSpecification().jsonString());
             } catch (ClassNotFoundException e) {
                 System.out.printf("Cannot load required class: %s%n", e);
             }

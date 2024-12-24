@@ -24,6 +24,7 @@
 
 package net.algart.executors.api.model.tests;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.model.ExecutorJson;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ExecutorJsonTest {
+    @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 4) {
             System.out.printf("Usage: %s executor_model.json " +
@@ -48,15 +50,14 @@ public class ExecutorJsonTest {
 //        ExecutorJson model = ExecutorJson.valueOf(Jsons.readJson(modelFile)); // - for testing null file
         model.write(resultFile1);
         System.out.printf("Java configuration:%n");
-        System.out.println(model.minimalConfigurationJsonString());
+        System.out.println(model.minimalSpecification());
         System.out.printf("%nFull model:%n");
         System.out.println(model);
         System.out.printf("%nExecutor object:%n");
         Thread.sleep(100);
-        final ExecutionBlock executionBlock;
+        ExecutionBlock executionBlock;
         try {
-            executionBlock = ExecutionBlock.newExecutionBlock(
-                    null, model.getExecutorId(), model.minimalConfigurationJsonString());
+            executionBlock = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), model);
             Thread.sleep(100);
             System.out.println(executionBlock);
             if (executionBlock instanceof Executor) {
@@ -73,6 +74,37 @@ public class ExecutorJsonTest {
                 System.out.printf("%nExecutor specification:%n");
                 System.out.println(executionBlock.getExecutorSpecification());
             }
+            ExecutionBlock block1 = null;
+            ExecutionBlock block2 = null;
+            for (int test = 1; test <= 16; test++) {
+                System.out.printf("Timing test %d...%n", test);
+                final int n = 1000;
+                JsonObject json = null;
+                String minimal = null;
+                long t1 = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    json = model.toJson();
+                }
+                long t2 = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    minimal = model.minimalSpecification();
+                }
+                long t3 = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    block1 = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), model);
+                }
+                long t4 = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    block2 = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), minimal);
+                }
+                long t5 = System.nanoTime();
+                System.out.printf("ExecutorJson.toJson(): %.3f mcs%n", (t2 - t1) * 1e-3 / n);
+                System.out.printf("ExecutorJson.minimalSpecification(): %.3f mcs%n", (t3 - t2) * 1e-3 / n);
+                System.out.printf("Creating execution block from ExecutorJson: %.3f mcs%n", (t4 - t3) * 1e-3 / n);
+                System.out.printf("Creating execution block from minimal string:  %.3f mcs%n", (t5 - t4) * 1e-3 / n);
+            }
+            System.out.printf("Full execution block:%n%s%n%n", block1.getExecutorSpecification().jsonString());
+            System.out.printf("Minimal execution block:%n%s%n%n", block2.getExecutorSpecification().jsonString());
         } catch (ClassNotFoundException e) {
             System.out.printf("Cannot load required class: %s%n", e);
         }
