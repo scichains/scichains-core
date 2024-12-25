@@ -90,6 +90,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
             } else {
                 try {
                     executorJson = ExecutorJson.valueOf(specification);
+//                    System.out.println("Building executor: " + executorJson.getName());
                 } catch (JsonException e) {
                     throw new IllegalStateException("Standard executor provider cannot be used with executor "
                             + executorId + ": it is registered with unsupported format of executor specification", e);

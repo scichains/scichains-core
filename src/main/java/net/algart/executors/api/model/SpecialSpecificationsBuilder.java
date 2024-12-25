@@ -29,21 +29,21 @@ import net.algart.executors.api.CommonPlatformInformation;
 import java.util.Objects;
 import java.util.UUID;
 
-class SpecialModelsBuilder {
+class SpecialSpecificationsBuilder {
     public static final String PLATFORM_LANGUAGE = "system";
 
-    private final ExecutorJsonSet models;
+    private final ExecutorJsonSet specifications;
 
-    public SpecialModelsBuilder(ExecutorJsonSet models) {
-        this.models = Objects.requireNonNull(models, "Null models");
+    public SpecialSpecificationsBuilder(ExecutorJsonSet specifications) {
+        this.specifications = Objects.requireNonNull(specifications, "Null specifications");
     }
 
-    public boolean addSpecialModels() {
+    public boolean addSpecifications() {
         final ExecutorJson pattern = findCommonPlatformInformationPattern();
         if (pattern != null) {
-            models.remove(pattern.getExecutorId());
+            specifications.remove(pattern.getExecutorId());
             for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
-                models.add(newCommonPlatformInformationModel(pattern, platform));
+                specifications.add(newCommonPlatformInformationSpecification(pattern, platform));
             }
             return true;
         }
@@ -51,7 +51,7 @@ class SpecialModelsBuilder {
     }
 
     private ExecutorJson findCommonPlatformInformationPattern() {
-        for (ExecutorJson model : models.all()) {
+        for (ExecutorJson model : specifications.all()) {
             if (model.isJavaExecutor()) {
                 final ExecutorJson.JavaConf javaConf = model.getJava();
                 if (javaConf != null) {
@@ -65,7 +65,9 @@ class SpecialModelsBuilder {
         return null;
     }
 
-    private ExecutorJson newCommonPlatformInformationModel(ExecutorJson pattern, ExtensionJson.Platform platform) {
+    private ExecutorJson newCommonPlatformInformationSpecification(
+            ExecutorJson pattern,
+            ExtensionJson.Platform platform) {
         Objects.requireNonNull(pattern, "Null pattern");
         Objects.requireNonNull(platform, "Null platform");
         ExecutorJson result = new ExecutorJson();

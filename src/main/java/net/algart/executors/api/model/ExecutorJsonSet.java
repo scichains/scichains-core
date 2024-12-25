@@ -186,8 +186,8 @@ public final class ExecutorJsonSet {
                 final ExecutorJsonSet newSet = ExecutorJsonSet.newInstance();
                 newSet.addInstalledModelFolders(true);
                 // - I/O exceptions possible
-                final SpecialModelsBuilder builder = new SpecialModelsBuilder(newSet);
-                builder.addSpecialModels();
+                final SpecialSpecificationsBuilder builder = new SpecialSpecificationsBuilder(newSet);
+                builder.addSpecifications();
                 // - adding special models, which have no explicitly specified JSONs,
                 // like executors, describing each platform - "clone" of CommonPlatformInformation
                 newSet.immutable = true;

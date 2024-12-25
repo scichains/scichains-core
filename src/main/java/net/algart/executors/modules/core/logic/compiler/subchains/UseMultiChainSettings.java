@@ -46,8 +46,8 @@ public class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
-    public ExecutorJson buildCombineModel(SettingsCombiner settingsCombiner) {
-        final ExecutorJson result = super.buildCombineModel(settingsCombiner);
+    public ExecutorJson buildCombineSpecification(SettingsCombiner settingsCombiner) {
+        final ExecutorJson result = super.buildCombineSpecification(settingsCombiner);
         result.createOptionsIfAbsent().createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);

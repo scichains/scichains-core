@@ -325,11 +325,11 @@ public class UseSettings extends FileOperation {
         final SettingsCombiner settingsCombiner = SettingsCombiner.valueOf(settingsCombinerJson);
         settingsCombiner.setCustomSettingsInformation(customSettingsInformation());
         SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.id(), settingsCombiner,
-                buildCombineModel(settingsCombiner));
+                buildCombineSpecification(settingsCombiner));
         SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.splitId(), settingsCombiner,
-                buildSplitModel(settingsCombiner));
+                buildSplitSpecification(settingsCombiner));
         SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.getNamesId(), settingsCombiner,
-                buildGetNamesModel(settingsCombiner));
+                buildGetNamesSpecification(settingsCombiner));
         return this.settingsCombiner = settingsCombiner;
     }
 
@@ -348,7 +348,7 @@ public class UseSettings extends FileOperation {
 
     // Note: for multichain settings, this method is called as a result of
     // the call "settingsFactory.use" inside MultiChain constructor
-    public ExecutorJson buildCombineModel(SettingsCombiner settingsCombiner) {
+    public ExecutorJson buildCombineSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         ExecutorJson result = buildCommon(newCombineSettings(), settingsCombiner);
         result.setExecutorId(settingsCombiner.id());
@@ -371,7 +371,7 @@ public class UseSettings extends FileOperation {
         return combineExecutorModel = result;
     }
 
-    public ExecutorJson buildSplitModel(SettingsCombiner settingsCombiner) {
+    public ExecutorJson buildSplitSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.splitId() == null) {
             return splitExecutorModel = null;
@@ -386,7 +386,7 @@ public class UseSettings extends FileOperation {
         return splitExecutorModel = result;
     }
 
-    public ExecutorJson buildGetNamesModel(SettingsCombiner settingsCombiner) {
+    public ExecutorJson buildGetNamesSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.getNamesId() == null) {
             return getNamesExecutorModel = null;

@@ -40,9 +40,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// Note: this class is not absolutely safe in relation of copying mutable data into and from this object.
-// As a result, this object can become incorrect after creation, for example, by setting duplicated names
-// in several ports.
+/**
+ * <p>Detailed specification of an executor: ports, parameters, some key features of its behavior.</p>
+ *
+ * <p>Note: this class is not absolutely safe in relation of copying mutable data into and from this object.
+ * Therefore, this object can become incorrect after creation, for example, by setting duplicated names
+ * in several ports.</p>
+ */
 public class ExecutorJson extends AbstractConvertibleToJson {
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";

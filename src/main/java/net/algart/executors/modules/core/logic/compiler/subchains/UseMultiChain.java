@@ -282,11 +282,11 @@ public final class UseMultiChain extends FileOperation {
             multiChain.checkImplementationCompatibility();
         }
         MULTICHAIN_LOADER.registerWorker(
-                getSessionId(), multiChain.id(), multiChain, buildMultiChainModel(multiChain));
+                getSessionId(), multiChain.id(), multiChain, buildMultiChainSpecification(multiChain));
         return multiChain;
     }
 
-    public static ExecutorJson buildMultiChainModel(MultiChain multiChain) {
+    public static ExecutorJson buildMultiChainSpecification(MultiChain multiChain) {
         Objects.requireNonNull(multiChain, "Null multiChain");
         final MultiChainJson model = multiChain.model();
         ExecutorJson result = new ExecutorJson();

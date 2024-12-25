@@ -414,12 +414,12 @@ public final class UseSubChain extends FileOperation {
             chain.setExecuteAll(executeAll);
         }
         SUB_CHAIN_LOADER.registerWorker(
-                sessionId, chain.id(), chain, buildSubChainModelAndExecuteLoadingTimeWithoutInputs(chain));
+                sessionId, chain.id(), chain, buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(chain));
         loadedChainsCount.incrementAndGet();
         return chain;
     }
 
-    private ExecutorJson buildSubChainModelAndExecuteLoadingTimeWithoutInputs(Chain chain) {
+    private ExecutorJson buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(Chain chain) {
         Objects.requireNonNull(chain, "Null chain");
         final ExecutorJson result = new ExecutorJson();
         result.setTo(new InterpretSubChain());

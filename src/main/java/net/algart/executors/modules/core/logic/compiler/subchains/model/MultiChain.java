@@ -100,19 +100,20 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         + model.getMultiChainJsonFile(), e);
             }
             if (optionalChain.isPresent()) {
-                final ExecutorJson implementationModel = chainFactory.chainExecutorSpecification();
-                assert implementationModel != null : "chainExecutorModel cannot be null if use() returns some result";
-                this.loadedChainExecutorSpecifications.add(implementationModel);
+                final ExecutorJson implementationSpecification = chainFactory.chainExecutorSpecification();
+                assert implementationSpecification != null :
+                        "chainExecutorSpecification cannot be null if use() returns some result";
+                this.loadedChainExecutorSpecifications.add(implementationSpecification);
                 partialChainMap.put(optionalChain.get().id(), optionalChain.get());
             } else {
                 blockedChainModels.add(chainModel);
                 blockedChainModelNames.add(chainModel.chainName());
             }
-            // - Note: if loading chain was blocked due to recursion, it means that it is in the process
-            // of registering and not available yet even via ExecutionBlock.getExecutorModelDescription.
+            // - Note: if the process of loading chain was blocked due to recursion, it means that it is in
+            // the process of registering and not available yet even via ExecutionBlock.getExecutorSpecification.
             // We will not be able to check it at loading stage by checkImplementationCompatibility()
             // and will not be able to use help from partialChainMap,
-            // but it is not too serious problem: such a recursion is a very rare case.
+            // but it is not-too-serious problem: such a recursion is a very rare case.
         }
         final String defaultChainVariantId = model.getDefaultChainVariantId();
         this.defaultChainVariantId = defaultChainVariantId != null ? defaultChainVariantId : firstChainId;
@@ -120,16 +121,16 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         settingsFactory.setContextId(contextId);
         settingsFactory.setContextName(model.getName());
         // - this information, set by previous operators, will be used only in the following operators,
-        // to make a reference to this MultiChain and to set correct owner information
+        // to make a reference to this MultiChain and to set the correct owner information
         // inside newly created settings combiner
         this.multiChainOnlyCommonSettingsCombiner = SettingsCombiner.valueOf(
-                buildMultiChainSettingsModel(false, partialChainMap));
+                buildMultiChainSettingsSpecification(false, partialChainMap));
         // - this (internally used) combiner does not contain advanced multi-line controls
         // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainModel()
         settingsFactory.setMultiChain(this);
         // - this reference will be necessary in CombineMultiChainSettings.correctSettings
         this.multiChainSettingsCombiner = settingsFactory.use(
-                buildMultiChainSettingsModel(true, partialChainMap));
+                buildMultiChainSettingsSpecification(true, partialChainMap));
     }
 
     public static MultiChain valueOf(
@@ -366,7 +367,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     // Note: this.chainModels must be already built
-    private SettingsCombinerJson buildMultiChainSettingsModel(
+    private SettingsCombinerJson buildMultiChainSettingsSpecification(
             boolean addSubSettingsForVariants,
             Map<String, Chain> helpingChainMap) {
         final SettingsCombinerJson result = new SettingsCombinerJson();
