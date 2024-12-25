@@ -24,6 +24,7 @@
 
 package net.algart.executors.api;
 
+import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
@@ -37,6 +38,7 @@ import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.external.UsedForExternalCommunication;
+import net.algart.json.Jsons;
 import net.algart.json.PropertyChecker;
 
 import java.nio.file.NoSuchFileException;
@@ -1227,6 +1229,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             }
         }
         return null;
+    }
+
+    public static ExecutorJson parseExecutorSpecification(String sessionId, String executorId) throws JsonException {
+        final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
+        if (specification == null) {
+            return null;
+        }
+        return ExecutorJson.valueOf(specification);
     }
 
     /**

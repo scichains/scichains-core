@@ -138,7 +138,7 @@ public class UseJS extends FileOperation {
     public void use(JSCallerJson jsCallerJson) throws IOException {
         final String sessionId = getSessionId();
         final Path workingDirectory = translateWorkingDirectory();
-        correctJSExecutorModel(jsCallerJson, workingDirectory);
+        correctJSExecutorSpecification(jsCallerJson, workingDirectory);
         final JSCaller jsCaller = JSCaller.valueOf(jsCallerJson, workingDirectory);
         JS_CALLER_LOADER.registerWorker(sessionId, jsCaller.executorId(), jsCaller, jsCallerJson);
     }
@@ -147,7 +147,7 @@ public class UseJS extends FileOperation {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(workingDirectory, this);
     }
 
-    private void correctJSExecutorModel(JSCallerJson jsCallerJson, Path workingDirectory) {
+    private void correctJSExecutorSpecification(JSCallerJson jsCallerJson, Path workingDirectory) {
         Objects.requireNonNull(jsCallerJson, "Null jsCallerJson");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         jsCallerJson.setTo(new InterpretJS());

@@ -52,7 +52,7 @@ public final class ChainBlock {
     Chain chain;
     final String id;
     private final String executorId;
-    final ExecutorJson executorJson;
+    final ExecutorJson executorSpecification;
     // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
     // We use this information:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
@@ -108,7 +108,7 @@ public final class ChainBlock {
         this.id = Objects.requireNonNull(id, "Null block id");
         this.executorId = Objects.requireNonNull(executorId, "Null block executorId");
         ExecutorProvider executorProvider = chain.getExecutorProvider();
-        this.executorJson = executorProvider == null ? null : executorProvider.executorJson(executorId);
+        this.executorSpecification = executorProvider == null ? null : executorProvider.specification(executorId);
         // - Note: executorJson MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:
@@ -131,7 +131,7 @@ public final class ChainBlock {
         this.chain = block.chain;
         this.id = block.id;
         this.executorId = block.executorId;
-        this.executorJson = block.executorJson;
+        this.executorSpecification = block.executorSpecification;
 
         this.blockConfJson = block.blockConfJson;
         this.executionStage = block.executionStage;
@@ -154,15 +154,17 @@ public final class ChainBlock {
         // Note: this problem rarely occurs because usually the cloned chain contains
         // non-initialized executors (created by UseSubChain or UseMultiChain).
         // But here is an important exception: method ExecutorJson.setTo(Chain chain),
-        // used inside UseSubChain to build a chain executor model,
+        // used inside UseSubChain to build a chain executor specification,
         // initializes data blocks (with options.behavior.data = true) to know the default
         // corresponding parameters values of the sub-chain executor.
         // This situation really can lead to bug in recursive chains.
 
         initialize();
         this.properties.putAll(block.properties);
-        block.inputPorts.forEach((key, port) -> this.inputPorts.put(key, port.cleanCopy(this)));
-        block.outputPorts.forEach((key, port) -> this.outputPorts.put(key, port.cleanCopy(this)));
+        block.inputPorts.forEach((key, port) ->
+                this.inputPorts.put(key, port.cleanCopy(this)));
+        block.outputPorts.forEach((key, port) ->
+                this.outputPorts.put(key, port.cleanCopy(this)));
         // - copying ports, not their data (all ports will be empty at the beginning)
     }
 
@@ -204,15 +206,18 @@ public final class ChainBlock {
         result.setEnabled(blockConf.getSystem().isEnabled());
         result.setSystemName(blockConf.getSystem().name());
         final boolean enabledRunTime = result.isExecutedAtRunTime();
-        result.setStandardInput(enabledRunTime && result.executorJson != null && result.executorJson.isInput());
-        result.setStandardOutput(enabledRunTime && result.executorJson != null && result.executorJson.isOutput());
-        result.setStandardData(enabledRunTime && result.executorJson != null && result.executorJson.isData());
+        result.setStandardInput(enabledRunTime && result.executorSpecification != null
+                && result.executorSpecification.isInput());
+        result.setStandardOutput(enabledRunTime && result.executorSpecification != null
+                && result.executorSpecification.isOutput());
+        result.setStandardData(enabledRunTime && result.executorSpecification != null
+                && result.executorSpecification.isData());
         result.loadProperties(blockConf);
         result.loadPorts(blockConf);
         result.setEnabledByLegacyWayIfNecessary();
         result.setSystemNameByLegacyWayIfNecessary();
-        if (result.executorJson == null) {
-            LOG.log(Logger.Level.DEBUG, () -> "Model for executor " + executorId + " is not registered yet "
+        if (result.executorSpecification == null) {
+            LOG.log(Logger.Level.DEBUG, () -> "Specification of executor " + executorId + " is not registered yet "
                     + "(while creating chain block) and will be probably loaded later; "
                     + result.detailedMessage());
         }
@@ -243,8 +248,8 @@ public final class ChainBlock {
      *
      * @return description of the executor.
      */
-    public ExecutorJson getModel() {
-        return executorJson;
+    public ExecutorJson getExecutorSpecification() {
+        return executorSpecification;
     }
 
     public ChainJson.ChainBlockConf getBlockConfJson() {
@@ -817,7 +822,7 @@ public final class ChainBlock {
                 + "      ID='" + id + "'\n"
                 + (systemName == null ? "" : "      system name='" + systemName + "'\n")
                 + "      executor ID='" + executorId + "'"
-                + (executorJson == null ? " (no executor JSON)" : " (name='" + executorJson.getName() + "')")
+                + (executorSpecification == null ? " (no executor JSON)" : " (name='" + executorSpecification.getName() + "')")
                 + "\n"
                 + "      address='" + System.identityHashCode(this)
                 + " (belongs to " + System.identityHashCode(chain) + ")'\n"
@@ -871,7 +876,7 @@ public final class ChainBlock {
     }
 
     private String friendlyName(boolean useCaption) {
-        final String executorName = executorJson != null ? executorJson.getName() :
+        final String executorName = executorSpecification != null ? executorSpecification.getName() :
                 blockConfJson != null ? blockConfJson.getExecutorName() : null;
         String caption = null;
         if (useCaption && blockConfJson != null) {
@@ -880,7 +885,7 @@ public final class ChainBlock {
                 caption = null;
             }
         }
-        return (executorJson == null ? "dynamic " : "")
+        return (executorSpecification == null ? "dynamic " : "")
                 + (executorName != null ? "executor '" + executorName + "'" : "executor")
                 + (caption != null ? " ('" + caption + "')" : "");
     }
@@ -890,7 +895,7 @@ public final class ChainBlock {
     }
 
     private String friendlyCaption(boolean quoted) {
-        final String executorName = executorJson != null ? executorJson.getName() :
+        final String executorName = executorSpecification != null ? executorSpecification.getName() :
                 blockConfJson != null ? blockConfJson.getExecutorName() : null;
         String caption = blockConfJson == null ? null : blockConfJson.getSystem().getCaption();
         if (caption == null) {
@@ -898,7 +903,7 @@ public final class ChainBlock {
         }
         return caption != null ?
                 (quoted ? "'" + caption + "'" : caption) :
-                (executorJson == null ? "dynamic " : "") + "executor";
+                (executorSpecification == null ? "dynamic " : "") + "executor";
     }
 
     private String detailedMessage() {
@@ -907,9 +912,9 @@ public final class ChainBlock {
                 + "block ID " + id + "\n      "
                 + (systemName == null ? "" : "system name '" + systemName + "'\n      ")
                 + (executor == null ? "" : executor.getClass() + "\n      ")
-                + (executorJson == null ?
+                + (executorSpecification == null ?
                 "probably dynamic executor" :
-                "executor name '" + executorJson.getName() + "'")
+                "executor name '" + executorSpecification.getName() + "'")
                 + " (executor ID " + executorId + ")\n      "
                 + "in the chain '" + chain.name() + "' (ID " + chain.id() + ")";
     }
@@ -1003,15 +1008,15 @@ public final class ChainBlock {
     private void loadPorts(ChainJson.ChainBlockConf blockConf) {
         this.inputPorts.clear();
         this.outputPorts.clear();
-        if (this.executorJson != null) {
-            for (ExecutorJson.PortConf portConf : this.executorJson.getInPorts().values()) {
+        if (this.executorSpecification != null) {
+            for (ExecutorJson.PortConf portConf : this.executorSpecification.getInPorts().values()) {
                 ChainInputPort inputPort = ChainInputPort.valueOf(this, portConf);
                 Objects.requireNonNull(inputPort, "Null input port");
                 if (inputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                     throw new IllegalArgumentException("Duplicate input port name: " + inputPort.key);
                 }
             }
-            for (ExecutorJson.PortConf portConf : this.executorJson.getOutPorts().values()) {
+            for (ExecutorJson.PortConf portConf : this.executorSpecification.getOutPorts().values()) {
                 ChainOutputPort outputPort = ChainOutputPort.valueOf(this, portConf);
                 Objects.requireNonNull(outputPort, "Null output port");
                 if (outputPorts.putIfAbsent(outputPort.key, outputPort) != null) {

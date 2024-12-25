@@ -140,9 +140,9 @@ public class UseSettings extends FileOperation {
     // This variable affects to result of that function (when it is not overridden)
     // only in points 4 and later. Points 1-3 are always checked when mainSettings=false.
     private SettingsCombiner settingsCombiner = null;
-    private ExecutorJson combineExecutorModel = null;
-    private ExecutorJson splitExecutorModel = null;
-    private ExecutorJson getNamesExecutorModel = null;
+    private ExecutorJson combineExecutorSpecification = null;
+    private ExecutorJson splitExecutorSpecification = null;
+    private ExecutorJson getNamesExecutorSpecification = null;
 
     public UseSettings() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
@@ -271,16 +271,16 @@ public class UseSettings extends FileOperation {
             }
         }
         if (n == 1) {
-            if (combineExecutorModel != null) {
-                getScalar(OUTPUT_COMBINE_MODEL).setTo(combineExecutorModel.jsonString());
+            if (combineExecutorSpecification != null) {
+                getScalar(OUTPUT_COMBINE_MODEL).setTo(combineExecutorSpecification.jsonString());
 //                System.out.println("!!!lastCombineModel=" + lastCombineModel.jsonString());
             }
-            if (splitExecutorModel != null) {
-                getScalar(OUTPUT_SPLIT_MODEL).setTo(splitExecutorModel.jsonString());
+            if (splitExecutorSpecification != null) {
+                getScalar(OUTPUT_SPLIT_MODEL).setTo(splitExecutorSpecification.jsonString());
 //                System.out.println("!!!lastSplitModel=" + lastSplitModel.jsonString());
             }
-            if (getNamesExecutorModel != null) {
-                getScalar(OUTPUT_GET_NAMES_MODEL).setTo(getNamesExecutorModel.jsonString());
+            if (getNamesExecutorSpecification != null) {
+                getScalar(OUTPUT_GET_NAMES_MODEL).setTo(getNamesExecutorSpecification.jsonString());
 //                System.out.println("!!!lastGetNamesModel=" + lastGetNamesModel.jsonString());
             }
         }
@@ -368,13 +368,13 @@ public class UseSettings extends FileOperation {
                 false);
         addOutputPorts(result, settingsCombiner);
         addSpecialOutputPorts(result);
-        return combineExecutorModel = result;
+        return combineExecutorSpecification = result;
     }
 
     public ExecutorJson buildSplitSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.splitId() == null) {
-            return splitExecutorModel = null;
+            return splitExecutorSpecification = null;
         }
         ExecutorJson result = buildCommon(newSplitSettings(), settingsCombiner);
         result.setExecutorId(settingsCombiner.splitId());
@@ -383,13 +383,13 @@ public class UseSettings extends FileOperation {
         addOwner(result, settingsCombiner);
         addOutputPorts(result, settingsCombiner);
         addSpecialOutputPorts(result);
-        return splitExecutorModel = result;
+        return splitExecutorSpecification = result;
     }
 
     public ExecutorJson buildGetNamesSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.getNamesId() == null) {
-            return getNamesExecutorModel = null;
+            return getNamesExecutorSpecification = null;
         }
         ExecutorJson result = buildCommon(newGetNamesOfSettings(), settingsCombiner);
         final Map<String, ExecutorJson.ControlConf> executorControls = new LinkedHashMap<>(result.getControls());
@@ -407,7 +407,7 @@ public class UseSettings extends FileOperation {
         result.setDescription(settingsCombiner.getNamesDescription());
         addOwner(result, settingsCombiner);
         addSpecialOutputPorts(result);
-        return getNamesExecutorModel = result;
+        return getNamesExecutorSpecification = result;
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {

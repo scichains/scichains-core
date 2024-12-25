@@ -101,10 +101,10 @@ public final class ExampleLoadingStage extends Executor {
     @Override
     public void process() {
         final String id = "7ec64582-de9e-4607-85ad-adfa97a3b0e5";
-        final String executorModel = ExecutorJson.valueOf(new TestExecutor(), id).jsonString();
+        final String executorSpecification = ExecutorJson.valueOf(new TestExecutor(), id).jsonString();
         final String sessionId = getSessionId();
-        MY_LOADER.setExecutorSpecification(sessionId, id, executorModel);
-        getScalar(DEFAULT_OUTPUT_PORT).setTo(executorModel);
+        MY_LOADER.setExecutorSpecification(sessionId, id, executorSpecification);
+        getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification);
         System.out.println("Loading-stage test for session " + sessionId);
         System.out.println("Current folder: " + getCurrentDirectory());
         System.out.println(availableExecutorSpecifications(sessionId));

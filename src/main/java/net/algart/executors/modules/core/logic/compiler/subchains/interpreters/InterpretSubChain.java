@@ -197,7 +197,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
                     + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + chain);
-        final ExecutorJson settingsExecutorJson = settingsBlock.getModel();
+        final ExecutorJson settingsExecutorJson = settingsBlock.getExecutorSpecification();
         if (settingsExecutorJson != null) {
             // - In current version, settingsExecutorJson will be usually null.
             // We build every ChainBlock at the stage of loading sub-chain, BEFORE executing its loading-time

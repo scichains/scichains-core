@@ -47,7 +47,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
     }
 
     @Override
-    public ExecutorJson executorJson(String executorId) {
+    public ExecutorJson specification(String executorId) {
         synchronized (lock) {
             ExecutorJson executorJson = staticExecutors.get(executorId);
             if (executorJson != null) {
@@ -105,7 +105,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
     public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (lock) {
-            final ExecutorJson executorJson = executorJson(executorId);
+            final ExecutorJson executorJson = specification(executorId);
             if (executorJson == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }

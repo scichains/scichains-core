@@ -1992,8 +1992,8 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 // (though can be used as internal chain constants)
                 final ControlConf controlConf = controls.getOrDefault(parameterName, new ControlConf());
                 controlConf.setName(parameterName);
-                ParameterValueType valueType = block.executorJson != null ? block.executorJson.dataType() : null;
-                ControlEditionType editionType = block.executorJson != null ? block.executorJson.editionType() : null;
+                ParameterValueType valueType = block.executorSpecification != null ? block.executorSpecification.dataType() : null;
+                ControlEditionType editionType = block.executorSpecification != null ? block.executorSpecification.editionType() : null;
                 if (valueType == null) {
                     valueType = ParameterValueType.STRING;
                 }

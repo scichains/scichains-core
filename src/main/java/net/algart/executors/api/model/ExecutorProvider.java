@@ -28,10 +28,10 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutorLoader;
 
 /**
- * Provider of {@link ExecutionBlock executors}. Now we have only one implementation,
- * {@link StandardExecutorProvider}, which just calls
+ * Provider of {@link ExecutionBlock executors}.
+ * Now we have only one implementation, {@link StandardExecutorProvider}, which just calls
  * {@link ExecutionBlock#newExecutor} function with passing their
- * minimal simplified JSON string, necessary for loading Java class of executor.
+ * specification ({@link ExecutorJson}), necessary for loading Java class of executor.
  * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
  * instanced of {@link ExecutorLoader} to actually create Java class {@link ExecutionBlock}.
  *
@@ -43,9 +43,8 @@ public interface ExecutorProvider {
      * Returns JSON model of the given executor.
      *
      * <p>Note that the main goal of this function
-     * is only to return minimal description, enough for building new executor by {@link #newExecutor(String)} method;
-     * in current it is enough to return {@link ExecutorJson#minimalSpecification()}.
-     * But this function <b>may</b> return full JSON; it is used, in particular, by {@link Chain} class.
+     * is only to return minimal description, enough for building new executor by {@link #newExecutor(String)} method.
+     * However, this function usually returns full specification.
      *
      * <p>The main source of information about all JSON models is another:
      * {@link ExecutionBlock#availableExecutorSpecifications(String)}.
@@ -53,7 +52,7 @@ public interface ExecutorProvider {
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.
      */
-    ExecutorJson executorJson(String executorId);
+    ExecutorJson specification(String executorId);
 
     ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException;
 

@@ -24,16 +24,12 @@
 
 package net.algart.executors.api;
 
-import jakarta.json.JsonException;
-import jakarta.json.JsonObject;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
 import net.algart.executors.api.model.InstalledExtensions;
 import net.algart.external.UsedForExternalCommunication;
-import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.lang.System.Logger;
@@ -238,10 +234,6 @@ public abstract class Executor extends ExecutionBlock {
     public String statusData(int dataCode) {
         final ExecutionStatus.DataKind dataKind = ExecutionStatus.DataKind.valueOfCodeOrNull(dataCode);
         return dataKind == null ? null : dataKind.data(status);
-    }
-
-    public final ExecutorJson executorModel() throws JsonException {
-        return executorModel(getSessionId(), getExecutorId());
     }
 
     public final ExtensionJson.Platform executorPlatform() {
@@ -751,21 +743,6 @@ public abstract class Executor extends ExecutionBlock {
                 "Finishing executing in Java%n%s", Timing.INSTANCE.finishingInfo()));
         Timing.INSTANCE.startTiming();
         // - to be on the safe side (if startExecutingAllTiming was not called)
-    }
-
-    public static ExecutorJson executorModel(String sessionId, String executorId) throws JsonException {
-        final String description = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
-        if (description == null) {
-            return null;
-        }
-        final JsonObject json;
-        try {
-            json = Jsons.toJson(description);
-            return ExecutorJson.valueOf(json);
-        } catch (JsonException e) {
-            throw new JsonException("Executor with ID \"" + executorId
-                    + "\" has is specified by description, which is not a correct JSON");
-        }
     }
 
     protected static void logInfo(Supplier<String> msgSupplier) {

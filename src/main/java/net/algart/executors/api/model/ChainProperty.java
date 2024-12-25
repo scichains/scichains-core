@@ -102,6 +102,6 @@ public final class ChainProperty {
     }
 
     private ExecutorJson.ControlConf controlConf(ChainBlock block) {
-        return block.executorJson != null ? block.executorJson.getControl(this.name) : null;
+        return block.executorSpecification != null ? block.executorSpecification.getControl(this.name) : null;
     }
 }

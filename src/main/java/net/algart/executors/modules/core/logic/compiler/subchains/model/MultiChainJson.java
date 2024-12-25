@@ -447,37 +447,37 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return result;
     }
 
-    public void checkImplementationCompatibility(ExecutorJson implementationModel) {
-        Objects.requireNonNull(implementationModel, "Null implementationModel");
+    public void checkImplementationCompatibility(ExecutorJson implementationSpecification) {
+        Objects.requireNonNull(implementationSpecification, "Null implementationSpecification");
         for (ExecutorJson.PortConf port : inPorts.values()) {
-            final ExecutorJson.PortConf implementationPort = implementationModel.getInPort(port.getName());
+            final ExecutorJson.PortConf implementationPort = implementationSpecification.getInPort(port.getName());
             if (implementationPort == null) {
                 continue;
                 // - if an implementation has no corresponding input port, it is not a problem:
                 // it means that this implementation does not use this information
             }
             if (!port.isCompatible(implementationPort)) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationModel)
+                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
                         + " has incompatible input port \"" + port.getName() + "\"");
             }
         }
         for (ExecutorJson.PortConf port : outPorts.values()) {
-            final ExecutorJson.PortConf implementationPort = implementationModel.getOutPort(port.getName());
+            final ExecutorJson.PortConf implementationPort = implementationSpecification.getOutPort(port.getName());
             if (implementationPort == null) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationModel)
+                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
                         + " has no output port \"" + port.getName() + "\"");
             }
             if (!port.isCompatible(implementationPort)) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationModel)
+                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
                         + " has incompatible output port \"" + port.getName() + "\"");
             }
         }
     }
 
-    private String checkImplementationMessageStart(ExecutorJson implementationExecutorModel) {
+    private String checkImplementationMessageStart(ExecutorJson implementationSpecification) {
         return "Implementation \""
-                + implementationExecutorModel.getName() + "\" (ID \""
-                + implementationExecutorModel.getExecutorId() + "\") of multichain \""
+                + implementationSpecification.getName() + "\" (ID \""
+                + implementationSpecification.getExecutorId() + "\") of multichain \""
                 + name + "\" (ID \"" + id + "\")";
     }
 
