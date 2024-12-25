@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class InstalledExecutorModel extends Executor implements ReadOnlyExecutionInput {
+public class InstalledExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_PLATFORM_ID = "platform_id";
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
@@ -59,7 +59,7 @@ public class InstalledExecutorModel extends Executor implements ReadOnlyExecutio
     private String id = "n/a";
     private boolean specialSearchInBuiltIn = true;
 
-    public InstalledExecutorModel() {
+    public InstalledExecutorSpecification() {
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
 
@@ -67,7 +67,7 @@ public class InstalledExecutorModel extends Executor implements ReadOnlyExecutio
         return id;
     }
 
-    public InstalledExecutorModel setId(String id) {
+    public InstalledExecutorSpecification setId(String id) {
         this.id = nonEmpty(id);
         return this;
     }
@@ -76,7 +76,7 @@ public class InstalledExecutorModel extends Executor implements ReadOnlyExecutio
         return specialSearchInBuiltIn;
     }
 
-    public InstalledExecutorModel setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
+    public InstalledExecutorSpecification setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
         this.specialSearchInBuiltIn = specialSearchInBuiltIn;
         return this;
     }
@@ -115,7 +115,7 @@ public class InstalledExecutorModel extends Executor implements ReadOnlyExecutio
                     (t4 - t1) * 1e-6, (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
             return builtIn;
         }
-        final String description = ExecutionBlock.getExecutorModelDescription(getSessionId(), executorId);
+        final String description = ExecutionBlock.getExecutorSpecification(getSessionId(), executorId);
         if (description == null) {
             return null;
         }

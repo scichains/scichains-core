@@ -28,7 +28,7 @@ import net.algart.bridges.jep.additions.JepGlobalConfig;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.SimpleExecutionBlockLoader;
+import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
@@ -55,17 +55,17 @@ public class UsingPython {
     public static final String SUPPLIED_PYTHON_MODELS_OUTPUT_HINT =
             "List of Python model folders, supplied by this application and used to find Python-based executors";
 
-    private static final SimpleExecutionBlockLoader<PythonCaller> PYTHON_CALLER_LOADER =
-            new SimpleExecutionBlockLoader<>("Python loader");
+    private static final SimpleExecutorLoader<PythonCaller> PYTHON_CALLER_LOADER =
+            new SimpleExecutorLoader<>("Python loader");
 
     static {
-        ExecutionBlock.registerExecutionBlockLoader(PYTHON_CALLER_LOADER);
+        ExecutionBlock.registerExecutorLoader(PYTHON_CALLER_LOADER);
     }
 
     private UsingPython() {
     }
 
-    public static SimpleExecutionBlockLoader<PythonCaller> pythonCallerLoader() {
+    public static SimpleExecutorLoader<PythonCaller> pythonCallerLoader() {
         return PYTHON_CALLER_LOADER;
     }
 
@@ -96,7 +96,7 @@ public class UsingPython {
 
     // Note: corrects the argument
     public static void use(String sessionId, PythonCallerJson pythonCallerJson) throws IOException {
-        correctPythonExecutorModel(pythonCallerJson);
+        correctPythonExecutorSpecification(pythonCallerJson);
         final PythonCaller pythonCaller = PythonCaller.valueOf(pythonCallerJson);
         PYTHON_CALLER_LOADER.registerWorker(sessionId, pythonCaller.executorId(), pythonCaller, pythonCallerJson);
     }
@@ -118,7 +118,7 @@ public class UsingPython {
         JepGlobalConfig.INSTANCE.loadFromSystemProperties().useForJep();
     }
 
-    private static void correctPythonExecutorModel(PythonCallerJson pythonCallerJson) {
+    private static void correctPythonExecutorSpecification(PythonCallerJson pythonCallerJson) {
         Objects.requireNonNull(pythonCallerJson, "Null pythonCallerJson");
         pythonCallerJson.setTo(new InterpretPython());
         // - adds JavaConf, (maybe) parameters and some ports

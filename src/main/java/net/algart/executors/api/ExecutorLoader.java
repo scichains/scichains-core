@@ -25,10 +25,8 @@
 package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import jakarta.json.JsonObject;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExecutorJsonSet;
-import net.algart.json.Jsons;
 
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
@@ -41,21 +39,21 @@ import java.util.*;
  * Loader of {@link ExecutionBlock executors}. Every kind of executors, like sub-chains, settings combiners,
  * Python function uses their own loaders.
  *
- * <p>In current version, all they are instances of {@link SimpleExecutionBlockLoader}.
+ * <p>In current version, all they are instances of {@link SimpleExecutorLoader}.
  */
-public class ExecutionBlockLoader {
+public class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;
     // - Must be true since 15 Aug 2022. It helps external system to see modification,
     // made by Java in standard built-in executor JSONs.
 
-    private static final Logger LOG = System.getLogger(ExecutionBlockLoader.class.getName());
+    private static final Logger LOG = System.getLogger(ExecutorLoader.class.getName());
 
-    final Map<String, Map<String, String>> allModels = new LinkedHashMap<>();
+    final Map<String, Map<String, String>> allSpecifications = new LinkedHashMap<>();
     // - sessionId -> Map(executorId -> executorJson)
 
     private final String name;
 
-    public ExecutionBlockLoader(String name) {
+    public ExecutorLoader(String name) {
         this.name = Objects.requireNonNull(name, "Null loader name");
     }
 
@@ -70,15 +68,15 @@ public class ExecutionBlockLoader {
      * <p>Note: if this loader uses sessionId, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
      *
-     * @param sessionId     see the same argument of {@link ExecutionBlock#newExecutionBlock};
+     * @param sessionId     see the same argument of {@link ExecutionBlock#newExecutor};
      *                      may be ignored.
-     * @param executorId    see the same argument of {@link ExecutionBlock#newExecutionBlock}.
-     * @param specification see the same argument of {@link ExecutionBlock#newExecutionBlock}.
+     * @param executorId    see the same argument of {@link ExecutionBlock#newExecutor}.
+     * @param specification see the same argument of {@link ExecutionBlock#newExecutor}.
      * @return newly created executor or <code>null</code> if this loader does not "understand" such JSON.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification)
+    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification)
             throws ClassNotFoundException {
         return null;
     }
@@ -87,13 +85,13 @@ public class ExecutionBlockLoader {
      * Removes all executors, dynamically created for the given session,
      * probably stored in some tables by this loader for dynamic usage,
      * and frees some caches, necessary for such executors.
-     * Default implementation calls {@link #removeSessionExecutorModels(String)}.
+     * Default implementation calls {@link #removeSessionExecutorSpecifications(String)}.
      *
      * @param sessionId unique ID of current session.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public void clearSession(String sessionId) {
-        removeSessionExecutorModels(sessionId);
+        removeSessionExecutorSpecifications(sessionId);
     }
 
     /**
@@ -106,16 +104,16 @@ public class ExecutionBlockLoader {
      * @return executors' descriptions for executors, created by this loader.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public final Map<String, String> availableExecutorModelDescriptions(String sessionId) {
+    public final Map<String, String> availableExecutorSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
-        synchronized (allModels) {
-            return Collections.unmodifiableMap(allModels.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
+        synchronized (allSpecifications) {
+            return Collections.unmodifiableMap(allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
         }
     }
 
     /**
-     * Returns <tt>{@link #availableExecutorModelDescriptions(String)
-     * availableExecutorModelDescriptions}(sessionId).get(executorId)</tt>,
+     * Returns <tt>{@link #availableExecutorSpecifications(String)
+     * availableExecutorSpecifications}(sessionId).get(executorId)</tt>,
      * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session.
@@ -123,35 +121,35 @@ public class ExecutionBlockLoader {
      * @return description of this dynamic executor (probably JSON).
      * @throws NullPointerException if one of arguments is <code>null</code>.
      */
-    public final String getExecutorModelDescription(String sessionId, String executorId) {
+    public final String getExecutorSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
-        synchronized (allModels) {
-            return allModels.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
+        synchronized (allSpecifications) {
+            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
         }
     }
 
-    public final void setExecutorModelDescription(String sessionId, String executorId, String modelDescription) {
+    public final void setExecutorSpecification(String sessionId, String executorId, String specification) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(modelDescription, "Null modelDescription");
-        synchronized (allModels) {
-            allModels.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).put(executorId, modelDescription);
+        Objects.requireNonNull(specification, "Null specification");
+        synchronized (allSpecifications) {
+            allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).put(executorId, specification);
         }
     }
 
-    public final boolean removeExecutorModel(String sessionId, String executorId) {
+    public final boolean removeExecutorSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
-        synchronized (allModels) {
-            return allModels.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).remove(executorId) != null;
+        synchronized (allSpecifications) {
+            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).remove(executorId) != null;
         }
     }
 
-    public final void removeSessionExecutorModels(String sessionId) {
+    public final void removeSessionExecutorSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
-        synchronized (allModels) {
-            Map<String, String> models = allModels.get(sessionId);
+        synchronized (allSpecifications) {
+            Map<String, String> models = allSpecifications.get(sessionId);
             if (models != null) {
                 models.clear();
             }
@@ -160,20 +158,20 @@ public class ExecutionBlockLoader {
 
     @Override
     public String toString() {
-        return name + " (" + allModels.size() + " sessions)";
+        return name + " (" + allSpecifications.size() + " sessions)";
     }
 
     // Note: this loader is usually enough for actual creating executors,
     // because non-Java executors are usually implemented via standard Java executor, which performs their tasks.
     // This loader DOES NOT use sessionId (Java classes are shared among all JVM).
-    static class StandardJavaExecutorLoader extends ExecutionBlockLoader {
+    static class StandardJavaExecutorLoader extends ExecutorLoader {
         private final Map<String, Executable> newInstanceMakers = new HashMap<>();
 
         StandardJavaExecutorLoader() {
             super("standard Java executors loader");
         }
 
-        void registerAllStandardModels() {
+        void registerAllStandardExecutors() {
             if (REGISTER_BUILT_IN_EXECUTORS) {
                 final long t1 = System.nanoTime();
                 final Map<String, String> allStandardModels = new LinkedHashMap<>();
@@ -184,12 +182,12 @@ public class ExecutionBlockLoader {
                 LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
                         "Storing descriptions of installed built-in executor models: %.3f ms",
                         (t2 - t1) * 1e-6));
-                allModels.put(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandardModels);
+                allSpecifications.put(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandardModels);
             }
         }
 
         @Override
-        public ExecutionBlock newExecutionBlock(String ignoredSessionId, String executorId, ExecutorJson specification)
+        public ExecutionBlock newExecutor(String ignoredSessionId, String executorId, ExecutorJson specification)
                 throws ClassNotFoundException {
             Objects.requireNonNull(executorId, "Null executorId");
             Objects.requireNonNull(specification, "Null specification");

@@ -754,7 +754,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     public static ExecutorJson executorModel(String sessionId, String executorId) throws JsonException {
-        final String description = ExecutionBlock.getExecutorModelDescription(sessionId, executorId);
+        final String description = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
         if (description == null) {
             return null;
         }

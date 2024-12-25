@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutionBlockLoader;
+import net.algart.executors.api.ExecutorLoader;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.model.ExecutorJson;
 
@@ -88,11 +88,10 @@ public final class ExampleLoadingStage extends Executor {
         }
     }
 
-    private static final ExecutionBlockLoader MY_LOADER =
-            new ExecutionBlockLoader("test loader");
+    private static final ExecutorLoader MY_LOADER = new ExecutorLoader("test loader");
 
     static {
-        ExecutionBlock.registerExecutionBlockLoader(MY_LOADER);
+        ExecutionBlock.registerExecutorLoader(MY_LOADER);
     }
 
     public ExampleLoadingStage() {
@@ -104,10 +103,10 @@ public final class ExampleLoadingStage extends Executor {
         final String id = "7ec64582-de9e-4607-85ad-adfa97a3b0e5";
         final String executorModel = ExecutorJson.valueOf(new TestExecutor(), id).jsonString();
         final String sessionId = getSessionId();
-        MY_LOADER.setExecutorModelDescription(sessionId, id, executorModel);
+        MY_LOADER.setExecutorSpecification(sessionId, id, executorModel);
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorModel);
         System.out.println("Loading-stage test for session " + sessionId);
         System.out.println("Current folder: " + getCurrentDirectory());
-        System.out.println(availableExecutorModelDescriptions(sessionId));
+        System.out.println(availableExecutorSpecifications(sessionId));
     }
 }

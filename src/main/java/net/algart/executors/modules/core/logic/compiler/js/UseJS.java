@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.js;
 
 import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalPlatforms;
-import net.algart.executors.api.SimpleExecutionBlockLoader;
+import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.api.model.ExtensionJson;
 import net.algart.executors.modules.core.common.io.FileOperation;
@@ -47,11 +47,11 @@ import java.util.Objects;
 public class UseJS extends FileOperation {
     public static final String JS_LANGUAGE_NAME = "JavaScript";
 
-    private static final SimpleExecutionBlockLoader<JSCaller> JS_CALLER_LOADER =
-            new SimpleExecutionBlockLoader<>("JS loader");
+    private static final SimpleExecutorLoader<JSCaller> JS_CALLER_LOADER =
+            new SimpleExecutorLoader<>("JS loader");
 
     static {
-        registerExecutionBlockLoader(JS_CALLER_LOADER);
+        registerExecutorLoader(JS_CALLER_LOADER);
     }
 
     private String workingDirectory = ".";
@@ -64,7 +64,7 @@ public class UseJS extends FileOperation {
         return new UseJS();
     }
 
-    public static SimpleExecutionBlockLoader<JSCaller> jsCallerLoader() {
+    public static SimpleExecutorLoader<JSCaller> jsCallerLoader() {
         return JS_CALLER_LOADER;
     }
 

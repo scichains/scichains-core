@@ -60,7 +60,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private final List<ChainJson> chainModels;
     private final List<ChainJson> blockedChainModels;
     private final Set<String> blockedChainModelNames;
-    private final List<ExecutorJson> loadedChainExecutorModels;
+    private final List<ExecutorJson> loadedChainExecutorSpecifications;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
     // - note: this combiner is not registered, it is used for building multi-chain model only in UseMultiChain
@@ -81,7 +81,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         this.chainModels = model.readChainVariants();
         this.blockedChainModels = new ArrayList<>();
         this.blockedChainModelNames = new LinkedHashSet<>();
-        this.loadedChainExecutorModels = new ArrayList<>();
+        this.loadedChainExecutorSpecifications = new ArrayList<>();
         assert !this.chainModels.isEmpty();
         final Map<String, Chain> partialChainMap = new HashMap<>();
         String firstChainId = null;
@@ -100,9 +100,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         + model.getMultiChainJsonFile(), e);
             }
             if (optionalChain.isPresent()) {
-                final ExecutorJson implementationModel = chainFactory.chainExecutorModel();
+                final ExecutorJson implementationModel = chainFactory.chainExecutorSpecification();
                 assert implementationModel != null : "chainExecutorModel cannot be null if use() returns some result";
-                this.loadedChainExecutorModels.add(implementationModel);
+                this.loadedChainExecutorSpecifications.add(implementationModel);
                 partialChainMap.put(optionalChain.get().id(), optionalChain.get());
             } else {
                 blockedChainModels.add(chainModel);
@@ -203,7 +203,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public void checkImplementationCompatibility() {
-        for (ExecutorJson implementationModel : loadedChainExecutorModels) {
+        for (ExecutorJson implementationModel : loadedChainExecutorSpecifications) {
             model.checkImplementationCompatibility(implementationModel);
         }
     }

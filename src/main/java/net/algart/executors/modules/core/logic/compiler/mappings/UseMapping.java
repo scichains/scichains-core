@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.logic.compiler.mappings;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.SimpleExecutionBlockLoader;
+import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.ExecutorJson;
 import net.algart.executors.modules.core.common.io.FileOperation;
@@ -46,11 +46,11 @@ public class UseMapping extends FileOperation {
     public static final String MAPPING_LANGUAGE = "mapping";
     public static final String CATEGORY_PREFIX = "$";
 
-    private static final SimpleExecutionBlockLoader<Mapping> MAPPING_LOADER =
-            new SimpleExecutionBlockLoader<>("mappings loader");
+    private static final SimpleExecutorLoader<Mapping> MAPPING_LOADER =
+            new SimpleExecutorLoader<>("mappings loader");
 
     static {
-        ExecutionBlock.registerExecutionBlockLoader(MAPPING_LOADER);
+        ExecutionBlock.registerExecutorLoader(MAPPING_LOADER);
     }
 
     private String mappingKeysFile = null;
@@ -66,7 +66,7 @@ public class UseMapping extends FileOperation {
         return new UseMapping();
     }
 
-    public static SimpleExecutionBlockLoader<Mapping> mappingLoader() {
+    public static SimpleExecutorLoader<Mapping> mappingLoader() {
         return MAPPING_LOADER;
     }
 
@@ -184,11 +184,11 @@ public class UseMapping extends FileOperation {
                 keys.comments(),
                 items == null ? null : items.lines(),
                 items == null ? null : items.comments());
-        final ExecutorJson executorModel = buildMappingModel(mapping);
-        MAPPING_LOADER.registerWorker(sessionId, mapping.id(), mapping, executorModel);
+        final ExecutorJson specification = buildMappingSpecification(mapping);
+        MAPPING_LOADER.registerWorker(sessionId, mapping.id(), mapping, specification);
     }
 
-    public ExecutorJson buildMappingModel(Mapping mapping) {
+    public ExecutorJson buildMappingSpecification(Mapping mapping) {
         Objects.requireNonNull(mapping, "Null mapping");
         ExecutorJson result = new ExecutorJson();
         result.setTo(new InterpretMapping());

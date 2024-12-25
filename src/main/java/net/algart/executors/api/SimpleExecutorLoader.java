@@ -31,15 +31,15 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Actually we do not override any methods in most cases.
+ * Actually, we do not override any methods in most cases.
  * This loader is used only for adding model descriptions (registerWorker method);
  * standard execution block loader (for usual Java classes) is used for loading workers.
  *
  * @param <W> some object ("worker") that actually perform all work of the executor;
  *            should implement {@link AutoCloseable}, if is has some resources that must be freed after usage.
  */
-public class SimpleExecutionBlockLoader<W> extends ExecutionBlockLoader {
-    public SimpleExecutionBlockLoader(String name) {
+public class SimpleExecutorLoader<W> extends ExecutorLoader {
+    public SimpleExecutorLoader(String name) {
         super(name);
     }
 
@@ -47,18 +47,18 @@ public class SimpleExecutionBlockLoader<W> extends ExecutionBlockLoader {
     private final Object lock = new Object();
 
     @Override
-    public ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification) {
+    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification) {
         return null;
         // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
     }
 
-    public boolean registerWorker(String sessionId, String id, W worker, ExecutorJson executorModel) {
+    public boolean registerWorker(String sessionId, String id, W worker, ExecutorJson specification) {
         if (id == null) {
             return false;
         }
         Objects.requireNonNull(worker, "Null worker for non-null ID=" + id);
         synchronized (lock) {
-            setExecutorModelDescription(sessionId, id, executorModel.toJson().toString());
+            setExecutorSpecification(sessionId, id, specification.toJson().toString());
             final W previosWorker = idToWorkerMap.put(id, worker);
             try {
                 if (previosWorker instanceof AutoCloseable) {

@@ -82,13 +82,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    private static final List<ExecutionBlockLoader> executionBlockLoaders = new ArrayList<>();
+    private static final List<ExecutorLoader> executorLoaders = new ArrayList<>();
 
-    private static final ExecutionBlockLoader.StandardJavaExecutorLoader standardJavaExecutorLoader =
-            new ExecutionBlockLoader.StandardJavaExecutorLoader();
+    private static final ExecutorLoader.StandardJavaExecutorLoader standardJavaExecutorLoader =
+            new ExecutorLoader.StandardJavaExecutorLoader();
 
     static {
-        registerExecutionBlockLoader(standardJavaExecutorLoader);
+        registerExecutorLoader(standardJavaExecutorLoader);
     }
 
     private static final Map<Integer, Runnable> tasksBeforeExecutingAll =
@@ -742,7 +742,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Gets the specification of this executor, which was set while creating by
-     * {@link #newExecutionBlock(String, String, ExecutorJson)}.
+     * {@link #newExecutor(String, String, ExecutorJson)}.
      *
      * @return the specification of this executor.
      */
@@ -1122,17 +1122,17 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
-     * @see #getExecutorModelDescription(String, String) (String, String)
+     * @see #getExecutorSpecification(String, String) (String, String)
      */
-    public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, ExecutorJson specification)
+    public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
-        final List<ExecutionBlockLoader> loaders = executionBlockLoaders();
+        final List<ExecutorLoader> loaders = executionBlockLoaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutionBlockLoader loader = loaders.get(k);
-            final ExecutionBlock executor = loader.newExecutionBlock(sessionId, executorId, specification);
+            final ExecutorLoader loader = loaders.get(k);
+            final ExecutionBlock executor = loader.newExecutor(sessionId, executorId, specification);
             if (executor != null) {
                 executor.sessionId = sessionId;
                 executor.executorId = executorId;
@@ -1142,12 +1142,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             }
         }
         throw new IllegalArgumentException("Cannot create executor with ID " + executorId
-                + ": unknown executor model format");
+                + ": unknown executor specification format");
     }
 
     /**
      * <p>Equivalent to
-     * <code>{@link #newExecutionBlock(String, String, ExecutorJson)
+     * <code>{@link #newExecutor(String, String, ExecutorJson)
      * newExecutionBlock}(sessionId, executorId, {@link ExecutorJson#valueOf(String)
      * ExecutorJson.valueOf}(specification))</code>.
      *
@@ -1160,17 +1160,19 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
+    //TODO!! rename to newExecutor
     @UsedForExternalCommunication
     public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
-        return newExecutionBlock(sessionId, executorId, ExecutorJson.valueOf(specification));
+        return newExecutor(sessionId, executorId, ExecutorJson.valueOf(specification));
     }
 
+    //TODO!! rename
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
-        return availableExecutorModelDescriptions(sessionId).values().toArray(new String[0]);
+        return availableExecutorSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**
@@ -1186,12 +1188,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @return all available executors' descriptions for dynamically created executors.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public static Map<String, String> availableExecutorModelDescriptions(String sessionId) {
+    public static Map<String, String> availableExecutorSpecifications(String sessionId) {
         final Map<String, String> result = new LinkedHashMap<>();
-        for (ExecutionBlockLoader loader : executionBlockLoaders()) {
-            result.putAll(loader.availableExecutorModelDescriptions(GLOBAL_SHARED_SESSION_ID));
+        for (ExecutorLoader loader : executionBlockLoaders()) {
+            result.putAll(loader.availableExecutorSpecifications(GLOBAL_SHARED_SESSION_ID));
             if (sessionId != null) {
-                result.putAll(loader.availableExecutorModelDescriptions(sessionId));
+                result.putAll(loader.availableExecutorSpecifications(sessionId));
             }
 //            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }
@@ -1199,8 +1201,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Returns <tt>{@link #availableExecutorModelDescriptions(String)
-     * availableExecutorModelDescriptions}(sessionId).get(executorId)</tt>,
+     * Returns <tt>{@link #availableExecutorSpecifications(String)
+     * availableExecutorSpecifications}(sessionId).get(executorId)</tt>,
      * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
@@ -1209,15 +1211,15 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
      * @throws NullPointerException if one of arguments is <code>null</code>.
      */
-    public static String getExecutorModelDescription(String sessionId, String executorId) {
-        synchronized (executionBlockLoaders) {
-            for (ExecutionBlockLoader loader : executionBlockLoaders) {
-                String result = loader.getExecutorModelDescription(GLOBAL_SHARED_SESSION_ID, executorId);
+    public static String getExecutorSpecification(String sessionId, String executorId) {
+        synchronized (executorLoaders) {
+            for (ExecutorLoader loader : executorLoaders) {
+                String result = loader.getExecutorSpecification(GLOBAL_SHARED_SESSION_ID, executorId);
                 if (result != null) {
                     return result;
                 }
                 if (sessionId != null) {
-                    result = loader.getExecutorModelDescription(sessionId, executorId);
+                    result = loader.getExecutorSpecification(sessionId, executorId);
                     if (result != null) {
                         return result;
                     }
@@ -1236,20 +1238,20 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
         Objects.requireNonNull(sessionId, "Null executorId");
-        for (ExecutionBlockLoader loader : executionBlockLoaders()) {
+        for (ExecutorLoader loader : executionBlockLoaders()) {
             loader.clearSession(sessionId);
         }
     }
 
-    public static void registerExecutionBlockLoader(ExecutionBlockLoader loader) {
-        synchronized (executionBlockLoaders) {
-            executionBlockLoaders.add(loader);
+    public static void registerExecutorLoader(ExecutorLoader loader) {
+        synchronized (executorLoaders) {
+            executorLoaders.add(loader);
         }
     }
 
-    private static List<ExecutionBlockLoader> executionBlockLoaders() {
-        synchronized (executionBlockLoaders) {
-            return new ArrayList<>(executionBlockLoaders);
+    private static List<ExecutorLoader> executionBlockLoaders() {
+        synchronized (executorLoaders) {
+            return new ArrayList<>(executorLoaders);
         }
     }
 
@@ -1262,7 +1264,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             if (!initialized) {
                 try {
                     ExecutorJsonSet.findAllBuiltIn();
-                    standardJavaExecutorLoader.registerAllStandardModels();
+                    standardJavaExecutorLoader.registerAllStandardExecutors();
                     UsingPython.initializePython();
                     UsingPython.useAllInstalledInSharedContext();
                     UseJS.useAllInstalledInSharedContext();

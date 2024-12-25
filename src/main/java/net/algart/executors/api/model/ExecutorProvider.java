@@ -25,15 +25,15 @@
 package net.algart.executors.api.model;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutionBlockLoader;
+import net.algart.executors.api.ExecutorLoader;
 
 /**
  * Provider of {@link ExecutionBlock executors}. Now we have only one implementation,
  * {@link StandardExecutorProvider}, which just calls
- * {@link ExecutionBlock#newExecutionBlock} function with passing their
+ * {@link ExecutionBlock#newExecutor} function with passing their
  * minimal simplified JSON string, necessary for loading Java class of executor.
- * In turn, {@link ExecutionBlock#newExecutionBlock} uses one of registered
- * instanced of {@link ExecutionBlockLoader} to actually create Java class {@link ExecutionBlock}.
+ * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
+ * instanced of {@link ExecutorLoader} to actually create Java class {@link ExecutionBlock}.
  *
  * <p>This interface is necessary, for example, to execute block in a {@link Chain} or
  * to call some executor by its ID from JavaScript.
@@ -48,7 +48,7 @@ public interface ExecutorProvider {
      * But this function <b>may</b> return full JSON; it is used, in particular, by {@link Chain} class.
      *
      * <p>The main source of information about all JSON models is another:
-     * {@link ExecutionBlock#availableExecutorModelDescriptions(String)}.
+     * {@link ExecutionBlock#availableExecutorSpecifications(String)}.
      *
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.

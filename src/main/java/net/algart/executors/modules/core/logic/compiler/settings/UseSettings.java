@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.settings;
 import jakarta.json.JsonValue;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.SimpleExecutionBlockLoader;
+import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ExecutorJson;
@@ -125,11 +125,11 @@ public class UseSettings extends FileOperation {
 
     private static final InstalledPlatformsForTechnology SETTINGS_PLATFORMS =
             InstalledPlatformsForTechnology.getInstance(SETTINGS_TECHNOLOGY);
-    private static final SimpleExecutionBlockLoader<SettingsCombiner> SETTINGS_COMBINER_LOADER =
-            new SimpleExecutionBlockLoader<>("settings loader");
+    private static final SimpleExecutorLoader<SettingsCombiner> SETTINGS_COMBINER_LOADER =
+            new SimpleExecutorLoader<>("settings loader");
 
     static {
-        ExecutionBlock.registerExecutionBlockLoader(SETTINGS_COMBINER_LOADER);
+        ExecutionBlock.registerExecutorLoader(SETTINGS_COMBINER_LOADER);
     }
 
     private boolean recursiveScanning = true;
@@ -155,7 +155,7 @@ public class UseSettings extends FileOperation {
         return new UseSettings();
     }
 
-    public static SimpleExecutionBlockLoader<SettingsCombiner> settingsCombinerLoader() {
+    public static SimpleExecutorLoader<SettingsCombiner> settingsCombinerLoader() {
         return SETTINGS_COMBINER_LOADER;
     }
 

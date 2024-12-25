@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "system",
-  "name": "Installed executor model specification",
+  "name": "Installed executor specification",
   "id": "6a19d627-8805-4047-813b-bd2c48083c63",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.system.InstalledExecutorModel"
+    "class": "net.algart.executors.modules.core.system.InstalledExecutorSpecification"
   },
   "in_ports": [
   ],

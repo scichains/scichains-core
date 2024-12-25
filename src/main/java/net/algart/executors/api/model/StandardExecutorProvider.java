@@ -33,7 +33,7 @@ import java.util.Objects;
 public class StandardExecutorProvider implements ExecutorProvider {
     private final ExecutorJsonSet staticExecutors;
     private final ExecutorJsonSet dynamicExecutorsCache = ExecutorJsonSet.newInstance();
-    // - this set is dynamically extended in executorJson method via ExecutionBlock.getExecutorModelDescription
+    // - this set is dynamically extended in executorJson method via ExecutionBlock.getExecutorSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
@@ -49,13 +49,13 @@ public class StandardExecutorProvider implements ExecutorProvider {
     @Override
     public ExecutorJson executorJson(String executorId) {
         synchronized (lock) {
-            ExecutorJson model = staticExecutors.get(executorId);
-            if (model != null) {
-                return model;
+            ExecutorJson executorJson = staticExecutors.get(executorId);
+            if (executorJson != null) {
+                return executorJson;
             }
-            model = dynamicExecutorsCache.get(executorId);
-            if (model != null) {
-                return model;
+            executorJson = dynamicExecutorsCache.get(executorId);
+            if (executorJson != null) {
+                return executorJson;
                 // - Caching: we suppose that non-null executor models cannot change.
                 // It is not absolutely correct, when the programmer is developing new dynamic executors,
                 // but the usage of this model by this package is very pure: we prefer to provide
@@ -64,13 +64,13 @@ public class StandardExecutorProvider implements ExecutorProvider {
                 // We DO NOT TRY to cache null model: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-            final String modelDescription = ExecutionBlock.getExecutorModelDescription(sessionId, executorId);
-            if (modelDescription == null) {
-                // - Will be null, when there is no available executor: for example, it is a dynamic executor
+            final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
+            if (specification == null) {
+                // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
                 // or it is not a Java executor (but we loaded Java only).
-                // Typical example is creating/initializing new Chain in UseSubChain static executor.
-                // This process consists of 3 stage (see UseSubChain.use(ChainJson) method):
+                // The typical example is creating/initializing new Chain in UseSubChain static executor.
+                // This process consists of 3 stages (see UseSubChain.use(ChainJson) method):
                 //      A) we create a Chain instance with all its blocks (ChainBlock);
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);
@@ -82,21 +82,21 @@ public class StandardExecutorProvider implements ExecutorProvider {
                 // while its creation (ChainBlock.valueOf) - this is not obligatory, but helps while diagnostic
                 // possible errors. However, the actual model for them will become known only at the stage B),
                 // while executing corresponding static executors.
-                // Of course, when we will want to EXECUTE dynamic executor, we will call newExecutor method
-                // below, which REQUIRES existing a ready model.
+                // Of course, when we want to EXECUTE dynamic executor, we will call newExecutor method
+                // below, which REQUIRES the existence of a ready model.
                 return null;
                 // - No sense to add null to dynamicExecutorsCache;
                 // moreover, it is prohibited ("add" method will throw an exception)
             } else {
                 try {
-                    model = ExecutorJson.valueOf(modelDescription);
+                    executorJson = ExecutorJson.valueOf(specification);
                 } catch (JsonException e) {
                     throw new IllegalStateException("Standard executor provider cannot be used with executor "
-                            + executorId + ": it is registered with unsupported format of model description", e);
+                            + executorId + ": it is registered with unsupported format of executor specification", e);
                 }
             }
-            dynamicExecutorsCache.add(executorId, model);
-            return model;
+            dynamicExecutorsCache.add(executorId, executorJson);
+            return executorJson;
         }
     }
 
@@ -108,7 +108,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
             if (executorJson == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return ExecutionBlock.newExecutionBlock(sessionId, executorId, executorJson);
+            return ExecutionBlock.newExecutor(sessionId, executorId, executorJson);
         }
     }
 }

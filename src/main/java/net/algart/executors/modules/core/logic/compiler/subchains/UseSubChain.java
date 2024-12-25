@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains;
 import jakarta.json.JsonValue;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.SimpleExecutionBlockLoader;
+import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
@@ -100,11 +100,11 @@ public final class UseSubChain extends FileOperation {
 
     private static final InstalledPlatformsForTechnology SUB_CHAIN_PLATFORMS =
             InstalledPlatformsForTechnology.getInstance(ChainJson.CHAIN_TECHNOLOGY);
-    private static final SimpleExecutionBlockLoader<Chain> SUB_CHAIN_LOADER =
-            new SimpleExecutionBlockLoader<>("sub-chains loader");
+    private static final SimpleExecutorLoader<Chain> SUB_CHAIN_LOADER =
+            new SimpleExecutorLoader<>("sub-chains loader");
 
     static {
-        ExecutionBlock.registerExecutionBlockLoader(SUB_CHAIN_LOADER);
+        ExecutionBlock.registerExecutorLoader(SUB_CHAIN_LOADER);
     }
 
     private static final Set<String> NOW_USED_CHAIN_IDS = Collections.synchronizedSet(new HashSet<>());
@@ -116,7 +116,7 @@ public final class UseSubChain extends FileOperation {
     private boolean multithreading = false;
     private boolean executeAll = false;
 
-    private ExecutorJson chainExecutorModel = null;
+    private ExecutorJson chainExecutorSpecification = null;
 
     final AtomicInteger loadedChainsCount = new AtomicInteger(0);
     // - for logging needs
@@ -139,7 +139,7 @@ public final class UseSubChain extends FileOperation {
         return getSessionInstance(GLOBAL_SHARED_SESSION_ID);
     }
 
-    public static SimpleExecutionBlockLoader<Chain> subChainLoader() {
+    public static SimpleExecutorLoader<Chain> subChainLoader() {
         return SUB_CHAIN_LOADER;
     }
 
@@ -203,8 +203,8 @@ public final class UseSubChain extends FileOperation {
         return this;
     }
 
-    public ExecutorJson chainExecutorModel() {
-        return chainExecutorModel;
+    public ExecutorJson chainExecutorSpecification() {
+        return chainExecutorSpecification;
     }
 
     @Override
@@ -296,7 +296,7 @@ public final class UseSubChain extends FileOperation {
     public Optional<Chain> useIfNonRecursive(ChainJson chainJson) {
         Objects.requireNonNull(chainJson, "Null chain JSON model");
         final String chainId = chainJson.getExecutor().getId();
-        chainExecutorModel = null;
+        chainExecutorSpecification = null;
         synchronized (NOW_USED_CHAIN_IDS) {
             if (NOW_USED_CHAIN_IDS.contains(chainId)) {
                 // - Avoid infinite recursion.
@@ -457,7 +457,7 @@ public final class UseSubChain extends FileOperation {
         if (result.hasPlatformId()) {
             result.addSystemPlatformIdPort();
         }
-        return chainExecutorModel = result;
+        return chainExecutorSpecification = result;
     }
 
     static ExecutorJson.ControlConf createLogTimingControl(String parameterName) {

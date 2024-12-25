@@ -57,7 +57,7 @@ public class ExecutorJsonTest {
         Thread.sleep(100);
         ExecutionBlock executionBlock;
         try {
-            executionBlock = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), model);
+            executionBlock = ExecutionBlock.newExecutor(null, model.getExecutorId(), model);
             Thread.sleep(100);
             System.out.println(executionBlock);
             if (executionBlock instanceof Executor) {
@@ -91,7 +91,7 @@ public class ExecutorJsonTest {
                 }
                 long t3 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    block1 = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), model);
+                    block1 = ExecutionBlock.newExecutor(null, model.getExecutorId(), model);
                 }
                 long t4 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
