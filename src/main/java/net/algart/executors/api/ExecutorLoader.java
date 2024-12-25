@@ -40,6 +40,9 @@ import java.util.*;
  * Python function uses their own loaders.
  *
  * <p>In current version, all they are instances of {@link SimpleExecutorLoader}.
+ *
+ * <p>Note: there are global executor loaders, registered by
+ * {@link ExecutionBlock#registerExecutorLoader(ExecutorLoader)}.
  */
 public class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;

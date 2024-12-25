@@ -37,6 +37,9 @@ import net.algart.executors.api.ExecutorLoader;
  *
  * <p>This interface is necessary, for example, to execute block in a {@link Chain} or
  * to call some executor by its ID from JavaScript.
+ *
+ * <p>Usually there are many executor providers, created for different needs: in the chain interpreter,
+ * in JavaScript interpreter, etc.
  */
 public interface ExecutorProvider {
     /**
