@@ -25,10 +25,7 @@
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.SimpleExecutorLoader;
-import net.algart.executors.api.SystemEnvironment;
+import net.algart.executors.api.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.*;
@@ -400,8 +397,8 @@ public final class UseSubChain extends FileOperation {
         if (sessionId == null) {
             throw new IllegalStateException("Cannot register new chain: session ID was not set");
         }
-        final ExecutorProvider executorProvider = ExecutorProvider.newStandardInstance(sessionId);
-        Chain chain = Chain.valueOf(this, executorProvider, chainJson);
+        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(sessionId);
+        Chain chain = Chain.valueOf(this, executorFactory, chainJson);
         if (chain.getCurrentDirectory() == null) {
             // - If the chain was loaded not from file, but from the executor text parameter,
             // chainJson does not contain information about current folder;

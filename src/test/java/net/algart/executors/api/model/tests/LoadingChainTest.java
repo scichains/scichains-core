@@ -25,6 +25,8 @@
 package net.algart.executors.api.model.tests;
 
 import jakarta.json.JsonException;
+import net.algart.executors.api.ExecutorFactory;
+import net.algart.executors.api.StandardExecutorFactory;
 import net.algart.executors.api.model.*;
 
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class LoadingChainTest {
     boolean initialize = true;
     boolean stopOnError = false;
 
-    private void processChain(final Path chainFile, ExecutorProvider executorProvider) throws IOException {
+    private void processChain(final Path chainFile, ExecutorFactory executorFactory) throws IOException {
         try {
             System.out.printf("Reading %s... ", chainFile);
             ChainJson chainJson = ChainJson.readIfValid(chainFile);
@@ -52,7 +54,7 @@ public class LoadingChainTest {
                 System.out.println(chainJson);
             }
 
-            try (Chain chain = Chain.valueOf(null, executorProvider, chainJson)) {
+            try (Chain chain = Chain.valueOf(null, executorFactory, chainJson)) {
                 if (detailed) {
                     System.out.printf("%nFull chain:%n");
                     System.out.println(chain.toString(true));
@@ -72,13 +74,13 @@ public class LoadingChainTest {
         }
     }
 
-    private void processChainsFolder(final Path folder, ExecutorProvider executorProvider) throws IOException {
+    private void processChainsFolder(final Path folder, ExecutorFactory executorFactory) throws IOException {
         try (DirectoryStream<Path> files = Files.newDirectoryStream(folder)) {
             for (Path file : files) {
                 if (Files.isDirectory(file)) {
-                    processChainsFolder(file, executorProvider);
+                    processChainsFolder(file, executorFactory);
                 } else if (ChainJson.isChainJsonFile(file)) {
-                    processChain(file, executorProvider);
+                    processChain(file, executorFactory);
                 }
             }
         }
@@ -111,13 +113,13 @@ public class LoadingChainTest {
 
         System.out.printf("Reading %s...%n", modelFolder);
         final ExecutorJsonSet executorJsonSet = ExecutorJsonSet.newInstance().addFolder(modelFolder, true);
-        final ExecutorProvider executorProvider = StandardExecutorProvider.newInstance(
+        final ExecutorFactory executorFactory = StandardExecutorFactory.newInstance(
                 executorJsonSet, "~~DUMMY");
 
         if (Files.isDirectory(chainFile)) {
-            test.processChainsFolder(chainFile, executorProvider);
+            test.processChainsFolder(chainFile, executorFactory);
         } else {
-            test.processChain(chainFile, executorProvider);
+            test.processChain(chainFile, executorFactory);
         }
     }
 }

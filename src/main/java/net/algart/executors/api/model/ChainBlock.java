@@ -107,13 +107,13 @@ public final class ChainBlock {
         this.chain = Objects.requireNonNull(chain, "Null containing chain");
         this.id = Objects.requireNonNull(id, "Null block id");
         this.executorId = Objects.requireNonNull(executorId, "Null block executorId");
-        ExecutorProvider executorProvider = chain.getExecutorProvider();
-        this.executorSpecification = executorProvider == null ? null : executorProvider.specification(executorId);
+        final ExecutorFactory executorFactory = chain.getExecutorFactory();
+        this.executorSpecification = executorFactory == null ? null : executorFactory.specification(executorId);
         // - Note: executorJson MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:
         // we do it, for example, while registering new sub-chains-as-executors
-        // (see comments inside StandardExecutorProvider.executorJson).
+        // (see comments inside StandardExecutorFactory.specification()).
         // But we can delay actual assigning correct executorJson until reinitialize method.
         initialize();
     }
@@ -505,12 +505,12 @@ public final class ChainBlock {
                 if (this.executor == null) {
                     final ExecutionBlock executor;
                     try {
-                        ExecutorProvider executorProvider = chain.getExecutorProvider();
-                        if (executorProvider == null) {
+                        final ExecutorFactory executorFactory = chain.getExecutorFactory();
+                        if (executorFactory == null) {
                             throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
-                                    + ": executor provider is not set");
+                                    + ": executor factory is not set");
                         }
-                        executor = executorProvider.newExecutor(executorId);
+                        executor = executorFactory.newExecutor(executorId);
                     } catch (ClassNotFoundException | ExecutorNotFoundException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                 + (this.blockConfJson == null ?

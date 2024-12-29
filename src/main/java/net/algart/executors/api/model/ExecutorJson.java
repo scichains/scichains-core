@@ -2001,7 +2001,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
                 controlConf.setEditionType(editionType != null ? editionType : ControlEditionType.VALUE);
                 String defaultStringValue = null;
                 final ChainOutputPort outputPort = block.getActualOutputPort(Executor.DEFAULT_OUTPUT_PORT);
-                if (chain.getExecutorProvider() != null
+                if (chain.getExecutorFactory() != null
                         && outputPort != null && outputPort.getDataType() == DataType.SCALAR) {
                     block.reinitialize(false);
                     final var executor = block.getExecutor();

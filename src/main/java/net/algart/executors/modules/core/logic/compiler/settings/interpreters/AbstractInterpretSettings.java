@@ -49,14 +49,5 @@ public abstract class AbstractInterpretSettings extends Executor implements Read
         if (hasOutputPort(UseSettings.SETTINGS_NAME_OUTPUT_NAME)) {
             getScalar(UseSettings.SETTINGS_NAME_OUTPUT_NAME).setTo(settingsCombiner.name());
         }
-
-//        if (isOutputNecessary(UseSettings.EXECUTOR_JSON_OUTPUT_NAME)) {
-//            final String sessionId = getSessionId();
-//            final ExecutorProvider executorProvider = ExecutorProvider.newStandardInstance(sessionId);
-//            final ExecutorJson executorJson = executorProvider.executorJson(getExecutorId());
-//            if (executorJson != null) {
-//                getScalar(UseSettings.EXECUTOR_JSON_OUTPUT_NAME).setTo(executorJson.jsonString());
-//            }
-//        }
     }
 }

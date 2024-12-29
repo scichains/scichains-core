@@ -33,7 +33,6 @@ import net.algart.bridges.standard.JavaScriptContextContainer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.model.ExecutorNotFoundException;
-import net.algart.executors.api.model.ExecutorProvider;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;
@@ -80,7 +79,7 @@ public final class CommonJS extends Executor {
     public static class ExecutorFactory {
         private final String sessionId;
         private final boolean callableExecutorOutputsNecessaryAlways;
-        private ExecutorProvider executorProvider = null;
+        private net.algart.executors.api.ExecutorFactory executorFactory = null;
 
         private ExecutorFactory(String sessionId, boolean callableExecutorOutputsNecessaryAlways) {
             this.sessionId = sessionId;
@@ -88,10 +87,10 @@ public final class CommonJS extends Executor {
         }
 
         public Executor get(String callableExecutorId) {
-            final ExecutorProvider executorProvider = executorProvider();
+            final net.algart.executors.api.ExecutorFactory executorFactory = executorFactory();
             final ExecutionBlock executionBlock;
             try {
-                executionBlock = executorProvider.newExecutor(callableExecutorId);
+                executionBlock = executorFactory.newExecutor(callableExecutorId);
             } catch (ClassNotFoundException | ExecutorNotFoundException e) {
                 throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
                         + (e instanceof ClassNotFoundException ?
@@ -108,11 +107,11 @@ public final class CommonJS extends Executor {
             return (Executor) executionBlock;
         }
 
-        private ExecutorProvider executorProvider() {
-            if (executorProvider == null) {
-                executorProvider = ExecutorProvider.newStandardInstance(sessionId);
+        private net.algart.executors.api.ExecutorFactory executorFactory() {
+            if (this.executorFactory == null) {
+                this.executorFactory = net.algart.executors.api.ExecutorFactory.newStandardInstance(sessionId);
             }
-            return executorProvider;
+            return this.executorFactory;
         }
     }
 

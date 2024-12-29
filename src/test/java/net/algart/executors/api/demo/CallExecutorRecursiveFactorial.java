@@ -28,7 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.model.ExecutorNotFoundException;
-import net.algart.executors.api.model.ExecutorProvider;
+import net.algart.executors.api.ExecutorFactory;
 
 import java.io.IOException;
 
@@ -48,8 +48,8 @@ public class CallExecutorRecursiveFactorial {
         ExecutionBlock.initializeExecutionSystem();
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
         // it is a part of the platform folder for sub-chains
-        final ExecutorProvider executorProvider = ExecutorProvider.newStandardInstance(SESSION_ID);
-        try (ExecutionBlock executor = executorProvider.newExecutor(RECURSIVE_FACTORIAL_CHAIN_ID)) {
+        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
+        try (ExecutionBlock executor = executorFactory.newExecutor(RECURSIVE_FACTORIAL_CHAIN_ID)) {
             executor.setIntParameter("n", value);
             executor.addPort(Port.newOutput(executor.defaultOutputPortName(), DataType.SCALAR));
             executor.requestDefaultOutput();

@@ -29,6 +29,7 @@ import net.algart.arrays.JArrays;
 import net.algart.arrays.PArray;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SMat;
@@ -40,7 +41,6 @@ import net.algart.multimatrix.MultiMatrix2D;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -127,12 +127,12 @@ public class ExecutingChain {
         final ExecutorJsonSet executorJsonSet = ExecutorJsonSet.allBuiltIn();
         long t2 = System.nanoTime();
         System.out.printf(" done (%d executors, %.3f ms)%n", executorJsonSet.all().size(), (t2 - t1) * 1e-6);
-        final ExecutorProvider executorProvider = ExecutorProvider.newStandardInstance(SESSION_ID);
+        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
 
         System.out.printf("Reading %s...", chainFile);
         t1 = System.nanoTime();
         ChainJson chainJson = ChainJson.read(chainFile);
-        Chain originalChain = Chain.valueOf(null, executorProvider, chainJson);
+        Chain originalChain = Chain.valueOf(null, executorFactory, chainJson);
         originalChain.setMultithreading(multithreading);
         originalChain.setExecuteAll(executeAll);
         originalChain.setIgnoreExceptions(ignoreExceptions);

@@ -27,7 +27,7 @@ package net.algart.executors.api.model.tests;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorProvider;
+import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 
 import java.io.IOException;
@@ -45,8 +45,8 @@ public class SimpleExecutingChainTest {
 
     private static void executeChainDirectly(Path chainPath) throws IOException {
         ChainJson chainJson = ChainJson.read(chainPath);
-        final ExecutorProvider executorProvider = ExecutorProvider.newStandardInstance("MySession");
-        try (Chain chain = Chain.valueOf(null, executorProvider, chainJson)) {
+        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance("MySession");
+        try (Chain chain = Chain.valueOf(null, executorFactory, chainJson)) {
             chain.reinitializeAll();
             chain.execute();
             System.out.println("Chain finished: " + chain);

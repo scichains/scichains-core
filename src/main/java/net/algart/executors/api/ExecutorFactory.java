@@ -22,14 +22,16 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.model;
+package net.algart.executors.api;
 
-import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutorLoader;
+import net.algart.executors.api.model.Chain;
+import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorNotFoundException;
 
 /**
- * Provider of {@link ExecutionBlock executors}.
- * Now we have only one implementation, {@link StandardExecutorProvider}, which just calls
+ * Factory of {@link ExecutionBlock executors}.
+ * Now we have only one implementation, {@link StandardExecutorFactory}, which just calls
  * {@link ExecutionBlock#newExecutor} function with passing their
  * specification ({@link ExecutorJson}), necessary for loading Java class of executor.
  * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
@@ -38,10 +40,10 @@ import net.algart.executors.api.ExecutorLoader;
  * <p>This interface is necessary, for example, to execute block in a {@link Chain} or
  * to call some executor by its ID from JavaScript.
  *
- * <p>Usually there are many executor providers, created for different needs: in the chain interpreter,
+ * <p>Usually there are many executor factories, created for different needs: in the chain interpreter,
  * in JavaScript interpreter, etc.
  */
-public interface ExecutorProvider {
+public interface ExecutorFactory {
     /**
      * Returns JSON model of the given executor.
      *
@@ -60,13 +62,13 @@ public interface ExecutorProvider {
     ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException;
 
     /**
-     * Creates new executor provider with standard behavior, based on the executor set
+     * Creates new executor factory with standard behavior, based on the executor set
      * {@link ExecutorJsonSet#allBuiltIn()}.
      *
      * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
      * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
      * to execute executors like sub-chains, which dynamically create other executors,
-     * probably having equal executor IDs. Executor providers with different <code>sessionID</code>
+     * probably having equal executor IDs. Executor factories with different <code>sessionID</code>
      * are isolated from each other and can be used simultaneously.</p>
      *
      * <p>If you want to work with executors shared across all sessions, please use
@@ -77,12 +79,12 @@ public interface ExecutorProvider {
      *
      * @param sessionId unique session ID (1st argument of
      * {@link ExecutionBlock#newExecutionBlock(String, String, String)}).
-     * @return a new standard executor provider.
+     * @return a new standard executor factory.
      *
      * @see ExecutionBlock#setSessionId(String)
      * @see ExecutionBlock#newExecutionBlock(String, String, String)
      */
-    static ExecutorProvider newStandardInstance(String sessionId) {
-        return StandardExecutorProvider.newInstance(ExecutorJsonSet.allBuiltIn(), sessionId);
+    static ExecutorFactory newStandardInstance(String sessionId) {
+        return StandardExecutorFactory.newInstance(ExecutorJsonSet.allBuiltIn(), sessionId);
     }
 }

@@ -22,28 +22,30 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.model;
+package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorNotFoundException;
 
 import java.util.Objects;
 
 // Note: executing some loading-stage blocks can add here new IDs for further loading-stage blocks.
-public class StandardExecutorProvider implements ExecutorProvider {
+public class StandardExecutorFactory implements ExecutorFactory {
     private final ExecutorJsonSet staticExecutors;
     private final ExecutorJsonSet dynamicExecutorsCache = ExecutorJsonSet.newInstance();
     // - this set is dynamically extended in executorJson method via ExecutionBlock.getExecutorSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
-    private StandardExecutorProvider(ExecutorJsonSet staticExecutors, String sessionId) {
+    private StandardExecutorFactory(ExecutorJsonSet staticExecutors, String sessionId) {
         this.staticExecutors = Objects.requireNonNull(staticExecutors, "Null static executors set");
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
     }
 
-    public static StandardExecutorProvider newInstance(ExecutorJsonSet staticExecutors, String sessionId) {
-        return new StandardExecutorProvider(staticExecutors, sessionId);
+    public static StandardExecutorFactory newInstance(ExecutorJsonSet staticExecutors, String sessionId) {
+        return new StandardExecutorFactory(staticExecutors, sessionId);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class StandardExecutorProvider implements ExecutorProvider {
                     executorJson = ExecutorJson.valueOf(specification);
 //                    System.out.println("Building executor: " + executorJson.getName());
                 } catch (JsonException e) {
-                    throw new IllegalStateException("Standard executor provider cannot be used with executor "
+                    throw new IllegalStateException("Standard executor factory cannot be used with executor "
                             + executorId + ": it is registered with unsupported format of executor specification", e);
                 }
             }
