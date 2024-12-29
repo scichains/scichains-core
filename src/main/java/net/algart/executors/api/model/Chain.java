@@ -62,7 +62,7 @@ public final class Chain implements AutoCloseable {
     private String platformId = null;
     private String platformCategory = null;
     private Path chainJsonPath = null;
-    // - Previous 8 properties are not important for execution, but may make usage more comfortable.
+    // - Previous 8 fields are not important for execution, but may make usage more comfortable.
 
     private volatile Path currentDirectory = null;
     private volatile boolean multithreading = false;

@@ -28,7 +28,6 @@ import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutionStage;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -46,6 +45,9 @@ import static net.algart.executors.api.model.ExecutorJson.quote;
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
 // in several ports.
 public final class ChainJson extends AbstractConvertibleToJson {
+    private static final boolean USE_PARAMETERS_SECTION = false;
+    // - should be true since 4.4.11
+
     public static final String CHAIN_TECHNOLOGY = "chain";
     public static final String CHAIN_LANGUAGE = "chain";
     public static final String CHAIN_FILE_PATTERN = ".*\\.(json|chain)$";
@@ -374,14 +376,14 @@ public final class ChainJson extends AbstractConvertibleToJson {
             }
         }
 
-        public static final class PropertyConf extends AbstractConvertibleToJson {
+        public static final class ParameterConf extends AbstractConvertibleToJson {
             private String name;
             private JsonValue value = null;
 
-            public PropertyConf() {
+            public ParameterConf() {
             }
 
-            private PropertyConf(JsonObject json, Path file) {
+            private ParameterConf(JsonObject json, Path file) {
                 this.name = Jsons.reqString(json, "name", file);
                 this.value = json.get("value");
             }
@@ -390,7 +392,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
                 return name;
             }
 
-            public PropertyConf setName(String name) {
+            public ParameterConf setName(String name) {
                 this.name = Objects.requireNonNull(name, "Null name");
                 return this;
             }
@@ -399,7 +401,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
                 return value;
             }
 
-            public PropertyConf setValue(JsonValue value) {
+            public ParameterConf setValue(JsonValue value) {
                 this.value = value;
                 return this;
             }
@@ -411,7 +413,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
 
             @Override
             public String toString() {
-                return "Property{" +
+                return "Parameter{" +
                         "name='" + name + '\'' +
                         ", value=" + value +
                         '}';
@@ -527,7 +529,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         private String executorCategory = null;
         private ExecutionStage executionStage = ExecutionStage.RUN_TIME;
         private Map<String, ChainBlockConf.PortConf> uuidToPortMap = new LinkedHashMap<>();
-        private Map<String, PropertyConf> nameToPropertyMap = new LinkedHashMap<>();
+        private Map<String, ParameterConf> nameToParameterMap = new LinkedHashMap<>();
         private SystemConf system = new SystemConf();
 
         public ChainBlockConf() {
@@ -563,10 +565,11 @@ public final class ChainJson extends AbstractConvertibleToJson {
                     uuidToPortMap.put(port.uuid, port);
                 }
             }
-            for (JsonObject jsonObject : reqJsonObjectsWithAlias(
-                    json, "properties", "primitives", file)) {
-                final PropertyConf property = new PropertyConf(jsonObject, file);
-                nameToPropertyMap.put(property.name, property);
+            List<JsonObject> jsonParameters = reqJsonObjectsWithAlias(
+                    json, "parameters", "properties", "primitives", file);
+            for (JsonObject jsonObject : jsonParameters) {
+                final ParameterConf parameterConf = new ParameterConf(jsonObject, file);
+                nameToParameterMap.put(parameterConf.name, parameterConf);
             }
             final JsonObject systemJson = json.getJsonObject("system");
             if (systemJson != null) {
@@ -628,12 +631,12 @@ public final class ChainJson extends AbstractConvertibleToJson {
             return this;
         }
 
-        public Map<String, PropertyConf> getNameToPropertyMap() {
-            return Collections.unmodifiableMap(nameToPropertyMap);
+        public Map<String, ParameterConf> getNameToParameterMap() {
+            return Collections.unmodifiableMap(nameToParameterMap);
         }
 
-        public ChainBlockConf setNameToPropertyMap(Map<String, PropertyConf> nameToPropertyMap) {
-            this.nameToPropertyMap = checkProperties(nameToPropertyMap);
+        public ChainBlockConf setNameToParameterMap(Map<String, ParameterConf> nameToParameterMap) {
+            this.nameToParameterMap = checkParameters(nameToParameterMap);
             return this;
         }
 
@@ -662,7 +665,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
                     ", executorCategory='" + executorCategory + '\'' +
                     ", executionStage=" + executionStage +
                     ", uuidToPortMap=" + uuidToPortMap +
-                    ", nameToPropertyMap=" + nameToPropertyMap +
+                    ", nameToParameterMap=" + nameToParameterMap +
                     ", system=" + system +
                     '}';
         }
@@ -685,11 +688,11 @@ public final class ChainJson extends AbstractConvertibleToJson {
                 portsBuilder.add(port.toJson());
             }
             builder.add("ports", portsBuilder.build());
-            final JsonArrayBuilder propertiesBuilder = Json.createArrayBuilder();
-            for (PropertyConf property : nameToPropertyMap.values()) {
-                propertiesBuilder.add(property.toJson());
+            final JsonArrayBuilder parametersBuilder = Json.createArrayBuilder();
+            for (ParameterConf parameterConf : nameToParameterMap.values()) {
+                parametersBuilder.add(parameterConf.toJson());
             }
-            builder.add("properties", propertiesBuilder.build());
+            builder.add(USE_PARAMETERS_SECTION ? "parameters" : "properties", parametersBuilder.build());
             builder.add("system", system.toJson());
         }
 
@@ -712,24 +715,24 @@ public final class ChainJson extends AbstractConvertibleToJson {
             return ports;
         }
 
-        private static Map<String, PropertyConf> checkProperties(Map<String, PropertyConf> properties) {
-            Objects.requireNonNull(properties, "Null properties");
-            properties = new LinkedHashMap<>(properties);
-            for (Map.Entry<String, PropertyConf> property : properties.entrySet()) {
-                if (property.getKey() == null) {
-                    throw new IllegalArgumentException("Illegal property: null key");
+        private static Map<String, ParameterConf> checkParameters(Map<String, ParameterConf> parameters) {
+            Objects.requireNonNull(parameters, "Null parameters");
+            parameters = new LinkedHashMap<>(parameters);
+            for (Map.Entry<String, ParameterConf> parameter : parameters.entrySet()) {
+                if (parameter.getKey() == null) {
+                    throw new IllegalArgumentException("Illegal parameter: null key");
                 }
-                if (property.getValue() == null) {
-                    throw new IllegalArgumentException("Illegal property[" + quote(property.getKey())
+                if (parameter.getValue() == null) {
+                    throw new IllegalArgumentException("Illegal parameter[" + quote(parameter.getKey())
                             + "]: null");
                 }
-                if (!property.getKey().equals(property.getValue().name)) {
-                    throw new IllegalArgumentException("Illegal property[" + quote(property.getKey())
-                            + "]: its name is " + quote(property.getValue().name)
-                            + " (must be equal to key " + quote(property.getKey()) + ")");
+                if (!parameter.getKey().equals(parameter.getValue().name)) {
+                    throw new IllegalArgumentException("Illegal parameter[" + quote(parameter.getKey())
+                            + "]: its name is " + quote(parameter.getValue().name)
+                            + " (must be equal to key " + quote(parameter.getKey()) + ")");
                 }
             }
-            return properties;
+            return parameters;
         }
     }
 
@@ -829,7 +832,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         this.version = json.getString("version", CHAIN_CURRENT_VERSION);
         this.executor = new Executor(Jsons.reqJsonObject(json, "executor", file), file);
         for (JsonObject jsonObject : reqJsonObjectsWithAlias(
-                json, "blocks", "data_processes", file)) {
+                json, "blocks", "data_processes", null, file)) {
             this.blocks.add(new ChainBlockConf(jsonObject, file));
         }
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "links", file)) {
@@ -1109,15 +1112,19 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private static List<JsonObject> reqJsonObjectsWithAlias(
             JsonObject json,
             String name,
-            String aliasName,
+            String aliasName1,
+            String aliasName2,
             Path file) {
         Objects.requireNonNull(json, "Null json");
         Objects.requireNonNull(name, "Null name");
         JsonArray jsonArray;
         try {
             jsonArray = json.getJsonArray(name);
-            if (jsonArray == null && aliasName != null) {
-                jsonArray = json.getJsonArray(aliasName);
+            if (jsonArray == null && aliasName1 != null) {
+                jsonArray = json.getJsonArray(aliasName1);
+            }
+            if (jsonArray == null && aliasName2 != null) {
+                jsonArray = json.getJsonArray(aliasName2);
             }
         } catch (ClassCastException e) {
             throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)

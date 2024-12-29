@@ -29,22 +29,22 @@ import net.algart.executors.api.data.ParameterValueType;
 
 import java.util.Objects;
 
-public final class ChainProperty {
+public final class ChainParameter {
     private final String name;
     private Object value = null;
 
-    private ChainProperty(String name) {
+    private ChainParameter(String name) {
         this.name = Objects.requireNonNull(name, "Null name");
     }
 
-    public static ChainProperty newInstance(String name) {
-        return new ChainProperty(name);
+    public static ChainParameter newInstance(String name) {
+        return new ChainParameter(name);
     }
 
-    public static ChainProperty valueOf(ChainBlock block, ChainJson.ChainBlockConf.PropertyConf propertyConf) {
-        final ChainProperty result = newInstance(propertyConf.getName());
+    public static ChainParameter valueOf(ChainBlock block, ChainJson.ChainBlockConf.ParameterConf parameterConf) {
+        final ChainParameter result = newInstance(parameterConf.getName());
         assert result.value == null : "newInstance must set null value";
-        result.loadValue(block, propertyConf.getValue());
+        result.loadValue(block, parameterConf.getValue());
         return result;
     }
 
@@ -68,33 +68,33 @@ public final class ChainProperty {
 
     @Override
     public String toString() {
-        return "ChainProperty{" +
+        return "ChainParameter}{" +
                 "name='" + name + '\'' +
                 ", value=" + value +
                 '}';
     }
 
-    private void loadValue(ChainBlock block, JsonValue propertyJsonValue) {
+    private void loadValue(ChainBlock block, JsonValue parameterJsonValue) {
         ExecutorJson.ControlConf control = controlConf(block);
         if (control != null) {
-            // can be null, for example, for system property (obsolete concept)
+            // can be null, for example, for system properties (obsolete concept)
             final ParameterValueType valueType = control.getValueType();
             final JsonValue defaultJsonValue = control.getDefaultJsonValue();
             final Object defaultValue = valueType.toParameter(defaultJsonValue);
             if (defaultValue != null) {
                 this.value = defaultValue;
             }
-            final Object propertyValue = valueType.toParameter(propertyJsonValue);
-            if (propertyValue != null) {
-                // - if the property has a correctly written value, it is returned
-                this.value = propertyValue;
+            final Object parameterValue = valueType.toParameter(parameterJsonValue);
+            if (parameterValue != null) {
+                // - if the parameter has a correctly written value, it is returned
+                this.value = parameterValue;
                 return;
             }
         }
         // - if there is no information (from executor control) to set non-null value
         // with properly (efficient) type, we will treat the value as a string:
         // this is a suitable variant for string, boolean, integer and floating-point values
-        Object stringValue = ParameterValueType.STRING.toParameter(propertyJsonValue);
+        Object stringValue = ParameterValueType.STRING.toParameter(parameterJsonValue);
         if (stringValue != null) {
             this.value = stringValue;
         }

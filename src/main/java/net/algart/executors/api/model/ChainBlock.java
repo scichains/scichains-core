@@ -61,7 +61,7 @@ public final class ChainBlock {
     // 2) for creating additional "dynamic" ports (not specified in the chain JSON-file) in loadPorts() method;
     // so, we require that the behaviour of dynamic executors must not depend on the set of existing ports
     // (like in some static Java executors, inherited from SeveralMultiMatricesProcessing);
-    // 3) for loading values in the properties in ChainProperty.valueOf()
+    // 3) for loading values in the parameters in ChainParameter.valueOf()
     // (but if there is no executorJson, they are still loaded as strings);
     // 4) for diagnostic messages.
 
@@ -83,7 +83,7 @@ public final class ChainBlock {
 
     private final Object lock = new Object();
 
-    final Map<String, ChainProperty> properties = new LinkedHashMap<>();
+    final Map<String, ChainParameter> parameters = new LinkedHashMap<>();
     final Map<ChainPortKey, ChainInputPort> inputPorts = new LinkedHashMap<>();
     final Map<ChainPortKey, ChainOutputPort> outputPorts = new LinkedHashMap<>();
     // - Unlike ChainJson, the keys in inputPorts and outputPorts are name + port type pairs (not UUID).
@@ -160,7 +160,7 @@ public final class ChainBlock {
         // This situation really can lead to bug in recursive chains.
 
         initialize();
-        this.properties.putAll(block.properties);
+        this.parameters.putAll(block.parameters);
         block.inputPorts.forEach((key, port) ->
                 this.inputPorts.put(key, port.cleanCopy(this)));
         block.outputPorts.forEach((key, port) ->
@@ -175,22 +175,6 @@ public final class ChainBlock {
     public ChainBlock cleanCopy(Chain newChain) {
         return new ChainBlock(this, newChain);
         // Copying constructor is better than cloning, because we do not clone final fields like "lock"
-
-//        Objects.requireNonNull(newChain, "Null new chain");
-//        final ChainBlock clone;
-//        try {
-//            clone = (ChainBlock) super.clone();
-//        } catch (CloneNotSupportedException e) {
-//            throw new AssertionError(e);
-//        }
-//        clone.chain = newChain;
-//        clone.lock = new Object();
-        // - must not be synchronized by the same lock!
-//        clone.initialize();
-//        clone.properties.putAll(properties);
-//        inputPorts.forEach((key, value) -> clone.inputPorts.put(key, value.cleanCopy(clone)));
-//        outputPorts.forEach((key, value) -> clone.outputPorts.put(key, value.cleanCopy(clone)));
-//        return clone;
     }
 
     public static String standardInputOutputPortCaption(String systemName) {
@@ -212,7 +196,7 @@ public final class ChainBlock {
                 && result.executorSpecification.isOutput());
         result.setStandardData(enabledRunTime && result.executorSpecification != null
                 && result.executorSpecification.isData());
-        result.loadProperties(blockConf);
+        result.loadParameters(blockConf);
         result.loadPorts(blockConf);
         result.setEnabledByLegacyWayIfNecessary();
         result.setSystemNameByLegacyWayIfNecessary();
@@ -256,8 +240,8 @@ public final class ChainBlock {
         return blockConfJson;
     }
 
-    public Map<String, ChainProperty> getProperties() {
-        return Collections.unmodifiableMap(properties);
+    public Map<String, ChainParameter> getParameters() {
+        return Collections.unmodifiableMap(parameters);
     }
 
     public Collection<ChainInputPort> getAllInputPorts() {
@@ -268,14 +252,14 @@ public final class ChainBlock {
         return Collections.unmodifiableCollection(outputPorts.values());
     }
 
-    public ChainProperty getProperty(String propertyName) {
-        return properties.get(propertyName);
+    public ChainParameter getParameter(String parameterName) {
+        return parameters.get(parameterName);
     }
 
-    public void addProperty(ChainProperty property) {
-        Objects.requireNonNull(property, "Null property");
-        if (properties.putIfAbsent(property.getName(), property) != null) {
-            throw new IllegalArgumentException("Duplicate property name: " + property.getName());
+    public void addParameter(ChainParameter parameter) {
+        Objects.requireNonNull(parameter, "Null parameter");
+        if (parameters.putIfAbsent(parameter.getName(), parameter) != null) {
+            throw new IllegalArgumentException("Duplicate parameter name: " + parameter.getName());
         }
     }
 
@@ -556,8 +540,8 @@ public final class ChainBlock {
                     if (path != null) {
                         executor.setContextPath(path.toAbsolutePath().toString());
                     }
-                    updateSystemProperties(executor);
-                    updateProperties(executor);
+                    updateSystemSettings(executor);
+                    updateParameters(executor);
                     if (executor instanceof Executor e) {
                         e.setTimingEnabled(chain.isTimingByExecutorsEnabled());
                     }
@@ -826,9 +810,9 @@ public final class ChainBlock {
                 + "\n"
                 + "      address='" + System.identityHashCode(this)
                 + " (belongs to " + System.identityHashCode(chain) + ")'\n"
-                + "      properties=[\n");
-        for (ChainProperty property : properties.values()) {
-            sb.append("        ").append(property).append('\n');
+                + "      parameters=[\n");
+        for (ChainParameter parameter : parameters.values()) {
+            sb.append("        ").append(parameter).append('\n');
         }
         sb.append("      ],\n      inputPorts=[\n");
         for (ChainInputPort port : inputPorts.values()) {
@@ -978,17 +962,17 @@ public final class ChainBlock {
         return chain.isMultithreading() ? inputs.parallelStream() : inputs.stream();
     }
 
-    private void loadProperties(ChainJson.ChainBlockConf blockConf) {
-        this.properties.clear();
-        for (ChainJson.ChainBlockConf.PropertyConf propertyConf : blockConf.getNameToPropertyMap().values()) {
-            addProperty(ChainProperty.valueOf(this, propertyConf));
+    private void loadParameters(ChainJson.ChainBlockConf blockConf) {
+        this.parameters.clear();
+        for (ChainJson.ChainBlockConf.ParameterConf parameterConf : blockConf.getNameToParameterMap().values()) {
+            addParameter(ChainParameter.valueOf(this, parameterConf));
         }
     }
 
     private void setEnabledByLegacyWayIfNecessary() {
-        final ChainProperty property = properties.get("$__system.enabled");
-        if (property != null) {
-            final Object value = property.getValue();
+        final ChainParameter parameter = parameters.get("$__system.enabled");
+        if (parameter != null) {
+            final Object value = parameter.getValue();
             if (value instanceof Boolean) {
                 this.enabled = (Boolean) value;
             }
@@ -996,9 +980,9 @@ public final class ChainBlock {
     }
 
     private void setSystemNameByLegacyWayIfNecessary() {
-        final ChainProperty property = properties.get("$__system.name");
-        if (property != null) {
-            String systemName = property.toScalar();
+        final ChainParameter parameter = parameters.get("$__system.name");
+        if (parameter != null) {
+            String systemName = parameter.toScalar();
             if (systemName != null && !(systemName = systemName.trim()).isEmpty()) {
                 this.systemName = systemName;
             }
@@ -1077,17 +1061,17 @@ public final class ChainBlock {
         }
     }
 
-    private void updateProperties(ExecutionBlock executor) {
-        final Parameters executorProperties = executor.parameters();
-        for (ChainProperty property : this.properties.values()) {
-            executorProperties.put(property.getName(), property.getValue());
+    private void updateParameters(ExecutionBlock executor) {
+        final Parameters executorParameters = executor.parameters();
+        for (ChainParameter parameter : this.parameters.values()) {
+            executorParameters.put(parameter.getName(), parameter.getValue());
         }
-        for (String name : this.properties.keySet()) {
+        for (String name : this.parameters.keySet()) {
             executor.onChangeParameter(name);
         }
     }
 
-    private void updateSystemProperties(ExecutionBlock executor) {
+    private void updateSystemSettings(ExecutionBlock executor) {
         executor.setCurrentDirectory(chain.getCurrentDirectory());
         if (executor instanceof Executor) {
             ((Executor) executor).setMultithreadingEnvironment(chain.isMultithreading());

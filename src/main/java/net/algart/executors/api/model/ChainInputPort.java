@@ -25,7 +25,6 @@
 package net.algart.executors.api.model;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
@@ -109,13 +108,13 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     }
                     stringValue = ((SScalar) data).getValue();
                 }
-                final ChainProperty chainProperty = block.properties.get(this.name);
-                if (chainProperty == null) {
+                final ChainParameter chainParameter = block.parameters.get(this.name);
+                if (chainParameter == null) {
                     // - abnormal situation: virtual port without actual control;
                     // we prefer not to disable this in the constructor, but just to set the usual scalar value
                     executor.parameters().put(this.name, stringValue);
                 } else {
-                    final ParameterValueType valueType = chainProperty.probableType(block, ParameterValueType.STRING);
+                    final ParameterValueType valueType = chainParameter.probableType(block, ParameterValueType.STRING);
                     // - if there is no information about executor control, we treat the values as strings:
                     // this is a suitable variant for string, boolean, integer and floating-point values
                     Object value = valueType.toParameter(stringValue);

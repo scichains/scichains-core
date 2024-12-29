@@ -31,8 +31,8 @@ public enum ChainPortType {
     OUTPUT_PORT(2, Port.Type.OUTPUT, true),
     INPUT_CONTROL_AS_PORT(3, Port.Type.INPUT, false),
     OUTPUT_CONTROL_AS_PORT(4, Port.Type.OUTPUT, false),
-    OUTPUT_PORT_PROPERTY(5, Port.Type.OUTPUT, false);
-    // - last type OUTPUT_PORT_PROPERTY is not used in the current version
+    OUTPUT_PORT_PARAMETER(5, Port.Type.OUTPUT, false);
+    // - last type OUTPUT_PORT_PARAMETER is not used in the current version
 
     private final int code;
     private final Port.Type actualPortType;

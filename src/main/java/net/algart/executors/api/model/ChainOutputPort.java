@@ -25,7 +25,6 @@
 package net.algart.executors.api.model;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.SScalar;
@@ -86,8 +85,8 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                     this.data.setTo(SScalar.valueOf(executor.parameters().getString(name)));
                 }
             }
-            case OUTPUT_PORT_PROPERTY -> {
-                throw new UnsupportedOperationException("Chain do not support property-as-port: " + this);
+            case OUTPUT_PORT_PARAMETER -> {
+                throw new UnsupportedOperationException("Chain do not support parameter-as-port: " + this);
             }
             default -> {
                 throw new AssertionError("Unknown output port type: " + portType);
