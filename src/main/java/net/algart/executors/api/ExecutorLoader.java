@@ -79,7 +79,7 @@ public class ExecutorLoader {
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification)
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorJson specification)
             throws ClassNotFoundException {
         return null;
     }
@@ -88,13 +88,13 @@ public class ExecutorLoader {
      * Removes all executors, dynamically created for the given session,
      * probably stored in some tables by this loader for dynamic usage,
      * and frees some caches, necessary for such executors.
-     * Default implementation calls {@link #removeSessionExecutorSpecifications(String)}.
+     * Default implementation calls {@link #removeSessionSpecifications(String)}.
      *
      * @param sessionId unique ID of current session.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public void clearSession(String sessionId) {
-        removeSessionExecutorSpecifications(sessionId);
+        removeSessionSpecifications(sessionId);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ExecutorLoader {
      * @return executors' descriptions for executors, created by this loader.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public final Map<String, String> availableExecutorSpecifications(String sessionId) {
+    public final Map<String, String> availableSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
             return Collections.unmodifiableMap(allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
@@ -115,7 +115,7 @@ public class ExecutorLoader {
     }
 
     /**
-     * Returns <tt>{@link #availableExecutorSpecifications(String)
+     * Returns <tt>{@link #availableSpecifications(String)
      * availableExecutorSpecifications}(sessionId).get(executorId)</tt>,
      * but works quickly (without creating a new map).
      *
@@ -124,7 +124,7 @@ public class ExecutorLoader {
      * @return description of this dynamic executor (probably JSON).
      * @throws NullPointerException if one of arguments is <code>null</code>.
      */
-    public final String getExecutorSpecification(String sessionId, String executorId) {
+    public final String getSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
@@ -132,7 +132,7 @@ public class ExecutorLoader {
         }
     }
 
-    public final void setExecutorSpecification(String sessionId, String executorId, String specification) {
+    public final void setSpecification(String sessionId, String executorId, String specification) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
@@ -141,7 +141,7 @@ public class ExecutorLoader {
         }
     }
 
-    public final boolean removeExecutorSpecification(String sessionId, String executorId) {
+    public final boolean removeSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
@@ -149,7 +149,7 @@ public class ExecutorLoader {
         }
     }
 
-    public final void removeSessionExecutorSpecifications(String sessionId) {
+    public final void removeSessionSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
             Map<String, String> models = allSpecifications.get(sessionId);
@@ -190,7 +190,7 @@ public class ExecutorLoader {
         }
 
         @Override
-        public ExecutionBlock newExecutor(String ignoredSessionId, String executorId, ExecutorJson specification)
+        public ExecutionBlock loadExecutor(String ignoredSessionId, String executorId, ExecutorJson specification)
                 throws ClassNotFoundException {
             Objects.requireNonNull(executorId, "Null executorId");
             Objects.requireNonNull(specification, "Null specification");
@@ -227,21 +227,21 @@ public class ExecutorLoader {
             // No sense to free the cache, because it corresponds to system class loader and cannot become obsolete.
         }
 
-        private Executable findNewInstance(String executorId, ExecutorJson executorJson) throws ClassNotFoundException {
+        private Executable findNewInstance(String executorId, ExecutorJson specification) throws ClassNotFoundException {
             synchronized (newInstanceMakers) {
                 if (newInstanceMakers.containsKey(executorId)) {
                     return newInstanceMakers.get(executorId);
                 }
-                Executable executable = getNewInstance(executorJson);
+                Executable executable = getNewInstance(specification);
                 newInstanceMakers.put(executorId, executable);
                 return executable;
             }
         }
 
-        private static Executable getNewInstance(ExecutorJson executorJson) throws ClassNotFoundException {
-            // Note: we do not require executorJson.isJavaExecutor()
+        private static Executable getNewInstance(ExecutorJson specification) throws ClassNotFoundException {
+            // Note: we do not require specification.isJavaExecutor()
             // This allows to minimize requirements to a minimal JSON specification
-            ExecutorJson.JavaConf javaConf = executorJson.getJava();
+            ExecutorJson.JavaConf javaConf = specification.getJava();
             if (javaConf == null) {
                 return null;
             }
@@ -264,9 +264,8 @@ public class ExecutorLoader {
                         + (newInstanceMethodName != null ?
                         "public static method " + newInstanceMethodName + "() without parameters"
                         : "default public constructor")
-                        + " in class " + className + " <<<" + executorJson + ">>>", e);
+                        + " in class " + className + " <<<" + specification + ">>>", e);
             }
-
         }
     }
 }

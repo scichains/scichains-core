@@ -36,7 +36,7 @@ import java.util.Objects;
  * standard execution block loader (for usual Java classes) is used for loading workers.
  *
  * @param <W> some object ("worker") that actually perform all work of the executor;
- *            should implement {@link AutoCloseable}, if is has some resources that must be freed after usage.
+ *            should implement {@link AutoCloseable}, if it has some resources that must be freed after usage.
  */
 public class SimpleExecutorLoader<W> extends ExecutorLoader {
     public SimpleExecutorLoader(String name) {
@@ -47,7 +47,7 @@ public class SimpleExecutorLoader<W> extends ExecutorLoader {
     private final Object lock = new Object();
 
     @Override
-    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification) {
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorJson specification) {
         return null;
         // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
     }
@@ -58,7 +58,7 @@ public class SimpleExecutorLoader<W> extends ExecutorLoader {
         }
         Objects.requireNonNull(worker, "Null worker for non-null ID=" + id);
         synchronized (lock) {
-            setExecutorSpecification(sessionId, id, specification.toJson().toString());
+            setSpecification(sessionId, id, specification.toJson().toString());
             final W previosWorker = idToWorkerMap.put(id, worker);
             try {
                 if (previosWorker instanceof AutoCloseable) {

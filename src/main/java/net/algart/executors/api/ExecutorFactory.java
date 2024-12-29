@@ -31,7 +31,8 @@ import net.algart.executors.api.model.ExecutorNotFoundException;
 
 /**
  * Factory of {@link ExecutionBlock executors}.
- * Now we have only one implementation, {@link StandardExecutorFactory}, which just calls
+ *
+ * <p>Now we have only one implementation, {@link StandardExecutorFactory}, which just calls
  * {@link ExecutionBlock#newExecutor} function with passing their
  * specification ({@link ExecutorJson}), necessary for loading Java class of executor.
  * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
@@ -43,21 +44,7 @@ import net.algart.executors.api.model.ExecutorNotFoundException;
  * <p>Usually there are many executor factories, created for different needs: in the chain interpreter,
  * in JavaScript interpreter, etc.
  */
-public interface ExecutorFactory {
-    /**
-     * Returns JSON model of the given executor.
-     *
-     * <p>Note that the main goal of this function
-     * is only to return minimal description, enough for building new executor by {@link #newExecutor(String)} method.
-     * However, this function usually returns full specification.
-     *
-     * <p>The main source of information about all JSON models is another:
-     * {@link ExecutionBlock#availableExecutorSpecifications(String)}.
-     *
-     * @param executorId unique executor ID.
-     * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.
-     */
-    ExecutorJson specification(String executorId);
+public interface ExecutorFactory extends ExecutorSpecificationFactory {
 
     ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException;
 

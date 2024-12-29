@@ -103,7 +103,7 @@ public final class ExampleLoadingStage extends Executor {
         final String id = "7ec64582-de9e-4607-85ad-adfa97a3b0e5";
         final String executorSpecification = ExecutorJson.valueOf(new TestExecutor(), id).jsonString();
         final String sessionId = getSessionId();
-        MY_LOADER.setExecutorSpecification(sessionId, id, executorSpecification);
+        MY_LOADER.setSpecification(sessionId, id, executorSpecification);
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification);
         System.out.println("Loading-stage test for session " + sessionId);
         System.out.println("Current folder: " + getCurrentDirectory());

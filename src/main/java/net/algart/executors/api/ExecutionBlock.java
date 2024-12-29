@@ -1133,7 +1133,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
             final ExecutorLoader loader = loaders.get(k);
-            final ExecutionBlock executor = loader.newExecutor(sessionId, executorId, specification);
+            final ExecutionBlock executor = loader.loadExecutor(sessionId, executorId, specification);
             if (executor != null) {
                 //TODO!! set up ports and default parameters
                 executor.sessionId = sessionId;
@@ -1193,9 +1193,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     public static Map<String, String> availableExecutorSpecifications(String sessionId) {
         final Map<String, String> result = new LinkedHashMap<>();
         for (ExecutorLoader loader : executionBlockLoaders()) {
-            result.putAll(loader.availableExecutorSpecifications(GLOBAL_SHARED_SESSION_ID));
+            result.putAll(loader.availableSpecifications(GLOBAL_SHARED_SESSION_ID));
             if (sessionId != null) {
-                result.putAll(loader.availableExecutorSpecifications(sessionId));
+                result.putAll(loader.availableSpecifications(sessionId));
             }
 //            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }
@@ -1216,12 +1216,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     public static String getExecutorSpecification(String sessionId, String executorId) {
         synchronized (executorLoaders) {
             for (ExecutorLoader loader : executorLoaders) {
-                String result = loader.getExecutorSpecification(GLOBAL_SHARED_SESSION_ID, executorId);
+                String result = loader.getSpecification(GLOBAL_SHARED_SESSION_ID, executorId);
                 if (result != null) {
                     return result;
                 }
                 if (sessionId != null) {
-                    result = loader.getExecutorSpecification(sessionId, executorId);
+                    result = loader.getSpecification(sessionId, executorId);
                     if (result != null) {
                         return result;
                     }
