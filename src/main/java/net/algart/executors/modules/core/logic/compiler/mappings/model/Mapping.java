@@ -32,28 +32,27 @@ import net.algart.math.IRange;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 // Note: current version does not actually need cloning, but we implement clone() for possible future extensions.
 public final class Mapping implements Cloneable {
-    private final MappingJson model;
+    private final MappingSpecification specification;
     private final List<String> keys;
     private final List<String> keyCaptions;
     private final List<String> enumItems;
     private final List<String> enumItemCaptions;
 
     private Mapping(
-            MappingJson model,
+            MappingSpecification specification,
             List<String> keys,
             List<String> keyCaptions,
             List<String> enumItems,
             List<String> enumItemCaptions) {
-        this.model = Objects.requireNonNull(model, "Null json model");
+        this.specification = Objects.requireNonNull(specification, "Null specification");
         Objects.requireNonNull(keys, "Null keys");
-        final Set<String> ignoredKeys = model.getIgnoredKeys();
+        final Set<String> ignoredKeys = specification.getIgnoredKeys();
         this.keys = new ArrayList<>();
         this.keyCaptions = new ArrayList<>();
         for (int i = 0, n = keys.size(); i < n; i++) {
@@ -76,12 +75,12 @@ public final class Mapping implements Cloneable {
         for (String key : this.keys) {
             checkKey(key);
         }
-        if (model.isEnum()) {
+        if (specification.isEnum()) {
             this.enumItems = new ArrayList<>(Objects.requireNonNull(enumItems, "Null enum items"));
             this.enumItemCaptions = enumItemCaptions == null ? null : new ArrayList<>(enumItemCaptions);
             if (this.enumItems.isEmpty()) {
                 throw new IllegalArgumentException("Empty list of enum items, but value type is "
-                        + model.getControlTemplate().getValueType());
+                        + specification.getControlTemplate().getValueType());
             }
         } else {
             this.enumItems = null;
@@ -90,7 +89,7 @@ public final class Mapping implements Cloneable {
     }
 
     public static Mapping valueOf(
-            MappingJson model,
+            MappingSpecification model,
             List<String> keys,
             List<String> keyCaptions,
             List<String> enumItems,
@@ -98,29 +97,29 @@ public final class Mapping implements Cloneable {
         return new Mapping(model, keys, keyCaptions, enumItems, enumItemCaptions);
     }
 
-    public MappingJson model() {
-        return model;
+    public MappingSpecification model() {
+        return specification;
     }
 
 
-    public Path mappingJsonFile() {
-        return model.getMappingJsonFile();
+    public Path mappingSpecificationFile() {
+        return specification.getMappingSpecificationFile();
     }
 
     public String id() {
-        return model.getId();
+        return specification.getId();
     }
 
     public String category() {
-        return model.getCategory();
+        return specification.getCategory();
     }
 
     public String name() {
-        return model.getName();
+        return specification.getName();
     }
 
     public String description() {
-        return model.getDescription();
+        return specification.getDescription();
     }
 
     public int numberOfKeys() {
@@ -155,7 +154,7 @@ public final class Mapping implements Cloneable {
         Objects.requireNonNull(executor, "Null executor");
         final Parameters parameters = executor.parameters();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        final MappingJson.ControlConfTemplate controlTemplate = model.getControlTemplate();
+        final MappingSpecification.ControlConfTemplate controlTemplate = specification.getControlTemplate();
         for (String key : keys) {
             JsonValue jsonValue = getJsonValue(key, controlTemplate, parameters);
             assert jsonValue != null;
@@ -224,7 +223,7 @@ public final class Mapping implements Cloneable {
 
     private static JsonValue getJsonValue(
             String name,
-            MappingJson.ControlConfTemplate controlConfTemplate,
+            MappingSpecification.ControlConfTemplate controlConfTemplate,
             Parameters parameters) {
         final ParameterValueType valueType = controlConfTemplate.getValueType();
         JsonValue jsonValue = null;

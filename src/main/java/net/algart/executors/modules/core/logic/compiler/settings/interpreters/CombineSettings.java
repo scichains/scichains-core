@@ -28,13 +28,13 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.json.Jsons;
 
 import java.util.Locale;
 
 public class CombineSettings extends AbstractInterpretSettings {
-    public static final String SETTINGS = SettingsCombinerJson.SETTINGS;
+    public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
 
     public CombineSettings() {
         addInputScalar(SETTINGS);

@@ -36,7 +36,7 @@ import net.algart.executors.api.model.InstalledPlatformsForTechnology;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.*;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOError;
@@ -55,7 +55,7 @@ public class UseSettings extends FileOperation {
 
     public static final String SETTINGS_NAME_OUTPUT_NAME = "_cs___settings_name";
     public static final String SETTINGS_NAME_OUTPUT_CAPTION = "settings_name";
-    public static final String ALL_SETTINGS_PARAMETER_NAME = SettingsCombinerJson.SETTINGS;
+    public static final String ALL_SETTINGS_PARAMETER_NAME = SettingsCombinerSpecification.SETTINGS;
     public static final String ALL_SETTINGS_PARAMETER_CAPTION = "settings (all)";
     public static final String ALL_SETTINGS_PARAMETER_DESCRIPTION =
             "If contains non-empty string and if the input \"settings\" port is NOT initialized, "
@@ -82,7 +82,8 @@ public class UseSettings extends FileOperation {
 //    public static final String ADD_SETTINGS_CLASS_PARAMETER_CAPTION = "Add settings class \"%%%\"";
 //    public static final String ADD_SETTINGS_CLASS_PARAMETER_DESCRIPTION =
 //            "If set, settings JSON will contain additional string value, named \""
-//                    + SettingsCombinerJson.CLASS_KEY + "\" and containing category and name of this settings: "
+//                    + SettingsCombinerSpecification.CLASS_KEY +
+//                    "\" and containing category and name of these settings: "
 //                    + "\"%%%\".";
 
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_NAME = "_cs___extractSubSettings";
@@ -90,12 +91,12 @@ public class UseSettings extends FileOperation {
             "Extract sub-settings \"%%%\" from input \"settings\" JSON";
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DESCRIPTION =
             "If set, the parameters of this sub-chain are determined by the section \""
-                    + SettingsCombinerJson.SUBSETTINGS_PREFIX + "%%%\" "
+                    + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
                     + "of the input settings JSON. If cleared, the parameters of this sub-chain "
                     + "are extracted directly from the top level of the input settings JSON. "
                     + "Parameters below have less priority, they are used only if there are no "
                     + "parameters with same names in the input settings JSON or its section \""
-                    + SettingsCombinerJson.SUBSETTINGS_PREFIX + "%%%\" "
+                    + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
                     + "and if the following flag is not set.\n"
                     + "Normal state of this flag — set to true. Usually every sub-chain B1, B2, ... of your chain B "
                     + "is customized by some sub-settings of main JSON settings, specifying behaviour of the chain B."
@@ -209,16 +210,16 @@ public class UseSettings extends FileOperation {
                 + "or \"Settings combiner JSON content\" must be non-empty");
     }
 
-    public void useSeveralPaths(List<Path> settingsCombinerJsonPaths) throws IOException {
-        Objects.requireNonNull(settingsCombinerJsonPaths, "Null settings combiner paths");
+    public void useSeveralPaths(List<Path> settingsCombinerSpecificationPaths) throws IOException {
+        Objects.requireNonNull(settingsCombinerSpecificationPaths, "Null settings combiner paths");
         mainSettings = false;
         // - we need to reinitialize this field for improbable case of re-using this executor
-        if (isMainChainSettings() && settingsCombinerJsonPaths.size() > 1) {
+        if (isMainChainSettings() && settingsCombinerSpecificationPaths.size() > 1) {
             throw new IllegalArgumentException("Processing several paths is not allowed here, but you specified "
-                    + settingsCombinerJsonPaths.size() + " paths: " + settingsCombinerJsonPaths);
+                    + settingsCombinerSpecificationPaths.size() + " paths: " + settingsCombinerSpecificationPaths);
         }
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : settingsCombinerJsonPaths) {
+        for (Path path : settingsCombinerSpecificationPaths) {
             usePath(path, null, sb);
         }
         if (sb != null) {
@@ -226,48 +227,51 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    public void usePath(Path settingsCombinerJsonPath) throws IOException {
-        usePath(settingsCombinerJsonPath, null, null);
+    public void usePath(Path settingsCombinerSpecificationPath) throws IOException {
+        usePath(settingsCombinerSpecificationPath, null, null);
     }
 
-    public void usePath(Path settingsCombinerJsonPath, ExtensionSpecification.Platform platform, StringBuilder report)
+    public void usePath(
+            Path settingsCombinerSpecificationPath,
+            ExtensionSpecification.Platform platform,
+            StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(settingsCombinerJsonPath, "Null settings combiner path");
+        Objects.requireNonNull(settingsCombinerSpecificationPath, "Null settings combiner path");
         mainSettings = false;
         // - we need to reinitialize this field for improbable case of re-using this executor
         // (well be set again in use() method)
-        final List<SettingsCombinerJson> settingsCombinerJsons;
-        if (Files.isDirectory(settingsCombinerJsonPath)) {
-            settingsCombinerJsons = SettingsCombinerJson.readAllIfValid(
-                    settingsCombinerJsonPath, recursiveScanning, isMainChainSettings());
-            if (isExistingSettingsCombinersRequired() && settingsCombinerJsons.isEmpty()) {
+        final List<SettingsCombinerSpecification> settingsCombinerSpecifications;
+        if (Files.isDirectory(settingsCombinerSpecificationPath)) {
+            settingsCombinerSpecifications = SettingsCombinerSpecification.readAllIfValid(
+                    settingsCombinerSpecificationPath, recursiveScanning, isMainChainSettings());
+            if (isExistingSettingsCombinersRequired() && settingsCombinerSpecifications.isEmpty()) {
                 throw new IllegalArgumentException("No any standard chain settings was found in a folder "
-                        + settingsCombinerJsonPath);
+                        + settingsCombinerSpecificationPath);
             }
         } else {
-            settingsCombinerJsons = Collections.singletonList(SettingsCombinerJson.read(settingsCombinerJsonPath));
+            settingsCombinerSpecifications = Collections.singletonList(SettingsCombinerSpecification.read(settingsCombinerSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        SettingsCombinerJson.checkIdDifference(settingsCombinerJsons);
-        final int n = settingsCombinerJsons.size();
+        SettingsCombinerSpecification.checkIdDifference(settingsCombinerSpecifications);
+        final int n = settingsCombinerSpecifications.size();
         final boolean showContent = isMainChainSettings() && n == 1;
         for (int i = 0; i < n; i++) {
-            final SettingsCombinerJson settingsCombinerJson = settingsCombinerJsons.get(i);
+            final SettingsCombinerSpecification settingsCombinerSpecification = settingsCombinerSpecifications.get(i);
             logDebug("Loading settings combiner " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + settingsCombinerJson.getSettingsCombinerJsonFile().toAbsolutePath() + "...");
+                    + "from " + settingsCombinerSpecification.getSettingsCombinerSpecificationFile().toAbsolutePath() + "...");
             if (platform != null) {
-                settingsCombinerJson.addTags(platform.getTags());
-                settingsCombinerJson.setPlatformId(platform.getId());
-                settingsCombinerJson.setPlatformCategory(platform.getCategory());
+                settingsCombinerSpecification.addTags(platform.getTags());
+                settingsCombinerSpecification.setPlatformId(platform.getId());
+                settingsCombinerSpecification.setPlatformCategory(platform.getCategory());
             }
-            use(settingsCombinerJson);
+            use(settingsCombinerSpecification);
             if (showContent && report != null) {
-                report.append(settingsCombinerJson.jsonString());
+                report.append(settingsCombinerSpecification.jsonString());
             }
         }
         if (!showContent && report != null) {
-            for (SettingsCombinerJson settingsCombinerJson : settingsCombinerJsons) {
-                report.append(settingsCombinerJson.getSettingsCombinerJsonFile()).append("\n");
+            for (SettingsCombinerSpecification settingsCombinerSpecification : settingsCombinerSpecifications) {
+                report.append(settingsCombinerSpecification.getSettingsCombinerSpecificationFile()).append("\n");
             }
         }
         if (n == 1) {
@@ -286,21 +290,21 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    public void useContent(String settingsCombinerJsonContent) {
-        final SettingsCombinerJson settingsCombinerJson = SettingsCombinerJson.valueOf(
-                Jsons.toJson(settingsCombinerJsonContent),
+    public void useContent(String settingsCombinerSpecificationContent) {
+        final SettingsCombinerSpecification settingsCombinerSpecification = SettingsCombinerSpecification.valueOf(
+                Jsons.toJson(settingsCombinerSpecificationContent),
                 false);
         // - we don't require strict accuracy for JSON, entered in a little text area
         logDebug("Using settings combiner '"
-                + settingsCombinerJson.getName() + "' from the text argument...");
-        use(settingsCombinerJson);
+                + settingsCombinerSpecification.getName() + "' from the text argument...");
+        use(settingsCombinerSpecification);
         if (isOutputNecessary(DEFAULT_OUTPUT_PORT)) {
-            getScalar().setTo(settingsCombinerJson.jsonString());
+            getScalar().setTo(settingsCombinerSpecification.jsonString());
         }
     }
 
-    public SettingsCombiner use(SettingsCombinerJson settingsCombinerJson) {
-        this.mainSettings = settingsCombinerJson.isMain();
+    public SettingsCombiner use(SettingsCombinerSpecification settingsCombinerSpecification) {
+        this.mainSettings = settingsCombinerSpecification.isMain();
 //      Below is a very bad idea (commented code): it leads to an effect, when the settings NAMES
 //      will depend on an order of loading chains! It is possible, when the same
 //      main chain settings is used both as actual main settings for some chain A
@@ -312,17 +316,17 @@ public class UseSettings extends FileOperation {
 //        if (chainName != null) {
 //
 //            if (isMainChainSettings()) {
-//                settingsCombinerJson.updateAutogeneratedName(chainName);
+//                settingsCombinerSpecification.updateAutogeneratedName(chainName);
 //                // - for example, it is important if main chain settings model JSON file is named
 //                // "sc_model.json", but the chain is named "com.xxxxx.ia.frame": we need to rename
 //                // automatically chosen name "sc_model" to "frame"
 //            }
 //
-//            settingsCombinerJson.updateAutogeneratedCategory(chainName, isMainChainSettings());
+//            settingsCombinerSpecification.updateAutogeneratedCategory(chainName, isMainChainSettings());
 //        }
-        settingsCombinerJson.updateAutogeneratedCategory(isMainChainSettings());
+        settingsCombinerSpecification.updateAutogeneratedCategory(isMainChainSettings());
         final String sessionId = getSessionId();
-        final SettingsCombiner settingsCombiner = SettingsCombiner.valueOf(settingsCombinerJson);
+        final SettingsCombiner settingsCombiner = SettingsCombiner.valueOf(settingsCombinerSpecification);
         settingsCombiner.setCustomSettingsInformation(customSettingsInformation());
         SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.id(), settingsCombiner,
                 buildCombineSpecification(settingsCombiner));
@@ -358,7 +362,7 @@ public class UseSettings extends FileOperation {
         result.createOptionsIfAbsent().createRoleIfAbsent()
                 .setName(settingsCombiner.name())
                 .setSettings(true)
-                .setResultPort(SettingsCombinerJson.SETTINGS)
+                .setResultPort(SettingsCombinerSpecification.SETTINGS)
                 .setMain(isMainChainSettings());
         addInputControlsAndPorts(
                 result,
@@ -518,7 +522,7 @@ public class UseSettings extends FileOperation {
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         // - adds JavaConf, (maybe) parameters and some ports
-        result.setSourceInfo(settingsCombiner.settingsCombinerJsonFile(), null);
+        result.setSourceInfo(settingsCombiner.settingsCombinerSpecificationFile(), null);
         if (settingsCombiner.hasPlatformId()) {
             result.setPlatformId(settingsCombiner.platformId());
         }
@@ -589,9 +593,10 @@ public class UseSettings extends FileOperation {
                     IGNORE_PARAMETERS_PARAMETER_DEFAULT,
                     false);
         }
-        final SettingsCombinerJson model = settingsCombiner.model();
-        final Map<String, SettingsCombinerJson.ControlConfExtension> controlExtensions = model.getControlExtensions();
-        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : model.getControls().entrySet()) {
+        final SettingsCombinerSpecification specification = settingsCombiner.specification();
+        final Map<String, SettingsCombinerSpecification.ControlConfExtension> controlExtensions =
+                specification.getControlExtensions();
+        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : specification.getControls().entrySet()) {
             final String name = entry.getKey();
             ExecutorSpecification.ControlConf controlConf = entry.getValue().clone();
             if (controlConf.getValueType() == ParameterValueType.SETTINGS && !subChainMode) {
@@ -602,9 +607,9 @@ public class UseSettings extends FileOperation {
                 portConf.setValueType(DataType.SCALAR);
                 result.addInPort(portConf);
             }
-            final SettingsCombinerJson.ControlConfExtension controlExtension = controlExtensions.get(name);
+            final SettingsCombinerSpecification.ControlConfExtension controlExtension = controlExtensions.get(name);
             if (controlExtension != null) {
-                controlExtension.load(model);
+                controlExtension.load(specification);
                 controlExtension.completeControlConf(controlConf);
             }
             result.addControl(controlConf);
@@ -612,7 +617,7 @@ public class UseSettings extends FileOperation {
     }
 
     private static void addOutputPorts(ExecutorSpecification result, SettingsCombiner settingsCombiner) {
-        final Map<String, ExecutorSpecification.ControlConf> controls = settingsCombiner.model().getControls();
+        final Map<String, ExecutorSpecification.ControlConf> controls = settingsCombiner.specification().getControls();
         for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
             final String name = SettingsCombiner.portName(controlConf);
             final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf()

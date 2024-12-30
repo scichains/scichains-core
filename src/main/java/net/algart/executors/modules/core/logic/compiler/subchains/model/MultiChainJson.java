@@ -30,7 +30,7 @@ import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -169,8 +169,8 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
                         DEFAULT_MULTICHAIN_CATEGORY);
         this.settingsCategory = json.getString("settings_category",
                 recommendedCategory != null ?
-                        SettingsCombinerJson.DEFAULT_SETTINGS_CATEGORY_PREFIX + recommendedCategory :
-                        SettingsCombinerJson.DEFAULT_SETTINGS_CATEGORY);
+                        SettingsCombinerSpecification.DEFAULT_SETTINGS_CATEGORY_PREFIX + recommendedCategory :
+                        SettingsCombinerSpecification.DEFAULT_SETTINGS_CATEGORY);
         this.name = json.getString("name",
                 recommendedName != null ? recommendedName : DEFAULT_MULTICHAIN_NAME);
         this.settingsName = json.getString("settings_name",

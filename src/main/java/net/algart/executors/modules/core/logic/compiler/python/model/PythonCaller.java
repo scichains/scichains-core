@@ -35,7 +35,7 @@ import net.algart.executors.api.Port;
 import java.util.Objects;
 
 public final class PythonCaller implements Cloneable, AutoCloseable {
-    private final PythonCallerSpecification model;
+    private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.PythonConf pythonConf;
     private final JepPerformerContainer container;
     private final JepAPI jepAPI = JepAPI.getInstance();
@@ -43,11 +43,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     private final Object lock = new Object();
 
-    private PythonCaller(PythonCallerSpecification model) {
-        this.model = Objects.requireNonNull(model, "Null model");
-        this.pythonConf = model.getPython();
+    private PythonCaller(PythonCallerSpecification specification) {
+        this.specification = Objects.requireNonNull(specification, "Null specification");
+        this.pythonConf = specification.getPython();
         if (pythonConf == null) {
-            final var file = model.getExecutorSpecificationFile();
+            final var file = specification.getExecutorSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
@@ -58,20 +58,20 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         return new PythonCaller(model);
     }
 
-    public PythonCallerSpecification model() {
-        return model;
+    public PythonCallerSpecification specification() {
+        return specification;
     }
 
     public String executorId() {
-        return model.getExecutorId();
+        return specification.getExecutorId();
     }
 
     public String name() {
-        return model.getName();
+        return specification.getName();
     }
 
     public String platformId() {
-        return model.getPlatformId();
+        return specification.getPlatformId();
     }
 
     public JepPerformer performer() {

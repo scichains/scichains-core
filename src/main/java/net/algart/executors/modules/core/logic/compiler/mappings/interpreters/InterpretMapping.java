@@ -29,13 +29,13 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.logic.compiler.mappings.UseMapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;
-import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingJson;
+import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingSpecification;
 import net.algart.json.Jsons;
 
 import java.util.Locale;
 
 public class InterpretMapping extends Executor implements ReadOnlyExecutionInput {
-    public static final String OUTPUT_MAPPING = MappingJson.MAPPING;
+    public static final String OUTPUT_MAPPING = MappingSpecification.MAPPING;
     public static final String OUTPUT_KEYS = "keys";
 
     private volatile Mapping mapping = null;

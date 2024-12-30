@@ -28,7 +28,7 @@ import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.ExecutorFactory;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -46,7 +46,7 @@ public final class SubChainToSettingsCombiner {
         }
 
         final Path chainJsonFile = Paths.get(args[0]);
-        final Path settingsCombinerJsonFile = Paths.get(args[1]);
+        final Path settingsCombinerSpecificationFile = Paths.get(args[1]);
         final String modelName = args[2];
 
         final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
@@ -57,10 +57,10 @@ public final class SubChainToSettingsCombiner {
         final Chain chain = Chain.valueOf(null, executorFactory, chainJson);
         final ExecutorSpecification executorSpecification = new ExecutorSpecification();
         executorSpecification.setTo(chain);
-        final SettingsCombinerJson settingsCombinerJson = new SettingsCombinerJson();
-        settingsCombinerJson.setId(UUID.randomUUID().toString());
-        settingsCombinerJson.setCombineName(SettingsCombinerJson.DEFAULT_SETTINGS_COMBINE_PREFIX + modelName);
-        settingsCombinerJson.setControls(executorSpecification.getControls());
-        settingsCombinerJson.write(settingsCombinerJsonFile);
+        final SettingsCombinerSpecification settingsCombinerSpecification = new SettingsCombinerSpecification();
+        settingsCombinerSpecification.setId(UUID.randomUUID().toString());
+        settingsCombinerSpecification.setCombineName(SettingsCombinerSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + modelName);
+        settingsCombinerSpecification.setControls(executorSpecification.getControls());
+        settingsCombinerSpecification.write(settingsCombinerSpecificationFile);
     }
 }

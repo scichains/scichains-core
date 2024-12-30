@@ -37,7 +37,7 @@ import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.MainChainSettingsInformation;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.json.Jsons;
@@ -48,7 +48,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 public final class InterpretSubChain extends Executor implements ReadOnlyExecutionInput {
-    public static final String SETTINGS = SettingsCombinerJson.SETTINGS;
+    public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
 
     private volatile Chain chain = null;
     private final FunctionTiming timing = FunctionTiming.newDisabledInstance();

@@ -63,7 +63,7 @@ public class StandardExecutorFactory implements ExecutorFactory {
                 // but the usage of this model by this package is very pure: we prefer to provide
                 // maximal performance here (note that the following operators require conversion JSON <-> String
                 // and are relatively slow). In any case, the developer can restart the server at any time.
-                // We DO NOT TRY to cache null model: it MAY become non-null as a result of registering
+                // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
             final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);

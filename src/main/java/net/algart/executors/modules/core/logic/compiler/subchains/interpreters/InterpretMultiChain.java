@@ -32,7 +32,7 @@ import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public final class InterpretMultiChain extends Executor implements ReadOnlyExecutionInput {
-    public static final String SETTINGS = SettingsCombinerJson.SETTINGS;
+    public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
 
     private volatile MultiChain multiChain = null;
     private final FunctionTiming timing = FunctionTiming.newDisabledInstance();

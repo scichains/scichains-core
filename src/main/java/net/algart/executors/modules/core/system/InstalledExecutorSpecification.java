@@ -84,7 +84,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
-        final ExecutorSpecification model = findModel(id);
+        final ExecutorSpecification model = findSpecification(id);
         if (model == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
             return;
@@ -97,7 +97,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         getScalar(OUTPUT_LANGUAGE).setTo(model.getLanguage());
     }
 
-    public ExecutorSpecification findModel(String executorId) {
+    public ExecutorSpecification findSpecification(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
         final ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);

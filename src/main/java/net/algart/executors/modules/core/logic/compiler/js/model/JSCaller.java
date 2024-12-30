@@ -36,7 +36,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public final class JSCaller implements Cloneable, AutoCloseable {
-    private final JSCallerSpecification model;
+    private final JSCallerSpecification specification;
     private final JSCallerSpecification.JSConf jsConf;
     private final GraalPerformerContainer.Local performerContainer;
     private final GraalAPI graalAPI = GraalAPI.getInstance()
@@ -47,12 +47,12 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
 
-    private JSCaller(JSCallerSpecification model, Path workingDirectory) {
-        this.model = Objects.requireNonNull(model, "Null model");
+    private JSCaller(JSCallerSpecification specification, Path workingDirectory) {
+        this.specification = Objects.requireNonNull(specification, "Null specification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
-        this.jsConf = model.getJS();
+        this.jsConf = specification.getJS();
         if (jsConf == null) {
-            final var file = model.getExecutorSpecificationFile();
+            final var file = specification.getExecutorSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a JS executor configuration: no \"JS\" section");
         }
@@ -65,20 +65,20 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         return new JSCaller(model, workingDirectory);
     }
 
-    public JSCallerSpecification model() {
-        return model;
+    public JSCallerSpecification specification() {
+        return specification;
     }
 
     public String executorId() {
-        return model.getExecutorId();
+        return specification.getExecutorId();
     }
 
     public String name() {
-        return model.getName();
+        return specification.getName();
     }
 
     public String platformId() {
-        return model.getPlatformId();
+        return specification.getPlatformId();
     }
 
     public GraalPerformer performer() {

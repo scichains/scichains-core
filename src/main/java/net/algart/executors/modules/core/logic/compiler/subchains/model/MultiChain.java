@@ -31,7 +31,7 @@ import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.*;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.MainChainSettingsInformation;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChainSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
@@ -266,7 +266,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         final String multiChainName = name();
         final String selectedChainName = selectedChain.name();
         final Set<String> selectedSubChainActualKeys = settingsInformation.chainSettingsCombiner()
-                .settingsJsonKeySet();
+                .settingsKeySet();
 
         final JsonObject multiSettings = SettingsCombiner.getSubSettingsByName(parentSettings, multiChainName);
         final JsonObject parentSubSettings = SettingsCombiner.getSubSettingsByName(parentSettings, selectedChainName);
@@ -367,10 +367,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     // Note: this.chainModels must be already built
-    private SettingsCombinerJson buildMultiChainSettingsSpecification(
+    private SettingsCombinerSpecification buildMultiChainSettingsSpecification(
             boolean addSubSettingsForVariants,
             Map<String, Chain> helpingChainMap) {
-        final SettingsCombinerJson result = new SettingsCombinerJson();
+        final SettingsCombinerSpecification result = new SettingsCombinerSpecification();
         result.setId(model.getSettingsId());
         result.setName(model.getName());
         result.setCombineName(model.getSettingsName());
@@ -386,7 +386,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 final ChainJson.Executor executor = chainModel.getExecutor();
                 final String name = executor.getName();
                 try {
-                    SettingsCombinerJson.checkParameterName(name, null);
+                    SettingsCombinerSpecification.checkParameterName(name, null);
                 } catch (JsonException e) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name: "
                             + "it is not allowed as a parameter name in the settings" + multiChainJsonFileMessage, e);

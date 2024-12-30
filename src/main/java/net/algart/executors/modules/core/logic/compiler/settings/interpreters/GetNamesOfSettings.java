@@ -170,7 +170,7 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
         // - important to do this before other operations, for an improbable case
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         final SettingsCombiner combiner = settingsCombiner();
-        final List<String> names = combiner.model().getControls().values().stream()
+        final List<String> names = combiner.specification().getControls().values().stream()
                 .filter(this::isMatched).map(ExecutorSpecification.ControlConf::getName)
                 .collect(Collectors.toList());
         getScalar().setTo(resultType.result(names, resultJsonKey));

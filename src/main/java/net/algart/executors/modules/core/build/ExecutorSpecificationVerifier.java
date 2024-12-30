@@ -33,7 +33,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.ExtensionSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -74,8 +74,8 @@ public final class ExecutorSpecificationVerifier {
             if (ignoreOtherApps) {
                 return null;
             }
-            if (app.equals(SettingsCombinerJson.APP_NAME)
-                    || app.equals(SettingsCombinerJson.APP_NAME_FOR_MAIN)
+            if (app.equals(SettingsCombinerSpecification.APP_NAME)
+                    || app.equals(SettingsCombinerSpecification.APP_NAME_FOR_MAIN)
                     || app.equals(ExtensionSpecification.APP_NAME)
                     || ChainJson.isChainJsonContainer(json)) {
                 // - not an error, just another known model type
