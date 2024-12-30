@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ExecutorJsonTest {
+public class ExecutorSpecificationTest {
     @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 4) {
@@ -46,30 +46,30 @@ public class ExecutorJsonTest {
         final Path resultFile1 = Paths.get(args[1]);
         final Path resultFile2 = Paths.get(args[2]);
         final Path resultFile3 = Paths.get(args[3]);
-        ExecutorSpecification model = ExecutorSpecification.read(modelFile);
-//        ExecutorJson model = ExecutorJson.valueOf(Jsons.readJson(modelFile)); // - for testing null file
-        model.write(resultFile1);
+        ExecutorSpecification specification = ExecutorSpecification.read(modelFile);
+//        ExecutorSpecification specification = ExecutorSpecification.valueOf(Jsons.readJson(modelFile)); // - for testing null file
+        specification.write(resultFile1);
         System.out.printf("Java configuration:%n");
-        System.out.println(model.minimalSpecification());
-        System.out.printf("%nFull model:%n");
-        System.out.println(model);
+        System.out.println(specification.minimalSpecification());
+        System.out.printf("%nFull specification:%n");
+        System.out.println(specification);
         System.out.printf("%nExecutor object:%n");
         Thread.sleep(100);
         ExecutionBlock executionBlock;
         try {
-            executionBlock = ExecutionBlock.newExecutor(null, model.getExecutorId(), model);
+            executionBlock = ExecutionBlock.newExecutor(null, specification.getExecutorId(), specification);
             Thread.sleep(100);
             System.out.println(executionBlock);
             if (executionBlock instanceof Executor) {
-                model.setTo((Executor) executionBlock);
-                model.write(resultFile2);
-                System.out.printf("%nReloaded full model:%n");
-                System.out.println(model);
+                specification.setTo((Executor) executionBlock);
+                specification.write(resultFile2);
+                System.out.printf("%nReloaded full specification:%n");
+                System.out.println(specification);
 
-                model = ExecutorSpecification.valueOf((Executor) executionBlock, "12345678");
-                model.write(resultFile3);
+                specification = ExecutorSpecification.valueOf((Executor) executionBlock, "12345678");
+                specification.write(resultFile3);
                 System.out.printf("%nModel, created from executor:%n");
-                System.out.println(model);
+                System.out.println(specification);
 
                 System.out.printf("%nExecutor specification:%n");
                 System.out.println(executionBlock.getExecutorSpecification());
@@ -83,24 +83,24 @@ public class ExecutorJsonTest {
                 String minimal = null;
                 long t1 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    json = model.toJson();
+                    json = specification.toJson();
                 }
                 long t2 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    minimal = model.minimalSpecification();
+                    minimal = specification.minimalSpecification();
                 }
                 long t3 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    block1 = ExecutionBlock.newExecutor(null, model.getExecutorId(), model);
+                    block1 = ExecutionBlock.newExecutor(null, specification.getExecutorId(), specification);
                 }
                 long t4 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    block2 = ExecutionBlock.newExecutionBlock(null, model.getExecutorId(), minimal);
+                    block2 = ExecutionBlock.newExecutionBlock(null, specification.getExecutorId(), minimal);
                 }
                 long t5 = System.nanoTime();
-                System.out.printf("ExecutorJson.toJson(): %.3f mcs%n", (t2 - t1) * 1e-3 / n);
-                System.out.printf("ExecutorJson.minimalSpecification(): %.3f mcs%n", (t3 - t2) * 1e-3 / n);
-                System.out.printf("Creating execution block from ExecutorJson: %.3f mcs%n", (t4 - t3) * 1e-3 / n);
+                System.out.printf("ExecutorSpecification.toJson(): %.3f mcs%n", (t2 - t1) * 1e-3 / n);
+                System.out.printf("ExecutorSpecification.minimalSpecification(): %.3f mcs%n", (t3 - t2) * 1e-3 / n);
+                System.out.printf("Creating execution block from specification: %.3f mcs%n", (t4 - t3) * 1e-3 / n);
                 System.out.printf("Creating execution block from minimal string:  %.3f mcs%n", (t5 - t4) * 1e-3 / n);
             }
             System.out.printf("Full execution block:%n%s%n%n", block1.getExecutorSpecification().jsonString());

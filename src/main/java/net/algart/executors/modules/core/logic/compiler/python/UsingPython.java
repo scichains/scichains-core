@@ -88,7 +88,7 @@ public class UsingPython {
             final PythonCallerSpecification pythonCallerSpecification = pythonCallerSpecifications.get(i);
             Executor.LOG.log(System.Logger.Level.DEBUG,
                     "Loading Python caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                            + "from " + pythonCallerSpecification.getExecutorJsonFile() + "...");
+                            + "from " + pythonCallerSpecification.getExecutorSpecificationFile() + "...");
             if (platform != null) {
                 pythonCallerSpecification.updateCategoryPrefix(platform.getCategory());
                 pythonCallerSpecification.addTags(platform.getTags());

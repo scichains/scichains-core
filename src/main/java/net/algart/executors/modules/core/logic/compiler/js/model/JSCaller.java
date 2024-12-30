@@ -52,7 +52,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         this.jsConf = model.getJS();
         if (jsConf == null) {
-            final var file = model.getExecutorJsonFile();
+            final var file = model.getExecutorSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a JS executor configuration: no \"JS\" section");
         }

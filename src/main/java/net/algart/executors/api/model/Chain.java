@@ -489,12 +489,12 @@ public final class Chain implements AutoCloseable {
                 final ChainInputPort inputPort = block.reqStandardDataPort();
                 final Data data = inputPort.getData();
                 if (!(data instanceof SScalar)) {
-                    // - corresponds to ExecutorJson.setTo(Chain) logic
+                    // - corresponds to ExecutorSpecification.setTo(Chain) logic
                     continue;
                 }
                 final String value = parameters.getString(subChainParameterName, null);
                 // - should be called after checking for a scalar type: for other types,
-                // ExecutorJson.setTo(Chain) does not add parameters
+                // ExecutorSpecification.setTo(Chain) does not add parameters
                 if (value != null) {
                     // - if null, let the parameter have its default value
                     ((SScalar) data).setTo(value);

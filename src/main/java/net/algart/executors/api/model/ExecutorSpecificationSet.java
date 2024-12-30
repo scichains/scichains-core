@@ -38,7 +38,7 @@ import java.util.*;
 public final class ExecutorSpecificationSet {
     private static final Logger LOG = System.getLogger(Executor.class.getName());
 
-    private final Map<String, ExecutorSpecification> executorJsons = new LinkedHashMap<>();
+    private final Map<String, ExecutorSpecification> specifications = new LinkedHashMap<>();
     private boolean immutable = false;
 
     private ExecutorSpecificationSet() {
@@ -61,7 +61,7 @@ public final class ExecutorSpecificationSet {
     }
 
     public void add(ExecutorSpecification executorSpecification) {
-        Objects.requireNonNull(executorSpecification, "Null executorJson");
+        Objects.requireNonNull(executorSpecification, "Null executorSpecification");
         add(executorSpecification.getExecutorId(), executorSpecification);
     }
 
@@ -140,33 +140,33 @@ public final class ExecutorSpecificationSet {
     }
 
     public Collection<ExecutorSpecification> all() {
-        return Collections.unmodifiableCollection(executorJsons.values());
+        return Collections.unmodifiableCollection(specifications.values());
     }
 
     public boolean contains(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
-        return executorJsons.containsKey(executorId);
+        return specifications.containsKey(executorId);
     }
 
     public ExecutorSpecification get(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
-        return executorJsons.get(executorId);
+        return specifications.get(executorId);
     }
 
     public ExecutorSpecification remove(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         checkImmutable();
-        return executorJsons.remove(executorId);
+        return specifications.remove(executorId);
     }
 
     private void add(String executorId, ExecutorSpecification executorSpecification, Path file) {
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(executorSpecification, "Null executorJson");
+        Objects.requireNonNull(executorSpecification, "Null executorSpecification");
         // - No sense to store null values in the map
         if (immutable) {
             throw new UnsupportedOperationException("This executors json set is immutable");
         }
-        if (executorJsons.putIfAbsent(executorId, executorSpecification) != null) {
+        if (specifications.putIfAbsent(executorId, executorSpecification) != null) {
             throw new IllegalArgumentException("Duplicate executor model: " + executorId
                     + (file == null ? "" : " in " + file));
         }

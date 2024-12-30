@@ -40,7 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreateExecutorJsonTest {
+public class CreateExecutorSpecificationTest {
     public static class TestExecutor extends Executor {
         @Override
         public void process() {
@@ -53,7 +53,7 @@ public class CreateExecutorJsonTest {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 1) {
-            System.out.printf("Usage: %s result.json%n", CreateExecutorJsonTest.class.getName());
+            System.out.printf("Usage: %s result.json%n", CreateExecutorSpecificationTest.class.getName());
             return;
         }
         final Path resultFile = Paths.get(args[0]);

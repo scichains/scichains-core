@@ -52,7 +52,7 @@ public class ExecutorLoader {
     private static final Logger LOG = System.getLogger(ExecutorLoader.class.getName());
 
     final Map<String, Map<String, String>> allSpecifications = new LinkedHashMap<>();
-    // - sessionId -> Map(executorId -> executorJson)
+    // - sessionId -> Map(executorId -> executorSpecification)
 
     private final String name;
 

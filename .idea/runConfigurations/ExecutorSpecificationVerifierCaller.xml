@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ExecutorJsonVerifierCaller" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.modules.core.build.ExecutorJsonVerifierCaller" />
+  <configuration default="false" name="ExecutorSpecificationVerifierCaller" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.modules.core.build.ExecutorSpecificationVerifierCaller" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="-check_classes ${home}/ext/base-core" />
     <option name="VM_PARAMETERS" value="-ea -esa" />

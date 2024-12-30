@@ -45,7 +45,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public final class ExecutorJsonVerifier {
+public final class ExecutorSpecificationVerifier {
     private static final List<String> POSSIBLE_BLOCK_KINDS = List.of("function", "input", "output", "data");
 
     private final Set<String> ids = new HashSet<>();
@@ -54,7 +54,7 @@ public final class ExecutorJsonVerifier {
     private boolean checkClasses = false;
     private boolean thoroughWarnings = false;
 
-    static JsonObject readExecutorJson(Path f, boolean ignoreOtherApps) throws IOException {
+    static JsonObject readExecutorSpecification(Path f, boolean ignoreOtherApps) throws IOException {
         if (f.getFileName().toString().startsWith(".")) {
             // Skip special files
             return null;
@@ -87,7 +87,7 @@ public final class ExecutorJsonVerifier {
     }
 
     void verify(Path f) throws IOException {
-        final JsonObject json = readExecutorJson(f, false);
+        final JsonObject json = readExecutorSpecification(f, false);
         if (json == null) {
             return;
         }
@@ -351,7 +351,7 @@ public final class ExecutorJsonVerifier {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ExecutorJsonVerifier verifier = new ExecutorJsonVerifier();
+        ExecutorSpecificationVerifier verifier = new ExecutorSpecificationVerifier();
         int startArgIndex = 0;
         if (args.length > startArgIndex && args[startArgIndex].equals("-check_classes")) {
             verifier.checkClasses = true;
@@ -364,7 +364,7 @@ public final class ExecutorJsonVerifier {
         if (args.length == startArgIndex) {
             System.out.printf("Usage: %s [-check_classes] [-thorough] " +
                             "folder1_with_json_files folder2_with_json_files...s%n",
-                    ExecutorJsonVerifier.class.getName());
+                    ExecutorSpecificationVerifier.class.getName());
             return;
         }
         if (!verifier.checkClasses) {

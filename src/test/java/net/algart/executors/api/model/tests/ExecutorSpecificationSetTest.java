@@ -34,7 +34,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Locale;
 
-public class ExecutorJsonSetTest {
+public class ExecutorSpecificationSetTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         int startArgIndex = 0;
         boolean resolve = false;
@@ -133,7 +133,7 @@ public class ExecutorJsonSetTest {
             System.out.printf("  Writing xxx__model.json.files...%n");
             for (ExecutorSpecification model : executorSpecificationSet.all()) {
                 final String jsonString = model.jsonString();
-                final Path resultFile = Paths.get(model.getExecutorJsonFile() + "__model.json");
+                final Path resultFile = Paths.get(model.getExecutorSpecificationFile() + "__model.json");
                 java.nio.file.Files.writeString(resultFile, jsonString);
             }
         }

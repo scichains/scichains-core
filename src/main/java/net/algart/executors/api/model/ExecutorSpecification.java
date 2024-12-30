@@ -1347,7 +1347,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private Path executorJsonFile = null;
+    private Path executorSpecificationFile = null;
     private String version = CURRENT_VERSION;
     private String platformId = null;
     // - usually not loaded from JSON file, but set later, while loading all JSON models for some platform
@@ -1374,11 +1374,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     protected ExecutorSpecification(JsonObject json, Path file) {
-        if (!isExecutorJson(json)) {
+        if (!isExecutorSpecification(json)) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not an executor configuration: no \"app\":\"" + APP_NAME + "\" element");
         }
-        this.executorJsonFile = file;
+        this.executorSpecificationFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
         this.platformId = json.getString("platform_id", null);
         try {
@@ -1440,34 +1440,34 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static ExecutorSpecification read(Path executorJsonFile) throws IOException {
-        Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
-        final JsonObject json = Jsons.readJson(executorJsonFile);
-        return new ExecutorSpecification(json, executorJsonFile);
+    public static ExecutorSpecification read(Path executorSpecificationFile) throws IOException {
+        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
+        final JsonObject json = Jsons.readJson(executorSpecificationFile);
+        return new ExecutorSpecification(json, executorSpecificationFile);
     }
 
-    public static ExecutorSpecification readIfValid(Path executorJsonFile) throws IOException {
-        Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
-        final JsonObject json = Jsons.readJson(executorJsonFile);
-        if (!isExecutorJson(json)) {
+    public static ExecutorSpecification readIfValid(Path executorSpecificationFile) throws IOException {
+        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
+        final JsonObject json = Jsons.readJson(executorSpecificationFile);
+        if (!isExecutorSpecification(json)) {
             return null;
         }
-        return new ExecutorSpecification(json, executorJsonFile);
+        return new ExecutorSpecification(json, executorSpecificationFile);
     }
 
-    public void write(Path executorJsonFile, OpenOption... options) throws IOException {
-        Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
-        Files.writeString(executorJsonFile, jsonString(), options);
+    public void write(Path executorSpecificationFile, OpenOption... options) throws IOException {
+        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
+        Files.writeString(executorSpecificationFile, jsonString(), options);
     }
 
-    public static ExecutorSpecification valueOf(JsonObject executorJson) {
-        return new ExecutorSpecification(executorJson, null);
+    public static ExecutorSpecification valueOf(JsonObject executorSpecification) {
+        return new ExecutorSpecification(executorSpecification, null);
     }
 
-    public static ExecutorSpecification valueOf(String executorJsonString) throws JsonException {
-        Objects.requireNonNull(executorJsonString, "Null executorJsonString");
-        final JsonObject executorJson = Jsons.toJson(executorJsonString);
-        return new ExecutorSpecification(executorJson, null);
+    public static ExecutorSpecification valueOf(String executorSpecificationString) throws JsonException {
+        Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
+        final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
+        return new ExecutorSpecification(executorSpecification, null);
     }
 
     public static ExecutorSpecification valueOf(Executor executor, String executorId) {
@@ -1479,15 +1479,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return result;
     }
 
-    public static boolean isExecutorJson(JsonObject executorJson) {
-        Objects.requireNonNull(executorJson, "Null executor JSON");
-        return APP_NAME.equals(executorJson.getString("app", null));
+    public static boolean isExecutorSpecification(JsonObject executorSpecification) {
+        Objects.requireNonNull(executorSpecification, "Null executor specification");
+        return APP_NAME.equals(executorSpecification.getString("app", null));
     }
 
-    public static void checkIdDifference(Collection<? extends ExecutorSpecification> executorJsons) {
-        Objects.requireNonNull(executorJsons, "Null executor JSONs collection");
+    public static void checkIdDifference(Collection<? extends ExecutorSpecification> executorSpecifications) {
+        Objects.requireNonNull(executorSpecifications, "Null executor specifications collection");
         final Set<String> ids = new HashSet<>();
-        for (ExecutorSpecification executorSpecification : executorJsons) {
+        for (ExecutorSpecification executorSpecification : executorSpecifications) {
             final String id = executorSpecification.getExecutorId();
             assert id != null;
             if (!ids.add(id)) {
@@ -1497,12 +1497,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public final boolean hasExecutorJsonFile() {
-        return executorJsonFile != null;
+    public final boolean hasExecutorSpecificationFile() {
+        return executorSpecificationFile != null;
     }
 
-    public final Path getExecutorJsonFile() {
-        return executorJsonFile;
+    public final Path getExecutorSpecificationFile() {
+        return executorSpecificationFile;
     }
 
     public final String getVersion() {
@@ -1622,7 +1622,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
      * Returns configuration of the current Java executor or <code>null</code>
      * if it is not a Java executor.
      * <p>The result of this function is never <code>null</code>, if this model was constructed from JSON
-     * and if {@link #isExecutorJson(JsonObject)} returns <code>true</code>. But this can be not so
+     * and if {@link #isExecutorSpecification(JsonObject)} returns <code>true</code>. But this can be not so
      * if this object was constructed manually via setter methods.
      *
      * @return configuration of Java executor.
@@ -1709,7 +1709,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     public final SourceInfo setSourceInfoForModel() {
-        return setSourceInfo(executorJsonFile, null);
+        return setSourceInfo(executorSpecificationFile, null);
     }
 
     public final void updateCategoryPrefix(String categoryPrefix) {
@@ -2037,8 +2037,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     @Override
     public String toString() {
-        return "ExecutorJson{\n" +
-                "  executorJsonFile=" + executorJsonFile +
+        return "ExecutorSpecification{\n" +
+                "  executorSpecificationFile=" + executorSpecificationFile +
                 ",\n  version='" + version + '\'' +
                 ",\n  platformId='" + platformId + '\'' +
                 ",\n  category='" + category + '\'' +

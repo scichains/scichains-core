@@ -26,6 +26,6 @@ package net.algart.executors.modules.core.build;
 
 public final class ExecutorConfBuilderCaller {
     public static void main(String[] args) throws Exception {
-        ExecutorJsonBuilder.main(args);
+        ExecutorSpecificationBuilder.main(args);
     }
 }

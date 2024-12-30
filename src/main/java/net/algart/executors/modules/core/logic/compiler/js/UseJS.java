@@ -124,7 +124,7 @@ public class UseJS extends FileOperation {
         for (int i = 0, n = jsCallerSpecifications.size(); i < n; i++) {
             final JSCallerSpecification jsCallerSpecification = jsCallerSpecifications.get(i);
             logDebug("Loading JS caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + jsCallerSpecification.getExecutorJsonFile() + "...");
+                    + "from " + jsCallerSpecification.getExecutorSpecificationFile() + "...");
             if (platform != null) {
                 jsCallerSpecification.updateCategoryPrefix(platform.getCategory());
                 jsCallerSpecification.addTags(platform.getTags());
@@ -132,7 +132,7 @@ public class UseJS extends FileOperation {
             }
             use(jsCallerSpecification);
             if (report != null) {
-                report.append(jsCallerSpecification.getExecutorJsonFile()).append("\n");
+                report.append(jsCallerSpecification.getExecutorSpecificationFile()).append("\n");
             }
         }
     }

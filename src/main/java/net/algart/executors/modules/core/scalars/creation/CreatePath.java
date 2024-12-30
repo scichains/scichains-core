@@ -48,7 +48,7 @@ public final class CreatePath extends Executor {
         this.readOnly = readOnly;
         setDefaultInputScalar(DEFAULT_INPUT_PORT);
         // - Note: it MUST be DEFAULT_INPUT_PORT to allow using this function as input blocks in the chain:
-        // input block must have a standard name DEFAULT_INPUT_PORT: see ExecutorJson.setTo(Chain)
+        // input block must have a standard name DEFAULT_INPUT_PORT: see ExecutorSpecification.setTo(Chain)
         setDefaultOutputScalar(OUTPUT_ABSOLUTE_PATH);
         addOutputScalar(OUTPUT_PARENT_FOLDER);
         addOutputScalar(OUTPUT_FILE_NAME);

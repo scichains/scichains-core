@@ -794,12 +794,12 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private final Path extensionJsonFile;
+    private final Path extensionSpecificationFile;
     private String version = CURRENT_VERSION;
     private List<Platform> platforms = new ArrayList<>();
 
     public ExtensionSpecification() {
-        this.extensionJsonFile = null;
+        this.extensionSpecificationFile = null;
     }
 
     private ExtensionSpecification(JsonObject json, Path file) {
@@ -808,31 +808,31 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not an executor configuration: no \"app\":\"" + APP_NAME + "\" element");
         }
-        this.extensionJsonFile = file;
+        this.extensionSpecificationFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
         for (JsonObject platformJson : Jsons.reqJsonObjects(json, "platforms")) {
             this.platforms.add(new Platform(platformJson, file));
         }
     }
 
-    public static ExtensionSpecification valueOf(JsonObject extensionJson) {
-        return new ExtensionSpecification(extensionJson, null);
+    public static ExtensionSpecification valueOf(JsonObject extensionSpecification) {
+        return new ExtensionSpecification(extensionSpecification, null);
     }
 
-    public static ExtensionSpecification read(Path extensionJsonFile) throws IOException {
-        Objects.requireNonNull(extensionJsonFile, "Null extensionJsonFile");
-        final JsonObject json = Jsons.readJson(extensionJsonFile);
-        return new ExtensionSpecification(json, extensionJsonFile);
+    public static ExtensionSpecification read(Path extensionSpecificationFile) throws IOException {
+        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
+        final JsonObject json = Jsons.readJson(extensionSpecificationFile);
+        return new ExtensionSpecification(json, extensionSpecificationFile);
     }
 
-    public static ExtensionSpecification readIfValid(Path extensionJsonFile) throws IOException {
-        Objects.requireNonNull(extensionJsonFile, "Null extensionJsonFile");
-        final JsonObject json = Jsons.readJson(extensionJsonFile);
+    public static ExtensionSpecification readIfValid(Path extensionSpecificationFile) throws IOException {
+        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
+        final JsonObject json = Jsons.readJson(extensionSpecificationFile);
         Objects.requireNonNull(json, "Null extension JSON");
         if (!APP_NAME.equals(json.getString("app", null))) {
             return null;
         }
-        return new ExtensionSpecification(json, extensionJsonFile);
+        return new ExtensionSpecification(json, extensionSpecificationFile);
     }
 
     public static ExtensionSpecification readFromFolder(Path extensionFolder) throws IOException {
@@ -841,32 +841,32 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             throw new FileNotFoundException("Extension folder \"" + extensionFolder
                     + "\" is not an existing directory");
         }
-        final Path extensionJsonFile = defaultExtensionJsonFile(extensionFolder);
-        if (!Files.exists(extensionJsonFile)) {
-            throw new FileNotFoundException("Extension file \"" + extensionJsonFile
+        final Path extensionSpecificationFile = defaultExtensionSpecificationFile(extensionFolder);
+        if (!Files.exists(extensionSpecificationFile)) {
+            throw new FileNotFoundException("Extension specification file \"" + extensionSpecificationFile
                     + "\" does not exist in " + extensionFolder);
         }
-        return read(extensionJsonFile);
+        return read(extensionSpecificationFile);
     }
 
-    public void write(Path extensionJsonFile, OpenOption... options) throws IOException {
-        Objects.requireNonNull(extensionJsonFile, "Null extensionJsonFile");
-        Files.writeString(extensionJsonFile, jsonString(), options);
+    public void write(Path extensionSpecificationFile, OpenOption... options) throws IOException {
+        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
+        Files.writeString(extensionSpecificationFile, jsonString(), options);
     }
 
-    public static Path defaultExtensionJsonFile(Path extensionFolder) {
+    public static Path defaultExtensionSpecificationFile(Path extensionFolder) {
         Objects.requireNonNull(extensionFolder, "Null extensionFolder");
         return extensionFolder.resolve(DEFAULT_EXTENSION_FILE_NAME).toAbsolutePath();
     }
 
-    public static boolean isExtensionJson(JsonObject extensionJson) {
-        Objects.requireNonNull(extensionJson, "Null extension JSON");
-        return APP_NAME.equals(extensionJson.getString("app", null));
+    public static boolean isExtensionSpecification(JsonObject extensionSpecification) {
+        Objects.requireNonNull(extensionSpecification, "Null extensionSpecification");
+        return APP_NAME.equals(extensionSpecification.getString("app", null));
     }
 
     public static boolean isExtensionFolder(Path extensionFolder) {
         return Files.isDirectory(extensionFolder)
-                && Files.exists(defaultExtensionJsonFile(extensionFolder));
+                && Files.exists(defaultExtensionSpecificationFile(extensionFolder));
     }
 
     public static List<Path> allExtensionFolders(Path extensionRoot) throws IOException {
@@ -917,27 +917,8 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         return result;
     }
 
-// (not too good idea)
-//    /**
-//     * Returns a default version of extension JSON, that should be supposed
-//     * if there is no necessary .json file in the specified extension folder.
-//     *
-//     * <p>This method is necessary for old or very simple Java extensions,
-//     * which do not use an extension JSON file. The Result of this method describes
-//     * a Java extension, containing JSON files with models of executors in
-//     * {@value Platform.Folders#DEFAULT_MODELS_SUBFOLDER} subfolder.</p>
-//     *
-//     * @param extensionFolder
-//     * @return default (Java-based) variant of extension JSON.
-//     */
-
-//    public static ExtensionJson newDefaultInstance(Path extensionFolder) {
-//        return new ExtensionJson()
-//                .setPlatforms(List.of(Platform.newDefaultInstance(extensionFolder)));
-//    }
-
-    public Path getExtensionJsonFile() {
-        return extensionJsonFile;
+    public Path getExtensionSpecificationFile() {
+        return extensionSpecificationFile;
     }
 
     public String getVersion() {
@@ -965,8 +946,8 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
 
     @Override
     public String toString() {
-        return "ExtensionJson{" +
-                "extensionJsonFile=" + extensionJsonFile +
+        return "ExtensionSpecification{" +
+                "extensionSpecificationFile=" + extensionSpecificationFile +
                 ", version='" + version + '\'' +
                 ", platforms=" + platforms +
                 '}';

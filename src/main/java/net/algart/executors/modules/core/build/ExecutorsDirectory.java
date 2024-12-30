@@ -46,7 +46,7 @@ public final class ExecutorsDirectory {
     private String lastCategory = null;
 
     private void show(Path f) throws IOException {
-        final JsonObject json = ExecutorJsonVerifier.readExecutorJson(f, true);
+        final JsonObject json = ExecutorSpecificationVerifier.readExecutorSpecification(f, true);
         if (json == null) {
             return;
         }

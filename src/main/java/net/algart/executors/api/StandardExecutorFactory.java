@@ -35,7 +35,7 @@ import java.util.Objects;
 public class StandardExecutorFactory implements ExecutorFactory {
     private final ExecutorSpecificationSet staticExecutors;
     private final ExecutorSpecificationSet dynamicExecutorsCache = ExecutorSpecificationSet.newInstance();
-    // - this set is dynamically extended in executorJson method via ExecutionBlock.getExecutorSpecification
+    // - this set is dynamically extended in specification() method via ExecutionBlock.getExecutorSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
@@ -76,11 +76,11 @@ public class StandardExecutorFactory implements ExecutorFactory {
                 //      A) we create a Chain instance with all its blocks (ChainBlock);
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);
-                //      C) we finish creating the chain model (ExecutorJson) by
+                //      C) we finish creating the chain model (ExecutorSpecification) by
                 // buildSubChainModelAndExecuteLoadingTimeWithoutInputs method and register it.
                 // Let this chain contain some dynamic executors like CombineSettings or InterpretMultiChain,
                 // together with necessary static executors, which create them (UseSettings or UseMultiChain).
-                // Every ChainBlock tries to get ExecutorJson for its executor already at the stage A)
+                // Every ChainBlock tries to get ExecutorSpecification for its executor already at the stage A)
                 // while its creation (ChainBlock.valueOf) - this is not obligatory, but helps while diagnostic
                 // possible errors. However, the actual model for them will become known only at the stage B),
                 // while executing corresponding static executors.
@@ -92,7 +92,7 @@ public class StandardExecutorFactory implements ExecutorFactory {
             } else {
                 try {
                     executorSpecification = ExecutorSpecification.valueOf(specification);
-//                    System.out.println("Building executor: " + executorJson.getName());
+//                    System.out.println("Building executor: " + executorSpecification.getName());
                 } catch (JsonException e) {
                     throw new IllegalStateException("Standard executor factory cannot be used with executor "
                             + executorId + ": it is registered with unsupported format of executor specification", e);

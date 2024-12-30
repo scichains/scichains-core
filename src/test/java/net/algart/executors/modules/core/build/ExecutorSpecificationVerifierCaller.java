@@ -24,28 +24,11 @@
 
 package net.algart.executors.modules.core.build;
 
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorSpecification;
+import java.io.IOException;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.UUID;
-
-public class ExecutorJsonBuilder {
-    public static void main(String[] args) throws Exception {
-        if (args.length < 2) {
-            System.out.printf("Usage: %s ExecutorClassName result_executor_model.json%n",
-                    ExecutorJsonBuilder.class.getName());
-            return;
-        }
-
-        final String className = args[0];
-        final Path resultFile = Paths.get(args[1]);
-        final Executor executor = (Executor) Class.forName(className).getDeclaredConstructor().newInstance();
-        final ExecutorSpecification executorSpecification = ExecutorSpecification.valueOf(executor, UUID.randomUUID().toString());
-        executorSpecification.write(resultFile, StandardOpenOption.CREATE_NEW);
-        System.out.printf("JSON model for %s successfully stored in %s%n", executor.getClass(), resultFile);
-        executor.close();
+// This class has access also to test classpath (in IDEA)
+public final class ExecutorSpecificationVerifierCaller {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ExecutorSpecificationVerifier.main(args);
     }
 }

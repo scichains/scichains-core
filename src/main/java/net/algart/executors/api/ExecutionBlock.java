@@ -1151,7 +1151,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * <p>Equivalent to
      * <code>{@link #newExecutor(String, String, ExecutorSpecification)
      * newExecutionBlock}(sessionId, executorId, {@link ExecutorSpecification#valueOf(String)
-     * ExecutorJson.valueOf}(specification))</code>.
+     * ExecutorSpecification.valueOf}(specification))</code>.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.

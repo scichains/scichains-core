@@ -197,17 +197,17 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
                     + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + chain);
-        final ExecutorSpecification settingsExecutorSpecification = settingsBlock.getExecutorSpecification();
-        if (settingsExecutorSpecification != null) {
-            // - In current version, settingsExecutorJson will be usually null.
+        final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
+        if (settingsSpecification != null) {
+            // - In the current version, settingsSpecification will usually be null.
             // We build every ChainBlock at the stage of loading sub-chain, BEFORE executing its loading-time
             // functions; at this stage, settings combiners are not registered yet, and we have no correct JSON.
-            if (settingsExecutorSpecification.getOptions() == null
-                    || settingsExecutorSpecification.getOptions().getRole() == null
-                    || !settingsExecutorSpecification.getOptions().getRole().isSettings()) {
+            if (settingsSpecification.getOptions() == null
+                    || settingsSpecification.getOptions().getRole() == null
+                    || !settingsSpecification.getOptions().getRole().isSettings()) {
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
                         "a correct role \"settings\" (its options are " +
-                        settingsExecutorSpecification.getOptions() + ")");
+                        settingsSpecification.getOptions() + ")");
                 // Note: this role MAY be not main, if we loaded this combiner not only with a correct
                 // function UseChainSettings, but also h simple UseSettings
             }

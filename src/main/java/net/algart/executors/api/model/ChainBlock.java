@@ -62,13 +62,13 @@ public final class ChainBlock {
     // so, we require that the behaviour of dynamic executors must not depend on the set of existing ports
     // (like in some static Java executors, inherited from SeveralMultiMatricesProcessing);
     // 3) for loading values in the parameters in ChainParameter.valueOf()
-    // (but if there is no executorJson, they are still loaded as strings);
+    // (but if there is no executorSpecification, they are still loaded as strings);
     // 4) for diagnostic messages.
 
     ChainJson.ChainBlockConf blockConfJson = null;
     // - Correctly filled while typical usage, but not necessary for this technology.
     // It is used mostly for diagnostic messages and can be useful for external clients,
-    // and also for making more user-friendly executor JSON in ExecutorJson.setTo(Chain) method
+    // and also for making more user-friendly executor JSON in ExecutorSpecification.setTo(Chain) method
 
     private ExecutionStage executionStage = ExecutionStage.RUN_TIME;
     private boolean enabled = true;
@@ -109,12 +109,12 @@ public final class ChainBlock {
         this.executorId = Objects.requireNonNull(executorId, "Null block executorId");
         final ExecutorFactory executorFactory = chain.getExecutorFactory();
         this.executorSpecification = executorFactory == null ? null : executorFactory.specification(executorId);
-        // - Note: executorJson MAY be null until initializing and registering all dynamic executors:
+        // - Note: executorSpecification MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:
         // we do it, for example, while registering new sub-chains-as-executors
         // (see comments inside StandardExecutorFactory.specification()).
-        // But we can delay actual assigning correct executorJson until reinitialize method.
+        // But we can delay actual assigning correct executorSpecification until reinitialize method.
         initialize();
     }
 
@@ -153,7 +153,7 @@ public final class ChainBlock {
         //
         // Note: this problem rarely occurs because usually the cloned chain contains
         // non-initialized executors (created by UseSubChain or UseMultiChain).
-        // But here is an important exception: method ExecutorJson.setTo(Chain chain),
+        // But here is an important exception: method ExecutorSpecification.setTo(Chain chain),
         // used inside UseSubChain to build a chain executor specification,
         // initializes data blocks (with options.behavior.data = true) to know the default
         // corresponding parameters values of the sub-chain executor.
