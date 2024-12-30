@@ -32,11 +32,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-public class ExtensionJsonTest {
+public class ExtensionTest {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
             System.out.printf("Usage: %s extensionFolder result.json%n",
-                    ExtensionJsonTest.class.getName());
+                    ExtensionTest.class.getName());
             return;
         }
         final Path extensionFolder = Paths.get(args[0]);
@@ -49,6 +49,7 @@ public class ExtensionJsonTest {
         System.out.printf("Its platforms:%n");
         for (ExtensionJson.Platform platform : extension.getPlatforms()) {
             System.out.printf("    Technology: %s%n", platform.getTechnology());
+            System.out.printf("    Folders: %s%n", platform.getFolders());
             if (platform.isJvmTechnology()) {
                 final ExtensionJson.Platform.Configuration configuration = platform.getConfiguration();
                 System.out.printf("        classpath: %s%n", configuration.getClasspath());
