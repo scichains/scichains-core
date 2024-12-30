@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.python.model.tests;
 
-import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerJson;
+import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,9 +39,9 @@ public class PythonCallerJsonTest {
         }
         final Path modelFile = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
-        PythonCallerJson model = PythonCallerJson.read(modelFile);
-        model.write(resultFile);
+        PythonCallerSpecification specification = PythonCallerSpecification.read(modelFile);
+        specification.write(resultFile);
         System.out.printf("Python configuration:%n");
-        System.out.println(model.getPython());
+        System.out.println(specification.getPython());
     }
 }

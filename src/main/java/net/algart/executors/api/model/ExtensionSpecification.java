@@ -37,7 +37,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class ExtensionJson extends AbstractConvertibleToJson {
+public final class ExtensionSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "executors-extension";
     public static final String CURRENT_VERSION = "1.0";
     public static final String DEFAULT_EXTENSION_FILE_NAME = "extension.json";
@@ -73,7 +73,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
 
             /**
              * Returns name of the folder, containing JSON files with models of all executors,
-             * added by this platform (see {@link ExecutorJson}).
+             * added by this platform (see {@link ExecutorSpecification}).
              * Usually it is a subfolder of the {@link #getRoot() root folder} of the extension.
              *
              * <p>Note: this function may return <code>null</code>,
@@ -798,11 +798,11 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
     private String version = CURRENT_VERSION;
     private List<Platform> platforms = new ArrayList<>();
 
-    public ExtensionJson() {
+    public ExtensionSpecification() {
         this.extensionJsonFile = null;
     }
 
-    private ExtensionJson(JsonObject json, Path file) {
+    private ExtensionSpecification(JsonObject json, Path file) {
         Objects.requireNonNull(json, "Null extension JSON");
         if (!APP_NAME.equals(json.getString("app", null))) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
@@ -815,27 +815,27 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static ExtensionJson valueOf(JsonObject extensionJson) {
-        return new ExtensionJson(extensionJson, null);
+    public static ExtensionSpecification valueOf(JsonObject extensionJson) {
+        return new ExtensionSpecification(extensionJson, null);
     }
 
-    public static ExtensionJson read(Path extensionJsonFile) throws IOException {
+    public static ExtensionSpecification read(Path extensionJsonFile) throws IOException {
         Objects.requireNonNull(extensionJsonFile, "Null extensionJsonFile");
         final JsonObject json = Jsons.readJson(extensionJsonFile);
-        return new ExtensionJson(json, extensionJsonFile);
+        return new ExtensionSpecification(json, extensionJsonFile);
     }
 
-    public static ExtensionJson readIfValid(Path extensionJsonFile) throws IOException {
+    public static ExtensionSpecification readIfValid(Path extensionJsonFile) throws IOException {
         Objects.requireNonNull(extensionJsonFile, "Null extensionJsonFile");
         final JsonObject json = Jsons.readJson(extensionJsonFile);
         Objects.requireNonNull(json, "Null extension JSON");
         if (!APP_NAME.equals(json.getString("app", null))) {
             return null;
         }
-        return new ExtensionJson(json, extensionJsonFile);
+        return new ExtensionSpecification(json, extensionJsonFile);
     }
 
-    public static ExtensionJson readFromFolder(Path extensionFolder) throws IOException {
+    public static ExtensionSpecification readFromFolder(Path extensionFolder) throws IOException {
         Objects.requireNonNull(extensionFolder, "Null extensionFolder");
         if (!Files.isDirectory(extensionFolder)) {
             throw new FileNotFoundException("Extension folder \"" + extensionFolder
@@ -872,7 +872,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
     public static List<Path> allExtensionFolders(Path extensionRoot) throws IOException {
         Objects.requireNonNull(extensionRoot, "Null extensionRoot");
         try (Stream<Path> walk = Files.walk(extensionRoot)) {
-            return walk.sorted().filter(ExtensionJson::isExtensionFolder).toList();
+            return walk.sorted().filter(ExtensionSpecification::isExtensionFolder).toList();
         }
     }
 
@@ -944,7 +944,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         return version;
     }
 
-    public ExtensionJson setVersion(String version) {
+    public ExtensionSpecification setVersion(String version) {
         this.version = Objects.requireNonNull(version, "Null version");
         return this;
     }
@@ -953,7 +953,7 @@ public final class ExtensionJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableList(platforms);
     }
 
-    public ExtensionJson setPlatforms(List<Platform> platforms) {
+    public ExtensionSpecification setPlatforms(List<Platform> platforms) {
         this.platforms = new ArrayList<>(nonNull(platforms));
         return this;
     }

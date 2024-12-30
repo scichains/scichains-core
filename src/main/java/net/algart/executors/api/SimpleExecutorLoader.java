@@ -24,7 +24,7 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -47,12 +47,12 @@ public class SimpleExecutorLoader<W> extends ExecutorLoader {
     private final Object lock = new Object();
 
     @Override
-    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorJson specification) {
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification) {
         return null;
         // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
     }
 
-    public boolean registerWorker(String sessionId, String id, W worker, ExecutorJson specification) {
+    public boolean registerWorker(String sessionId, String id, W worker, ExecutorSpecification specification) {
         if (id == null) {
             return false;
         }

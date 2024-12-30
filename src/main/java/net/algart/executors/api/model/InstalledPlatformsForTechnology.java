@@ -33,7 +33,7 @@ public class InstalledPlatformsForTechnology {
     private final String platformTechnology;
 
     private boolean ready = false;
-    private List<ExtensionJson.Platform> installedPlatforms = null;
+    private List<ExtensionSpecification.Platform> installedPlatforms = null;
     private List<String> installedModelFolders = null;
     private List<String> installedImplementationFolders = null;
     private final Object lock = new Object();
@@ -46,7 +46,7 @@ public class InstalledPlatformsForTechnology {
         return new InstalledPlatformsForTechnology(platformTechnology);
     }
 
-    public List<ExtensionJson.Platform> installedPlatforms() {
+    public List<ExtensionSpecification.Platform> installedPlatforms() {
         synchronized (lock) {
             analysePlatforms();
             return installedPlatforms;
@@ -69,10 +69,10 @@ public class InstalledPlatformsForTechnology {
 
     private void analysePlatforms() {
         if (!this.ready) {
-            final List<ExtensionJson.Platform> platforms = new ArrayList<>();
+            final List<ExtensionSpecification.Platform> platforms = new ArrayList<>();
             final List<String> modelFolders = new ArrayList<>();
             final List<String> implementationFolders = new ArrayList<>();
-            for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
+            for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
                 if (platform.getTechnology().equals(platformTechnology)) {
                     platforms.add(platform);
                     if (platform.hasModels()) {

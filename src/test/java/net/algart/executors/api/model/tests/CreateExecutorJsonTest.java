@@ -29,7 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ControlEditionType;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -58,35 +58,41 @@ public class CreateExecutorJsonTest {
         }
         final Path resultFile = Paths.get(args[0]);
 
-        final ExecutorJson specification = new ExecutorJson();
+        final ExecutorSpecification specification = new ExecutorSpecification();
         specification.setVersion("0.0.11");
         specification.setPlatformId("~~~SOME_PLATFORM");
         specification.setCategory("some.category");
         specification.setName("some executor");
         specification.setExecutorId("144f8656-91c7-45a8-9e32-c19b179b9d34");
         specification.setLanguage("java");
-        final ExecutorJson.JavaConf javaConf = new ExecutorJson.JavaConf();
+        final ExecutorSpecification.JavaConf javaConf = new ExecutorSpecification.JavaConf();
         javaConf.setJson("{\"class\":\"" + TestExecutor.class.getName() + "\"}");
         specification.setJava(javaConf);
-        final ExecutorJson.Options options = new ExecutorJson.Options();
-        final ExecutorJson.Options.Behavior behavior = new ExecutorJson.Options.Behavior();
+        final ExecutorSpecification.Options options = new ExecutorSpecification.Options();
+        final ExecutorSpecification.Options.Behavior behavior = new ExecutorSpecification.Options.Behavior();
         options.setBehavior(behavior);
         specification.setOptions(options);
-        final Map<String, ExecutorJson.PortConf> outPorts = new LinkedHashMap<>();
-        outPorts.put("output", new ExecutorJson.PortConf().setName("output").setValueType(DataType.SCALAR));
+        final Map<String, ExecutorSpecification.PortConf> outPorts = new LinkedHashMap<>();
+        outPorts.put("output", new ExecutorSpecification.PortConf()
+                .setName("output").setValueType(DataType.SCALAR));
         specification.setOutPorts(outPorts);
-        final Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
-        controls.put("width", new ExecutorJson.ControlConf().setName("width").setValueType(ParameterValueType.INT));
-        List<ExecutorJson.ControlConf.EnumItem> items = new ArrayList<>();
-        items.add(new ExecutorJson.ControlConf.EnumItem().setValue("MODE_1").setCaption("mode 2"));
-        items.add(new ExecutorJson.ControlConf.EnumItem().setValue("MODE_2").setCaption("mode 2"));
-        controls.put("mode", new ExecutorJson.ControlConf().setName("mode").setValueType(ParameterValueType.STRING)
+        final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
+        controls.put("width", new ExecutorSpecification.ControlConf()
+                .setName("width").setValueType(ParameterValueType.INT));
+        List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
+        items.add(new ExecutorSpecification.ControlConf.EnumItem().setValue("MODE_1").setCaption("mode 2"));
+        items.add(new ExecutorSpecification.ControlConf.EnumItem().setValue("MODE_2").setCaption("mode 2"));
+        controls.put("mode", new ExecutorSpecification.ControlConf()
+                .setName("mode").setValueType(ParameterValueType.STRING)
                 .setCaption("Mode").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultStringValue("MODE_1"));
         items = new ArrayList<>();
-        items.add(new ExecutorJson.ControlConf.EnumItem().setValue(Jsons.toJsonIntValue(1)).setCaption("m_1"));
-        items.add(new ExecutorJson.ControlConf.EnumItem().setValue(Jsons.toJsonIntValue(2)).setCaption("m_2"));
-        controls.put("modeInt", new ExecutorJson.ControlConf().setName("modeInt").setValueType(ParameterValueType.INT)
+        items.add(new ExecutorSpecification.ControlConf.EnumItem()
+                .setValue(Jsons.toJsonIntValue(1)).setCaption("m_1"));
+        items.add(new ExecutorSpecification.ControlConf.EnumItem()
+                .setValue(Jsons.toJsonIntValue(2)).setCaption("m_2"));
+        controls.put("modeInt", new ExecutorSpecification.ControlConf()
+                .setName("modeInt").setValueType(ParameterValueType.INT)
                 .setCaption("Mode (int)").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultJsonValue(Jsons.toJsonIntValue(2)));
         specification.setControls(controls);

@@ -29,8 +29,8 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ControlEditionType;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -216,7 +216,7 @@ public final class MappingJson extends AbstractConvertibleToJson {
     }
 
     public static List<MappingJson> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionJson.readAllJsonIfValid(null, containingJsonPath, MappingJson::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(null, containingJsonPath, MappingJson::readIfValid);
     }
 
     public void write(Path mappingJsonFile, OpenOption... options) throws IOException {
@@ -422,12 +422,12 @@ public final class MappingJson extends AbstractConvertibleToJson {
         return enumItemsFile == null ? null : resolve(Paths.get(enumItemsFile), "enum items");
     }
 
-    public ExecutorJson.ControlConf buildControlConf(
+    public ExecutorSpecification.ControlConf buildControlConf(
             String name,
             List<String> enumItemValues,
             List<String> enumItemCaptions,
             boolean advancedParameters) {
-        final ExecutorJson.ControlConf result = new ExecutorJson.ControlConf()
+        final ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf()
                 .setName(name)
                 .setValueType(controlTemplate.valueType)
                 .setEditionType(editionTypeOrDefault())

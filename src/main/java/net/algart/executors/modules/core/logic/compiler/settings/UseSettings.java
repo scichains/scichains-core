@@ -30,8 +30,8 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.api.model.InstalledPlatformsForTechnology;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.*;
@@ -140,9 +140,9 @@ public class UseSettings extends FileOperation {
     // This variable affects to result of that function (when it is not overridden)
     // only in points 4 and later. Points 1-3 are always checked when mainSettings=false.
     private SettingsCombiner settingsCombiner = null;
-    private ExecutorJson combineExecutorSpecification = null;
-    private ExecutorJson splitExecutorSpecification = null;
-    private ExecutorJson getNamesExecutorSpecification = null;
+    private ExecutorSpecification combineExecutorSpecification = null;
+    private ExecutorSpecification splitExecutorSpecification = null;
+    private ExecutorSpecification getNamesExecutorSpecification = null;
 
     public UseSettings() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
@@ -230,7 +230,7 @@ public class UseSettings extends FileOperation {
         usePath(settingsCombinerJsonPath, null, null);
     }
 
-    public void usePath(Path settingsCombinerJsonPath, ExtensionJson.Platform platform, StringBuilder report)
+    public void usePath(Path settingsCombinerJsonPath, ExtensionSpecification.Platform platform, StringBuilder report)
             throws IOException {
         Objects.requireNonNull(settingsCombinerJsonPath, "Null settings combiner path");
         mainSettings = false;
@@ -334,7 +334,7 @@ public class UseSettings extends FileOperation {
     }
 
     public void useAllInstalled() throws IOException {
-        for (ExtensionJson.Platform platform : SETTINGS_PLATFORMS.installedPlatforms()) {
+        for (ExtensionSpecification.Platform platform : SETTINGS_PLATFORMS.installedPlatforms()) {
             if (platform.hasModels()) {
                 final long t1 = System.nanoTime();
                 usePath(platform.modelsFolder(), platform, null);
@@ -348,9 +348,9 @@ public class UseSettings extends FileOperation {
 
     // Note: for multichain settings, this method is called as a result of
     // the call "settingsFactory.use" inside MultiChain constructor
-    public ExecutorJson buildCombineSpecification(SettingsCombiner settingsCombiner) {
+    public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
-        ExecutorJson result = buildCommon(newCombineSettings(), settingsCombiner);
+        ExecutorSpecification result = buildCommon(newCombineSettings(), settingsCombiner);
         result.setExecutorId(settingsCombiner.id());
         result.setName(settingsCombiner.combineName());
         result.setDescription(settingsCombiner.combineDescription());
@@ -371,12 +371,12 @@ public class UseSettings extends FileOperation {
         return combineExecutorSpecification = result;
     }
 
-    public ExecutorJson buildSplitSpecification(SettingsCombiner settingsCombiner) {
+    public ExecutorSpecification buildSplitSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.splitId() == null) {
             return splitExecutorSpecification = null;
         }
-        ExecutorJson result = buildCommon(newSplitSettings(), settingsCombiner);
+        ExecutorSpecification result = buildCommon(newSplitSettings(), settingsCombiner);
         result.setExecutorId(settingsCombiner.splitId());
         result.setName(settingsCombiner.splitName());
         result.setDescription(settingsCombiner.splitDescription());
@@ -386,16 +386,17 @@ public class UseSettings extends FileOperation {
         return splitExecutorSpecification = result;
     }
 
-    public ExecutorJson buildGetNamesSpecification(SettingsCombiner settingsCombiner) {
+    public ExecutorSpecification buildGetNamesSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         if (settingsCombiner.getNamesId() == null) {
             return getNamesExecutorSpecification = null;
         }
-        ExecutorJson result = buildCommon(newGetNamesOfSettings(), settingsCombiner);
-        final Map<String, ExecutorJson.ControlConf> executorControls = new LinkedHashMap<>(result.getControls());
+        ExecutorSpecification result = buildCommon(newGetNamesOfSettings(), settingsCombiner);
+        final Map<String, ExecutorSpecification.ControlConf> executorControls =
+                new LinkedHashMap<>(result.getControls());
         executorControls.get("resultType").setCaption("Result type");
         executorControls.get("resultJsonKey").setCaption("Key in result JSON").setDefaultStringValue("names");
-        for (ExecutorJson.ControlConf controlConf : executorControls.values()) {
+        for (ExecutorSpecification.ControlConf controlConf : executorControls.values()) {
             if (controlConf.getValueType() == ParameterValueType.BOOLEAN
                     && controlConf.getName().startsWith("extract")) {
                 controlConf.setDefaultJsonValue(JsonValue.TRUE);
@@ -417,12 +418,16 @@ public class UseSettings extends FileOperation {
     }
 
     // Used for adding controls and ports to ExecuteSubChain executor
-    public static void addExecuteSubChainControlsAndPorts(ExecutorJson result, SettingsCombiner settingsCombiner) {
+    public static void addExecuteSubChainControlsAndPorts(
+            ExecutorSpecification result,
+            SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, true, false);
     }
 
     // Used for adding controls and ports to ExecuteMultiChain executor
-    public static void addExecuteMultiChainControlsAndPorts(ExecutorJson result, SettingsCombiner settingsCombiner) {
+    public static void addExecuteMultiChainControlsAndPorts(
+            ExecutorSpecification result,
+            SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, false, true);
     }
 
@@ -492,7 +497,7 @@ public class UseSettings extends FileOperation {
         return "installed settings combiner models";
     }
 
-    private void addOwner(ExecutorJson result, SettingsCombiner settingsCombiner) {
+    private void addOwner(ExecutorSpecification result, SettingsCombiner settingsCombiner) {
         if (isNeedToAddOwner()) {
             final Object contextId = getContextId();
             final String ownerId = getOwnerId();
@@ -509,8 +514,8 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static ExecutorJson buildCommon(Executor executor, SettingsCombiner settingsCombiner) {
-        ExecutorJson result = new ExecutorJson();
+    private static ExecutorSpecification buildCommon(Executor executor, SettingsCombiner settingsCombiner) {
+        ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         // - adds JavaConf, (maybe) parameters and some ports
         result.setSourceInfo(settingsCombiner.settingsCombinerJsonFile(), null);
@@ -519,19 +524,19 @@ public class UseSettings extends FileOperation {
         }
         result.setLanguage(SETTINGS_LANGUAGE);
         result.setTags(settingsCombiner.tags());
-        result.setCategory(ExecutorJson.correctDynamicCategory(settingsCombiner.category()));
+        result.setCategory(ExecutorSpecification.correctDynamicCategory(settingsCombiner.category()));
         result.updateCategoryPrefix(settingsCombiner.platformCategory());
         return result;
     }
 
     private static void addInputControlsAndPorts(
-            ExecutorJson result,
+            ExecutorSpecification result,
             SettingsCombiner settingsCombiner,
             boolean mainForChain,
             boolean subChainMode,
             boolean noSystemFlags) {
         if (mainForChain) {
-            result.addControl(new ExecutorJson.ControlConf()
+            result.addControl(new ExecutorSpecification.ControlConf()
                     .setName(ALL_SETTINGS_PARAMETER_NAME)
                     .setCaption(ALL_SETTINGS_PARAMETER_CAPTION)
                     .setDescription(ALL_SETTINGS_PARAMETER_DESCRIPTION)
@@ -586,11 +591,11 @@ public class UseSettings extends FileOperation {
         }
         final SettingsCombinerJson model = settingsCombiner.model();
         final Map<String, SettingsCombinerJson.ControlConfExtension> controlExtensions = model.getControlExtensions();
-        for (Map.Entry<String, ExecutorJson.ControlConf> entry : model.getControls().entrySet()) {
+        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : model.getControls().entrySet()) {
             final String name = entry.getKey();
-            ExecutorJson.ControlConf controlConf = entry.getValue().clone();
+            ExecutorSpecification.ControlConf controlConf = entry.getValue().clone();
             if (controlConf.getValueType() == ParameterValueType.SETTINGS && !subChainMode) {
-                final ExecutorJson.PortConf portConf = new ExecutorJson.PortConf();
+                final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf();
                 portConf.setName(name);
                 portConf.setCaption(controlConf.getCaption());
                 portConf.setHint(controlConf.getDescription());
@@ -606,11 +611,11 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static void addOutputPorts(ExecutorJson result, SettingsCombiner settingsCombiner) {
-        final Map<String, ExecutorJson.ControlConf> controls = settingsCombiner.model().getControls();
-        for (ExecutorJson.ControlConf controlConf : controls.values()) {
+    private static void addOutputPorts(ExecutorSpecification result, SettingsCombiner settingsCombiner) {
+        final Map<String, ExecutorSpecification.ControlConf> controls = settingsCombiner.model().getControls();
+        for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
             final String name = SettingsCombiner.portName(controlConf);
-            final ExecutorJson.PortConf portConf = new ExecutorJson.PortConf()
+            final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf()
                     .setName(name)
                     .setCaption(controlConf.getCaption())
                     .setHint(controlConf.getDescription())
@@ -620,12 +625,12 @@ public class UseSettings extends FileOperation {
             }
             result.addOutPort(portConf);
             if (controlConf.getValueType() == ParameterValueType.STRING && controlConf.getEditionType().isPath()) {
-                result.addOutPort(new ExecutorJson.PortConf()
+                result.addOutPort(new ExecutorSpecification.PortConf()
                         .setName(name + SettingsCombiner.PATH_PARENT_FOLDER_SUFFIX)
                         .setHint(PATH_PARENT_FOLDER_HINT)
                         .setValueType(DataType.SCALAR)
                         .setAdvanced(true));
-                result.addOutPort(new ExecutorJson.PortConf()
+                result.addOutPort(new ExecutorSpecification.PortConf()
                         .setName(name + SettingsCombiner.PATH_FILE_NAME_SUFFIX)
                         .setHint(PATH_FILE_NAME_HINT)
                         .setValueType(DataType.SCALAR)
@@ -634,7 +639,7 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static void addSpecialOutputPorts(ExecutorJson result) {
+    private static void addSpecialOutputPorts(ExecutorSpecification result) {
         // - to be on the safe side (maybe, the user defined the output port with the same name)
         result.addSystemExecutorIdPort();
         if (result.hasPlatformId()) {
@@ -645,7 +650,7 @@ public class UseSettings extends FileOperation {
             // to replace ${resource} string (see PathPropertyReplacement)
         }
         if (!result.getOutPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
-            result.addOutPort(new ExecutorJson.PortConf()
+            result.addOutPort(new ExecutorSpecification.PortConf()
                     .setName(SETTINGS_NAME_OUTPUT_NAME)
                     .setCaption(SETTINGS_NAME_OUTPUT_CAPTION)
                     .setValueType(DataType.SCALAR)
@@ -654,13 +659,13 @@ public class UseSettings extends FileOperation {
     }
 
     private static void addBooleanControl(
-            ExecutorJson result,
+            ExecutorSpecification result,
             String name,
             String caption,
             String description,
             boolean defaultValue,
             boolean advanced) {
-        result.addControl(new ExecutorJson.ControlConf()
+        result.addControl(new ExecutorSpecification.ControlConf()
                 .setName(name)
                 .setCaption(caption)
                 .setDescription(description)

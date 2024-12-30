@@ -35,15 +35,15 @@ import net.algart.executors.api.Port;
 import java.util.Objects;
 
 public final class PythonCaller implements Cloneable, AutoCloseable {
-    private final PythonCallerJson model;
-    private final PythonCallerJson.PythonConf pythonConf;
+    private final PythonCallerSpecification model;
+    private final PythonCallerSpecification.PythonConf pythonConf;
     private final JepPerformerContainer container;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject instance = null;
 
     private final Object lock = new Object();
 
-    private PythonCaller(PythonCallerJson model) {
+    private PythonCaller(PythonCallerSpecification model) {
         this.model = Objects.requireNonNull(model, "Null model");
         this.pythonConf = model.getPython();
         if (pythonConf == null) {
@@ -54,11 +54,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         this.container = JepAPI.getContainer();
     }
 
-    public static PythonCaller valueOf(PythonCallerJson model) {
+    public static PythonCaller valueOf(PythonCallerSpecification model) {
         return new PythonCaller(model);
     }
 
-    public PythonCallerJson model() {
+    public PythonCallerSpecification model() {
         return model;
     }
 

@@ -28,7 +28,7 @@ import jakarta.json.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.json.Jsons;
@@ -196,7 +196,7 @@ public final class SettingsCombiner implements Cloneable {
     public void splitSettings(Executor executor, JsonObject settings) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(settings, "Null settings");
-        for (ExecutorJson.ControlConf controlConf : model.getControls().values()) {
+        for (ExecutorSpecification.ControlConf controlConf : model.getControls().values()) {
             final String name = portName(controlConf);
             if (executor.hasOutputPort(name)) {
                 final ParameterValueType valueType = controlConf.getValueType();
@@ -313,7 +313,7 @@ public final class SettingsCombiner implements Cloneable {
         return builder.build();
     }
 
-    public static String portName(ExecutorJson.ControlConf controlConf) {
+    public static String portName(ExecutorSpecification.ControlConf controlConf) {
         return controlConf.getName();
     }
 
@@ -337,7 +337,7 @@ public final class SettingsCombiner implements Cloneable {
         if (addSettingsClass) {
             builder.add(SettingsCombinerJson.CLASS_KEY, model.settingsClassMame());
         }
-        for (ExecutorJson.ControlConf controlConf : model.getControls().values()) {
+        for (ExecutorSpecification.ControlConf controlConf : model.getControls().values()) {
             JsonValue jsonValue = getJsonValue(controlConf, useExecutorParameters ? executor : null);
             assert jsonValue != null;
             jsonValue = replaceToAbsolutePath(executor, controlConf, jsonValue);
@@ -347,7 +347,7 @@ public final class SettingsCombiner implements Cloneable {
         return builder.build();
     }
 
-    private static JsonValue getJsonValue(ExecutorJson.ControlConf controlConf, Executor executor) {
+    private static JsonValue getJsonValue(ExecutorSpecification.ControlConf controlConf, Executor executor) {
         final String name = controlConf.getName();
         final ParameterValueType valueType = controlConf.getValueType();
         JsonValue jsonValue = null;
@@ -376,7 +376,7 @@ public final class SettingsCombiner implements Cloneable {
 
     private JsonValue replaceToAbsolutePath(
             Executor executor,
-            ExecutorJson.ControlConf controlConf,
+            ExecutorSpecification.ControlConf controlConf,
             JsonValue jsonValue) {
         assert jsonValue != null;
         if (controlConf.getValueType() == ParameterValueType.STRING

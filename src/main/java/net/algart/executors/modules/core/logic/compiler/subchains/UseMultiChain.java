@@ -31,7 +31,7 @@ import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.model.ChainJson;
 import net.algart.executors.api.model.ChainLoadingException;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.InstalledPlatformsForTechnology;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
@@ -286,15 +286,15 @@ public final class UseMultiChain extends FileOperation {
         return multiChain;
     }
 
-    public static ExecutorJson buildMultiChainSpecification(MultiChain multiChain) {
+    public static ExecutorSpecification buildMultiChainSpecification(MultiChain multiChain) {
         Objects.requireNonNull(multiChain, "Null multiChain");
         final MultiChainJson model = multiChain.model();
-        ExecutorJson result = new ExecutorJson();
+        ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMultiChain());
         // - adds JavaConf and (maybe) parameters with setters
         result.setSourceInfo(multiChain.multiChainJsonFile(), null);
         result.setExecutorId(multiChain.id());
-        result.setCategory(ExecutorJson.correctDynamicCategory(multiChain.category()));
+        result.setCategory(ExecutorSpecification.correctDynamicCategory(multiChain.category()));
         result.setName(multiChain.name());
         result.setDescription(multiChain.description());
         result.setLanguage(MULTICHAIN_LANGUAGE);
@@ -306,13 +306,13 @@ public final class UseMultiChain extends FileOperation {
         UseSettings.addExecuteMultiChainControlsAndPorts(result, settingsCombinerForMultiChain);
         // - also adds ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary;
         // note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsCombiner
-        final ExecutorJson.Options options = result.createOptionsIfAbsent();
+        final ExecutorSpecification.Options options = result.createOptionsIfAbsent();
         options.createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);
         options.createServiceIfAbsent()
                 .setSettingsId(settingsCombinerForMultiChain.id());
-        final ExecutorJson.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
+        final ExecutorSpecification.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {
             result.addControl(visibleResult);
@@ -333,11 +333,11 @@ public final class UseMultiChain extends FileOperation {
         }
     }
 
-    private static void addSystemParameters(ExecutorJson result, MultiChain multiChain) {
+    private static void addSystemParameters(ExecutorSpecification result, MultiChain multiChain) {
         final String multiChainName = multiChain.name();
         final MultiChainJson.Options options = multiChain.model().getOptions();
         if (options != null && options.getBehavior() != null && options.getBehavior().isSkippable()) {
-            result.addControl(new ExecutorJson.ControlConf()
+            result.addControl(new ExecutorSpecification.ControlConf()
                     .setName(DO_ACTION_NAME)
                     .setCaption(DO_ACTION_CAPTION)
                     .setDescription(DO_ACTION_DESCRIPTION)
@@ -348,21 +348,21 @@ public final class UseMultiChain extends FileOperation {
         result.addControl(UseSubChain.createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
         result.addControl(UseSubChain.createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
         result.addControl(UseSubChain.createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
-        result.addControl(new ExecutorJson.ControlConf()
+        result.addControl(new ExecutorSpecification.ControlConf()
                 .setName(EXTRACT_SUB_SETTINGS_PARAMETER_NAME)
                 .setCaption(EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", multiChainName))
                 .setDescription(EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
                 .setValueType(ParameterValueType.BOOLEAN)
                 .setDefaultJsonValue(Jsons.toJsonBooleanValue(EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT))
                 .setAdvanced(true));
-        result.addControl(new ExecutorJson.ControlConf()
+        result.addControl(new ExecutorSpecification.ControlConf()
                 .setName(LOG_SETTINGS_PARAMETER_NAME)
                 .setCaption(LOG_SETTINGS_PARAMETER_CAPTION)
                 .setDescription(LOG_SETTINGS_PARAMETER_DESCRIPTION)
                 .setValueType(ParameterValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.FALSE)
                 .setAdvanced(true));
-        result.addControl(new ExecutorJson.ControlConf()
+        result.addControl(new ExecutorSpecification.ControlConf()
                 .setName(IGNORE_PARAMETERS_PARAMETER_NAME)
                 .setCaption(IGNORE_PARAMETERS_PARAMETER_CAPTION)
                 .setDescription(IGNORE_PARAMETERS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))

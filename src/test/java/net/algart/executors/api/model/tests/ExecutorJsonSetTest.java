@@ -25,8 +25,8 @@
 package net.algart.executors.api.model.tests;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -54,7 +54,7 @@ public class ExecutorJsonSetTest {
         }
 
         if (args.length < startArgIndex + 1) {
-            System.out.printf("Usage: %s executors_folder%n", ExecutorJsonSet.class.getName());
+            System.out.printf("Usage: %s executors_folder%n", ExecutorSpecificationSet.class.getName());
             return;
         }
 
@@ -63,23 +63,23 @@ public class ExecutorJsonSetTest {
         System.out.printf("Used memory %.2f/%.2f GB%n",
                 (rt.totalMemory() - rt.freeMemory()) * 1e-9, rt.maxMemory() * 1e-9);
 
-        ExecutorJsonSet executorJsonSet = null;
+        ExecutorSpecificationSet executorSpecificationSet = null;
         for (int test = 1; test <= 5; test++) {
             System.gc();
             System.out.printf("Test #%d...%n", test);
             System.out.printf("  Reading %s...%n", modelFolder);
             long t1 = System.nanoTime();
-            executorJsonSet = ExecutorJsonSet.newInstance();
-            executorJsonSet.addFolder(modelFolder, false);
+            executorSpecificationSet = ExecutorSpecificationSet.newInstance();
+            executorSpecificationSet.addFolder(modelFolder, false);
             long t2 = System.nanoTime();
-            final Collection<ExecutorJson> specifications = executorJsonSet.all();
+            final Collection<ExecutorSpecification> specifications = executorSpecificationSet.all();
             System.out.printf(Locale.US,
                     "  %d specifications loaded in %.3f ms (%.5f mcs/model); used memory %.2f/%.2f MB%n",
                     specifications.size(), (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                     (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
             if (resolve) {
                 t1 = System.nanoTime();
-                for (ExecutorJson specification : specifications) {
+                for (ExecutorSpecification specification : specifications) {
                     if (specification.isJavaExecutor()) {
                         specification.getJava().resolveSupportedExecutor();
                     }
@@ -97,9 +97,9 @@ public class ExecutorJsonSetTest {
         if (create) {
             for (int test = 1; test <= 10; test++) {
                 System.out.printf("Creation test #%d...%n", test);
-                final Collection<ExecutorJson> specifications = executorJsonSet.all();
+                final Collection<ExecutorSpecification> specifications = executorSpecificationSet.all();
                 long t1 = System.nanoTime();
-                for (ExecutorJson model : specifications) {
+                for (ExecutorSpecification model : specifications) {
                     if (model.isJavaExecutor()) {
 //                    try {
 //                        model.getJavaConf().getClass().newInstance();
@@ -119,7 +119,7 @@ public class ExecutorJsonSetTest {
                         (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
                 System.out.println();
             }
-            for (ExecutorJson model : executorJsonSet.all()) {
+            for (ExecutorSpecification model : executorSpecificationSet.all()) {
                 if (model.isJavaExecutor()) {
                     System.out.printf("Creating executor %s.%s...%n", model.getCategory(), model.getName());
                     final ExecutionBlock executionBlock = ExecutionBlock.newExecutionBlock(
@@ -131,7 +131,7 @@ public class ExecutorJsonSetTest {
 
         if (writeDebugFiles) {
             System.out.printf("  Writing xxx__model.json.files...%n");
-            for (ExecutorJson model : executorJsonSet.all()) {
+            for (ExecutorSpecification model : executorSpecificationSet.all()) {
                 final String jsonString = model.jsonString();
                 final Path resultFile = Paths.get(model.getExecutorJsonFile() + "__model.json");
                 java.nio.file.Files.writeString(resultFile, jsonString);

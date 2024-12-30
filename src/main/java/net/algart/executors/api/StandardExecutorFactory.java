@@ -25,39 +25,39 @@
 package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 import net.algart.executors.api.model.ExecutorNotFoundException;
 
 import java.util.Objects;
 
 // Note: executing some loading-stage blocks can add here new IDs for further loading-stage blocks.
 public class StandardExecutorFactory implements ExecutorFactory {
-    private final ExecutorJsonSet staticExecutors;
-    private final ExecutorJsonSet dynamicExecutorsCache = ExecutorJsonSet.newInstance();
+    private final ExecutorSpecificationSet staticExecutors;
+    private final ExecutorSpecificationSet dynamicExecutorsCache = ExecutorSpecificationSet.newInstance();
     // - this set is dynamically extended in executorJson method via ExecutionBlock.getExecutorSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
-    private StandardExecutorFactory(ExecutorJsonSet staticExecutors, String sessionId) {
+    private StandardExecutorFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
         this.staticExecutors = Objects.requireNonNull(staticExecutors, "Null static executors set");
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
     }
 
-    public static StandardExecutorFactory newInstance(ExecutorJsonSet staticExecutors, String sessionId) {
+    public static StandardExecutorFactory newInstance(ExecutorSpecificationSet staticExecutors, String sessionId) {
         return new StandardExecutorFactory(staticExecutors, sessionId);
     }
 
     @Override
-    public ExecutorJson specification(String executorId) {
+    public ExecutorSpecification specification(String executorId) {
         synchronized (lock) {
-            ExecutorJson executorJson = staticExecutors.get(executorId);
-            if (executorJson != null) {
-                return executorJson;
+            ExecutorSpecification executorSpecification = staticExecutors.get(executorId);
+            if (executorSpecification != null) {
+                return executorSpecification;
             }
-            executorJson = dynamicExecutorsCache.get(executorId);
-            if (executorJson != null) {
-                return executorJson;
+            executorSpecification = dynamicExecutorsCache.get(executorId);
+            if (executorSpecification != null) {
+                return executorSpecification;
                 // - Caching: we suppose that non-null executor models cannot change.
                 // It is not absolutely correct, when the programmer is developing new dynamic executors,
                 // but the usage of this model by this package is very pure: we prefer to provide
@@ -91,15 +91,15 @@ public class StandardExecutorFactory implements ExecutorFactory {
                 // moreover, it is prohibited ("add" method will throw an exception)
             } else {
                 try {
-                    executorJson = ExecutorJson.valueOf(specification);
+                    executorSpecification = ExecutorSpecification.valueOf(specification);
 //                    System.out.println("Building executor: " + executorJson.getName());
                 } catch (JsonException e) {
                     throw new IllegalStateException("Standard executor factory cannot be used with executor "
                             + executorId + ": it is registered with unsupported format of executor specification", e);
                 }
             }
-            dynamicExecutorsCache.add(executorId, executorJson);
-            return executorJson;
+            dynamicExecutorsCache.add(executorId, executorSpecification);
+            return executorSpecification;
         }
     }
 
@@ -107,11 +107,11 @@ public class StandardExecutorFactory implements ExecutorFactory {
     public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (lock) {
-            final ExecutorJson executorJson = specification(executorId);
-            if (executorJson == null) {
+            final ExecutorSpecification executorSpecification = specification(executorId);
+            if (executorSpecification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return ExecutionBlock.newExecutor(sessionId, executorId, executorJson);
+            return ExecutionBlock.newExecutor(sessionId, executorId, executorSpecification);
         }
     }
 }

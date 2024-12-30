@@ -35,20 +35,20 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.*;
 
-public final class ExecutorJsonSet {
+public final class ExecutorSpecificationSet {
     private static final Logger LOG = System.getLogger(Executor.class.getName());
 
-    private final Map<String, ExecutorJson> executorJsons = new LinkedHashMap<>();
+    private final Map<String, ExecutorSpecification> executorJsons = new LinkedHashMap<>();
     private boolean immutable = false;
 
-    private ExecutorJsonSet() {
+    private ExecutorSpecificationSet() {
     }
 
-    public static ExecutorJsonSet newInstance() {
-        return new ExecutorJsonSet();
+    public static ExecutorSpecificationSet newInstance() {
+        return new ExecutorSpecificationSet();
     }
 
-    public static ExecutorJsonSet allBuiltIn() {
+    public static ExecutorSpecificationSet allBuiltIn() {
         try {
             return findAllBuiltIn();
         } catch (IOException e) {
@@ -56,24 +56,27 @@ public final class ExecutorJsonSet {
         }
     }
 
-    public static ExecutorJsonSet findAllBuiltIn() throws IOException {
+    public static ExecutorSpecificationSet findAllBuiltIn() throws IOException {
         return InstalledSetHolder.builtInSet();
     }
 
-    public void add(ExecutorJson executorJson) {
-        Objects.requireNonNull(executorJson, "Null executorJson");
-        add(executorJson.getExecutorId(), executorJson);
+    public void add(ExecutorSpecification executorSpecification) {
+        Objects.requireNonNull(executorSpecification, "Null executorJson");
+        add(executorSpecification.getExecutorId(), executorSpecification);
     }
 
-    public void add(String executorId, ExecutorJson executorJson) {
-        add(executorId, executorJson, null);
+    public void add(String executorId, ExecutorSpecification executorSpecification) {
+        add(executorId, executorSpecification, null);
     }
 
-    public ExecutorJsonSet addFolder(Path folder, boolean onlyBuiltIn) throws IOException {
+    public ExecutorSpecificationSet addFolder(Path folder, boolean onlyBuiltIn) throws IOException {
         return addFolder(folder, null, onlyBuiltIn);
     }
 
-    public ExecutorJsonSet addFolder(Path folder, ExtensionJson.Platform platform, boolean onlyBuiltIn)
+    public ExecutorSpecificationSet addFolder(
+            Path folder,
+            ExtensionSpecification.Platform platform,
+            boolean onlyBuiltIn)
             throws IOException {
         Objects.requireNonNull(folder, "Null folder");
         LOG.log(System.Logger.Level.TRACE, () -> "Adding executors folder " + folder);
@@ -91,23 +94,23 @@ public final class ExecutorJsonSet {
                     continue;
                 }
                 if (Files.isRegularFile(file) && file.getFileName().toString().toLowerCase().endsWith(".json")) {
-                    ExecutorJson executorJson = ExecutorJson.readIfValid(file);
-                    if (executorJson != null) {
-                        if (onlyBuiltIn && !executorJson.isJavaExecutor()) {
+                    ExecutorSpecification executorSpecification = ExecutorSpecification.readIfValid(file);
+                    if (executorSpecification != null) {
+                        if (onlyBuiltIn && !executorSpecification.isJavaExecutor()) {
                             continue;
                         }
-                        executorJson.addSystemExecutorIdPort();
+                        executorSpecification.addSystemExecutorIdPort();
                         if (platform != null) {
-                            executorJson.updateCategoryPrefix(platform.getCategory());
-                            executorJson.addTags(platform.getTags());
-                            executorJson.setPlatformId(platform.getId());
-                            executorJson.addSystemPlatformIdPort();
+                            executorSpecification.updateCategoryPrefix(platform.getCategory());
+                            executorSpecification.addTags(platform.getTags());
+                            executorSpecification.setPlatformId(platform.getId());
+                            executorSpecification.addSystemPlatformIdPort();
                             // - but not resource folder: for Java executors it is usually not helpful
                             // (PathPropertyReplacement works better)
                         }
-                        add(executorJson.getExecutorId(), executorJson, file);
+                        add(executorSpecification.getExecutorId(), executorSpecification, file);
                         LOG.log(System.Logger.Level.TRACE,
-                                () -> "Executor " + executorJson.getExecutorId() + " loaded from " + file);
+                                () -> "Executor " + executorSpecification.getExecutorId() + " loaded from " + file);
                     } else {
                         LOG.log(System.Logger.Level.TRACE,
                                 () -> "File " + file + " skipped: it is not an executor's JSON");
@@ -119,7 +122,7 @@ public final class ExecutorJsonSet {
     }
 
     public void addInstalledModelFolders(boolean onlyBuiltIn) throws IOException {
-        for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
+        for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
             if (onlyBuiltIn && !platform.isBuiltIn()) {
                 continue;
             }
@@ -136,7 +139,7 @@ public final class ExecutorJsonSet {
         }
     }
 
-    public Collection<ExecutorJson> all() {
+    public Collection<ExecutorSpecification> all() {
         return Collections.unmodifiableCollection(executorJsons.values());
     }
 
@@ -145,25 +148,25 @@ public final class ExecutorJsonSet {
         return executorJsons.containsKey(executorId);
     }
 
-    public ExecutorJson get(String executorId) {
+    public ExecutorSpecification get(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         return executorJsons.get(executorId);
     }
 
-    public ExecutorJson remove(String executorId) {
+    public ExecutorSpecification remove(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         checkImmutable();
         return executorJsons.remove(executorId);
     }
 
-    private void add(String executorId, ExecutorJson executorJson, Path file) {
+    private void add(String executorId, ExecutorSpecification executorSpecification, Path file) {
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(executorJson, "Null executorJson");
+        Objects.requireNonNull(executorSpecification, "Null executorJson");
         // - No sense to store null values in the map
         if (immutable) {
             throw new UnsupportedOperationException("This executors json set is immutable");
         }
-        if (executorJsons.putIfAbsent(executorId, executorJson) != null) {
+        if (executorJsons.putIfAbsent(executorId, executorSpecification) != null) {
             throw new IllegalArgumentException("Duplicate executor model: " + executorId
                     + (file == null ? "" : " in " + file));
         }
@@ -176,14 +179,14 @@ public final class ExecutorJsonSet {
     }
 
     private static class InstalledSetHolder {
-        private static ExecutorJsonSet installedSet = null;
+        private static ExecutorSpecificationSet installedSet = null;
 
-        static synchronized ExecutorJsonSet builtInSet() throws IOException {
+        static synchronized ExecutorSpecificationSet builtInSet() throws IOException {
             // It is better than static initialization: this solution allows seeing possible exceptions
             // (static initialization will lead to very "strange" exceptions like NoClassDefFound error,
             // because this class will stay not initialized)
             if (installedSet == null) {
-                final ExecutorJsonSet newSet = ExecutorJsonSet.newInstance();
+                final ExecutorSpecificationSet newSet = ExecutorSpecificationSet.newInstance();
                 newSet.addInstalledModelFolders(true);
                 // - I/O exceptions possible
                 final SpecialSpecificationsBuilder builder = new SpecialSpecificationsBuilder(newSet);

@@ -39,7 +39,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static net.algart.executors.api.model.ExecutorJson.quote;
+import static net.algart.executors.api.model.ExecutorSpecification.quote;
 
 // Note: this class is not absolutely safe in relation of copying mutable data into and from this object.
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
@@ -877,7 +877,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
             Path containingJsonPath,
             boolean recursive)
             throws IOException {
-        return ExtensionJson.readAllIfValid(
+        return ExtensionSpecification.readAllIfValid(
                 result, containingJsonPath, recursive, ChainJson::readIfValid, ChainJson::isChainJsonFile);
     }
 
@@ -982,7 +982,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
     }
 
     public ChainJson setBlocks(List<ChainBlockConf> blocks) {
-        this.blocks = ExecutorJson.checkNonNullObjects(blocks);
+        this.blocks = ExecutorSpecification.checkNonNullObjects(blocks);
         return this;
     }
 

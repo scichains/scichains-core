@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.GetNamesOfSettings;
@@ -46,8 +46,8 @@ public class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
-    public ExecutorJson buildCombineSpecification(SettingsCombiner settingsCombiner) {
-        final ExecutorJson result = super.buildCombineSpecification(settingsCombiner);
+    public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
+        final ExecutorSpecification result = super.buildCombineSpecification(settingsCombiner);
         result.createOptionsIfAbsent().createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);

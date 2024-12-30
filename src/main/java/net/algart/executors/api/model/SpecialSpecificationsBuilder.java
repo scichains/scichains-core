@@ -32,17 +32,17 @@ import java.util.UUID;
 class SpecialSpecificationsBuilder {
     public static final String PLATFORM_LANGUAGE = "system";
 
-    private final ExecutorJsonSet specifications;
+    private final ExecutorSpecificationSet specifications;
 
-    public SpecialSpecificationsBuilder(ExecutorJsonSet specifications) {
+    public SpecialSpecificationsBuilder(ExecutorSpecificationSet specifications) {
         this.specifications = Objects.requireNonNull(specifications, "Null specifications");
     }
 
     public boolean addSpecifications() {
-        final ExecutorJson pattern = findCommonPlatformInformationPattern();
+        final ExecutorSpecification pattern = findCommonPlatformInformationPattern();
         if (pattern != null) {
             specifications.remove(pattern.getExecutorId());
-            for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
+            for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
                 specifications.add(newCommonPlatformInformationSpecification(pattern, platform));
             }
             return true;
@@ -50,10 +50,10 @@ class SpecialSpecificationsBuilder {
         return false;
     }
 
-    private ExecutorJson findCommonPlatformInformationPattern() {
-        for (ExecutorJson model : specifications.all()) {
+    private ExecutorSpecification findCommonPlatformInformationPattern() {
+        for (ExecutorSpecification model : specifications.all()) {
             if (model.isJavaExecutor()) {
-                final ExecutorJson.JavaConf javaConf = model.getJava();
+                final ExecutorSpecification.JavaConf javaConf = model.getJava();
                 if (javaConf != null) {
                     final String className = javaConf.getClassName();
                     if (Objects.equals(className, CommonPlatformInformation.class.getName())) {
@@ -65,20 +65,20 @@ class SpecialSpecificationsBuilder {
         return null;
     }
 
-    private ExecutorJson newCommonPlatformInformationSpecification(
-            ExecutorJson pattern,
-            ExtensionJson.Platform platform) {
+    private ExecutorSpecification newCommonPlatformInformationSpecification(
+            ExecutorSpecification pattern,
+            ExtensionSpecification.Platform platform) {
         Objects.requireNonNull(pattern, "Null pattern");
         Objects.requireNonNull(platform, "Null platform");
-        ExecutorJson result = new ExecutorJson();
+        ExecutorSpecification result = new ExecutorSpecification();
         result.setExecutorId(makeId(pattern.getExecutorId(), platform));
         result.setPlatformId(platform.getId());
         result.setName(replacePlatformName(pattern.getName(), platform));
         result.setCategory(pattern.getCategory());
         result.setDescription(replacePlatformName(pattern.getDescription(), platform));
         result.setLanguage(PLATFORM_LANGUAGE);
-        result.setJava(new ExecutorJson.JavaConf().setJson(
-                ExecutorJson.JavaConf.standardJson(CommonPlatformInformation.class.getName())));
+        result.setJava(new ExecutorSpecification.JavaConf().setJson(
+                ExecutorSpecification.JavaConf.standardJson(CommonPlatformInformation.class.getName())));
         result.setInPorts(pattern.getInPorts());
         result.setOutPorts(pattern.getOutPorts());
         result.setControls(pattern.getControls());
@@ -87,11 +87,11 @@ class SpecialSpecificationsBuilder {
         return result;
     }
 
-    private static String replacePlatformName(String s, ExtensionJson.Platform platform) {
+    private static String replacePlatformName(String s, ExtensionSpecification.Platform platform) {
         return s == null ? null : s.replace("$$$", platform.getName());
     }
 
-    private static String makeId(String commonPlatformInformationId, ExtensionJson.Platform platform) {
+    private static String makeId(String commonPlatformInformationId, ExtensionSpecification.Platform platform) {
         UUID uuid;
         try {
             uuid = UUID.fromString(platform.getId());

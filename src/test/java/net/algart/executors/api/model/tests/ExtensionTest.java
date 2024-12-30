@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.model.tests;
 
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.api.model.InstalledExtensions;
 
 import java.io.IOException;
@@ -42,35 +42,35 @@ public class ExtensionTest {
         final Path extensionFolder = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
         System.out.printf("Analysing extension folder %s...%n", extensionFolder);
-        final ExtensionJson extension = ExtensionJson.readFromFolder(extensionFolder);
+        final ExtensionSpecification extension = ExtensionSpecification.readFromFolder(extensionFolder);
         System.out.printf("Writing %s...%n", resultFile);
         extension.write(resultFile);
         System.out.printf("Extension:%n%s%n", extension);
         System.out.printf("Its platforms:%n");
-        for (ExtensionJson.Platform platform : extension.getPlatforms()) {
+        for (ExtensionSpecification.Platform platform : extension.getPlatforms()) {
             System.out.printf("    Technology: %s%n", platform.getTechnology());
             System.out.printf("    Folders: %s%n", platform.getFolders());
             if (platform.isJvmTechnology()) {
-                final ExtensionJson.Platform.Configuration configuration = platform.getConfiguration();
+                final ExtensionSpecification.Platform.Configuration configuration = platform.getConfiguration();
                 System.out.printf("        classpath: %s%n", configuration.getClasspath());
                 System.out.printf("        VM options: %s%n", configuration.getVmOptions());
             }
         }
 
-        final ExtensionJson.Platform empty = new ExtensionJson.Platform()
+        final ExtensionSpecification.Platform empty = new ExtensionSpecification.Platform()
                 .setId("some id")
                 .setCategory("some category")
                 .setName("some name")
                 .setTechnology("jvm");
         System.out.printf("%nEmpty JVM platform:%n    %s%n%s%n", empty, empty.jsonString());
         System.out.printf("%n%n****************%nInstalled extensions:%n");
-        for (ExtensionJson e : InstalledExtensions.allInstalledExtensions()) {
+        for (ExtensionSpecification e : InstalledExtensions.allInstalledExtensions()) {
             System.out.println(e.jsonString());
         }
         System.out.printf("%n%n****************%nInstalled platforms:%n");
-        for (Map.Entry<String, ExtensionJson.Platform> entry
+        for (Map.Entry<String, ExtensionSpecification.Platform> entry
                 : InstalledExtensions.allInstalledPlatformsMap().entrySet()) {
-            final ExtensionJson.Platform platform = entry.getValue();
+            final ExtensionSpecification.Platform platform = entry.getValue();
             System.out.println(entry.getKey() + ": "
                     + platform.jsonString() + " ["
                     + (platform.isBuiltIn() ? "supported, " : "")

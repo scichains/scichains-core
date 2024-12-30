@@ -27,9 +27,9 @@ package net.algart.executors.modules.core.system;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.api.model.InstalledExtensions;
 
 import java.io.File;
@@ -80,7 +80,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
 
         sb.append(String.format("%nInstalled platforms:%n"));
         final StringJoiner joiner = new StringJoiner(String.format(",%n"));
-        for (ExtensionJson.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
+        for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
             joiner.add(String.format("%s%n[[%s%n" +
                             "    models folder: %s%n" +
                             "    modules folder: %s%n" +
@@ -101,7 +101,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("%n%nSystem properties:%n"));
         System.getProperties().forEach((key, value) -> sb.append(String.format("    %s: \"%s\"%n", key, value)));
 
-        final Collection<ExecutorJson> allExecutors = ExecutorJsonSet.allBuiltIn().all();
+        final Collection<ExecutorSpecification> allExecutors = ExecutorSpecificationSet.allBuiltIn().all();
         sb.append(String.format("%n%nAll %d executor models:%n", allExecutors.size()));
         allExecutors.forEach(
                 executor -> sb.append(String.format("    %s    %s%n",

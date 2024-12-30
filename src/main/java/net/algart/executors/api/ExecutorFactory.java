@@ -25,8 +25,8 @@
 package net.algart.executors.api;
 
 import net.algart.executors.api.model.Chain;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 import net.algart.executors.api.model.ExecutorNotFoundException;
 
 /**
@@ -34,7 +34,7 @@ import net.algart.executors.api.model.ExecutorNotFoundException;
  *
  * <p>Now we have only one implementation, {@link StandardExecutorFactory}, which just calls
  * {@link ExecutionBlock#newExecutor} function with passing their
- * specification ({@link ExecutorJson}), necessary for loading Java class of executor.
+ * specification ({@link ExecutorSpecification}), necessary for loading Java class of executor.
  * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
  * instanced of {@link ExecutorLoader} to actually create Java class {@link ExecutionBlock}.
  *
@@ -50,7 +50,7 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
 
     /**
      * Creates new executor factory with standard behavior, based on the executor set
-     * {@link ExecutorJsonSet#allBuiltIn()}.
+     * {@link ExecutorSpecificationSet#allBuiltIn()}.
      *
      * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
      * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
@@ -72,6 +72,6 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      * @see ExecutionBlock#newExecutionBlock(String, String, String)
      */
     static ExecutorFactory newStandardInstance(String sessionId) {
-        return StandardExecutorFactory.newInstance(ExecutorJsonSet.allBuiltIn(), sessionId);
+        return StandardExecutorFactory.newInstance(ExecutorSpecificationSet.allBuiltIn(), sessionId);
     }
 }

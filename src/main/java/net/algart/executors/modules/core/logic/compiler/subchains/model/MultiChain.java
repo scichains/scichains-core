@@ -60,7 +60,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private final List<ChainJson> chainModels;
     private final List<ChainJson> blockedChainModels;
     private final Set<String> blockedChainModelNames;
-    private final List<ExecutorJson> loadedChainExecutorSpecifications;
+    private final List<ExecutorSpecification> loadedChainExecutorSpecifications;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
     // - note: this combiner is not registered, it is used for building multi-chain model only in UseMultiChain
@@ -100,7 +100,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         + model.getMultiChainJsonFile(), e);
             }
             if (optionalChain.isPresent()) {
-                final ExecutorJson implementationSpecification = chainFactory.chainExecutorSpecification();
+                final ExecutorSpecification implementationSpecification = chainFactory.chainExecutorSpecification();
                 assert implementationSpecification != null :
                         "chainExecutorSpecification cannot be null if use() returns some result";
                 this.loadedChainExecutorSpecifications.add(implementationSpecification);
@@ -204,7 +204,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public void checkImplementationCompatibility() {
-        for (ExecutorJson implementationModel : loadedChainExecutorSpecifications) {
+        for (ExecutorSpecification implementationModel : loadedChainExecutorSpecifications) {
             model.checkImplementationCompatibility(implementationModel);
         }
     }
@@ -375,8 +375,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         result.setName(model.getName());
         result.setCombineName(model.getSettingsName());
         result.setCategory(model.getSettingsCategory());
-        final Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
-        final ExecutorJson.ControlConf currentChainIdControl = createCurrentChainIdControl();
+        final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
+        final ExecutorSpecification.ControlConf currentChainIdControl = createCurrentChainIdControl();
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
         controls.putAll(model.getControls());
         if (addSubSettingsForVariants) {
@@ -391,7 +391,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name: "
                             + "it is not allowed as a parameter name in the settings" + multiChainJsonFileMessage, e);
                 }
-                final ExecutorJson.ControlConf settingsControlConf = new ExecutorJson.ControlConf()
+                final ExecutorSpecification.ControlConf settingsControlConf = new ExecutorSpecification.ControlConf()
                         .setValueType(ParameterValueType.SETTINGS)
                         .setName(name)
                         .setDescription(executor.getDescription())
@@ -419,13 +419,13 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return result;
     }
 
-    private ExecutorJson.ControlConf createCurrentChainIdControl() {
-        final List<ExecutorJson.ControlConf.EnumItem> items = new ArrayList<>();
+    private ExecutorSpecification.ControlConf createCurrentChainIdControl() {
+        final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
         for (ChainJson chainModel : chainModels) {
             final String chainId = chainModel.chainId();
-            items.add(new ExecutorJson.ControlConf.EnumItem(chainId).setCaption(chainModel.chainName()));
+            items.add(new ExecutorSpecification.ControlConf.EnumItem(chainId).setCaption(chainModel.chainName()));
         }
-        ExecutorJson.ControlConf result = new ExecutorJson.ControlConf();
+        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(SELECTED_CHAIN_ID_PARAMETER_NAME);
         result.setCaption(SELECTED_CHAIN_ID_PARAMETER_CAPTION);
         result.setValueType(ParameterValueType.ENUM_STRING);

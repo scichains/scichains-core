@@ -60,7 +60,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                 portConf.getDataType());
     }
 
-    public static ChainOutputPort valueOf(ChainBlock block, ExecutorJson.PortConf portConf) {
+    public static ChainOutputPort valueOf(ChainBlock block, ExecutorSpecification.PortConf portConf) {
         return newInstance(
                 block,
                 null,

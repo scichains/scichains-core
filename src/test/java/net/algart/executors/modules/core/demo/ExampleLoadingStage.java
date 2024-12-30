@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.demo;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutorLoader;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 public final class ExampleLoadingStage extends Executor {
     public static class TestExecutor extends Executor {
@@ -101,7 +101,7 @@ public final class ExampleLoadingStage extends Executor {
     @Override
     public void process() {
         final String id = "7ec64582-de9e-4607-85ad-adfa97a3b0e5";
-        final String executorSpecification = ExecutorJson.valueOf(new TestExecutor(), id).jsonString();
+        final String executorSpecification = ExecutorSpecification.valueOf(new TestExecutor(), id).jsonString();
         final String sessionId = getSessionId();
         MY_LOADER.setSpecification(sessionId, id, executorSpecification);
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification);

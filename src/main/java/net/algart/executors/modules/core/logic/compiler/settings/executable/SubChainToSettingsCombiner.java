@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.settings.executable;
 
 import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
 
@@ -55,12 +55,12 @@ public final class SubChainToSettingsCombiner {
         // 2) to find default values of parameters in data blocks.
         final ChainJson chainJson = ChainJson.read(chainJsonFile);
         final Chain chain = Chain.valueOf(null, executorFactory, chainJson);
-        final ExecutorJson executorJson = new ExecutorJson();
-        executorJson.setTo(chain);
+        final ExecutorSpecification executorSpecification = new ExecutorSpecification();
+        executorSpecification.setTo(chain);
         final SettingsCombinerJson settingsCombinerJson = new SettingsCombinerJson();
         settingsCombinerJson.setId(UUID.randomUUID().toString());
         settingsCombinerJson.setCombineName(SettingsCombinerJson.DEFAULT_SETTINGS_COMBINE_PREFIX + modelName);
-        settingsCombinerJson.setControls(executorJson.getControls());
+        settingsCombinerJson.setControls(executorSpecification.getControls());
         settingsCombinerJson.write(settingsCombinerJsonFile);
     }
 }

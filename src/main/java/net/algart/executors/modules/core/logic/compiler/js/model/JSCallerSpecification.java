@@ -28,8 +28,8 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.graalvm.GraalSourceContainer;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -39,7 +39,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
-public class JSCallerJson extends ExecutorJson {
+public class JSCallerSpecification extends ExecutorSpecification {
     public static final class JSConf extends AbstractConvertibleToJson {
 
         public static final String DEFAULT_FUNCTION = "execute";
@@ -95,10 +95,10 @@ public class JSCallerJson extends ExecutorJson {
 
     private JSConf js = null;
 
-    public JSCallerJson() {
+    public JSCallerSpecification() {
     }
 
-    protected JSCallerJson(JsonObject json, Path file) {
+    protected JSCallerSpecification(JsonObject json, Path file) {
         super(json, file);
         final JsonObject jsJson = json.getJsonObject("js");
         if (isJSExecutor() && jsJson == null) {
@@ -108,13 +108,13 @@ public class JSCallerJson extends ExecutorJson {
         this.js = jsJson == null ? null : new JSConf(jsJson, file);
     }
 
-    public static JSCallerJson read(Path executorJsonFile) throws IOException {
+    public static JSCallerSpecification read(Path executorJsonFile) throws IOException {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json = Jsons.readJson(executorJsonFile);
-        return new JSCallerJson(json, executorJsonFile);
+        return new JSCallerSpecification(json, executorJsonFile);
     }
 
-    public static JSCallerJson readIfValid(Path executorJsonFile) {
+    public static JSCallerSpecification readIfValid(Path executorJsonFile) {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json;
         try {
@@ -126,37 +126,37 @@ public class JSCallerJson extends ExecutorJson {
         if (!isExecutorJson(json)) {
             return null;
         }
-        return new JSCallerJson(json, executorJsonFile);
+        return new JSCallerSpecification(json, executorJsonFile);
     }
 
-    public static List<JSCallerJson> readAllIfValid(Path containingJsonPath) throws IOException {
+    public static List<JSCallerSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
         return readAllIfValid(null, containingJsonPath);
     }
 
-    public static List<JSCallerJson> readAllIfValid(
-            List<JSCallerJson> result,
+    public static List<JSCallerSpecification> readAllIfValid(
+            List<JSCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionJson.readAllJsonIfValid(result, containingJsonPath, JSCallerJson::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 
-    public static JSCallerJson valueOf(JsonObject executorJson) {
-        return new JSCallerJson(executorJson, null);
+    public static JSCallerSpecification valueOf(JsonObject executorJson) {
+        return new JSCallerSpecification(executorJson, null);
     }
 
-    public static JSCallerJson valueOf(String executorJsonString) {
+    public static JSCallerSpecification valueOf(String executorJsonString) {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject executorJson = Jsons.toJson(executorJsonString);
-        return new JSCallerJson(executorJson, null);
+        return new JSCallerSpecification(executorJson, null);
     }
 
-    public static JSCallerJson valueOfIfValid(String executorJsonString) {
+    public static JSCallerSpecification valueOfIfValid(String executorJsonString) {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject json = Jsons.toJson(executorJsonString);
         if (!isExecutorJson(json)) {
             return null;
         }
-        return new JSCallerJson(json, null);
+        return new JSCallerSpecification(json, null);
     }
 
     public final boolean isJSExecutor() {
@@ -167,7 +167,7 @@ public class JSCallerJson extends ExecutorJson {
         return js;
     }
 
-    public JSCallerJson setJS(JSConf js) {
+    public JSCallerSpecification setJS(JSConf js) {
         this.js = js;
         return this;
     }

@@ -29,8 +29,8 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
 
 import java.util.List;
@@ -84,7 +84,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
-        final ExecutorJson model = findModel(id);
+        final ExecutorSpecification model = findModel(id);
         if (model == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
             return;
@@ -97,10 +97,10 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         getScalar(OUTPUT_LANGUAGE).setTo(model.getLanguage());
     }
 
-    public ExecutorJson findModel(String executorId) {
+    public ExecutorSpecification findModel(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
-        final ExecutorJson builtIn = ExecutorJsonSet.allBuiltIn().get(executorId);
+        final ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);
         getScalar(OUTPUT_BUILT_IN).setTo(builtIn != null);
         long t2 = debugTime();
         if (builtIn != null && specialSearchInBuiltIn) {
@@ -121,10 +121,10 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         }
         long t3 = debugTime();
         final JsonObject json;
-        final ExecutorJson extended;
+        final ExecutorSpecification extended;
         try {
             json = Jsons.toJson(description);
-            extended = ExecutorJson.valueOf(json);
+            extended = ExecutorSpecification.valueOf(json);
         } catch (JsonException e) {
             getScalar().setTo(description);
             throw new IllegalArgumentException("Executor with ID \"" + executorId

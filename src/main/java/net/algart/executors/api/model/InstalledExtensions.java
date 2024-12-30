@@ -45,7 +45,7 @@ public class InstalledExtensions {
     /**
      * System property {@value}
      * must contain a root path to all extensions, where they will be searched recursively
-     * (by a criteria that the subdirectory contains {@value ExtensionJson#DEFAULT_EXTENSION_FILE_NAME} file).
+     * (by a criteria that the subdirectory contains {@value ExtensionSpecification#DEFAULT_EXTENSION_FILE_NAME} file).
      * Used only if {@value #EXTENSIONS_PATH_PROPERTY} property is not defined,
      * in another case it is ignored.
      */
@@ -96,7 +96,7 @@ public class InstalledExtensions {
                 return Arrays.stream(split).map(Paths::get).toList();
             }
             if (EXTENSIONS_ROOT != null) {
-                return ExtensionJson.allExtensionFolders(Paths.get(EXTENSIONS_ROOT));
+                return ExtensionSpecification.allExtensionFolders(Paths.get(EXTENSIONS_ROOT));
             }
         } catch (IOException | InvalidPathException e) {
             throw new IllegalStateException("Installed extensions root path " +
@@ -111,38 +111,38 @@ public class InstalledExtensions {
                 + "\" (root folder of all extensions, which will be scanned recursively)");
     }
 
-    public static List<ExtensionJson> allInstalledExtensions() {
+    public static List<ExtensionSpecification> allInstalledExtensions() {
         return InstalledPlatformsHolder.installedExtensions();
     }
 
-    public static List<ExtensionJson.Platform> allInstalledPlatforms() {
+    public static List<ExtensionSpecification.Platform> allInstalledPlatforms() {
         return InstalledPlatformsHolder.installedPlatforms();
     }
 
-    public static Map<String, ExtensionJson.Platform> allInstalledPlatformsMap() {
+    public static Map<String, ExtensionSpecification.Platform> allInstalledPlatformsMap() {
         return InstalledPlatformsHolder.installedPlatformsMap();
     }
 
-    public static ExtensionJson.Platform installedPlatform(String id) {
+    public static ExtensionSpecification.Platform installedPlatform(String id) {
         Objects.requireNonNull(id, "Null platform ID");
-        ExtensionJson.Platform platform = allInstalledPlatformsMap().get(id);
+        ExtensionSpecification.Platform platform = allInstalledPlatformsMap().get(id);
         if (platform == null) {
             throw new IllegalArgumentException("Platform with ID \"" + id + "\" is not installed");
         }
         return platform;
     }
 
-    public static void checkDependencies(Map<String, ExtensionJson.Platform> platformMap) {
+    public static void checkDependencies(Map<String, ExtensionSpecification.Platform> platformMap) {
         Objects.requireNonNull(platformMap, "Null platformMap");
         if (!platformMap.isEmpty() && !platformMap.containsKey(CORE_PLATFORM_ID)) {
             // - however, empty configuration is also allowed, even without the core platform
             throw new ExecutionSystemConfigurationException("No core platform installed (ID \""
                     + CORE_PLATFORM_ID + "\")");
         }
-        for (ExtensionJson.Platform platform : platformMap.values()) {
+        for (ExtensionSpecification.Platform platform : platformMap.values()) {
             Objects.requireNonNull(platform, "Null platform inside platformMap");
-            final List<ExtensionJson.Platform.Dependency> dependencies = platform.getDependencies();
-            for (ExtensionJson.Platform.Dependency dependency : dependencies) {
+            final List<ExtensionSpecification.Platform.Dependency> dependencies = platform.getDependencies();
+            for (ExtensionSpecification.Platform.Dependency dependency : dependencies) {
                 if (!platformMap.containsKey(dependency.getId())) {
                     final String id = dependency.getId();
                     assert id != null;
@@ -165,21 +165,21 @@ public class InstalledExtensions {
     }
 
     private static class InstalledPlatformsHolder {
-        private static List<ExtensionJson> installedExtensions = null;
-        private static List<ExtensionJson.Platform> installedPlatforms = null;
-        private static Map<String, ExtensionJson.Platform> installedPlatformsMap = null;
+        private static List<ExtensionSpecification> installedExtensions = null;
+        private static List<ExtensionSpecification.Platform> installedPlatforms = null;
+        private static Map<String, ExtensionSpecification.Platform> installedPlatformsMap = null;
 
-        private static synchronized List<ExtensionJson> installedExtensions() {
+        private static synchronized List<ExtensionSpecification> installedExtensions() {
             load();
             return installedExtensions;
         }
 
-        private static synchronized List<ExtensionJson.Platform> installedPlatforms() {
+        private static synchronized List<ExtensionSpecification.Platform> installedPlatforms() {
             load();
             return installedPlatforms;
         }
 
-        private static synchronized Map<String, ExtensionJson.Platform> installedPlatformsMap() {
+        private static synchronized Map<String, ExtensionSpecification.Platform> installedPlatformsMap() {
             load();
             return installedPlatformsMap;
         }
@@ -190,18 +190,19 @@ public class InstalledExtensions {
             // because this class will stay not initialized)
             if (installedExtensions == null) {
                 try {
-                    final List<ExtensionJson> extensions = new ArrayList<>();
-                    final List<ExtensionJson.Platform> platforms = new ArrayList<>();
-                    final Map<String, ExtensionJson.Platform> platformsMap = new LinkedHashMap<>();
+                    final List<ExtensionSpecification> extensions = new ArrayList<>();
+                    final List<ExtensionSpecification.Platform> platforms = new ArrayList<>();
+                    final Map<String, ExtensionSpecification.Platform> platformsMap = new LinkedHashMap<>();
                     for (Path path : installedExtensionsPaths()) {
-                        final ExtensionJson extension = ExtensionJson.readFromFolder(path);
+                        final ExtensionSpecification extension = ExtensionSpecification.readFromFolder(path);
                         extensions.add(extension);
-                        for (ExtensionJson.Platform platform : extension.getPlatforms()) {
+                        for (ExtensionSpecification.Platform platform : extension.getPlatforms()) {
                             if (CHECK_EXISTING_PATHS) {
                                 platform.checkExistingPathsIfRequired();
                             }
                             platform.setImmutable();
-                            final ExtensionJson.Platform existing = platformsMap.put(platform.getId(), platform);
+                            final ExtensionSpecification.Platform existing =
+                                    platformsMap.put(platform.getId(), platform);
                             if (existing != null) {
                                 throw new IOException("Invalid set of extensions: duplicate id \""
                                         + platform.getId() + "\" for platform, named \"" + platform.getName()

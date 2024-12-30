@@ -27,8 +27,8 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
 import net.algart.io.MatrixIO;
@@ -144,9 +144,9 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     private Options options = null;
     private List<String> chainVariantPaths = new ArrayList<>();
     private String defaultChainVariantId = null;
-    private Map<String, ExecutorJson.PortConf> inPorts = new LinkedHashMap<>();
-    private Map<String, ExecutorJson.PortConf> outPorts = new LinkedHashMap<>();
-    private Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
+    private Map<String, ExecutorSpecification.PortConf> inPorts = new LinkedHashMap<>();
+    private Map<String, ExecutorSpecification.PortConf> outPorts = new LinkedHashMap<>();
+    private Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
 
     public MultiChainJson() {
     }
@@ -189,16 +189,16 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
                 Jsons.reqJsonArray(json, "chain_variant_paths", file), "chain_variant_paths");
         this.defaultChainVariantId = json.getString("default_variant_id", null);
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
-            final ExecutorJson.PortConf port = new ExecutorJson.PortConf(jsonObject, file);
-            ExecutorJson.putOrException(inPorts, port.getName(), port, file, "in_ports");
+            final ExecutorSpecification.PortConf port = new ExecutorSpecification.PortConf(jsonObject, file);
+            ExecutorSpecification.putOrException(inPorts, port.getName(), port, file, "in_ports");
         }
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "out_ports", file)) {
-            final ExecutorJson.PortConf port = new ExecutorJson.PortConf(jsonObject, file);
-            ExecutorJson.putOrException(outPorts, port.getName(), port, file, "out_ports");
+            final ExecutorSpecification.PortConf port = new ExecutorSpecification.PortConf(jsonObject, file);
+            ExecutorSpecification.putOrException(outPorts, port.getName(), port, file, "out_ports");
         }
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
-            final ExecutorJson.ControlConf control = new ExecutorJson.ControlConf(jsonObject, file);
-            ExecutorJson.putOrException(controls, control.getName(), control, file, "controls");
+            final ExecutorSpecification.ControlConf control = new ExecutorSpecification.ControlConf(jsonObject, file);
+            ExecutorSpecification.putOrException(controls, control.getName(), control, file, "controls");
         }
     }
 
@@ -224,7 +224,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     }
 
     public static List<MultiChainJson> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionJson.readAllJsonIfValid(null, containingJsonPath, MultiChainJson::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(null, containingJsonPath, MultiChainJson::readIfValid);
     }
 
     public void write(Path multiChainJsonFile, OpenOption... options) throws IOException {
@@ -392,30 +392,30 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return this;
     }
 
-    public Map<String, ExecutorJson.PortConf> getInPorts() {
+    public Map<String, ExecutorSpecification.PortConf> getInPorts() {
         return Collections.unmodifiableMap(inPorts);
     }
 
-    public MultiChainJson setInPorts(Map<String, ExecutorJson.PortConf> inPorts) {
-        this.inPorts = ExecutorJson.checkInPorts(inPorts);
+    public MultiChainJson setInPorts(Map<String, ExecutorSpecification.PortConf> inPorts) {
+        this.inPorts = ExecutorSpecification.checkInPorts(inPorts);
         return this;
     }
 
-    public Map<String, ExecutorJson.PortConf> getOutPorts() {
+    public Map<String, ExecutorSpecification.PortConf> getOutPorts() {
         return Collections.unmodifiableMap(outPorts);
     }
 
-    public MultiChainJson setOutPorts(Map<String, ExecutorJson.PortConf> outPorts) {
-        this.outPorts = ExecutorJson.checkOutPorts(outPorts);
+    public MultiChainJson setOutPorts(Map<String, ExecutorSpecification.PortConf> outPorts) {
+        this.outPorts = ExecutorSpecification.checkOutPorts(outPorts);
         return this;
     }
 
-    public Map<String, ExecutorJson.ControlConf> getControls() {
+    public Map<String, ExecutorSpecification.ControlConf> getControls() {
         return Collections.unmodifiableMap(controls);
     }
 
-    public MultiChainJson setControls(Map<String, ExecutorJson.ControlConf> controls) {
-        this.controls = ExecutorJson.checkControls(controls);
+    public MultiChainJson setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
+        this.controls = ExecutorSpecification.checkControls(controls);
         return this;
     }
 
@@ -447,10 +447,11 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return result;
     }
 
-    public void checkImplementationCompatibility(ExecutorJson implementationSpecification) {
+    public void checkImplementationCompatibility(ExecutorSpecification implementationSpecification) {
         Objects.requireNonNull(implementationSpecification, "Null implementationSpecification");
-        for (ExecutorJson.PortConf port : inPorts.values()) {
-            final ExecutorJson.PortConf implementationPort = implementationSpecification.getInPort(port.getName());
+        for (ExecutorSpecification.PortConf port : inPorts.values()) {
+            final ExecutorSpecification.PortConf implementationPort =
+                    implementationSpecification.getInPort(port.getName());
             if (implementationPort == null) {
                 continue;
                 // - if an implementation has no corresponding input port, it is not a problem:
@@ -461,8 +462,9 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
                         + " has incompatible input port \"" + port.getName() + "\"");
             }
         }
-        for (ExecutorJson.PortConf port : outPorts.values()) {
-            final ExecutorJson.PortConf implementationPort = implementationSpecification.getOutPort(port.getName());
+        for (ExecutorSpecification.PortConf port : outPorts.values()) {
+            final ExecutorSpecification.PortConf implementationPort =
+                    implementationSpecification.getOutPort(port.getName());
             if (implementationPort == null) {
                 throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
                         + " has no output port \"" + port.getName() + "\"");
@@ -474,7 +476,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    private String checkImplementationMessageStart(ExecutorJson implementationSpecification) {
+    private String checkImplementationMessageStart(ExecutorSpecification implementationSpecification) {
         return "Implementation \""
                 + implementationSpecification.getName() + "\" (ID \""
                 + implementationSpecification.getExecutorId() + "\") of multichain \""
@@ -542,17 +544,17 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
             builder.add("default_variant_id", defaultChainVariantId);
         }
         final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
-        for (ExecutorJson.PortConf port : inPorts.values()) {
+        for (ExecutorSpecification.PortConf port : inPorts.values()) {
             inPortsBuilder.add(port.toJson());
         }
         builder.add("in_ports", inPortsBuilder.build());
         final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
-        for (ExecutorJson.PortConf port : outPorts.values()) {
+        for (ExecutorSpecification.PortConf port : outPorts.values()) {
             outPortsBuilder.add(port.toJson());
         }
         builder.add("out_ports", outPortsBuilder.build());
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-        for (ExecutorJson.ControlConf control : controls.values()) {
+        for (ExecutorSpecification.ControlConf control : controls.values()) {
             controlsBuilder.add(control.toJson());
         }
         builder.add("controls", controlsBuilder.build());

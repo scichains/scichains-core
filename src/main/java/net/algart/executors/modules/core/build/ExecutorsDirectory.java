@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.build;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.SystemEnvironment;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -50,15 +50,15 @@ public final class ExecutorsDirectory {
         if (json == null) {
             return;
         }
-        final ExecutorJson model = ExecutorJson.valueOf(json);
-        final String category = model.getCategory();
+        final ExecutorSpecification specification = ExecutorSpecification.valueOf(json);
+        final String category = specification.getCategory();
         if (!category.equals(lastCategory)) {
             System.out.printf("%n%s%n", category);
         }
         lastCategory = category;
-        System.out.printf("  %s%n", model.getName());
+        System.out.printf("  %s%n", specification.getName());
         if (descriptions) {
-            final String description = model.getDescription();
+            final String description = specification.getDescription();
             if (description != null) {
                 System.out.printf("    %s%n", description);
             }

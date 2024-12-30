@@ -30,11 +30,11 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.logic.compiler.python.interpreters.InterpretPython;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCaller;
-import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerJson;
+import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,19 +69,19 @@ public class UsingPython {
         return PYTHON_CALLER_LOADER;
     }
 
-    public static void usePath(String sessionId, Path pythonCallerJsonPath, ExtensionJson.Platform platform)
+    public static void usePath(String sessionId, Path pythonCallerJsonPath, ExtensionSpecification.Platform platform)
             throws IOException {
         Objects.requireNonNull(pythonCallerJsonPath, "Null path to Python model JSON files");
-        final List<PythonCallerJson> pythonCallerJsons;
+        final List<PythonCallerSpecification> pythonCallerJsons;
         if (Files.isDirectory(pythonCallerJsonPath)) {
-            pythonCallerJsons = PythonCallerJson.readAllIfValid(pythonCallerJsonPath);
+            pythonCallerJsons = PythonCallerSpecification.readAllIfValid(pythonCallerJsonPath);
         } else {
-            pythonCallerJsons = Collections.singletonList(PythonCallerJson.read(pythonCallerJsonPath));
+            pythonCallerJsons = Collections.singletonList(PythonCallerSpecification.read(pythonCallerJsonPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        ExecutorJson.checkIdDifference(pythonCallerJsons);
+        ExecutorSpecification.checkIdDifference(pythonCallerJsons);
         for (int i = 0, n = pythonCallerJsons.size(); i < n; i++) {
-            final PythonCallerJson pythonCallerJson = pythonCallerJsons.get(i);
+            final PythonCallerSpecification pythonCallerJson = pythonCallerJsons.get(i);
             Executor.LOG.log(System.Logger.Level.DEBUG,
                     "Loading Python caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                             + "from " + pythonCallerJson.getExecutorJsonFile() + "...");
@@ -95,14 +95,14 @@ public class UsingPython {
     }
 
     // Note: corrects the argument
-    public static void use(String sessionId, PythonCallerJson pythonCallerJson) throws IOException {
+    public static void use(String sessionId, PythonCallerSpecification pythonCallerJson) throws IOException {
         correctPythonExecutorSpecification(pythonCallerJson);
         final PythonCaller pythonCaller = PythonCaller.valueOf(pythonCallerJson);
         PYTHON_CALLER_LOADER.registerWorker(sessionId, pythonCaller.executorId(), pythonCaller, pythonCallerJson);
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
-        for (ExtensionJson.Platform platform : JepPlatforms.pythonPlatforms().installedPlatforms()) {
+        for (ExtensionSpecification.Platform platform : JepPlatforms.pythonPlatforms().installedPlatforms()) {
             if (platform.hasModels()) {
                 final long t1 = System.nanoTime();
                 UsingPython.usePath(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.modelsFolder(), platform);
@@ -118,7 +118,7 @@ public class UsingPython {
         JepGlobalConfig.INSTANCE.loadFromSystemProperties().useForJep();
     }
 
-    private static void correctPythonExecutorSpecification(PythonCallerJson pythonCallerJson) {
+    private static void correctPythonExecutorSpecification(PythonCallerSpecification pythonCallerJson) {
         Objects.requireNonNull(pythonCallerJson, "Null pythonCallerJson");
         pythonCallerJson.setTo(new InterpretPython());
         // - adds JavaConf, (maybe) parameters and some ports
@@ -130,10 +130,10 @@ public class UsingPython {
         pythonCallerJson.setSourceInfoForModel().setLanguageName(PYTHON_LANGUAGE_NAME);
     }
 
-    private static void addSpecialOutputPorts(ExecutorJson result) {
+    private static void addSpecialOutputPorts(ExecutorSpecification result) {
         if (!result.getOutPorts().containsKey(SUPPLIED_PYTHON_ROOTS_OUTPUT_NAME)) {
             // - to be on the safe side (maybe, the user defined the output port with the same name)
-            result.addOutPort(new ExecutorJson.PortConf()
+            result.addOutPort(new ExecutorSpecification.PortConf()
                     .setName(SUPPLIED_PYTHON_ROOTS_OUTPUT_NAME)
                     .setCaption(SUPPLIED_PYTHON_ROOTS_OUTPUT_CAPTION)
                     .setHint(SUPPLIED_PYTHON_ROOTS_OUTPUT_HINT)
@@ -142,7 +142,7 @@ public class UsingPython {
         }
         if (!result.getOutPorts().containsKey(SUPPLIED_PYTHON_MODELS_OUTPUT_NAME)) {
             // - to be on the safe side (maybe, the user defined the output port with the same name)
-            result.addOutPort(new ExecutorJson.PortConf()
+            result.addOutPort(new ExecutorSpecification.PortConf()
                     .setName(SUPPLIED_PYTHON_MODELS_OUTPUT_NAME)
                     .setCaption(SUPPLIED_PYTHON_MODELS_OUTPUT_CAPTION)
                     .setHint(SUPPLIED_PYTHON_MODELS_OUTPUT_HINT)

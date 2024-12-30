@@ -28,8 +28,8 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.js.UseJS;
@@ -120,7 +120,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private ExecutionBlock rootCaller = this;
     private String sessionId = null;
     private String executorId = null;
-    private ExecutorJson executorSpecification = null;
+    private ExecutorSpecification executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -743,11 +743,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Gets the specification of this executor, which was set while creating by
-     * {@link #newExecutor(String, String, ExecutorJson)}.
+     * {@link #newExecutor(String, String, ExecutorSpecification)}.
      *
      * @return the specification of this executor.
      */
-    public final ExecutorJson getExecutorSpecification() {
+    public final ExecutorSpecification getExecutorSpecification() {
         return executorSpecification;
     }
 
@@ -1111,12 +1111,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.</p>
      *
      * <p>The specification must contain all information, necessary for constructing and initializing the Java class
-     * of the executor, in its {@link ExecutorJson#getJava() Java configuration}.
+     * of the executor, in its {@link ExecutorSpecification#getJava() Java configuration}.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.
      * @param executorId    unique ID of this executor in the system (probably equal to
-     *                      <code>specification.{@link ExecutorJson#getExecutorId()
+     *                      <code>specification.{@link ExecutorSpecification#getExecutorId()
      *                      getExecutorId()}</code>).
      * @param specification JSON specification of the executor.
      * @return newly created executor.
@@ -1125,7 +1125,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      * @see #getExecutorSpecification(String, String) (String, String)
      */
-    public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorJson specification)
+    public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
@@ -1149,8 +1149,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * <p>Equivalent to
-     * <code>{@link #newExecutor(String, String, ExecutorJson)
-     * newExecutionBlock}(sessionId, executorId, {@link ExecutorJson#valueOf(String)
+     * <code>{@link #newExecutor(String, String, ExecutorSpecification)
+     * newExecutionBlock}(sessionId, executorId, {@link ExecutorSpecification#valueOf(String)
      * ExecutorJson.valueOf}(specification))</code>.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
@@ -1168,7 +1168,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
-        return newExecutor(sessionId, executorId, ExecutorJson.valueOf(specification));
+        return newExecutor(sessionId, executorId, ExecutorSpecification.valueOf(specification));
     }
 
     //TODO!! rename
@@ -1179,7 +1179,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Returns executors' descriptions (probable JSONs, like in
-     * {@link ExecutorJson})
+     * {@link ExecutorSpecification})
      * for all executors, dynamically created by some Java functions for the given session
      * <b>and</b> for global session {@link #GLOBAL_SHARED_SESSION_ID}.
      * Keys in the result are ID of every executor, values are descriptions.
@@ -1231,12 +1231,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return null;
     }
 
-    public static ExecutorJson parseExecutorSpecification(String sessionId, String executorId) throws JsonException {
+    public static ExecutorSpecification parseExecutorSpecification(String sessionId, String executorId) throws JsonException {
         final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
         if (specification == null) {
             return null;
         }
-        return ExecutorJson.valueOf(specification);
+        return ExecutorSpecification.valueOf(specification);
     }
 
     /**
@@ -1273,7 +1273,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         private static synchronized void initializeExecutionSystem() {
             if (!initialized) {
                 try {
-                    ExecutorJsonSet.findAllBuiltIn();
+                    ExecutorSpecificationSet.findAllBuiltIn();
                     standardJavaExecutorLoader.registerAllStandardExecutors();
                     UsingPython.initializePython();
                     UsingPython.useAllInstalledInSharedContext();

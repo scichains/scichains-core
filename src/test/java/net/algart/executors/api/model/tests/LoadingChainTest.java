@@ -112,9 +112,10 @@ public class LoadingChainTest {
         final Path chainFile = Paths.get(args[startArgIndex + 1]);
 
         System.out.printf("Reading %s...%n", modelFolder);
-        final ExecutorJsonSet executorJsonSet = ExecutorJsonSet.newInstance().addFolder(modelFolder, true);
+        final ExecutorSpecificationSet executorSpecificationSet =
+                ExecutorSpecificationSet.newInstance().addFolder(modelFolder, true);
         final ExecutorFactory executorFactory = StandardExecutorFactory.newInstance(
-                executorJsonSet, "~~DUMMY");
+                executorSpecificationSet, "~~DUMMY");
 
         if (Files.isDirectory(chainFile)) {
             test.processChainsFolder(chainFile, executorFactory);

@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.build;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,8 +43,8 @@ public class ExecutorJsonBuilder {
         final String className = args[0];
         final Path resultFile = Paths.get(args[1]);
         final Executor executor = (Executor) Class.forName(className).getDeclaredConstructor().newInstance();
-        final ExecutorJson executorJson = ExecutorJson.valueOf(executor, UUID.randomUUID().toString());
-        executorJson.write(resultFile, StandardOpenOption.CREATE_NEW);
+        final ExecutorSpecification executorSpecification = ExecutorSpecification.valueOf(executor, UUID.randomUUID().toString());
+        executorSpecification.write(resultFile, StandardOpenOption.CREATE_NEW);
         System.out.printf("JSON model for %s successfully stored in %s%n", executor.getClass(), resultFile);
         executor.close();
     }

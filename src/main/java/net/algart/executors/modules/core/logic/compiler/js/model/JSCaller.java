@@ -36,8 +36,8 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public final class JSCaller implements Cloneable, AutoCloseable {
-    private final JSCallerJson model;
-    private final JSCallerJson.JSConf jsConf;
+    private final JSCallerSpecification model;
+    private final JSCallerSpecification.JSConf jsConf;
     private final GraalPerformerContainer.Local performerContainer;
     private final GraalAPI graalAPI = GraalAPI.getInstance()
             .setConvertInputScalarToNumber(false)
@@ -47,7 +47,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
 
-    private JSCaller(JSCallerJson model, Path workingDirectory) {
+    private JSCaller(JSCallerSpecification model, Path workingDirectory) {
         this.model = Objects.requireNonNull(model, "Null model");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         this.jsConf = model.getJS();
@@ -61,11 +61,11 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         GraalAPI.initializeJS(this.performerContainer);
     }
 
-    public static JSCaller valueOf(JSCallerJson model, Path workingDirectory) {
+    public static JSCaller valueOf(JSCallerSpecification model, Path workingDirectory) {
         return new JSCaller(model, workingDirectory);
     }
 
-    public JSCallerJson model() {
+    public JSCallerSpecification model() {
         return model;
     }
 

@@ -24,7 +24,7 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.api.model.InstalledExtensions;
 
 import java.util.List;
@@ -61,7 +61,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
     @Override
     public void process() {
         String id = platformId();
-        final ExtensionJson.Platform platform = InstalledExtensions.allInstalledPlatformsMap().get(id);
+        final ExtensionSpecification.Platform platform = InstalledExtensions.allInstalledPlatformsMap().get(id);
         if (platform == null) {
             ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
             getScalar().setTo("Platform \"" + id + "\" not found");

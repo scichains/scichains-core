@@ -124,9 +124,9 @@ public class ExecutingChain {
                 InstalledExtensions.installedExtensionsPaths().toArray(),
                 String.format(";%n    "), 16384));
         long t1 = System.nanoTime();
-        final ExecutorJsonSet executorJsonSet = ExecutorJsonSet.allBuiltIn();
+        final ExecutorSpecificationSet executorSpecificationSet = ExecutorSpecificationSet.allBuiltIn();
         long t2 = System.nanoTime();
-        System.out.printf(" done (%d executors, %.3f ms)%n", executorJsonSet.all().size(), (t2 - t1) * 1e-6);
+        System.out.printf(" done (%d executors, %.3f ms)%n", executorSpecificationSet.all().size(), (t2 - t1) * 1e-6);
         final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
 
         System.out.printf("Reading %s...", chainFile);

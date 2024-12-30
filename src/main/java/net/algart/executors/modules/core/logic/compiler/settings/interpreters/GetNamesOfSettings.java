@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.json.Jsons;
 
@@ -171,12 +171,12 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         final SettingsCombiner combiner = settingsCombiner();
         final List<String> names = combiner.model().getControls().values().stream()
-                .filter(this::isMatched).map(ExecutorJson.ControlConf::getName)
+                .filter(this::isMatched).map(ExecutorSpecification.ControlConf::getName)
                 .collect(Collectors.toList());
         getScalar().setTo(resultType.result(names, resultJsonKey));
     }
 
-    private boolean isMatched(ExecutorJson.ControlConf controlConf) {
+    private boolean isMatched(ExecutorSpecification.ControlConf controlConf) {
         return switch (controlConf.getValueType()) {
             case INT -> extractIntType;
             case LONG -> extractLongType;

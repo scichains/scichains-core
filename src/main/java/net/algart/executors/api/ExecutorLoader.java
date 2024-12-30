@@ -25,8 +25,8 @@
 package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExecutorJsonSet;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExecutorSpecificationSet;
 
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
@@ -79,7 +79,7 @@ public class ExecutorLoader {
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorJson specification)
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
         return null;
     }
@@ -99,7 +99,7 @@ public class ExecutorLoader {
 
     /**
      * Returns executors' descriptions (probable JSONs, like in
-     * {@link ExecutorJson})
+     * {@link ExecutorSpecification})
      * for all executors, dynamically created by this loader for the given session.
      * Keys in the result are ID of every executor, values are descriptions.
      *
@@ -177,20 +177,20 @@ public class ExecutorLoader {
         void registerAllStandardExecutors() {
             if (REGISTER_BUILT_IN_EXECUTORS) {
                 final long t1 = System.nanoTime();
-                final Map<String, String> allStandardModels = new LinkedHashMap<>();
-                for (ExecutorJson executorJson : ExecutorJsonSet.allBuiltIn().all()) {
-                    allStandardModels.put(executorJson.getExecutorId(), executorJson.toJson().toString());
+                final Map<String, String> allStandard = new LinkedHashMap<>();
+                for (ExecutorSpecification executorSpecification : ExecutorSpecificationSet.allBuiltIn().all()) {
+                    allStandard.put(executorSpecification.getExecutorId(), executorSpecification.toJson().toString());
                 }
                 final long t2 = System.nanoTime();
                 LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
                         "Storing descriptions of installed built-in executor models: %.3f ms",
                         (t2 - t1) * 1e-6));
-                allSpecifications.put(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandardModels);
+                allSpecifications.put(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
             }
         }
 
         @Override
-        public ExecutionBlock loadExecutor(String ignoredSessionId, String executorId, ExecutorJson specification)
+        public ExecutionBlock loadExecutor(String ignoredSessionId, String executorId, ExecutorSpecification specification)
                 throws ClassNotFoundException {
             Objects.requireNonNull(executorId, "Null executorId");
             Objects.requireNonNull(specification, "Null specification");
@@ -227,7 +227,7 @@ public class ExecutorLoader {
             // No sense to free the cache, because it corresponds to system class loader and cannot become obsolete.
         }
 
-        private Executable findNewInstance(String executorId, ExecutorJson specification) throws ClassNotFoundException {
+        private Executable findNewInstance(String executorId, ExecutorSpecification specification) throws ClassNotFoundException {
             synchronized (newInstanceMakers) {
                 if (newInstanceMakers.containsKey(executorId)) {
                     return newInstanceMakers.get(executorId);
@@ -238,10 +238,10 @@ public class ExecutorLoader {
             }
         }
 
-        private static Executable getNewInstance(ExecutorJson specification) throws ClassNotFoundException {
+        private static Executable getNewInstance(ExecutorSpecification specification) throws ClassNotFoundException {
             // Note: we do not require specification.isJavaExecutor()
             // This allows to minimize requirements to a minimal JSON specification
-            ExecutorJson.JavaConf javaConf = specification.getJava();
+            ExecutorSpecification.JavaConf javaConf = specification.getJava();
             if (javaConf == null) {
                 return null;
             }

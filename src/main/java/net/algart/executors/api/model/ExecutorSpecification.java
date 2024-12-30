@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * Therefore, this object can become incorrect after creation, for example, by setting duplicated names
  * in several ports.</p>
  */
-public class ExecutorJson extends AbstractConvertibleToJson {
+public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
 
@@ -1370,10 +1370,10 @@ public class ExecutorJson extends AbstractConvertibleToJson {
 
     private volatile String minimalSpecification = null;
 
-    public ExecutorJson() {
+    public ExecutorSpecification() {
     }
 
-    protected ExecutorJson(JsonObject json, Path file) {
+    protected ExecutorSpecification(JsonObject json, Path file) {
         if (!isExecutorJson(json)) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not an executor configuration: no \"app\":\"" + APP_NAME + "\" element");
@@ -1440,19 +1440,19 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static ExecutorJson read(Path executorJsonFile) throws IOException {
+    public static ExecutorSpecification read(Path executorJsonFile) throws IOException {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json = Jsons.readJson(executorJsonFile);
-        return new ExecutorJson(json, executorJsonFile);
+        return new ExecutorSpecification(json, executorJsonFile);
     }
 
-    public static ExecutorJson readIfValid(Path executorJsonFile) throws IOException {
+    public static ExecutorSpecification readIfValid(Path executorJsonFile) throws IOException {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json = Jsons.readJson(executorJsonFile);
         if (!isExecutorJson(json)) {
             return null;
         }
-        return new ExecutorJson(json, executorJsonFile);
+        return new ExecutorSpecification(json, executorJsonFile);
     }
 
     public void write(Path executorJsonFile, OpenOption... options) throws IOException {
@@ -1460,20 +1460,20 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         Files.writeString(executorJsonFile, jsonString(), options);
     }
 
-    public static ExecutorJson valueOf(JsonObject executorJson) {
-        return new ExecutorJson(executorJson, null);
+    public static ExecutorSpecification valueOf(JsonObject executorJson) {
+        return new ExecutorSpecification(executorJson, null);
     }
 
-    public static ExecutorJson valueOf(String executorJsonString) throws JsonException {
+    public static ExecutorSpecification valueOf(String executorJsonString) throws JsonException {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject executorJson = Jsons.toJson(executorJsonString);
-        return new ExecutorJson(executorJson, null);
+        return new ExecutorSpecification(executorJson, null);
     }
 
-    public static ExecutorJson valueOf(Executor executor, String executorId) {
+    public static ExecutorSpecification valueOf(Executor executor, String executorId) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(executorId, "Null executor ID");
-        final ExecutorJson result = new ExecutorJson();
+        final ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         result.setExecutorId(executorId);
         return result;
@@ -1484,15 +1484,15 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return APP_NAME.equals(executorJson.getString("app", null));
     }
 
-    public static void checkIdDifference(Collection<? extends ExecutorJson> executorJsons) {
+    public static void checkIdDifference(Collection<? extends ExecutorSpecification> executorJsons) {
         Objects.requireNonNull(executorJsons, "Null executor JSONs collection");
         final Set<String> ids = new HashSet<>();
-        for (ExecutorJson executorJson : executorJsons) {
-            final String id = executorJson.getExecutorId();
+        for (ExecutorSpecification executorSpecification : executorJsons) {
+            final String id = executorSpecification.getExecutorId();
             assert id != null;
             if (!ids.add(id)) {
                 throw new IllegalArgumentException("Two executor JSONs have identical IDs " + id
-                        + ", one of them is \"" + executorJson.getName() + "\"");
+                        + ", one of them is \"" + executorSpecification.getName() + "\"");
             }
         }
     }
@@ -1509,7 +1509,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return version;
     }
 
-    public final ExecutorJson setVersion(String version) {
+    public final ExecutorSpecification setVersion(String version) {
         this.version = Objects.requireNonNull(version, "Null version");
         return this;
     }
@@ -1522,7 +1522,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return platformId;
     }
 
-    public final ExecutorJson setPlatformId(String platformId) {
+    public final ExecutorSpecification setPlatformId(String platformId) {
         this.platformId = platformId;
         return this;
     }
@@ -1531,7 +1531,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return category;
     }
 
-    public final ExecutorJson setCategory(String category) {
+    public final ExecutorSpecification setCategory(String category) {
         this.category = Objects.requireNonNull(category, "Null category");
         return this;
     }
@@ -1540,7 +1540,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return name;
     }
 
-    public final ExecutorJson setName(String name) {
+    public final ExecutorSpecification setName(String name) {
         this.name = Objects.requireNonNull(name, "Null name");
         return this;
     }
@@ -1553,7 +1553,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return description;
     }
 
-    public final ExecutorJson setDescription(String description) {
+    public final ExecutorSpecification setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -1562,7 +1562,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableSet(tags);
     }
 
-    public final ExecutorJson setTags(Set<String> tags) {
+    public final ExecutorSpecification setTags(Set<String> tags) {
         Objects.requireNonNull(tags, "Null tags");
         this.tags = new LinkedHashSet<>(tags);
         return this;
@@ -1572,7 +1572,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return executorId;
     }
 
-    public final ExecutorJson setExecutorId(String executorId) {
+    public final ExecutorSpecification setExecutorId(String executorId) {
         this.executorId = Objects.requireNonNull(executorId, "Null executor ID");
         return this;
     }
@@ -1588,7 +1588,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return options;
     }
 
-    public final ExecutorJson setOptions(Options options) {
+    public final ExecutorSpecification setOptions(Options options) {
         this.options = options;
         return this;
     }
@@ -1597,7 +1597,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return language;
     }
 
-    public final ExecutorJson setLanguage(String language) {
+    public final ExecutorSpecification setLanguage(String language) {
         this.language = language;
         this.javaExecutor = JavaConf.JAVA_LANGUAGE.equals(language);
         this.chainExecutor = ChainJson.CHAIN_LANGUAGE.equals(language);
@@ -1631,7 +1631,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return java;
     }
 
-    public final ExecutorJson setJava(JavaConf java) {
+    public final ExecutorSpecification setJava(JavaConf java) {
         this.java = java;
         return this;
     }
@@ -1644,7 +1644,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(inPorts);
     }
 
-    public final ExecutorJson setInPorts(Map<String, PortConf> inPorts) {
+    public final ExecutorSpecification setInPorts(Map<String, PortConf> inPorts) {
         this.inPorts = checkInPorts(inPorts);
         return this;
     }
@@ -1657,7 +1657,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(outPorts);
     }
 
-    public final ExecutorJson setOutPorts(Map<String, PortConf> outPorts) {
+    public final ExecutorSpecification setOutPorts(Map<String, PortConf> outPorts) {
         this.outPorts = checkOutPorts(outPorts);
         return this;
     }
@@ -1670,7 +1670,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(controls);
     }
 
-    public final ExecutorJson setControls(Map<String, ControlConf> controls) {
+    public final ExecutorSpecification setControls(Map<String, ControlConf> controls) {
         this.controls = checkControls(controls);
         return this;
     }
@@ -1679,7 +1679,7 @@ public class ExecutorJson extends AbstractConvertibleToJson {
         return sourceInfo;
     }
 
-    public final ExecutorJson setSourceInfo(SourceInfo sourceInfo) {
+    public final ExecutorSpecification setSourceInfo(SourceInfo sourceInfo) {
         this.sourceInfo = sourceInfo;
         return this;
     }

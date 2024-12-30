@@ -27,13 +27,13 @@ package net.algart.executors.modules.core.logic.compiler.js;
 import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalPlatforms;
 import net.algart.executors.api.SimpleExecutorLoader;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.modules.core.logic.compiler.js.interpreters.InterpretJS;
 import net.algart.executors.modules.core.logic.compiler.js.model.JSCaller;
-import net.algart.executors.modules.core.logic.compiler.js.model.JSCallerJson;
+import net.algart.executors.modules.core.logic.compiler.js.model.JSCallerSpecification;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -107,19 +107,19 @@ public class UseJS extends FileOperation {
         usePath(jsCallerJsonPath, null, null);
     }
 
-    public void usePath(Path jsCallerJsonPath, ExtensionJson.Platform platform, StringBuilder report)
+    public void usePath(Path jsCallerJsonPath, ExtensionSpecification.Platform platform, StringBuilder report)
             throws IOException {
         Objects.requireNonNull(jsCallerJsonPath, "Null path to JS model JSON files");
-        final List<JSCallerJson> jsCallerJsons;
+        final List<JSCallerSpecification> jsCallerJsons;
         if (Files.isDirectory(jsCallerJsonPath)) {
-            jsCallerJsons = JSCallerJson.readAllIfValid(jsCallerJsonPath);
+            jsCallerJsons = JSCallerSpecification.readAllIfValid(jsCallerJsonPath);
         } else {
-            jsCallerJsons = Collections.singletonList(JSCallerJson.read(jsCallerJsonPath));
+            jsCallerJsons = Collections.singletonList(JSCallerSpecification.read(jsCallerJsonPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        ExecutorJson.checkIdDifference(jsCallerJsons);
+        ExecutorSpecification.checkIdDifference(jsCallerJsons);
         for (int i = 0, n = jsCallerJsons.size(); i < n; i++) {
-            final JSCallerJson jsCallerJson = jsCallerJsons.get(i);
+            final JSCallerSpecification jsCallerJson = jsCallerJsons.get(i);
             logDebug("Loading JS caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + jsCallerJson.getExecutorJsonFile() + "...");
             if (platform != null) {
@@ -135,7 +135,7 @@ public class UseJS extends FileOperation {
     }
 
     // Note: corrects the argument
-    public void use(JSCallerJson jsCallerJson) throws IOException {
+    public void use(JSCallerSpecification jsCallerJson) throws IOException {
         final String sessionId = getSessionId();
         final Path workingDirectory = translateWorkingDirectory();
         correctJSExecutorSpecification(jsCallerJson, workingDirectory);
@@ -147,7 +147,7 @@ public class UseJS extends FileOperation {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(workingDirectory, this);
     }
 
-    private void correctJSExecutorSpecification(JSCallerJson jsCallerJson, Path workingDirectory) {
+    private void correctJSExecutorSpecification(JSCallerSpecification jsCallerJson, Path workingDirectory) {
         Objects.requireNonNull(jsCallerJson, "Null jsCallerJson");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         jsCallerJson.setTo(new InterpretJS());
@@ -165,7 +165,7 @@ public class UseJS extends FileOperation {
     public static void useAllInstalledInSharedContext() throws IOException {
         final UseJS useJS = UseJS.getInstance();
         useJS.setSessionId(GLOBAL_SHARED_SESSION_ID);
-        for (ExtensionJson.Platform platform : GraalPlatforms.graalPlatforms().installedPlatforms()) {
+        for (ExtensionSpecification.Platform platform : GraalPlatforms.graalPlatforms().installedPlatforms()) {
             if (GraalSourceContainer.JAVASCRIPT_LANGUAGE.equals(platform.getLanguage())) {
                 if (platform.hasModels() && platform.hasModules()) {
                     final long t1 = System.nanoTime();
@@ -180,7 +180,7 @@ public class UseJS extends FileOperation {
         }
     }
 
-    private static void addSpecialOutputPorts(ExecutorJson result) {
+    private static void addSpecialOutputPorts(ExecutorSpecification result) {
         // nothing in this version
     }
 }

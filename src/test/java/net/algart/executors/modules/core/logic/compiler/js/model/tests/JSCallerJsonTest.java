@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.js.model.tests;
 
-import net.algart.executors.modules.core.logic.compiler.js.model.JSCallerJson;
+import net.algart.executors.modules.core.logic.compiler.js.model.JSCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,9 +39,9 @@ public class JSCallerJsonTest {
         }
         final Path modelFile = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
-        JSCallerJson model = JSCallerJson.read(modelFile);
-        model.write(resultFile);
+        JSCallerSpecification specification = JSCallerSpecification.read(modelFile);
+        specification.write(resultFile);
         System.out.printf("JS configuration:%n");
-        System.out.println(model.getJS());
+        System.out.println(specification.getJS());
     }
 }

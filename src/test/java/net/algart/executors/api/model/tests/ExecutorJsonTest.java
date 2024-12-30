@@ -27,7 +27,7 @@ package net.algart.executors.api.model.tests;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,14 +39,14 @@ public class ExecutorJsonTest {
         if (args.length < 4) {
             System.out.printf("Usage: %s executor_model.json " +
                             "result_1.json result_2.json result_3.json%n",
-                    ExecutorJson.class.getName());
+                    ExecutorSpecification.class.getName());
             return;
         }
         final Path modelFile = Paths.get(args[0]);
         final Path resultFile1 = Paths.get(args[1]);
         final Path resultFile2 = Paths.get(args[2]);
         final Path resultFile3 = Paths.get(args[3]);
-        ExecutorJson model = ExecutorJson.read(modelFile);
+        ExecutorSpecification model = ExecutorSpecification.read(modelFile);
 //        ExecutorJson model = ExecutorJson.valueOf(Jsons.readJson(modelFile)); // - for testing null file
         model.write(resultFile1);
         System.out.printf("Java configuration:%n");
@@ -66,7 +66,7 @@ public class ExecutorJsonTest {
                 System.out.printf("%nReloaded full model:%n");
                 System.out.println(model);
 
-                model = ExecutorJson.valueOf((Executor) executionBlock, "12345678");
+                model = ExecutorSpecification.valueOf((Executor) executionBlock, "12345678");
                 model.write(resultFile3);
                 System.out.printf("%nModel, created from executor:%n");
                 System.out.println(model);

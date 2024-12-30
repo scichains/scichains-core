@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.mappings;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.mappings.interpreters.InterpretMapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;
@@ -184,13 +184,13 @@ public class UseMapping extends FileOperation {
                 keys.comments(),
                 items == null ? null : items.lines(),
                 items == null ? null : items.comments());
-        final ExecutorJson specification = buildMappingSpecification(mapping);
+        final ExecutorSpecification specification = buildMappingSpecification(mapping);
         MAPPING_LOADER.registerWorker(sessionId, mapping.id(), mapping, specification);
     }
 
-    public ExecutorJson buildMappingSpecification(Mapping mapping) {
+    public ExecutorSpecification buildMappingSpecification(Mapping mapping) {
         Objects.requireNonNull(mapping, "Null mapping");
-        ExecutorJson result = new ExecutorJson();
+        ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMapping());
         // - adds JavaConf, (maybe) parameters and some ports
         result.setSourceInfo(mapping.mappingJsonFile(), null);
@@ -207,12 +207,12 @@ public class UseMapping extends FileOperation {
         return result;
     }
 
-    private void addInputControls(ExecutorJson result, Mapping mapping) {
+    private void addInputControls(ExecutorSpecification result, Mapping mapping) {
         final List<String> enumItems = mapping.enumItems();
         final List<String> enumItemCaptions = mapping.enumItemCaptions();
         for (int i = 0, n = mapping.numberOfKeys(); i < n; i++) {
             String key = mapping.key(i);
-            ExecutorJson.ControlConf controlConf = mapping.model().buildControlConf(
+            ExecutorSpecification.ControlConf controlConf = mapping.model().buildControlConf(
                     key, enumItems, enumItemCaptions, advancedParameters);
             controlConf.setCaption(mapping.keyCaption(i));
             controlConf.setHint("\"" + controlConf.getName() + "\" key in the result JSON");

@@ -31,8 +31,8 @@ import net.algart.executors.api.Port;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerJson;
 import net.algart.json.Jsons;
 
@@ -70,13 +70,13 @@ public final class ExecutorJsonVerifier {
             // It is not a json for execution block
             return null;
         }
-        if (!app.equals(ExecutorJson.APP_NAME)) {
+        if (!app.equals(ExecutorSpecification.APP_NAME)) {
             if (ignoreOtherApps) {
                 return null;
             }
             if (app.equals(SettingsCombinerJson.APP_NAME)
                     || app.equals(SettingsCombinerJson.APP_NAME_FOR_MAIN)
-                    || app.equals(ExtensionJson.APP_NAME)
+                    || app.equals(ExtensionSpecification.APP_NAME)
                     || ChainJson.isChainJsonContainer(json)) {
                 // - not an error, just another known model type
                 return null;
@@ -118,10 +118,10 @@ public final class ExecutorJsonVerifier {
         final String instantiationName;
         final ExecutionBlock executionBlock;
         if (checkClasses) {
-            final JsonObject javaSection = json.getJsonObject(ExecutorJson.JavaConf.JAVA_CONF_NAME);
-            final String className = javaSection.getString(ExecutorJson.JavaConf.CLASS_PROPERTY_NAME);
+            final JsonObject javaSection = json.getJsonObject(ExecutorSpecification.JavaConf.JAVA_CONF_NAME);
+            final String className = javaSection.getString(ExecutorSpecification.JavaConf.CLASS_PROPERTY_NAME);
             final String newInstanceMethodName = javaSection.getString(
-                    ExecutorJson.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
+                    ExecutorSpecification.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
             instantiationName = newInstanceMethodName != null ?
                     className + "." + newInstanceMethodName + "()" :
                     className;
@@ -246,7 +246,7 @@ public final class ExecutorJsonVerifier {
                             throw new JsonException("One of suppress_warnings is not string in " + f +
                                     " (" + value + ")");
                         }
-                        if (ExecutorJson.ControlConf.SUPPESS_WARNING_NO_SETTER.equals(jsonString.getString())) {
+                        if (ExecutorSpecification.ControlConf.SUPPESS_WARNING_NO_SETTER.equals(jsonString.getString())) {
                             suppressNoSetter = true;
                         }
                     }
@@ -310,7 +310,7 @@ public final class ExecutorJsonVerifier {
             }
         }
         try {
-            ExecutorJson.valueOf(json);
+            ExecutorSpecification.valueOf(json);
             // - check for all other problems, possible while usage in sub-chains
         } catch (Exception e) {
             throw new JsonException("Some problem detected while parsing " + f, e);

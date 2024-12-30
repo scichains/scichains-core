@@ -29,8 +29,8 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.ChainJson;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -127,7 +127,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
             this.enumItemCaptions = items.comments();
         }
 
-        public void completeControlConf(ExecutorJson.ControlConf controlConf) {
+        public void completeControlConf(ExecutorSpecification.ControlConf controlConf) {
             if (controlConf.getItems() == null && this.enumItemNames != null) {
                 controlConf.setItemsFromLists(enumItemNames, enumItemCaptions);
             }
@@ -164,7 +164,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
     private String id;
     private String splitId = null;
     private String getNamesId = null;
-    private Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
+    private Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
     private Map<String, ControlConfExtension> controlExtensions = new LinkedHashMap<>();
 
     // The following properties are not loaded from JSON-file, but are set later,
@@ -209,7 +209,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
         this.splitId = json.getString("split_id", null);
         this.getNamesId = json.getString("get_names_id", null);
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
-            final ExecutorJson.ControlConf control = new ExecutorJson.ControlConf(jsonObject, file);
+            final ExecutorSpecification.ControlConf control = new ExecutorSpecification.ControlConf(jsonObject, file);
             final String name = control.getName();
             checkParameterName(name, file);
             controls.put(name, control);
@@ -245,7 +245,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
             boolean recursive,
             boolean onlyMainCombiners)
             throws IOException {
-        return ExtensionJson.readAllIfValid(
+        return ExtensionSpecification.readAllIfValid(
                 null,
                 containingJsonPath,
                 recursive,
@@ -276,7 +276,7 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
         return jsonKey.startsWith(SUBSETTINGS_PREFIX);
     }
 
-    public static String controlJsonKey(ExecutorJson.ControlConf controlConf) {
+    public static String controlJsonKey(ExecutorSpecification.ControlConf controlConf) {
         Objects.requireNonNull(controlConf, "Null controlConf");
         final String name = controlConf.getName();
         return controlConf.getValueType() == ParameterValueType.SETTINGS ?
@@ -481,20 +481,20 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
         return this;
     }
 
-    public Map<String, ExecutorJson.ControlConf> getControls() {
+    public Map<String, ExecutorSpecification.ControlConf> getControls() {
         return Collections.unmodifiableMap(controls);
     }
 
-    public SettingsCombinerJson setControls(Map<String, ExecutorJson.ControlConf> controls) {
-        controls = ExecutorJson.checkControls(controls);
+    public SettingsCombinerJson setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
+        controls = ExecutorSpecification.checkControls(controls);
         this.controls = controls;
-        for (ExecutorJson.ControlConf controlConf : controls.values()) {
+        for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
             checkParameterName(controlConf.getName(), null);
         }
         return this;
     }
 
-    public ExecutorJson.ControlConf getControl(String name) {
+    public ExecutorSpecification.ControlConf getControl(String name) {
         return controls.get(name);
     }
 
@@ -544,16 +544,16 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
         return this;
     }
 
-    public void addControl(ExecutorJson.ControlConf control) {
+    public void addControl(ExecutorSpecification.ControlConf control) {
         Objects.requireNonNull(control, "Null control");
         control.checkCompleteness();
         controls.put(control.getName(), control);
     }
 
-    public void addFirstControl(ExecutorJson.ControlConf control) {
+    public void addFirstControl(ExecutorSpecification.ControlConf control) {
         Objects.requireNonNull(control, "Null control");
         control.checkCompleteness();
-        final Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
+        final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
         controls.put(control.getName(), control);
         controls.putAll(this.controls);
         this.controls = controls;
@@ -706,8 +706,8 @@ public final class SettingsCombinerJson extends AbstractConvertibleToJson {
             builder.add("get_names_id", getNamesId);
         }
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-        for (Map.Entry<String, ExecutorJson.ControlConf> entry : controls.entrySet()) {
-            final ExecutorJson.ControlConf control = entry.getValue();
+        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
+            final ExecutorSpecification.ControlConf control = entry.getValue();
             control.checkCompleteness();
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
             control.buildJson(controlBuilder);

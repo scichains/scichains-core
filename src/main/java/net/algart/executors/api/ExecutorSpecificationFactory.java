@@ -24,7 +24,7 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 
 @FunctionalInterface
 public interface ExecutorSpecificationFactory {
@@ -41,5 +41,5 @@ public interface ExecutorSpecificationFactory {
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.
      */
-    ExecutorJson specification(String executorId);
+    ExecutorSpecification specification(String executorId);
 }

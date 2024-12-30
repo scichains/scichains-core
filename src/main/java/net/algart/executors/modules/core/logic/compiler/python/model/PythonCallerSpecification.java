@@ -28,8 +28,8 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.jep.api.JepAPI;
-import net.algart.executors.api.model.ExecutorJson;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -39,7 +39,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
-public class PythonCallerJson extends ExecutorJson {
+public class PythonCallerSpecification extends ExecutorSpecification {
     public static final class PythonConf extends AbstractConvertibleToJson {
         public static final String DEFAULT_FUNCTION = "execute";
 
@@ -152,10 +152,10 @@ public class PythonCallerJson extends ExecutorJson {
 
     private PythonConf python = null;
 
-    public PythonCallerJson() {
+    public PythonCallerSpecification() {
     }
 
-    protected PythonCallerJson(JsonObject json, Path file) {
+    protected PythonCallerSpecification(JsonObject json, Path file) {
         super(json, file);
         final JsonObject pythonJson = json.getJsonObject("python");
         if (isPythonExecutor() && pythonJson == null) {
@@ -165,13 +165,13 @@ public class PythonCallerJson extends ExecutorJson {
         this.python = pythonJson == null ? null : new PythonConf(pythonJson, file);
     }
 
-    public static PythonCallerJson read(Path executorJsonFile) throws IOException {
+    public static PythonCallerSpecification read(Path executorJsonFile) throws IOException {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json = Jsons.readJson(executorJsonFile);
-        return new PythonCallerJson(json, executorJsonFile);
+        return new PythonCallerSpecification(json, executorJsonFile);
     }
 
-    public static PythonCallerJson readIfValid(Path executorJsonFile) {
+    public static PythonCallerSpecification readIfValid(Path executorJsonFile) {
         Objects.requireNonNull(executorJsonFile, "Null executorJsonFile");
         final JsonObject json;
         try {
@@ -183,37 +183,37 @@ public class PythonCallerJson extends ExecutorJson {
         if (!isExecutorJson(json)) {
             return null;
         }
-        return new PythonCallerJson(json, executorJsonFile);
+        return new PythonCallerSpecification(json, executorJsonFile);
     }
 
-    public static List<PythonCallerJson> readAllIfValid(Path containingJsonPath) throws IOException {
+    public static List<PythonCallerSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
         return readAllIfValid(null, containingJsonPath);
     }
 
-    public static List<PythonCallerJson> readAllIfValid(
-            List<PythonCallerJson> result,
+    public static List<PythonCallerSpecification> readAllIfValid(
+            List<PythonCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionJson.readAllJsonIfValid(result, containingJsonPath, PythonCallerJson::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 
-    public static PythonCallerJson valueOf(JsonObject executorJson) {
-        return new PythonCallerJson(executorJson, null);
+    public static PythonCallerSpecification valueOf(JsonObject executorJson) {
+        return new PythonCallerSpecification(executorJson, null);
     }
 
-    public static PythonCallerJson valueOf(String executorJsonString) {
+    public static PythonCallerSpecification valueOf(String executorJsonString) {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject executorJson = Jsons.toJson(executorJsonString);
-        return new PythonCallerJson(executorJson, null);
+        return new PythonCallerSpecification(executorJson, null);
     }
 
-    public static PythonCallerJson valueOfIfValid(String executorJsonString) {
+    public static PythonCallerSpecification valueOfIfValid(String executorJsonString) {
         Objects.requireNonNull(executorJsonString, "Null executorJsonString");
         final JsonObject json = Jsons.toJson(executorJsonString);
         if (!isExecutorJson(json)) {
             return null;
         }
-        return new PythonCallerJson(json, null);
+        return new PythonCallerSpecification(json, null);
     }
 
     public final boolean isPythonExecutor() {
@@ -224,7 +224,7 @@ public class PythonCallerJson extends ExecutorJson {
         return python;
     }
 
-    public PythonCallerJson setPython(PythonConf python) {
+    public PythonCallerSpecification setPython(PythonConf python) {
         this.python = python;
         return this;
     }

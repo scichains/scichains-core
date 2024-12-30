@@ -52,7 +52,7 @@ public final class ChainBlock {
     Chain chain;
     final String id;
     private final String executorId;
-    final ExecutorJson executorSpecification;
+    final ExecutorSpecification executorSpecification;
     // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
     // We use this information:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
@@ -232,7 +232,7 @@ public final class ChainBlock {
      *
      * @return description of the executor.
      */
-    public ExecutorJson getExecutorSpecification() {
+    public ExecutorSpecification getExecutorSpecification() {
         return executorSpecification;
     }
 
@@ -515,8 +515,8 @@ public final class ChainBlock {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                 + (this.blockConfJson == null ?
                                 "" :
-                                " (name=" + ExecutorJson.quote(blockConfJson.getExecutorName())
-                                        + ", category=" + ExecutorJson.quote(blockConfJson.getExecutorCategory())
+                                " (name=" + ExecutorSpecification.quote(blockConfJson.getExecutorName())
+                                        + ", category=" + ExecutorSpecification.quote(blockConfJson.getExecutorCategory())
                                         + ")")
                                 + (e instanceof ClassNotFoundException ?
                                 " - Java class not found: " + e.getMessage() :
@@ -993,14 +993,14 @@ public final class ChainBlock {
         this.inputPorts.clear();
         this.outputPorts.clear();
         if (this.executorSpecification != null) {
-            for (ExecutorJson.PortConf portConf : this.executorSpecification.getInPorts().values()) {
+            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getInPorts().values()) {
                 ChainInputPort inputPort = ChainInputPort.valueOf(this, portConf);
                 Objects.requireNonNull(inputPort, "Null input port");
                 if (inputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                     throw new IllegalArgumentException("Duplicate input port name: " + inputPort.key);
                 }
             }
-            for (ExecutorJson.PortConf portConf : this.executorSpecification.getOutPorts().values()) {
+            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getOutPorts().values()) {
                 ChainOutputPort outputPort = ChainOutputPort.valueOf(this, portConf);
                 Objects.requireNonNull(outputPort, "Null output port");
                 if (outputPorts.putIfAbsent(outputPort.key, outputPort) != null) {

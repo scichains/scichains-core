@@ -31,7 +31,7 @@ import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainBlock;
-import net.algart.executors.api.model.ExecutorJson;
+import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
@@ -197,16 +197,17 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
                     + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + chain);
-        final ExecutorJson settingsExecutorJson = settingsBlock.getExecutorSpecification();
-        if (settingsExecutorJson != null) {
+        final ExecutorSpecification settingsExecutorSpecification = settingsBlock.getExecutorSpecification();
+        if (settingsExecutorSpecification != null) {
             // - In current version, settingsExecutorJson will be usually null.
             // We build every ChainBlock at the stage of loading sub-chain, BEFORE executing its loading-time
             // functions; at this stage, settings combiners are not registered yet, and we have no correct JSON.
-            if (settingsExecutorJson.getOptions() == null
-                    || settingsExecutorJson.getOptions().getRole() == null
-                    || !settingsExecutorJson.getOptions().getRole().isSettings()) {
-                throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have "
-                        + "a correct role \"settings\" (its options are " + settingsExecutorJson.getOptions() + ")");
+            if (settingsExecutorSpecification.getOptions() == null
+                    || settingsExecutorSpecification.getOptions().getRole() == null
+                    || !settingsExecutorSpecification.getOptions().getRole().isSettings()) {
+                throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
+                        "a correct role \"settings\" (its options are " +
+                        settingsExecutorSpecification.getOptions() + ")");
                 // Note: this role MAY be not main, if we loaded this combiner not only with a correct
                 // function UseChainSettings, but also h simple UseSettings
             }

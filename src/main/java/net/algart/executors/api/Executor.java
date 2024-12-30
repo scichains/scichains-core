@@ -27,7 +27,7 @@ package net.algart.executors.api;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.model.ExtensionJson;
+import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.api.model.InstalledExtensions;
 import net.algart.external.UsedForExternalCommunication;
 
@@ -236,7 +236,7 @@ public abstract class Executor extends ExecutionBlock {
         return dataKind == null ? null : dataKind.data(status);
     }
 
-    public final ExtensionJson.Platform executorPlatform() {
+    public final ExtensionSpecification.Platform executorPlatform() {
         final String id = getPlatformId();
         if (id == null) {
             return null;
@@ -245,7 +245,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     public final Path executorResourceFolder() {
-        final ExtensionJson.Platform platform = executorPlatform();
+        final ExtensionSpecification.Platform platform = executorPlatform();
         if (platform == null) {
             return null;
         }
