@@ -85,9 +85,6 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                     this.data.setTo(SScalar.valueOf(executor.parameters().getString(name)));
                 }
             }
-            case OUTPUT_PORT_PARAMETER -> {
-                throw new UnsupportedOperationException("Chain do not support parameter-as-port: " + this);
-            }
             default -> {
                 throw new AssertionError("Unknown output port type: " + portType);
             }
