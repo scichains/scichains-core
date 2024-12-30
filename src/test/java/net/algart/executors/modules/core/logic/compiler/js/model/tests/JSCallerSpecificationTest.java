@@ -30,11 +30,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class JSCallerJsonTest {
+public class JSCallerSpecificationTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 2) {
             System.out.printf("Usage: %s js_executor_model.json result.json%n",
-                    JSCallerJsonTest.class.getName());
+                    JSCallerSpecificationTest.class.getName());
             return;
         }
         final Path modelFile = Paths.get(args[0]);

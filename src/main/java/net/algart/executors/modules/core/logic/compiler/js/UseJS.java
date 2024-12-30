@@ -92,10 +92,10 @@ public class UseJS extends FileOperation {
         }
     }
 
-    public void useSeveralPaths(List<Path> jsCallerJsonPaths) throws IOException {
-        Objects.requireNonNull(jsCallerJsonPaths, "Null paths to JS model JSON files");
+    public void useSeveralPaths(List<Path> jsCallerSpecificationsPaths) throws IOException {
+        Objects.requireNonNull(jsCallerSpecificationsPaths, "Null paths to JS specifications files");
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : jsCallerJsonPaths) {
+        for (Path path : jsCallerSpecificationsPaths) {
             usePath(path, null, sb);
         }
         if (sb != null) {
@@ -103,63 +103,66 @@ public class UseJS extends FileOperation {
         }
     }
 
-    public void usePath(Path jsCallerJsonPath) throws IOException {
-        usePath(jsCallerJsonPath, null, null);
+    public void usePath(Path jsCallerSpecificationsPaths) throws IOException {
+        usePath(jsCallerSpecificationsPaths, null, null);
     }
 
-    public void usePath(Path jsCallerJsonPath, ExtensionSpecification.Platform platform, StringBuilder report)
+    public void usePath(
+            Path jsCallerSpecificationsPaths,
+            ExtensionSpecification.Platform platform,
+            StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(jsCallerJsonPath, "Null path to JS model JSON files");
-        final List<JSCallerSpecification> jsCallerJsons;
-        if (Files.isDirectory(jsCallerJsonPath)) {
-            jsCallerJsons = JSCallerSpecification.readAllIfValid(jsCallerJsonPath);
+        Objects.requireNonNull(jsCallerSpecificationsPaths, "Null path to JS specification files");
+        final List<JSCallerSpecification> jsCallerSpecifications;
+        if (Files.isDirectory(jsCallerSpecificationsPaths)) {
+            jsCallerSpecifications = JSCallerSpecification.readAllIfValid(jsCallerSpecificationsPaths);
         } else {
-            jsCallerJsons = Collections.singletonList(JSCallerSpecification.read(jsCallerJsonPath));
+            jsCallerSpecifications = Collections.singletonList(JSCallerSpecification.read(jsCallerSpecificationsPaths));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        ExecutorSpecification.checkIdDifference(jsCallerJsons);
-        for (int i = 0, n = jsCallerJsons.size(); i < n; i++) {
-            final JSCallerSpecification jsCallerJson = jsCallerJsons.get(i);
+        ExecutorSpecification.checkIdDifference(jsCallerSpecifications);
+        for (int i = 0, n = jsCallerSpecifications.size(); i < n; i++) {
+            final JSCallerSpecification jsCallerSpecification = jsCallerSpecifications.get(i);
             logDebug("Loading JS caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + jsCallerJson.getExecutorJsonFile() + "...");
+                    + "from " + jsCallerSpecification.getExecutorJsonFile() + "...");
             if (platform != null) {
-                jsCallerJson.updateCategoryPrefix(platform.getCategory());
-                jsCallerJson.addTags(platform.getTags());
-                jsCallerJson.setPlatformId(platform.getId());
+                jsCallerSpecification.updateCategoryPrefix(platform.getCategory());
+                jsCallerSpecification.addTags(platform.getTags());
+                jsCallerSpecification.setPlatformId(platform.getId());
             }
-            use(jsCallerJson);
+            use(jsCallerSpecification);
             if (report != null) {
-                report.append(jsCallerJson.getExecutorJsonFile()).append("\n");
+                report.append(jsCallerSpecification.getExecutorJsonFile()).append("\n");
             }
         }
     }
 
     // Note: corrects the argument
-    public void use(JSCallerSpecification jsCallerJson) throws IOException {
+    public void use(JSCallerSpecification jsCallerSpecification) throws IOException {
         final String sessionId = getSessionId();
         final Path workingDirectory = translateWorkingDirectory();
-        correctJSExecutorSpecification(jsCallerJson, workingDirectory);
-        final JSCaller jsCaller = JSCaller.valueOf(jsCallerJson, workingDirectory);
-        JS_CALLER_LOADER.registerWorker(sessionId, jsCaller.executorId(), jsCaller, jsCallerJson);
+        correctJSExecutorSpecification(jsCallerSpecification, workingDirectory);
+        final JSCaller jsCaller = JSCaller.valueOf(jsCallerSpecification, workingDirectory);
+        JS_CALLER_LOADER.registerWorker(sessionId, jsCaller.executorId(), jsCaller, jsCallerSpecification);
     }
 
     private Path translateWorkingDirectory() {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(workingDirectory, this);
     }
 
-    private void correctJSExecutorSpecification(JSCallerSpecification jsCallerJson, Path workingDirectory) {
-        Objects.requireNonNull(jsCallerJson, "Null jsCallerJson");
+    private void correctJSExecutorSpecification(JSCallerSpecification jsCallerSpecification, Path workingDirectory) {
+        Objects.requireNonNull(jsCallerSpecification, "Null jsCallerSpecification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
-        jsCallerJson.setTo(new InterpretJS());
+        jsCallerSpecification.setTo(new InterpretJS());
         // - adds JavaConf, (maybe) parameters and some ports
-        jsCallerJson.addSystemExecutorIdPort();
-        if (jsCallerJson.hasPlatformId()) {
-            jsCallerJson.addSystemPlatformIdPort();
+        jsCallerSpecification.addSystemExecutorIdPort();
+        if (jsCallerSpecification.hasPlatformId()) {
+            jsCallerSpecification.addSystemPlatformIdPort();
         }
-        addSpecialOutputPorts(jsCallerJson);
-        jsCallerJson.setSourceInfoForModel()
+        addSpecialOutputPorts(jsCallerSpecification);
+        jsCallerSpecification.setSourceInfoForModel()
                 .setLanguageName(JS_LANGUAGE_NAME)
-                .setAbsoluteModulePath(workingDirectory.resolve(jsCallerJson.getJS().getModule()));
+                .setAbsoluteModulePath(workingDirectory.resolve(jsCallerSpecification.getJS().getModule()));
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {

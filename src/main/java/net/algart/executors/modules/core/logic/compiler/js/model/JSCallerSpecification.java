@@ -182,7 +182,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
 
     @Override
     public String toString() {
-        return "JSCallerJson{" +
+        return "JSCallerSpecification{" +
                 "js=" + js +
                 "}, extending " + super.toString();
     }

@@ -239,7 +239,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
 
     @Override
     public String toString() {
-        return "PythonCallerJson{" +
+        return "PythonCallerSpecification{" +
                 "python=" + python +
                 "}, extending " + super.toString();
     }
