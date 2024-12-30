@@ -112,7 +112,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                 parameters().getBoolean(UseSubChain.LOG_TIMING_NAME, UseSubChain.LOG_TIMING_DEFAULT)) {
             final String name = chain.name() == null ? "" : " \"" + chain.name() + "\"";
             timing.analyse();
-            final Path file = chain.chainJsonPath();
+            final Path file = chain.chainSpecificationPath();
             LOG.log(timingLogLevel, () -> String.format(Locale.US,
                     "Sub-chain%s executed%s%s in %.3f ms:%n" +
                             "  %.3f mcs getting chain, " +

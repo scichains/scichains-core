@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.logic.compiler.settings.executable;
 
 import net.algart.executors.api.model.Chain;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
@@ -45,7 +45,7 @@ public final class SubChainToSettingsCombiner {
             return;
         }
 
-        final Path chainJsonFile = Paths.get(args[0]);
+        final Path chainSpecificationFile = Paths.get(args[0]);
         final Path settingsCombinerSpecificationFile = Paths.get(args[1]);
         final String modelName = args[2];
 
@@ -53,8 +53,8 @@ public final class SubChainToSettingsCombiner {
         // - ExecutorFactory is necessary:
         // 1) to find input/output/data blocks;
         // 2) to find default values of parameters in data blocks.
-        final ChainJson chainJson = ChainJson.read(chainJsonFile);
-        final Chain chain = Chain.valueOf(null, executorFactory, chainJson);
+        final ChainSpecification chainSpecification = ChainSpecification.read(chainSpecificationFile);
+        final Chain chain = Chain.valueOf(null, executorFactory, chainSpecification);
         final ExecutorSpecification executorSpecification = new ExecutorSpecification();
         executorSpecification.setTo(chain);
         final SettingsCombinerSpecification settingsCombinerSpecification = new SettingsCombinerSpecification();

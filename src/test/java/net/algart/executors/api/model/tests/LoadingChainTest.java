@@ -43,18 +43,18 @@ public class LoadingChainTest {
     private void processChain(final Path chainFile, ExecutorFactory executorFactory) throws IOException {
         try {
             System.out.printf("Reading %s... ", chainFile);
-            ChainJson chainJson = ChainJson.readIfValid(chainFile);
-            if (chainJson == null) {
+            ChainSpecification chainSpecification = ChainSpecification.readIfValid(chainFile);
+            if (chainSpecification == null) {
                 System.out.printf("%n%s is not a chain%n", chainFile);
                 return;
             }
 
             if (detailed) {
                 System.out.printf("%nFull chain json:%n");
-                System.out.println(chainJson);
+                System.out.println(chainSpecification);
             }
 
-            try (Chain chain = Chain.valueOf(null, executorFactory, chainJson)) {
+            try (Chain chain = Chain.valueOf(null, executorFactory, chainSpecification)) {
                 if (detailed) {
                     System.out.printf("%nFull chain:%n");
                     System.out.println(chain.toString(true));
@@ -79,7 +79,7 @@ public class LoadingChainTest {
             for (Path file : files) {
                 if (Files.isDirectory(file)) {
                     processChainsFolder(file, executorFactory);
-                } else if (ChainJson.isChainJsonFile(file)) {
+                } else if (ChainSpecification.isChainSpecificationFile(file)) {
                     processChain(file, executorFactory);
                 }
             }
@@ -87,7 +87,7 @@ public class LoadingChainTest {
     }
 
     public static void main(String[] args) throws IOException {
-//        System.out.println(ChainJson.isChainJsonFile(Paths.get("a/compile.chain")));
+//        System.out.println(ChainSpecification.isChainSpecificationFile(Paths.get("a/compile.chain")));
         final LoadingChainTest test = new LoadingChainTest();
         int startArgIndex = 0;
         if (args.length > startArgIndex && args[startArgIndex].equals("-detailed")) {

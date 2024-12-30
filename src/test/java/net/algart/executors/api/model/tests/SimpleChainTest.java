@@ -25,7 +25,7 @@
 package net.algart.executors.api.model.tests;
 
 import net.algart.executors.api.model.Chain;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -35,26 +35,26 @@ public class SimpleChainTest {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
             System.out.printf("Usage: %s chain.chain result_1.chain [result_2.chain]%n",
-                    ChainJson.class.getName());
+                    ChainSpecification.class.getName());
             return;
         }
         final Path chainFile = Paths.get(args[0]);
         final Path resultFile1 = Paths.get(args[1]);
         final Path resultFile2 = args.length >= 3 ? Paths.get(args[2]) : null;
         System.out.printf("Reading %s...%n", chainFile);
-        ChainJson chainJson = ChainJson.read(chainFile);
+        ChainSpecification chainSpecification = ChainSpecification.read(chainFile);
         System.out.printf("Writing %s...%n", resultFile1);
-        chainJson.rewriteChainSection(resultFile1);
+        chainSpecification.rewriteChainSection(resultFile1);
         System.out.printf("Full chain JSON:%n");
-        System.out.println(chainJson);
+        System.out.println(chainSpecification);
         if (resultFile2 != null) {
-            chainJson = ChainJson.read(resultFile1);
-            chainJson.rewriteChainSection(resultFile2);
+            chainSpecification = ChainSpecification.read(resultFile1);
+            chainSpecification.rewriteChainSection(resultFile2);
         }
 
         long t1 = System.nanoTime();
         //noinspection resource
-        Chain chain = Chain.valueOf(null, null, chainJson);
+        Chain chain = Chain.valueOf(null, null, chainSpecification);
         long t2 = System.nanoTime();
         System.out.printf("%nFull chain created in %.3f ms:%n", (t2 - t1) * 1e-6);
         System.out.println(chain.toString(true));

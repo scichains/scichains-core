@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.mappings.model;
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.api.model.ControlEditionType;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.ExtensionSpecification;
@@ -50,7 +50,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     public static final String MAPPING = "mapping";
     public static final String DEFAULT_MAPPING_CATEGORY = "mappings";
     public static final String DEFAULT_MAPPING_CATEGORY_PREFIX =
-            DEFAULT_MAPPING_CATEGORY + ChainJson.CATEGORY_SEPARATOR;
+            DEFAULT_MAPPING_CATEGORY + ChainSpecification.CATEGORY_SEPARATOR;
 
     public static final class ControlConfTemplate extends AbstractConvertibleToJson {
         private ParameterValueType valueType = ParameterValueType.STRING;

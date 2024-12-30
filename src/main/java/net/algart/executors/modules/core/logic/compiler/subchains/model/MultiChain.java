@@ -56,10 +56,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private volatile long contextId;
     // - Unique ID for every multichain. Unlike sub-chains, it is almost not used: multichain is not an environment
     // for executing anything; but it is used as a context ID for multichain settings combiner.
-    private final MultiChainJson model;
-    private final List<ChainJson> chainModels;
-    private final List<ChainJson> blockedChainModels;
-    private final Set<String> blockedChainModelNames;
+    private final MultiChainJson specification;
+    private final List<ChainSpecification> chainSpecifications;
+    private final List<ChainSpecification> blockedChainSpecifications;
+    private final Set<String> blockedChainSpecificationNames;
     private final List<ExecutorSpecification> loadedChainExecutorSpecifications;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
@@ -71,21 +71,21 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private boolean extractSubSettings = false;
 
-    private MultiChain(MultiChainJson model, UseSubChain chainFactory, UseMultiChainSettings settingsFactory)
+    private MultiChain(MultiChainJson specification, UseSubChain chainFactory, UseMultiChainSettings settingsFactory)
             throws IOException {
         renewContextId();
-        this.model = Objects.requireNonNull(model, "Null json model");
+        this.specification = Objects.requireNonNull(specification, "Null json model");
         Objects.requireNonNull(chainFactory, "Null chainFactory");
         Objects.requireNonNull(settingsFactory, "Null settingsFactory");
-        this.model.checkCompleteness();
-        this.chainModels = model.readChainVariants();
-        this.blockedChainModels = new ArrayList<>();
-        this.blockedChainModelNames = new LinkedHashSet<>();
+        this.specification.checkCompleteness();
+        this.chainSpecifications = specification.readChainVariants();
+        this.blockedChainSpecifications = new ArrayList<>();
+        this.blockedChainSpecificationNames = new LinkedHashSet<>();
         this.loadedChainExecutorSpecifications = new ArrayList<>();
-        assert !this.chainModels.isEmpty();
+        assert !this.chainSpecifications.isEmpty();
         final Map<String, Chain> partialChainMap = new HashMap<>();
         String firstChainId = null;
-        for (ChainJson chainModel : this.chainModels) {
+        for (ChainSpecification chainModel : this.chainSpecifications) {
             if (firstChainId == null) {
                 firstChainId = chainModel.chainId();
             }
@@ -96,8 +96,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 throw e;
             } catch (RuntimeException e) {
                 throw new ChainRunningException("Cannot initialize sub-chain "
-                        + chainModel.getChainJsonFile() + ", variant of multichain "
-                        + model.getMultiChainJsonFile(), e);
+                        + chainModel.getChainSpecificationFile() + ", variant of multichain "
+                        + specification.getMultiChainJsonFile(), e);
             }
             if (optionalChain.isPresent()) {
                 final ExecutorSpecification implementationSpecification = chainFactory.chainExecutorSpecification();
@@ -106,8 +106,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 this.loadedChainExecutorSpecifications.add(implementationSpecification);
                 partialChainMap.put(optionalChain.get().id(), optionalChain.get());
             } else {
-                blockedChainModels.add(chainModel);
-                blockedChainModelNames.add(chainModel.chainName());
+                blockedChainSpecifications.add(chainModel);
+                blockedChainSpecificationNames.add(chainModel.chainName());
             }
             // - Note: if the process of loading chain was blocked due to recursion, it means that it is in
             // the process of registering and not available yet even via ExecutionBlock.getExecutorSpecification.
@@ -115,11 +115,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             // and will not be able to use help from partialChainMap,
             // but it is not-too-serious problem: such a recursion is a very rare case.
         }
-        final String defaultChainVariantId = model.getDefaultChainVariantId();
+        final String defaultChainVariantId = specification.getDefaultChainVariantId();
         this.defaultChainVariantId = defaultChainVariantId != null ? defaultChainVariantId : firstChainId;
-        settingsFactory.setOwnerId(model.getId());
+        settingsFactory.setOwnerId(specification.getId());
         settingsFactory.setContextId(contextId);
-        settingsFactory.setContextName(model.getName());
+        settingsFactory.setContextName(specification.getName());
         // - this information, set by previous operators, will be used only in the following operators,
         // to make a reference to this MultiChain and to set the correct owner information
         // inside newly created settings combiner
@@ -151,19 +151,19 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public MultiChainJson model() {
-        return model;
+        return specification;
     }
 
-    public List<ChainJson> chainModels() {
-        return Collections.unmodifiableList(chainModels);
+    public List<ChainSpecification> chainModels() {
+        return Collections.unmodifiableList(chainSpecifications);
     }
 
-    public List<ChainJson> blockedChainModels() {
-        return Collections.unmodifiableList(blockedChainModels);
+    public List<ChainSpecification> blockedChainModels() {
+        return Collections.unmodifiableList(blockedChainSpecifications);
     }
 
     public Set<String> blockedChainModelNames() {
-        return Collections.unmodifiableSet(blockedChainModelNames);
+        return Collections.unmodifiableSet(blockedChainSpecificationNames);
     }
 
     public String defaultChainVariantId() {
@@ -184,28 +184,28 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public Path multiChainJsonFile() {
-        return model.getMultiChainJsonFile();
+        return specification.getMultiChainJsonFile();
     }
 
     public String id() {
-        return model.getId();
+        return specification.getId();
     }
 
     public String category() {
-        return model.getCategory();
+        return specification.getCategory();
     }
 
     public String name() {
-        return model.getName();
+        return specification.getName();
     }
 
     public String description() {
-        return model.getDescription();
+        return specification.getDescription();
     }
 
     public void checkImplementationCompatibility() {
         for (ExecutorSpecification implementationModel : loadedChainExecutorSpecifications) {
-            model.checkImplementationCompatibility(implementationModel);
+            specification.checkImplementationCompatibility(implementationModel);
         }
     }
 
@@ -335,10 +335,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("multichain \"" + category()
-                + ChainJson.CATEGORY_SEPARATOR + name()
-                + "\", containing " + chainModels.size() + " chains:\n");
-        for (int i = 0, n = chainModels.size(); i < n; i++) {
-            ChainJson chainModel = chainModels.get(i);
+                + ChainSpecification.CATEGORY_SEPARATOR + name()
+                + "\", containing " + chainSpecifications.size() + " chains:\n");
+        for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
+            ChainSpecification chainModel = chainSpecifications.get(i);
             if (i > 0) {
                 sb.append("\n");
             }
@@ -371,19 +371,19 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             boolean addSubSettingsForVariants,
             Map<String, Chain> helpingChainMap) {
         final SettingsCombinerSpecification result = new SettingsCombinerSpecification();
-        result.setId(model.getSettingsId());
-        result.setName(model.getName());
-        result.setCombineName(model.getSettingsName());
-        result.setCategory(model.getSettingsCategory());
+        result.setId(specification.getSettingsId());
+        result.setName(specification.getName());
+        result.setCombineName(specification.getSettingsName());
+        result.setCategory(specification.getSettingsCategory());
         final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
         final ExecutorSpecification.ControlConf currentChainIdControl = createCurrentChainIdControl();
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
-        controls.putAll(model.getControls());
+        controls.putAll(specification.getControls());
         if (addSubSettingsForVariants) {
-            final String multiChainJsonFileMessage = model.getMultiChainJsonFile() == null ? "" :
-                    " (problem occurred in multichain, loaded from the file " + model.getMultiChainJsonFile() + ")";
-            for (ChainJson chainModel : chainModels) {
-                final ChainJson.Executor executor = chainModel.getExecutor();
+            final String multiChainJsonFileMessage = specification.getMultiChainJsonFile() == null ? "" :
+                    " (problem occurred in multichain, loaded from the file " + specification.getMultiChainJsonFile() + ")";
+            for (ChainSpecification chainModel : chainSpecifications) {
+                final ChainSpecification.Executor executor = chainModel.getExecutor();
                 final String name = executor.getName();
                 try {
                     SettingsCombinerSpecification.checkParameterName(name, null);
@@ -421,7 +421,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private ExecutorSpecification.ControlConf createCurrentChainIdControl() {
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ChainJson chainModel : chainModels) {
+        for (ChainSpecification chainModel : chainSpecifications) {
             final String chainId = chainModel.chainId();
             items.add(new ExecutorSpecification.ControlConf.EnumItem(chainId).setCaption(chainModel.chainName()));
         }
@@ -437,7 +437,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private Map<String, Chain> createChainMap() {
         Map<String, Chain> result = new LinkedHashMap<>();
-        for (ChainJson chainModel : this.chainModels) {
+        for (ChainSpecification chainModel : this.chainSpecifications) {
             final String executorId = chainModel.chainId();
             final Chain chain = registeredChain(executorId);
             result.put(executorId, chain);

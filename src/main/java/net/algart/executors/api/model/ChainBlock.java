@@ -65,7 +65,7 @@ public final class ChainBlock {
     // (but if there is no executorSpecification, they are still loaded as strings);
     // 4) for diagnostic messages.
 
-    ChainJson.ChainBlockConf blockConfJson = null;
+    ChainSpecification.ChainBlockConf blockConfJson = null;
     // - Correctly filled while typical usage, but not necessary for this technology.
     // It is used mostly for diagnostic messages and can be useful for external clients,
     // and also for making more user-friendly executor JSON in ExecutorSpecification.setTo(Chain) method
@@ -86,7 +86,7 @@ public final class ChainBlock {
     final Map<String, ChainParameter> parameters = new LinkedHashMap<>();
     final Map<ChainPortKey, ChainInputPort> inputPorts = new LinkedHashMap<>();
     final Map<ChainPortKey, ChainOutputPort> outputPorts = new LinkedHashMap<>();
-    // - Unlike ChainJson, the keys in inputPorts and outputPorts are name + port type pairs (not UUID).
+    // - Unlike ChainSpecification, the keys in inputPorts and outputPorts are name + port type pairs (not UUID).
     // Note: we must use such a pair, not a single name: it is a correct situation when a virtual port
     // has the same name as an actual port.
 
@@ -181,7 +181,7 @@ public final class ChainBlock {
         return systemName == null ? null : DEFAULT_CHAIN_PORT_CAPTION_PATTERN.replace("$$$", systemName);
     }
 
-    public static ChainBlock valueOf(Chain chain, ChainJson.ChainBlockConf blockConf) {
+    public static ChainBlock valueOf(Chain chain, ChainSpecification.ChainBlockConf blockConf) {
         Objects.requireNonNull(blockConf, "Null blockConf");
         final String executorId = blockConf.getExecutorId();
         final ChainBlock result = newInstance(chain, blockConf.getUuid(), executorId);
@@ -236,7 +236,7 @@ public final class ChainBlock {
         return executorSpecification;
     }
 
-    public ChainJson.ChainBlockConf getBlockConfJson() {
+    public ChainSpecification.ChainBlockConf getBlockConfJson() {
         return blockConfJson;
     }
 
@@ -536,7 +536,7 @@ public final class ChainBlock {
                     executor.setOwnerId(chain.id());
                     executor.setContextId(chain.contextId());
                     executor.setContextName(chain.name());
-                    final Path path = chain.chainJsonPath();
+                    final Path path = chain.chainSpecificationPath();
                     if (path != null) {
                         executor.setContextPath(path.toAbsolutePath().toString());
                     }
@@ -962,9 +962,9 @@ public final class ChainBlock {
         return chain.isMultithreading() ? inputs.parallelStream() : inputs.stream();
     }
 
-    private void loadParameters(ChainJson.ChainBlockConf blockConf) {
+    private void loadParameters(ChainSpecification.ChainBlockConf blockConf) {
         this.parameters.clear();
-        for (ChainJson.ChainBlockConf.ParameterConf parameterConf : blockConf.getNameToParameterMap().values()) {
+        for (ChainSpecification.ChainBlockConf.ParameterConf parameterConf : blockConf.getNameToParameterMap().values()) {
             addParameter(ChainParameter.valueOf(this, parameterConf));
         }
     }
@@ -989,7 +989,7 @@ public final class ChainBlock {
         }
     }
 
-    private void loadPorts(ChainJson.ChainBlockConf blockConf) {
+    private void loadPorts(ChainSpecification.ChainBlockConf blockConf) {
         this.inputPorts.clear();
         this.outputPorts.clear();
         if (this.executorSpecification != null) {
@@ -1012,7 +1012,7 @@ public final class ChainBlock {
         // It can be important to provide a correct set of ports (even if chain's JSON doesn't specify all ports).
         final Map<ChainPortKey, ChainInputPort> chainInputPorts = new LinkedHashMap<>();
         final Map<ChainPortKey, ChainOutputPort> chainOutputPorts = new LinkedHashMap<>();
-        for (ChainJson.ChainBlockConf.PortConf portConf : blockConf.getUuidToPortMap().values()) {
+        for (ChainSpecification.ChainBlockConf.PortConf portConf : blockConf.getUuidToPortMap().values()) {
             switch (portConf.getPortType().actualPortType()) {
                 // We must add here both actual and virtual ports;
                 // we distinguish them by ChainPort.key (i.e., by name + type)

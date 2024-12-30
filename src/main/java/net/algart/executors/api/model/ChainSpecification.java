@@ -44,7 +44,7 @@ import static net.algart.executors.api.model.ExecutorSpecification.quote;
 // Note: this class is not absolutely safe in relation of copying mutable data into and from this object.
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
 // in several ports.
-public final class ChainJson extends AbstractConvertibleToJson {
+public final class ChainSpecification extends AbstractConvertibleToJson {
     private static final boolean USE_PARAMETERS_SECTION = false;
     // - should be true since 4.4.11
 
@@ -806,7 +806,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    private Path chainJsonFile = null;
+    private Path chainSpecificationFile = null;
     private String version = CHAIN_CURRENT_VERSION;
     private Executor executor;
     private List<ChainBlockConf> blocks = new ArrayList<>();
@@ -818,17 +818,17 @@ public final class ChainJson extends AbstractConvertibleToJson {
     private String platformId = null;
     private String platformCategory = null;
 
-    public ChainJson() {
+    public ChainSpecification() {
     }
 
-    private ChainJson(JsonObject json, Path file) {
-        if (!isChainJson(json)) {
+    private ChainSpecification(JsonObject json, Path file) {
+        if (!isChainSpecification(json)) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + (json == null ? " does not contain \"" : " contains illegal \"")
                     + CHAIN_SECTION + "\" section with chain configuration"
                     + (json == null ? "" : ": it does not contain \"app\":\"" + CHAIN_APP_NAME + "\" element"));
         }
-        this.chainJsonFile = file;
+        this.chainSpecificationFile = file;
         this.version = json.getString("version", CHAIN_CURRENT_VERSION);
         this.executor = new Executor(Jsons.reqJsonObject(json, "executor", file), file);
         for (JsonObject jsonObject : reqJsonObjectsWithAlias(
@@ -843,23 +843,23 @@ public final class ChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static ChainJson valueOf(JsonObject chainJson) {
-        return new ChainJson(chainJson, null);
+    public static ChainSpecification valueOf(JsonObject chainSpecification) {
+        return new ChainSpecification(chainSpecification, null);
     }
 
-    public static ChainJson valueOf(String chainJsonString) {
-        return valueOf(chainJsonString, true);
+    public static ChainSpecification valueOf(String chainSpecificationString) {
+        return valueOf(chainSpecificationString, true);
     }
 
-    public static ChainJson valueOfIfValid(String chainJsonString) {
-        return valueOf(chainJsonString, false);
+    public static ChainSpecification valueOfIfValid(String chainSpecificationString) {
+        return valueOf(chainSpecificationString, false);
     }
 
-    public static ChainJson read(Path containingJsonFile) throws IOException {
+    public static ChainSpecification read(Path containingJsonFile) throws IOException {
         return read(containingJsonFile, true);
     }
 
-    public static ChainJson readIfValid(Path containingJsonFile) {
+    public static ChainSpecification readIfValid(Path containingJsonFile) {
         try {
             return read(containingJsonFile, false);
         } catch (IOException e) {
@@ -868,17 +868,21 @@ public final class ChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static List<ChainJson> readAllIfValid(Path containingJsonPath, boolean recursive) throws IOException {
+    public static List<ChainSpecification> readAllIfValid(Path containingJsonPath, boolean recursive) throws IOException {
         return readAllIfValid(null, containingJsonPath, recursive);
     }
 
-    public static List<ChainJson> readAllIfValid(
-            List<ChainJson> result,
+    public static List<ChainSpecification> readAllIfValid(
+            List<ChainSpecification> result,
             Path containingJsonPath,
             boolean recursive)
             throws IOException {
         return ExtensionSpecification.readAllIfValid(
-                result, containingJsonPath, recursive, ChainJson::readIfValid, ChainJson::isChainJsonFile);
+                result,
+                containingJsonPath,
+                recursive,
+                ChainSpecification::readIfValid,
+                ChainSpecification::isChainSpecificationFile);
     }
 
     public void rewriteChainSection(Path containingJsonFile, OpenOption... options) throws IOException {
@@ -900,20 +904,20 @@ public final class ChainJson extends AbstractConvertibleToJson {
         Files.writeString(containingJsonFile, Jsons.toPrettyString(json), options);
     }
 
-    public static boolean isChainJsonFile(Path file) {
+    public static boolean isChainSpecificationFile(Path file) {
         Objects.requireNonNull(file, "Null file");
         return COMPILED_CHAIN_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
     }
 
-    public static boolean isChainJson(JsonObject chainJson) {
-        if (chainJson == null) {
+    public static boolean isChainSpecification(JsonObject chainSpecification) {
+        if (chainSpecification == null) {
             return false;
         }
-        final String appName = chainJson.getString("app", null);
+        final String appName = chainSpecification.getString("app", null);
         return CHAIN_APP_NAME.equals(appName) || CHAIN_APP_NAME_ALIAS.equals(appName);
     }
 
-    public static JsonObject getChainJson(JsonObject json) {
+    public static JsonObject getChainSpecification(JsonObject json) {
         Objects.requireNonNull(json, "Null json");
         if (json.containsKey(CHAIN_SECTION)) {
             return Jsons.getJsonObject(json, CHAIN_SECTION, null);
@@ -923,39 +927,39 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return null;
     }
 
-    public static JsonObject getChainJson(JsonObject json, JsonObject defaultValue) {
-        final JsonObject chainJson = getChainJson(json);
-        return chainJson != null ? chainJson : defaultValue;
+    public static JsonObject getChainSpecification(JsonObject json, JsonObject defaultValue) {
+        final JsonObject chainSpecification = getChainSpecification(json);
+        return chainSpecification != null ? chainSpecification : defaultValue;
     }
 
-    public static boolean isChainJsonContainer(JsonObject json) {
-        return isChainJson(getChainJson(json, json));
+    public static boolean isChainSpecificationContainer(JsonObject json) {
+        return isChainSpecification(getChainSpecification(json, json));
     }
 
-    public static void checkIdDifference(Collection<ChainJson> chains) {
+    public static void checkIdDifference(Collection<ChainSpecification> chains) {
         Objects.requireNonNull(chains, "Null chain JSONs collection");
         final Map<String, String> ids = new HashMap<>();
-        for (ChainJson chain : chains) {
+        for (ChainSpecification chain : chains) {
             final String name = ids.put(chain.chainId(), chain.executor.getName());
             if (name != null) {
                 throw new IllegalArgumentException("Two chains with names \"" + name + "\" and \""
                         + chain.executor.getName() + "\" have identical ID " + chain.chainId()
-                        + (chain.chainJsonFile == null ? "" :
-                        ", the 2nd chain is loaded from the file " + chain.chainJsonFile));
+                        + (chain.chainSpecificationFile == null ? "" :
+                        ", the 2nd chain is loaded from the file " + chain.chainSpecificationFile));
             }
         }
     }
 
-    public boolean hasChainJsonFile() {
-        return chainJsonFile != null;
+    public boolean hasChainSpecificationFile() {
+        return chainSpecificationFile != null;
     }
 
-    public Path getChainJsonFile() {
-        return chainJsonFile;
+    public Path getChainSpecificationFile() {
+        return chainSpecificationFile;
     }
 
-    public ChainJson setChainJsonFile(Path chainJsonFile) {
-        this.chainJsonFile = chainJsonFile;
+    public ChainSpecification setChainSpecificationFile(Path chainSpecificationFile) {
+        this.chainSpecificationFile = chainSpecificationFile;
         return this;
     }
 
@@ -963,7 +967,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return version;
     }
 
-    public ChainJson setVersion(String version) {
+    public ChainSpecification setVersion(String version) {
         this.version = Objects.requireNonNull(version, "Null version");
         return this;
     }
@@ -972,7 +976,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return executor;
     }
 
-    public ChainJson setExecutor(Executor executor) {
+    public ChainSpecification setExecutor(Executor executor) {
         this.executor = Objects.requireNonNull(executor, "Null executor");
         return this;
     }
@@ -981,7 +985,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableList(blocks);
     }
 
-    public ChainJson setBlocks(List<ChainBlockConf> blocks) {
+    public ChainSpecification setBlocks(List<ChainBlockConf> blocks) {
         this.blocks = ExecutorSpecification.checkNonNullObjects(blocks);
         return this;
     }
@@ -990,7 +994,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return links;
     }
 
-    public ChainJson setLinks(List<ChainLinkConf> links) {
+    public ChainSpecification setLinks(List<ChainLinkConf> links) {
         this.links = links;
         return this;
     }
@@ -999,7 +1003,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableSet(tags);
     }
 
-    public ChainJson setTags(Set<String> tags) {
+    public ChainSpecification setTags(Set<String> tags) {
         Objects.requireNonNull(tags, "Null tags");
         this.tags = new LinkedHashSet<>(tags);
         return this;
@@ -1014,7 +1018,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return platformId;
     }
 
-    public ChainJson setPlatformId(String platformId) {
+    public ChainSpecification setPlatformId(String platformId) {
         this.platformId = platformId;
         return this;
     }
@@ -1023,7 +1027,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
         return platformCategory;
     }
 
-    public ChainJson setPlatformCategory(String platformCategory) {
+    public ChainSpecification setPlatformCategory(String platformCategory) {
         this.platformCategory = platformCategory;
         return this;
     }
@@ -1050,7 +1054,7 @@ public final class ChainJson extends AbstractConvertibleToJson {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ChainJson{\n  version=" + version +
+        final StringBuilder sb = new StringBuilder("ChainSpecification{\n  version=" + version +
                 ",\n  executor=" + executor +
                 ",\n  blocks=[\n");
         for (ChainBlockConf block : blocks) {
@@ -1081,27 +1085,27 @@ public final class ChainJson extends AbstractConvertibleToJson {
         builder.add("links", linksBuilder.build());
     }
 
-    private static ChainJson valueOf(String chainJsonString, boolean requireValid) {
-        Objects.requireNonNull(chainJsonString, "Null chainJsonString");
-        JsonObject json = Jsons.toJson(chainJsonString);
-        json = getChainJson(json, json);
-        if (!ChainJson.isChainJson(json) && !requireValid) {
+    private static ChainSpecification valueOf(String chainSpecificationString, boolean requireValid) {
+        Objects.requireNonNull(chainSpecificationString, "Null chainSpecificationString");
+        JsonObject json = Jsons.toJson(chainSpecificationString);
+        json = getChainSpecification(json, json);
+        if (!ChainSpecification.isChainSpecification(json) && !requireValid) {
             return null;
         }
-        return new ChainJson(json, null);
+        return new ChainSpecification(json, null);
     }
 
-    private static ChainJson read(Path containingJsonFile, boolean requireValid) throws IOException {
+    private static ChainSpecification read(Path containingJsonFile, boolean requireValid) throws IOException {
         Objects.requireNonNull(containingJsonFile, "Null containingJsonFile");
         final JsonObject json = Jsons.readJson(containingJsonFile);
-        JsonObject chainJson = Jsons.getJsonObject(json, CHAIN_SECTION, containingJsonFile);
-        if (chainJson == null) {
-            chainJson = Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, containingJsonFile);
+        JsonObject chainSpecification = Jsons.getJsonObject(json, CHAIN_SECTION, containingJsonFile);
+        if (chainSpecification == null) {
+            chainSpecification = Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, containingJsonFile);
         }
-        if (!ChainJson.isChainJson(chainJson) && !requireValid) {
+        if (!ChainSpecification.isChainSpecification(chainSpecification) && !requireValid) {
             return null;
         }
-        return new ChainJson(chainJson, containingJsonFile);
+        return new ChainSpecification(chainSpecification, containingJsonFile);
     }
 
     private static String removeExtension(String fileName) {

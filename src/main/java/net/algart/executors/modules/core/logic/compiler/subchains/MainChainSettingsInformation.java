@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import net.algart.executors.api.model.Chain;
 import net.algart.executors.api.model.ChainBlock;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 
 import java.util.Objects;
@@ -55,7 +55,7 @@ public final class MainChainSettingsInformation {
         final String id = combiner.id();
         assert id != null;
         for (ChainBlock block : chain.getAllBlocks().values()) {
-            final ChainJson.ChainBlockConf blockConfJson = block.getBlockConfJson();
+            final ChainSpecification.ChainBlockConf blockConfJson = block.getBlockConfJson();
             assert blockConfJson != null;
             final String blockExecutorId = blockConfJson.getExecutorId();
             assert blockExecutorId != null;

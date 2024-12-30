@@ -131,8 +131,8 @@ public class ExecutingChain {
 
         System.out.printf("Reading %s...", chainFile);
         t1 = System.nanoTime();
-        ChainJson chainJson = ChainJson.read(chainFile);
-        Chain originalChain = Chain.valueOf(null, executorFactory, chainJson);
+        ChainSpecification chainSpecification = ChainSpecification.read(chainFile);
+        Chain originalChain = Chain.valueOf(null, executorFactory, chainSpecification);
         originalChain.setMultithreading(multithreading);
         originalChain.setExecuteAll(executeAll);
         originalChain.setIgnoreExceptions(ignoreExceptions);

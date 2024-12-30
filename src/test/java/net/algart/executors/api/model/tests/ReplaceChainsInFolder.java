@@ -25,7 +25,7 @@
 package net.algart.executors.api.model.tests;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -39,9 +39,9 @@ public class ReplaceChainsInFolder {
     int count = 0;
 
     private void replace(Path f) throws IOException {
-        ChainJson model = null;
+        ChainSpecification model = null;
         try {
-            model = ChainJson.readIfValid(f);
+            model = ChainSpecification.readIfValid(f);
         } catch (JsonException e) {
             System.err.println(e.getMessage());
             return;
@@ -52,7 +52,7 @@ public class ReplaceChainsInFolder {
         }
         // Debugging:
         final String jsonString = model.jsonString();
-        final ChainJson reverse = ChainJson.valueOf(Jsons.toJson(jsonString));
+        final ChainSpecification reverse = ChainSpecification.valueOf(Jsons.toJson(jsonString));
         if (!reverse.jsonString().equals(jsonString)) {
             throw new AssertionError("Cannot reproduce JSON structre for " + f);
         }
@@ -68,7 +68,7 @@ public class ReplaceChainsInFolder {
             for (Path file : files) {
                 if (Files.isDirectory(file)) {
                     replaceAll(file);
-                } else if (ChainJson.isChainJsonFile(file)) {
+                } else if (ChainSpecification.isChainSpecificationFile(file)) {
                     replace(file);
                 }
             }

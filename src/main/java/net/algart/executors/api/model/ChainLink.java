@@ -41,7 +41,7 @@ public final class ChainLink {
         return new ChainLink(srcPortId, destPortId);
     }
 
-    public static ChainLink valueOf(ChainJson.ChainLinkConf linkConf) {
+    public static ChainLink valueOf(ChainSpecification.ChainLinkConf linkConf) {
         return newInstance(linkConf.getSrcPortUuid(), linkConf.getDestPortUuid());
     }
 

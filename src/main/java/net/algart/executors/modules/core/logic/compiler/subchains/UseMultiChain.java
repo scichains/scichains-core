@@ -29,7 +29,7 @@ import jakarta.json.JsonValue;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.api.model.ChainLoadingException;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.InstalledPlatformsForTechnology;
@@ -176,7 +176,7 @@ public final class UseMultiChain extends FileOperation {
     public void usePath(Path multiChainJsonPath, StringBuilder report) throws IOException {
         Objects.requireNonNull(multiChainJsonPath, "Null multichain path");
         final List<MultiChainJson> multiChainJsons;
-        final List<ChainJson> chainJsons;
+        final List<ChainSpecification> chainSpecifications;
         if (!Files.exists(multiChainJsonPath)) {
             if (fileExistenceRequired) {
                 throw new FileNotFoundException("Multichain file or multi-chains folder " + multiChainJsonPath
@@ -188,20 +188,20 @@ public final class UseMultiChain extends FileOperation {
         if (Files.isDirectory(multiChainJsonPath)) {
             multiChainJsons = MultiChainJson.readAllIfValid(multiChainJsonPath);
             // - always recursive
-            chainJsons = alsoSubChains ?
-                    ChainJson.readAllIfValid(multiChainJsonPath, true) :
+            chainSpecifications = alsoSubChains ?
+                    ChainSpecification.readAllIfValid(multiChainJsonPath, true) :
                     Collections.emptyList();
         } else if (!alsoSubChains) {
             multiChainJsons = Collections.singletonList(MultiChainJson.read(multiChainJsonPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
-            chainJsons = Collections.emptyList();
+            chainSpecifications = Collections.emptyList();
         } else {
             final MultiChainJson multiChainJson = MultiChainJson.readIfValid(multiChainJsonPath);
             multiChainJsons = multiChainJson == null ?
                     Collections.emptyList() : Collections.singletonList(multiChainJson);
-            final ChainJson chainJson = ChainJson.readIfValid(multiChainJsonPath);
-            chainJsons = chainJson == null ? Collections.emptyList() : Collections.singletonList(chainJson);
-            if (multiChainJson == null && chainJson == null) {
+            final ChainSpecification chainSpecification = ChainSpecification.readIfValid(multiChainJsonPath);
+            chainSpecifications = chainSpecification == null ? Collections.emptyList() : Collections.singletonList(chainSpecification);
+            if (multiChainJson == null && chainSpecification == null) {
                 throw new JsonException("JSON " + multiChainJsonPath
                         + " is not a valid multichain or sub-chain configuration");
 
@@ -209,7 +209,7 @@ public final class UseMultiChain extends FileOperation {
         }
         use(multiChainJsons, report);
         try (UseSubChain chainFactory = createChainFactory()) {
-            chainFactory.use(chainJsons, report);
+            chainFactory.use(chainSpecifications, report);
         }
     }
 
@@ -232,7 +232,7 @@ public final class UseMultiChain extends FileOperation {
                         + multiChainJson.getMultiChainJsonFile(), e);
             }
             long t2 = infoTime();
-            final List<ChainJson> chainModels = multiChain.chainModels();
+            final List<ChainSpecification> chainModels = multiChain.chainModels();
             final Set<String> blockedChainModelNames = multiChain.blockedChainModelNames();
             // - Note: in a multichain, all chain variants always have different names
             // (it is checked in MultiChainJson.readChainVariants method).
@@ -252,7 +252,7 @@ public final class UseMultiChain extends FileOperation {
                                                     m.chainName(),
                                                     blockedChainModelNames.contains(m.chainName()) ?
                                                             " " + UseSubChain.RECURSIVE_LOADING_BLOCKED_MESSAGE : "",
-                                                    m.getChainJsonFile()))
+                                                    m.getChainSpecificationFile()))
                                     .collect(Collectors.joining(String.format("%n")))));
         }
         if (report != null) {

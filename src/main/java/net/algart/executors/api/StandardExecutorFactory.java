@@ -72,7 +72,7 @@ public class StandardExecutorFactory implements ExecutorFactory {
                 // (which was not created yet by the corresponding static executor),
                 // or it is not a Java executor (but we loaded Java only).
                 // The typical example is creating/initializing new Chain in UseSubChain static executor.
-                // This process consists of 3 stages (see UseSubChain.use(ChainJson) method):
+                // This process consists of 3 stages (see UseSubChain.use(ChainSpecification) method):
                 //      A) we create a Chain instance with all its blocks (ChainBlock);
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);

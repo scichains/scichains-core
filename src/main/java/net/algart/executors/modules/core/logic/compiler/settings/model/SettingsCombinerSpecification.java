@@ -28,7 +28,7 @@ import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.io.MatrixIO;
@@ -58,7 +58,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     public static final String CLASS_KEY = SYSTEM_PREFIX + "class";
     public static final String SETTINGS = "settings";
     public static final String DEFAULT_SETTINGS_CATEGORY = SETTINGS;
-    public static final String DEFAULT_SETTINGS_CATEGORY_PREFIX = SETTINGS + ChainJson.CATEGORY_SEPARATOR;
+    public static final String DEFAULT_SETTINGS_CATEGORY_PREFIX = SETTINGS + ChainSpecification.CATEGORY_SEPARATOR;
     public static final String DEFAULT_SETTINGS_COMBINE_PREFIX = "Combine ";
     public static final String DEFAULT_SETTINGS_SPLIT_PREFIX = "Split ";
     public static final String DEFAULT_SETTINGS_GET_NAMES_PREFIX = "Get names of ";
@@ -566,7 +566,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     }
 
     public String settingsClassMame() {
-        return category + ChainJson.CATEGORY_SEPARATOR + name;
+        return category + ChainSpecification.CATEGORY_SEPARATOR + name;
     }
 
     public String parentFolderName() {
@@ -634,7 +634,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         } catch (JsonException e) {
             throw new AssertionError("Was not checked before!", e);
         }
-        return settingsClassName.endsWith(ChainJson.CATEGORY_SEPARATOR + name);
+        return settingsClassName.endsWith(ChainSpecification.CATEGORY_SEPARATOR + name);
     }
 
     public boolean hasPathControl() {
@@ -732,10 +732,10 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     }
 
     private static void checkSettingsName(String name, Path file) throws JsonException {
-        if (name.contains(String.valueOf(ChainJson.CATEGORY_SEPARATOR))) {
+        if (name.contains(String.valueOf(ChainSpecification.CATEGORY_SEPARATOR))) {
             throw new JsonException("Non-allowed settings name \"" + name
                     + "\"" + (file == null ? "" : " in JSON " + file)
-                    + ": it contains \"" + ChainJson.CATEGORY_SEPARATOR + "\" character");
+                    + ": it contains \"" + ChainSpecification.CATEGORY_SEPARATOR + "\" character");
         }
     }
 

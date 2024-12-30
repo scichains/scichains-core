@@ -96,7 +96,7 @@ public final class UseSubChain extends FileOperation {
     static final String RECURSIVE_LOADING_BLOCKED_MESSAGE = "[recursive loading blocked]";
 
     private static final InstalledPlatformsForTechnology SUB_CHAIN_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(ChainJson.CHAIN_TECHNOLOGY);
+            InstalledPlatformsForTechnology.getInstance(ChainSpecification.CHAIN_TECHNOLOGY);
     private static final SimpleExecutorLoader<Chain> SUB_CHAIN_LOADER =
             new SimpleExecutorLoader<>("sub-chains loader");
 
@@ -222,10 +222,10 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public void useSeveralPaths(List<Path> chainJsonPaths) throws IOException {
-        Objects.requireNonNull(chainJsonPaths, "Null chains paths");
+    public void useSeveralPaths(List<Path> chainSpecificationPaths) throws IOException {
+        Objects.requireNonNull(chainSpecificationPaths, "Null chains paths");
         final StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : chainJsonPaths) {
+        for (Path path : chainSpecificationPaths) {
             usePath(path, null, sb);
         }
         if (sb != null) {
@@ -233,38 +233,38 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public void usePath(Path chainJsonPath) throws IOException {
-        usePath(chainJsonPath, null, null);
+    public void usePath(Path chainSpecificationPath) throws IOException {
+        usePath(chainSpecificationPath, null, null);
     }
 
     public void usePath(
-            Path chainJsonPath,
+            Path chainSpecificationPath,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(chainJsonPath, "Null chains path");
-        final List<ChainJson> chainJsons;
-        if (!Files.exists(chainJsonPath)) {
+        Objects.requireNonNull(chainSpecificationPath, "Null chains path");
+        final List<ChainSpecification> chainSpecifications;
+        if (!Files.exists(chainSpecificationPath)) {
             if (fileExistenceRequired) {
-                throw new FileNotFoundException("Sub-chain file or sub-chains folder " + chainJsonPath
+                throw new FileNotFoundException("Sub-chain file or sub-chains folder " + chainSpecificationPath
                         + " does not exist");
             } else {
                 return;
             }
         }
-        if (Files.isDirectory(chainJsonPath)) {
-            chainJsons = ChainJson.readAllIfValid(chainJsonPath, true);
+        if (Files.isDirectory(chainSpecificationPath)) {
+            chainSpecifications = ChainSpecification.readAllIfValid(chainSpecificationPath, true);
         } else {
-            chainJsons = Collections.singletonList(ChainJson.read(chainJsonPath));
+            chainSpecifications = Collections.singletonList(ChainSpecification.read(chainSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        use(chainJsons, platform, report);
+        use(chainSpecifications, platform, report);
     }
 
     public void useContent(String chainJsonContent) {
-        final ChainJson chainJson = ChainJson.valueOf(chainJsonContent);
+        final ChainSpecification chainSpecification = ChainSpecification.valueOf(chainJsonContent);
         long t1 = infoTime();
-        final Optional<Chain> chain = useIfNonRecursive(chainJson);
+        final Optional<Chain> chain = useIfNonRecursive(chainSpecification);
         long t2 = infoTime();
         LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
                 () -> String.format(Locale.US, "Sub-chain \"%s\"%s %screated from text parameter in %.3f ms",
@@ -273,26 +273,26 @@ public final class UseSubChain extends FileOperation {
                         chain.isPresent() ? "" : "not ",
                         (t2 - t1) * 1e-6));
         if (isOutputNecessary(DEFAULT_OUTPUT_PORT)) {
-            getScalar().setTo("Sub-chain:\nCategory: '" + chainJson.chainCategory()
-                    + "'\nName: '" + chainJson.chainName() + "'");
+            getScalar().setTo("Sub-chain:\nCategory: '" + chainSpecification.chainCategory()
+                    + "'\nName: '" + chainSpecification.chainName() + "'");
         }
     }
 
-    public void use(List<ChainJson> chainJsons, StringBuilder report) {
-        use(chainJsons, null, report);
+    public void use(List<ChainSpecification> chainSpecifications, StringBuilder report) {
+        use(chainSpecifications, null, report);
     }
 
-    public Chain use(ChainJson chainJson) {
-        Optional<Chain> result = useIfNonRecursive(chainJson);
+    public Chain use(ChainSpecification chainSpecification) {
+        Optional<Chain> result = useIfNonRecursive(chainSpecification);
         if (result.isEmpty()) {
             throw new IllegalStateException("Recursive using of the chain is not allowed here");
         }
         return result.get();
     }
 
-    public Optional<Chain> useIfNonRecursive(ChainJson chainJson) {
-        Objects.requireNonNull(chainJson, "Null chain JSON model");
-        final String chainId = chainJson.getExecutor().getId();
+    public Optional<Chain> useIfNonRecursive(ChainSpecification chainSpecification) {
+        Objects.requireNonNull(chainSpecification, "Null chain JSON model");
+        final String chainId = chainSpecification.getExecutor().getId();
         chainExecutorSpecification = null;
         synchronized (NOW_USED_CHAIN_IDS) {
             if (NOW_USED_CHAIN_IDS.contains(chainId)) {
@@ -305,27 +305,27 @@ public final class UseSubChain extends FileOperation {
             NOW_USED_CHAIN_IDS.add(chainId);
         }
         try {
-            return Optional.of(register(chainJson));
+            return Optional.of(register(chainSpecification));
         } finally {
             NOW_USED_CHAIN_IDS.remove(chainId);
         }
     }
 
-    public static Executor createExecutor(ChainJson chainJson) {
-        return getShared().toExecutor(chainJson);
+    public static Executor createExecutor(ChainSpecification chainSpecification) {
+        return getShared().toExecutor(chainSpecification);
     }
 
     public static Executor createExecutor(Path containingJsonFile) throws IOException {
-        return createExecutor(ChainJson.read(containingJsonFile));
+        return createExecutor(ChainSpecification.read(containingJsonFile));
     }
 
-    public Executor toExecutor(ChainJson chainJson) {
+    public Executor toExecutor(ChainSpecification chainSpecification) {
         //noinspection resource
-        return use(chainJson).toExecutor();
+        return use(chainSpecification).toExecutor();
     }
 
     public Executor toExecutor(Path containingJsonFile) throws IOException {
-        return toExecutor(ChainJson.read(containingJsonFile));
+        return toExecutor(ChainSpecification.read(containingJsonFile));
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
@@ -352,23 +352,23 @@ public final class UseSubChain extends FileOperation {
         return information != null ? information.chainSettingsCombiner().id() : null;
     }
 
-    private void use(List<ChainJson> chainJsons, ExtensionSpecification.Platform platform, StringBuilder report) {
-        ChainJson.checkIdDifference(chainJsons);
-        for (int i = 0, n = chainJsons.size(); i < n; i++) {
-            ChainJson chainJson = chainJsons.get(i);
+    private void use(List<ChainSpecification> chainSpecifications, ExtensionSpecification.Platform platform, StringBuilder report) {
+        ChainSpecification.checkIdDifference(chainSpecifications);
+        for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
+            ChainSpecification chainSpecification = chainSpecifications.get(i);
             long t1 = infoTime();
             if (platform != null) {
-                chainJson.addTags(platform.getTags());
-                chainJson.setPlatformId(platform.getId());
-                chainJson.setPlatformCategory(platform.getCategory());
+                chainSpecification.addTags(platform.getTags());
+                chainSpecification.setPlatformId(platform.getId());
+                chainSpecification.setPlatformCategory(platform.getCategory());
             }
             final Optional<Chain> chain;
             try {
-                chain = useIfNonRecursive(chainJson);
+                chain = useIfNonRecursive(chainSpecification);
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot load sub-chain " + chainJson.getChainJsonFile(), e);
+                throw new ChainRunningException("Cannot load sub-chain " + chainSpecification.getChainSpecificationFile(), e);
             }
             long t2 = infoTime();
             final int index = i;
@@ -376,32 +376,32 @@ public final class UseSubChain extends FileOperation {
             LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
                     () -> String.format(Locale.US, "Sub-chain %s\"%s\"%s %sloaded from %s in %.3f ms",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
-                            chainJson.getExecutor().getName(),
+                            chainSpecification.getExecutor().getName(),
                             additionalChainInformation(chain),
                             chain.isPresent() ? "" : "not ",
-                            chainJson.getChainJsonFile().toAbsolutePath(),
+                            chainSpecification.getChainSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6));
         }
         if (report != null) {
-            for (ChainJson chainJson : chainJsons) {
-                final Path file = chainJson.getChainJsonFile();
-                final String message = file != null ? file.toString() : chainJson.canonicalName() + " (no file)";
+            for (ChainSpecification chainSpecification : chainSpecifications) {
+                final Path file = chainSpecification.getChainSpecificationFile();
+                final String message = file != null ? file.toString() : chainSpecification.canonicalName() + " (no file)";
                 report.append(message).append("\n");
             }
         }
     }
 
-    private Chain register(ChainJson chainJson) {
-        Objects.requireNonNull(chainJson, "Null chain JSON model");
+    private Chain register(ChainSpecification chainSpecification) {
+        Objects.requireNonNull(chainSpecification, "Null chain JSON model");
         final String sessionId = getSessionId();
         if (sessionId == null) {
             throw new IllegalStateException("Cannot register new chain: session ID was not set");
         }
         final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(sessionId);
-        Chain chain = Chain.valueOf(this, executorFactory, chainJson);
+        Chain chain = Chain.valueOf(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {
             // - If the chain was loaded not from file, but from the executor text parameter,
-            // chainJson does not contain information about current folder;
+            // chainSpecification does not contain information about current folder;
             // in this case, we suppose that the current folder is equal
             // to the current folder of this UseSubChain executor.
             chain.setCurrentDirectory(this.getCurrentDirectory());
@@ -422,7 +422,7 @@ public final class UseSubChain extends FileOperation {
         result.setTo(new InterpretSubChain());
         // - adds JavaConf and (maybe) parameters with setters
         result.setTo(chain);
-        result.setSourceInfo(null, chain.chainJsonPath()).setLanguageName(SUB_CHAIN_LANGUAGE_NAME);
+        result.setSourceInfo(null, chain.chainSpecificationPath()).setLanguageName(SUB_CHAIN_LANGUAGE_NAME);
         if (chain.hasPlatformId()) {
             result.setPlatformId(chain.platformId());
         }

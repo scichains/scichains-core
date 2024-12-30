@@ -51,7 +51,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
         return new ChainOutputPort(block, id, name, portType, dataType);
     }
 
-    public static ChainOutputPort valueOf(ChainBlock block, ChainJson.ChainBlockConf.PortConf portConf) {
+    public static ChainOutputPort valueOf(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
         return newInstance(
                 block,
                 portConf.getUuid(),

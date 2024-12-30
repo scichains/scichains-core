@@ -1600,7 +1600,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public final ExecutorSpecification setLanguage(String language) {
         this.language = language;
         this.javaExecutor = JavaConf.JAVA_LANGUAGE.equals(language);
-        this.chainExecutor = ChainJson.CHAIN_LANGUAGE.equals(language);
+        this.chainExecutor = ChainSpecification.CHAIN_LANGUAGE.equals(language);
         return this;
     }
 
@@ -1921,7 +1921,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
      * This method:
      * <ul>
      * <li>sets id to be equal <code>chain.getId()</code>;</li>
-     * <li>sets language to {@link ChainJson#CHAIN_LANGUAGE};</li>
+     * <li>sets language to {@link ChainSpecification#CHAIN_LANGUAGE};</li>
      * <li>does not set the name, category and path to source;</li>
      * <li>does not set "java" section.</li>
      * </ul>
@@ -1935,7 +1935,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setDescription(chain.description());
         this.setTags(chain.tags());
         this.setExecutorId(chain.id());
-        this.setLanguage(ChainJson.CHAIN_LANGUAGE);
+        this.setLanguage(ChainSpecification.CHAIN_LANGUAGE);
         final Map<String, PortConf> inPorts = new LinkedHashMap<>(this.inPorts);
         for (ChainBlock block : chain.getAllInputs()) {
             final ChainInputPort inputPort = block.getActualInputPort(Executor.DEFAULT_INPUT_PORT);
@@ -2188,18 +2188,18 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     private static void setAdditionalFields(ControlConf controlConf, ChainBlock block) {
-        final ChainJson.ChainBlockConf blockConf = block.getBlockConfJson();
+        final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
         if (blockConf != null) {
-            final ChainJson.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
+            final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
             controlConf.setCaption(makeCaption(block, systemConf.getCaption()));
             controlConf.setDescription(systemConf.getDescription());
         }
     }
 
     private static void setAdditionalFields(PortConf portConf, ChainBlock block) {
-        final ChainJson.ChainBlockConf blockConf = block.getBlockConfJson();
+        final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
         if (blockConf != null) {
-            final ChainJson.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
+            final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
             portConf.setCaption(makeCaption(block, systemConf.getCaption()));
             portConf.setHint(systemConf.getDescription());
         }

@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.api.model.ExecutorSpecification;
 import net.algart.executors.api.model.ExtensionSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
@@ -165,7 +165,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         final String recommendedCategory = ExecutionBlock.recommendedCategory(fileName);
         this.category = json.getString("category",
                 recommendedCategory != null ?
-                        DEFAULT_MULTICHAIN_CATEGORY + ChainJson.CATEGORY_SEPARATOR + recommendedCategory :
+                        DEFAULT_MULTICHAIN_CATEGORY + ChainSpecification.CATEGORY_SEPARATOR + recommendedCategory :
                         DEFAULT_MULTICHAIN_CATEGORY);
         this.settingsCategory = json.getString("settings_category",
                 recommendedCategory != null ?
@@ -264,13 +264,13 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static void checkNameDifference(Collection<ChainJson> chains) {
+    public static void checkNameDifference(Collection<ChainSpecification> chains) {
         Objects.requireNonNull(chains, "Null chain JSONs collection");
         final Set<String> names = new HashSet<>();
-        for (ChainJson chain : chains) {
+        for (ChainSpecification chain : chains) {
             final String name = chain.chainName();
             if (!names.add(name)) {
-                final Path file = chain.getChainJsonFile();
+                final Path file = chain.getChainSpecificationFile();
                 throw new IllegalArgumentException("Two chain variants have identical name \"" + name
                         + "\", but it is prohibited inside the single multichain! "
                         + "(One of 2 chain variants has ID \"" + chain.chainId() + "\""
@@ -420,29 +420,29 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     }
 
     public String canonicalName() {
-        return category + ChainJson.CATEGORY_SEPARATOR + name;
+        return category + ChainSpecification.CATEGORY_SEPARATOR + name;
     }
 
     public List<Path> resolveChainVariantPaths() {
         return chainVariantPaths.stream().map(p -> resolve(p, "sub-chain path")).toList();
     }
 
-    public List<ChainJson> readChainVariants() throws IOException {
-        final List<ChainJson> result = new ArrayList<>();
+    public List<ChainSpecification> readChainVariants() throws IOException {
+        final List<ChainSpecification> result = new ArrayList<>();
         final List<Path> paths = resolveChainVariantPaths();
         for (Path path : paths) {
             if (Files.isDirectory(path)) {
-                ChainJson.readAllIfValid(result, path, false);
+                ChainSpecification.readAllIfValid(result, path, false);
             } else {
-                result.add(ChainJson.read(path));
+                result.add(ChainSpecification.read(path));
             }
         }
         if (result.isEmpty()) {
             throw new FileNotFoundException("No valid sub-chains found for multichain \"" + name
                     + "\" among the following paths: " + paths);
         }
-        ChainJson.checkIdDifference(result);
-        result.sort(Comparator.comparing(ChainJson::chainName));
+        ChainSpecification.checkIdDifference(result);
+        result.sort(Comparator.comparing(ChainSpecification::chainName));
         checkNameDifference(result);
         return result;
     }

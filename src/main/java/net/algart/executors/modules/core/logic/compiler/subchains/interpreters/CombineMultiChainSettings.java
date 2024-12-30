@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains.interpreters;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.model.ChainJson;
+import net.algart.executors.api.model.ChainSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineChainSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
@@ -53,9 +53,9 @@ public class CombineMultiChainSettings extends CombineChainSettings {
 //        System.out.println("!!!" + chainId + "; " + multiChain);
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         if (!settings.containsKey(MultiChain.SELECTED_CHAIN_NAME_JSON_KEY)) {
-            for (ChainJson model : multiChain.chainModels()) {
-                if (chainId.equals(model.chainId())) {
-                    builder.add(MultiChain.SELECTED_CHAIN_NAME_JSON_KEY, model.chainName());
+            for (ChainSpecification specification : multiChain.chainModels()) {
+                if (chainId.equals(specification.chainId())) {
+                    builder.add(MultiChain.SELECTED_CHAIN_NAME_JSON_KEY, specification.chainName());
                     break;
                 }
             }
