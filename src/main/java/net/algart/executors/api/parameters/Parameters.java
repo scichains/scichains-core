@@ -309,7 +309,7 @@ public class Parameters implements Map<String, Object> {
 
     @Override
     public String toString() {
-        return map.toString();
+        return "Executor parameters: " + map.toString();
     }
 
     @Override

@@ -72,23 +72,23 @@ public class ExecutorJsonSetTest {
             executorJsonSet = ExecutorJsonSet.newInstance();
             executorJsonSet.addFolder(modelFolder, false);
             long t2 = System.nanoTime();
-            final Collection<ExecutorJson> models = executorJsonSet.all();
+            final Collection<ExecutorJson> specifications = executorJsonSet.all();
             System.out.printf(Locale.US,
-                    "  %d models loaded in %.3f ms (%.5f mcs/model); used memory %.2f/%.2f MB%n",
-                    models.size(), (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / models.size(),
+                    "  %d specifications loaded in %.3f ms (%.5f mcs/model); used memory %.2f/%.2f MB%n",
+                    specifications.size(), (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                     (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
             if (resolve) {
                 t1 = System.nanoTime();
-                for (ExecutorJson model : models) {
-                    if (model.isJavaExecutor()) {
-                        model.getJava().resolveSupportedExecutor();
+                for (ExecutorJson specification : specifications) {
+                    if (specification.isJavaExecutor()) {
+                        specification.getJava().resolveSupportedExecutor();
                     }
                 }
                 t2 = System.nanoTime();
                 System.out.printf(Locale.US,
                         "  Java classes of executors resolved in %.3f ms "
                                 + "(%.5f mcs/model); used memory %.2f/%.2f MB%n",
-                        (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / models.size(),
+                        (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                         (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
             }
             System.out.println();
@@ -97,9 +97,9 @@ public class ExecutorJsonSetTest {
         if (create) {
             for (int test = 1; test <= 10; test++) {
                 System.out.printf("Creation test #%d...%n", test);
-                final Collection<ExecutorJson> models = executorJsonSet.all();
+                final Collection<ExecutorJson> specifications = executorJsonSet.all();
                 long t1 = System.nanoTime();
-                for (ExecutorJson model : models) {
+                for (ExecutorJson model : specifications) {
                     if (model.isJavaExecutor()) {
 //                    try {
 //                        model.getJavaConf().getClass().newInstance();
@@ -115,7 +115,7 @@ public class ExecutorJsonSetTest {
                 System.out.printf(Locale.US,
                         "  Executors created in %.3f ms "
                                 + "(%.5f mcs/model); used memory %.2f/%.2f MB%n",
-                        (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / models.size(),
+                        (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                         (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
                 System.out.println();
             }

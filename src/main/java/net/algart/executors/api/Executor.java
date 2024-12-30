@@ -94,8 +94,8 @@ public abstract class Executor extends ExecutionBlock {
             "setInterruptionRequested"
     ));
 
-    private final Set<String> automaticUpdateDisabledParameters = new HashSet<>();
-    private boolean automaticUpdateParameters = true;
+    private final Set<String> onChangeParametersAutomaticDisabledParameters = new HashSet<>();
+    private boolean onChangeParametersAutomatic = true;
     private final Map<String, ParameterSetter> parameterSetters;
     private final Map<String, ParameterValueType> parameterTypes;
 
@@ -584,17 +584,17 @@ public abstract class Executor extends ExecutionBlock {
         Objects.requireNonNull(name, "Null parameter name");
         if (USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY && name.equals("$__system.working_directory")) {
             setCurrentDirectory(Paths.get(parameters().getString(name)));
-        } else if (automaticUpdateParameters && !automaticUpdateDisabledParameters.contains(name)) {
+        } else if (onChangeParametersAutomatic && !onChangeParametersAutomaticDisabledParameters.contains(name)) {
             onChangeParameterAutomatic(name);
         }
     }
 
     public final void disableOnChangeParametersAutomatic() {
-        this.automaticUpdateParameters = false;
+        this.onChangeParametersAutomatic = false;
     }
 
     public final void disableOnChangeParameterAutomatic(String parameterName) {
-        this.automaticUpdateDisabledParameters.add(parameterName);
+        this.onChangeParametersAutomaticDisabledParameters.add(parameterName);
     }
 
     @Override

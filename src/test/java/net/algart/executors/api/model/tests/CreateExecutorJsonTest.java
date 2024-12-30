@@ -47,6 +47,7 @@ public class CreateExecutorJsonTest {
             System.out.println("    Hi from TestExecutor!");
             System.out.println("    My ID: " + getExecutorId());
             System.out.println("    Current session ID: " + getSessionId());
+            System.out.println("    My mode (int): " + parameters().getInteger("modeInt"));
         }
     }
 
@@ -57,23 +58,23 @@ public class CreateExecutorJsonTest {
         }
         final Path resultFile = Paths.get(args[0]);
 
-        final ExecutorJson model = new ExecutorJson();
-        model.setVersion("0.0.11");
-        model.setPlatformId("~~~SOME_PLATFORM");
-        model.setCategory("some.category");
-        model.setName("some executor");
-        model.setExecutorId("11933940-d53b-495b-94ef-bb85d5b5402e");
-        model.setLanguage("java");
+        final ExecutorJson specification = new ExecutorJson();
+        specification.setVersion("0.0.11");
+        specification.setPlatformId("~~~SOME_PLATFORM");
+        specification.setCategory("some.category");
+        specification.setName("some executor");
+        specification.setExecutorId("144f8656-91c7-45a8-9e32-c19b179b9d34");
+        specification.setLanguage("java");
         final ExecutorJson.JavaConf javaConf = new ExecutorJson.JavaConf();
         javaConf.setJson("{\"class\":\"" + TestExecutor.class.getName() + "\"}");
-        model.setJava(javaConf);
+        specification.setJava(javaConf);
         final ExecutorJson.Options options = new ExecutorJson.Options();
         final ExecutorJson.Options.Behavior behavior = new ExecutorJson.Options.Behavior();
         options.setBehavior(behavior);
-        model.setOptions(options);
+        specification.setOptions(options);
         final Map<String, ExecutorJson.PortConf> outPorts = new LinkedHashMap<>();
         outPorts.put("output", new ExecutorJson.PortConf().setName("output").setValueType(DataType.SCALAR));
-        model.setOutPorts(outPorts);
+        specification.setOutPorts(outPorts);
         final Map<String, ExecutorJson.ControlConf> controls = new LinkedHashMap<>();
         controls.put("width", new ExecutorJson.ControlConf().setName("width").setValueType(ParameterValueType.INT));
         List<ExecutorJson.ControlConf.EnumItem> items = new ArrayList<>();
@@ -88,27 +89,35 @@ public class CreateExecutorJsonTest {
         controls.put("modeInt", new ExecutorJson.ControlConf().setName("modeInt").setValueType(ParameterValueType.INT)
                 .setCaption("Mode (int)").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultJsonValue(Jsons.toJsonIntValue(2)));
-        model.setControls(controls);
+        specification.setControls(controls);
 
-        final String jsonString = model.jsonString();
+        final String jsonString = specification.jsonString();
         java.nio.file.Files.writeString(resultFile, jsonString);
         System.out.printf("Minimal configuration:%n");
-        System.out.println(model.minimalSpecification());
-        System.out.printf("%nFull model:%n");
-        System.out.println(model);
-        if (model.isJavaExecutor()) {
+        System.out.println(specification.minimalSpecification());
+        System.out.printf("%nFull specification:%n");
+        System.out.println(specification);
+        if (specification.isJavaExecutor()) {
             System.out.printf("%nExecutor object:%n");
             Thread.sleep(100);
-            final ExecutionBlock executionBlock;
+            final Executor executor;
             try {
-                executionBlock = ExecutionBlock.newExecutionBlock(
-                        "some_session", model.getExecutorId(), model.minimalSpecification());
-                Thread.sleep(100);
-                System.out.println(executionBlock);
-                executionBlock.execute();
+                executor = (Executor) ExecutionBlock.newExecutionBlock(
+                        "some_session", specification.getExecutorId(), specification.minimalSpecification());
+                executor.disableOnChangeParametersAutomatic();
+                // - suppressing warning on setIntParameter
+                executor.setIntParameter("modeInt", 1);
                 System.out.println();
-                System.out.println("Specification:");
-                System.out.println(executionBlock.getExecutorSpecification().jsonString());
+                System.out.println("Full specification:");
+                System.out.println(specification.jsonString());
+                System.out.println("Minimal specification for creation:");
+                System.out.println(executor.getExecutorSpecification().jsonString());
+                System.out.println("Parameters:");
+                System.out.println(executor.parameters());
+                System.out.println("Executor:");
+                System.out.println(executor);
+                System.out.println();
+                executor.execute();
             } catch (ClassNotFoundException e) {
                 System.out.printf("Cannot load required class: %s%n", e);
             }
