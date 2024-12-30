@@ -108,7 +108,7 @@ public class UseSettings extends FileOperation {
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
             "If set, the behavior is completely determined by the input settings port and internal settings "
                     + "of the sub-chain. All parameters below are ignored.\n"
-                    + "We recommend to set this flag always in multichain configuration, "
+                    + "We recommend to set this flag always in multi-chain configuration, "
                     + "if you allow and plan replacing some sub-chains in future.";
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
     // - Note: when we add IGNORE_PARAMETERS_PARAMETER_DESCRIPTION, we never add PORTS for sub-settings,
@@ -350,7 +350,7 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    // Note: for multichain settings, this method is called as a result of
+    // Note: for multi-chain settings, this method is called as a result of
     // the call "settingsFactory.use" inside MultiChain constructor
     public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");

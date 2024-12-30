@@ -56,14 +56,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private volatile long contextId;
     // - Unique ID for every multichain. Unlike sub-chains, it is almost not used: multichain is not an environment
     // for executing anything; but it is used as a context ID for multichain settings combiner.
-    private final MultiChainJson specification;
+    private final MultiChainSpecification specification;
     private final List<ChainSpecification> chainSpecifications;
     private final List<ChainSpecification> blockedChainSpecifications;
     private final Set<String> blockedChainSpecificationNames;
     private final List<ExecutorSpecification> loadedChainExecutorSpecifications;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
-    // - note: this combiner is not registered, it is used for building multi-chain model only in UseMultiChain
+    // - note: this combiner is not registered, it is used for building a multi-chain model only in UseMultiChain
     private final SettingsCombiner multiChainSettingsCombiner;
 
     // Note: unlike Chain, currentDirectory is not actual here: loading without files is senseless here.
@@ -71,7 +71,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private boolean extractSubSettings = false;
 
-    private MultiChain(MultiChainJson specification, UseSubChain chainFactory, UseMultiChainSettings settingsFactory)
+    private MultiChain(
+            MultiChainSpecification specification,
+            UseSubChain chainFactory,
+            UseMultiChainSettings settingsFactory)
             throws IOException {
         renewContextId();
         this.specification = Objects.requireNonNull(specification, "Null json model");
@@ -97,7 +100,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             } catch (RuntimeException e) {
                 throw new ChainRunningException("Cannot initialize sub-chain "
                         + chainModel.getChainSpecificationFile() + ", variant of multichain "
-                        + specification.getMultiChainJsonFile(), e);
+                        + specification.getMultiChainSpecificationFile(), e);
             }
             if (optionalChain.isPresent()) {
                 final ExecutorSpecification implementationSpecification = chainFactory.chainExecutorSpecification();
@@ -134,7 +137,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public static MultiChain valueOf(
-            MultiChainJson model,
+            MultiChainSpecification model,
             UseSubChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
@@ -150,7 +153,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return this;
     }
 
-    public MultiChainJson model() {
+    public MultiChainSpecification model() {
         return specification;
     }
 
@@ -183,8 +186,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return contextId;
     }
 
-    public Path multiChainJsonFile() {
-        return specification.getMultiChainJsonFile();
+    public Path multiChainSpecificationFile() {
+        return specification.getMultiChainSpecificationFile();
     }
 
     public String id() {
@@ -380,8 +383,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
         controls.putAll(specification.getControls());
         if (addSubSettingsForVariants) {
-            final String multiChainJsonFileMessage = specification.getMultiChainJsonFile() == null ? "" :
-                    " (problem occurred in multichain, loaded from the file " + specification.getMultiChainJsonFile() + ")";
+            final String multiChainSpecificationFileMessage =
+                    specification.getMultiChainSpecificationFile() == null ? "" :
+                            " (problem occurred in multi-chain, loaded from the file " +
+                                    specification.getMultiChainSpecificationFile() + ")";
             for (ChainSpecification chainModel : chainSpecifications) {
                 final ChainSpecification.Executor executor = chainModel.getExecutor();
                 final String name = executor.getName();
@@ -389,7 +394,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     SettingsCombinerSpecification.checkParameterName(name, null);
                 } catch (JsonException e) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name: "
-                            + "it is not allowed as a parameter name in the settings" + multiChainJsonFileMessage, e);
+                            + "it is not allowed as a parameter name in the settings" + multiChainSpecificationFileMessage, e);
                 }
                 final ExecutorSpecification.ControlConf settingsControlConf = new ExecutorSpecification.ControlConf()
                         .setValueType(ParameterValueType.SETTINGS)
@@ -409,7 +414,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 }
                 if (controls.put(name, settingsControlConf) != null) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" has a name, identical "
-                            + "to one of multichain parameters; it is not allowed" + multiChainJsonFileMessage);
+                            + "to one of multichain parameters; it is not allowed" + multiChainSpecificationFileMessage);
                 }
             }
         }

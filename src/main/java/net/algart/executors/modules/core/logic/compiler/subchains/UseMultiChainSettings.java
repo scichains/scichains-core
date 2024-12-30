@@ -67,13 +67,13 @@ public class UseMultiChainSettings extends UseSettings {
     @Override
     protected SplitSettings newSplitSettings() {
         throw new UnsupportedOperationException("This method should not be called: " + getClass()
-                + " must be used only for creating multichain settings combiner, which has no split_id");
+                + " must be used only for creating multi-chain settings combiner, which has no split_id");
     }
 
     @Override
     protected GetNamesOfSettings newGetNamesOfSettings() {
         throw new UnsupportedOperationException("This method should not be called: " + getClass()
-                + " must be used only for creating multichain settings combiner, which has no get_names_id");
+                + " must be used only for creating multi-chain settings combiner, which has no get_names_id");
     }
 
     @Override

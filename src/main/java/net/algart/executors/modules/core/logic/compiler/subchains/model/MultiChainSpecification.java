@@ -44,7 +44,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public final class MultiChainJson extends AbstractConvertibleToJson {
+public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "multi-chain";
     public static final String CURRENT_VERSION = "1.0";
 
@@ -131,7 +131,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    private Path multiChainJsonFile = null;
+    private Path multiChainSpecificationFile = null;
     private String version = CURRENT_VERSION;
     private String category;
     private String settingsCategory;
@@ -148,16 +148,16 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     private Map<String, ExecutorSpecification.PortConf> outPorts = new LinkedHashMap<>();
     private Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
 
-    public MultiChainJson() {
+    public MultiChainSpecification() {
     }
 
-    private MultiChainJson(JsonObject json, boolean strictMode, Path file) {
-        if (!isMulciChainJson(json) && strictMode) {
+    private MultiChainSpecification(JsonObject json, boolean strictMode, Path file) {
+        if (!isMultiChainSpecification(json) && strictMode) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not a multichain configuration: no \"app\":\""
                     + APP_NAME + "\" element");
         }
-        this.multiChainJsonFile = file;
+        this.multiChainSpecificationFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
         final String fileName;
         fileName = file == null ? null : MatrixIO.removeExtension(file.getFileName().toString());
@@ -202,64 +202,64 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    public static MultiChainJson read(Path multiSubChainJsonFile) throws IOException {
-        Objects.requireNonNull(multiSubChainJsonFile, "Null multiSubChainJsonFile");
-        final JsonObject json = Jsons.readJson(multiSubChainJsonFile);
-        return new MultiChainJson(json, true, multiSubChainJsonFile);
+    public static MultiChainSpecification read(Path multiChainSpecificationFile) throws IOException {
+        Objects.requireNonNull(multiChainSpecificationFile, "Null multiChainSpecificationFile");
+        final JsonObject json = Jsons.readJson(multiChainSpecificationFile);
+        return new MultiChainSpecification(json, true, multiChainSpecificationFile);
     }
 
-    public static MultiChainJson readIfValid(Path multiSubChainJsonFile) {
-        Objects.requireNonNull(multiSubChainJsonFile, "Null multiSubChainJsonFile");
+    public static MultiChainSpecification readIfValid(Path multiSubChainSpecificationFile) {
+        Objects.requireNonNull(multiSubChainSpecificationFile, "Null multiSubChainSpecificationFile");
         final JsonObject json;
         try {
-            json = Jsons.readJson(multiSubChainJsonFile);
+            json = Jsons.readJson(multiSubChainSpecificationFile);
         } catch (IOException e) {
             // - usually called while scanning folder with .json-files, so, exception should not occur here
             throw new IOError(e);
         }
-        if (!isMulciChainJson(json)) {
+        if (!isMultiChainSpecification(json)) {
             return null;
         }
-        return new MultiChainJson(json, true, multiSubChainJsonFile);
+        return new MultiChainSpecification(json, true, multiSubChainSpecificationFile);
     }
 
-    public static List<MultiChainJson> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(null, containingJsonPath, MultiChainJson::readIfValid);
+    public static List<MultiChainSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
+        return ExtensionSpecification.readAllJsonIfValid(null, containingJsonPath, MultiChainSpecification::readIfValid);
     }
 
-    public void write(Path multiChainJsonFile, OpenOption... options) throws IOException {
-        Objects.requireNonNull(multiChainJsonFile, "Null multiChainJsonFile");
-        Files.writeString(multiChainJsonFile, Jsons.toPrettyString(toJson()), options);
+    public void write(Path multiChainSpecificationFile, OpenOption... options) throws IOException {
+        Objects.requireNonNull(multiChainSpecificationFile, "Null multiChainSpecificationFile");
+        Files.writeString(multiChainSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
-    public static MultiChainJson valueOf(JsonObject multiChainJson, boolean strictMode) {
-        return new MultiChainJson(multiChainJson, strictMode, null);
+    public static MultiChainSpecification valueOf(JsonObject multiSpecificationJson, boolean strictMode) {
+        return new MultiChainSpecification(multiSpecificationJson, strictMode, null);
     }
 
-    public static boolean isMulciChainJson(JsonObject multiChainJson) {
-        Objects.requireNonNull(multiChainJson, "Null multichain JSON");
-        return APP_NAME.equals(multiChainJson.getString("app", null));
+    public static boolean isMultiChainSpecification(JsonObject multiChainSpecification) {
+        Objects.requireNonNull(multiChainSpecification, "Null multiChainSpecification");
+        return APP_NAME.equals(multiChainSpecification.getString("app", null));
     }
 
-    public static void checkIdDifference(Collection<MultiChainJson> multiChainJsons) {
-        Objects.requireNonNull(multiChainJsons, "Null multichain JSONs collection");
+    public static void checkIdDifference(Collection<MultiChainSpecification> multiChainSpecifications) {
+        Objects.requireNonNull(multiChainSpecifications, "Null multiChainSpecifications");
         final Set<String> ids = new HashSet<>();
-        for (MultiChainJson multiChainJson : multiChainJsons) {
-            final String id = multiChainJson.getId();
-            final String settingsId = multiChainJson.getSettingsId();
+        for (MultiChainSpecification multiChainSpecification : multiChainSpecifications) {
+            final String id = multiChainSpecification.getId();
+            final String settingsId = multiChainSpecification.getSettingsId();
             assert id != null;
             if (id.equals(settingsId)) {
                 // - impossible
                 throw new AssertionError("Identical id and settingsId for multichain \""
-                        + multiChainJson.getName() + "\": " + id);
+                        + multiChainSpecification.getName() + "\": " + id);
             }
             if (!ids.add(id)) {
                 throw new IllegalArgumentException("Two multichain JSONs have identical IDs " + id
-                        + ", one of them is \"" + multiChainJson.getName() + "\"");
+                        + ", one of them is \"" + multiChainSpecification.getName() + "\"");
             }
             if (settingsId != null && !ids.add(settingsId)) {
                 throw new IllegalArgumentException("Two settings-combiner JSONs have identical IDs " + settingsId
-                        + ", one of them is \"" + multiChainJson.getName() + "\"");
+                        + ", one of them is \"" + multiChainSpecification.getName() + "\"");
             }
         }
     }
@@ -279,15 +279,15 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         }
     }
 
-    public Path getMultiChainJsonFile() {
-        return multiChainJsonFile;
+    public Path getMultiChainSpecificationFile() {
+        return multiChainSpecificationFile;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public MultiChainJson setVersion(String version) {
+    public MultiChainSpecification setVersion(String version) {
         this.version = Objects.requireNonNull(version, "Null version");
         return this;
     }
@@ -296,7 +296,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return category;
     }
 
-    public MultiChainJson setCategory(String category) {
+    public MultiChainSpecification setCategory(String category) {
         this.category = Objects.requireNonNull(category, "Null category");
         return this;
     }
@@ -305,7 +305,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return settingsCategory;
     }
 
-    public MultiChainJson setSettingsCategory(String settingsCategory) {
+    public MultiChainSpecification setSettingsCategory(String settingsCategory) {
         this.settingsCategory = Objects.requireNonNull(settingsCategory, "Null settingsCategory");
         return this;
     }
@@ -314,7 +314,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return name;
     }
 
-    public MultiChainJson setName(String name) {
+    public MultiChainSpecification setName(String name) {
         this.name = Objects.requireNonNull(name, "Null name");
         return this;
     }
@@ -323,7 +323,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return settingsName;
     }
 
-    public MultiChainJson setSettingsName(String settingsName) {
+    public MultiChainSpecification setSettingsName(String settingsName) {
         this.settingsName = Objects.requireNonNull(settingsName, "Null settingsName");
         return this;
     }
@@ -332,7 +332,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return description;
     }
 
-    public MultiChainJson setDescription(String description) {
+    public MultiChainSpecification setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -341,7 +341,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return settingsDescription;
     }
 
-    public MultiChainJson setSettingsDescription(String settingsDescription) {
+    public MultiChainSpecification setSettingsDescription(String settingsDescription) {
         this.settingsDescription = settingsDescription;
         return this;
     }
@@ -350,7 +350,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return id;
     }
 
-    public MultiChainJson setId(String id) {
+    public MultiChainSpecification setId(String id) {
         this.id = Objects.requireNonNull(id, "Null id");
         this.settingsId = modifyIdForSettings(this.id);
         return this;
@@ -360,7 +360,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return settingsId;
     }
 
-    public MultiChainJson setSettingsId(String settingsId) {
+    public MultiChainSpecification setSettingsId(String settingsId) {
         this.settingsId = settingsId;
         return this;
     }
@@ -369,7 +369,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return options;
     }
 
-    public MultiChainJson setOptions(Options options) {
+    public MultiChainSpecification setOptions(Options options) {
         this.options = options;
         return this;
     }
@@ -378,7 +378,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableList(chainVariantPaths);
     }
 
-    public MultiChainJson setChainVariantPaths(List<String> chainVariantPaths) {
+    public MultiChainSpecification setChainVariantPaths(List<String> chainVariantPaths) {
         this.chainVariantPaths = checkChainVariantPaths(chainVariantPaths);
         return this;
     }
@@ -387,7 +387,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return defaultChainVariantId;
     }
 
-    public MultiChainJson setDefaultChainVariantId(String defaultChainVariantId) {
+    public MultiChainSpecification setDefaultChainVariantId(String defaultChainVariantId) {
         this.defaultChainVariantId = defaultChainVariantId;
         return this;
     }
@@ -396,7 +396,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(inPorts);
     }
 
-    public MultiChainJson setInPorts(Map<String, ExecutorSpecification.PortConf> inPorts) {
+    public MultiChainSpecification setInPorts(Map<String, ExecutorSpecification.PortConf> inPorts) {
         this.inPorts = ExecutorSpecification.checkInPorts(inPorts);
         return this;
     }
@@ -405,7 +405,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(outPorts);
     }
 
-    public MultiChainJson setOutPorts(Map<String, ExecutorSpecification.PortConf> outPorts) {
+    public MultiChainSpecification setOutPorts(Map<String, ExecutorSpecification.PortConf> outPorts) {
         this.outPorts = ExecutorSpecification.checkOutPorts(outPorts);
         return this;
     }
@@ -414,7 +414,7 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         return Collections.unmodifiableMap(controls);
     }
 
-    public MultiChainJson setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
+    public MultiChainSpecification setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
         this.controls = ExecutorSpecification.checkControls(controls);
         return this;
     }
@@ -493,8 +493,8 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
 
     @Override
     public String toString() {
-        return "MultiChainJson{" +
-                "multiChainJsonFile=" + multiChainJsonFile +
+        return "MultiChainSpecification{" +
+                "multiChainSpecificationFile=" + multiChainSpecificationFile +
                 ", version='" + version + '\'' +
                 ", category='" + category + '\'' +
                 ", settingsCategory='" + settingsCategory + '\'' +
@@ -561,17 +561,17 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
     }
 
     private Path resolve(String path, String whatFile) {
-        path = PathPropertyReplacement.translateProperties(path, multiChainJsonFile);
+        path = PathPropertyReplacement.translateProperties(path, multiChainSpecificationFile);
         final Path p = Paths.get(path);
         if (p.isAbsolute()) {
             return p;
         }
-        if (this.multiChainJsonFile == null) {
+        if (this.multiChainSpecificationFile == null) {
             throw new IllegalStateException("The " + whatFile
                     + " is relative and cannot be resolved, because "
                     + "multi-chain JSON was not loaded from file; you must use absolute paths in this case");
         }
-        return multiChainJsonFile.getParent().resolve(p);
+        return multiChainSpecificationFile.getParent().resolve(p);
     }
 
     private static List<String> checkChainVariantPaths(List<String> chainFileNames) {
@@ -622,12 +622,12 @@ public final class MultiChainJson extends AbstractConvertibleToJson {
         System.out.println(id);
         System.out.println(modifyIdForSettings(id));
 
-        MultiChainJson multiChainJson = read(Paths.get(args[0]));
+        MultiChainSpecification multiChainSpecification = read(Paths.get(args[0]));
         System.out.println("Multi sub-chain:");
-        System.out.println(multiChainJson);
+        System.out.println(multiChainSpecification);
         System.out.println("Sub-chain paths:");
-        System.out.println(multiChainJson.resolveChainVariantPaths());
+        System.out.println(multiChainSpecification.resolveChainVariantPaths());
         System.out.println("JSON:");
-        System.out.println(Jsons.toPrettyString(multiChainJson.toJson()));
+        System.out.println(Jsons.toPrettyString(multiChainSpecification.toJson()));
     }
 }

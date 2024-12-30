@@ -39,7 +39,7 @@ import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsC
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.interpreters.InterpretMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
-import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChainJson;
+import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChainSpecification;
 import net.algart.json.Jsons;
 
 import java.io.FileNotFoundException;
@@ -158,10 +158,10 @@ public final class UseMultiChain extends FileOperation {
         }
     }
 
-    public void useSeveralPaths(List<Path> multiChainJsonPaths) throws IOException {
-        Objects.requireNonNull(multiChainJsonPaths, "Null multichains paths");
+    public void useSeveralPaths(List<Path> multiChainSpecificationPaths) throws IOException {
+        Objects.requireNonNull(multiChainSpecificationPaths, "Null multichains paths");
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : multiChainJsonPaths) {
+        for (Path path : multiChainSpecificationPaths) {
             usePath(path, sb);
         }
         if (sb != null) {
@@ -169,73 +169,73 @@ public final class UseMultiChain extends FileOperation {
         }
     }
 
-    public void usePath(Path multiChainJsonPath) throws IOException {
-        usePath(multiChainJsonPath, null);
+    public void usePath(Path multiChainSpecificationPath) throws IOException {
+        usePath(multiChainSpecificationPath, null);
     }
 
-    public void usePath(Path multiChainJsonPath, StringBuilder report) throws IOException {
-        Objects.requireNonNull(multiChainJsonPath, "Null multichain path");
-        final List<MultiChainJson> multiChainJsons;
+    public void usePath(Path multiChainSpecificationPath, StringBuilder report) throws IOException {
+        Objects.requireNonNull(multiChainSpecificationPath, "Null multiChainSpecificationPath");
+        final List<MultiChainSpecification> multiChainSpecifications;
         final List<ChainSpecification> chainSpecifications;
-        if (!Files.exists(multiChainJsonPath)) {
+        if (!Files.exists(multiChainSpecificationPath)) {
             if (fileExistenceRequired) {
-                throw new FileNotFoundException("Multichain file or multi-chains folder " + multiChainJsonPath
+                throw new FileNotFoundException("Multichain file or multi-chains folder " + multiChainSpecificationPath
                         + " does not exist");
             } else {
                 return;
             }
         }
-        if (Files.isDirectory(multiChainJsonPath)) {
-            multiChainJsons = MultiChainJson.readAllIfValid(multiChainJsonPath);
+        if (Files.isDirectory(multiChainSpecificationPath)) {
+            multiChainSpecifications = MultiChainSpecification.readAllIfValid(multiChainSpecificationPath);
             // - always recursive
             chainSpecifications = alsoSubChains ?
-                    ChainSpecification.readAllIfValid(multiChainJsonPath, true) :
+                    ChainSpecification.readAllIfValid(multiChainSpecificationPath, true) :
                     Collections.emptyList();
         } else if (!alsoSubChains) {
-            multiChainJsons = Collections.singletonList(MultiChainJson.read(multiChainJsonPath));
+            multiChainSpecifications = Collections.singletonList(MultiChainSpecification.read(multiChainSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
             chainSpecifications = Collections.emptyList();
         } else {
-            final MultiChainJson multiChainJson = MultiChainJson.readIfValid(multiChainJsonPath);
-            multiChainJsons = multiChainJson == null ?
-                    Collections.emptyList() : Collections.singletonList(multiChainJson);
-            final ChainSpecification chainSpecification = ChainSpecification.readIfValid(multiChainJsonPath);
+            final MultiChainSpecification multiChainSpecification = MultiChainSpecification.readIfValid(multiChainSpecificationPath);
+            multiChainSpecifications = multiChainSpecification == null ?
+                    Collections.emptyList() : Collections.singletonList(multiChainSpecification);
+            final ChainSpecification chainSpecification = ChainSpecification.readIfValid(multiChainSpecificationPath);
             chainSpecifications = chainSpecification == null ? Collections.emptyList() : Collections.singletonList(chainSpecification);
-            if (multiChainJson == null && chainSpecification == null) {
-                throw new JsonException("JSON " + multiChainJsonPath
+            if (multiChainSpecification == null && chainSpecification == null) {
+                throw new JsonException("JSON " + multiChainSpecificationPath
                         + " is not a valid multichain or sub-chain configuration");
 
             }
         }
-        use(multiChainJsons, report);
+        use(multiChainSpecifications, report);
         try (UseSubChain chainFactory = createChainFactory()) {
             chainFactory.use(chainSpecifications, report);
         }
     }
 
-    public void use(List<MultiChainJson> multiChainJsons, StringBuilder report) throws IOException {
-        MultiChainJson.checkIdDifference(multiChainJsons);
+    public void use(List<MultiChainSpecification> multiChainSpecifications, StringBuilder report) throws IOException {
+        MultiChainSpecification.checkIdDifference(multiChainSpecifications);
         final UseSubChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
-        for (int i = 0, n = multiChainJsons.size(); i < n; i++) {
-            final MultiChainJson multiChainJson = multiChainJsons.get(i);
+        for (int i = 0, n = multiChainSpecifications.size(); i < n; i++) {
+            final MultiChainSpecification multiChainSpecification = multiChainSpecifications.get(i);
             final MultiChain multiChain;
             long t1 = infoTime();
             try {
                 // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
-                multiChain = use(multiChainJson, chainFactory, settingsFactory);
+                multiChain = use(multiChainSpecification, chainFactory, settingsFactory);
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
                 // - but not IOException
                 throw new ChainLoadingException("Cannot load multichain "
-                        + multiChainJson.getMultiChainJsonFile(), e);
+                        + multiChainSpecification.getMultiChainSpecificationFile(), e);
             }
             long t2 = infoTime();
             final List<ChainSpecification> chainModels = multiChain.chainModels();
             final Set<String> blockedChainModelNames = multiChain.blockedChainModelNames();
             // - Note: in a multichain, all chain variants always have different names
-            // (it is checked in MultiChainJson.readChainVariants method).
+            // (it is checked in MultiChainSpecification.readChainVariants method).
             // Note: recursive usage of multichain is a sub-chain is possible, but seems to be an error,
             // so, we use WARNING level here.
             final int index = i;
@@ -243,8 +243,8 @@ public final class UseMultiChain extends FileOperation {
                     () -> String.format(Locale.US, "Multichain %s\"%s\" loaded from %s in %.3f ms; " +
                                     "%d chain variants:%n%s",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
-                            multiChainJson.getName(),
-                            multiChainJson.getMultiChainJsonFile().toAbsolutePath(),
+                            multiChainSpecification.getName(),
+                            multiChainSpecification.getMultiChainSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6,
                             chainModels.size(),
                             chainModels.stream().map(
@@ -256,27 +256,27 @@ public final class UseMultiChain extends FileOperation {
                                     .collect(Collectors.joining(String.format("%n")))));
         }
         if (report != null) {
-            for (MultiChainJson multiChainJson : multiChainJsons) {
-                final Path file = multiChainJson.getMultiChainJsonFile();
-                final String message = file != null ? file.toString() : multiChainJson.canonicalName() + " (no file)";
+            for (MultiChainSpecification multiChainSpecification : multiChainSpecifications) {
+                final Path file = multiChainSpecification.getMultiChainSpecificationFile();
+                final String message = file != null ? file.toString() : multiChainSpecification.canonicalName() + " (no file)";
                 report.append(message).append("\n");
             }
         }
     }
 
-    public void use(MultiChainJson multiChainJson) throws IOException {
+    public void use(MultiChainSpecification multiChainSpecification) throws IOException {
         // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
         final UseSubChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
-        use(multiChainJson, chainFactory, settingsFactory);
+        use(multiChainSpecification, chainFactory, settingsFactory);
     }
 
     public MultiChain use(
-            MultiChainJson multiChainJson,
+            MultiChainSpecification multiChainSpecification,
             UseSubChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
-        final MultiChain multiChain = MultiChain.valueOf(multiChainJson, chainFactory, settingsFactory);
+        final MultiChain multiChain = MultiChain.valueOf(multiChainSpecification, chainFactory, settingsFactory);
         // - Actually use all sub-chains and built-in multichain settings combiner
         if (strictMode) {
             multiChain.checkImplementationCompatibility();
@@ -288,11 +288,11 @@ public final class UseMultiChain extends FileOperation {
 
     public static ExecutorSpecification buildMultiChainSpecification(MultiChain multiChain) {
         Objects.requireNonNull(multiChain, "Null multiChain");
-        final MultiChainJson model = multiChain.model();
+        final MultiChainSpecification model = multiChain.model();
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMultiChain());
         // - adds JavaConf and (maybe) parameters with setters
-        result.setSourceInfo(multiChain.multiChainJsonFile(), null);
+        result.setSourceInfo(multiChain.multiChainSpecificationFile(), null);
         result.setExecutorId(multiChain.id());
         result.setCategory(ExecutorSpecification.correctDynamicCategory(multiChain.category()));
         result.setName(multiChain.name());
@@ -335,7 +335,7 @@ public final class UseMultiChain extends FileOperation {
 
     private static void addSystemParameters(ExecutorSpecification result, MultiChain multiChain) {
         final String multiChainName = multiChain.name();
-        final MultiChainJson.Options options = multiChain.model().getOptions();
+        final MultiChainSpecification.Options options = multiChain.model().getOptions();
         if (options != null && options.getBehavior() != null && options.getBehavior().isSkippable()) {
             result.addControl(new ExecutorSpecification.ControlConf()
                     .setName(DO_ACTION_NAME)
