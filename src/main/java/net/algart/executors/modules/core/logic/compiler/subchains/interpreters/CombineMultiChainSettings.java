@@ -53,7 +53,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
 //        System.out.println("!!!" + chainId + "; " + multiChain);
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         if (!settings.containsKey(MultiChain.SELECTED_CHAIN_NAME_JSON_KEY)) {
-            for (ChainSpecification specification : multiChain.chainModels()) {
+            for (ChainSpecification specification : multiChain.chainSpecifications()) {
                 if (chainId.equals(specification.chainId())) {
                     builder.add(MultiChain.SELECTED_CHAIN_NAME_JSON_KEY, specification.chainName());
                     break;

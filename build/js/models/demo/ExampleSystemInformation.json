@@ -15,7 +15,7 @@
   "out_ports": [
     {
       "value_type": "scalar",
-      "name": "model"
+      "name": "specification"
     },
     {
       "value_type": "scalar",

@@ -160,7 +160,7 @@ public class UseJS extends FileOperation {
             jsCallerSpecification.addSystemPlatformIdPort();
         }
         addSpecialOutputPorts(jsCallerSpecification);
-        jsCallerSpecification.setSourceInfoForModel()
+        jsCallerSpecification.setSourceInfoForSpecification()
                 .setLanguageName(JS_LANGUAGE_NAME)
                 .setAbsoluteModulePath(workingDirectory.resolve(jsCallerSpecification.getJS().getModule()));
     }
@@ -176,7 +176,7 @@ public class UseJS extends FileOperation {
                     useJS.usePath(platform.modelsFolder(), platform, null);
                     final long t2 = System.nanoTime();
                     logInfo(() -> String.format(Locale.US,
-                            "Loading installed JS models from %s: %.3f ms",
+                            "Loading installed JS specifications from %s: %.3f ms",
                             platform.modelsFolder(), (t2 - t1) * 1e-6));
                 }
             }

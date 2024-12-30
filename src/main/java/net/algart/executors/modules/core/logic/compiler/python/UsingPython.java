@@ -50,10 +50,11 @@ public class UsingPython {
     public static final String SUPPLIED_PYTHON_ROOTS_OUTPUT_CAPTION = "supplied python roots";
     public static final String SUPPLIED_PYTHON_ROOTS_OUTPUT_HINT =
             "List of Python root folders, supplied by this application and added to Python search paths";
-    public static final String SUPPLIED_PYTHON_MODELS_OUTPUT_NAME = "_py_supplied_python_models";
-    public static final String SUPPLIED_PYTHON_MODELS_OUTPUT_CAPTION = "supplied python models";
-    public static final String SUPPLIED_PYTHON_MODELS_OUTPUT_HINT =
-            "List of Python model folders, supplied by this application and used to find Python-based executors";
+    public static final String SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME = "_py_supplied_python_specification";
+    public static final String SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_CAPTION = "supplied python specification";
+    public static final String SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_HINT =
+            "List of Python executor specification folders, " +
+                    "supplied by this application and used to find Python-based executors";
 
     private static final SimpleExecutorLoader<PythonCaller> PYTHON_CALLER_LOADER =
             new SimpleExecutorLoader<>("Python loader");
@@ -113,7 +114,7 @@ public class UsingPython {
                 UsingPython.usePath(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.modelsFolder(), platform);
                 final long t2 = System.nanoTime();
                 Executor.LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
-                        "Loading installed Python models from %s: %.3f ms",
+                        "Loading installed Python specifications from %s: %.3f ms",
                         platform.modelsFolder(), (t2 - t1) * 1e-6));
             }
         }
@@ -132,7 +133,7 @@ public class UsingPython {
             pythonCallerSpecification.addSystemPlatformIdPort();
         }
         addSpecialOutputPorts(pythonCallerSpecification);
-        pythonCallerSpecification.setSourceInfoForModel().setLanguageName(PYTHON_LANGUAGE_NAME);
+        pythonCallerSpecification.setSourceInfoForSpecification().setLanguageName(PYTHON_LANGUAGE_NAME);
     }
 
     private static void addSpecialOutputPorts(ExecutorSpecification result) {
@@ -145,12 +146,12 @@ public class UsingPython {
                     .setValueType(DataType.SCALAR)
                     .setAdvanced(true));
         }
-        if (!result.getOutPorts().containsKey(SUPPLIED_PYTHON_MODELS_OUTPUT_NAME)) {
+        if (!result.getOutPorts().containsKey(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME)) {
             // - to be on the safe side (maybe, the user defined the output port with the same name)
             result.addOutPort(new ExecutorSpecification.PortConf()
-                    .setName(SUPPLIED_PYTHON_MODELS_OUTPUT_NAME)
-                    .setCaption(SUPPLIED_PYTHON_MODELS_OUTPUT_CAPTION)
-                    .setHint(SUPPLIED_PYTHON_MODELS_OUTPUT_HINT)
+                    .setName(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME)
+                    .setCaption(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_CAPTION)
+                    .setHint(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_HINT)
                     .setValueType(DataType.SCALAR)
                     .setAdvanced(true));
         }

@@ -104,10 +104,10 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
             getScalar(UsingPython.SUPPLIED_PYTHON_ROOTS_OUTPUT_NAME).setTo(
                     String.join(String.format("%n"), JepPlatforms.pythonRootFolders()));
         }
-        if (isOutputNecessary(UsingPython.SUPPLIED_PYTHON_MODELS_OUTPUT_NAME)) {
-            getScalar(UsingPython.SUPPLIED_PYTHON_MODELS_OUTPUT_NAME).setTo(
+        if (isOutputNecessary(UsingPython.SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME)) {
+            getScalar(UsingPython.SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME).setTo(
                     String.join(String.format("%n"),
-                            JepPlatforms.pythonPlatforms().installedModelFolders()));
+                            JepPlatforms.pythonPlatforms().installedSpecificationFolders()));
         }
     }
 }

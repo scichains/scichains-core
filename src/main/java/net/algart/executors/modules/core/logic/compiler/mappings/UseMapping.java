@@ -212,7 +212,7 @@ public class UseMapping extends FileOperation {
         final List<String> enumItemCaptions = mapping.enumItemCaptions();
         for (int i = 0, n = mapping.numberOfKeys(); i < n; i++) {
             String key = mapping.key(i);
-            ExecutorSpecification.ControlConf controlConf = mapping.model().buildControlConf(
+            ExecutorSpecification.ControlConf controlConf = mapping.specification().buildControlConf(
                     key, enumItems, enumItemCaptions, advancedParameters);
             controlConf.setCaption(mapping.keyCaption(i));
             controlConf.setHint("\"" + controlConf.getName() + "\" key in the result JSON");

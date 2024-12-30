@@ -134,7 +134,7 @@ public final class ExecutorSpecificationSet {
             addFolder(folder, platform, onlyBuiltIn);
             final long t2 = System.nanoTime();
             LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
-                    "Loading installed built-in executor models from %s: %.3f ms",
+                    "Loading installed built-in executor specifications from %s: %.3f ms",
                     folder, (t2 - t1) * 1e-6));
         }
     }

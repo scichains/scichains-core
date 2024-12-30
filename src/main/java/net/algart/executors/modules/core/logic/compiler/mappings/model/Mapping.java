@@ -97,7 +97,7 @@ public final class Mapping implements Cloneable {
         return new Mapping(model, keys, keyCaptions, enumItems, enumItemCaptions);
     }
 
-    public MappingSpecification model() {
+    public MappingSpecification specification() {
         return specification;
     }
 

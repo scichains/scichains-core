@@ -131,7 +131,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         if (timingNumberOfCalls > 0 &&
                 parameters().getBoolean(UseMultiChain.LOG_TIMING_NAME, UseSubChain.LOG_TIMING_DEFAULT)) {
             timing.analyse();
-            final Path file = multiChain.model().getMultiChainSpecificationFile();
+            final Path file = multiChain.specification().getMultiChainSpecificationFile();
             LOG.log(timingLogLevel, () -> String.format(Locale.US,
                     "Multichain \"%s\", variant \"%s\" executed%s%s in %.3f ms:%n" +
                             "  %.5f ms initializing, %.5f ms loading inputs, %.5f ms set chain settings, " +

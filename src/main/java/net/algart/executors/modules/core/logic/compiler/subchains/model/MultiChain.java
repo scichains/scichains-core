@@ -137,11 +137,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public static MultiChain valueOf(
-            MultiChainSpecification model,
+            MultiChainSpecification specification,
             UseSubChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
-        return new MultiChain(model, chainFactory, settingsFactory);
+        return new MultiChain(specification, chainFactory, settingsFactory);
     }
 
     public boolean isExtractSubSettings() {
@@ -153,19 +153,19 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return this;
     }
 
-    public MultiChainSpecification model() {
+    public MultiChainSpecification specification() {
         return specification;
     }
 
-    public List<ChainSpecification> chainModels() {
+    public List<ChainSpecification> chainSpecifications() {
         return Collections.unmodifiableList(chainSpecifications);
     }
 
-    public List<ChainSpecification> blockedChainModels() {
+    public List<ChainSpecification> blockedChainSpecifications() {
         return Collections.unmodifiableList(blockedChainSpecifications);
     }
 
-    public Set<String> blockedChainModelNames() {
+    public Set<String> blockedChainSpecificationNames() {
         return Collections.unmodifiableSet(blockedChainSpecificationNames);
     }
 

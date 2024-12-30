@@ -34,7 +34,7 @@ public class InstalledPlatformsForTechnology {
 
     private boolean ready = false;
     private List<ExtensionSpecification.Platform> installedPlatforms = null;
-    private List<String> installedModelFolders = null;
+    private List<String> installedSpecificationFolders = null;
     private List<String> installedImplementationFolders = null;
     private final Object lock = new Object();
 
@@ -53,10 +53,10 @@ public class InstalledPlatformsForTechnology {
         }
     }
 
-    public List<String> installedModelFolders() {
+    public List<String> installedSpecificationFolders() {
         synchronized (lock) {
             analysePlatforms();
-            return installedModelFolders;
+            return installedSpecificationFolders;
         }
     }
 
@@ -70,13 +70,13 @@ public class InstalledPlatformsForTechnology {
     private void analysePlatforms() {
         if (!this.ready) {
             final List<ExtensionSpecification.Platform> platforms = new ArrayList<>();
-            final List<String> modelFolders = new ArrayList<>();
+            final List<String> specificationFolders = new ArrayList<>();
             final List<String> implementationFolders = new ArrayList<>();
             for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
                 if (platform.getTechnology().equals(platformTechnology)) {
                     platforms.add(platform);
                     if (platform.hasModels()) {
-                        modelFolders.add(platform.modelsFolder().toString());
+                        specificationFolders.add(platform.modelsFolder().toString());
                     }
                     if (platform.hasModules()) {
                         implementationFolders.add(platform.modulesFolder().toString());
@@ -87,7 +87,7 @@ public class InstalledPlatformsForTechnology {
                 }
             }
             this.installedPlatforms = Collections.unmodifiableList(platforms);
-            this.installedModelFolders = Collections.unmodifiableList(modelFolders);
+            this.installedSpecificationFolders = Collections.unmodifiableList(specificationFolders);
             this.installedImplementationFolders = Collections.unmodifiableList(implementationFolders);
             this.ready = true;
         }

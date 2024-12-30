@@ -625,7 +625,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final class SourceInfo extends AbstractConvertibleToJson {
         private String languageName = null;
         // - this language name is user-friendly, unlike root "language" field
-        private String modelPath = null;
+        private String specificationPath = null;
         private String modulePath = null;
 
         public SourceInfo() {
@@ -633,7 +633,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         private SourceInfo(JsonObject json, Path file) {
             this.languageName = json.getString("language_name", null);
-            this.modelPath = json.getString("model_path", null);
+            this.specificationPath = json.getString("specification_path", null);
             this.modulePath = json.getString("module_path", null);
         }
 
@@ -646,17 +646,19 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public String getModelPath() {
-            return modelPath;
+        public String getSpecificationPath() {
+            return specificationPath;
         }
 
-        public SourceInfo setModelPath(String modelPath) {
-            this.modelPath = modelPath;
+        public SourceInfo setSpecificationPath(String specificationPath) {
+            this.specificationPath = specificationPath;
             return this;
         }
 
-        public SourceInfo setAbsoluteModelPath(Path modelPath) {
-            return setModelPath(modelPath == null ? null : modelPath.toAbsolutePath().toString());
+        public SourceInfo setAbsoluteSpecificationPath(Path specificationPath) {
+            return setSpecificationPath(specificationPath == null ?
+                    null :
+                    specificationPath.toAbsolutePath().toString());
         }
 
         public String getModulePath() {
@@ -680,7 +682,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         public String toString() {
             return "SourceInfo{" +
                     "languageName='" + languageName + '\'' +
-                    ", modelPath='" + modelPath + '\'' +
+                    ", specificationPath='" + specificationPath + '\'' +
                     ", modulePath='" + modulePath + '\'' +
                     '}';
         }
@@ -690,8 +692,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (languageName != null) {
                 builder.add("language_name", languageName);
             }
-            if (modelPath != null) {
-                builder.add("model_path", modelPath);
+            if (specificationPath != null) {
+                builder.add("specification_path", specificationPath);
             }
             if (modulePath != null) {
                 builder.add("module_path", modulePath);
@@ -976,7 +978,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private ParameterValueType valueType;
         private String valueClass = null;
         // - can be the name of some class of similar values; for example,
-        // for value-type "settings" it may be the name of the settings model
+        // for value-type "settings" it may be the name of the settings specification
         private ControlEditionType editionType = ControlEditionType.VALUE;
         private String builderId = null;
         // - can be executor ID of some executor, that can create this parameter (usually value-type "settings"),
@@ -1350,7 +1352,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private Path executorSpecificationFile = null;
     private String version = CURRENT_VERSION;
     private String platformId = null;
-    // - usually not loaded from JSON file, but set later, while loading all JSON models for some platform
+    // - usually not loaded from JSON file, but set later, while loading all JSON specification for some platform
     private String category;
     private String name;
     private String description = null;
@@ -1434,7 +1436,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 throw e;
                 // - file name is enough information to find a mistake
             }
-            throw new JsonException("Problem in JSON model for executor with ID '" + executorId + "\'"
+            throw new JsonException("Problem in JSON specification for executor with ID '" + executorId + "\'"
                     + (name == null ? "" : ", name \'" + name + "\'")
                     + (description == null ? "" : ", description \'" + name + "\'"), e);
         }
@@ -1621,7 +1623,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     /**
      * Returns configuration of the current Java executor or <code>null</code>
      * if it is not a Java executor.
-     * <p>The result of this function is never <code>null</code>, if this model was constructed from JSON
+     * <p>The result of this function is never <code>null</code>, if this specification was constructed from JSON
      * and if {@link #isExecutorSpecification(JsonObject)} returns <code>true</code>. But this can be not so
      * if this object was constructed manually via setter methods.
      *
@@ -1685,30 +1687,30 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     /**
-     * Sets the source files information for this executor model.
+     * Sets the source files information for this executor specification.
      *
-     * <p>Usually it is set by {@link #setSourceInfoForModel()} method, which uses JSON file, passed
-     * to  {@link #read(Path)} or {@link #readIfValid(Path)} methods, as a model file, and does not try
+     * <p>Usually it is set by {@link #setSourceInfoForSpecification()} method, which uses JSON file, passed
+     * to  {@link #read(Path)} or {@link #readIfValid(Path)} methods, as a specification file, and does not try
      * to set module source file (if that method is not overridden).
      * However, it can be useful to set some of these two paths manually even in a case, when this object
      * is built on the base some other source, for example, a chain ({@link #setTo(Chain)} method).
      * For example, it can be used to allow GUI to open the source file of the given executor.</p>
      *
-     * @param modelPath  path to some resource, defining this model of the executor,
-     *                   usually a disk path (but also can be, for example, URL or something else).
-     * @param modulePath path to some source text of the module (if applicable and available, for example,
-     *                   JavaScript or chain file), usually a disk path
-     *                   (but also can be, for example, URL or something else).
+     * @param specificationPath path to some resource, defining this specification of the executor,
+     *                          usually a disk path (but also can be, for example, URL or something else).
+     * @param modulePath        path to some source text of the module (if applicable and available, for example,
+     *                          JavaScript or chain file), usually a disk path
+     *                          (but also can be, for example, URL or something else).
      * @return a reference to {@link SourceInfo} field inside this object (for possible additional corrections).
      */
-    public final SourceInfo setSourceInfo(Path modelPath, Path modulePath) {
+    public final SourceInfo setSourceInfo(Path specificationPath, Path modulePath) {
         this.sourceInfo = new SourceInfo();
-        this.sourceInfo.setAbsoluteModelPath(modelPath);
+        this.sourceInfo.setAbsoluteSpecificationPath(specificationPath);
         this.sourceInfo.setAbsoluteModulePath(modulePath);
         return sourceInfo;
     }
 
-    public final SourceInfo setSourceInfoForModel() {
+    public final SourceInfo setSourceInfoForSpecification() {
         return setSourceInfo(executorSpecificationFile, null);
     }
 
@@ -1992,8 +1994,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 // (though can be used as internal chain constants)
                 final ControlConf controlConf = controls.getOrDefault(parameterName, new ControlConf());
                 controlConf.setName(parameterName);
-                ParameterValueType valueType = block.executorSpecification != null ? block.executorSpecification.dataType() : null;
-                ControlEditionType editionType = block.executorSpecification != null ? block.executorSpecification.editionType() : null;
+                ParameterValueType valueType = block.executorSpecification != null ?
+                        block.executorSpecification.dataType() : null;
+                ControlEditionType editionType = block.executorSpecification != null ?
+                        block.executorSpecification.editionType() : null;
                 if (valueType == null) {
                     valueType = ParameterValueType.STRING;
                 }

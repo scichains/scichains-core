@@ -232,8 +232,8 @@ public final class UseMultiChain extends FileOperation {
                         + multiChainSpecification.getMultiChainSpecificationFile(), e);
             }
             long t2 = infoTime();
-            final List<ChainSpecification> chainModels = multiChain.chainModels();
-            final Set<String> blockedChainModelNames = multiChain.blockedChainModelNames();
+            final List<ChainSpecification> chainModels = multiChain.chainSpecifications();
+            final Set<String> blockedChainModelNames = multiChain.blockedChainSpecificationNames();
             // - Note: in a multichain, all chain variants always have different names
             // (it is checked in MultiChainSpecification.readChainVariants method).
             // Note: recursive usage of multichain is a sub-chain is possible, but seems to be an error,
@@ -288,7 +288,7 @@ public final class UseMultiChain extends FileOperation {
 
     public static ExecutorSpecification buildMultiChainSpecification(MultiChain multiChain) {
         Objects.requireNonNull(multiChain, "Null multiChain");
-        final MultiChainSpecification model = multiChain.model();
+        final MultiChainSpecification model = multiChain.specification();
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMultiChain());
         // - adds JavaConf and (maybe) parameters with setters
@@ -323,19 +323,19 @@ public final class UseMultiChain extends FileOperation {
     public static void useAllInstalledInSharedContext() throws IOException {
         final UseMultiChain useMultiChain = UseMultiChain.getInstance();
         useMultiChain.setSessionId(GLOBAL_SHARED_SESSION_ID);
-        for (String folder : MULTICHAIN_PLATFORMS.installedModelFolders()) {
+        for (String folder : MULTICHAIN_PLATFORMS.installedSpecificationFolders()) {
             final long t1 = System.nanoTime();
             useMultiChain.usePath(Paths.get(folder));
             final long t2 = System.nanoTime();
             logInfo(() -> String.format(Locale.US,
-                    "Loading installed multichain models from %s: %.3f ms",
+                    "Loading installed multi-chain specifications from %s: %.3f ms",
                     folder, (t2 - t1) * 1e-6));
         }
     }
 
     private static void addSystemParameters(ExecutorSpecification result, MultiChain multiChain) {
         final String multiChainName = multiChain.name();
-        final MultiChainSpecification.Options options = multiChain.model().getOptions();
+        final MultiChainSpecification.Options options = multiChain.specification().getOptions();
         if (options != null && options.getBehavior() != null && options.getBehavior().isSkippable()) {
             result.addControl(new ExecutorSpecification.ControlConf()
                     .setName(DO_ACTION_NAME)
