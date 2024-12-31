@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.geometry;
 
-import net.algart.multimatrix.MultiMatrix2D;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixChannel2DFilter;
 import net.algart.arrays.*;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixChannel2DFilter;
 import net.algart.math.functions.Func;
 import net.algart.math.functions.LinearFunc;
+import net.algart.multimatrix.MultiMatrix2D;
 
 public final class Resize extends MultiMatrixChannel2DFilter {
     public static final String OUTPUT_DIM_X = "dim_x";

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.matrices.copying;
 
-import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SMat;
 
 public final class CopyMatrix extends Executor {
     private boolean requireInput = false;

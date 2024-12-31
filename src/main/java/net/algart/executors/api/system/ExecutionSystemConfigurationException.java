@@ -22,43 +22,20 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
-public enum ExecutionStage {
-    LOADING_TIME("loading_time"),
-    RUN_TIME("run_time");
+import java.io.Serial;
 
-    private final String stageName;
+public class ExecutionSystemConfigurationException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 4681440223056373283L;
 
-    ExecutionStage(String stageName) {
-        this.stageName = stageName;
+    public ExecutionSystemConfigurationException(String message) {
+        super(message);
     }
 
-    public String stageName() {
-        return stageName;
-    }
-
-    public static ExecutionStage valueOfStageName(String name) {
-        final ExecutionStage result = valueOfStageNameOrNull(name);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown stage name: " + name);
-        }
-        return result;
-    }
-
-    public static ExecutionStage valueOfStageNameOrNull(String name) {
-        for (ExecutionStage stage : values()) {
-            if (stage.stageName.equals(name)) {
-                return stage;
-            }
-        }
-        return null;
-    }
-
-    public static void main(String[] args) {
-        for (ExecutionStage stage : values()) {
-            System.out.printf("%s: %s, %s%n", stage, stage.stageName(), valueOfStageName(stage.stageName()));
-        }
+    public ExecutionSystemConfigurationException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

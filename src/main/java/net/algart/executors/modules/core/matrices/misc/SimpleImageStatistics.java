@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.misc;
 
+import net.algart.additions.arrays.ArrayMinMaxFinder;
 import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.math.Range;
-import net.algart.additions.arrays.ArrayMinMaxFinder;
 import net.algart.multimatrix.MultiMatrix;
 
 import java.util.function.ToIntFunction;

@@ -25,10 +25,10 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.system.ExecutorNotFoundException;
-import net.algart.executors.api.ExecutorFactory;
 
 import java.io.IOException;
 

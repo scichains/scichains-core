@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
+import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.math.functions.Func;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class MatrixAbs extends MultiMatrixFilter {
     private boolean contrastResult = false;

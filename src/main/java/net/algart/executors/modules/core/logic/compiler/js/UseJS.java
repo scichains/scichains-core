@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.logic.compiler.js;
 
 import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalPlatforms;
-import net.algart.executors.api.SimpleExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExtensionSpecification;
+import net.algart.executors.api.system.SimpleExecutorLoader;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.modules.core.logic.compiler.js.interpreters.InterpretJS;

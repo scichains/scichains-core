@@ -27,9 +27,7 @@ package net.algart.multimatrix;
 import net.algart.executors.api.data.SMat;
 import net.algart.io.MatrixIO;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 

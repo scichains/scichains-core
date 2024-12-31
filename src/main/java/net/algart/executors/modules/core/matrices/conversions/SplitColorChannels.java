@@ -32,8 +32,6 @@ import net.algart.executors.api.data.SMat;
 import net.algart.multimatrix.MultiMatrix;
 import net.algart.multimatrix.MultiMatrix2D;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public final class SplitColorChannels extends ColorSpaceConversion {

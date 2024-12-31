@@ -28,8 +28,8 @@ import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
-import net.algart.math.functions.AbstractFunc;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelGenerator;
+import net.algart.math.functions.AbstractFunc;
 
 public final class CreateBilinearFunction extends MultiMatrixChannelGenerator {
     private String color = "#FFFFFF";

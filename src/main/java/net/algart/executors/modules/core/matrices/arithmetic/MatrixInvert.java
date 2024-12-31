@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
+import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.math.functions.LinearFunc;
 import net.algart.multimatrix.MultiMatrix;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 
 public final class MatrixInvert extends MultiMatrixFilter {
     private double topBoundary = 1.0;

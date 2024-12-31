@@ -28,9 +28,11 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
+import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.system.ExecutionSystemConfigurationException;
+import net.algart.executors.api.system.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
-import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.js.UseJS;
 import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
@@ -85,8 +87,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     private static final List<ExecutorLoader> executorLoaders = new ArrayList<>();
 
-    private static final ExecutorLoader.StandardJavaExecutorLoader standardJavaExecutorLoader =
-            new ExecutorLoader.StandardJavaExecutorLoader();
+    private static final ExecutorLoader standardJavaExecutorLoader =
+            ExecutorLoader.getStandardJavaExecutorLoader();
 
     static {
         registerExecutorLoader(standardJavaExecutorLoader);
@@ -1274,7 +1276,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             if (!initialized) {
                 try {
                     ExecutorSpecificationSet.findAllBuiltIn();
-                    standardJavaExecutorLoader.registerAllStandardExecutors();
+                    // - this method can be called automatically from registerAllStandardExecutors(),
+                    // but an explicit call allows to avoid extra catching IOException -> IOError
+                    standardJavaExecutorLoader.addAllStandardJavaExecutorSpecifications();
                     UsingPython.initializePython();
                     UsingPython.useAllInstalledInSharedContext();
                     UseJS.useAllInstalledInSharedContext();

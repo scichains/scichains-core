@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.executable;
 
+import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.api.system.Chain;
 import net.algart.executors.api.system.ChainSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 
 import java.io.IOException;

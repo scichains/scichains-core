@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.common.scalars;
 
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SScalar;
 
 public abstract class ScalarFilter extends Executor {
     protected ScalarFilter() {

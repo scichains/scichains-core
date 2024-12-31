@@ -24,9 +24,9 @@
 
 package net.algart.executors.modules.core.common.numbers;
 
-import net.algart.math.IRange;
-import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.SNumbers;
+import net.algart.math.IRange;
 
 import java.util.*;
 

@@ -27,7 +27,6 @@ package net.algart.executors.api.tests;
 import net.algart.executors.api.data.SScalar;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;

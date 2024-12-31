@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.ExecutionBlock;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

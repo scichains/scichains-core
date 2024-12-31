@@ -24,7 +24,6 @@
 
 package net.algart.executors.api.data;
 
-import net.algart.arrays.Arrays;
 import net.algart.arrays.*;
 import net.algart.contours.Contours;
 import net.algart.external.UsedForExternalCommunication;
@@ -36,7 +35,10 @@ import java.nio.ByteOrder;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

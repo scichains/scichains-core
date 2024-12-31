@@ -24,11 +24,11 @@
 
 package net.algart.executors.modules.core.matrices.arithmetic;
 
-import net.algart.executors.modules.core.common.OptionalArguments;
-import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.OptionalArguments;
+import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.math.functions.Func;
 
 import java.util.List;

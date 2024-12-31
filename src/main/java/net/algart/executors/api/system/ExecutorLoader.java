@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.ExecutionBlock;
 
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
@@ -58,6 +57,10 @@ public class ExecutorLoader {
 
     public ExecutorLoader(String name) {
         this.name = Objects.requireNonNull(name, "Null loader name");
+    }
+
+    public static ExecutorLoader getStandardJavaExecutorLoader() {
+        return new StandardJavaExecutorLoader();
     }
 
     public String name() {
@@ -128,7 +131,8 @@ public class ExecutorLoader {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
-            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
+            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
+                    .get(executorId);
         }
     }
 
@@ -137,7 +141,32 @@ public class ExecutorLoader {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
         synchronized (allSpecifications) {
-            allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).put(executorId, specification);
+            allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
+                    .put(executorId, specification);
+        }
+    }
+
+    public final void addSpecifications(String sessionId, Map<String, String> specifications) {
+        Objects.requireNonNull(sessionId, "Null sessionId");
+        Objects.requireNonNull(specifications, "Null specifications");
+        synchronized (allSpecifications) {
+            allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
+                    .putAll(specifications);
+        }
+    }
+
+    public void addAllStandardJavaExecutorSpecifications() {
+        if (REGISTER_BUILT_IN_EXECUTORS) {
+            final long t1 = System.nanoTime();
+            final Map<String, String> allStandard = new LinkedHashMap<>();
+            for (ExecutorSpecification executorSpecification : ExecutorSpecificationSet.allBuiltIn().all()) {
+                allStandard.put(executorSpecification.getExecutorId(), executorSpecification.toJson().toString());
+            }
+            final long t2 = System.nanoTime();
+            LOG.log(Logger.Level.INFO, () -> String.format(Locale.US,
+                    "Storing descriptions of installed built-in executor models: %.3f ms",
+                    (t2 - t1) * 1e-6));
+            addSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
         }
     }
 
@@ -145,7 +174,8 @@ public class ExecutorLoader {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
-            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).remove(executorId) != null;
+            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
+                    .remove(executorId) != null;
         }
     }
 
@@ -167,26 +197,11 @@ public class ExecutorLoader {
     // Note: this loader is usually enough for actual creating executors,
     // because non-Java executors are usually implemented via standard Java executor, which performs their tasks.
     // This loader DOES NOT use sessionId (Java classes are shared among all JVM).
-    static class StandardJavaExecutorLoader extends ExecutorLoader {
+    private static class StandardJavaExecutorLoader extends ExecutorLoader {
         private final Map<String, Executable> newInstanceMakers = new HashMap<>();
 
         StandardJavaExecutorLoader() {
             super("standard Java executors loader");
-        }
-
-        void registerAllStandardExecutors() {
-            if (REGISTER_BUILT_IN_EXECUTORS) {
-                final long t1 = System.nanoTime();
-                final Map<String, String> allStandard = new LinkedHashMap<>();
-                for (ExecutorSpecification executorSpecification : ExecutorSpecificationSet.allBuiltIn().all()) {
-                    allStandard.put(executorSpecification.getExecutorId(), executorSpecification.toJson().toString());
-                }
-                final long t2 = System.nanoTime();
-                LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
-                        "Storing descriptions of installed built-in executor models: %.3f ms",
-                        (t2 - t1) * 1e-6));
-                allSpecifications.put(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
-            }
         }
 
         @Override

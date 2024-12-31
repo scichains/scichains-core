@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.matrices.geometry;
 
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelFilter;
 import net.algart.math.IPoint;
 import net.algart.math.IRectangularArea;
-import net.algart.executors.modules.core.common.matrices.MultiMatrixChannelFilter;
 
 public abstract class SubMatrixFilter extends MultiMatrixChannelFilter {
     public static final String RECTANGULAR_AREA = "rectangular_area";

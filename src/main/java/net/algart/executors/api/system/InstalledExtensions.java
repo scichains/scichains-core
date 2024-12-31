@@ -24,7 +24,6 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.ExecutionSystemConfigurationException;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.external.UsedForExternalCommunication;
 
