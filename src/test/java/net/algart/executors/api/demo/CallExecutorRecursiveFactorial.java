@@ -50,8 +50,8 @@ public class CallExecutorRecursiveFactorial {
         // it is a part of the platform folder for sub-chains
         final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
         try (ExecutionBlock executor = executorFactory.newExecutor(RECURSIVE_FACTORIAL_CHAIN_ID)) {
+            CallSimpleChain.printExecutorInterface(executor);
             executor.setIntParameter("n", value);
-            executor.addPort(Port.newOutput(executor.defaultOutputPortName(), DataType.SCALAR));
             executor.requestDefaultOutput();
             executor.execute();
             final double result = executor.getScalar().toDouble();

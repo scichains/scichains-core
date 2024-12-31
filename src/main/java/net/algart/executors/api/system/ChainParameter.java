@@ -41,7 +41,9 @@ public final class ChainParameter {
         return new ChainParameter(name);
     }
 
-    public static ChainParameter valueOf(ChainBlock block, ChainSpecification.ChainBlockConf.ParameterConf parameterConf) {
+    public static ChainParameter valueOf(
+            ChainBlock block,
+            ChainSpecification.ChainBlockConf.ParameterConf parameterConf) {
         final ChainParameter result = newInstance(parameterConf.getName());
         assert result.value == null : "newInstance must set null value";
         result.loadValue(block, parameterConf.getValue());

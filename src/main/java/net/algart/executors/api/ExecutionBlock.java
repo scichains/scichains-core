@@ -97,19 +97,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private static final Map<Integer, Runnable> oneTimeTasksAfterExecutingAll =
             Collections.synchronizedMap(new LinkedHashMap<>());
 
-    /**
-     * input ports
-     */
     private final Map<String, Port> inputPorts = new LinkedHashMap<>();
-
-    /**
-     * output ports
-     */
     private final Map<String, Port> outputPorts = new LinkedHashMap<>();
-
-    /**
-     * Parameters, updated automatically by host application.
-     */
     private final Parameters parameters = new Parameters();
 
     private boolean visibleResultNecessary = false;
@@ -1134,6 +1123,17 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         executor.sessionId = sessionId;
         executor.executorId = executorId;
         executor.executorSpecification = specification;
+        for (var e : specification.getControls().entrySet()) {
+            final String name = e.getKey();
+            final ExecutorSpecification.ControlConf controlConf = e.getValue();
+            executor.parameters.put(name, controlConf.getDefaultValue());
+        }
+        for (var e : specification.getInPorts().entrySet()) {
+            executor.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
+        }
+        for (var e : specification.getOutPorts().entrySet()) {
+            executor.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
+        }
 //                System.out.println("Specification: " + specification);
         return executor;
     }

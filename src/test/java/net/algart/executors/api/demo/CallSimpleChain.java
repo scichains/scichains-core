@@ -57,9 +57,10 @@ public class CallSimpleChain {
         final SMat inputMat = SMat.valueOf(ImageIO.read(inputImagePath.toFile()));
 
         ExecutionBlock.initializeExecutionSystem();
-        System.out.println("Loading " + chainPath.toAbsolutePath() + "...");
+        System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
         try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
 //            System.out.println(executor.getExecutorSpecification().jsonString());
+            printExecutorInterface(executor);
             executor.putMat(inputMat);
             if (parameterA != null) {
                 // - if null, default value should be used
@@ -78,5 +79,21 @@ public class CallSimpleChain {
             MatrixIO.writeBufferedImage(outputImagePath, result);
             System.out.println("O'k: results saved in " + outputImagePath);
         }
+    }
+
+    static void printExecutorInterface(ExecutionBlock executor) {
+        System.out.println("Initial executor parameters:");
+        for (var e : executor.parameters().entrySet()) {
+            System.out.printf("    %s = %s%n", e.getKey(), e.getValue());
+        }
+        System.out.println("Initial input ports:");
+        for (var p : executor.allInputPorts()) {
+            System.out.printf("    %s%n", p);
+        }
+        System.out.println("Initial output ports:");
+        for (var p : executor.allOutputPorts()) {
+            System.out.printf("    %s%n", p);
+        }
+        System.out.println();
     }
 }

@@ -1207,6 +1207,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return defaultJsonValue;
         }
 
+        public Object getDefaultValue() {
+            return getValueType().toParameter(this.defaultJsonValue);
+        }
+
         public ControlConf setDefaultJsonValue(JsonValue defaultJsonValue) {
             assert valueType != null;
             if (defaultJsonValue != null) {
