@@ -81,13 +81,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    private static final ExecutorLoaderList GLOBAL_EXECUTOR_LOADER_LIST = new ExecutorLoaderList();
+    private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
 
     private static final ExecutorLoader STANDARD_JAVA_EXECUTOR_LOADER =
             ExecutorLoader.getStandardJavaExecutorLoader();
 
     static {
-        registerExecutorLoader(STANDARD_JAVA_EXECUTOR_LOADER);
+        globalExecutorLoaders().register(STANDARD_JAVA_EXECUTOR_LOADER);
     }
 
     private static final Map<Integer, Runnable> tasksBeforeExecutingAll =
@@ -733,7 +733,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Gets the unique ID of this executor, which was set while creating by
-     * {@link #newExecutionBlock(String, String, String)}.
+     * {@link #newExecutor(String, String, ExecutorSpecification)}.
      */
     public final String getExecutorId() {
         return executorId;
@@ -1105,8 +1105,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return p == -1 ? null : className.substring(0, p);
     }
 
-    public static ExecutorLoaderList globalExecutorLoaderList() {
-        return GLOBAL_EXECUTOR_LOADER_LIST;
+    public static ExecutorLoaderSet globalExecutorLoaders() {
+        return GLOBAL_EXECUTOR_LOADERS;
     }
 
     /**
@@ -1129,24 +1129,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(specification, "Null specification");
-        final List<ExecutorLoader> loaders = GLOBAL_EXECUTOR_LOADER_LIST.loaders();
-        for (int k = loaders.size() - 1; k >= 0; k--) {
-            // Last registered loaders override previous
-            final ExecutorLoader loader = loaders.get(k);
-            final ExecutionBlock executor = loader.loadExecutor(sessionId, executorId, specification);
-            if (executor != null) {
-                //TODO!! set up ports and default parameters
-                executor.sessionId = sessionId;
-                executor.executorId = executorId;
-                executor.executorSpecification = specification;
+        final ExecutionBlock executor = GLOBAL_EXECUTOR_LOADERS.loadExecutor(sessionId, executorId, specification);
+        //TODO!! set up ports and default parameters
+        executor.sessionId = sessionId;
+        executor.executorId = executorId;
+        executor.executorSpecification = specification;
 //                System.out.println("Specification: " + specification);
-                return executor;
-            }
-        }
-        throw new IllegalArgumentException("Cannot create executor with ID " + executorId
-                + ": unknown executor specification format");
+        return executor;
     }
 
     /**
@@ -1176,7 +1165,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     //TODO!! rename
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
-        return GLOBAL_EXECUTOR_LOADER_LIST.availableSpecifications(sessionId).values().toArray(new String[0]);
+        return GLOBAL_EXECUTOR_LOADERS.availableSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**
@@ -1191,7 +1180,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static String getExecutorSpecification(String sessionId, String executorId) {
-        return GLOBAL_EXECUTOR_LOADER_LIST.getSpecification(sessionId, executorId);
+        return GLOBAL_EXECUTOR_LOADERS.getSpecification(sessionId, executorId);
     }
 
     /**
@@ -1202,13 +1191,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
-        GLOBAL_EXECUTOR_LOADER_LIST.clearSession(sessionId);
-    }
-
-    public static void registerExecutorLoader(ExecutorLoader loader) {
-        synchronized (GLOBAL_EXECUTOR_LOADER_LIST) {
-            GLOBAL_EXECUTOR_LOADER_LIST.addLoader(loader);
-        }
+        GLOBAL_EXECUTOR_LOADERS.clearSession(sessionId);
     }
 
     private static class Initialization {

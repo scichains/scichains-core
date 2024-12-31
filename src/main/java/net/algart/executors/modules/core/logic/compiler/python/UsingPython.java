@@ -60,7 +60,7 @@ public class UsingPython {
             new SimpleExecutorLoader<>("Python loader");
 
     static {
-        ExecutionBlock.registerExecutorLoader(PYTHON_CALLER_LOADER);
+        ExecutionBlock.globalExecutorLoaders().register(PYTHON_CALLER_LOADER);
     }
 
     private UsingPython() {

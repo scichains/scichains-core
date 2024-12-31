@@ -29,10 +29,10 @@ import net.algart.executors.api.ExecutionBlock;
 
 import java.util.*;
 
-public class ExecutorLoaderList {
+public final class ExecutorLoaderSet {
     private final List<ExecutorLoader> loaders = new ArrayList<>();
 
-    public void addLoader(ExecutorLoader loader) {
+    public void register(ExecutorLoader loader) {
         synchronized (loaders) {
             loaders.add(loader);
         }
@@ -42,6 +42,23 @@ public class ExecutorLoaderList {
         synchronized (loaders) {
             return new ArrayList<>(loaders);
         }
+    }
+
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+            throws ClassNotFoundException {
+        Objects.requireNonNull(executorId, "Null executorId");
+        Objects.requireNonNull(specification, "Null specification");
+        final List<ExecutorLoader> loaders = loaders();
+        for (int k = loaders.size() - 1; k >= 0; k--) {
+            // Last registered loaders override previous
+            final ExecutorLoader loader = loaders.get(k);
+            final ExecutionBlock executor = loader.loadExecutor(sessionId, executorId, specification);
+            if (executor != null) {
+                return executor;
+            }
+        }
+        throw new IllegalArgumentException("Cannot load executor with ID " + executorId
+                + ": unknown executor specification");
     }
 
     public Map<String, String> availableSpecifications(String sessionId) {

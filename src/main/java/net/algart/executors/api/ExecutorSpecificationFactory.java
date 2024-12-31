@@ -24,6 +24,7 @@
 
 package net.algart.executors.api;
 
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 @FunctionalInterface
@@ -37,7 +38,7 @@ public interface ExecutorSpecificationFactory {
      * However, this function usually returns full specification.
      *
      * <p>The main source of information about all specifications is another:
-     * {@link net.algart.executors.api.system.ExecutorLoaderList#availableSpecifications(String)}.
+     * {@link ExecutorLoaderSet#availableSpecifications(String)}.
      *
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.

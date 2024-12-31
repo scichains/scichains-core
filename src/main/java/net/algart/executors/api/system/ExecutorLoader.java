@@ -40,8 +40,8 @@ import java.util.*;
  *
  * <p>In current version, all they are instances of {@link SimpleExecutorLoader}.
  *
- * <p>Note: there are global executor loaders, registered by
- * {@link ExecutionBlock#registerExecutorLoader(ExecutorLoader)}.
+ * @see ExecutorLoaderSet
+ * @see ExecutionBlock#globalExecutorLoaders()
  */
 public class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;
@@ -161,6 +161,7 @@ public class ExecutorLoader {
             final Map<String, String> allStandard = new LinkedHashMap<>();
             for (ExecutorSpecification executorSpecification : ExecutorSpecificationSet.allBuiltIn().all()) {
                 allStandard.put(executorSpecification.getExecutorId(), executorSpecification.toJson().toString());
+                // - storing brief JSONs: usually we have a lot of executors, and it makes sense to save time
             }
             final long t2 = System.nanoTime();
             LOG.log(Logger.Level.INFO, () -> String.format(Locale.US,

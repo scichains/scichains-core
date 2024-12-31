@@ -25,7 +25,6 @@
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ExecutorFactory;
 import net.algart.executors.api.SystemEnvironment;
@@ -104,7 +103,7 @@ public final class UseSubChain extends FileOperation {
             new SimpleExecutorLoader<>("sub-chains loader");
 
     static {
-        ExecutionBlock.registerExecutorLoader(SUB_CHAIN_LOADER);
+        globalExecutorLoaders().register(SUB_CHAIN_LOADER);
     }
 
     private static final Set<String> NOW_USED_CHAIN_IDS = Collections.synchronizedSet(new HashSet<>());

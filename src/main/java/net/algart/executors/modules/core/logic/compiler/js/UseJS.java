@@ -51,7 +51,7 @@ public class UseJS extends FileOperation {
             new SimpleExecutorLoader<>("JS loader");
 
     static {
-        registerExecutorLoader(JS_CALLER_LOADER);
+        globalExecutorLoaders().register(JS_CALLER_LOADER);
     }
 
     private String workingDirectory = ".";

@@ -26,7 +26,6 @@ package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
@@ -96,7 +95,7 @@ public final class UseMultiChain extends FileOperation {
             new SimpleExecutorLoader<>("multi-chains loader");
 
     static {
-        ExecutionBlock.registerExecutorLoader(MULTICHAIN_LOADER);
+        globalExecutorLoaders().register(MULTICHAIN_LOADER);
     }
 
     private boolean fileExistenceRequired = true;
