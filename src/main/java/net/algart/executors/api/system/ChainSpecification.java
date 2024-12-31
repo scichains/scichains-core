@@ -44,7 +44,7 @@ import static net.algart.executors.api.system.ExecutorSpecification.quote;
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
 // in several ports.
 public final class ChainSpecification extends AbstractConvertibleToJson {
-    private static final boolean USE_PARAMETERS_SECTION = false;
+    private static final boolean USE_PARAMETERS_SECTION = true;
     // - should be true since 4.4.11
 
     public static final String CHAIN_TECHNOLOGY = "chain";
