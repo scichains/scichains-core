@@ -894,6 +894,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         } else {
             clone = new LinkedHashMap<>();
         }
+        clone.remove(CHAIN_SECTION_ALIAS);
         clone.put(CHAIN_SECTION, toJson());
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         for (Map.Entry<String, JsonValue> entry : clone.entrySet()) {
