@@ -24,7 +24,7 @@
 
 package net.algart.bridges.jep.api;
 
-import net.algart.executors.api.model.InstalledPlatformsForTechnology;
+import net.algart.executors.api.system.InstalledPlatformsForTechnology;
 
 import java.util.List;
 

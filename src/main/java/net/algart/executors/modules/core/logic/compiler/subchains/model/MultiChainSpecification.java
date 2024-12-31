@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.logic.compiler.subchains.model;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.model.ChainSpecification;
-import net.algart.executors.api.model.ExecutorSpecification;
-import net.algart.executors.api.model.ExtensionSpecification;
+import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExtensionSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.io.MatrixIO;

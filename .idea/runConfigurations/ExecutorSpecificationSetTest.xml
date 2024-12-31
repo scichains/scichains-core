@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ExecutorSpecificationSetTest" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.ExecutorSpecificationSetTest" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.system.tests.ExecutorSpecificationSetTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="--resolve --create \SciChains\ext\base-core" />
     <method v="2">

@@ -1,12 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SimpleExecutingChainTest with UseSubChain" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.SimpleExecutingChainTest" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.system.tests.SimpleExecutingChainTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value=" build\java\resources\demo\chains\chain_from_java\use_simple_linear_function.chain" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.executors.api.model.tests.*" />
+        <option name="PATTERN" value="net.algart.executors.api.system.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

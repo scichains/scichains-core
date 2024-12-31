@@ -24,7 +24,7 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 @FunctionalInterface
 public interface ExecutorSpecificationFactory {

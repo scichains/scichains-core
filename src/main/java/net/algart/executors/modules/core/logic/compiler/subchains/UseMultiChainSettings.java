@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
-import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.GetNamesOfSettings;

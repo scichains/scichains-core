@@ -27,10 +27,10 @@ package net.algart.executors.modules.core.system;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.model.ExecutorSpecification;
-import net.algart.executors.api.model.ExecutorSpecificationSet;
-import net.algart.executors.api.model.ExtensionSpecification;
-import net.algart.executors.api.model.InstalledExtensions;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.system.ExtensionSpecification;
+import net.algart.executors.api.system.InstalledExtensions;
 
 import java.io.File;
 import java.nio.file.Files;

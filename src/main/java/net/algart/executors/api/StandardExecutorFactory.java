@@ -25,9 +25,9 @@
 package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.model.ExecutorSpecification;
-import net.algart.executors.api.model.ExecutorSpecificationSet;
-import net.algart.executors.api.model.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.system.ExecutorNotFoundException;
 
 import java.util.Objects;
 

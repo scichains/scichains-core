@@ -28,7 +28,7 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.model.*;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;

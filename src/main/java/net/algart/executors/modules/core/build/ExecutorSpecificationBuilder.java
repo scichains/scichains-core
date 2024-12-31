@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.build;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

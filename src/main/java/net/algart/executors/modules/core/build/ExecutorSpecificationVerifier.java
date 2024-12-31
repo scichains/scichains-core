@@ -30,9 +30,9 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.Port;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.model.ChainSpecification;
-import net.algart.executors.api.model.ExecutorSpecification;
-import net.algart.executors.api.model.ExtensionSpecification;
+import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExtensionSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 import net.algart.json.Jsons;
 

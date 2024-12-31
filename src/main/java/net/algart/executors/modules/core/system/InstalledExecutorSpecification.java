@@ -29,8 +29,8 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.model.ExecutorSpecification;
-import net.algart.executors.api.model.ExecutorSpecificationSet;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
 
 import java.util.List;

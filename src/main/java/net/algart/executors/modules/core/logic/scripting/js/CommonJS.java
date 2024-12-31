@@ -32,7 +32,7 @@ import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.bridges.standard.JavaScriptContextContainer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.model.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorNotFoundException;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;

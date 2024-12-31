@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.build;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.SystemEnvironment;
-import net.algart.executors.api.model.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.io.IOError;
 import java.io.IOException;

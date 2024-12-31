@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ExtensionTest" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.model.tests.ExtensionTest" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.system.tests.ExtensionTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="build \tmp\ext.json" />
     <option name="VM_PARAMETERS" value="-Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext\" />

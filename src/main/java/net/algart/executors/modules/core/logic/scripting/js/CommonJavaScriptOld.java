@@ -31,7 +31,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.model.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorNotFoundException;
 
 import javax.script.ScriptEngine;
 import java.util.Locale;
