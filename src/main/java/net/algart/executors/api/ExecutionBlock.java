@@ -722,10 +722,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     /**
      * Sets ID of the session, in which this executor works. Called automatically while creating by
-     * {@link #newExecutionBlock(String, String, String)}. This can be useful in executors
+     * {@link #newExecutor(String, String, ExecutorSpecification)}. This can be useful in executors
      * that compile new functions and change the current session environment.
      *
-     * @param sessionId unique session ID (1st argument of {@link #newExecutionBlock(String, String, String)}).
+     * @param sessionId unique session ID (1st argument of {@link #newExecutor(String, String, ExecutorSpecification)}).
      */
     public final void setSessionId(String sessionId) {
         this.sessionId = sessionId;
@@ -1141,7 +1141,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * <p>Equivalent to
      * <code>{@link #newExecutor(String, String, ExecutorSpecification)
-     * newExecutionBlock}(sessionId, executorId, {@link ExecutorSpecification#valueOf(String)
+     * newExecutor}(sessionId, executorId, {@link ExecutorSpecification#valueOf(String)
      * ExecutorSpecification.valueOf}(specification))</code>.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
