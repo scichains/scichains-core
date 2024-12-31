@@ -32,11 +32,12 @@ public interface ExecutorSpecificationFactory {
      * Returns the specification of the given executor.
      *
      * <p>Note that the main goal of this function
-     * is only to return minimal description, enough for building new executor by {@link #newExecutor(String)} method.
+     * is only to return minimal description, enough for building new executor by
+     * {@link ExecutorFactory#newExecutor(String)} method.
      * However, this function usually returns full specification.
      *
-     * <p>The main source of information about all JSON models is another:
-     * {@link ExecutionBlock#availableExecutorSpecifications(String)}.
+     * <p>The main source of information about all specifications is another:
+     * {@link net.algart.executors.api.system.ExecutorLoaderList#availableSpecifications(String)}.
      *
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.

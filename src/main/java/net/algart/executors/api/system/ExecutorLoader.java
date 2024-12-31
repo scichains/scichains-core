@@ -118,8 +118,8 @@ public class ExecutorLoader {
     }
 
     /**
-     * Returns <tt>{@link #availableSpecifications(String)
-     * availableExecutorSpecifications}(sessionId).get(executorId)</tt>,
+     * Returns <code>{@link #availableSpecifications(String)
+     * availableExecutorSpecifications}(sessionId).get(executorId)</code>,
      * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session.

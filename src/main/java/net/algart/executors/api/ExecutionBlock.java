@@ -24,15 +24,11 @@
 
 package net.algart.executors.api;
 
-import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.data.*;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.system.ExecutionSystemConfigurationException;
-import net.algart.executors.api.system.ExecutorLoader;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.js.UseJS;
 import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
@@ -85,13 +81,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         }
     }
 
-    private static final List<ExecutorLoader> executorLoaders = new ArrayList<>();
+    private static final ExecutorLoaderList GLOBAL_EXECUTOR_LOADER_LIST = new ExecutorLoaderList();
 
-    private static final ExecutorLoader standardJavaExecutorLoader =
+    private static final ExecutorLoader STANDARD_JAVA_EXECUTOR_LOADER =
             ExecutorLoader.getStandardJavaExecutorLoader();
 
     static {
-        registerExecutorLoader(standardJavaExecutorLoader);
+        registerExecutorLoader(STANDARD_JAVA_EXECUTOR_LOADER);
     }
 
     private static final Map<Integer, Runnable> tasksBeforeExecutingAll =
@@ -1109,6 +1105,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return p == -1 ? null : className.substring(0, p);
     }
 
+    public static ExecutorLoaderList globalExecutorLoaderList() {
+        return GLOBAL_EXECUTOR_LOADER_LIST;
+    }
+
     /**
      * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.</p>
      *
@@ -1131,7 +1131,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
-        final List<ExecutorLoader> loaders = executionBlockLoaders();
+        final List<ExecutorLoader> loaders = GLOBAL_EXECUTOR_LOADER_LIST.loaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
             final ExecutorLoader loader = loaders.get(k);
@@ -1176,69 +1176,22 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     //TODO!! rename
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
-        return availableExecutorSpecifications(sessionId).values().toArray(new String[0]);
+        return GLOBAL_EXECUTOR_LOADER_LIST.availableSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**
-     * Returns executors' descriptions (probable JSONs, like in
-     * {@link ExecutorSpecification})
-     * for all executors, dynamically created by some Java functions for the given session
-     * <b>and</b> for global session {@link #GLOBAL_SHARED_SESSION_ID}.
-     * Keys in the result are ID of every executor, values are descriptions.
-     * This may be used for the user interface to show information for available executors.
+     * Returns specification of a registered executor.
      *
-     * @param sessionId unique ID of current session; may be <code>null</code>,
-     *                  then only global session will be checked.
-     * @return all available executors' descriptions for dynamically created executors.
-     * @throws NullPointerException if <code>sessionId==null</code>.
-     */
-    public static Map<String, String> availableExecutorSpecifications(String sessionId) {
-        final Map<String, String> result = new LinkedHashMap<>();
-        for (ExecutorLoader loader : executionBlockLoaders()) {
-            result.putAll(loader.availableSpecifications(GLOBAL_SHARED_SESSION_ID));
-            if (sessionId != null) {
-                result.putAll(loader.availableSpecifications(sessionId));
-            }
-//            System.out.println("!!! " + loader + ": " + result.size() + " executors");
-        }
-        return result;
-    }
-
-    /**
-     * Returns <tt>{@link #availableExecutorSpecifications(String)
-     * availableExecutorSpecifications}(sessionId).get(executorId)</tt>,
-     * but works quickly (without creating a new map).
+     * <p>This method is sometimes used from JavaScript and other platforms: this is the reason of adding
+     * {@link @UsedForExternalCommunication} annotation.</p>
      *
-     * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
-     *                   checked.
-     * @param executorId unique ID of this executor in the system.
-     * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
-     * @throws NullPointerException if one of arguments is <code>null</code>.
+     * @param sessionId  unique ID of current session; may be <code>null</code>.
+     * @param executorId executor ID.
+     * @return specification of this executor.
      */
+    @UsedForExternalCommunication
     public static String getExecutorSpecification(String sessionId, String executorId) {
-        synchronized (executorLoaders) {
-            for (ExecutorLoader loader : executorLoaders) {
-                String result = loader.getSpecification(GLOBAL_SHARED_SESSION_ID, executorId);
-                if (result != null) {
-                    return result;
-                }
-                if (sessionId != null) {
-                    result = loader.getSpecification(sessionId, executorId);
-                    if (result != null) {
-                        return result;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static ExecutorSpecification parseExecutorSpecification(String sessionId, String executorId) throws JsonException {
-        final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
-        if (specification == null) {
-            return null;
-        }
-        return ExecutorSpecification.valueOf(specification);
+        return GLOBAL_EXECUTOR_LOADER_LIST.getSpecification(sessionId, executorId);
     }
 
     /**
@@ -1249,21 +1202,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
-        Objects.requireNonNull(sessionId, "Null executorId");
-        for (ExecutorLoader loader : executionBlockLoaders()) {
-            loader.clearSession(sessionId);
-        }
+        GLOBAL_EXECUTOR_LOADER_LIST.clearSession(sessionId);
     }
 
     public static void registerExecutorLoader(ExecutorLoader loader) {
-        synchronized (executorLoaders) {
-            executorLoaders.add(loader);
-        }
-    }
-
-    private static List<ExecutorLoader> executionBlockLoaders() {
-        synchronized (executorLoaders) {
-            return new ArrayList<>(executorLoaders);
+        synchronized (GLOBAL_EXECUTOR_LOADER_LIST) {
+            GLOBAL_EXECUTOR_LOADER_LIST.addLoader(loader);
         }
     }
 
@@ -1278,7 +1222,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                     ExecutorSpecificationSet.findAllBuiltIn();
                     // - this method can be called automatically from registerAllStandardExecutors(),
                     // but an explicit call allows to avoid extra catching IOException -> IOError
-                    standardJavaExecutorLoader.addAllStandardJavaExecutorSpecifications();
+                    STANDARD_JAVA_EXECUTOR_LOADER.addAllStandardJavaExecutorSpecifications();
                     UsingPython.initializePython();
                     UsingPython.useAllInstalledInSharedContext();
                     UseJS.useAllInstalledInSharedContext();
