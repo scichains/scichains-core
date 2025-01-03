@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.mappings;
 
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.DefaultExecutorLoader;
+import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.mappings.interpreters.InterpretMapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;

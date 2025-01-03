@@ -105,9 +105,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private boolean allOutputsNecessary = false;
     private ExecutionBlock caller = null;
     private ExecutionBlock rootCaller = this;
-    String sessionId = null;
-    String executorId = null;
-    ExecutorSpecification executorSpecification = null;
+    private String sessionId = null;
+    private String executorId = null;
+    private ExecutorSpecification executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -706,14 +706,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Returns unique ID of the session, in which this executor works. It is set automatically while creating by
-     * {@link ExecutorLoader#newExecutor(String, String, ExecutorSpecification)}.
+     * Returns the unique ID of the session, in which this executor works.
+     * It is set automatically while creating by
+     * {@link #newExecutor(String, String, ExecutorSpecification)}.
      */
     public final String getSessionId() {
         return sessionId;
     }
 
-    @Deprecated
     public final void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
@@ -726,6 +726,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return executorId;
     }
 
+
+    public final void setExecutorId(String executorId) {
+        this.executorId = executorId;
+    }
+
     /**
      * Gets the specification of this executor, which was set while creating by
      * {@link #newExecutor(String, String, ExecutorSpecification)}.
@@ -734,6 +739,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public final ExecutorSpecification getExecutorSpecification() {
         return executorSpecification;
+    }
+
+    public final void setExecutorSpecification(ExecutorSpecification executorSpecification) {
+        this.executorSpecification = executorSpecification;
     }
 
     public final String getPlatformId() {
@@ -752,9 +761,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @param ownerId unique ID of this executor "owner".
      */
     @UsedForExternalCommunication
-    public final ExecutionBlock setOwnerId(String ownerId) {
+    public final void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
-        return this;
     }
 
     public final Object getContextId() {
@@ -1097,7 +1105,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.</p>
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification.
+     * This method also creates all input/output ports and fills the parameters by default values
+     * according to the specification.</p>
      *
      * <p>The specification must contain all information, necessary for constructing and initializing the Java class
      * of the executor, in its {@link ExecutorSpecification#getJava() Java configuration}.

@@ -22,13 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.system.ExecutorLoaderSet;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.ExecutionBlock;
 
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;
@@ -68,32 +65,6 @@ public abstract class ExecutorLoader {
 
     public String name() {
         return name;
-    }
-
-    public final ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
-            throws ClassNotFoundException {
-        final ExecutionBlock executor = loadExecutor(sessionId, executorId, specification);
-        if (executor == null) {
-            return null;
-        }
-        executor.sessionId = sessionId;
-        executor.executorId = executorId;
-        executor.executorSpecification = specification;
-        final Parameters parameters = executor.parameters();
-        for (var e : specification.getControls().entrySet()) {
-            final String name = e.getKey();
-            final ExecutorSpecification.ControlConf controlConf = e.getValue();
-            parameters.put(name, controlConf.getDefaultValue());
-        }
-        for (var e : specification.getInPorts().entrySet()) {
-            executor.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
-        }
-        for (var e : specification.getOutPorts().entrySet()) {
-            executor.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
-        }
-//                System.out.println("Specification: " + specification);
-        return executor;
-
     }
 
     /**

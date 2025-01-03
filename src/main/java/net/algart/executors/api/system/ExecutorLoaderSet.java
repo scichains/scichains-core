@@ -26,7 +26,8 @@ package net.algart.executors.api.system;
 
 import jakarta.json.JsonException;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutorLoader;
+import net.algart.executors.api.Port;
+import net.algart.executors.api.parameters.Parameters;
 
 import java.util.*;
 
@@ -45,14 +46,37 @@ public final class ExecutorLoaderSet {
         }
     }
 
-    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public final ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+            throws ClassNotFoundException {
+        final ExecutionBlock executor = loadExecutor(sessionId, executorId, specification);
+        executor.setSessionId(sessionId);
+        executor.setExecutorId(executorId);
+        executor.setExecutorSpecification(specification);
+        final Parameters parameters = executor.parameters();
+        for (var e : specification.getControls().entrySet()) {
+            final String name = e.getKey();
+            final ExecutorSpecification.ControlConf controlConf = e.getValue();
+            parameters.put(name, controlConf.getDefaultValue());
+        }
+        for (var e : specification.getInPorts().entrySet()) {
+            executor.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
+        }
+        for (var e : specification.getOutPorts().entrySet()) {
+            executor.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
+        }
+//                System.out.println("Specification: " + specification);
+        return executor;
+
+    }
+
+    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
         final List<ExecutorLoader> loaders = loaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutionBlock executor = loaders.get(k).newExecutor(sessionId, executorId, specification);
+            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, executorId, specification);
             if (executor != null) {
                 return executor;
             }
