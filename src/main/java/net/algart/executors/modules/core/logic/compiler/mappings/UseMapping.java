@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.mappings;
 
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.SimpleExecutorLoader;
+import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.mappings.interpreters.InterpretMapping;
 import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;
@@ -45,8 +45,8 @@ public class UseMapping extends FileOperation {
     public static final String MAPPING_LANGUAGE = "mapping";
     public static final String CATEGORY_PREFIX = "$";
 
-    private static final SimpleExecutorLoader<Mapping> MAPPING_LOADER =
-            new SimpleExecutorLoader<>("mappings loader");
+    private static final DefaultExecutorLoader<Mapping> MAPPING_LOADER =
+            new DefaultExecutorLoader<>("mappings loader");
 
     static {
         globalExecutorLoaders().register(MAPPING_LOADER);
@@ -65,7 +65,7 @@ public class UseMapping extends FileOperation {
         return new UseMapping();
     }
 
-    public static SimpleExecutorLoader<Mapping> mappingLoader() {
+    public static DefaultExecutorLoader<Mapping> mappingLoader() {
         return MAPPING_LOADER;
     }
 

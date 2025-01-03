@@ -31,7 +31,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExtensionSpecification;
-import net.algart.executors.api.system.SimpleExecutorLoader;
+import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.modules.core.logic.compiler.python.interpreters.InterpretPython;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCaller;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerSpecification;
@@ -56,8 +56,8 @@ public class UsingPython {
             "List of Python executor specification folders, " +
                     "supplied by this application and used to find Python-based executors";
 
-    private static final SimpleExecutorLoader<PythonCaller> PYTHON_CALLER_LOADER =
-            new SimpleExecutorLoader<>("Python loader");
+    private static final DefaultExecutorLoader<PythonCaller> PYTHON_CALLER_LOADER =
+            new DefaultExecutorLoader<>("Python loader");
 
     static {
         ExecutionBlock.globalExecutorLoaders().register(PYTHON_CALLER_LOADER);
@@ -66,7 +66,7 @@ public class UsingPython {
     private UsingPython() {
     }
 
-    public static SimpleExecutorLoader<PythonCaller> pythonCallerLoader() {
+    public static DefaultExecutorLoader<PythonCaller> pythonCallerLoader() {
         return PYTHON_CALLER_LOADER;
     }
 

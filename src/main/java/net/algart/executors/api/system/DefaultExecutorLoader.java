@@ -38,8 +38,8 @@ import java.util.Objects;
  * @param <W> some object ("worker") that actually perform all work of the executor;
  *            should implement {@link AutoCloseable}, if it has some resources that must be freed after usage.
  */
-public class SimpleExecutorLoader<W> extends ExecutorLoader {
-    public SimpleExecutorLoader(String name) {
+public class DefaultExecutorLoader<W> extends ExecutorLoader {
+    public DefaultExecutorLoader(String name) {
         super(name);
     }
 
@@ -52,6 +52,7 @@ public class SimpleExecutorLoader<W> extends ExecutorLoader {
         // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean registerWorker(String sessionId, String id, W worker, ExecutorSpecification specification) {
         if (id == null) {
             return false;

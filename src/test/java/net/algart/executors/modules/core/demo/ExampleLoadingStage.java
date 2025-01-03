@@ -27,6 +27,7 @@ package net.algart.executors.modules.core.demo;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.system.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.DefaultExecutorLoader;
 
 public final class ExampleLoadingStage extends Executor {
     public static class TestExecutor extends Executor {
@@ -87,7 +88,7 @@ public final class ExampleLoadingStage extends Executor {
         }
     }
 
-    private static final ExecutorLoader MY_LOADER = new ExecutorLoader("test loader");
+    private static final ExecutorLoader MY_LOADER = new DefaultExecutorLoader<>("test loader");
 
     static {
         globalExecutorLoaders().register(MY_LOADER);

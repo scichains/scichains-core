@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import jakarta.json.JsonValue;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
@@ -99,8 +99,8 @@ public final class UseSubChain extends FileOperation {
 
     private static final InstalledPlatformsForTechnology SUB_CHAIN_PLATFORMS =
             InstalledPlatformsForTechnology.getInstance(ChainSpecification.CHAIN_TECHNOLOGY);
-    private static final SimpleExecutorLoader<Chain> SUB_CHAIN_LOADER =
-            new SimpleExecutorLoader<>("sub-chains loader");
+    private static final DefaultExecutorLoader<Chain> SUB_CHAIN_LOADER =
+            new DefaultExecutorLoader<>("sub-chains loader");
 
     static {
         globalExecutorLoaders().register(SUB_CHAIN_LOADER);
@@ -138,7 +138,7 @@ public final class UseSubChain extends FileOperation {
         return getSessionInstance(GLOBAL_SHARED_SESSION_ID);
     }
 
-    public static SimpleExecutorLoader<Chain> subChainLoader() {
+    public static DefaultExecutorLoader<Chain> subChainLoader() {
         return SUB_CHAIN_LOADER;
     }
 

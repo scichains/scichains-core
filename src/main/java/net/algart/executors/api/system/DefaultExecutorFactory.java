@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2024 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,30 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.system.ExecutorNotFoundException;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.ExecutionBlock;
 
 import java.util.Objects;
 
-// Note: executing some loading-stage blocks can add here new IDs for further loading-stage blocks.
-public class StandardExecutorFactory implements ExecutorFactory {
+/**
+ * Default standard implementation of executor factory, based on {@link ExecutorLoader}.
+ */
+public class DefaultExecutorFactory implements ExecutorFactory {
     private final ExecutorSpecificationSet staticExecutors;
     private final ExecutorSpecificationSet dynamicExecutorsCache = ExecutorSpecificationSet.newInstance();
     // - this set is dynamically extended in specification() method via ExecutionBlock.getExecutorSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
-    private StandardExecutorFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
+    private DefaultExecutorFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
         this.staticExecutors = Objects.requireNonNull(staticExecutors, "Null static executors set");
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
     }
 
-    public static StandardExecutorFactory newInstance(ExecutorSpecificationSet staticExecutors, String sessionId) {
-        return new StandardExecutorFactory(staticExecutors, sessionId);
+    public static DefaultExecutorFactory newInstance(ExecutorSpecificationSet staticExecutors, String sessionId) {
+        return new DefaultExecutorFactory(staticExecutors, sessionId);
     }
 
     @Override

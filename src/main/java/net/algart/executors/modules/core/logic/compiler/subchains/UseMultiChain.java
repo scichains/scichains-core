@@ -91,8 +91,8 @@ public final class UseMultiChain extends FileOperation {
 
     private static final InstalledPlatformsForTechnology MULTICHAIN_PLATFORMS =
             InstalledPlatformsForTechnology.getInstance(MULTICHAIN_TECHNOLOGY);
-    private static final SimpleExecutorLoader<MultiChain> MULTICHAIN_LOADER =
-            new SimpleExecutorLoader<>("multi-chains loader");
+    private static final DefaultExecutorLoader<MultiChain> MULTICHAIN_LOADER =
+            new DefaultExecutorLoader<>("multi-chains loader");
 
     static {
         globalExecutorLoaders().register(MULTICHAIN_LOADER);
@@ -110,7 +110,7 @@ public final class UseMultiChain extends FileOperation {
         return new UseMultiChain();
     }
 
-    public static SimpleExecutorLoader<MultiChain> multiChainLoader() {
+    public static DefaultExecutorLoader<MultiChain> multiChainLoader() {
         return MULTICHAIN_LOADER;
     }
 

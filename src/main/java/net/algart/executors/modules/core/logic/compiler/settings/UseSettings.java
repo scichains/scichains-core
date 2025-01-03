@@ -122,8 +122,8 @@ public class UseSettings extends FileOperation {
 
     private static final InstalledPlatformsForTechnology SETTINGS_PLATFORMS =
             InstalledPlatformsForTechnology.getInstance(SETTINGS_TECHNOLOGY);
-    private static final SimpleExecutorLoader<SettingsCombiner> SETTINGS_COMBINER_LOADER =
-            new SimpleExecutorLoader<>("settings loader");
+    private static final DefaultExecutorLoader<SettingsCombiner> SETTINGS_COMBINER_LOADER =
+            new DefaultExecutorLoader<>("settings loader");
 
     static {
         globalExecutorLoaders().register(SETTINGS_COMBINER_LOADER);
@@ -152,7 +152,7 @@ public class UseSettings extends FileOperation {
         return new UseSettings();
     }
 
-    public static SimpleExecutorLoader<SettingsCombiner> settingsCombinerLoader() {
+    public static DefaultExecutorLoader<SettingsCombiner> settingsCombinerLoader() {
         return SETTINGS_COMBINER_LOADER;
     }
 

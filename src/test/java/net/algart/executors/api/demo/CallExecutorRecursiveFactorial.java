@@ -25,9 +25,7 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutorFactory;
-import net.algart.executors.api.Port;
-import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorNotFoundException;
 
 import java.io.IOException;

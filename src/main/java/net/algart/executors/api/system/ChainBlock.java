@@ -113,7 +113,7 @@ public final class ChainBlock {
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:
         // we do it, for example, while registering new sub-chains-as-executors
-        // (see comments inside StandardExecutorFactory.specification()).
+        // (see comments inside DefaultExecutorFactory.specification()).
         // But we can delay actual assigning correct executorSpecification until reinitialize method.
         initialize();
     }

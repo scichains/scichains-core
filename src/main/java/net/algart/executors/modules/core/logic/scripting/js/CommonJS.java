@@ -79,7 +79,7 @@ public final class CommonJS extends Executor {
     public static class ExecutorFactory {
         private final String sessionId;
         private final boolean callableExecutorOutputsNecessaryAlways;
-        private net.algart.executors.api.ExecutorFactory executorFactory = null;
+        private net.algart.executors.api.system.ExecutorFactory executorFactory = null;
 
         private ExecutorFactory(String sessionId, boolean callableExecutorOutputsNecessaryAlways) {
             this.sessionId = sessionId;
@@ -87,7 +87,7 @@ public final class CommonJS extends Executor {
         }
 
         public Executor get(String callableExecutorId) {
-            final net.algart.executors.api.ExecutorFactory executorFactory = executorFactory();
+            final net.algart.executors.api.system.ExecutorFactory executorFactory = executorFactory();
             final ExecutionBlock executionBlock;
             try {
                 executionBlock = executorFactory.newExecutor(callableExecutorId);
@@ -107,9 +107,9 @@ public final class CommonJS extends Executor {
             return (Executor) executionBlock;
         }
 
-        private net.algart.executors.api.ExecutorFactory executorFactory() {
+        private net.algart.executors.api.system.ExecutorFactory executorFactory() {
             if (this.executorFactory == null) {
-                this.executorFactory = net.algart.executors.api.ExecutorFactory.newStandardInstance(sessionId);
+                this.executorFactory = net.algart.executors.api.system.ExecutorFactory.newStandardInstance(sessionId);
             }
             return this.executorFactory;
         }

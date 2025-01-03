@@ -38,12 +38,12 @@ import java.util.*;
  * Loader of {@link ExecutionBlock executors}. Every kind of executors, like sub-chains, settings combiners,
  * Python function uses their own loaders.
  *
- * <p>In current version, all they are instances of {@link SimpleExecutorLoader}.
+ * <p>In current version, all they are instances of {@link DefaultExecutorLoader}.
  *
  * @see ExecutorLoaderSet
  * @see ExecutionBlock#globalExecutorLoaders()
  */
-public class ExecutorLoader {
+public abstract class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;
     // - Must be true since 15 Aug 2022. It helps external system to see modification,
     // made by Java in standard built-in executor JSONs.
@@ -69,7 +69,8 @@ public class ExecutorLoader {
 
     /**
      * Actually loads and instantiate new execution block.
-     * Default implementation returns <code>null</code>.
+     *
+     * <p>If this method returns <code>null</code>, the system will ignore this loader and try another one.
      *
      * <p>Note: if this loader uses sessionId, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
@@ -78,14 +79,12 @@ public class ExecutorLoader {
      *                      may be ignored.
      * @param executorId    see the same argument of {@link ExecutionBlock#newExecutor}.
      * @param specification see the same argument of {@link ExecutionBlock#newExecutor}.
-     * @return newly created executor or <code>null</code> if this loader does not "understand" such JSON.
+     * @return newly created executor or <code>null</code> if this loader does not "understand" this specification.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
-            throws ClassNotFoundException {
-        return null;
-    }
+    public abstract ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+            throws ClassNotFoundException;
 
     /**
      * Removes all executors, dynamically created for the given session,

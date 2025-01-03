@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2024 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.system;
 
-import net.algart.executors.api.system.*;
+import net.algart.executors.api.ExecutionBlock;
 
 /**
  * Factory of {@link ExecutionBlock executors}.
  *
- * <p>Now we have only one implementation, {@link StandardExecutorFactory}, which just calls
+ * <p>Now we have only one implementation, {@link DefaultExecutorFactory}, which just calls
  * {@link ExecutionBlock#newExecutor} function with passing their
  * specification ({@link ExecutorSpecification}), necessary for loading Java class of executor.
  * In turn, {@link ExecutionBlock#newExecutor} uses one of registered
@@ -69,6 +69,6 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      * @see ExecutionBlock#newExecutionBlock(String, String, String)
      */
     static ExecutorFactory newStandardInstance(String sessionId) {
-        return StandardExecutorFactory.newInstance(ExecutorSpecificationSet.allBuiltIn(), sessionId);
+        return DefaultExecutorFactory.newInstance(ExecutorSpecificationSet.allBuiltIn(), sessionId);
     }
 }
