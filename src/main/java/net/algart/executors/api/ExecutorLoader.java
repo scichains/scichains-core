@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2024 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.system.ExecutorLoaderSet;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationSet;
 
 import java.lang.System.Logger;
 import java.lang.reflect.Constructor;

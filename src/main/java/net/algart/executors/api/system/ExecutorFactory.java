@@ -25,6 +25,7 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.ExecutorLoader;
 
 /**
  * Factory of {@link ExecutionBlock executors}.
