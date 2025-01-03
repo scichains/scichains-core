@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.logic.compiler.settings;
 
 import jakarta.json.JsonValue;
+import net.algart.executors.api.DefaultExecutorLoader;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;

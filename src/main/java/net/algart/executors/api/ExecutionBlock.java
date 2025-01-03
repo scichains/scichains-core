@@ -105,9 +105,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private boolean allOutputsNecessary = false;
     private ExecutionBlock caller = null;
     private ExecutionBlock rootCaller = this;
-    private String sessionId = null;
-    private String executorId = null;
-    private ExecutorSpecification executorSpecification = null;
+    String sessionId = null;
+    String executorId = null;
+    ExecutorSpecification executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -705,17 +705,15 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         this.rootCaller = caller == null ? this : caller.rootCaller;
     }
 
+    /**
+     * Returns unique ID of the session, in which this executor works. It is set automatically while creating by
+     * {@link ExecutorLoader#newExecutor(String, String, ExecutorSpecification)}.
+     */
     public final String getSessionId() {
         return sessionId;
     }
 
-    /**
-     * Sets ID of the session, in which this executor works. Called automatically while creating by
-     * {@link #newExecutor(String, String, ExecutorSpecification)}. This can be useful in executors
-     * that compile new functions and change the current session environment.
-     *
-     * @param sessionId unique session ID (1st argument of {@link #newExecutor(String, String, ExecutorSpecification)}).
-     */
+    @Deprecated
     public final void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
@@ -1118,24 +1116,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        final ExecutionBlock executor = GLOBAL_EXECUTOR_LOADERS.loadExecutor(sessionId, executorId, specification);
-        //TODO!! set up ports and default parameters
-        executor.sessionId = sessionId;
-        executor.executorId = executorId;
-        executor.executorSpecification = specification;
-        for (var e : specification.getControls().entrySet()) {
-            final String name = e.getKey();
-            final ExecutorSpecification.ControlConf controlConf = e.getValue();
-            executor.parameters.put(name, controlConf.getDefaultValue());
-        }
-        for (var e : specification.getInPorts().entrySet()) {
-            executor.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
-        }
-        for (var e : specification.getOutPorts().entrySet()) {
-            executor.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
-        }
-//                System.out.println("Specification: " + specification);
-        return executor;
+        return GLOBAL_EXECUTOR_LOADERS.newExecutor(sessionId, executorId, specification);
     }
 
     /**

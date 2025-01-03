@@ -45,15 +45,14 @@ public final class ExecutorLoaderSet {
         }
     }
 
-    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
         final List<ExecutorLoader> loaders = loaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutorLoader loader = loaders.get(k);
-            final ExecutionBlock executor = loader.loadExecutor(sessionId, executorId, specification);
+            final ExecutionBlock executor = loaders.get(k).newExecutor(sessionId, executorId, specification);
             if (executor != null) {
                 return executor;
             }
@@ -77,7 +76,6 @@ public final class ExecutorLoaderSet {
      * @param includeGlobalSession if <code>true</code>, the result includes the executors,
      *                             registered in the global session.
      * @return all available executor specifications for this and the global session.
-     * @throws NullPointerException if the argument is <code>null</code>.
      */
     public Map<String, String> availableSpecifications(String sessionId, boolean includeGlobalSession) {
         final Map<String, String> result = new LinkedHashMap<>();
@@ -106,7 +104,7 @@ public final class ExecutorLoaderSet {
      *                   checked.
      * @param executorId unique ID of this executor in the system.
      * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
-     * @throws NullPointerException if one of arguments is <code>null</code>.
+     * @throws NullPointerException if <code>executorId</code>> arguments is <code>null</code>.
      */
     public String getSpecification(String sessionId, String executorId, boolean includeGlobalSession) {
         synchronized (loaders) {

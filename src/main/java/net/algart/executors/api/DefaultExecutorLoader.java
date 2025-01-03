@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017-2024 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api;
 
-import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.ExecutorLoader;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,8 +32,10 @@ import java.util.Objects;
 
 /**
  * Actually, we do not override any methods in most cases.
- * This loader is used only for adding model descriptions (registerWorker method);
- * standard execution block loader (for usual Java classes) is used for loading workers.
+ * This loader is used only for adding model descriptions ({@link #registerWorker} method).
+ * The {@link ExecutorLoader#getStandardJavaExecutorLoader() standard executor loader}
+ * (for usual Java classes) is used for loading the executor, but it delegates all work
+ * to the "worker", registered for this executor ID.
  *
  * @param <W> some object ("worker") that actually perform all work of the executor;
  *            should implement {@link AutoCloseable}, if it has some resources that must be freed after usage.
@@ -50,7 +51,9 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
     @Override
     public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification) {
         return null;
-        // - the same behavior as in the superclass: just skip loading and pass executorId to the standard loader
+        // - Just skip loading and pass executorId to the standard loader.
+        // Usually we have a set of executors with different IDs, but with the same Java class like InterpretSubChain,
+        // which can be loaded by the standard Java loader.
     }
 
     @SuppressWarnings("UnusedReturnValue")

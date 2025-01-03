@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.demo;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.DefaultExecutorLoader;
 
 public final class ExampleLoadingStage extends Executor {
     public static class TestExecutor extends Executor {
