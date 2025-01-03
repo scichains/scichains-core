@@ -24,10 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.settings.executable;
 
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.Chain;
-import net.algart.executors.api.system.ChainSpecification;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
 
 import java.io.IOException;
@@ -49,7 +46,7 @@ public final class SubChainToSettingsCombiner {
         final Path settingsCombinerSpecificationFile = Paths.get(args[1]);
         final String modelName = args[2];
 
-        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
+        final ExecutorFactory executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(SESSION_ID);
         // - ExecutorFactory is necessary:
         // 1) to find input/output/data blocks;
         // 2) to find default values of parameters in data blocks.

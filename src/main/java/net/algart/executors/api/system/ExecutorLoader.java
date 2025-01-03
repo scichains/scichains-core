@@ -40,8 +40,7 @@ import java.util.*;
  *
  * <p>In current version, all they are instances of {@link DefaultExecutorLoader}.
  *
- * @see ExecutorLoaderSet
- * @see ExecutionBlock#globalExecutorLoaders()
+ * @see ExecutorLoaderSet#globalExecutorLoaders()
  */
 public abstract class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;

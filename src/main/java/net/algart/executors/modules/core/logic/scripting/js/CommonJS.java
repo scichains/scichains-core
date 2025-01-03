@@ -32,6 +32,7 @@ import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.bridges.standard.JavaScriptContextContainer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorNotFoundException;
 import org.graalvm.polyglot.Value;
 
@@ -109,7 +110,7 @@ public final class CommonJS extends Executor {
 
         private net.algart.executors.api.system.ExecutorFactory executorFactory() {
             if (this.executorFactory == null) {
-                this.executorFactory = net.algart.executors.api.system.ExecutorFactory.newStandardInstance(sessionId);
+                this.executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(sessionId);
             }
             return this.executorFactory;
         }

@@ -32,7 +32,13 @@ import net.algart.executors.api.parameters.Parameters;
 import java.util.*;
 
 public final class ExecutorLoaderSet {
+    private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
+
     private final List<ExecutorLoader> loaders = new ArrayList<>();
+
+    public static ExecutorLoaderSet globalExecutorLoaders() {
+        return GLOBAL_EXECUTOR_LOADERS;
+    }
 
     public void register(ExecutorLoader loader) {
         synchronized (loaders) {
@@ -46,7 +52,15 @@ public final class ExecutorLoaderSet {
         }
     }
 
-    public final ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public ExecutorFactory newFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
+        return new DefaultExecutorFactory(this, staticExecutors, sessionId);
+    }
+
+    public ExecutorFactory newFactory(String sessionId) {
+        return newFactory(ExecutorSpecificationSet.allBuiltIn(), sessionId);
+    }
+
+    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
         final ExecutionBlock executor = loadExecutor(sessionId, executorId, specification);
         executor.setSessionId(sessionId);

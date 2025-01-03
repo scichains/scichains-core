@@ -25,11 +25,7 @@
 package net.algart.executors.api.system.tests;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.DefaultExecutorFactory;
-import net.algart.executors.api.system.Chain;
-import net.algart.executors.api.system.ChainSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationSet;
+import net.algart.executors.api.system.*;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -116,7 +112,7 @@ public class LoadingChainTest {
         System.out.printf("Reading %s...%n", modelFolder);
         final ExecutorSpecificationSet executorSpecificationSet =
                 ExecutorSpecificationSet.newInstance().addFolder(modelFolder, true);
-        final ExecutorFactory executorFactory = DefaultExecutorFactory.newInstance(
+        final ExecutorFactory executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(
                 executorSpecificationSet, "~~DUMMY");
 
         if (Files.isDirectory(chainFile)) {

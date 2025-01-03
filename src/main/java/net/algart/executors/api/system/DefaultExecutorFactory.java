@@ -30,22 +30,54 @@ import net.algart.executors.api.ExecutionBlock;
 import java.util.Objects;
 
 /**
- * Default standard implementation of executor factory, based on {@link ExecutorLoader}.
+ * Default standard implementation of executor factory, based on {@link ExecutorLoaderSet}.
  */
 public class DefaultExecutorFactory implements ExecutorFactory {
+    private final ExecutorLoaderSet executorLoaderSet;
+
     private final ExecutorSpecificationSet staticExecutors;
     private final ExecutorSpecificationSet dynamicExecutorsCache = ExecutorSpecificationSet.newInstance();
-    // - this set is dynamically extended in specification() method via ExecutionBlock.getExecutorSpecification
+    // - this set is dynamically extended in specification() method via ExecutorLoaderSet.getSpecification
     private final String sessionId;
     private final Object lock = new Object();
 
-    private DefaultExecutorFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
+    /**
+     * Creates new executor factory with standard behavior, based on the executor specification set
+     * {@link ExecutorSpecificationSet#allBuiltIn()}.
+     *
+     * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
+     * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
+     * to execute executors like sub-chains, which dynamically create other executors,
+     * probably having equal executor IDs. Executor factories with different <code>sessionID</code>
+     * are isolated from each other and can be used simultaneously.</p>
+     *
+     * <p>If you want to work with executors shared across all sessions, please use
+     * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.</p>
+     *
+     * <p>If you need only one set of executors, you can specify any <code>sessionID</code> like
+     * <code>"MySession"</code>.</p>
+     *
+     * @param executorLoaderSet set of executor loaders, used to search for specifications and create new executors.
+     * @param sessionId unique session ID (1st argument of
+     * {@link ExecutionBlock#newExecutionBlock(String, String, String)}).
+     *
+     * @see ExecutionBlock#getSessionId()
+     * @see ExecutorLoaderSet#newExecutor(String, String, ExecutorSpecification)
+     */
+    public DefaultExecutorFactory(
+            ExecutorLoaderSet executorLoaderSet,
+            ExecutorSpecificationSet staticExecutors,
+            String sessionId) {
+        this.executorLoaderSet = Objects.requireNonNull(executorLoaderSet);
         this.staticExecutors = Objects.requireNonNull(staticExecutors, "Null static executors set");
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
     }
 
-    public static DefaultExecutorFactory newInstance(ExecutorSpecificationSet staticExecutors, String sessionId) {
-        return new DefaultExecutorFactory(staticExecutors, sessionId);
+    public static DefaultExecutorFactory newInstance(
+            ExecutorLoaderSet executorLoaderSet,
+            ExecutorSpecificationSet staticExecutors,
+            String sessionId) {
+        return new DefaultExecutorFactory(executorLoaderSet, staticExecutors, sessionId);
     }
 
     @Override
@@ -66,7 +98,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-            final String specification = ExecutionBlock.getExecutorSpecification(sessionId, executorId);
+            final String specification = executorLoaderSet.getSpecification(sessionId, executorId);
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
@@ -111,7 +143,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             if (executorSpecification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return ExecutionBlock.newExecutor(sessionId, executorId, executorSpecification);
+            return executorLoaderSet.newExecutor(sessionId, executorId, executorSpecification);
         }
     }
 }

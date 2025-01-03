@@ -26,6 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.js;
 
 import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalPlatforms;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExtensionSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
@@ -51,7 +52,7 @@ public class UseJS extends FileOperation {
             new DefaultExecutorLoader<>("JS loader");
 
     static {
-        globalExecutorLoaders().register(JS_CALLER_LOADER);
+        ExecutorLoaderSet.globalExecutorLoaders().register(JS_CALLER_LOADER);
     }
 
     private String workingDirectory = ".";

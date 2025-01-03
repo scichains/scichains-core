@@ -127,7 +127,7 @@ public class UseSettings extends FileOperation {
             new DefaultExecutorLoader<>("settings loader");
 
     static {
-        globalExecutorLoaders().register(SETTINGS_COMBINER_LOADER);
+        ExecutorLoaderSet.globalExecutorLoaders().register(SETTINGS_COMBINER_LOADER);
     }
 
     private boolean recursiveScanning = true;

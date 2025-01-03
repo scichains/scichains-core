@@ -26,6 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorNotFoundException;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class CallExecutorRecursiveFactorial {
         ExecutionBlock.initializeExecutionSystem();
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
         // it is a part of the platform folder for sub-chains
-        final ExecutorFactory executorFactory = ExecutorFactory.newStandardInstance(SESSION_ID);
+        final ExecutorFactory executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(SESSION_ID);
         try (ExecutionBlock executor = executorFactory.newExecutor(RECURSIVE_FACTORIAL_CHAIN_ID)) {
             CallSimpleChain.printExecutorInterface(executor);
             executor.setIntParameter("n", value);

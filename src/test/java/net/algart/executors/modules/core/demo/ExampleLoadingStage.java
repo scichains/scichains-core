@@ -26,6 +26,7 @@ package net.algart.executors.modules.core.demo;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.system.ExecutorLoader;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 
@@ -91,7 +92,7 @@ public final class ExampleLoadingStage extends Executor {
     private static final ExecutorLoader MY_LOADER = new DefaultExecutorLoader<>("test loader");
 
     static {
-        globalExecutorLoaders().register(MY_LOADER);
+        ExecutorLoaderSet.globalExecutorLoaders().register(MY_LOADER);
     }
 
     public ExampleLoadingStage() {
@@ -107,6 +108,6 @@ public final class ExampleLoadingStage extends Executor {
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification);
         System.out.println("Loading-stage test for session " + sessionId);
         System.out.println("Current folder: " + getCurrentDirectory());
-        System.out.println(globalExecutorLoaders().availableSpecifications(sessionId));
+        System.out.println(ExecutorLoaderSet.globalExecutorLoaders().availableSpecifications(sessionId));
     }
 }
