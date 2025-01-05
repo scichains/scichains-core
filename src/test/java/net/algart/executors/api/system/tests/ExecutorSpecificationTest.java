@@ -57,7 +57,7 @@ public class ExecutorSpecificationTest {
         Thread.sleep(100);
         ExecutionBlock executionBlock;
         try {
-            executionBlock = ExecutionBlock.newExecutor(null, specification.getExecutorId(), specification);
+            executionBlock = ExecutionBlock.newExecutor(null, specification);
             Thread.sleep(100);
             System.out.println(executionBlock);
             if (executionBlock instanceof Executor) {
@@ -91,7 +91,7 @@ public class ExecutorSpecificationTest {
                 }
                 long t3 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    block1 = ExecutionBlock.newExecutor(null, specification.getExecutorId(), specification);
+                    block1 = ExecutionBlock.newExecutor(null, specification);
                 }
                 long t4 = System.nanoTime();
                 for (int i = 0; i < n; i++) {

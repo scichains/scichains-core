@@ -104,7 +104,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private ExecutionBlock caller = null;
     private ExecutionBlock rootCaller = this;
     private String sessionId = null;
-    private String executorId = null;
     private ExecutorSpecification executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
@@ -716,22 +715,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         this.sessionId = sessionId;
     }
 
-    /**
-     * Gets the unique ID of this executor, which was set while creating by
-     * {@link #newExecutor(String, String, ExecutorSpecification)}.
-     */
     public final String getExecutorId() {
-        return executorId;
+        return executorSpecification == null ? null : executorSpecification.getExecutorId();
     }
 
-
-    public final void setExecutorId(String executorId) {
-        this.executorId = executorId;
-    }
 
     /**
      * Gets the specification of this executor, which was set while creating by
-     * {@link #newExecutor(String, String, ExecutorSpecification)}.
+     * {@link #newExecutor(String, ExecutorSpecification)}.
      *
      * @return the specification of this executor.
      */
@@ -1108,42 +1099,37 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @param sessionId     unique ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.
-     * @param executorId    unique ID of this executor in the system (probably equal to
-     *                      <code>specification.{@link ExecutorSpecification#getExecutorId()
-     *                      getExecutorId()}</code>).
      * @param specification JSON specification of the executor.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
-    public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public static ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        return ExecutorLoaderSet.globalExecutorLoaders().newExecutor(sessionId, executorId, specification);
+        return ExecutorLoaderSet.globalExecutorLoaders().newExecutor(sessionId, specification);
     }
 
     /**
      * <p>Equivalent to
-     * <code>{@link #newExecutor(String, String, ExecutorSpecification)
-     * newExecutor}(sessionId, executorId, {@link ExecutorSpecification#valueOf(String)
+     * <code>{@link #newExecutor(String, ExecutorSpecification)
+     * newExecutor}(sessionId, {@link ExecutorSpecification#valueOf(String)
      * ExecutorSpecification.valueOf}(specification))</code>.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.
-     * @param executorId    unique ID of this executor in the system.
      * @param specification specification of the executor, JSON format.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
-    //TODO!! rename to newExecutor
+    //TODO!! rename to newExecutor and remove executorId
     @UsedForExternalCommunication
     public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String specification)
             throws ClassNotFoundException {
-        Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
-        return newExecutor(sessionId, executorId, ExecutorSpecification.valueOf(specification));
+        return newExecutor(sessionId, ExecutorSpecification.valueOf(specification));
     }
 
     //TODO!! rename to serializedSpecifications

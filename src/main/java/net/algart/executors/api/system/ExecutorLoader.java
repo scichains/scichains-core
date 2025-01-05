@@ -50,7 +50,7 @@ public abstract class ExecutorLoader {
     private static final Logger LOG = System.getLogger(ExecutorLoader.class.getName());
 
     final Map<String, Map<String, String>> allSpecifications = new LinkedHashMap<>();
-    // - sessionId -> Map(executorId -> executorSpecification)
+    // - structure of this map: sessionId -> Map(executorId -> executorSpecification)
 
     private final String name;
 
@@ -71,19 +71,16 @@ public abstract class ExecutorLoader {
      *
      * <p>If this method returns <code>null</code>, the system will ignore this loader and try another one.
      *
-     * <p>Note: if this loader uses sessionId, if MUST always check also
+     * <p>Note: if this loader uses <code>sessionId</code>, if MUST always check also
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
      *
-     * @param sessionId     see the same argument of {@link ExecutionBlock#newExecutor};
-     *                      may be ignored.
-     * @param executorId    see the same argument of {@link ExecutionBlock#newExecutor}.
+     * @param sessionId     see the same argument of {@link ExecutionBlock#newExecutor}; may be ignored.
      * @param specification see the same argument of {@link ExecutionBlock#newExecutor}.
      * @return newly created executor or <code>null</code> if this loader does not "understand" this specification.
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public abstract ExecutionBlock loadExecutor(
-            String sessionId, String executorId, ExecutorSpecification specification)
+    public abstract ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException;
 
     /**
@@ -225,14 +222,10 @@ public abstract class ExecutorLoader {
         }
 
         @Override
-        public ExecutionBlock loadExecutor(
-                String ignoredSessionId,
-                String executorId,
-                ExecutorSpecification specification)
+        public ExecutionBlock loadExecutor(String ignoredSessionId, ExecutorSpecification specification)
                 throws ClassNotFoundException {
-            Objects.requireNonNull(executorId, "Null executorId");
             Objects.requireNonNull(specification, "Null specification");
-            final Executable newInstance = findNewInstance(executorId, specification);
+            final Executable newInstance = findNewInstance(specification);
             if (newInstance == null) {
                 return null;
             }
@@ -265,7 +258,8 @@ public abstract class ExecutorLoader {
             // No sense to free the cache, because it corresponds to system class loader and cannot become obsolete.
         }
 
-        private Executable findNewInstance(String executorId, ExecutorSpecification specification) throws ClassNotFoundException {
+        private Executable findNewInstance(ExecutorSpecification specification) throws ClassNotFoundException {
+            final String executorId = specification.getExecutorId();
             synchronized (newInstanceMakers) {
                 if (newInstanceMakers.containsKey(executorId)) {
                     return newInstanceMakers.get(executorId);

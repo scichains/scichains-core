@@ -60,11 +60,10 @@ public final class ExecutorLoaderSet {
         return newFactory(ExecutorSpecificationSet.allBuiltIn(), sessionId);
     }
 
-    public ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        final ExecutionBlock executor = loadExecutor(sessionId, executorId, specification);
+        final ExecutionBlock executor = loadExecutor(sessionId, specification);
         executor.setSessionId(sessionId);
-        executor.setExecutorId(executorId);
         executor.setExecutorSpecification(specification);
         final Parameters parameters = executor.parameters();
         for (var e : specification.getControls().entrySet()) {
@@ -83,19 +82,18 @@ public final class ExecutorLoaderSet {
 
     }
 
-    public ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
         final List<ExecutorLoader> loaders = loaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, executorId, specification);
+            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification);
             if (executor != null) {
                 return executor;
             }
         }
-        throw new IllegalArgumentException("Cannot load executor with ID " + executorId
+        throw new IllegalArgumentException("Cannot load executor with ID " + specification.getExecutorId()
                 + ": unknown executor specification");
     }
 

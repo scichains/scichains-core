@@ -42,5 +42,5 @@ public interface ExecutorSpecificationFactory {
      * @param executorId unique executor ID.
      * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.
      */
-    ExecutorSpecification specification(String executorId);
+    ExecutorSpecification getSpecification(String executorId);
 }

@@ -24,7 +24,6 @@
 
 package net.algart.executors.api.system;
 
-import jakarta.json.JsonException;
 import net.algart.executors.api.ExecutionBlock;
 
 import java.util.Objects;
@@ -81,7 +80,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     }
 
     @Override
-    public ExecutorSpecification specification(String executorId) {
+    public ExecutorSpecification getSpecification(String executorId) {
         synchronized (lock) {
             ExecutorSpecification specification = staticExecutors.get(executorId);
             if (specification != null) {
@@ -131,11 +130,11 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (lock) {
-            final ExecutorSpecification executorSpecification = specification(executorId);
+            final ExecutorSpecification executorSpecification = getSpecification(executorId);
             if (executorSpecification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return executorLoaderSet.newExecutor(sessionId, executorId, executorSpecification);
+            return executorLoaderSet.newExecutor(sessionId, executorSpecification);
         }
     }
 }
