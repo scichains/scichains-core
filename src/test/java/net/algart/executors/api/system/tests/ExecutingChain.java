@@ -127,7 +127,7 @@ public class ExecutingChain {
         final ExecutorSpecificationSet executorSpecificationSet = ExecutorSpecificationSet.allBuiltIn();
         long t2 = System.nanoTime();
         System.out.printf(" done (%d executors, %.3f ms)%n", executorSpecificationSet.all().size(), (t2 - t1) * 1e-6);
-        final ExecutorFactory executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(SESSION_ID);
+        final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance(SESSION_ID);
 
         System.out.printf("Reading %s...", chainFile);
         t1 = System.nanoTime();

@@ -83,9 +83,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     private static final ExecutorLoader STANDARD_JAVA_EXECUTOR_LOADER =
             ExecutorLoader.getStandardJavaExecutorLoader();
-
+    private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
     static {
-        ExecutorLoaderSet.globalExecutorLoaders().register(STANDARD_JAVA_EXECUTOR_LOADER);
+        GLOBAL_EXECUTOR_LOADERS.register(STANDARD_JAVA_EXECUTOR_LOADER);
+    }
+
+    public static ExecutorLoaderSet globalExecutorLoaders() {
+        return GLOBAL_EXECUTOR_LOADERS;
     }
 
     private static final Map<Integer, Runnable> tasksBeforeExecutingAll =
@@ -1107,7 +1111,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        return ExecutorLoaderSet.globalExecutorLoaders().newExecutor(sessionId, specification);
+        return GLOBAL_EXECUTOR_LOADERS.newExecutor(sessionId, specification);
     }
 
     /**
@@ -1135,8 +1139,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     //TODO!! rename to serializedSpecifications
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
-        return ExecutorLoaderSet.globalExecutorLoaders()
-                .serializedSessionSpecifications(sessionId).values().toArray(new String[0]);
+        return GLOBAL_EXECUTOR_LOADERS.serializedSessionSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**
@@ -1147,7 +1150,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
-        ExecutorLoaderSet.globalExecutorLoaders().clearSession(sessionId);
+        GLOBAL_EXECUTOR_LOADERS.clearSession(sessionId);
     }
 
     private static class Initialization {

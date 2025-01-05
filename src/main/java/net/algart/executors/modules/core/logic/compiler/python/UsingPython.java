@@ -29,7 +29,6 @@ import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExtensionSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
@@ -61,7 +60,7 @@ public class UsingPython {
             new DefaultExecutorLoader<>("Python loader");
 
     static {
-        ExecutorLoaderSet.globalExecutorLoaders().register(PYTHON_CALLER_LOADER);
+        ExecutionBlock.globalExecutorLoaders().register(PYTHON_CALLER_LOADER);
     }
 
     private UsingPython() {

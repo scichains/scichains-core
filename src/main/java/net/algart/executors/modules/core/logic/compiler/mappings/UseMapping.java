@@ -25,7 +25,6 @@
 package net.algart.executors.modules.core.logic.compiler.mappings;
 
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.modules.core.common.io.FileOperation;
@@ -50,7 +49,7 @@ public class UseMapping extends FileOperation {
             new DefaultExecutorLoader<>("mappings loader");
 
     static {
-        ExecutorLoaderSet.globalExecutorLoaders().register(MAPPING_LOADER);
+        globalExecutorLoaders().register(MAPPING_LOADER);
     }
 
     private String mappingKeysFile = null;

@@ -31,7 +31,6 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorNotFoundException;
 
 import javax.script.ScriptEngine;
@@ -110,7 +109,7 @@ public final class CommonJavaScriptOld extends Executor {
 
         private net.algart.executors.api.system.ExecutorFactory executorFactory() {
             if (executorFactory == null) {
-                executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(sessionId);
+                executorFactory = globalExecutorLoaders().newFactory(sessionId);
             }
             return executorFactory;
         }

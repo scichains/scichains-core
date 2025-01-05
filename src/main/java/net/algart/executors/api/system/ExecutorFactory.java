@@ -44,4 +44,8 @@ import net.algart.executors.api.ExecutionBlock;
 public interface ExecutorFactory extends ExecutorSpecificationFactory {
 
     ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException;
+
+    static ExecutorFactory newDefaultInstance(String sessionId) {
+        return ExecutionBlock.globalExecutorLoaders().newFactory(sessionId);
+    }
 }

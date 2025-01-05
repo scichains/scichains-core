@@ -27,7 +27,6 @@ package net.algart.executors.modules.core.system;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
@@ -114,8 +113,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
                     (t4 - t1) * 1e-6, (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
             return builtIn;
         }
-        final ExecutorSpecification extended = ExecutorLoaderSet.globalExecutorLoaders()
-                .getSpecification(getSessionId(), executorId);
+        final ExecutorSpecification extended = globalExecutorLoaders().getSpecification(getSessionId(), executorId);
         if (extended == null) {
             return null;
         }

@@ -32,13 +32,7 @@ import net.algart.executors.api.parameters.Parameters;
 import java.util.*;
 
 public final class ExecutorLoaderSet {
-    private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
-
     private final List<ExecutorLoader> loaders = new ArrayList<>();
-
-    public static ExecutorLoaderSet globalExecutorLoaders() {
-        return GLOBAL_EXECUTOR_LOADERS;
-    }
 
     public void register(ExecutorLoader loader) {
         synchronized (loaders) {

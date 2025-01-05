@@ -104,7 +104,7 @@ public final class UseSubChain extends FileOperation {
             new DefaultExecutorLoader<>("sub-chains loader");
 
     static {
-        ExecutorLoaderSet.globalExecutorLoaders().register(SUB_CHAIN_LOADER);
+        globalExecutorLoaders().register(SUB_CHAIN_LOADER);
     }
 
     private static final Set<String> NOW_USED_CHAIN_IDS = Collections.synchronizedSet(new HashSet<>());
@@ -403,7 +403,7 @@ public final class UseSubChain extends FileOperation {
         if (sessionId == null) {
             throw new IllegalStateException("Cannot register new chain: session ID was not set");
         }
-        final ExecutorFactory executorFactory = ExecutorLoaderSet.globalExecutorLoaders().newFactory(sessionId);
+        final ExecutorFactory executorFactory = globalExecutorLoaders().newFactory(sessionId);
         Chain chain = Chain.valueOf(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {
             // - If the chain was loaded not from file, but from the executor text parameter,
