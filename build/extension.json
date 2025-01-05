@@ -13,7 +13,7 @@
       "technology": "jvm",
       "language": "java",
       "folders": {
-        "models": "java/models",
+        "specifications": "java/specifications",
         "resources": "java/resources"
       },
       "configuration": {
@@ -35,7 +35,7 @@
       "technology": "jep",
       "language": "python",
       "folders": {
-        "models": "python/models",
+        "specifications": "python/specifications",
         "modules": "python/modules",
         "libraries": "python/lib"
       }
@@ -52,7 +52,7 @@
       "technology": "graal",
       "language": "js",
       "folders": {
-        "models": "js/models",
+        "specifications": "js/specifications",
         "modules": "js/modules"
       }
     },
@@ -68,7 +68,7 @@
       ],
       "technology": "settings",
       "folders": {
-        "models": "settings/models"
+        "specifications": "settings/specifications"
       }
     },
     {
@@ -84,7 +84,7 @@
       "technology": "chain",
       "language": "chain",
       "folders": {
-        "models": "chain/models"
+        "specifications": "chain/specifications"
       }
     }
   ]
