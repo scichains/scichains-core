@@ -38,6 +38,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public final class ExtensionSpecification extends AbstractConvertibleToJson {
+    private static final boolean SUPPORT_OLD_MODELS_SYNTAX = true;
+
     public static final String APP_NAME = "executors-extension";
     public static final String CURRENT_VERSION = "1.0";
     public static final String DEFAULT_EXTENSION_FILE_NAME = "extension.json";
@@ -49,7 +51,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         private static final AtomicLong DYNAMIC_ID_INDEX = new AtomicLong(0);
 
         public static final class Folders extends AbstractConvertibleToJson {
-            private String models = null;
+            private String specifications = null;
             private String modules = null;
             private String libraries = null;
             private String resources = null;
@@ -62,7 +64,12 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             }
 
             private Folders(JsonObject json, Path file) {
-                setModels(json.getString("models", null));
+                String specifications = json.getString("specifications", null);
+                if (SUPPORT_OLD_MODELS_SYNTAX && specifications == null) {
+                    specifications = json.getString("models", null);
+                    // - alias from the versions before 4.4.11
+                }
+                setSpecifications(specifications);
                 setModules(json.getString("modules", null));
                 setLibraries(json.getString("libraries", null));
                 setResources(json.getString("resources", null));
@@ -84,13 +91,13 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
              *
              * @return folder, containing the files with specifications of the executors.
              */
-            public String getModels() {
-                return models;
+            public String getSpecifications() {
+                return specifications;
             }
 
-            public Folders setModels(String models) {
+            public Folders setSpecifications(String specifications) {
                 checkImmutable();
-                this.models = models == null ? null : nonEmpty(models);
+                this.specifications = specifications == null ? null : nonEmpty(specifications);
                 return this;
             }
 
@@ -200,7 +207,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             @Override
             public String toString() {
                 return "Folders{" +
-                        "models='" + models + '\'' +
+                        "specifications='" + specifications + '\'' +
                         ", modules='" + modules + '\'' +
                         ", libraries='" + libraries + '\'' +
                         ", resources='" + resources + '\'' +
@@ -211,8 +218,8 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
 
             @Override
             public void buildJson(JsonObjectBuilder builder) {
-                if (models != null) {
-                    builder.add("models", models);
+                if (specifications != null) {
+                    builder.add("specifications", specifications);
                 }
                 if (modules != null) {
                     builder.add("modules", modules);
@@ -499,20 +506,6 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             }
         }
 
-// Not too good idea
-//        public static final String DEFAULT_MODELS_SUBFOLDER = "_java/models"; // Folders
-//        public static final String DEFAULT_LANGUAGE = "java";
-//        public static final String DEFAULT_TECHNOLOGY = JVM_TECHNOLOGY;
-//        public static Platform newDefaultInstance(Path extensionFolder) {
-//            Objects.requireNonNull(extensionFolder, "Null extensionFolder");
-//            return new Platform()
-//                    .setTechnology(Platform.DEFAULT_TECHNOLOGY)
-//                    .setLanguage(Platform.DEFAULT_LANGUAGE)
-//                    .setFolders(new Platform.Folders()
-//                            .setModels(Platform.Folders.DEFAULT_MODELS_SUBFOLDER)
-//                            .setRoot(extensionFolder));
-//        }
-
         public String getId() {
             return id;
         }
@@ -626,16 +619,16 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public boolean hasModels() {
-            return folders.models != null;
+        public boolean hasSpecifications() {
+            return folders.specifications != null;
         }
 
-        public Path modelsFolder() {
-            return folders.resolve(folders.models, "models");
+        public Path specificationsFolder() {
+            return folders.resolve(folders.specifications, "specifications");
         }
 
-        public Path modelsFolderOrNull() {
-            return hasModels() ? modelsFolder() : null;
+        public Path specificationsFolderOrNull() {
+            return hasSpecifications() ? specificationsFolder() : null;
         }
 
         public boolean hasModules() {
@@ -889,11 +882,11 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
                 path -> path.getFileName().toString().toLowerCase().endsWith(".json"));
     }
 
-    public static <T> List<T> readAllIfValid(
-            List<T> result,
+    public static <S> List<S> readAllIfValid(
+            List<S> result,
             Path containingJsonPath,
             boolean recursive,
-            Function<Path, T> reader,
+            Function<Path, S> reader,
             Predicate<Path> isAllowedPath)
             throws IOException {
         Objects.requireNonNull(containingJsonPath, "Null containingJsonPath");
@@ -909,9 +902,9 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
                 }
             }
         } else if (Files.isRegularFile(containingJsonPath) && isAllowedPath.test(containingJsonPath)) {
-            final T modelJson = reader.apply(containingJsonPath);
-            if (modelJson != null) {
-                result.add(modelJson);
+            final S specification = reader.apply(containingJsonPath);
+            if (specification != null) {
+                result.add(specification);
             }
         }
         return result;

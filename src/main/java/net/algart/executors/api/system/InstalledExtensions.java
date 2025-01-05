@@ -81,21 +81,47 @@ public class InstalledExtensions {
     public static final boolean ENABLE_REPLACEMENT_IN_EXTENSIONS_PROPERTIES = SystemEnvironment.getBooleanProperty(
             "net.algart.executors.pathReplacementAllowed", false);
 
+    /**
+     * The value of {@link #EXTENSIONS_ROOT_PROPERTY} system property.
+     * This property is used in {@link #installedExtensionsPaths()} method with
+     * normalization of the path via {@link #extensionPath(String)}.
+     */
     public static final String EXTENSIONS_ROOT = replaceHome(
             SystemEnvironment.getStringProperty(EXTENSIONS_ROOT_PROPERTY));
+
+    /**
+     * The value of {@link #EXTENSIONS_PATH_PROPERTY} system property.
+     * This property is used in {@link #installedExtensionsPaths()} method with
+     * normalization of the path via {@link #extensionPath(String)}.
+     */
     public static final String EXTENSIONS_PATH = replaceHome(
             SystemEnvironment.getStringProperty(EXTENSIONS_PATH_PROPERTY));
+
+    /**
+     * The value of {@link #EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY} system property.
+     */
     public static final boolean CHECK_EXISTING_PATHS =
             SystemEnvironment.getBooleanProperty(EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY, true);
+
+    /**
+     * Equivalent to <code>Path.of(path).toAbsolutePath().normalize()</code>.
+     *
+     * @param path the path string for some installed extension.
+     * @return equivalent normalized absolute path.
+     */
+    public static Path extensionPath(String path) {
+        Objects.requireNonNull(path, "Null path");
+        return Path.of(path).toAbsolutePath().normalize();
+    }
 
     public static Collection<Path> installedExtensionsPaths() {
         try {
             if (EXTENSIONS_PATH != null) {
                 final String[] split = EXTENSIONS_PATH.split("\\" + File.pathSeparator);
-                return Arrays.stream(split).map(Paths::get).toList();
+                return Arrays.stream(split).map(InstalledExtensions::extensionPath).toList();
             }
             if (EXTENSIONS_ROOT != null) {
-                return ExtensionSpecification.allExtensionFolders(Paths.get(EXTENSIONS_ROOT));
+                return ExtensionSpecification.allExtensionFolders(extensionPath(EXTENSIONS_ROOT));
             }
         } catch (IOException | InvalidPathException e) {
             throw new IllegalStateException("Installed extensions root path " +

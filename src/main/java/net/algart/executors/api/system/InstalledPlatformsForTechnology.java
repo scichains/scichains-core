@@ -75,8 +75,8 @@ public class InstalledPlatformsForTechnology {
             for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
                 if (platform.getTechnology().equals(platformTechnology)) {
                     platforms.add(platform);
-                    if (platform.hasModels()) {
-                        specificationFolders.add(platform.modelsFolder().toString());
+                    if (platform.hasSpecifications()) {
+                        specificationFolders.add(platform.specificationsFolder().toString());
                     }
                     if (platform.hasModules()) {
                         implementationFolders.add(platform.modulesFolder().toString());

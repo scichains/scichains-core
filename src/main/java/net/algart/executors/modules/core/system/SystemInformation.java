@@ -90,7 +90,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
                             "]]",
                     platform.jsonString(),
                     platform.isBuiltIn() ? "  built-in," : "",
-                    folderToString(platform.modelsFolderOrNull()),
+                    folderToString(platform.specificationsFolderOrNull()),
                     folderToString(platform.modulesFolderOrNull()),
                     folderToString(platform.librariesFolderOrNull()),
                     folderToString(platform.resourcesFolderOrNull()),

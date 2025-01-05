@@ -49,13 +49,13 @@
     },
     {
       "value_type": "scalar",
-      "name": "models_folder",
-      "hint": "Platform models folder"
+      "name": "specifications_folder",
+      "hint": "Platform executor specifications folder"
     },
     {
       "value_type": "scalar",
       "name": "modules_folder",
-      "hint": "Platform modules folder"
+      "hint": "Platform executor modules folder"
     },
     {
       "value_type": "scalar",

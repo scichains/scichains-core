@@ -341,13 +341,13 @@ public class UseSettings extends FileOperation {
 
     public void useAllInstalled() throws IOException {
         for (ExtensionSpecification.Platform platform : SETTINGS_PLATFORMS.installedPlatforms()) {
-            if (platform.hasModels()) {
+            if (platform.hasSpecifications()) {
                 final long t1 = System.nanoTime();
-                usePath(platform.modelsFolder(), platform, null);
+                usePath(platform.specificationsFolder(), platform, null);
                 final long t2 = System.nanoTime();
                 logInfo(() -> String.format(Locale.US,
                         "Loading %s from %s: %.3f ms",
-                        installedModelsCaption(), platform.modelsFolder(), (t2 - t1) * 1e-6));
+                        installedModelsCaption(), platform.specificationsFolder(), (t2 - t1) * 1e-6));
             }
         }
     }

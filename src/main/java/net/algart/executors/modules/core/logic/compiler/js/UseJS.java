@@ -170,14 +170,14 @@ public class UseJS extends FileOperation {
         useJS.setSessionId(GLOBAL_SHARED_SESSION_ID);
         for (ExtensionSpecification.Platform platform : GraalPlatforms.graalPlatforms().installedPlatforms()) {
             if (GraalSourceContainer.JAVASCRIPT_LANGUAGE.equals(platform.getLanguage())) {
-                if (platform.hasModels() && platform.hasModules()) {
+                if (platform.hasSpecifications() && platform.hasModules()) {
                     final long t1 = System.nanoTime();
                     useJS.setWorkingDirectory(platform.modulesFolder().toString());
-                    useJS.usePath(platform.modelsFolder(), platform, null);
+                    useJS.usePath(platform.specificationsFolder(), platform, null);
                     final long t2 = System.nanoTime();
                     logInfo(() -> String.format(Locale.US,
                             "Loading installed JS specifications from %s: %.3f ms",
-                            platform.modelsFolder(), (t2 - t1) * 1e-6));
+                            platform.specificationsFolder(), (t2 - t1) * 1e-6));
                 }
             }
         }

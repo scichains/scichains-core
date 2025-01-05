@@ -36,7 +36,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
     public static final String OUTPUT_TECHNOLOGY = "technology";
     public static final String OUTPUT_LANGUAGE = "language";
     public static final String OUTPUT_ROOT_FOLDER = "root_folder";
-    public static final String OUTPUT_MODELS_FOLDER = "models_folder";
+    public static final String OUTPUT_SPECIFICATIONS_FOLDER = "specifications_folder";
     public static final String OUTPUT_MODULES_FOLDER = "modules_folder";
     public static final String OUTPUT_LIBRARIES_FOLDER = "libraries_folder";
     public static final String OUTPUT_RESOURCES_FOLDER = "resources_folder";
@@ -49,7 +49,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
             OUTPUT_TECHNOLOGY,
             OUTPUT_LANGUAGE,
             OUTPUT_ROOT_FOLDER,
-            OUTPUT_MODELS_FOLDER,
+            OUTPUT_SPECIFICATIONS_FOLDER,
             OUTPUT_MODULES_FOLDER,
             OUTPUT_LIBRARIES_FOLDER,
             OUTPUT_RESOURCES_FOLDER);
@@ -73,7 +73,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
             getScalar(OUTPUT_TECHNOLOGY).setTo(platform.getTechnology());
             getScalar(OUTPUT_LANGUAGE).setTo(platform.getLanguage());
             getScalar(OUTPUT_ROOT_FOLDER).setTo(platform.getFolders().getRoot());
-            getScalar(OUTPUT_MODELS_FOLDER).setTo(platform.modelsFolderOrNull());
+            getScalar(OUTPUT_SPECIFICATIONS_FOLDER).setTo(platform.specificationsFolderOrNull());
             getScalar(OUTPUT_MODULES_FOLDER).setTo(platform.modulesFolderOrNull());
             getScalar(OUTPUT_LIBRARIES_FOLDER).setTo(platform.librariesFolderOrNull());
             getScalar(OUTPUT_RESOURCES_FOLDER).setTo(platform.resourcesFolderOrNull());

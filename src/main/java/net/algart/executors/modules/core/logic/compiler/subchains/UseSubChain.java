@@ -334,8 +334,8 @@ public final class UseSubChain extends FileOperation {
     public static void useAllInstalledInSharedContext() throws IOException {
         final UseSubChain useSubChain = UseSubChain.getShared();
         for (ExtensionSpecification.Platform platform : SUB_CHAIN_PLATFORMS.installedPlatforms()) {
-            if (platform.hasModels()) {
-                useInstalledFolder(useSubChain, platform.modelsFolder(), platform, "installed chain models");
+            if (platform.hasSpecifications()) {
+                useInstalledFolder(useSubChain, platform.specificationsFolder(), platform, "installed chain models");
             }
         }
         if (ADDITIONAL_STANDARD_SUBCHAINS_PATH != null) {

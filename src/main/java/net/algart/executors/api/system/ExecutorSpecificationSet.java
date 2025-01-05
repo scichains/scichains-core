@@ -126,10 +126,10 @@ public final class ExecutorSpecificationSet {
             if (onlyBuiltIn && !platform.isBuiltIn()) {
                 continue;
             }
-            if (!platform.hasModels()) {
+            if (!platform.hasSpecifications()) {
                 continue;
             }
-            final Path folder = platform.modelsFolder();
+            final Path folder = platform.specificationsFolder();
             final long t1 = System.nanoTime();
             addFolder(folder, platform, onlyBuiltIn);
             final long t2 = System.nanoTime();

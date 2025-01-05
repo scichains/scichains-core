@@ -108,13 +108,13 @@ public class UsingPython {
 
     public static void useAllInstalledInSharedContext() throws IOException {
         for (ExtensionSpecification.Platform platform : JepPlatforms.pythonPlatforms().installedPlatforms()) {
-            if (platform.hasModels()) {
+            if (platform.hasSpecifications()) {
                 final long t1 = System.nanoTime();
-                UsingPython.usePath(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.modelsFolder(), platform);
+                UsingPython.usePath(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.specificationsFolder(), platform);
                 final long t2 = System.nanoTime();
                 Executor.LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
                         "Loading installed Python specifications from %s: %.3f ms",
-                        platform.modelsFolder(), (t2 - t1) * 1e-6));
+                        platform.specificationsFolder(), (t2 - t1) * 1e-6));
             }
         }
     }
