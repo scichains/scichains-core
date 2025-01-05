@@ -31,8 +31,10 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Actually, we do not override any methods in most cases.
- * This loader is used only for adding model descriptions ({@link #registerWorker} method).
+ * Default executor loader.
+ *
+ * <p>Actually, we do not override any methods in most cases.
+ * This loader is used only for adding model specifications (performed inside {@link #registerWorker} method).
  * The {@link ExecutorLoader#getStandardJavaExecutorLoader() standard executor loader}
  * (for usual Java classes) is used for loading the executor, but it delegates all work
  * to the "worker", registered for this executor ID.

@@ -38,7 +38,15 @@ import java.util.*;
  * Loader of {@link ExecutionBlock executors}. Every kind of executors, like sub-chains, settings combiners,
  * Python function uses their own loaders.
  *
- * <p>In current version, all they are instances of {@link DefaultExecutorLoader}.
+ * <p>This class registers new executor specifications by
+ * {@link #setSpecification(String, ExecutorSpecification)} method.
+ * The registered specifications are stored inside an internal two-level table:
+ * a map of sessions, where every session is a map of executor specifications.
+ * Specifications are stored in some immutable serialized form, probable strings:
+ * this helps to avoid problems while concurrent accessing from different chains,
+ * executed in parallel threads.
+ *
+ * <p>In the current version, all they are instances of {@link DefaultExecutorLoader}.</p>
  *
  * @see ExecutorLoaderSet
  * @see ExecutionBlock#globalExecutorLoaders()
