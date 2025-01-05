@@ -107,6 +107,6 @@ public final class ExampleLoadingStage extends Executor {
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification.jsonString());
         System.out.println("Loading-stage test for session " + sessionId);
         System.out.println("Current folder: " + getCurrentDirectory());
-        System.out.println(globalExecutorLoaders().serializedSessionSpecifications(sessionId));
+        System.out.println(globalExecutorLoaders().serializedSpecifications(sessionId));
     }
 }

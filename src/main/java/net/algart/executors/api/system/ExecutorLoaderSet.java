@@ -96,7 +96,7 @@ public final class ExecutorLoaderSet {
     }
 
     /**
-     * Returns specification Equivalent to <code>{@link #serializedSessionSpecifications(String, boolean)
+     * Returns specification Equivalent to <code>{@link #serializedSpecifications(String, boolean)
      * availableExecutorSpecifications}(sessionId, includeGlobalSession).get(executorId)</code>,
      * but works quickly (without creating a new map).
      *
@@ -128,8 +128,8 @@ public final class ExecutorLoaderSet {
     }
 
 
-    public Map<String, String> serializedSessionSpecifications(String sessionId) {
-        return serializedSessionSpecifications(sessionId, true);
+    public Map<String, String> serializedSpecifications(String sessionId) {
+        return serializedSpecifications(sessionId, true);
     }
 
     /**
@@ -145,14 +145,14 @@ public final class ExecutorLoaderSet {
      *                             registered in the global session.
      * @return all available executor specifications for this and (possibly) the global session.
      */
-    public Map<String, String> serializedSessionSpecifications(String sessionId, boolean includeGlobalSession) {
+    public Map<String, String> serializedSpecifications(String sessionId, boolean includeGlobalSession) {
         final Map<String, String> result = new LinkedHashMap<>();
         for (ExecutorLoader loader : loaders()) {
             if (includeGlobalSession) {
-                result.putAll(loader.serializedSessionSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+                result.putAll(loader.serializedSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
             if (sessionId != null) {
-                result.putAll(loader.serializedSessionSpecifications(sessionId));
+                result.putAll(loader.serializedSpecifications(sessionId));
             }
 //            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }

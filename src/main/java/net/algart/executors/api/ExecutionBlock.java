@@ -1139,7 +1139,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     //TODO!! rename to serializedSpecifications
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
-        return GLOBAL_EXECUTOR_LOADERS.serializedSessionSpecifications(sessionId).values().toArray(new String[0]);
+        return GLOBAL_EXECUTOR_LOADERS.serializedSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**
