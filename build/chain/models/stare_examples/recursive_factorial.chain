@@ -1,6 +1,6 @@
 {
-    "app": "stare-project",
-    "version": "1.0.9",
+    "app": "SciChains",
+    "version": "1.1",
     "root": {
         "scale": 0.8000000000000009,
         "desktop": {
@@ -2236,9 +2236,9 @@
     "properties": {
     },
     "poke_and_look_project": "",
-    "stare_chain": {
-        "app": "stare-chain",
-        "version": "1.0",
+    "chain": {
+        "app": "chain",
+        "version": "1.1",
         "executor": {
             "category": "~examples.chain",
             "options": {
@@ -2248,10 +2248,8 @@
                     "multithreading": true
                 }
             },
-            "uuid": "8585f3b5-decf-45e5-be50-e91b7a1a693c"
+            "id": "8585f3b5-decf-45e5-be50-e91b7a1a693c"
         },
-        "properties": [
-        ],
         "blocks": [
             {
                 "uuid": "d6d5ff92-0d20-4808-aa4f-a5238e066a27",
@@ -2362,40 +2360,33 @@
                         "name": "executeAll"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "executeAll",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "executeIsolatedLoadingTimeFunctions",
-                        "type": "boolean",
                         "value": true
                     },
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": "${path.name.ext}"
                     },
                     {
                         "name": "fileExistenceRequired",
-                        "type": "boolean",
                         "value": true
                     },
                     {
                         "name": "multithreading",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "overrideBehaviour",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "subChainJsonContent",
-                        "type": "scalar",
                         "value": ""
                     }
                 ],
@@ -2614,7 +2605,7 @@
                         "name": "_sys___platform_id"
                     }
                 ],
-                "properties": [
+                "parameters": [
                 ],
                 "system": {
                     "caption": "Output/copy scalar"
@@ -2662,10 +2653,9 @@
                         "name": "value"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "value",
-                        "type": "int64",
                         "value": 10
                     }
                 ],
@@ -2758,35 +2748,29 @@
                         "name": "_sch___timingNumberOfPercentiles"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "_sch___doAction",
-                        "type": "boolean",
                         "value": true
                     },
                     {
                         "name": "_sch___logTiming",
-                        "type": "boolean",
                         "value": true
                     },
                     {
                         "name": "_sch___timingLogLevel",
-                        "type": "scalar",
                         "value": "DEBUG"
                     },
                     {
                         "name": "_sch___timingNumberOfCalls",
-                        "type": "int64",
                         "value": 10
                     },
                     {
                         "name": "_sch___timingNumberOfPercentiles",
-                        "type": "int64",
                         "value": 5
                     },
                     {
                         "name": "n",
-                        "type": "int64",
                         "value": 9
                     }
                 ],
@@ -2896,20 +2880,17 @@
                         "name": "file"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "logLevel",
-                        "type": "scalar",
                         "value": "PRINTLN_TO_CONSOLE"
                     },
                     {
                         "name": "pattern",
-                        "type": "scalar",
                         "value": "Copying $$$"
                     }
                 ],
@@ -3019,20 +3000,17 @@
                         "name": "file"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "logLevel",
-                        "type": "scalar",
                         "value": "PRINTLN_TO_CONSOLE"
                     },
                     {
                         "name": "pattern",
-                        "type": "scalar",
                         "value": "Returning $$$"
                     }
                 ],
@@ -3142,20 +3120,17 @@
                         "name": "file"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "logLevel",
-                        "type": "scalar",
                         "value": "PRINTLN_TO_CONSOLE"
                     },
                     {
                         "name": "pattern",
-                        "type": "scalar",
                         "value": "Decreasing $$$"
                     }
                 ],
@@ -3235,20 +3210,17 @@
                         "name": "m"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "a",
-                        "type": "scalar",
                         "value": "1.0"
                     },
                     {
                         "name": "b",
-                        "type": "scalar",
                         "value": "1.0"
                     },
                     {
                         "name": "m",
-                        "type": "double",
                         "value": 1.0
                     }
                 ],
@@ -3352,30 +3324,25 @@
                         "name": "roundingMode"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "a",
-                        "type": "double",
                         "value": 1.0
                     },
                     {
                         "name": "absoluteValue",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "b",
-                        "type": "double",
                         "value": 0.0
                     },
                     {
                         "name": "roundingMode",
-                        "type": "scalar",
                         "value": "CAST_TO_LONG"
                     },
                     {
                         "name": "summand",
-                        "type": "double",
                         "value": -1.0
                     }
                 ],
@@ -3491,30 +3458,25 @@
                         "name": "requireInput"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "conditionStyle",
-                        "type": "scalar",
                         "value": "JAVA_LIKE"
                     },
                     {
                         "name": "defaultCondition",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "defaultFalse",
-                        "type": "scalar",
                         "value": "1"
                     },
                     {
                         "name": "defaultTrue",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "requireInput",
-                        "type": "boolean",
                         "value": false
                     }
                 ],
@@ -3636,25 +3598,21 @@
                         "name": "visibleResult"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "booleanStyle",
-                        "type": "scalar",
                         "value": "JAVA_LIKE"
                     },
                     {
                         "name": "defaultX",
-                        "type": "double",
                         "value": 0.0
                     },
                     {
                         "name": "defaultY",
-                        "type": "double",
                         "value": 1.0
                     },
                     {
                         "name": "visibleResult",
-                        "type": "scalar",
                         "value": "greater"
                     }
                 ],
@@ -3704,10 +3662,9 @@
                         "name": "roundingMode"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "roundingMode",
-                        "type": "scalar",
                         "value": "ROUND_TO_LONG"
                     }
                 ],
@@ -3835,25 +3792,21 @@
                         "name": "message"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "conditionStyle",
-                        "type": "scalar",
                         "value": "JAVA_LIKE"
                     },
                     {
                         "name": "exceptionKind",
-                        "type": "scalar",
                         "value": "ILLEGAL_ARGUMENT_EXCEPTION"
                     },
                     {
                         "name": "invert",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "message",
-                        "type": "scalar",
                         "value": "Zero or negative n="
                     }
                 ],

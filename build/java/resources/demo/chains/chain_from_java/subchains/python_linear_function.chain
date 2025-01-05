@@ -445,8 +445,8 @@
                     "visible": false,
                     "port_type": "OUTPUT",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "_py_supplied_python_models",
-                    "caption": "supplied python models"
+                    "name": "_py_supplied_python_specifications",
+                    "caption": "supplied python specifications"
                 },
                 {
                     "@id": "UIPortModel",
@@ -1959,7 +1959,7 @@
                         "uuid": "d0fb00c1-0200-0000-2ad2-69bf87623a59",
                         "type": 2,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "_py_supplied_python_models"
+                        "name": "_py_supplied_python_specifications"
                     },
                     {
                         "uuid": "d0fb00c1-0300-0000-f7a5-215a5404306a",

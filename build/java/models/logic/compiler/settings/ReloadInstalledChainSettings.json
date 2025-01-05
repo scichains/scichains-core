@@ -25,15 +25,15 @@
   "out_ports_hidden": [
     {
       "value_type": "scalar",
-      "name": "combine-model"
+      "name": "combine-specification"
     },
     {
       "value_type": "scalar",
-      "name": "split-model"
+      "name": "split-specification"
     },
     {
       "value_type": "scalar",
-      "name": "get-names-model"
+      "name": "get-names-specification"
     }
   ],
   "controls": [

@@ -102,7 +102,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         System.getProperties().forEach((key, value) -> sb.append(String.format("    %s: \"%s\"%n", key, value)));
 
         final Collection<ExecutorSpecification> allExecutors = ExecutorSpecificationSet.allBuiltIn().all();
-        sb.append(String.format("%n%nAll %d executor models:%n", allExecutors.size()));
+        sb.append(String.format("%n%nAll %d executor specifications:%n", allExecutors.size()));
         allExecutors.forEach(
                 executor -> sb.append(String.format("    %s    %s%n",
                         executor.getCanonicalName(),

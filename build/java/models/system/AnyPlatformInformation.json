@@ -48,8 +48,8 @@
     },
     {
       "value_type": "scalar",
-      "name": "models_folder",
-      "hint": "Platform models folder"
+      "name": "specifications_folder",
+      "hint": "Platform specifications folder"
     },
     {
       "value_type": "scalar",

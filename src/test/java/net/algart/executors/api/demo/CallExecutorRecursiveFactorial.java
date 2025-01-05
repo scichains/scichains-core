@@ -33,7 +33,7 @@ import java.io.IOException;
 public class CallExecutorRecursiveFactorial {
     public static final String SESSION_ID = "~~DUMMY_SESSION";
     public static final String RECURSIVE_FACTORIAL_CHAIN_ID = "8585f3b5-decf-45e5-be50-e91b7a1a693c";
-    // - ID of the sub-chain build/chain/models/stare_examples/recursive_factorial.chain
+    // - ID of the sub-chain recursive_factorial.chain in the "build" folder
 
     public static void main(String[] args) throws IOException, ExecutorNotFoundException, ClassNotFoundException {
         if (args.length < 1) {
