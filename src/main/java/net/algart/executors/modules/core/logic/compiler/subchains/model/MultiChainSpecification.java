@@ -154,7 +154,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     private MultiChainSpecification(JsonObject json, boolean strictMode, Path file) {
         if (!isMultiChainSpecification(json) && strictMode) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
-                    + " is not a multichain configuration: no \"app\":\""
+                    + " is not a multi-chain configuration: no \"app\":\""
                     + APP_NAME + "\" element");
         }
         this.multiChainSpecificationFile = file;
@@ -250,11 +250,11 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             assert id != null;
             if (id.equals(settingsId)) {
                 // - impossible
-                throw new AssertionError("Identical id and settingsId for multichain \""
+                throw new AssertionError("Identical id and settingsId for multi-chain \""
                         + multiChainSpecification.getName() + "\": " + id);
             }
             if (!ids.add(id)) {
-                throw new IllegalArgumentException("Two multichain JSONs have identical IDs " + id
+                throw new IllegalArgumentException("Two multi-chain JSONs have identical IDs " + id
                         + ", one of them is \"" + multiChainSpecification.getName() + "\"");
             }
             if (settingsId != null && !ids.add(settingsId)) {
@@ -272,7 +272,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             if (!names.add(name)) {
                 final Path file = chain.getChainSpecificationFile();
                 throw new IllegalArgumentException("Two chain variants have identical name \"" + name
-                        + "\", but it is prohibited inside the single multichain! "
+                        + "\", but it is prohibited inside the single multi-chain! "
                         + "(One of 2 chain variants has ID \"" + chain.chainId() + "\""
                         + (file == null ? "" : " and loaded from the file " + file + ".)"));
             }
@@ -438,7 +438,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             }
         }
         if (result.isEmpty()) {
-            throw new FileNotFoundException("No valid sub-chains found for multichain \"" + name
+            throw new FileNotFoundException("No valid sub-chains found for multi-chain \"" + name
                     + "\" among the following paths: " + paths);
         }
         ChainSpecification.checkIdDifference(result);
@@ -479,7 +479,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     private String checkImplementationMessageStart(ExecutorSpecification implementationSpecification) {
         return "Implementation \""
                 + implementationSpecification.getName() + "\" (ID \""
-                + implementationSpecification.getExecutorId() + "\") of multichain \""
+                + implementationSpecification.getExecutorId() + "\") of multi-chain \""
                 + name + "\" (ID \"" + id + "\")";
     }
 

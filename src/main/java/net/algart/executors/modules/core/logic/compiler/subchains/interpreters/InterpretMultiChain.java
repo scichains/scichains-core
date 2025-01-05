@@ -90,7 +90,8 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         final Chain selectedChain = chains.get(selectedChainId);
         if (selectedChain == null) {
             throw new IllegalArgumentException("Invalid selected chain ID: " + selectedChainId
-                    + "; there is no chain variant with this ID among all elements of this multichain " + multiChain);
+                    + "; there is no chain variant with this ID among all elements of this multi-chain " +
+                    multiChain);
         }
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
@@ -154,7 +155,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
                 Level.WARNING :
                 Level.DEBUG;
         LOG.log(settingsLogLevel, () -> String.format(Locale.US,
-                "Customizing multichain \"%s\", variant \"%s\" with help of %s (called from %s):\n%s",
+                "Customizing multi-chain \"%s\", variant \"%s\" with help of %s (called from %s):\n%s",
                 multiChain.name(),
                 selectedChain.name(),
                 extractSubSettings ? "extracted sub-settings" : "json-settings",

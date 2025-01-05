@@ -23,22 +23,22 @@
     },
     {
       "value_type": "scalar",
-      "name": "combine-model"
+      "name": "combine-specification"
     },
     {
       "value_type": "scalar",
-      "name": "split-model"
+      "name": "split-specification"
     },
     {
       "value_type": "scalar",
-      "name": "get-names-model"
+      "name": "get-names-specification"
     }
   ],
   "controls": [
     {
       "caption": "Settings combiner JSON file(s)/folder(s)",
       "name": "file",
-      "description": "Path(s) to one or several settings combiner model JSON files or folders, containing such JSON files, separated by \";\". In a case of folders, each folder is scanned, and all settings combiner JSONs, found in the folder and its subfolders, become available to use.\nNote: every path is trimmed, i.e. leading/trailing space characters, including line feeds, are removed. Thus, if you need several paths, separated by \";\", you can place each path in a separate line.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "description": "Path(s) to one or several settings combiner specification JSON files or folders, containing such JSON files, separated by \";\". In a case of folders, each folder is scanned, and all settings combiner JSONs, found in the folder and its subfolders, become available to use.\nNote: every path is trimmed, i.e. leading/trailing space characters, including line feeds, are removed. Thus, if you need several paths, separated by \";\", you can place each path in a separate line.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
@@ -55,7 +55,7 @@
     {
       "caption": "Settings combiner JSON content",
       "name": "settingsCombinerJsonContent",
-      "description": "This argument is used only when \"Settings combiner JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire settings combiner model JSON. This settings combiner will become available to use. This variant allows to use only 1 settings combiner (1–3 executors) in a single call.",
+      "description": "This argument is used only when \"Settings combiner JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire settings combiner specification JSON. This settings combiner will become available to use. This variant allows to use only 1 settings combiner (1–3 executors) in a single call.",
       "value_type": "settings",
       "edition_type": "value",
       "multiline": true,

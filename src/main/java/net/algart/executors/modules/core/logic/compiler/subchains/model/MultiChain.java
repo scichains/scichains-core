@@ -51,11 +51,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private static final AtomicLong CURRENT_CONTEXT_ID = new AtomicLong(109099000000000L);
     // - Some magic value helps to reduce the chance of accidental coincidence with other contextIDs,
-    // probable used in the system in other ways (109, 99 are ASCII-codes of letters 'mc').
+    // probably used in the system in other ways (109, 99 are ASCII-codes of letters 'mc').
 
     private volatile long contextId;
-    // - Unique ID for every multichain. Unlike sub-chains, it is almost not used: multichain is not an environment
-    // for executing anything; but it is used as a context ID for multichain settings combiner.
+    // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: multi-chain is not an environment
+    // for executing anything; but it is used as a context ID for multi-chain settings combiner.
     private final MultiChainSpecification specification;
     private final List<ChainSpecification> chainSpecifications;
     private final List<ChainSpecification> blockedChainSpecifications;
@@ -99,7 +99,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 throw e;
             } catch (RuntimeException e) {
                 throw new ChainRunningException("Cannot initialize sub-chain "
-                        + chainSpecification.getChainSpecificationFile() + ", variant of multichain "
+                        + chainSpecification.getChainSpecificationFile() + ", variant of multi-chain "
                         + specification.getMultiChainSpecificationFile(), e);
             }
             if (optionalChain.isPresent()) {
@@ -213,7 +213,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     // Note: it is not too good idea to create it only inside the constructor.
-    // Every chain can require a lot of resources, and different clones of multichain (see clone())
+    // Every chain can require a lot of resources, and different clones of multi-chain (see clone())
     // should have different chains.
     public Map<String, Chain> chainMap() {
         Map<String, Chain> chainMap = this.chainMap;
@@ -291,14 +291,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             result = Jsons.overrideEntries(result, onlyActual);
         }
 
-        // 2nd overriding: by section @MMM (when extractSubSettings), MMM is the name of multichain,
+        // 2nd overriding: by section @MMM (when extractSubSettings), MMM is the name of multi-chain,
         if (multiSettings != null) {
             final JsonObject onlyActual = Jsons.filterJson(multiSettings, selectedSubChainActualKeys);
             // - only actual: maybe this sub-settings contains a lot of other information (for other variants)
             result = Jsons.overrideEntries(result, onlyActual);
-            // - Note: we use THE SAME actual keys, not multichain actual keys!
+            // - Note: we use THE SAME actual keys, not multi-chain actual keys!
             // We need to return settings for selected CHAIN, that does not understand
-            // any multichain parameters, excepting ones that are identical with (and also actual for)
+            // any multi-chain parameters, excepting ones that are identical with (and also actual for)
             // CHAIN parameters. In particular, we must NEVER return here SELECTED_CHAIN_ID_PARAMETER_NAME:
             // it must not appear on the top level to avoid possible problems.
         }
@@ -337,7 +337,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("multichain \"" + category()
+        final StringBuilder sb = new StringBuilder("multi-chain \"" + category()
                 + ChainSpecification.CATEGORY_SEPARATOR + name()
                 + "\", containing " + chainSpecifications.size() + " chains:\n");
         for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
@@ -408,13 +408,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     settingsControlConf.setGroupId(chain.id());
                     final String combinerId = UseSubChain.getMainChainSettingsCombinerId(chain);
                     if (combinerId != null) {
-                        // - to be on the safe side (should not occur for normal multichain)
+                        // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setBuilderId(combinerId);
                     }
                 }
                 if (controls.put(name, settingsControlConf) != null) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" has a name, identical "
-                            + "to one of multichain parameters; it is not allowed" + multiChainSpecificationFileMessage);
+                            + "to one of multi-chain parameters; it is not allowed" +
+                            multiChainSpecificationFileMessage);
                 }
             }
         }
@@ -454,9 +455,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         final Chain chain = InterpretSubChain.registeredChain(executorId);
         if (UseSubChain.getMainChainSettingsInformation(chain) == null) {
             throw new IllegalStateException("Chain \"" + chain.name()
-                    + " \" (ID \"" + chain.id() + "\") of multichain \"" + name()
+                    + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()
                     + "\" (ID \"" + id() + "\") has no built-in settings; "
-                    + "it is not allowed inside multichains");
+                    + "it is not allowed inside multi-chains");
         }
         return chain;
     }

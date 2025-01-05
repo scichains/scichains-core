@@ -447,7 +447,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // which are created as a serving companion for the chain
         private Service service = null;
         // - information about some service executors;
-        // usually applied for sub-chains or multichains
+        // usually applied for sub-chains or multi-chains
         private Behavior behavior = null;
         private Controlling controlling = null;
         private JsonObject extension = null;

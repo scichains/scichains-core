@@ -40,7 +40,7 @@ public interface ExecutorSpecificationFactory {
      * {@link ExecutorLoaderSet#serializedSpecifications(String)}.
      *
      * @param executorId unique executor ID.
-     * @return minimal JSON model, enough for creating Java class {@link ExecutionBlock}.
+     * @return minimal specification, enough for creating Java class {@link ExecutionBlock}.
      */
     ExecutorSpecification getSpecification(String executorId);
 }

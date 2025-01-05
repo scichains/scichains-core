@@ -67,9 +67,9 @@ public final class UseMultiChain extends FileOperation {
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION =
             "Extract sub-settings \"%%%\" from source JSON";
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION =
-            "If set, the parameters of this multichain are determined by the section \""
+            "If set, the parameters of this multi-chain are determined by the section \""
                     + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
-                    + "of the input settings JSON. If cleared, the parameters of this multichain "
+                    + "of the input settings JSON. If cleared, the parameters of this multi-chain "
                     + "are extracted directly from the top level of the input settings JSON. "
                     + "Parameters below have less priority, then the content of input settings.";
     public static final boolean EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT = true;
@@ -86,7 +86,7 @@ public final class UseMultiChain extends FileOperation {
                     + "if they are not specified in the section \""
                     + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
                     + "of the input settings JSON.\n"
-                    + "We recommend to set this flag always in multichain configuration, "
+                    + "We recommend to set this flag always in multi-chain configuration, "
                     + "if you are allowing and planning to replace some sub-chains in future.";
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
 
@@ -144,9 +144,9 @@ public final class UseMultiChain extends FileOperation {
 
     @Override
     public void process() {
-        // Note: unlike UseSubChain, this function does not allow to specify multichain in a text parameter.
-        // It is useless, because does not allow to avoid files at all:
-        // multichain in any case requires several files for subchain variants.
+        // Note: unlike UseSubChain, this function does not allow to specify multi-chain in a text parameter.
+        // It is useless because it does not allow avoiding files at all:
+        // a multi-chain in any case requires several files for sub-chain variants.
         try {
             useSeveralPaths(completeSeveralFilePaths());
         } catch (IOException e) {
@@ -155,7 +155,7 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public void useSeveralPaths(List<Path> multiChainSpecificationPaths) throws IOException {
-        Objects.requireNonNull(multiChainSpecificationPaths, "Null multichains paths");
+        Objects.requireNonNull(multiChainSpecificationPaths, "Null multi-chains paths");
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
         for (Path path : multiChainSpecificationPaths) {
             usePath(path, sb);
@@ -175,8 +175,8 @@ public final class UseMultiChain extends FileOperation {
         final List<ChainSpecification> chainSpecifications;
         if (!Files.exists(multiChainSpecificationPath)) {
             if (fileExistenceRequired) {
-                throw new FileNotFoundException("Multichain file or multi-chains folder " + multiChainSpecificationPath
-                        + " does not exist");
+                throw new FileNotFoundException("Multi-chain file or multi-chains folder " +
+                        multiChainSpecificationPath + " does not exist");
             } else {
                 return;
             }
@@ -199,7 +199,7 @@ public final class UseMultiChain extends FileOperation {
             chainSpecifications = chainSpecification == null ? Collections.emptyList() : Collections.singletonList(chainSpecification);
             if (multiChainSpecification == null && chainSpecification == null) {
                 throw new JsonException("JSON " + multiChainSpecificationPath
-                        + " is not a valid multichain or sub-chain configuration");
+                        + " is not a valid multi-chain or sub-chain configuration");
 
             }
         }
@@ -224,26 +224,26 @@ public final class UseMultiChain extends FileOperation {
                 throw e;
             } catch (RuntimeException e) {
                 // - but not IOException
-                throw new ChainLoadingException("Cannot load multichain "
+                throw new ChainLoadingException("Cannot load multi-chain "
                         + multiChainSpecification.getMultiChainSpecificationFile(), e);
             }
             long t2 = infoTime();
-            final List<ChainSpecification> chainModels = multiChain.chainSpecifications();
+            final List<ChainSpecification> chainSpecifications = multiChain.chainSpecifications();
             final Set<String> blockedChainModelNames = multiChain.blockedChainSpecificationNames();
-            // - Note: in a multichain, all chain variants always have different names
+            // - Note: in a multi-chain, all chain variants always have different names
             // (it is checked in MultiChainSpecification.readChainVariants method).
-            // Note: recursive usage of multichain is a sub-chain is possible, but seems to be an error,
+            // Note: recursive usage of multi-chain is a sub-chain is possible, but seems to be an error,
             // so, we use WARNING level here.
             final int index = i;
             LOG.log(blockedChainModelNames.isEmpty() ? Level.DEBUG : Level.WARNING,
-                    () -> String.format(Locale.US, "Multichain %s\"%s\" loaded from %s in %.3f ms; " +
+                    () -> String.format(Locale.US, "Multi-chain %s\"%s\" loaded from %s in %.3f ms; " +
                                     "%d chain variants:%n%s",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
                             multiChainSpecification.getName(),
                             multiChainSpecification.getMultiChainSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6,
-                            chainModels.size(),
-                            chainModels.stream().map(
+                            chainSpecifications.size(),
+                            chainSpecifications.stream().map(
                                             m -> String.format("  \"%s\"%s from %s",
                                                     m.chainName(),
                                                     blockedChainModelNames.contains(m.chainName()) ?
@@ -273,7 +273,7 @@ public final class UseMultiChain extends FileOperation {
             UseMultiChainSettings settingsFactory)
             throws IOException {
         final MultiChain multiChain = MultiChain.valueOf(multiChainSpecification, chainFactory, settingsFactory);
-        // - Actually use all sub-chains and built-in multichain settings combiner
+        // - Actually use all sub-chains and built-in multi-chain settings combiner
         if (strictMode) {
             multiChain.checkImplementationCompatibility();
         }

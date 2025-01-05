@@ -23,22 +23,22 @@
     },
     {
       "value_type": "scalar",
-      "name": "combine-model"
+      "name": "combine-specification"
     },
     {
       "value_type": "scalar",
-      "name": "split-model"
+      "name": "split-specification"
     },
     {
       "value_type": "scalar",
-      "name": "get-names-model"
+      "name": "get-names-specification"
     }
   ],
   "controls": [
     {
       "caption": "Main chains settings combiner JSON file",
       "name": "file",
-      "description": "Path to settings combiner model JSON file or path to a folder, containing a single MAIN settings combiner (\"app\": \"main-settings-combiner\" instead of usual \"app\": \"settings-combiner\").\nNote: several paths, separated by \";\", are NOT allowed here! This function usually should create only 1 main settings combiner. In a case of a folder, this function scans it, but searches only for main settings combiners; non-main settings are skipped.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "description": "Path to settings combiner specification JSON file or path to a folder, containing a single MAIN settings combiner (\"app\": \"main-settings-combiner\" instead of usual \"app\": \"settings-combiner\").\nNote: several paths, separated by \";\", are NOT allowed here! This function usually should create only 1 main settings combiner. In a case of a folder, this function scans it, but searches only for main settings combiners; non-main settings are skipped.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.dat\" or \"samples/test.dat\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
       "value_type": "String",
       "edition_type": "file",
       "default": ""
@@ -54,7 +54,7 @@
     {
       "caption": "Main chain settings combiner JSON content",
       "name": "settingsCombinerJsonContent",
-      "description": "This argument is used only when \"Main chains settings combiner JSON file\" above is an empty string. In this case, this argument must be a text, which is either entire settings combiner model JSON. This settings combiner will become available to use. This variant allows to use only 1 settings combiner (2 executors) in a single call.",
+      "description": "This argument is used only when \"Main chains settings combiner JSON file\" above is an empty string. In this case, this argument must be a text, which is either entire settings combiner specification JSON. This settings combiner will become available to use. This variant allows to use only 1 settings combiner (2 executors) in a single call.",
       "value_type": "settings",
       "edition_type": "value",
       "multiline": true,

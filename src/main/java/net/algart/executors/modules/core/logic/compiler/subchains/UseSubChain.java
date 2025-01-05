@@ -294,7 +294,7 @@ public final class UseSubChain extends FileOperation {
     }
 
     public Optional<Chain> useIfNonRecursive(ChainSpecification chainSpecification) {
-        Objects.requireNonNull(chainSpecification, "Null chain JSON model");
+        Objects.requireNonNull(chainSpecification, "Null chainSpecification");
         final String chainId = chainSpecification.getExecutor().getId();
         chainExecutorSpecification = null;
         synchronized (NOW_USED_CHAIN_IDS) {
@@ -335,12 +335,14 @@ public final class UseSubChain extends FileOperation {
         final UseSubChain useSubChain = UseSubChain.getShared();
         for (ExtensionSpecification.Platform platform : SUB_CHAIN_PLATFORMS.installedPlatforms()) {
             if (platform.hasSpecifications()) {
-                useInstalledFolder(useSubChain, platform.specificationsFolder(), platform, "installed chain models");
+                useInstalledFolder(useSubChain, platform.specificationsFolder(), platform,
+                        "installed chain specifications");
             }
         }
         if (ADDITIONAL_STANDARD_SUBCHAINS_PATH != null) {
             for (String folder : UseSubChain.ADDITIONAL_STANDARD_SUBCHAINS_PATH.split("[\\;]")) {
-                useInstalledFolder(useSubChain, Paths.get(folder), null, "additional chain models");
+                useInstalledFolder(useSubChain, Paths.get(folder), null,
+                        "additional chain specifications");
             }
         }
     }
