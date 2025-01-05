@@ -34,7 +34,7 @@ import java.util.Objects;
  * Default executor loader.
  *
  * <p>Actually, we do not override any methods in most cases.
- * This loader is used only for adding model specifications (performed inside {@link #registerWorker} method).
+ * This loader is used only for adding executor specifications (performed inside {@link #registerWorker} method).
  * The {@link ExecutorLoader#getStandardJavaExecutorLoader() standard executor loader}
  * (for usual Java classes) is used for loading the executor, but it delegates all work
  * to the "worker", registered for this executor ID.

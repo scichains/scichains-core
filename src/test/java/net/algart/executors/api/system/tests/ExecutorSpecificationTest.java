@@ -37,17 +37,18 @@ public class ExecutorSpecificationTest {
     @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 4) {
-            System.out.printf("Usage: %s executor_model.json " +
+            System.out.printf("Usage: %s executor_specification.json " +
                             "result_1.json result_2.json result_3.json%n",
                     ExecutorSpecification.class.getName());
             return;
         }
-        final Path modelFile = Paths.get(args[0]);
+        final Path specificationFile = Paths.get(args[0]);
         final Path resultFile1 = Paths.get(args[1]);
         final Path resultFile2 = Paths.get(args[2]);
         final Path resultFile3 = Paths.get(args[3]);
-        ExecutorSpecification specification = ExecutorSpecification.read(modelFile);
-//        ExecutorSpecification specification = ExecutorSpecification.valueOf(Jsons.readJson(modelFile)); // - for testing null file
+        ExecutorSpecification specification = ExecutorSpecification.read(specificationFile);
+//        ExecutorSpecification specification = ExecutorSpecification.valueOf(Jsons.readJson(specificationFile));
+// - for testing null file
         specification.write(resultFile1);
         System.out.printf("Java configuration:%n");
         System.out.println(specification.minimalSpecification());
@@ -68,7 +69,7 @@ public class ExecutorSpecificationTest {
 
                 specification = ExecutorSpecification.valueOf((Executor) executionBlock, "12345678");
                 specification.write(resultFile3);
-                System.out.printf("%nModel, created from executor:%n");
+                System.out.printf("%nSpecification, created from executor:%n");
                 System.out.println(specification);
 
                 System.out.printf("%nExecutor specification:%n");

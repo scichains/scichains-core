@@ -58,7 +58,7 @@ public class ExecutorSpecificationSetTest {
             return;
         }
 
-        final Path modelFolder = Paths.get(args[startArgIndex]);
+        final Path executorsFolder = Paths.get(args[startArgIndex]);
         final Runtime rt = Runtime.getRuntime();
         System.out.printf("Used memory %.2f/%.2f GB%n",
                 (rt.totalMemory() - rt.freeMemory()) * 1e-9, rt.maxMemory() * 1e-9);
@@ -67,14 +67,14 @@ public class ExecutorSpecificationSetTest {
         for (int test = 1; test <= 5; test++) {
             System.gc();
             System.out.printf("Test #%d...%n", test);
-            System.out.printf("  Reading %s...%n", modelFolder);
+            System.out.printf("  Reading %s...%n", executorsFolder);
             long t1 = System.nanoTime();
             executorSpecificationSet = ExecutorSpecificationSet.newInstance();
-            executorSpecificationSet.addFolder(modelFolder, false);
+            executorSpecificationSet.addFolder(executorsFolder, false);
             long t2 = System.nanoTime();
             final Collection<ExecutorSpecification> specifications = executorSpecificationSet.all();
             System.out.printf(Locale.US,
-                    "  %d specifications loaded in %.3f ms (%.5f mcs/model); used memory %.2f/%.2f MB%n",
+                    "  %d specifications loaded in %.3f ms (%.5f mcs/executor); used memory %.2f/%.2f MB%n",
                     specifications.size(), (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                     (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
             if (resolve) {
@@ -87,7 +87,7 @@ public class ExecutorSpecificationSetTest {
                 t2 = System.nanoTime();
                 System.out.printf(Locale.US,
                         "  Java classes of executors resolved in %.3f ms "
-                                + "(%.5f mcs/model); used memory %.2f/%.2f MB%n",
+                                + "(%.5f mcs/executor); used memory %.2f/%.2f MB%n",
                         (t2 - t1) * 1e-6, (t2 - t1) * 1e-3 / specifications.size(),
                         (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
             }
@@ -99,14 +99,14 @@ public class ExecutorSpecificationSetTest {
                 System.out.printf("Creation test #%d...%n", test);
                 final Collection<ExecutorSpecification> specifications = executorSpecificationSet.all();
                 long t1 = System.nanoTime();
-                for (ExecutorSpecification model : specifications) {
-                    if (model.isJavaExecutor()) {
+                for (ExecutorSpecification specification : specifications) {
+                    if (specification.isJavaExecutor()) {
 //                    try {
-//                        model.getJavaConf().getClass().newInstance();
+//                        specification.getJavaConf().getClass().newInstance();
 //                    } catch (Exception e) {
 //                    }
-                        final String id = model.getExecutorId();
-                        final String javaConfiguration = model.minimalSpecification();
+                        final String id = specification.getExecutorId();
+                        final String javaConfiguration = specification.minimalSpecification();
                         //noinspection resource
                         ExecutionBlock.newExecutionBlock(null, id, javaConfiguration);
                     }
@@ -119,21 +119,23 @@ public class ExecutorSpecificationSetTest {
                         (rt.totalMemory() - rt.freeMemory()) * 1e-6, rt.maxMemory() * 1e-6);
                 System.out.println();
             }
-            for (ExecutorSpecification model : executorSpecificationSet.all()) {
-                if (model.isJavaExecutor()) {
-                    System.out.printf("Creating executor %s.%s...%n", model.getCategory(), model.getName());
+            for (ExecutorSpecification specification : executorSpecificationSet.all()) {
+                if (specification.isJavaExecutor()) {
+                    System.out.printf("Creating executor %s.%s...%n",
+                            specification.getCategory(), specification.getName());
                     final ExecutionBlock executionBlock = ExecutionBlock.newExecutionBlock(
-                            null, model.getExecutorId(), model.minimalSpecification());
+                            null, specification.getExecutorId(), specification.minimalSpecification());
                     System.out.printf("  %s [id=%s]%n", executionBlock, executionBlock.getExecutorId());
                 }
             }
         }
 
         if (writeDebugFiles) {
-            System.out.printf("  Writing xxx__model.json.files...%n");
-            for (ExecutorSpecification model : executorSpecificationSet.all()) {
-                final String jsonString = model.jsonString();
-                final Path resultFile = Paths.get(model.getExecutorSpecificationFile() + "__model.json");
+            System.out.printf("  Writing xxx__specification.json.files...%n");
+            for (ExecutorSpecification specification : executorSpecificationSet.all()) {
+                final String jsonString = specification.jsonString();
+                final Path resultFile = Paths.get(
+                        specification.getExecutorSpecificationFile() + "__specification.json");
                 java.nio.file.Files.writeString(resultFile, jsonString);
             }
         }

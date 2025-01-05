@@ -82,7 +82,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         final StringJoiner joiner = new StringJoiner(String.format(",%n"));
         for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
             joiner.add(String.format("%s%n[[%s%n" +
-                            "    models folder: %s%n" +
+                            "    specifications folder: %s%n" +
                             "    modules folder: %s%n" +
                             "    libraries folder: %s%n" +
                             "    resources folder: %s%n" +

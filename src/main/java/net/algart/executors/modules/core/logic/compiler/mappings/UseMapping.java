@@ -163,7 +163,8 @@ public class UseMapping extends FileOperation {
     }
 
     public void useContent(String mappingJsonContent) throws IOException {
-        final MappingSpecification mappingSpecification = MappingSpecification.valueOf(Jsons.toJson(mappingJsonContent), false);
+        final MappingSpecification mappingSpecification =
+                MappingSpecification.valueOf(Jsons.toJson(mappingJsonContent), false);
         // - we don't require strict accuracy for JSON, entered in a little text area
         logDebug("Using mapping '" + mappingSpecification.getName() + "' from the text argument...");
         use(mappingSpecification);
@@ -219,28 +220,29 @@ public class UseMapping extends FileOperation {
         }
     }
 
-    private SScalar.MultiLineOrJsonSplitter keys(MappingSpecification model) throws IOException {
-        if (model.hasKeys()) {
-            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(model.getKeys().toArray(new String[0]));
+    private SScalar.MultiLineOrJsonSplitter keys(MappingSpecification specification) throws IOException {
+        if (specification.hasKeys()) {
+            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(specification.getKeys().toArray(new String[0]));
         }
-        Path file = model.keysFile();
+        Path file = specification.keysFile();
         if (file == null) {
-            file = requireFile(model, customKeysOrEnumItemsFile(this.mappingKeysFile),
+            file = requireFile(specification, customKeysOrEnumItemsFile(this.mappingKeysFile),
                     "keys", "Keys file");
         }
         return SScalar.splitJsonOrTrimmedLinesWithComments(Mapping.readNames(file));
     }
 
-    private SScalar.MultiLineOrJsonSplitter enumItems(MappingSpecification model) throws IOException {
-        if (!model.isEnum()) {
+    private SScalar.MultiLineOrJsonSplitter enumItems(MappingSpecification specification) throws IOException {
+        if (!specification.isEnum()) {
             return null;
         }
-        if (model.hasEnumItems()) {
-            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(model.getEnumItems().toArray(new String[0]));
+        if (specification.hasEnumItems()) {
+            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(
+                    specification.getEnumItems().toArray(new String[0]));
         }
-        Path file = model.enumItemsFile();
+        Path file = specification.enumItemsFile();
         if (file == null) {
-            file = requireFile(model, customKeysOrEnumItemsFile(this.mappingEnumItemsFile),
+            file = requireFile(specification, customKeysOrEnumItemsFile(this.mappingEnumItemsFile),
                     "enum items", "Enum items file");
         }
         return SScalar.splitJsonOrTrimmedLinesWithComments(Mapping.readNames(file));
@@ -252,10 +254,16 @@ public class UseMapping extends FileOperation {
                 completeFilePath(file, false);
     }
 
-    private static Path requireFile(MappingSpecification model, Path file, String whatFile, String whatParameter) {
+    private static Path requireFile(
+            MappingSpecification specification,
+            Path file,
+            String whatFile,
+            String whatParameter) {
         if (file == null || !Files.exists(file)) {
-            throw new IllegalStateException("Mapping model \"" + model.getName() + "\""
-                    + (model.getMappingSpecificationFile() == null ? "" : ", loaded from " + model.getMappingSpecificationFile() + ",")
+            throw new IllegalStateException("Mapping specification \"" + specification.getName() + "\""
+                    + (specification.getMappingSpecificationFile() == null ?
+                    "" :
+                    ", loaded from " + specification.getMappingSpecificationFile() + ",")
                     + " has no " + whatFile + " file; in this case the parameter \"" + whatParameter
                     + "\" must contain a correct existing file" + (file == null ? "" : " " + file.toAbsolutePath()));
         }

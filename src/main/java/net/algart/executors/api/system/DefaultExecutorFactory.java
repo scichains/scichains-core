@@ -89,9 +89,9 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             specification = dynamicExecutorsCache.get(executorId);
             if (specification != null) {
                 return specification;
-                // - Caching: we suppose that non-null executor models cannot change.
-                // It is not absolutely correct, when the programmer is developing new dynamic executors,
-                // but the usage of this model by this package is very pure: we prefer to provide
+                // - Caching: we suppose that non-null executor specifications cannot change.
+                // It is not absolutely correct when the programmer is developing new dynamic executors,
+                // but the usage of this specification by this package is very pure: we prefer to provide
                 // maximal performance here (note that the following operators require conversion JSON <-> String
                 // and are relatively slow). In any case, the developer can restart the server at any time.
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
@@ -101,22 +101,23 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
-                // or it is not a Java executor (but we loaded Java only).
+                // or it is not a Java executor (but we have loaded Java only).
                 // The typical example is creating/initializing new Chain in UseSubChain static executor.
                 // This process consists of 3 stages (see UseSubChain.use(ChainSpecification) method):
                 //      A) we create a Chain instance with all its blocks (ChainBlock);
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);
-                //      C) we finish creating the chain model (ExecutorSpecification) by
-                // buildSubChainModelAndExecuteLoadingTimeWithoutInputs method and register it.
+                //      C) we finish creating the chain executor specification by
+                // buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs method and register it.
                 // Let this chain contain some dynamic executors like CombineSettings or InterpretMultiChain,
                 // together with necessary static executors, which create them (UseSettings or UseMultiChain).
-                // Every ChainBlock tries to get ExecutorSpecification for its executor already at the stage A)
-                // while its creation (ChainBlock.valueOf) - this is not obligatory, but helps while diagnostic
-                // possible errors. However, the actual model for them will become known only at the stage B),
+                // Every ChainBlock tries to get ExecutorSpecification for its executor already at stage A,
+                // while its creation (ChainBlock.valueOf) - this is not obligatory, but helps in the case of
+                // possible diagnostic errors.
+                // However, the actual specification for them will become known only at stage B,
                 // while executing corresponding static executors.
                 // Of course, when we want to EXECUTE dynamic executor, we will call newExecutor method
-                // below, which REQUIRES the existence of a ready model.
+                // below, which REQUIRES the existence of a ready specification.
                 return null;
                 // - No sense to add null to dynamicExecutorsCache;
                 // moreover, it is prohibited ("add" method will throw an exception)

@@ -78,7 +78,7 @@ public final class ExecutorSpecificationVerifier {
                     || app.equals(SettingsCombinerSpecification.APP_NAME_FOR_MAIN)
                     || app.equals(ExtensionSpecification.APP_NAME)
                     || ChainSpecification.isChainSpecificationContainer(json)) {
-                // - not an error, just another known model type
+                // - not an error, just another known specification type
                 return null;
             }
             throw new JsonException("Invalid app " + app + " in " + f);

@@ -35,7 +35,7 @@ import java.util.UUID;
 public class ExecutorSpecificationBuilder {
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {
-            System.out.printf("Usage: %s ExecutorClassName result_executor_model.json%n",
+            System.out.printf("Usage: %s ExecutorClassName result_executor_specification.json%n",
                     ExecutorSpecificationBuilder.class.getName());
             return;
         }
@@ -45,7 +45,7 @@ public class ExecutorSpecificationBuilder {
         final Executor executor = (Executor) Class.forName(className).getDeclaredConstructor().newInstance();
         final ExecutorSpecification executorSpecification = ExecutorSpecification.valueOf(executor, UUID.randomUUID().toString());
         executorSpecification.write(resultFile, StandardOpenOption.CREATE_NEW);
-        System.out.printf("JSON model for %s successfully stored in %s%n", executor.getClass(), resultFile);
+        System.out.printf("JSON specification for %s successfully stored in %s%n", executor.getClass(), resultFile);
         executor.close();
     }
 }

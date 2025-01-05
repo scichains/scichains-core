@@ -107,12 +107,12 @@ public class LoadingChainTest {
                     LoadingChainTest.class.getName());
             return;
         }
-        final Path modelFolder = Paths.get(args[startArgIndex]);
+        final Path specificationFolder = Paths.get(args[startArgIndex]);
         final Path chainFile = Paths.get(args[startArgIndex + 1]);
 
-        System.out.printf("Reading %s...%n", modelFolder);
+        System.out.printf("Reading %s...%n", specificationFolder);
         final ExecutorSpecificationSet executorSpecificationSet =
-                ExecutorSpecificationSet.newInstance().addFolder(modelFolder, true);
+                ExecutorSpecificationSet.newInstance().addFolder(specificationFolder, true);
         final ExecutorFactory executorFactory = ExecutionBlock.globalExecutorLoaders().newFactory(
                 executorSpecificationSet, "~~DUMMY");
 

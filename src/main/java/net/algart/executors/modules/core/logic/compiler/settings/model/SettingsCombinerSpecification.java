@@ -92,8 +92,10 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
             return this;
         }
 
-        public Path enumItemsFile(SettingsCombinerSpecification model) {
-            return enumItemsFile == null ? null : model.resolve(Paths.get(enumItemsFile), "enum items");
+        public Path enumItemsFile(SettingsCombinerSpecification specification) {
+            return enumItemsFile == null ?
+                    null :
+                    specification.resolve(Paths.get(enumItemsFile), "enum items");
         }
 
         public List<String> enumItemNames() {
@@ -108,8 +110,8 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         public void checkCompleteness() {
         }
 
-        public void load(SettingsCombinerSpecification model) {
-            final Path file = enumItemsFile(model);
+        public void load(SettingsCombinerSpecification specification) {
+            final Path file = enumItemsFile(specification);
             if (file == null) {
                 return;
             }
@@ -168,7 +170,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     private Map<String, ControlConfExtension> controlExtensions = new LinkedHashMap<>();
 
     // The following properties are not loaded from JSON-file, but are set later,
-    // while loading all JSON models for some platform
+    // while loading all specifications for some platform
     private Set<String> tags = new LinkedHashSet<>();
     private String platformId = null;
     private String platformCategory = null;

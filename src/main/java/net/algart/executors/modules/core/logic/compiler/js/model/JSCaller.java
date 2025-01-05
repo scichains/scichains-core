@@ -61,8 +61,8 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         GraalAPI.initializeJS(this.performerContainer);
     }
 
-    public static JSCaller valueOf(JSCallerSpecification model, Path workingDirectory) {
-        return new JSCaller(model, workingDirectory);
+    public static JSCaller valueOf(JSCallerSpecification specification, Path workingDirectory) {
+        return new JSCaller(specification, workingDirectory);
     }
 
     public JSCallerSpecification specification() {

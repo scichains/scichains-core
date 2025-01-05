@@ -33,13 +33,13 @@ import java.nio.file.Paths;
 public class PythonCallerSpecificationTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s python_executor_model.json result.json%n",
+            System.out.printf("Usage: %s python_executor_specification.json result.json%n",
                     PythonCallerSpecificationTest.class.getName());
             return;
         }
-        final Path modelFile = Paths.get(args[0]);
+        final Path specificationFile = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
-        PythonCallerSpecification specification = PythonCallerSpecification.read(modelFile);
+        PythonCallerSpecification specification = PythonCallerSpecification.read(specificationFile);
         specification.write(resultFile);
         System.out.printf("Python configuration:%n");
         System.out.println(specification.getPython());

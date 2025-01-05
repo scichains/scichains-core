@@ -133,11 +133,11 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
             timing.analyse();
             final Path file = multiChain.specification().getMultiChainSpecificationFile();
             LOG.log(timingLogLevel, () -> String.format(Locale.US,
-                    "Multichain \"%s\", variant \"%s\" executed%s%s in %.3f ms:%n" +
+                    "Multi-chain \"%s\", variant \"%s\" executed%s%s in %.3f ms:%n" +
                             "  %.5f ms initializing, %.5f ms loading inputs, %.5f ms set chain settings, " +
                             "%.5f ms process, %.5f ms returning outputs, %.5f ms freeing%n" +
-                            "  multichain model file: %s%n%s" +
-                            "  All multichain \"%s\", %s",
+                            "  multi-chain specification file: %s%n%s" +
+                            "  All multi-chain \"%s\", %s",
                     multiChain.name(),
                     selectedChain.name(),
                     selectedChain.isMultithreading() ? " (multithreading mode)" : " (single-thread mode)",

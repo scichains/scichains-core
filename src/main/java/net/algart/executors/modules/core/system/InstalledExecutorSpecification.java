@@ -82,17 +82,17 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
-        final ExecutorSpecification model = findSpecification(id);
-        if (model == null) {
+        final ExecutorSpecification specification = findSpecification(id);
+        if (specification == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
             return;
         }
-        getScalar(OUTPUT_PLATFORM_ID).setTo(model.getPlatformId());
-        getScalar(OUTPUT_CATEGORY).setTo(model.getCategory());
-        getScalar(OUTPUT_NAME).setTo(model.getName());
-        getScalar(OUTPUT_DESCRIPTION).setTo(model.getDescription());
-        getScalar(OUTPUT_ID).setTo(model.getExecutorId());
-        getScalar(OUTPUT_LANGUAGE).setTo(model.getLanguage());
+        getScalar(OUTPUT_PLATFORM_ID).setTo(specification.getPlatformId());
+        getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
+        getScalar(OUTPUT_NAME).setTo(specification.getName());
+        getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
+        getScalar(OUTPUT_ID).setTo(specification.getExecutorId());
+        getScalar(OUTPUT_LANGUAGE).setTo(specification.getLanguage());
     }
 
     public ExecutorSpecification findSpecification(String executorId) {

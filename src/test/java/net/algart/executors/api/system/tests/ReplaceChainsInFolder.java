@@ -39,25 +39,25 @@ public class ReplaceChainsInFolder {
     int count = 0;
 
     private void replace(Path f) throws IOException {
-        ChainSpecification model = null;
+        ChainSpecification specification;
         try {
-            model = ChainSpecification.readIfValid(f);
+            specification = ChainSpecification.readIfValid(f);
         } catch (JsonException e) {
             System.err.println(e.getMessage());
             return;
         }
-        if (model == null) {
+        if (specification == null) {
             System.out.printf("%s is not a chain%n", f);
             return;
         }
         // Debugging:
-        final String jsonString = model.jsonString();
+        final String jsonString = specification.jsonString();
         final ChainSpecification reverse = ChainSpecification.valueOf(Jsons.toJson(jsonString));
         if (!reverse.jsonString().equals(jsonString)) {
             throw new AssertionError("Cannot reproduce JSON structre for " + f);
         }
         if (doChanges) {
-            model.rewriteChainSection(f);
+            specification.rewriteChainSection(f);
             System.out.printf("%s successfully rewritten%n", f);
         }
         count++;

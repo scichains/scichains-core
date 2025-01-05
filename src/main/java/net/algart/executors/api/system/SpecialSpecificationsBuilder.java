@@ -51,13 +51,13 @@ class SpecialSpecificationsBuilder {
     }
 
     private ExecutorSpecification findCommonPlatformInformationPattern() {
-        for (ExecutorSpecification model : specifications.all()) {
-            if (model.isJavaExecutor()) {
-                final ExecutorSpecification.JavaConf javaConf = model.getJava();
+        for (ExecutorSpecification specification : specifications.all()) {
+            if (specification.isJavaExecutor()) {
+                final ExecutorSpecification.JavaConf javaConf = specification.getJava();
                 if (javaConf != null) {
                     final String className = javaConf.getClassName();
                     if (Objects.equals(className, CommonPlatformInformation.class.getName())) {
-                        return model;
+                        return specification;
                     }
                 }
             }

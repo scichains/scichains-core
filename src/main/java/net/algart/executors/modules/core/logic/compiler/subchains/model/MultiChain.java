@@ -63,7 +63,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private final List<ExecutorSpecification> loadedChainExecutorSpecifications;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
-    // - note: this combiner is not registered, it is used for building a multi-chain model only in UseMultiChain
+    // - note: this combiner is not registered, it is used for building a multi-chain executor only in UseMultiChain
     private final SettingsCombiner multiChainSettingsCombiner;
 
     // Note: unlike Chain, currentDirectory is not actual here: loading without files is senseless here.
@@ -77,7 +77,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             UseMultiChainSettings settingsFactory)
             throws IOException {
         renewContextId();
-        this.specification = Objects.requireNonNull(specification, "Null json model");
+        this.specification = Objects.requireNonNull(specification, "Null specification");
         Objects.requireNonNull(chainFactory, "Null chainFactory");
         Objects.requireNonNull(settingsFactory, "Null settingsFactory");
         this.specification.checkCompleteness();
@@ -88,18 +88,18 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         assert !this.chainSpecifications.isEmpty();
         final Map<String, Chain> partialChainMap = new HashMap<>();
         String firstChainId = null;
-        for (ChainSpecification chainModel : this.chainSpecifications) {
+        for (ChainSpecification chainSpecification : this.chainSpecifications) {
             if (firstChainId == null) {
-                firstChainId = chainModel.chainId();
+                firstChainId = chainSpecification.chainId();
             }
             final Optional<Chain> optionalChain;
             try {
-                optionalChain = chainFactory.useIfNonRecursive(chainModel);
+                optionalChain = chainFactory.useIfNonRecursive(chainSpecification);
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
                 throw new ChainRunningException("Cannot initialize sub-chain "
-                        + chainModel.getChainSpecificationFile() + ", variant of multichain "
+                        + chainSpecification.getChainSpecificationFile() + ", variant of multichain "
                         + specification.getMultiChainSpecificationFile(), e);
             }
             if (optionalChain.isPresent()) {
@@ -109,8 +109,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 this.loadedChainExecutorSpecifications.add(implementationSpecification);
                 partialChainMap.put(optionalChain.get().id(), optionalChain.get());
             } else {
-                blockedChainSpecifications.add(chainModel);
-                blockedChainSpecificationNames.add(chainModel.chainName());
+                blockedChainSpecifications.add(chainSpecification);
+                blockedChainSpecificationNames.add(chainSpecification.chainName());
             }
             // - Note: if the process of loading chain was blocked due to recursion, it means that it is in
             // the process of registering and not available yet even via ExecutionBlock.getExecutorSpecification.
@@ -129,7 +129,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         this.multiChainOnlyCommonSettingsCombiner = SettingsCombiner.valueOf(
                 buildMultiChainSettingsSpecification(false, partialChainMap));
         // - this (internally used) combiner does not contain advanced multi-line controls
-        // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainModel()
+        // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainSpecification()
         settingsFactory.setMultiChain(this);
         // - this reference will be necessary in CombineMultiChainSettings.correctSettings
         this.multiChainSettingsCombiner = settingsFactory.use(
@@ -207,8 +207,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public void checkImplementationCompatibility() {
-        for (ExecutorSpecification implementationModel : loadedChainExecutorSpecifications) {
-            specification.checkImplementationCompatibility(implementationModel);
+        for (ExecutorSpecification implementation : loadedChainExecutorSpecifications) {
+            specification.checkImplementationCompatibility(implementation);
         }
     }
 
@@ -341,12 +341,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 + ChainSpecification.CATEGORY_SEPARATOR + name()
                 + "\", containing " + chainSpecifications.size() + " chains:\n");
         for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
-            ChainSpecification chainModel = chainSpecifications.get(i);
+            ChainSpecification chainchainSpecification = chainSpecifications.get(i);
             if (i > 0) {
                 sb.append("\n");
             }
-            sb.append("   \"").append(chainModel.canonicalName())
-                    .append("\", ID '").append(chainModel.chainId()).append("'");
+            sb.append("   \"").append(chainchainSpecification.canonicalName())
+                    .append("\", ID '").append(chainchainSpecification.chainId()).append("'");
         }
         return sb.toString();
     }
@@ -369,7 +369,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         freeResources();
     }
 
-    // Note: this.chainModels must be already built
+    // Note: this.chainSpecifications must be already built
     private SettingsCombinerSpecification buildMultiChainSettingsSpecification(
             boolean addSubSettingsForVariants,
             Map<String, Chain> helpingChainMap) {
@@ -387,8 +387,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     specification.getMultiChainSpecificationFile() == null ? "" :
                             " (problem occurred in multi-chain, loaded from the file " +
                                     specification.getMultiChainSpecificationFile() + ")";
-            for (ChainSpecification chainModel : chainSpecifications) {
-                final ChainSpecification.Executor executor = chainModel.getExecutor();
+            for (ChainSpecification chainSpecification : chainSpecifications) {
+                final ChainSpecification.Executor executor = chainSpecification.getExecutor();
                 final String name = executor.getName();
                 try {
                     SettingsCombinerSpecification.checkParameterName(name, null);
@@ -403,7 +403,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setEditionType(ControlEditionType.VALUE)
                         .setAdvanced(true)
                         .setMultiline(true);
-                final Chain chain = helpingChainMap.get(chainModel.chainId());
+                final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
                     settingsControlConf.setGroupId(chain.id());
                     final String combinerId = UseSubChain.getMainChainSettingsCombinerId(chain);
@@ -426,9 +426,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private ExecutorSpecification.ControlConf createCurrentChainIdControl() {
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ChainSpecification chainModel : chainSpecifications) {
-            final String chainId = chainModel.chainId();
-            items.add(new ExecutorSpecification.ControlConf.EnumItem(chainId).setCaption(chainModel.chainName()));
+        for (ChainSpecification specification : chainSpecifications) {
+            final String chainId = specification.chainId();
+            items.add(new ExecutorSpecification.ControlConf.EnumItem(chainId).setCaption(specification.chainName()));
         }
         ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(SELECTED_CHAIN_ID_PARAMETER_NAME);
@@ -442,8 +442,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private Map<String, Chain> createChainMap() {
         Map<String, Chain> result = new LinkedHashMap<>();
-        for (ChainSpecification chainModel : this.chainSpecifications) {
-            final String executorId = chainModel.chainId();
+        for (ChainSpecification specification : this.chainSpecifications) {
+            final String executorId = specification.chainId();
             final Chain chain = registeredChain(executorId);
             result.put(executorId, chain);
         }

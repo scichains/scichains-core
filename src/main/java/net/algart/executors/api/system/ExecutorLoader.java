@@ -96,13 +96,13 @@ public abstract class ExecutorLoader {
      * Removes all executors, dynamically created for the given session,
      * probably stored in some tables by this loader for dynamic usage,
      * and frees some caches, necessary for such executors.
-     * Default implementation calls {@link #removeSessionSpecifications(String)}.
+     * Default implementation calls {@link #removeSpecifications(String)}.
      *
      * @param sessionId unique ID of current session.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public void clearSession(String sessionId) {
-        removeSessionSpecifications(sessionId);
+        removeSpecifications(sessionId);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class ExecutorLoader {
             final var allStandard = ExecutorSpecificationSet.allBuiltIn().all();
             final long t2 = System.nanoTime();
             LOG.log(Logger.Level.INFO, () -> String.format(Locale.US,
-                    "Storing descriptions of installed built-in executor models: %.3f ms",
+                    "Storing descriptions of installed built-in executor specifications: %.3f ms",
                     (t2 - t1) * 1e-6));
             setSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
         }
@@ -205,12 +205,12 @@ public abstract class ExecutorLoader {
         }
     }
 
-    public final void removeSessionSpecifications(String sessionId) {
+    public final void removeSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
-            Map<String, String> models = allSpecifications.get(sessionId);
-            if (models != null) {
-                models.clear();
+            Map<String, String> specifications = allSpecifications.get(sessionId);
+            if (specifications != null) {
+                specifications.clear();
             }
         }
     }

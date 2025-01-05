@@ -120,7 +120,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                             "%.3f mcs process, " +
                             "%.3f mcs returning outputs, %.3f mcs freeing%n" +
                             "  Sub-chain ID: %s (identity %X)%n" +
-                            "  Sub-chain model file: %s%n%s" +
+                            "  Sub-chain specification file: %s%n%s" +
                             "  All%s, %s",
                     name,
                     chain.isMultithreading() ? " (multithreading mode)" : " (single-thread mode)",

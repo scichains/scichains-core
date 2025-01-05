@@ -398,7 +398,7 @@ public final class UseSubChain extends FileOperation {
     }
 
     private Chain register(ChainSpecification chainSpecification) {
-        Objects.requireNonNull(chainSpecification, "Null chain JSON model");
+        Objects.requireNonNull(chainSpecification, "Null chainSpecification");
         final String sessionId = getSessionId();
         if (sessionId == null) {
             throw new IllegalStateException("Cannot register new chain: session ID was not set");

@@ -40,14 +40,15 @@ public final class SubChainToSettingsCombiner {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
-            System.out.printf("Usage: %s sub_chain.json new_resulting_settings_combiner_model.json model_name%n",
+            System.out.printf("Usage: %s sub_chain.json " +
+                            "new_resulting_settings_combiner_specification.json executor_name%n",
                     SubChainToSettingsCombiner.class);
             return;
         }
 
         final Path chainSpecificationFile = Paths.get(args[0]);
         final Path settingsCombinerSpecificationFile = Paths.get(args[1]);
-        final String modelName = args[2];
+        final String executorName = args[2];
 
         final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance(SESSION_ID);
         // - ExecutorFactory is necessary:
@@ -59,7 +60,8 @@ public final class SubChainToSettingsCombiner {
         executorSpecification.setTo(chain);
         final SettingsCombinerSpecification settingsCombinerSpecification = new SettingsCombinerSpecification();
         settingsCombinerSpecification.setId(UUID.randomUUID().toString());
-        settingsCombinerSpecification.setCombineName(SettingsCombinerSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + modelName);
+        settingsCombinerSpecification.setCombineName(
+                SettingsCombinerSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + executorName);
         settingsCombinerSpecification.setControls(executorSpecification.getControls());
         settingsCombinerSpecification.write(settingsCombinerSpecificationFile);
     }

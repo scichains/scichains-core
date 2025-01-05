@@ -89,12 +89,12 @@ public final class Mapping implements Cloneable {
     }
 
     public static Mapping valueOf(
-            MappingSpecification model,
+            MappingSpecification specification,
             List<String> keys,
             List<String> keyCaptions,
             List<String> enumItems,
             List<String> enumItemCaptions) {
-        return new Mapping(model, keys, keyCaptions, enumItems, enumItemCaptions);
+        return new Mapping(specification, keys, keyCaptions, enumItems, enumItemCaptions);
     }
 
     public MappingSpecification specification() {

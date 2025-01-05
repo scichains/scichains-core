@@ -47,7 +47,7 @@ public final class ReloadInstalledChainSettings extends UseChainSettings {
         return false;
     }
 
-    String installedModelsCaption() {
-        return "installed chain main settings combiner models";
+    String installedSpecificationsCaption() {
+        return "installed chain main settings combiner specifications";
     }
 }

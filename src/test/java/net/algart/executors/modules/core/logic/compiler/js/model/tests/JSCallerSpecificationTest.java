@@ -33,13 +33,13 @@ import java.nio.file.Paths;
 public class JSCallerSpecificationTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s js_executor_model.json result.json%n",
+            System.out.printf("Usage: %s js_executor_specification.json result.json%n",
                     JSCallerSpecificationTest.class.getName());
             return;
         }
-        final Path modelFile = Paths.get(args[0]);
+        final Path specificationFile = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
-        JSCallerSpecification specification = JSCallerSpecification.read(modelFile);
+        JSCallerSpecification specification = JSCallerSpecification.read(specificationFile);
         specification.write(resultFile);
         System.out.printf("JS configuration:%n");
         System.out.println(specification.getJS());

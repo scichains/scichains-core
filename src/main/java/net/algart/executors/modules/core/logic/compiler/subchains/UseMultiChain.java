@@ -283,7 +283,7 @@ public final class UseMultiChain extends FileOperation {
 
     public static ExecutorSpecification buildMultiChainSpecification(MultiChain multiChain) {
         Objects.requireNonNull(multiChain, "Null multiChain");
-        final MultiChainSpecification model = multiChain.specification();
+        final MultiChainSpecification specification = multiChain.specification();
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMultiChain());
         // - adds JavaConf and (maybe) parameters with setters
@@ -293,8 +293,8 @@ public final class UseMultiChain extends FileOperation {
         result.setName(multiChain.name());
         result.setDescription(multiChain.description());
         result.setLanguage(MULTICHAIN_LANGUAGE);
-        result.setInPorts(model.getInPorts());
-        result.setOutPorts(model.getOutPorts());
+        result.setInPorts(specification.getInPorts());
+        result.setOutPorts(specification.getOutPorts());
         UseSubChain.addSettingsPorts(result);
         final SettingsCombiner settingsCombinerForMultiChain = multiChain.multiChainOnlyCommonSettingsCombiner();
         addSystemParameters(result, multiChain);
