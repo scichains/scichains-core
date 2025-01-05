@@ -82,7 +82,8 @@ public abstract class ExecutorLoader {
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public abstract ExecutionBlock loadExecutor(String sessionId, String executorId, ExecutorSpecification specification)
+    public abstract ExecutionBlock loadExecutor(
+            String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException;
 
     /**
@@ -99,33 +100,45 @@ public abstract class ExecutorLoader {
     }
 
     /**
-     * Returns executors' descriptions (probable JSONs, like in
-     * {@link ExecutorSpecification})
-     * for all executors, dynamically created by this loader for the given session.
-     * Keys in the result are ID of every executor, values are descriptions.
+     * Returns executor specifications for all executors, registered by this loader
+     * for the given session, in a serialized (string) form.
+     * Keys in the result are IDs of executors, values are serialized specifications.
      *
      * @param sessionId unique ID of current session.
-     * @return executors' descriptions for executors, created by this loader.
+     * @return specifications for all executors, created by this loader.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public final Map<String, String> availableSpecifications(String sessionId) {
+    public final Map<String, String> serializedSessionSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
-            return Collections.unmodifiableMap(allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
+            return Collections.unmodifiableMap(
+                    allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
         }
     }
 
     /**
-     * Returns <code>{@link #availableSpecifications(String)
-     * availableExecutorSpecifications}(sessionId).get(executorId)</code>,
-     * but works quickly (without creating a new map).
+     * Returns the executor specification, registered for the specified session ID and executor ID.
      *
      * @param sessionId  unique ID of current session.
      * @param executorId unique ID of this executor in the system.
-     * @return description of this dynamic executor (probably JSON).
+     * @return specification of the executor or <code>null</code> if there is no such executor.
      * @throws NullPointerException if one of arguments is <code>null</code>.
      */
-    public final String getSpecification(String sessionId, String executorId) {
+    public final ExecutorSpecification getSpecification(String sessionId, String executorId) {
+        final String serialized = serializedSpecification(sessionId, executorId);
+        if (serialized == null) {
+            return null;
+        }
+        try {
+            return ExecutorSpecification.valueOf(serialized);
+        } catch (JsonException e) {
+            throw new AssertionError("Very strange: all registered specification " +
+                    "were serialized via toJson().toString()!", e);
+        }
+
+    }
+
+    public final String serializedSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
@@ -134,38 +147,46 @@ public abstract class ExecutorLoader {
         }
     }
 
-    public final void setSpecification(String sessionId, String executorId, String specification) {
+    /**
+     * Registers new executor according to the specification with its ID
+     * {@link ExecutorSpecification#getExecutorId() specification.getExecutorId()}.
+     * If this specification is already present, this method overrides it with the new value.
+     *
+     * <p>This method is called from {@link DefaultExecutorLoader#registerWorker} method.</p>
+     *
+     * @param sessionId     unique ID of current session.
+     * @param specification new specification.
+     */
+    public final void setSpecification(String sessionId, ExecutorSpecification specification) {
         Objects.requireNonNull(sessionId, "Null sessionId");
-        Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(specification, "Null specification");
         synchronized (allSpecifications) {
             allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .put(executorId, specification);
+                    .put(specification.getExecutorId(), specification.toJson().toString());
         }
     }
 
-    public final void addSpecifications(String sessionId, Map<String, String> specifications) {
+    public final void setSpecifications(String sessionId, Collection<ExecutorSpecification> specifications) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(specifications, "Null specifications");
         synchronized (allSpecifications) {
-            allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .putAll(specifications);
+            final var serialized = allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>());
+            for (ExecutorSpecification specification : specifications) {
+                Objects.requireNonNull(specification, "Null specification in the collection");
+                serialized.put(specification.getExecutorId(), specification.toJson().toString());
+            }
         }
     }
 
-    public void addAllStandardJavaExecutorSpecifications() {
+    public final void addAllStandardJavaExecutorSpecifications() {
         if (REGISTER_BUILT_IN_EXECUTORS) {
             final long t1 = System.nanoTime();
-            final Map<String, String> allStandard = new LinkedHashMap<>();
-            for (ExecutorSpecification executorSpecification : ExecutorSpecificationSet.allBuiltIn().all()) {
-                allStandard.put(executorSpecification.getExecutorId(), executorSpecification.toJson().toString());
-                // - storing brief JSONs: usually we have a lot of executors, and it makes sense to save time
-            }
+            final var allStandard = ExecutorSpecificationSet.allBuiltIn().all();
             final long t2 = System.nanoTime();
             LOG.log(Logger.Level.INFO, () -> String.format(Locale.US,
                     "Storing descriptions of installed built-in executor models: %.3f ms",
                     (t2 - t1) * 1e-6));
-            addSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
+            setSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
         }
     }
 
@@ -204,7 +225,10 @@ public abstract class ExecutorLoader {
         }
 
         @Override
-        public ExecutionBlock loadExecutor(String ignoredSessionId, String executorId, ExecutorSpecification specification)
+        public ExecutionBlock loadExecutor(
+                String ignoredSessionId,
+                String executorId,
+                ExecutorSpecification specification)
                 throws ClassNotFoundException {
             Objects.requireNonNull(executorId, "Null executorId");
             Objects.requireNonNull(specification, "Null specification");

@@ -246,7 +246,8 @@ public class UseSettings extends FileOperation {
                         + settingsCombinerSpecificationPath);
             }
         } else {
-            settingsCombinerSpecifications = Collections.singletonList(SettingsCombinerSpecification.read(settingsCombinerSpecificationPath));
+            settingsCombinerSpecifications =
+                    Collections.singletonList(SettingsCombinerSpecification.read(settingsCombinerSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         SettingsCombinerSpecification.checkIdDifference(settingsCombinerSpecifications);
@@ -325,12 +326,16 @@ public class UseSettings extends FileOperation {
         final String sessionId = getSessionId();
         final SettingsCombiner settingsCombiner = SettingsCombiner.valueOf(settingsCombinerSpecification);
         settingsCombiner.setCustomSettingsInformation(customSettingsInformation());
-        SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.id(), settingsCombiner,
-                buildCombineSpecification(settingsCombiner));
-        SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.splitId(), settingsCombiner,
-                buildSplitSpecification(settingsCombiner));
-        SETTINGS_COMBINER_LOADER.registerWorker(sessionId, settingsCombiner.getNamesId(), settingsCombiner,
-                buildGetNamesSpecification(settingsCombiner));
+        final ExecutorSpecification combineSpecification = buildCombineSpecification(settingsCombiner);
+        SETTINGS_COMBINER_LOADER.registerWorker(sessionId, combineSpecification, settingsCombiner);
+        final ExecutorSpecification splitSpecification = buildSplitSpecification(settingsCombiner);
+        if (splitSpecification != null) {
+            SETTINGS_COMBINER_LOADER.registerWorker(sessionId, splitSpecification, settingsCombiner);
+        }
+        final ExecutorSpecification getNamesSpecification = buildGetNamesSpecification(settingsCombiner);
+        if (getNamesSpecification != null) {
+            SETTINGS_COMBINER_LOADER.registerWorker(sessionId, getNamesSpecification, settingsCombiner);
+        }
         return this.settingsCombiner = settingsCombiner;
     }
 

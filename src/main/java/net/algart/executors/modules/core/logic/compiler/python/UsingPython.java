@@ -104,8 +104,7 @@ public class UsingPython {
     public static void use(String sessionId, PythonCallerSpecification pythonCallerSpecification) throws IOException {
         correctPythonExecutorSpecification(pythonCallerSpecification);
         final PythonCaller pythonCaller = PythonCaller.valueOf(pythonCallerSpecification);
-        PYTHON_CALLER_LOADER.registerWorker(
-                sessionId, pythonCaller.executorId(), pythonCaller, pythonCallerSpecification);
+        PYTHON_CALLER_LOADER.registerWorker(sessionId, pythonCallerSpecification, pythonCaller);
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {

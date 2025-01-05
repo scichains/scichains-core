@@ -99,42 +99,12 @@ public final class ExecutorLoaderSet {
                 + ": unknown executor specification");
     }
 
-    public Map<String, String> availableSpecifications(String sessionId) {
-        return availableSpecifications(sessionId, true);
-    }
-
-    /**
-     * Returns executor specifications for all executors, registered for the given session
-     * and, if the second argument is <code>true</code>,
-     * for the global session {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
-     * Keys in the result are ID of every executor, values are descriptions.
-     * This may be used for the user interface to show information for available executors.
-     *
-     * @param sessionId            unique ID of current session; may be <code>null</code>.
-     * @param includeGlobalSession if <code>true</code>, the result includes the executors,
-     *                             registered in the global session.
-     * @return all available executor specifications for this and the global session.
-     */
-    public Map<String, String> availableSpecifications(String sessionId, boolean includeGlobalSession) {
-        final Map<String, String> result = new LinkedHashMap<>();
-        for (ExecutorLoader loader : loaders()) {
-            if (includeGlobalSession) {
-                result.putAll(loader.availableSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
-            }
-            if (sessionId != null) {
-                result.putAll(loader.availableSpecifications(sessionId));
-            }
-//            System.out.println("!!! " + loader + ": " + result.size() + " executors");
-        }
-        return result;
-    }
-
-    public String getSpecification(String sessionId, String executorId) {
+    public ExecutorSpecification getSpecification(String sessionId, String executorId) {
         return getSpecification(sessionId, executorId, true);
     }
 
     /**
-     * Equivalent to <code>{@link #availableSpecifications(String, boolean)
+     * Returns specification Equivalent to <code>{@link #serializedSessionSpecifications(String, boolean)
      * availableExecutorSpecifications}(sessionId, includeGlobalSession).get(executorId)</code>,
      * but works quickly (without creating a new map).
      *
@@ -144,17 +114,18 @@ public final class ExecutorLoaderSet {
      * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
      * @throws NullPointerException if <code>executorId</code>> arguments is <code>null</code>.
      */
-    public String getSpecification(String sessionId, String executorId, boolean includeGlobalSession) {
+    public ExecutorSpecification getSpecification(String sessionId, String executorId, boolean includeGlobalSession)
+            throws JsonException {
         synchronized (loaders) {
             for (ExecutorLoader loader : loaders) {
                 if (includeGlobalSession) {
-                    final String result = loader.getSpecification(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
+                    final var result = loader.getSpecification(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
                     if (result != null) {
                         return result;
                     }
                 }
                 if (sessionId != null) {
-                    final String result = loader.getSpecification(sessionId, executorId);
+                    final var result = loader.getSpecification(sessionId, executorId);
                     if (result != null) {
                         return result;
                     }
@@ -164,12 +135,36 @@ public final class ExecutorLoaderSet {
         return null;
     }
 
-    public ExecutorSpecification parseSpecification(String sessionId, String executorId) throws JsonException {
-        final String specification = getSpecification(sessionId, executorId);
-        if (specification == null) {
-            return null;
+
+    public Map<String, String> serializedSessionSpecifications(String sessionId) {
+        return serializedSessionSpecifications(sessionId, true);
+    }
+
+    /**
+     * Returns executor specifications for all executors, registered for the given session
+     * and, if the second argument is <code>true</code>,
+     * for the global session {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID},
+     * in a serialized (string) form.
+     * Keys in the result are IDs of executors, values are serialized specifications.
+     * This may be used for the user interface to show information for available executors.
+     *
+     * @param sessionId            unique ID of current session; may be <code>null</code>.
+     * @param includeGlobalSession if <code>true</code>, the result includes the executors,
+     *                             registered in the global session.
+     * @return all available executor specifications for this and (possibly) the global session.
+     */
+    public Map<String, String> serializedSessionSpecifications(String sessionId, boolean includeGlobalSession) {
+        final Map<String, String> result = new LinkedHashMap<>();
+        for (ExecutorLoader loader : loaders()) {
+            if (includeGlobalSession) {
+                result.putAll(loader.serializedSessionSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+            }
+            if (sessionId != null) {
+                result.putAll(loader.serializedSessionSpecifications(sessionId));
+            }
+//            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }
-        return ExecutorSpecification.valueOf(specification);
+        return result;
     }
 
     public void clearSession(String sessionId) {

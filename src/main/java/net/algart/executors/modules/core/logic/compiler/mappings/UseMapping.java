@@ -185,7 +185,7 @@ public class UseMapping extends FileOperation {
                 items == null ? null : items.lines(),
                 items == null ? null : items.comments());
         final ExecutorSpecification specification = buildMappingSpecification(mapping);
-        MAPPING_LOADER.registerWorker(sessionId, mapping.id(), mapping, specification);
+        MAPPING_LOADER.registerWorker(sessionId, specification, mapping);
     }
 
     public ExecutorSpecification buildMappingSpecification(Mapping mapping) {

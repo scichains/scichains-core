@@ -72,7 +72,7 @@ public class InterpretMapping extends Executor implements ReadOnlyExecutionInput
     private Mapping mapping() {
         Mapping mapping = this.mapping;
         if (mapping == null) {
-            mapping = UseMapping.mappingLoader().reqRegisteredWorker(getExecutorId());
+            mapping = UseMapping.mappingLoader().registeredWorker(getExecutorId());
             this.mapping = mapping.clone();
             // - the order is important for multithreading: local mapping is assigned first,
             // this.mapping is assigned to it;

@@ -118,10 +118,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Add in/out port only if absent
+     * Adds in/out port if it is absent, otherwise just returns <code>false</code>.
      *
-     * @param port added port
-     * @return success operation flag
+     * @param port added port.
+     * @return success operation flag.
      */
     @UsedForExternalCommunication
     public final boolean addPort(Port port) {
@@ -1116,7 +1116,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * @throws ClassNotFoundException if Java class, required for creating executing block,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
-     * @see #getExecutorSpecification(String, String) (String, String)
      */
     public static ExecutionBlock newExecutor(String sessionId, String executorId, ExecutorSpecification specification)
             throws ClassNotFoundException {
@@ -1147,26 +1146,11 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return newExecutor(sessionId, executorId, ExecutorSpecification.valueOf(specification));
     }
 
-    //TODO!! rename
+    //TODO!! rename to serializedSpecifications
     @UsedForExternalCommunication
     public static String[] availableExecutorModelArray(String sessionId) {
         return ExecutorLoaderSet.globalExecutorLoaders()
-                .availableSpecifications(sessionId).values().toArray(new String[0]);
-    }
-
-    /**
-     * Returns specification of a registered executor.
-     *
-     * <p>This method is sometimes used from JavaScript and other platforms: this is the reason of adding
-     * {@link @UsedForExternalCommunication} annotation.</p>
-     *
-     * @param sessionId  unique ID of current session; may be <code>null</code>.
-     * @param executorId executor ID.
-     * @return specification of this executor.
-     */
-    @UsedForExternalCommunication
-    public static String getExecutorSpecification(String sessionId, String executorId) {
-        return ExecutorLoaderSet.globalExecutorLoaders().getSpecification(sessionId, executorId);
+                .serializedSessionSpecifications(sessionId).values().toArray(new String[0]);
     }
 
     /**

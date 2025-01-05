@@ -71,7 +71,7 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
     public JSCaller jsCaller() {
         JSCaller jsCaller = this.jsCaller;
         if (jsCaller == null) {
-            jsCaller = UseJS.jsCallerLoader().reqRegisteredWorker(getExecutorId());
+            jsCaller = UseJS.jsCallerLoader().registeredWorker(getExecutorId());
             jsCaller = jsCaller.clone();
             // - we return a clone!
             this.jsCaller = jsCaller;

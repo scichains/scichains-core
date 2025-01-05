@@ -83,13 +83,13 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     @Override
     public ExecutorSpecification specification(String executorId) {
         synchronized (lock) {
-            ExecutorSpecification executorSpecification = staticExecutors.get(executorId);
-            if (executorSpecification != null) {
-                return executorSpecification;
+            ExecutorSpecification specification = staticExecutors.get(executorId);
+            if (specification != null) {
+                return specification;
             }
-            executorSpecification = dynamicExecutorsCache.get(executorId);
-            if (executorSpecification != null) {
-                return executorSpecification;
+            specification = dynamicExecutorsCache.get(executorId);
+            if (specification != null) {
+                return specification;
                 // - Caching: we suppose that non-null executor models cannot change.
                 // It is not absolutely correct, when the programmer is developing new dynamic executors,
                 // but the usage of this model by this package is very pure: we prefer to provide
@@ -98,7 +98,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-            final String specification = executorLoaderSet.getSpecification(sessionId, executorId);
+            specification = executorLoaderSet.getSpecification(sessionId, executorId);
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
@@ -121,17 +121,9 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 return null;
                 // - No sense to add null to dynamicExecutorsCache;
                 // moreover, it is prohibited ("add" method will throw an exception)
-            } else {
-                try {
-                    executorSpecification = ExecutorSpecification.valueOf(specification);
-//                    System.out.println("Building executor: " + executorSpecification.getName());
-                } catch (JsonException e) {
-                    throw new IllegalStateException("Standard executor factory cannot be used with executor "
-                            + executorId + ": it is registered with unsupported format of executor specification", e);
-                }
             }
-            dynamicExecutorsCache.add(executorId, executorSpecification);
-            return executorSpecification;
+            dynamicExecutorsCache.add(executorId, specification);
+            return specification;
         }
     }
 

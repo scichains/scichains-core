@@ -173,7 +173,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
     }
 
     public static Chain registeredChain(String executorId) {
-        Chain chain = UseSubChain.subChainLoader().reqRegisteredWorker(executorId);
+        Chain chain = UseSubChain.subChainLoader().registeredWorker(executorId);
         chain = chain.cleanCopy();
         // - every instance of this executor has its own space for data, like activates for usual procedures
         // (necessary for recursion)

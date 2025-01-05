@@ -24,11 +24,10 @@
 
 package net.algart.executors.modules.core.system;
 
-import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
@@ -115,34 +114,22 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
                     (t4 - t1) * 1e-6, (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
             return builtIn;
         }
-        final String description = ExecutionBlock.getExecutorSpecification(getSessionId(), executorId);
-        if (description == null) {
+        final ExecutorSpecification extended = ExecutorLoaderSet.globalExecutorLoaders()
+                .getSpecification(getSessionId(), executorId);
+        if (extended == null) {
             return null;
         }
         long t3 = debugTime();
-        final JsonObject json;
-        final ExecutorSpecification extended;
-        try {
-            json = Jsons.toJson(description);
-            extended = ExecutorSpecification.valueOf(json);
-        } catch (JsonException e) {
-            getScalar().setTo(description);
-            throw new IllegalArgumentException("Executor with ID \"" + executorId
-                    + "\" is specified by description, which is not a correct JSON", e);
-        }
-        long t4 = debugTime();
-        getScalar().setTo(Jsons.toPrettyString(json));
+        getScalar().setTo(extended.jsonString());
         // - note: this JSON can have more information than ExecutorSpecification extended
         // (for example, it has additional fields for PythonCallerSpecification)
-        long t5 = debugTime();
+        long t4 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Executor \"%s\" is an extended executor \"%s\": %.5f ms = " +
-                        "%.3f mcs quick check + %.3f mcs requesting description + " +
-                        "%.3f mcs parsing + %.3f mcs returning",
+                        "%.3f mcs quick check + %.3f mcs requesting description + %.3f mcs returning",
                 executorId, extended.getName(),
-                (t5 - t1) * 1e-6,
-                (t2 - t1) * 1e-3, (t3 - t2) * 1e-3,
-                (t4 - t3) * 1e-3, (t5 - t4) * 1e-3));
+                (t4 - t1) * 1e-6,
+                (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
         return extended;
     }
 }

@@ -196,7 +196,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
 
     public static MultiChain registeredMultiChain(String executorId) {
         @SuppressWarnings("resource")
-        MultiChain multiChain = UseMultiChain.multiChainLoader().reqRegisteredWorker(executorId);
+        MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(executorId);
         return multiChain.clone();
     }
 

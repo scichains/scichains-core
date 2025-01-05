@@ -277,8 +277,7 @@ public final class UseMultiChain extends FileOperation {
         if (strictMode) {
             multiChain.checkImplementationCompatibility();
         }
-        MULTICHAIN_LOADER.registerWorker(
-                getSessionId(), multiChain.id(), multiChain, buildMultiChainSpecification(multiChain));
+        MULTICHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
         return multiChain;
     }
 

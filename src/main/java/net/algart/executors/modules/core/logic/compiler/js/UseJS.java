@@ -144,7 +144,7 @@ public class UseJS extends FileOperation {
         final Path workingDirectory = translateWorkingDirectory();
         correctJSExecutorSpecification(jsCallerSpecification, workingDirectory);
         final JSCaller jsCaller = JSCaller.valueOf(jsCallerSpecification, workingDirectory);
-        JS_CALLER_LOADER.registerWorker(sessionId, jsCaller.executorId(), jsCaller, jsCallerSpecification);
+        JS_CALLER_LOADER.registerWorker(sessionId, jsCallerSpecification, jsCaller);
     }
 
     private Path translateWorkingDirectory() {

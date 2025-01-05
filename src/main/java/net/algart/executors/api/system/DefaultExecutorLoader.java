@@ -57,14 +57,13 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public boolean registerWorker(String sessionId, String id, W worker, ExecutorSpecification specification) {
-        if (id == null) {
-            return false;
-        }
-        Objects.requireNonNull(worker, "Null worker for non-null ID=" + id);
+    public boolean registerWorker(String sessionId, ExecutorSpecification specification, W worker) {
+        Objects.requireNonNull(sessionId, "Null sessionId");
+        Objects.requireNonNull(specification, "Null specification");
+        Objects.requireNonNull(worker, "Null worker");
         synchronized (lock) {
-            setSpecification(sessionId, id, specification.toJson().toString());
-            final W previosWorker = idToWorkerMap.put(id, worker);
+            setSpecification(sessionId, specification);
+            final W previosWorker = idToWorkerMap.put(specification.getExecutorId(), worker);
             try {
                 if (previosWorker instanceof AutoCloseable) {
                     ((AutoCloseable) previosWorker).close();
@@ -75,7 +74,7 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
         }
     }
 
-    public W reqRegisteredWorker(String id) {
+    public W registeredWorker(String id) {
         synchronized (lock) {
             final W result = idToWorkerMap.get(id);
             Objects.requireNonNull(result, "Cannot find registered worker with id=" + id);
