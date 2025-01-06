@@ -27,6 +27,7 @@ package net.algart.executors.api;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.data.Port;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.Jsons;
 

@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.SMat;

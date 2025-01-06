@@ -25,11 +25,13 @@
 package net.algart.executors.modules.core.logic.compiler.settings;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
-import net.algart.executors.api.system.*;
+import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExtensionSpecification;
+import net.algart.executors.api.system.InstalledPlatformsForTechnology;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.*;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;

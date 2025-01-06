@@ -25,7 +25,7 @@
 package net.algart.executors.api.tests;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.SScalar;
 

@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 
 public enum ChainPortType {
     INPUT_PORT(1, Port.Type.INPUT, true),

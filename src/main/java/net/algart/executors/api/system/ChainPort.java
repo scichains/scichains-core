@@ -24,9 +24,9 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.Port;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.data.Port;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

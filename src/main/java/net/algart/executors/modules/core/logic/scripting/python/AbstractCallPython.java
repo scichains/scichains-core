@@ -31,7 +31,7 @@ import net.algart.bridges.jep.additions.JepInterpreterKind;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 
 import java.util.*;
 import java.util.function.Function;

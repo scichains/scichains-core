@@ -30,7 +30,7 @@ import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalAPI;
 import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import org.graalvm.polyglot.Value;
 

@@ -27,7 +27,6 @@ package net.algart.bridges.graalvm.api;
 import net.algart.bridges.graalvm.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.data.*;
 import org.graalvm.polyglot.Value;
 

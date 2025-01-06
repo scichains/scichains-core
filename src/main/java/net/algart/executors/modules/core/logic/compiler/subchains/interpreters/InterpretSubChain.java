@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.logic.compiler.subchains.interpreters;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.system.Chain;
 import net.algart.executors.api.system.ChainBlock;

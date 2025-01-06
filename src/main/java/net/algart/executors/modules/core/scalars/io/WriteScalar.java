@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.scalars.io;
 
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.modules.core.common.io.WriteFileOperation;
 
 import java.io.IOError;

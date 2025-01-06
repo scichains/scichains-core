@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.logic.ifelse.matrices;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.modules.core.logic.ConditionStyle;
 
 public final class IfScalarThenMatrix extends Executor {

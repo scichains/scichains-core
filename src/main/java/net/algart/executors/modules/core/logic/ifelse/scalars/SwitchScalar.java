@@ -25,8 +25,8 @@
 package net.algart.executors.modules.core.logic.ifelse.scalars;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 
 public final class SwitchScalar extends Executor implements ReadOnlyExecutionInput {

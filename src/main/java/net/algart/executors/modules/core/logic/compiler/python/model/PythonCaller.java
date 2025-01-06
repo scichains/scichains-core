@@ -30,7 +30,7 @@ import net.algart.bridges.jep.additions.AtomicPyCallable;
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 
 import java.util.Objects;
 

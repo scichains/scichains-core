@@ -29,7 +29,7 @@ import net.algart.bridges.graalvm.GraalPerformerContainer;
 import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalAPI;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import org.graalvm.polyglot.Value;
 
 import java.nio.file.Path;

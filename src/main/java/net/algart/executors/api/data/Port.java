@@ -22,22 +22,17 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api;
+package net.algart.executors.api.data;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.data.Data;
-import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.ExecutionBlock;
 import net.algart.external.UsedForExternalCommunication;
 
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * @author mnogono
- * Created on 11.05.2017.
- */
 public final class Port {
     public enum Type {
         INPUT(1, "input") {

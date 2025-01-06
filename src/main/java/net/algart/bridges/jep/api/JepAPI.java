@@ -33,7 +33,6 @@ import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.additions.JepExtendedConfig;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.data.*;
 
 import java.nio.Buffer;

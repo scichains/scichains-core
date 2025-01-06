@@ -29,7 +29,7 @@ import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.Port;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
 import net.algart.math.functions.Func2;

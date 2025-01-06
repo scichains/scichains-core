@@ -25,8 +25,8 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Port;
 import net.algart.executors.api.data.DataType;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 
 import java.util.concurrent.atomic.AtomicInteger;
