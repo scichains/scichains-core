@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 
 public final class ExtensionSpecification extends AbstractConvertibleToJson {
     private static final boolean SUPPORT_OLD_MODELS_SYNTAX = true;
+    // Can be false since 4.4.11
 
     public static final String APP_NAME = "executors-extension";
     public static final String CURRENT_VERSION = "1.0";
