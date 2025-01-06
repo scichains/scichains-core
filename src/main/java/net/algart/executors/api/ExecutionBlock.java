@@ -714,7 +714,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Returns the unique ID of the session, in which this executor works.
      * It is set automatically while creating by
-     * {@link #newExecutor(String, String, ExecutorSpecification)}.
+     * {@link #newExecutor(String, ExecutorSpecification)}.
      */
     public final String getSessionId() {
         return sessionId;

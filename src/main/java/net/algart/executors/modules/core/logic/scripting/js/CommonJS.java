@@ -87,7 +87,7 @@ public final class CommonJS extends Executor {
         }
 
         public Executor get(String callableExecutorId) {
-            final net.algart.executors.api.system.ExecutorFactory executorFactory = executorFactory();
+            final net.algart.executors.api.system.ExecutorFactory executorFactory = factory();
             final ExecutionBlock executionBlock;
             try {
                 executionBlock = executorFactory.newExecutor(callableExecutorId);
@@ -107,7 +107,7 @@ public final class CommonJS extends Executor {
             return (Executor) executionBlock;
         }
 
-        private net.algart.executors.api.system.ExecutorFactory executorFactory() {
+        public net.algart.executors.api.system.ExecutorFactory factory() {
             if (this.executorFactory == null) {
                 this.executorFactory = globalExecutorLoaders().newFactory(sessionId);
             }

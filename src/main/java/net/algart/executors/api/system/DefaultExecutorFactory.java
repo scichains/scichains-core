@@ -79,6 +79,10 @@ public class DefaultExecutorFactory implements ExecutorFactory {
         return new DefaultExecutorFactory(executorLoaderSet, staticExecutors, sessionId);
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
     @Override
     public ExecutorSpecification getSpecification(String executorId) {
         synchronized (lock) {
@@ -137,5 +141,10 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             }
             return executorLoaderSet.newExecutor(sessionId, executorSpecification);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "default executor factory for session \"" + sessionId + "\"";
     }
 }
