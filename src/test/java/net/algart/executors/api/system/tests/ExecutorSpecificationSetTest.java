@@ -108,7 +108,7 @@ public class ExecutorSpecificationSetTest {
                         final String id = specification.getExecutorId();
                         final String javaConfiguration = specification.minimalSpecification();
                         //noinspection resource
-                        ExecutionBlock.newExecutionBlock(null, id, javaConfiguration);
+                        ExecutionBlock.newExecutor(null, javaConfiguration);
                     }
                 }
                 long t2 = System.nanoTime();
@@ -123,8 +123,8 @@ public class ExecutorSpecificationSetTest {
                 if (specification.isJavaExecutor()) {
                     System.out.printf("Creating executor %s.%s...%n",
                             specification.getCategory(), specification.getName());
-                    final ExecutionBlock executionBlock = ExecutionBlock.newExecutionBlock(
-                            null, specification.getExecutorId(), specification.minimalSpecification());
+                    final ExecutionBlock executionBlock = ExecutionBlock.newExecutor(
+                            null, specification.minimalSpecification());
                     System.out.printf("  %s [id=%s]%n", executionBlock, executionBlock.getExecutorId());
                 }
             }

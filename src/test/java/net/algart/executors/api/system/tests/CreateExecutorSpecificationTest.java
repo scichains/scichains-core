@@ -108,8 +108,8 @@ public class CreateExecutorSpecificationTest {
             Thread.sleep(100);
             final Executor executor;
             try {
-                executor = (Executor) ExecutionBlock.newExecutionBlock(
-                        "some_session", specification.getExecutorId(), specification.minimalSpecification());
+                executor = (Executor) ExecutionBlock.newExecutor("some_session",
+                        specification.minimalSpecification());
                 executor.disableOnChangeParametersAutomatic();
                 // - suppressing warning on setIntParameter
                 executor.setIntParameter("modeInt", 1);

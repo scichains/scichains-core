@@ -58,7 +58,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      *
      * @param executorLoaderSet set of executor loaders, used to search for specifications and create new executors.
      * @param sessionId unique session ID (1st argument of
-     * {@link ExecutionBlock#newExecutionBlock(String, String, String)}).
+     * {@link ExecutionBlock#newExecutor(String, String, String)}).
      *
      * @see ExecutionBlock#getSessionId()
      * @see ExecutorLoaderSet#newExecutor(String, ExecutorSpecification)

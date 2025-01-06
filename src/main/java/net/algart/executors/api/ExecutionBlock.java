@@ -1132,17 +1132,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
-    //TODO!! rename to newExecutor and remove executorId
     @UsedForExternalCommunication
-    public static ExecutionBlock newExecutionBlock(String sessionId, String executorId, String specification)
-            throws ClassNotFoundException {
+    public static ExecutionBlock newExecutor(String sessionId, String specification) throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
         return newExecutor(sessionId, ExecutorSpecification.valueOf(specification));
     }
 
-    //TODO!! rename to serializedSpecifications
     @UsedForExternalCommunication
-    public static String[] availableExecutorModelArray(String sessionId) {
+    public static String[] serializedSpecifications(String sessionId) {
         return GLOBAL_EXECUTOR_LOADERS.serializedSpecifications(sessionId).values().toArray(new String[0]);
     }
 

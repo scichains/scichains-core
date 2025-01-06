@@ -96,7 +96,7 @@ public class ExecutorSpecificationTest {
                 }
                 long t4 = System.nanoTime();
                 for (int i = 0; i < n; i++) {
-                    block2 = ExecutionBlock.newExecutionBlock(null, specification.getExecutorId(), minimal);
+                    block2 = ExecutionBlock.newExecutor(null, minimal);
                 }
                 long t5 = System.nanoTime();
                 System.out.printf("ExecutorSpecification.toJson(): %.3f mcs%n", (t2 - t1) * 1e-3 / n);
