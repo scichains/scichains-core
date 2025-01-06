@@ -87,10 +87,11 @@ public class ExecutionStatus {
     private static final int MAX_POSSIBLE_NUMBER_OF_PARENTS = 10000;
     private static final int MAX_SHOWN_NUMBER_OF_PARENTS = 256;
 
-    private static final String LOGGING_STATUS_LEVEL = SystemEnvironment.getStringProperty(
-            "net.algart.executors.api.loggingStatusLevel");
-    private static final DataKind LOGGING_STATUS_KIND = DataKind.valueOfOrNull(SystemEnvironment.getStringProperty(
-            "net.algart.executors.api.loggingStatusKind"));
+    private static final String LOGGING_STATUS_LEVEL = net.algart.arrays.Arrays.SystemSettings.getStringProperty(
+            "net.algart.executors.api.loggingStatusLevel", null);
+    private static final DataKind LOGGING_STATUS_KIND = DataKind.valueOfOrNull(
+            net.algart.arrays.Arrays.SystemSettings.getStringProperty(
+                    "net.algart.executors.api.loggingStatusKind", null));
     private static final long MIN_TIME_BETWEEN_LOGGING_IN_NANOSECONDS = 500_000_000;
 
     private final Supplier<String> ownerName;

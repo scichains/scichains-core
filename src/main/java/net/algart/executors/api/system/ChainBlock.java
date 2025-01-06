@@ -24,6 +24,7 @@
 
 package net.algart.executors.api.system;
 
+import net.algart.arrays.Arrays;
 import net.algart.contexts.InterruptionException;
 import net.algart.executors.api.*;
 import net.algart.executors.api.data.Data;
@@ -42,7 +43,7 @@ import java.util.stream.Stream;
 public final class ChainBlock {
     private static final String DEFAULT_CHAIN_PORT_CAPTION_PATTERN = "[$$$]";
 
-    private static final boolean ANALYSE_CONDITIONAL_INPUTS = SystemEnvironment.getBooleanProperty(
+    private static final boolean ANALYSE_CONDITIONAL_INPUTS = Arrays.SystemSettings.getBooleanProperty(
             "net.algart.executors.api.analyseConditionalInputs", true);
     // - can be set to false for debugging needs; it will decrease the speed of executing some sub-chains
     // and will lead to stack overflow in recursive sub-chains

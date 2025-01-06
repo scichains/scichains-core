@@ -71,30 +71,4 @@ public class SystemEnvironment {
             return path;
         }
     }
-
-    public static boolean getBooleanProperty(String propertyName, boolean defaultValue) {
-        try {
-            if (defaultValue)
-                return !"false".equalsIgnoreCase(System.getProperty(propertyName));
-            else {
-                return Boolean.getBoolean(propertyName);
-            }
-        } catch (Exception e) {
-            return defaultValue;
-        }
-    }
-
-    public static String getStringProperty(String propertyName) {
-        try {
-            return System.getProperty(propertyName);
-        } catch (Exception e) {
-            // for a case of SecurityException
-            return null;
-        }
-    }
-
-    public static String getStringProperty(String propertyName, String defaultValue) {
-        final String result = getStringProperty(propertyName);
-        return result != null ? result : defaultValue;
-    }
 }

@@ -62,8 +62,9 @@ public abstract class Executor extends ExecutionBlock {
     protected static final boolean LOGGABLE_DEBUG = LOG.isLoggable(Logger.Level.DEBUG);
     protected static final boolean LOGGABLE_TRACE = LOG.isLoggable(Logger.Level.TRACE);
 
-    private static final boolean CREATE_EXECUTION_KEY_FILE = SystemEnvironment.getBooleanProperty(
-            "net.algart.executors.api.createExecutionKeyFile", false);
+    private static final boolean CREATE_EXECUTION_KEY_FILE =
+            net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+                    "net.algart.executors.api.createExecutionKeyFile", false);
 
     private static final Map<String, Map<String, ParameterSetter>> EXECUTOR_CLASS_SETTERS = new HashMap<>();
     private static final Map<String, Map<String, ParameterValueType>> EXECUTOR_CLASS_PARAMETER_TYPES = new HashMap<>();

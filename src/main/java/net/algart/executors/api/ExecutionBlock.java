@@ -53,20 +53,24 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static final String GLOBAL_SHARED_SESSION_ID = "$~~GLOBAL-SESSION~~_699d349b-3312-4d5d-8fc4-0444dd2b387f";
 
-    public static final boolean SHOW_INFO_ON_STARTUP = SystemEnvironment.getBooleanProperty(
+    public static final boolean SHOW_INFO_ON_STARTUP = Arrays.SystemSettings.getBooleanProperty(
             "net.algart.executors.api.showInfo", false);
-    public static final boolean EXTENDED_MODE = SystemEnvironment.getBooleanProperty(
-            "net.algart.executors.api.extended", false);
+    public static final boolean EXTENDED_MODE;
 
     static {
+        EXTENDED_MODE = Arrays.SystemSettings.getBooleanProperty(
+                "net.algart.executors.api.extended", false);
         if (SHOW_INFO_ON_STARTUP) {
             System.out.printf("%nJava executors system started%s%n", EXTENDED_MODE ? " in extended mode" : "");
-            System.out.printf("Java version: %s%n", SystemEnvironment.getStringProperty("java.version"));
-            String arch = SystemEnvironment.getStringProperty("os.arch");
+            System.out.printf("Java version: %s%n", Arrays.SystemSettings.getStringProperty(
+                    "java.version", null));
+            String arch = Arrays.SystemSettings.getStringProperty("os.arch", null);
             boolean java32 = arch != null && !arch.contains("64") && arch.toLowerCase().contains("x86");
             System.out.printf("Architecture: %s (%d-bit)%n", arch, java32 ? 32 : 64);
-            if (SystemEnvironment.getBooleanProperty("net.algart.executors.api.showLibraryPath", false)) {
-                String javaLibraryPath = SystemEnvironment.getStringProperty("java.library.path");
+            if (Arrays.SystemSettings.getBooleanProperty(
+                    "net.algart.executors.api.showLibraryPath", false)) {
+                String javaLibraryPath = Arrays.SystemSettings.getStringProperty(
+                        "java.library.path", null);
                 if (javaLibraryPath != null) {
                     javaLibraryPath = javaLibraryPath.replace(";", String.format(";%n    "));
                     System.out.printf("Native library path:%n    %s%n", javaLibraryPath);
@@ -84,6 +88,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private static final ExecutorLoader STANDARD_JAVA_EXECUTOR_LOADER =
             ExecutorLoader.getStandardJavaExecutorLoader();
     private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
+
     static {
         GLOBAL_EXECUTOR_LOADERS.register(STANDARD_JAVA_EXECUTOR_LOADER);
     }

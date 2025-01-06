@@ -32,7 +32,6 @@ import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class InstalledExtensions {
@@ -78,8 +77,9 @@ public class InstalledExtensions {
      * replaced with the value of {@link SystemEnvironment#EXECUTORS_HOME_ENV_NAME} environment variable.
      * Default value is <code>false</code>.
      */
-    public static final boolean ENABLE_REPLACEMENT_IN_EXTENSIONS_PROPERTIES = SystemEnvironment.getBooleanProperty(
-            "net.algart.executors.pathReplacementAllowed", false);
+    public static final boolean ENABLE_REPLACEMENT_IN_EXTENSIONS_PROPERTIES =
+            net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+                    "net.algart.executors.pathReplacementAllowed", false);
 
     /**
      * The value of {@link #EXTENSIONS_ROOT_PROPERTY} system property.
@@ -87,7 +87,7 @@ public class InstalledExtensions {
      * normalization of the path via {@link #extensionPath(String)}.
      */
     public static final String EXTENSIONS_ROOT = replaceHome(
-            SystemEnvironment.getStringProperty(EXTENSIONS_ROOT_PROPERTY));
+            net.algart.arrays.Arrays.SystemSettings.getStringProperty(EXTENSIONS_ROOT_PROPERTY, null));
 
     /**
      * The value of {@link #EXTENSIONS_PATH_PROPERTY} system property.
@@ -95,13 +95,13 @@ public class InstalledExtensions {
      * normalization of the path via {@link #extensionPath(String)}.
      */
     public static final String EXTENSIONS_PATH = replaceHome(
-            SystemEnvironment.getStringProperty(EXTENSIONS_PATH_PROPERTY));
+            net.algart.arrays.Arrays.SystemSettings.getStringProperty(EXTENSIONS_PATH_PROPERTY, null));
 
     /**
      * The value of {@link #EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY} system property.
      */
-    public static final boolean CHECK_EXISTING_PATHS =
-            SystemEnvironment.getBooleanProperty(EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY, true);
+    public static final boolean CHECK_EXISTING_PATHS = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+                    EXTENSIONS_CHECK_EXISTING_PATHS_PROPERTY, true);
 
     /**
      * Equivalent to <code>Path.of(path).toAbsolutePath().normalize()</code>.

@@ -25,10 +25,10 @@
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
 import jakarta.json.JsonValue;
+import net.algart.arrays.Arrays;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.SystemEnvironment;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.system.*;
@@ -51,8 +51,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class UseSubChain extends FileOperation {
     public static final String SUB_CHAIN_LANGUAGE_NAME = "sub-chain";
-    public static final String ADDITIONAL_STANDARD_SUBCHAINS_PATH = SystemEnvironment.getStringProperty(
-            "net.algart.executors.logic.compiler.subchains.path");
+    public static final String ADDITIONAL_STANDARD_SUBCHAINS_PATH = Arrays.SystemSettings.getStringProperty(
+            "net.algart.executors.logic.compiler.subchains.path", null);
 
     public static final String DO_ACTION_NAME = "_sch___doAction";
     public static final String DO_ACTION_CAPTION = "Do actions";
