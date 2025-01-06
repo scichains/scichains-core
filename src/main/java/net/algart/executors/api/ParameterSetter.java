@@ -89,7 +89,7 @@ abstract class ParameterSetter {
             if (setter != null) {
                 final ParameterSetter previous = result.get(setter.parameterName);
                 if (previous != null) {
-                    // we have two suitable setters with different argument type
+                    // we have two suitable setters with a different argument type
                     if (setter.priority < previous.priority) {
                         continue;
                     }

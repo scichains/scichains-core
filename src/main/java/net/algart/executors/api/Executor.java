@@ -669,6 +669,7 @@ public abstract class Executor extends ExecutionBlock {
      * If this method returns <code>true</code>, {@link #Executor() constructor of this class} will not register
      * standard parameters, processed by {@link Executor} itself.
      * It is provided for possible future needs; the current version has no standard parameters.
+     * (Some older versions had "autoContrast" standard parameter, but it was deprecated and removed.)
      *
      * <p>Note: for correct work, this method must return <b>constant</b> (the same value for
      * all instances of the inheritor).
@@ -677,15 +678,15 @@ public abstract class Executor extends ExecutionBlock {
         return false;
     }
 
-    protected final void onChangeParameterAutomatic(String name) {
+    protected final void onChangeParameterAutomatic(String parameterName) {
         long t1 = LOGGABLE_TRACE ? System.nanoTime() : 0;
-        final ParameterSetter setter = parameterSetters.get(name);
+        final ParameterSetter setter = parameterSetters.get(parameterName);
         if (setter != null) {
             setter.set(this);
         } else {
             // don't check loggingEnabled(): it is a probable inconsistency in the programming code
             LOG.log(System.Logger.Level.WARNING, () ->
-                    getClass() + " has no setter for parameter \"" + name + "\" ("
+                    getClass() + " has no setter for parameter \"" + parameterName + "\" ("
                             + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
                             + (getContextPath() == null ? "" : " at " + getContextPath())
                             + ")");
@@ -693,7 +694,7 @@ public abstract class Executor extends ExecutionBlock {
         long t2 = LOGGABLE_TRACE ? System.nanoTime() : 0;
         if (loggingEnabled()) {
             LOG.log(System.Logger.Level.TRACE, () -> Executor.this.getClass()
-                    + " set parameter \"" + name + "\": " + (t2 - t1) * 1e-3 + " mcs");
+                    + " set parameter \"" + parameterName + "\": " + (t2 - t1) * 1e-3 + " mcs");
         }
     }
 

@@ -728,7 +728,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return executorSpecification == null ? null : executorSpecification.getExecutorId();
     }
 
-
     /**
      * Gets the specification of this executor, which was set while creating by
      * {@link #newExecutor(String, ExecutorSpecification)}.
