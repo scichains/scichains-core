@@ -187,7 +187,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
     public MultiChain multiChain() {
         MultiChain multiChain = this.multiChain;
         if (multiChain == null) {
-            multiChain = registeredMultiChain(getExecutorId());
+            multiChain = registeredMultiChain(getSessionId(), getExecutorId());
             this.multiChain = multiChain;
             // - the order is important for multithreading: local multiChain is assigned first,
             // this.multiChain is assigned to it
@@ -195,9 +195,9 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         return multiChain;
     }
 
-    public static MultiChain registeredMultiChain(String executorId) {
+    public static MultiChain registeredMultiChain(String sessionId, String executorId) {
         @SuppressWarnings("resource")
-        MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(executorId);
+        MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(sessionId, executorId);
         return multiChain.clone();
     }
 

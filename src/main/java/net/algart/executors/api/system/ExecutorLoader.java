@@ -58,8 +58,8 @@ public abstract class ExecutorLoader {
 
     private static final Logger LOG = System.getLogger(ExecutorLoader.class.getName());
 
-    final Map<String, Map<String, String>> allSpecifications = new LinkedHashMap<>();
-    // - structure of this map: sessionId -> Map(executorId -> executorSpecification)
+    private final Map<String, Map<String, String>> allSpecifications = new LinkedHashMap<>();
+    // - This map is: sessionId -> Map(executorId -> executorSpecification)
 
     private final String name;
 
@@ -148,8 +148,7 @@ public abstract class ExecutorLoader {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
-            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .get(executorId);
+            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
         }
     }
 
@@ -166,9 +165,10 @@ public abstract class ExecutorLoader {
     public final void setSpecification(String sessionId, ExecutorSpecification specification) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(specification, "Null specification");
+        final String serialized = specification.toJson().toString();
         synchronized (allSpecifications) {
             allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .put(specification.getExecutorId(), specification.toJson().toString());
+                    .put(specification.getExecutorId(), serialized);
         }
     }
 
@@ -208,16 +208,17 @@ public abstract class ExecutorLoader {
     public final void removeSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
-            Map<String, String> specifications = allSpecifications.get(sessionId);
-            if (specifications != null) {
-                specifications.clear();
-            }
+            allSpecifications.remove(sessionId);
         }
     }
 
     @Override
     public String toString() {
-        return name + " (" + allSpecifications.size() + " sessions)";
+        return name + " (" + allSpecifications.size() + " sessions" +
+                (allSpecifications.containsKey(ExecutionBlock.GLOBAL_SHARED_SESSION_ID) ?
+                        ", including global" :
+                        "") +
+                ")";
     }
 
     // Note: this loader is usually enough for actual creating executors,

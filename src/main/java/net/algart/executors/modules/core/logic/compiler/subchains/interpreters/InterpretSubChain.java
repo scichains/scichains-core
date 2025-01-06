@@ -165,15 +165,15 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
     public Chain chain() {
         Chain chain = this.chain;
         if (chain == null) {
-            chain = registeredChain(getExecutorId());
+            chain = registeredChain(getSessionId(), getExecutorId());
             this.chain = chain;
             // - the order is important for multithreading: local chain is assigned first, this.chain is assigned to it
         }
         return chain;
     }
 
-    public static Chain registeredChain(String executorId) {
-        Chain chain = UseSubChain.subChainLoader().registeredWorker(executorId);
+    public static Chain registeredChain(String sessionId, String executorId) {
+        Chain chain = UseSubChain.subChainLoader().registeredWorker(sessionId, executorId);
         chain = chain.cleanCopy();
         // - every instance of this executor has its own space for data, like activates for usual procedures
         // (necessary for recursion)

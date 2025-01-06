@@ -54,9 +54,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     // probably used in the system in other ways (109, 99 are ASCII-codes of letters 'mc').
 
     private volatile long contextId;
-    // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: multi-chain is not an environment
+    // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
     // for executing anything; but it is used as a context ID for multi-chain settings combiner.
     private final MultiChainSpecification specification;
+    private final String chainSessionId;
     private final List<ChainSpecification> chainSpecifications;
     private final List<ChainSpecification> blockedChainSpecifications;
     private final Set<String> blockedChainSpecificationNames;
@@ -81,6 +82,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(chainFactory, "Null chainFactory");
         Objects.requireNonNull(settingsFactory, "Null settingsFactory");
         this.specification.checkCompleteness();
+        this.chainSessionId = chainFactory.getSessionId();
         this.chainSpecifications = specification.readChainVariants();
         this.blockedChainSpecifications = new ArrayList<>();
         this.blockedChainSpecificationNames = new LinkedHashSet<>();
@@ -212,7 +214,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
-    // Note: it is not too good idea to create it only inside the constructor.
+    // Note: it is not-too-good idea to create it only inside the constructor.
     // Every chain can require a lot of resources, and different clones of multi-chain (see clone())
     // should have different chains.
     public Map<String, Chain> chainMap() {
@@ -445,14 +447,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Map<String, Chain> result = new LinkedHashMap<>();
         for (ChainSpecification specification : this.chainSpecifications) {
             final String executorId = specification.chainId();
-            final Chain chain = registeredChain(executorId);
+            final Chain chain = registeredChain(chainSessionId, executorId);
             result.put(executorId, chain);
         }
         return result;
     }
 
-    private Chain registeredChain(String executorId) {
-        final Chain chain = InterpretSubChain.registeredChain(executorId);
+    private Chain registeredChain(String sessionId, String executorId) {
+        final Chain chain = InterpretSubChain.registeredChain(sessionId, executorId);
         if (UseSubChain.getMainChainSettingsInformation(chain) == null) {
             throw new IllegalStateException("Chain \"" + chain.name()
                     + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()

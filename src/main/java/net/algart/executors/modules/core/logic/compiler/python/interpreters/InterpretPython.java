@@ -73,7 +73,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     public PythonCaller pythonCaller() {
         PythonCaller pythonCaller = this.pythonCaller;
         if (pythonCaller == null) {
-            pythonCaller = UsingPython.pythonCallerLoader().registeredWorker(getExecutorId());
+            pythonCaller = UsingPython.pythonCallerLoader().registeredWorker(getSessionId(), getExecutorId());
             pythonCaller = pythonCaller.clone();
             // - we return a clone!
             this.pythonCaller = pythonCaller;

@@ -35,7 +35,7 @@ public abstract class AbstractInterpretSettings extends Executor implements Read
     public SettingsCombiner settingsCombiner() {
         SettingsCombiner settingsCombiner = this.settingsCombiner;
         if (settingsCombiner == null) {
-            settingsCombiner = UseSettings.settingsCombinerLoader().registeredWorker(getExecutorId());
+            settingsCombiner = UseSettings.settingsCombinerLoader().registeredWorker(getSessionId(), getExecutorId());
             this.settingsCombiner = settingsCombiner.clone();
             // - the order is important for multithreading: local settingsCombiner is assigned first,
             // this.settingsCombiner is assigned to it;

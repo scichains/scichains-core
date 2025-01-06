@@ -34,10 +34,11 @@ import java.util.Objects;
  * Default executor loader.
  *
  * <p>Actually, we do not override any methods in most cases.
- * This loader is used only for adding executor specifications (performed inside {@link #registerWorker} method).
+ * This loader is used only for adding executor specifications, performed inside {@link #registerWorker} method.
  * The {@link ExecutorLoader#getStandardJavaExecutorLoader() standard executor loader}
  * (for usual Java classes) is used for loading the executor, but it delegates all work
- * to the "worker", registered for this executor ID.
+ * to the "worker", registered for this session and executor ID.
+ * Possible example of "worker" is {@link Chain} class.
  *
  * @param <W> some object ("worker") that actually perform all work of the executor;
  *            should implement {@link AutoCloseable}, if it has some resources that must be freed after usage.
@@ -47,7 +48,13 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
         super(name);
     }
 
-    private final Map<String, W> idToWorkerMap = new LinkedHashMap<>();
+    private final Map<String, Map<String, W>> idToWorkerMap = new LinkedHashMap<>();
+    // - This map is: sessionId -> Map(executorId -> worker)
+    // Note that we MUST NOT share workers between sessions!
+    // Worker can use session information, for example, for creating its own "child" executors (like Chain class).
+    // Usually this is not too important, but may lead to strange results: let's suppose
+    // that the executor prints all available executor specifications in its session.
+
     private final Object lock = new Object();
 
     @Override
@@ -65,7 +72,7 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
         Objects.requireNonNull(worker, "Null worker");
         synchronized (lock) {
             setSpecification(sessionId, specification);
-            final W previosWorker = idToWorkerMap.put(specification.getExecutorId(), worker);
+            final W previosWorker = setWorker(sessionId, specification.getExecutorId(), worker);
             try {
                 if (previosWorker instanceof AutoCloseable) {
                     ((AutoCloseable) previosWorker).close();
@@ -76,11 +83,36 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
         }
     }
 
-    public W registeredWorker(String id) {
+    public W registeredWorker(String sessionId, String executorId) {
+        Objects.requireNonNull(sessionId, "Null sessionId");
+        Objects.requireNonNull(executorId, "Null executorId");
         synchronized (lock) {
-            final W result = idToWorkerMap.get(id);
-            Objects.requireNonNull(result, "Cannot find registered worker with id=" + id);
+            W result = getWorker(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
+            if (result != null) {
+                return result;
+            }
+            result = getWorker(sessionId, executorId);
+            Objects.requireNonNull(result, "Cannot find registered worker with id \"" +
+                    executorId + "\" for session \"" + sessionId + "\"");
             return result;
         }
     }
+
+    @Override
+    public void clearSession(String sessionId) {
+        super.clearSession(sessionId);
+        synchronized (lock) {
+            idToWorkerMap.remove(sessionId);
+//            System.out.println("Clearing session " + sessionId + " in " + this);
+        }
+    }
+
+    private W getWorker(String sessionId, String executorId) {
+        return idToWorkerMap.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
+    }
+
+    private W setWorker(String sessionId, String executorId, W worker) {
+        return idToWorkerMap.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).put(executorId, worker);
+    }
+
 }
