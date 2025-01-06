@@ -79,38 +79,22 @@ public final class Port {
     private Port() {
     }
 
-    /**
-     * port name
-     */
     @UsedForExternalCommunication
     private String name;
 
-    /**
-     * port data
-     */
     @UsedForExternalCommunication
     private Data data;
 
-    /**
-     * input / output port
-     */
     @UsedForExternalCommunication
     private Type portType;
 
-    /**
-     * port data type
-     */
     @UsedForExternalCommunication
     private DataType dataType;
 
-    /**
-     * port uuid
-     */
     private UUID uuid;
 
     /**
-     * flag shows does current port has connection with other port(s)
-     * connected flag modify by c++ host application
+     * Whether this port is connected with other port(s)
      */
     @UsedForExternalCommunication
     private boolean connected = false;
