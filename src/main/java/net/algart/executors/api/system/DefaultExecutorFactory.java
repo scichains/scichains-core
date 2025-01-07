@@ -71,13 +71,6 @@ public class DefaultExecutorFactory implements ExecutorFactory {
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
     }
 
-    public static DefaultExecutorFactory newInstance(
-            ExecutorLoaderSet executorLoaderSet,
-            ExecutorSpecificationSet staticExecutors,
-            String sessionId) {
-        return new DefaultExecutorFactory(executorLoaderSet, staticExecutors, sessionId);
-    }
-
     public String getSessionId() {
         return sessionId;
     }
