@@ -74,6 +74,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         final boolean ignoreInputParameters = parameters().getBoolean(
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_NAME,
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
+        @SuppressWarnings("resource")
         final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
         final SettingsCombiner multiChainCombiner = multiChain.multiChainSettingsCombiner();

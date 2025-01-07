@@ -541,6 +541,10 @@ public final class Chain implements AutoCloseable {
                 final String executorPortName = block.getStandardInputOutputName();
                 if (executor.hasInputPort(executorPortName)) {
                     final Data data = executor.getInputData(executorPortName, true);
+//                    System.out.printf("... %s: %s %s %s (%s, %s)%n", block.getSystemName(), executorPortName,
+//                            executor.hasInputPort(executorPortName), data,
+//                            executor.getClass().getSimpleName(),
+//                            executor.getExecutorSpecification().getName());
                     chainInputPort.getData().setTo(data, true);
                     // - cloning data, because ports in the chain can be freed
                 }
