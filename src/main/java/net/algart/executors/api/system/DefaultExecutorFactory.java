@@ -29,13 +29,13 @@ import net.algart.executors.api.ExecutionBlock;
 import java.util.Objects;
 
 /**
- * Default standard implementation of executor factory, based on {@link ExecutorLoaderSet}.
+ * Default standard implementation of executor factory, based on the {@link ExecutorLoaderSet executor loader set}.
  */
 public class DefaultExecutorFactory implements ExecutorFactory {
-    private final ExecutorLoaderSet executorLoaderSet;
+    private final ExecutorLoaderSet loaderSet;
 
-    private final ExecutorSpecificationSet staticExecutors;
-    private final ExecutorSpecificationSet dynamicExecutorsCache = ExecutorSpecificationSet.newInstance();
+    private final ExecutorSpecificationSet preloadedSpecifications;
+    private final ExecutorSpecificationSet dynamicSpecificationsCache = ExecutorSpecificationSet.newInstance();
     // - this set is dynamically extended in specification() method via ExecutorLoaderSet.getSpecification
     private final String sessionId;
     private final Object lock = new Object();
@@ -55,35 +55,63 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * <p>If you need only one set of executors, you can specify any <code>sessionID</code> like
      * <code>"MySession"</code>.</p>
      *
-     * @param executorLoaderSet set of executor loaders, used to search for specifications and create new executors.
-     * @param staticExecutors executor specifications, which will always be used before checking the loaders
-     *                        for optimization; possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
-     * @param sessionId unique session ID (1st argument of {@link ExecutionBlock#newExecutor(String, String)}).
-     *
+     * @param loaderSet               set of executor loaders, used to search for specifications and create new
+     *                                executors.
+     * @param sessionId               unique session ID (1st argument of
+     * {@link ExecutionBlock#newExecutor(String, String)}).
+     * @param preloadedSpecifications executor specifications, which will always be used before checking the loaders
+     *                                for optimization; possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
      * @see ExecutionBlock#getSessionId()
      * @see ExecutorLoaderSet#newExecutor(String, ExecutorSpecification)
      */
     public DefaultExecutorFactory(
-            ExecutorLoaderSet executorLoaderSet,
-            ExecutorSpecificationSet staticExecutors,
-            String sessionId) {
-        this.executorLoaderSet = Objects.requireNonNull(executorLoaderSet);
-        this.staticExecutors = Objects.requireNonNull(staticExecutors, "Null static executors set");
+            ExecutorLoaderSet loaderSet,
+            String sessionId,
+            ExecutorSpecificationSet preloadedSpecifications) {
+        this.loaderSet = Objects.requireNonNull(loaderSet);
         this.sessionId = Objects.requireNonNull(sessionId, "Null sessionId");
+        this.preloadedSpecifications = Objects.requireNonNull(preloadedSpecifications, "Null static executors set");
     }
 
-    public String getSessionId() {
+    /**
+     * Returns the executor loader set, specified in the constructor.
+     *
+     * @return the executor loader set, used by this factory.
+     */
+    public final ExecutorLoaderSet loaderSet() {
+        return loaderSet;
+    }
+
+    /**
+     * Returns the session ID, specified in the constructor.
+     *
+     * @return the session ID of this factory.
+     */
+    public final String sessionId() {
         return sessionId;
     }
 
+    /**
+     * This implementation works like
+     * <pre>
+     *      {@link #loaderSet() loaderSet()}.{@link ExecutorLoaderSet#getSpecification
+     *      getSpecification}({@link #sessionId() sessionId()}, executorId, true);
+     * </pre>
+     *
+     * <p>Unlike this, this method has an optimization: first, the specification is searched for in the
+     * preloaded specification set specified in the constructor, and the parsed specifications found.
+     *
+     * @param executorId unique executor ID.
+     * @return executor specification for creating new executor.
+     */
     @Override
     public ExecutorSpecification getSpecification(String executorId) {
         synchronized (lock) {
-            ExecutorSpecification specification = staticExecutors.get(executorId);
+            ExecutorSpecification specification = preloadedSpecifications.get(executorId);
             if (specification != null) {
                 return specification;
             }
-            specification = dynamicExecutorsCache.get(executorId);
+            specification = dynamicSpecificationsCache.get(executorId);
             if (specification != null) {
                 return specification;
                 // - Caching: we suppose that non-null executor specifications cannot change.
@@ -94,7 +122,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-            specification = executorLoaderSet.getSpecification(sessionId, executorId, true);
+            specification = loaderSet.getSpecification(sessionId, executorId, true);
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
@@ -120,11 +148,10 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // moreover, it is prohibited ("add" method will throw an exception)
             }
 //            System.out.printf("Creating specification \"%s\" in \"%s\"%n", specification.getName(), sessionId);
-            dynamicExecutorsCache.add(executorId, specification);
+            dynamicSpecificationsCache.add(executorId, specification);
             return specification;
         }
     }
-
     @Override
     public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
@@ -133,7 +160,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             if (executorSpecification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return executorLoaderSet.newExecutor(sessionId, executorSpecification);
+            return loaderSet.newExecutor(sessionId, executorSpecification);
         }
     }
 

@@ -114,7 +114,7 @@ public class LoadingChainTest {
         final ExecutorSpecificationSet executorSpecificationSet =
                 ExecutorSpecificationSet.newInstance().addFolder(specificationFolder, true);
         final ExecutorFactory executorFactory = ExecutionBlock.globalExecutorLoaders().newFactory(
-                executorSpecificationSet, "~~DUMMY");
+                "~~DUMMY", executorSpecificationSet);
 
         if (Files.isDirectory(chainFile)) {
             test.processChainsFolder(chainFile, executorFactory);

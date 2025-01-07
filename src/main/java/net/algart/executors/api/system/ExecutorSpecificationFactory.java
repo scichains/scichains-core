@@ -31,16 +31,11 @@ public interface ExecutorSpecificationFactory {
     /**
      * Returns the specification of the given executor.
      *
-     * <p>Note that the main goal of this function
-     * is only to return minimal description, enough for building new executor by
-     * {@link ExecutorFactory#newExecutor(String)} method.
-     * However, this function usually returns full specification.
-     *
-     * <p>The main source of information about all specifications is another:
+     * <p>The main source of information about all specifications is
      * {@link ExecutorLoaderSet#serializedSpecifications(String, boolean)}.
      *
      * @param executorId unique executor ID.
-     * @return minimal specification, enough for creating Java class {@link ExecutionBlock}.
+     * @return executor specification for creating new executor.
      */
     ExecutorSpecification getSpecification(String executorId);
 }

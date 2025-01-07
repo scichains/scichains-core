@@ -46,12 +46,12 @@ public final class ExecutorLoaderSet {
         }
     }
 
-    public ExecutorFactory newFactory(ExecutorSpecificationSet staticExecutors, String sessionId) {
-        return new DefaultExecutorFactory(this, staticExecutors, sessionId);
+    public ExecutorFactory newFactory(String sessionId, ExecutorSpecificationSet preloadedSpecifications) {
+        return new DefaultExecutorFactory(this, sessionId, preloadedSpecifications);
     }
 
     public ExecutorFactory newFactory(String sessionId) {
-        return newFactory(ExecutorSpecificationSet.allBuiltIn(), sessionId);
+        return newFactory(sessionId, ExecutorSpecificationSet.allBuiltIn());
     }
 
     public ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
