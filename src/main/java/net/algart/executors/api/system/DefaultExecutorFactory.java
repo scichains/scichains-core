@@ -56,8 +56,8 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * <code>"MySession"</code>.</p>
      *
      * @param executorLoaderSet set of executor loaders, used to search for specifications and create new executors.
-     * @param staticExecutors executor specifications, which will always be used before checking the loaders;
-     *                        possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
+     * @param staticExecutors executor specifications, which will always be used before checking the loaders
+     *                        for optimization; possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
      * @param sessionId unique session ID (1st argument of {@link ExecutionBlock#newExecutor(String, String)}).
      *
      * @see ExecutionBlock#getSessionId()
@@ -119,6 +119,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // - No sense to add null to dynamicExecutorsCache;
                 // moreover, it is prohibited ("add" method will throw an exception)
             }
+//            System.out.printf("Creating specification \"%s\" in \"%s\"%n", specification.getName(), sessionId);
             dynamicExecutorsCache.add(executorId, specification);
             return specification;
         }
