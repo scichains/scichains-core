@@ -91,13 +91,9 @@ public final class ExecutorLoaderSet {
                 + ": unknown executor specification");
     }
 
-    public ExecutorSpecification getSpecification(String sessionId, String executorId) {
-        return getSpecification(sessionId, executorId, true);
-    }
-
     /**
      * Returns specification Equivalent to <code>{@link #serializedSpecifications(String, boolean)
-     * availableExecutorSpecifications}(sessionId, includeGlobalSession).get(executorId)</code>,
+     * serializedSpecifications}(sessionId, includeGlobalSession).get(executorId)</code>,
      * but works quickly (without creating a new map).
      *
      * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
@@ -125,11 +121,6 @@ public final class ExecutorLoaderSet {
             }
         }
         return null;
-    }
-
-
-    public Map<String, String> serializedSpecifications(String sessionId) {
-        return serializedSpecifications(sessionId, true);
     }
 
     /**

@@ -41,8 +41,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     private final Object lock = new Object();
 
     /**
-     * Creates new executor factory with standard behavior, based on the executor specification set
-     * {@link ExecutorSpecificationSet#allBuiltIn()}.
+     * Creates new executor factory.
      *
      * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
      * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
@@ -57,6 +56,8 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * <code>"MySession"</code>.</p>
      *
      * @param executorLoaderSet set of executor loaders, used to search for specifications and create new executors.
+     * @param staticExecutors executor specifications, which will always be used before checking the loaders;
+     *                        possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
      * @param sessionId unique session ID (1st argument of {@link ExecutionBlock#newExecutor(String, String)}).
      *
      * @see ExecutionBlock#getSessionId()
@@ -93,7 +94,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-            specification = executorLoaderSet.getSpecification(sessionId, executorId);
+            specification = executorLoaderSet.getSpecification(sessionId, executorId, true);
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),

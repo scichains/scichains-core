@@ -37,7 +37,7 @@ public interface ExecutorSpecificationFactory {
      * However, this function usually returns full specification.
      *
      * <p>The main source of information about all specifications is another:
-     * {@link ExecutorLoaderSet#serializedSpecifications(String)}.
+     * {@link ExecutorLoaderSet#serializedSpecifications(String, boolean)}.
      *
      * @param executorId unique executor ID.
      * @return minimal specification, enough for creating Java class {@link ExecutionBlock}.
