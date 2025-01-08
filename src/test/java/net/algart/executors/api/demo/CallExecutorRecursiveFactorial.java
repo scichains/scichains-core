@@ -48,7 +48,7 @@ public class CallExecutorRecursiveFactorial {
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
         // it is a part of the platform folder for sub-chains
         final ExecutorFactory factory = ExecutorFactory.newDefaultInstance(SESSION_ID);
-        try (ExecutionBlock executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, InstantiationMode.REQUEST_OUTPUT)) {
+        try (var executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, InstantiationMode.REQUEST_DEFAULT)) {
             CallSimpleChain.printExecutorInterface(executor);
             executor.setIntParameter("n", value);
             executor.execute();

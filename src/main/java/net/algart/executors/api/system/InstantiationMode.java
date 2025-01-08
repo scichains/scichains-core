@@ -59,14 +59,14 @@ public enum InstantiationMode {
             }
         }
     },
-    REQUEST_OUTPUT {
+    REQUEST_DEFAULT {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             NORMAL.customizeExecutor(result, sessionId, specification);
             result.requestDefaultOutput();
         }
     },
-    REQUEST_ALL_OUTPUTS {
+    REQUEST_ALL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             NORMAL.customizeExecutor(result, sessionId, specification);
