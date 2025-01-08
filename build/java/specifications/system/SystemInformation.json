@@ -13,6 +13,26 @@
     {
       "value_type": "scalar",
       "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "current_directory"
+    },
+    {
+      "value_type": "scalar",
+      "name": "session_id"
+    },
+    {
+      "value_type": "scalar",
+      "name": "context_id"
+    },
+    {
+      "value_type": "scalar",
+      "name": "context_name"
+    },
+    {
+      "value_type": "scalar",
+      "name": "context_path"
     }
   ],
   "controls": [

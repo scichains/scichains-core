@@ -41,10 +41,19 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public final class SystemInformation extends Executor implements ReadOnlyExecutionInput {
-
+    public static final String OUTPUT_CURRENT_DIRECTORY = "current_directory";
+    public static final String OUTPUT_SESSION_ID = "session_id";
+    public static final String OUTPUT_CONTEXT_ID = "context_id";
+    public static final String OUTPUT_CONTEXT_NAME = "context_name";
+    public static final String OUTPUT_CONTEXT_PATH = "context_path";
 
     @Override
     public void process() {
+        getScalar(OUTPUT_CURRENT_DIRECTORY).setTo(getCurrentDirectory());
+        getScalar(OUTPUT_SESSION_ID).setTo(getSessionId());
+        getScalar(OUTPUT_CONTEXT_ID).setTo(getContextId());
+        getScalar(OUTPUT_CONTEXT_NAME).setTo(getContextName());
+        getScalar(OUTPUT_CONTEXT_PATH).setTo(getContextPath());
         getScalar().setTo(information());
     }
 
