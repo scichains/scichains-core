@@ -26,8 +26,6 @@ package net.algart.executors.api.system;
 
 import jakarta.json.JsonException;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.data.Port;
-import net.algart.executors.api.parameters.Parameters;
 
 import java.util.*;
 
@@ -88,8 +86,8 @@ public final class ExecutorLoaderSet {
     /**
      * Returns specification with the given <code>executorId</code>,
      * that can be found in
-     * <pre>{@link #serializedSpecifications(String, boolean)
-     * serializedSpecifications}(sessionId, includeGlobalSession),</pre>
+     * <pre>{@link #serializedSessionSpecifications(String, boolean)
+     * serializedSessionSpecifications}(sessionId, includeGlobalSession),</pre>
      * and parses it.
      * This method searches all the registered loaders for the requested executor.
      * This method can be relatively slow because it parses the serialized form of specification.
@@ -125,8 +123,8 @@ public final class ExecutorLoaderSet {
     /**
      * Returns specification with the given <code>executorId</code>,
      * that can be found in
-     * <pre>{@link #serializedSpecifications(String, boolean)
-     * serializedSpecifications}(sessionId, includeGlobalSession)</pre>
+     * <pre>{@link #serializedSessionSpecifications(String, boolean)
+     * serializedSessionSpecifications}(sessionId, includeGlobalSession)</pre>
      * This method searches all the registered loaders for the requested executor.
      *
      * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
@@ -171,18 +169,32 @@ public final class ExecutorLoaderSet {
      *                             registered in the global session.
      * @return all available executor specifications for this and (possibly) the global session.
      */
-    public Map<String, String> serializedSpecifications(String sessionId, boolean includeGlobalSession) {
+    public Map<String, String> serializedSessionSpecifications(String sessionId, boolean includeGlobalSession) {
         final Map<String, String> result = new LinkedHashMap<>();
         for (ExecutorLoader loader : loaders()) {
             if (includeGlobalSession) {
-                result.putAll(loader.serializedSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+                result.putAll(loader.serializedSessionSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
             if (sessionId != null) {
-                result.putAll(loader.serializedSpecifications(sessionId));
+                result.putAll(loader.serializedSessionSpecifications(sessionId));
             }
 //            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }
         return result;
+    }
+
+    public Set<String> allSessionExecutorIds(String sessionId, boolean includeGlobalSession) {
+        final Set<String> result = new LinkedHashSet<>();
+        for (ExecutorLoader loader : loaders()) {
+            if (includeGlobalSession) {
+                result.addAll(loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+            }
+            if (sessionId != null) {
+                result.addAll(loader.allSessionExecutorIds(sessionId));
+            }
+        }
+        return result;
+
     }
 
     public void clearSession(String sessionId) {

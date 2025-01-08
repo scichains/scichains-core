@@ -26,6 +26,9 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.SMat;
+import net.algart.executors.api.system.Chain;
+import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.io.MatrixIO;
@@ -58,9 +61,10 @@ public class CallSimpleChain {
         final SMat inputMat = SMat.valueOf(ImageIO.read(inputImagePath.toFile()));
 
         ExecutionBlock.initializeExecutionSystem();
+
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
         try (ExecutionBlock executor = UseSubChain.newExecutor(chainPath, InstantiationMode.REQUEST_ALL)) {
-//            System.out.println(executor.getExecutorSpecification().jsonString());
+            printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);
             if (parameterA != null) {
@@ -78,6 +82,18 @@ public class CallSimpleChain {
             }
             MatrixIO.writeBufferedImage(outputImagePath, result);
             System.out.println("O'k: results saved in " + outputImagePath);
+        }
+    }
+
+    static void printSubChainExecutors() {
+        final DefaultExecutorLoader<Chain> loader = UseSubChain.subChainLoader();
+        System.out.printf("All registered sub-chain IDs: %s%n",
+                loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+        System.out.println("All registered sub-chains:");
+        for (String serialized : loader.serializedSessionSpecifications(
+                ExecutionBlock.GLOBAL_SHARED_SESSION_ID).values()) {
+            ExecutorSpecification specification = ExecutorSpecification.valueOf(serialized);
+            System.out.printf("    %s%n", specification.getName());
         }
     }
 

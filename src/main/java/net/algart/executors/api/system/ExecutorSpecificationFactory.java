@@ -24,15 +24,13 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.ExecutionBlock;
-
 @FunctionalInterface
 public interface ExecutorSpecificationFactory {
     /**
      * Returns the specification of the given executor.
      *
      * <p>The main source of information about all specifications is
-     * {@link ExecutorLoaderSet#serializedSpecifications(String, boolean)}.
+     * {@link ExecutorLoaderSet#serializedSessionSpecifications(String, boolean)}.
      *
      * @param executorId unique executor ID.
      * @return executor specification for creating new executor.

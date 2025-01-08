@@ -316,7 +316,8 @@ public final class UseSubChain extends FileOperation {
         return getShared().toExecutor(chainSpecification, instantiationMode);
     }
 
-    public static Executor newExecutor(Path containingJsonFile, InstantiationMode instantiationMode) throws IOException {
+    public static Executor newExecutor(Path containingJsonFile, InstantiationMode instantiationMode)
+            throws IOException {
         return newExecutor(ChainSpecification.read(containingJsonFile), instantiationMode);
     }
 

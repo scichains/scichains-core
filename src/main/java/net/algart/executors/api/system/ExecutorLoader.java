@@ -166,12 +166,16 @@ public abstract class ExecutorLoader {
      * @return specifications for all executors, created by this loader.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public final Map<String, String> serializedSpecifications(String sessionId) {
+    public final Map<String, String> serializedSessionSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
             return Collections.unmodifiableMap(
                     allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
         }
+    }
+
+    public Set<String> allSessionExecutorIds(String sessionId) {
+        return serializedSessionSpecifications(sessionId).keySet();
     }
 
     /**
