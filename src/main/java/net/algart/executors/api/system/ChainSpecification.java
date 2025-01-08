@@ -44,9 +44,6 @@ import static net.algart.executors.api.system.ExecutorSpecification.quote;
 // As a result, this object can become incorrect after creation, for example, by setting duplicated names
 // in several ports.
 public final class ChainSpecification extends AbstractConvertibleToJson {
-    private static final boolean USE_PARAMETERS_SECTION = true;
-    // - should be true since 4.4.11
-
     public static final String CHAIN_TECHNOLOGY = "chain";
     public static final String CHAIN_LANGUAGE = "chain";
     public static final String CHAIN_FILE_PATTERN = ".*\\.(json|chain)$";
@@ -691,7 +688,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             for (ParameterConf parameterConf : nameToParameterMap.values()) {
                 parametersBuilder.add(parameterConf.toJson());
             }
-            builder.add(USE_PARAMETERS_SECTION ? "parameters" : "properties", parametersBuilder.build());
+            builder.add("parameters", parametersBuilder.build());
             builder.add("system", system.toJson());
         }
 
