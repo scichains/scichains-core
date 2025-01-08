@@ -59,23 +59,25 @@ public final class ExecutorLoaderSet {
             ExecutorSpecification specification,
             InstantiationMode instantiationMode)
             throws ClassNotFoundException {
-        final ExecutionBlock executor = loadExecutor(sessionId, specification);
+        final ExecutionBlock executor = loadExecutor(sessionId, specification, instantiationMode);
         if (executor == null) {
             throw new IllegalArgumentException("Cannot load executor with ID " + specification.getExecutorId()
                     + ": unknown executor specification");
         }
-        instantiationMode.customizeExecutor(executor, sessionId, specification);
 //                System.out.println("Specification: " + specification);
         return executor;
     }
 
-    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification)
+    public ExecutionBlock loadExecutor(
+            String sessionId,
+            ExecutorSpecification specification,
+            InstantiationMode instantiationMode)
             throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
         final List<ExecutorLoader> loaders = loaders();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification);
+            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification, instantiationMode);
             if (executor != null) {
                 return executor;
             }
