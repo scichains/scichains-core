@@ -81,8 +81,8 @@ public abstract class ExecutorLoader {
      *
      * <p>If this method returns <code>null</code>, the system will ignore this loader and try another one.
      *
-     * <p>Note: if this loader uses <code>sessionId</code>, if MUST always check also
-     * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.
+     * <p>Note: <code>sessionId</code> is typically used only to store it into the returned executor
+     * according {@link InstantiationMode}. Usually this does not affect creating a class instance.
      *
      * @param sessionId         see the same argument of {@link ExecutionBlock#newExecutor}; may be ignored.
      * @param specification     see the same argument of {@link ExecutionBlock#newExecutor}.

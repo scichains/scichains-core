@@ -67,7 +67,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * @param sessionId               unique session ID.
      * @param preloadedSpecifications executor specifications, which will always be used before checking the loaders.
      * @see ExecutionBlock#getSessionId()
-     * @see ExecutorLoaderSet#newExecutor(String, ExecutorSpecification)
+     * @see ExecutorLoaderSet#newExecutor
      */
     public DefaultExecutorFactory(
             ExecutorLoaderSet loaderSet,
