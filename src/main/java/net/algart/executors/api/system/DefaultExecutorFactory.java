@@ -41,26 +41,31 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     private final Object lock = new Object();
 
     /**
-     * Creates new executor factory.
+     * Creates a new executor factory based on the specified <code>loaderSet</code>:
+     * methods of this interface call the corresponding methods of this loader set.
      *
-     * <p>The <code>sessionId</code> is the unique ID of the session, where all executors will be initialized:
-     * see {@link ExecutionBlock#setSessionId(String)} method. This is important if you want
-     * to execute executors like sub-chains, which dynamically create other executors,
-     * probably having equal executor IDs. Executor factories with different <code>sessionID</code>
-     * are isolated from each other and can be used simultaneously.</p>
+     * <p>The <code>sessionId</code> is a unique ID of the session in which all executors will be initialized
+     * by teh {@link ExecutionBlock#setSessionId(String)} method.
+     * It is passed as the first argument to the loader set methods.</p>
      *
-     * <p>If you want to work with executors shared across all sessions, please use
+     * <p>This is important if you want to use executors like sub-chains that dynamically create other executors,
+     * possibly having the same executor IDs.
+     * Executor factories with different <code>sessionID</code> are isolated from each other
+     * and can be used simultaneously.
+     * If you want to work with executors shared across all sessions, please use
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.</p>
      *
-     * <p>If you need only one set of executors, you can specify any <code>sessionID</code> like
-     * <code>"MySession"</code>.</p>
+     * <p>The set of specifications <code>preloadedSpecifications</code> changes the behavior
+     * of the main method {@link #getSpecification(String)}. If any executor ID is found in this set,
+     * it is returned without any additional checks of the loader set.
+     * This can be used for optimization.
+     * Typical variants of this parameter are {@link ExecutorSpecificationSet#allBuiltIn()}
+     * and {@link ExecutorSpecificationSet#newInstance()}.</p>
      *
      * @param loaderSet               set of executor loaders, used to search for specifications and create new
      *                                executors.
-     * @param sessionId               unique session ID (1st argument of
-     * {@link ExecutionBlock#newExecutor(String, String)}).
-     * @param preloadedSpecifications executor specifications, which will always be used before checking the loaders
-     *                                for optimization; possible value is {@link ExecutorSpecificationSet#allBuiltIn()}.
+     * @param sessionId               unique session ID.
+     * @param preloadedSpecifications executor specifications, which will always be used before checking the loaders.
      * @see ExecutionBlock#getSessionId()
      * @see ExecutorLoaderSet#newExecutor(String, ExecutorSpecification)
      */
@@ -98,8 +103,11 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      *      getSpecification}({@link #sessionId() sessionId()}, executorId, true);
      * </pre>
      *
-     * <p>Unlike this, this method has an optimization: first, the specification is searched for in the
-     * preloaded specification set specified in the constructor, and the parsed specifications found.
+     * <p>Unlike this, this method has optimizations:</p>
+     * <ul>
+     *     <li>the specification is searched for in the preloaded specification set specified in the constructor;</li>
+     *     <li>the parsed specifications are cached.</li>
+     * </ul>
      *
      * @param executorId unique executor ID.
      * @return executor specification for creating new executor.
@@ -152,6 +160,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             return specification;
         }
     }
+
     @Override
     public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");

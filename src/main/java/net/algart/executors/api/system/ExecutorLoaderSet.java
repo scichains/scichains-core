@@ -92,18 +92,23 @@ public final class ExecutorLoaderSet {
     }
 
     /**
-     * Returns specification Equivalent to <code>{@link #serializedSpecifications(String, boolean)
-     * serializedSpecifications}(sessionId, includeGlobalSession).get(executorId)</code>,
-     * but works quickly (without creating a new map).
+     * Returns specification with the given <code>executorId</code>,
+     * that can be found in
+     * <pre>{@link #serializedSpecifications(String, boolean)
+     * serializedSpecifications}(sessionId, includeGlobalSession),</pre>
+     * and parses it.
+     * This method searches all the registered loaders for the requested executor.
+     * This method can be relatively slow because it parses the serialized form of specification.
      *
-     * @param sessionId  unique ID of current session; may be <code>null</code>, than only global session will be
+     * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
      *                   checked.
-     * @param executorId unique ID of this executor in the system.
-     * @return description of this dynamic executor (probably JSON) or <code>null</code> if there is not such executor.
+     * @param executorId unique ID of the executor.
+     * @return specification of the executor or <code>null</code> if there is not such executor.
      * @throws NullPointerException if <code>executorId</code>> arguments is <code>null</code>.
      */
     public ExecutorSpecification getSpecification(String sessionId, String executorId, boolean includeGlobalSession)
             throws JsonException {
+        Objects.requireNonNull(executorId, "Null executorId");
         synchronized (loaders) {
             for (ExecutorLoader loader : loaders) {
                 if (includeGlobalSession) {
@@ -124,6 +129,41 @@ public final class ExecutorLoaderSet {
     }
 
     /**
+     * Returns specification with the given <code>executorId</code>,
+     * that can be found in
+     * <pre>{@link #serializedSpecifications(String, boolean)
+     * serializedSpecifications}(sessionId, includeGlobalSession)</pre>
+     * This method searches all the registered loaders for the requested executor.
+     *
+     * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
+     *                   checked.
+     * @param executorId unique ID of the executor.
+     * @return serialized specification of the executor or <code>null</code> if there is not such executor.
+     * @throws NullPointerException if <code>executorId</code>> arguments is <code>null</code>.
+     */
+    public String serializedSpecification(String sessionId, String executorId, boolean includeGlobalSession)
+            throws JsonException {
+        Objects.requireNonNull(executorId, "Null executorId");
+        synchronized (loaders) {
+            for (ExecutorLoader loader : loaders) {
+                if (includeGlobalSession) {
+                    final var result = loader.serializedSpecification(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
+                    if (result != null) {
+                        return result;
+                    }
+                }
+                if (sessionId != null) {
+                    final var result = loader.serializedSpecification(sessionId, executorId);
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Returns executor specifications for all executors, registered for the given session
      * and, if the second argument is <code>true</code>,
      * for the global session {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID},
@@ -131,7 +171,8 @@ public final class ExecutorLoaderSet {
      * Keys in the result are IDs of executors, values are serialized specifications.
      * This may be used for the user interface to show information for available executors.
      *
-     * @param sessionId            unique ID of current session; may be <code>null</code>.
+     * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
+     *                   checked.
      * @param includeGlobalSession if <code>true</code>, the result includes the executors,
      *                             registered in the global session.
      * @return all available executor specifications for this and (possibly) the global session.
