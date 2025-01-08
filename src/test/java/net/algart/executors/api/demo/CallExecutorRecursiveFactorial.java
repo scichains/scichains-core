@@ -27,12 +27,13 @@ package net.algart.executors.api.demo;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorNotFoundException;
+import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
 
 public class CallExecutorRecursiveFactorial {
     public static final String SESSION_ID = "~~DUMMY_SESSION";
-    public static final String RECURSIVE_FACTORIAL_CHAIN_ID = "8585f3b5-decf-45e5-be50-e91b7a1a693c";
+    public static final String RECURSIVE_FACTORIAL_ID = "8585f3b5-decf-45e5-be50-e91b7a1a693c";
     // - ID of the sub-chain recursive_factorial.chain in the "build" folder
 
     public static void main(String[] args) throws IOException, ExecutorNotFoundException, ClassNotFoundException {
@@ -46,11 +47,10 @@ public class CallExecutorRecursiveFactorial {
         ExecutionBlock.initializeExecutionSystem();
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
         // it is a part of the platform folder for sub-chains
-        final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance(SESSION_ID);
-        try (ExecutionBlock executor = executorFactory.newExecutor(RECURSIVE_FACTORIAL_CHAIN_ID)) {
+        final ExecutorFactory factory = ExecutorFactory.newDefaultInstance(SESSION_ID);
+        try (ExecutionBlock executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, InstantiationMode.REQUEST_OUTPUT)) {
             CallSimpleChain.printExecutorInterface(executor);
             executor.setIntParameter("n", value);
-            executor.requestDefaultOutput();
             executor.execute();
             final double result = executor.getScalar().toDouble();
             System.out.println("Factorial of " + value + " is " + result);

@@ -26,6 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.SMat;
+import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 import net.algart.io.MatrixIO;
 
@@ -58,7 +59,7 @@ public class CallSimpleChain {
 
         ExecutionBlock.initializeExecutionSystem();
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (ExecutionBlock executor = UseSubChain.createExecutor(chainPath)) {
+        try (ExecutionBlock executor = UseSubChain.newExecutor(chainPath, InstantiationMode.REQUEST_ALL_OUTPUTS)) {
 //            System.out.println(executor.getExecutorSpecification().jsonString());
             printExecutorInterface(executor);
             executor.putMat(inputMat);
@@ -70,7 +71,6 @@ public class CallSimpleChain {
                 // - if null, default value should be used
                 executor.setStringParameter("b", parameterB);
             }
-            executor.setAllOutputsNecessary(true);
             executor.execute();
             final BufferedImage result = executor.getMat().toBufferedImage();
             if (result == null) {
@@ -83,6 +83,7 @@ public class CallSimpleChain {
 
     static void printExecutorInterface(ExecutionBlock executor) {
         System.out.println("Initial executor parameters:");
+        System.out.printf("    ID = %s, session ID = %s%n", executor.getExecutorId(), executor.getSessionId());
         for (var e : executor.parameters().entrySet()) {
             System.out.printf("    %s = %s%n", e.getKey(), e.getValue());
         }

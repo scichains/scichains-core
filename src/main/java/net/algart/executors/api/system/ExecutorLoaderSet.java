@@ -54,26 +54,19 @@ public final class ExecutorLoaderSet {
         return newFactory(sessionId, ExecutorSpecificationSet.allBuiltIn());
     }
 
-    public ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
+    public ExecutionBlock newExecutor(
+            String sessionId,
+            ExecutorSpecification specification,
+            InstantiationMode instantiationMode)
             throws ClassNotFoundException {
         final ExecutionBlock executor = loadExecutor(sessionId, specification);
-        executor.setSessionId(sessionId);
-        executor.setExecutorSpecification(specification);
-        final Parameters parameters = executor.parameters();
-        for (var e : specification.getControls().entrySet()) {
-            final String name = e.getKey();
-            final ExecutorSpecification.ControlConf controlConf = e.getValue();
-            parameters.put(name, controlConf.getDefaultValue());
+        if (executor == null) {
+            throw new IllegalArgumentException("Cannot load executor with ID " + specification.getExecutorId()
+                    + ": unknown executor specification");
         }
-        for (var e : specification.getInPorts().entrySet()) {
-            executor.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
-        }
-        for (var e : specification.getOutPorts().entrySet()) {
-            executor.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
-        }
+        instantiationMode.customizeExecutor(executor, sessionId, specification);
 //                System.out.println("Specification: " + specification);
         return executor;
-
     }
 
     public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification)
@@ -87,8 +80,7 @@ public final class ExecutorLoaderSet {
                 return executor;
             }
         }
-        throw new IllegalArgumentException("Cannot load executor with ID " + specification.getExecutorId()
-                + ": unknown executor specification");
+        return null;
     }
 
     /**

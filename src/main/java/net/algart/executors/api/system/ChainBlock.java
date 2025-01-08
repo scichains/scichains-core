@@ -515,7 +515,7 @@ public final class ChainBlock {
                             throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                     + ": executor factory is not set");
                         }
-                        executor = executorFactory.newExecutor(executorId);
+                        executor = executorFactory.newExecutor(executorId, InstantiationMode.NORMAL);
                     } catch (ClassNotFoundException | ExecutorNotFoundException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                 + (this.blockConfJson == null ?

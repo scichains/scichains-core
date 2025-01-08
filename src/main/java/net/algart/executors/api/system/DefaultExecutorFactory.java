@@ -162,14 +162,16 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     }
 
     @Override
-    public ExecutionBlock newExecutor(String executorId) throws ClassNotFoundException, ExecutorNotFoundException {
+    public ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode)
+            throws ClassNotFoundException, ExecutorNotFoundException {
         Objects.requireNonNull(executorId, "Null executorId");
+        Objects.requireNonNull(instantiationMode, "Null instantiationMode");
         synchronized (lock) {
-            final ExecutorSpecification executorSpecification = getSpecification(executorId);
-            if (executorSpecification == null) {
+            final ExecutorSpecification specification = getSpecification(executorId);
+            if (specification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }
-            return loaderSet.newExecutor(sessionId, executorSpecification);
+            return loaderSet.newExecutor(sessionId, specification, instantiationMode);
         }
     }
 

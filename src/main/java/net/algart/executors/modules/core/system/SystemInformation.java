@@ -41,6 +41,8 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public final class SystemInformation extends Executor implements ReadOnlyExecutionInput {
+
+
     @Override
     public void process() {
         getScalar().setTo(information());

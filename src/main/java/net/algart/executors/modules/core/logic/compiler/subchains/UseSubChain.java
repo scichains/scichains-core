@@ -312,21 +312,21 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public static Executor createExecutor(ChainSpecification chainSpecification) {
-        return getShared().toExecutor(chainSpecification);
+    public static Executor newExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
+        return getShared().toExecutor(chainSpecification, instantiationMode);
     }
 
-    public static Executor createExecutor(Path containingJsonFile) throws IOException {
-        return createExecutor(ChainSpecification.read(containingJsonFile));
+    public static Executor newExecutor(Path containingJsonFile, InstantiationMode instantiationMode) throws IOException {
+        return newExecutor(ChainSpecification.read(containingJsonFile), instantiationMode);
     }
 
-    public Executor toExecutor(ChainSpecification chainSpecification) {
+    public Executor toExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
         //noinspection resource
-        return use(chainSpecification).toExecutor();
+        return use(chainSpecification).toExecutor(instantiationMode);
     }
 
-    public Executor toExecutor(Path containingJsonFile) throws IOException {
-        return toExecutor(ChainSpecification.read(containingJsonFile));
+    public Executor toExecutor(Path containingJsonFile, InstantiationMode instantiationMode) throws IOException {
+        return toExecutor(ChainSpecification.read(containingJsonFile), instantiationMode);
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {

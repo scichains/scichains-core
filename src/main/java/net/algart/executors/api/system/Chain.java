@@ -619,14 +619,14 @@ public final class Chain implements AutoCloseable {
         }
     }
 
-    public Executor toExecutor() {
+    public Executor toExecutor(InstantiationMode instantiationMode) {
         if (executorFactory == null) {
             throw new IllegalStateException("Cannot convert chain with ID " + id
                     + " to executor: executor factory is not set");
         }
         ExecutionBlock result;
         try {
-            result = executorFactory.newExecutor(id());
+            result = executorFactory.newExecutor(id(), instantiationMode);
             // - we suppose that someone has a registered executor, which execute this chain
         } catch (ClassNotFoundException | ExecutorNotFoundException e) {
             throw new IllegalStateException("Chain with ID " + id + " was not successfully registered", e);

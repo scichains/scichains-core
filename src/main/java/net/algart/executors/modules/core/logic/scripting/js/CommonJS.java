@@ -33,6 +33,7 @@ import net.algart.bridges.standard.JavaScriptContextContainer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.system.ExecutorNotFoundException;
+import net.algart.executors.api.system.InstantiationMode;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;
@@ -90,7 +91,7 @@ public final class CommonJS extends Executor {
             final net.algart.executors.api.system.ExecutorFactory executorFactory = factory();
             final ExecutionBlock executionBlock;
             try {
-                executionBlock = executorFactory.newExecutor(callableExecutorId);
+                executionBlock = executorFactory.newExecutor(callableExecutorId, InstantiationMode.NORMAL);
             } catch (ClassNotFoundException | ExecutorNotFoundException e) {
                 throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
                         + (e instanceof ClassNotFoundException ?

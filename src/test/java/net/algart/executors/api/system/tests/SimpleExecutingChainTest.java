@@ -28,6 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.Chain;
 import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 
 import java.io.IOException;
@@ -36,8 +37,8 @@ import java.nio.file.Paths;
 
 public class SimpleExecutingChainTest {
     private static void executeChainAsExecutor(Path chainPath) throws IOException {
-        try (ExecutionBlock executor = UseSubChain.getSessionInstance("MySession").toExecutor(chainPath)) {
-            executor.setAllOutputsNecessary(true);
+        try (ExecutionBlock executor = UseSubChain.getSessionInstance("MySession")
+                .toExecutor(chainPath, InstantiationMode.REQUEST_ALL_OUTPUTS)) {
             executor.execute();
             System.out.println("Executor finished: " + executor);
         }
