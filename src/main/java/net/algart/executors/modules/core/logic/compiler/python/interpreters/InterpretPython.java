@@ -71,9 +71,17 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     }
 
     public PythonCaller pythonCaller() {
+        final String sessionId = getSessionId();
+        final String executorId = getExecutorId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot find Python worker: session ID is not set");
+        }
+        if (executorId == null) {
+            throw new IllegalStateException("Cannot find Python worker: executor ID is not set");
+        }
         PythonCaller pythonCaller = this.pythonCaller;
         if (pythonCaller == null) {
-            pythonCaller = UsingPython.pythonCallerLoader().registeredWorker(getSessionId(), getExecutorId());
+            pythonCaller = UsingPython.pythonCallerLoader().registeredWorker(sessionId, executorId);
             pythonCaller = pythonCaller.clone();
             // - we return a clone!
             this.pythonCaller = pythonCaller;

@@ -253,7 +253,7 @@ public final class Port {
     @Override
     public String toString() {
         return "Port \"" + name + "\" [" + portType + " for " + dataType + "], "
-                + (connected ? "connected" : "unconnected")
+                + (connected ? "connected" + (isOutput() ? " (requested)" : "") : "unconnected")
                 + ": " + data
                 + (uuid == null ? "" : " [uuid " + uuid + "]");
     }

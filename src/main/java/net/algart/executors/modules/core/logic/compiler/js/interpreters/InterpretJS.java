@@ -69,14 +69,24 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
     }
 
     public JSCaller jsCaller() {
+        final String sessionId = getSessionId();
+        final String executorId = getExecutorId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot find JavaScript worker: session ID is not set");
+        }
+        if (executorId == null) {
+            throw new IllegalStateException("Cannot find JavaScript worker: executor ID is not set");
+        }
         JSCaller jsCaller = this.jsCaller;
         if (jsCaller == null) {
-            jsCaller = UseJS.jsCallerLoader().registeredWorker(getSessionId(), getExecutorId());
+            jsCaller = UseJS.jsCallerLoader().registeredWorker(sessionId, executorId);
             jsCaller = jsCaller.clone();
             // - we return a clone!
             this.jsCaller = jsCaller;
             // - the order is important for multithreading: local jsCaller is assigned first,
             // this.jsCaller is assigned to it;
+
+
             // cloning is not necessary in the current version, but added for possible future extensions
         }
         return jsCaller;

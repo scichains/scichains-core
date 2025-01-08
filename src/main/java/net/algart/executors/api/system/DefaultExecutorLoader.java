@@ -58,7 +58,8 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
     private final Object lock = new Object();
 
     @Override
-    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification) {
+    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification)
+            throws ClassNotFoundException {
         return null;
         // - Just skip loading and pass executorId to the standard loader.
         // Usually we have a set of executors with different IDs, but with the same Java class like InterpretSubChain,

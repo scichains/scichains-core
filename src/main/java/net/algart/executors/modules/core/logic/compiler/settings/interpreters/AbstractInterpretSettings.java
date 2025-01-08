@@ -33,9 +33,17 @@ public abstract class AbstractInterpretSettings extends Executor implements Read
     private volatile SettingsCombiner settingsCombiner = null;
 
     public SettingsCombiner settingsCombiner() {
+        final String sessionId = getSessionId();
+        final String executorId = getExecutorId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot find settings combiner worker: session ID is not set");
+        }
+        if (executorId == null) {
+            throw new IllegalStateException("Cannot find settings combiner worker: executor ID is not set");
+        }
         SettingsCombiner settingsCombiner = this.settingsCombiner;
         if (settingsCombiner == null) {
-            settingsCombiner = UseSettings.settingsCombinerLoader().registeredWorker(getSessionId(), getExecutorId());
+            settingsCombiner = UseSettings.settingsCombinerLoader().registeredWorker(sessionId, executorId);
             this.settingsCombiner = settingsCombiner.clone();
             // - the order is important for multithreading: local settingsCombiner is assigned first,
             // this.settingsCombiner is assigned to it;

@@ -42,6 +42,7 @@ import java.lang.System.Logger.Level;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public final class InterpretMultiChain extends Executor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
@@ -197,6 +198,8 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
     }
 
     public static MultiChain registeredMultiChain(String sessionId, String executorId) {
+        Objects.requireNonNull(sessionId, "Cannot find multi-chain worker: session ID is not set");
+        Objects.requireNonNull(executorId, "Cannot find multi-chain worker: executor ID is not set");
         @SuppressWarnings("resource")
         MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(sessionId, executorId);
         return multiChain.clone();

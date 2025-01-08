@@ -70,9 +70,17 @@ public class InterpretMapping extends Executor implements ReadOnlyExecutionInput
     }
 
     private Mapping mapping() {
+        final String sessionId = getSessionId();
+        final String executorId = getExecutorId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot find mapping worker: session ID is not set");
+        }
+        if (executorId == null) {
+            throw new IllegalStateException("Cannot find mapping worker: executor ID is not set");
+        }
         Mapping mapping = this.mapping;
         if (mapping == null) {
-            mapping = UseMapping.mappingLoader().registeredWorker(getSessionId(), getExecutorId());
+            mapping = UseMapping.mappingLoader().registeredWorker(sessionId, executorId);
             this.mapping = mapping.clone();
             // - the order is important for multithreading: local mapping is assigned first,
             // this.mapping is assigned to it;

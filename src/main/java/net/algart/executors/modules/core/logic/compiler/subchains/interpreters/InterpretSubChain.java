@@ -46,6 +46,7 @@ import java.lang.System.Logger.Level;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Objects;
 
 public final class InterpretSubChain extends Executor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
@@ -173,6 +174,8 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
     }
 
     public static Chain registeredChain(String sessionId, String executorId) {
+        Objects.requireNonNull(sessionId, "Cannot find sub-chain worker: session ID is not set");
+        Objects.requireNonNull(executorId, "Cannot find sub-chain worker: executor ID is not set");
         Chain chain = UseSubChain.subChainLoader().registeredWorker(sessionId, executorId);
         chain = chain.cleanCopy();
         // - every instance of this executor has its own space for data, like activates for usual procedures

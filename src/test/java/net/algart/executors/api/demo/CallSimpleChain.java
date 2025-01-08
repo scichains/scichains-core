@@ -82,8 +82,9 @@ public class CallSimpleChain {
     }
 
     static void printExecutorInterface(ExecutionBlock executor) {
+        System.out.println();
         System.out.println("Initial executor parameters:");
-        System.out.printf("    ID = %s, session ID = %s%n", executor.getExecutorId(), executor.getSessionId());
+        System.out.printf("    ID = %s%n    session ID = %s%n", executor.getExecutorId(), executor.getSessionId());
         for (var e : executor.parameters().entrySet()) {
             System.out.printf("    %s = %s%n", e.getKey(), e.getValue());
         }
