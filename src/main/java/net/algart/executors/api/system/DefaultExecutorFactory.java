@@ -161,6 +161,22 @@ public class DefaultExecutorFactory implements ExecutorFactory {
         }
     }
 
+    /**
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its {@link #getSpecification(String)
+     * specification} with help of the following call:
+     * <pre>
+     *      {@link #loaderSet() loaderSet()}.{@link ExecutorLoaderSet#newExecutor
+     *      newExecutor}({@link #sessionId() sessionId()}, specification, instantiationMode);
+     * </pre>
+     *
+     * @param executorId        unique ID of the executor.
+     * @param instantiationMode what should we do after successful instantiating the executor?
+     * @return newly created executor.
+     * @throws ClassNotFoundException    if Java class, required for creating the executor,
+     *                                   is not available in the current <code>classpath</code> environment.
+     * @throws ExecutorNotFoundException if there is no requested executor.
+     * @throws NullPointerException      if <code>executorId==null</code> or <code>instantiationMode==null</code>.
+     */
     @Override
     public ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode)
             throws ClassNotFoundException, ExecutorNotFoundException {

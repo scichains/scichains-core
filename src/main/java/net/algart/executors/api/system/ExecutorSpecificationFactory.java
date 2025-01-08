@@ -29,9 +29,6 @@ public interface ExecutorSpecificationFactory {
     /**
      * Returns the specification of the given executor.
      *
-     * <p>The main source of information about all specifications is
-     * {@link ExecutorLoaderSet#serializedSessionSpecifications(String, boolean)}.
-     *
      * @param executorId unique executor ID.
      * @return executor specification for creating new executor.
      */

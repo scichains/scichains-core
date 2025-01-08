@@ -43,6 +43,22 @@ import net.algart.executors.api.ExecutionBlock;
  */
 public interface ExecutorFactory extends ExecutorSpecificationFactory {
 
+    /**
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification,
+     * returned by {@link #getSpecification(String)} method.
+     * This method also performs some initialization of the newly created object
+     * according the <code>instantiationMode</code> argument.</p>
+     *
+     * <p>If {@link #getSpecification(String)} method returns <code>null</code>, this method
+     * throws {@link ExecutorNotFoundException}; this method never returns <code>null</code>.</p>
+     *
+     * @param executorId unique ID of the executor.
+     * @return newly created executor.
+     * @throws ClassNotFoundException    if Java class, required for creating the executor,
+     *                                   is not available in the current <code>classpath</code> environment.
+     * @throws ExecutorNotFoundException if there is no requested executor.
+     * @throws NullPointerException      if <code>executorId==null</code> or <code>instantiationMode==null</code>.
+     */
     ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode) throws
             ClassNotFoundException, ExecutorNotFoundException;
 

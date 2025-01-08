@@ -90,7 +90,7 @@ public abstract class ExecutorLoader {
      * @return newly created executor or <code>null</code> if this loader does not "understand" this specification.
      * @throws NullPointerException   if <code>specification</code> or <code>instantiationMode</code> is
      *                                <code>null</code>.
-     * @throws ClassNotFoundException if Java class, required for creating executing block,
+     * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.
      */
     public ExecutionBlock loadExecutor(

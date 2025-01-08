@@ -1109,7 +1109,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                      may be <code>null</code> while simple usage.
      * @param specification JSON specification of the executor.
      * @return newly created executor.
-     * @throws ClassNotFoundException if Java class, required for creating executing block,
+     * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
@@ -1128,7 +1128,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *                      may be <code>null</code> while simple usage.
      * @param specification specification of the executor, JSON format.
      * @return newly created executor.
-     * @throws ClassNotFoundException if Java class, required for creating executing block,
+     * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.
      * @throws NullPointerException   if <code>executorId==null</code> or <code>specification==null</code>.
      */
@@ -1139,7 +1139,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     @UsedForExternalCommunication
-    public static String[] serializedSpecifications(String sessionId) {
+    public static String[] serializedSessionSpecificationsArray(String sessionId) {
         return GLOBAL_EXECUTOR_LOADERS.serializedSessionSpecifications(sessionId, true)
                 .values().toArray(new String[0]);
     }

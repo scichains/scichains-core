@@ -95,7 +95,7 @@ public final class ExecutorLoaderSet {
      * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
      *                   checked.
      * @param executorId unique ID of the executor.
-     * @return specification of the executor or <code>null</code> if there is not such executor.
+     * @return specification of the executor or <code>null</code> if there is no requested executor.
      * @throws NullPointerException if <code>executorId</code>> arguments is <code>null</code>.
      */
     public ExecutorSpecification getSpecification(String sessionId, String executorId, boolean includeGlobalSession)
