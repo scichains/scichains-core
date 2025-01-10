@@ -4,6 +4,7 @@
     "-esa",
     "-Dnet.algart.executors.api.extended=true",
     "-D_net.algart.executors.api.showLibraryPath=true",
+    "-D_net.algart.executors.api.warningForDeprecatedParameters=false",
     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
   ]
 }

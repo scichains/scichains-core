@@ -30,6 +30,7 @@ import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.system.ExtensionSpecification;
 import net.algart.executors.api.system.InstalledExtensions;
+import net.algart.executors.modules.core.scalars.creation.CreateScalar;
 import net.algart.external.UsedForExternalCommunication;
 
 import java.io.IOException;
@@ -42,9 +43,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 public abstract class Executor extends ExecutionBlock {
-    private static final boolean USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY = false;
-    // - Deprecated (can be false) since 4.4.9
-
     static {
         addTaskBeforeExecutingAll(Executor::startTimingOfExecutingAll);
         addTaskAfterExecutingAll(Executor::finishTimingOfExecutingAll);
@@ -66,6 +64,12 @@ public abstract class Executor extends ExecutionBlock {
     private static final boolean CREATE_EXECUTION_KEY_FILE =
             net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
                     "net.algart.executors.api.createExecutionKeyFile", false);
+    private static final boolean WARNING_FOR_DEPRECATED_PARAMETERS =
+            net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+            "net.algart.executors.api.warningForDeprecatedParameters", true);
+    // - false value allows avoiding warning for old chains with deprecated "system parameters":
+    // such names are detected with debug logging instead
+
 
     private static final Map<String, Map<String, ParameterSetter>> EXECUTOR_CLASS_SETTERS = new HashMap<>();
     private static final Map<String, Map<String, ParameterValueType>> EXECUTOR_CLASS_PARAMETER_TYPES = new HashMap<>();
@@ -584,8 +588,12 @@ public abstract class Executor extends ExecutionBlock {
     @Override
     public void onChangeParameter(String name) {
         Objects.requireNonNull(name, "Null parameter name");
-        if (USE_SYSTEM_PARAMETER_FOR_SETTING_CURRENT_DIRECTORY && name.equals("$__system.working_directory")) {
-            setCurrentDirectory(Paths.get(parameters().getString(name)));
+        if (!WARNING_FOR_DEPRECATED_PARAMETERS && deprecatedParameter(name)) {
+            LOG.log(Logger.Level.DEBUG, () -> "Old-style parameter " + name + " found for " +
+                    getClass() + ", we recommend resaving the chain file (" +
+                    (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"") +
+                    (getContextPath() == null ? "" : " at " + getContextPath())
+                    + ")");
         } else if (onChangeParametersAutomatic && !onChangeParametersAutomaticDisabledParameters.contains(name)) {
             onChangeParameterAutomatic(name);
         }
@@ -670,7 +678,7 @@ public abstract class Executor extends ExecutionBlock {
      * If this method returns <code>true</code>, {@link #Executor() constructor of this class} will not register
      * standard parameters, processed by {@link Executor} itself.
      * It is provided for possible future needs; the current version has no standard parameters.
-     * (Some older versions had "autoContrast" standard parameter, but it was deprecated and removed.)
+     * (Some older versions had "autoContrastVisibleResult" standard parameter, but it was deprecated and removed.)
      *
      * <p>Note: for correct work, this method must return <b>constant</b> (the same value for
      * all instances of the inheritor).
@@ -800,6 +808,13 @@ public abstract class Executor extends ExecutionBlock {
             default -> Logger.Level.valueOf(name);
         };
     }
+
+    private boolean deprecatedParameter(String name) {
+        return name.startsWith("$__")
+                || (this instanceof CreateScalar && name.equals("nullValue"))
+                || name.equals("autoContrastVisibleResult");
+    }
+
 
     public static final class Timing {
         private static final Timing INSTANCE = new Timing();
