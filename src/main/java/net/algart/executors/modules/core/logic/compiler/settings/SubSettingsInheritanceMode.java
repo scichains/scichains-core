@@ -22,15 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.settings.model;
+package net.algart.executors.modules.core.logic.compiler.settings;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonValue;
 import net.algart.json.Jsons;
-
-import java.util.Map;
 
 public enum SubSettingsInheritanceMode {
     NONE() {
@@ -42,38 +37,22 @@ public enum SubSettingsInheritanceMode {
     ADD_NEW_TO_PARENT() {
         @Override
         public JsonObject inherit(JsonObject parentSettings, JsonObject subSettings) {
-            return Jsons.addNonExistingEntries(extractSimpleValues(parentSettings), subSettings);
+            return Jsons.addNonExistingEntries(Jsons.extractSimpleValues(parentSettings), subSettings);
         }
     },
     OVERRIDE_PARENT() {
         @Override
         public JsonObject inherit(JsonObject parentSettings, JsonObject subSettings) {
-            return Jsons.overrideEntries(extractSimpleValues(parentSettings), subSettings);
+            return Jsons.overrideEntries(Jsons.extractSimpleValues(parentSettings), subSettings);
         }
     },
     OVERRIDE_BY_EXISTING_IN_PARENT() {
         @Override
         public JsonObject inherit(JsonObject parentSettings, JsonObject subSettings) {
-            return Jsons.overrideOnlyExistingInBoth(subSettings, extractSimpleValues(parentSettings));
+            return Jsons.overrideOnlyExistingInBoth(subSettings, Jsons.extractSimpleValues(parentSettings));
         }
     };
 
     public abstract JsonObject inherit(JsonObject parentSettings, JsonObject subSettings);
 
-    private static JsonObject extractSimpleValues(JsonObject parent) {
-        final JsonObjectBuilder builder = Json.createObjectBuilder();
-        for (Map.Entry<String, JsonValue> entry : parent.entrySet()) {
-            final JsonValue value = entry.getValue();
-            switch (value.getValueType()) {
-                case NUMBER:
-                case STRING:
-                case FALSE:
-                case TRUE:
-                case NULL: {
-                    builder.add(entry.getKey(), value);
-                }
-            }
-        }
-        return builder.build();
-    }
 }

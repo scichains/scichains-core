@@ -216,12 +216,9 @@ public final class SettingsCombiner implements Cloneable {
                 assert jsonValue != null;
                 final Object value;
                 if (valueType.isSettings()) {
-                    JsonObject subSettings = jsonValue instanceof JsonObject ?
-                            (JsonObject) jsonValue :
-                            Jsons.newEmptyJson();
+                    JsonObject subSettings = jsonValue instanceof JsonObject jo ? jo : Jsons.newEmptyJson();
                     // - subSettings CAN be not a JsonObject, if the source JSON was created manually
-                    subSettings = SubSettingsInheritanceMode.OVERRIDE_BY_EXISTING_IN_PARENT
-                            .inherit(settings, subSettings);
+                    subSettings = Jsons.overrideOnlyExistingInBoth(subSettings, Jsons.extractSimpleValues(settings));
                     value = Jsons.toPrettyString(subSettings);
                 } else {
                     value = valueType.toSmartParameter(jsonValue);

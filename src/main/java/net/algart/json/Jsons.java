@@ -179,6 +179,24 @@ public class Jsons {
         return builder.build();
     }
 
+    public static JsonObject extractSimpleValues(JsonObject sourceJson) {
+        Objects.requireNonNull(sourceJson, "Null sourceJson");
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (Map.Entry<String, JsonValue> entry : sourceJson.entrySet()) {
+            final JsonValue value = entry.getValue();
+            switch (value.getValueType()) {
+                case NUMBER:
+                case STRING:
+                case FALSE:
+                case TRUE:
+                case NULL: {
+                    builder.add(entry.getKey(), value);
+                }
+            }
+        }
+        return builder.build();
+    }
+
     public static String toPrettyString(JsonValue jsonValue) {
         Objects.requireNonNull(jsonValue, "Null jsonValue");
         return switch (jsonValue.getValueType()) {
