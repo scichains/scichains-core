@@ -113,7 +113,7 @@ public class LoadingChainTest {
         System.out.printf("Reading %s...%n", specificationFolder);
         final ExecutorSpecificationSet executorSpecificationSet =
                 ExecutorSpecificationSet.newInstance().addFolder(specificationFolder, true);
-        final ExecutorFactory executorFactory = ExecutionBlock.globalExecutorLoaders().newFactory(
+        final ExecutorFactory executorFactory = ExecutionBlock.globalLoaders().newFactory(
                 "~~DUMMY", executorSpecificationSet);
 
         if (Files.isDirectory(chainFile)) {

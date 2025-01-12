@@ -49,7 +49,7 @@ public class UseMapping extends FileOperation {
             new DefaultExecutorLoader<>("mappings loader");
 
     static {
-        globalExecutorLoaders().register(MAPPING_LOADER);
+        globalLoaders().register(MAPPING_LOADER);
     }
 
     private String mappingKeysFile = null;

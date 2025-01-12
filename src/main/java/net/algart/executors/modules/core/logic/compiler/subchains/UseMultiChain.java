@@ -95,7 +95,7 @@ public final class UseMultiChain extends FileOperation {
             new DefaultExecutorLoader<>("multi-chains loader");
 
     static {
-        globalExecutorLoaders().register(MULTICHAIN_LOADER);
+        globalLoaders().register(MULTICHAIN_LOADER);
     }
 
     private boolean fileExistenceRequired = true;

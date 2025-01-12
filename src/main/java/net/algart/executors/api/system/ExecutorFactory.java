@@ -52,7 +52,8 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      * <p>If {@link #getSpecification(String)} method returns <code>null</code>, this method
      * throws {@link ExecutorNotFoundException}; this method never returns <code>null</code>.</p>
      *
-     * @param executorId unique ID of the executor.
+     * @param executorId        unique ID of the executor.
+     * @param instantiationMode how to initialize a newly created instance?
      * @return newly created executor.
      * @throws ClassNotFoundException    if Java class, required for creating the executor,
      *                                   is not available in the current <code>classpath</code> environment.
@@ -63,6 +64,6 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
             ClassNotFoundException, ExecutorNotFoundException;
 
     static ExecutorFactory newDefaultInstance(String sessionId) {
-        return ExecutionBlock.globalExecutorLoaders().newFactory(sessionId);
+        return ExecutionBlock.globalLoaders().newFactory(sessionId);
     }
 }

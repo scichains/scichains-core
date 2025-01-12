@@ -110,7 +110,7 @@ public final class CommonJavaScriptOld extends Executor {
 
         private net.algart.executors.api.system.ExecutorFactory executorFactory() {
             if (executorFactory == null) {
-                executorFactory = globalExecutorLoaders().newFactory(sessionId);
+                executorFactory = globalLoaders().newFactory(sessionId);
             }
             return executorFactory;
         }

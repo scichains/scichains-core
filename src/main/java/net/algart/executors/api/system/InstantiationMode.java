@@ -28,12 +28,31 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
 
+/**
+ * Initialization mode for executor, created by {@link ExecutorFactory#newExecutor(String, InstantiationMode)}
+ * and similar methods.
+ */
 public enum InstantiationMode {
+    /**
+     * The executor is created by its constructor or an equivalent instantiation method.
+     * No additional initialization is performed.
+     * Note that some executors can be unable to operate normally in this mode: for example, a
+     * {@link net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain#newExecutor(
+     *ChainSpecification, InstantiationMode) chain executor} requires information about its executor ID.
+     */
     CONSTRUCTOR_ONLY {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
         }
     },
+    /**
+     * Minimal initialization, sufficient for most needs.
+     * The new executor is configured by {@link ExecutionBlock#setSessionId(String)}
+     * and {@link ExecutionBlock#setExecutorSpecification(ExecutorSpecification)} methods.
+     * So, the {@link ExecutionBlock#getExecutorId() executor ID},
+     * {@link ExecutionBlock#getPlatformId() platform ID} and other specification details will be available
+     * to the executor implementation.
+     */
     MINIMAL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
@@ -41,6 +60,14 @@ public enum InstantiationMode {
             result.setExecutorSpecification(specification);
         }
     },
+    /**
+     * In addition to {@link #MINIMAL} mode, this initialization procedure creates all input and
+     * output ports, listed in the specification, and fills all {@link ExecutionBlock#parameters() parameters}
+     * with the default values from the specification.
+     * This is convenient for usage.
+     * <p>Note that this mode can theoretically lead to another behavior from {@link #MINIMAL}
+     * in some clients if they depend on the ports' existence or on default parameter values.
+     */
     NORMAL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
@@ -59,13 +86,12 @@ public enum InstantiationMode {
             }
         }
     },
-    REQUEST_DEFAULT {
-        @Override
-        void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
-            NORMAL.customizeExecutor(result, sessionId, specification);
-            result.requestDefaultOutput();
-        }
-    },
+    /**
+     * The same as {@link #NORMAL}, but in addition this node calls
+     * {@link ExecutionBlock#setAllOutputsNecessary(boolean) executor.setAllOutputsNecessary(true)}.
+     * Usually this is desired behavior, excepting some complex cases when the executor has
+     * several resulting ports, and we need to calculate only part from them for saving executing time.
+     */
     REQUEST_ALL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {

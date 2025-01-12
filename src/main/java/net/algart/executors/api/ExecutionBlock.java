@@ -87,14 +87,14 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     private static final ExecutorLoader STANDARD_JAVA_EXECUTOR_LOADER =
             ExecutorLoader.getStandardJavaExecutorLoader();
-    private static final ExecutorLoaderSet GLOBAL_EXECUTOR_LOADERS = new ExecutorLoaderSet();
+    private static final ExecutorLoaderSet GLOBAL_LOADERS = new ExecutorLoaderSet();
 
     static {
-        GLOBAL_EXECUTOR_LOADERS.register(STANDARD_JAVA_EXECUTOR_LOADER);
+        GLOBAL_LOADERS.register(STANDARD_JAVA_EXECUTOR_LOADER);
     }
 
-    public static ExecutorLoaderSet globalExecutorLoaders() {
-        return GLOBAL_EXECUTOR_LOADERS;
+    public static ExecutorLoaderSet globalLoaders() {
+        return GLOBAL_LOADERS;
     }
 
     private static final Map<Integer, Runnable> tasksBeforeExecutingAll =
@@ -1115,7 +1115,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        return GLOBAL_EXECUTOR_LOADERS.newExecutor(sessionId, specification, InstantiationMode.NORMAL);
+        return GLOBAL_LOADERS.newExecutor(sessionId, specification, InstantiationMode.NORMAL);
     }
 
     /**
@@ -1140,7 +1140,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     @UsedForExternalCommunication
     public static String[] serializedSessionSpecificationsArray(String sessionId) {
-        return GLOBAL_EXECUTOR_LOADERS.serializedSessionSpecifications(sessionId, true)
+        return GLOBAL_LOADERS.serializedSessionSpecifications(sessionId, true)
                 .values().toArray(new String[0]);
     }
 
@@ -1152,7 +1152,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     @UsedForExternalCommunication
     public static void clearSession(String sessionId) {
-        GLOBAL_EXECUTOR_LOADERS.clearSession(sessionId);
+        GLOBAL_LOADERS.clearSession(sessionId);
     }
 
     private static class Initialization {

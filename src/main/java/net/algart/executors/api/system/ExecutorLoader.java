@@ -49,7 +49,7 @@ import java.util.*;
  * <p>In the current version, all they are instances of {@link DefaultExecutorLoader}.</p>
  *
  * @see ExecutorLoaderSet
- * @see ExecutionBlock#globalExecutorLoaders()
+ * @see ExecutionBlock#globalLoaders()
  */
 public abstract class ExecutorLoader {
     private static final boolean REGISTER_BUILT_IN_EXECUTORS = true;

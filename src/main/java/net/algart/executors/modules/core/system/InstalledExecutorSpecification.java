@@ -113,7 +113,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
                     (t4 - t1) * 1e-6, (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
             return builtIn;
         }
-        final ExecutorSpecification extended = globalExecutorLoaders().getSpecification(
+        final ExecutorSpecification extended = globalLoaders().getSpecification(
                 getSessionId(), executorId, true);
         if (extended == null) {
             return null;
