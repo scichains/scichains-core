@@ -28,9 +28,9 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.chains.MultiChain;
+import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineChainSettings;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
 import net.algart.json.Jsons;
 
 // Must be public with public constructor without arguments to be created by external systems.

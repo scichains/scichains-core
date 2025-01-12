@@ -27,9 +27,9 @@ package net.algart.executors.modules.core.logic.compiler.mappings.interpreters;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.mappings.Mapping;
+import net.algart.executors.api.mappings.MappingSpecification;
 import net.algart.executors.modules.core.logic.compiler.mappings.UseMapping;
-import net.algart.executors.modules.core.logic.compiler.mappings.model.Mapping;
-import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingSpecification;
 import net.algart.json.Jsons;
 
 import java.util.Locale;

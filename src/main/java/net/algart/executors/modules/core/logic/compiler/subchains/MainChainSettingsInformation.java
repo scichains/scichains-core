@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainBlock;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
+import net.algart.executors.api.settings.SettingsCombiner;
 
 import java.util.Objects;
 

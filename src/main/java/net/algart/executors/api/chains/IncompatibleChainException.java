@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.subchains.model;
+package net.algart.executors.api.chains;
 
 import java.io.Serial;
 

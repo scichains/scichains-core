@@ -28,7 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.Jsons;
 
 public final class AddSubSettings extends Executor implements ReadOnlyExecutionInput {

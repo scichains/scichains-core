@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 
 public abstract class AbstractInterpretSettings extends Executor implements ReadOnlyExecutionInput {
     private volatile SettingsCombiner settingsCombiner = null;

@@ -32,9 +32,9 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.mappings.MappingSpecification;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;

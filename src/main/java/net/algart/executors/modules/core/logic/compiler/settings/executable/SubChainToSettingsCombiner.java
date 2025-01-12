@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.logic.compiler.settings.executable;
 
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;

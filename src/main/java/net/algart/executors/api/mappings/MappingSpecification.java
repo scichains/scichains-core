@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.mappings.model;
+package net.algart.executors.api.mappings;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;

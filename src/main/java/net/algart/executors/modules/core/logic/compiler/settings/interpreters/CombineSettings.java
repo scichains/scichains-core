@@ -26,9 +26,9 @@ package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.json.Jsons;
 
 import java.util.Locale;

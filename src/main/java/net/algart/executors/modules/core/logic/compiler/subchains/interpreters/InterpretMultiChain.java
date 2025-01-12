@@ -28,14 +28,14 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.MultiChain;
+import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
-import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
 import net.algart.json.Jsons;
 
 import java.lang.System.Logger.Level;

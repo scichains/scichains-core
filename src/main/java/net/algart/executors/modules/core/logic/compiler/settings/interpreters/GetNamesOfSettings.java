@@ -27,8 +27,8 @@ package net.algart.executors.modules.core.logic.compiler.settings.interpreters;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
 import net.algart.json.Jsons;
 
 import java.util.List;

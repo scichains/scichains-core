@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.subchains.model;
+package net.algart.executors.api.chains;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
