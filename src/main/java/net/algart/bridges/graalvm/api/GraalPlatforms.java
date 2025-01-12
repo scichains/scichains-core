@@ -24,7 +24,7 @@
 
 package net.algart.bridges.graalvm.api;
 
-import net.algart.executors.api.system.InstalledPlatformsForTechnology;
+import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 
 public class GraalPlatforms {
     public static final String GRAAL_TECHNOLOGY = "graal";

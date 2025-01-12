@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.system.tests;
 
-import net.algart.executors.api.system.ExtensionSpecification;
-import net.algart.executors.api.system.InstalledExtensions;
+import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.extensions.InstalledExtensions;
 
 import java.io.IOException;
 import java.nio.file.Path;

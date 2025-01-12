@@ -24,6 +24,8 @@
 
 package net.algart.executors.api;
 
+import net.algart.executors.api.extensions.InstalledExtensions;
+
 public class SystemEnvironment {
     private SystemEnvironment() {
     }
@@ -31,8 +33,8 @@ public class SystemEnvironment {
     /**
      * Name of environment variable (optional), that may refer to the home directory of the full product.
      * Should <b>not</b> be used in the executors or execution system, excepting
-     * {@link net.algart.executors.api.system.InstalledExtensions#EXTENSIONS_PATH_PROPERTY} and
-     * {@link net.algart.executors.api.system.InstalledExtensions#EXTENSIONS_ROOT_PROPERTY}.
+     * {@link InstalledExtensions#EXTENSIONS_PATH_PROPERTY} and
+     * {@link InstalledExtensions#EXTENSIONS_ROOT_PROPERTY}.
      * But it may be used, for example, in some tests.
      */
     public static final String EXECUTORS_HOME_ENV_NAME = "EXECUTORS_HOME";

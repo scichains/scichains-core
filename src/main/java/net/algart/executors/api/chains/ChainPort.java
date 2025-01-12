@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;

@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.logic.compiler.subchains.interpreters;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.system.Chain;
+import net.algart.executors.api.chains.Chain;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;

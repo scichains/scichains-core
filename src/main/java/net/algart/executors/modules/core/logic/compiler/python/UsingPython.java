@@ -31,7 +31,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExtensionSpecification;
+import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.modules.core.logic.compiler.python.interpreters.InterpretPython;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCaller;
 import net.algart.executors.modules.core.logic.compiler.python.model.PythonCallerSpecification;

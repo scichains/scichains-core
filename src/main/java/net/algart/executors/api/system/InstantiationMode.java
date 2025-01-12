@@ -37,8 +37,8 @@ public enum InstantiationMode {
      * The executor is created by its constructor or an equivalent instantiation method.
      * No additional initialization is performed.
      * Note that some executors can be unable to operate normally in this mode: for example, a
-     * {@link net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain#newExecutor(
-     *ChainSpecification, InstantiationMode) chain executor} requires information about its executor ID.
+     * {@link net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain#newExecutor}
+     * requires information about its executor ID.
      */
     CONSTRUCTOR_ONLY {
         @Override

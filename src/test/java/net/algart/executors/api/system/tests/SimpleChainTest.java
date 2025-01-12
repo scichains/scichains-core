@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.system.tests;
 
-import net.algart.executors.api.system.Chain;
-import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.ChainSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;

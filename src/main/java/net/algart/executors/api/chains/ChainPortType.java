@@ -22,19 +22,48 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
-import java.io.Serial;
+import net.algart.executors.api.data.Port;
 
-public class ChainLoadingException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = -8781925655456853821L;
+public enum ChainPortType {
+    INPUT_PORT(1, Port.Type.INPUT, true),
+    OUTPUT_PORT(2, Port.Type.OUTPUT, true),
+    INPUT_CONTROL_AS_PORT(3, Port.Type.INPUT, false),
+    OUTPUT_CONTROL_AS_PORT(4, Port.Type.OUTPUT, false);
 
-    public ChainLoadingException(String message, Throwable cause) {
-        super(correctMessage(message, cause), cause);
+    private final int code;
+    private final Port.Type actualPortType;
+    private final boolean actual;
+
+    ChainPortType(int code, Port.Type actualPortType, boolean actual) {
+        this.code = code;
+        this.actualPortType = actualPortType;
+        this.actual = actual;
     }
 
-    private static String correctMessage(String message, Throwable cause) {
-        return "[caused by " + cause + "]\n" + message;
+    public int code() {
+        return code;
+    }
+
+    public static ChainPortType valueOfCodeOrNull(int code) {
+        for (ChainPortType portType : values()) {
+            if (portType.code == code) {
+                return portType;
+            }
+        }
+        return null;
+    }
+
+    public boolean isActual() {
+        return actual;
+    }
+
+    public boolean isVirtual() {
+        return !actual;
+    }
+
+    public Port.Type actualPortType() {
+        return actualPortType;
     }
 }

@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
 import jakarta.json.JsonValue;
 import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.Objects;
 
@@ -104,6 +105,7 @@ public final class ChainParameter {
     }
 
     private ExecutorSpecification.ControlConf controlConf(ChainBlock block) {
-        return block.executorSpecification != null ? block.executorSpecification.getControl(this.name) : null;
+        ExecutorSpecification specification = block.getExecutorSpecification();
+        return specification != null ? specification.getControl(this.name) : null;
     }
 }

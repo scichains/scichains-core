@@ -29,8 +29,8 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
-import net.algart.executors.api.system.ExtensionSpecification;
-import net.algart.executors.api.system.InstalledExtensions;
+import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.extensions.InstalledExtensions;
 
 import java.io.File;
 import java.nio.file.Files;

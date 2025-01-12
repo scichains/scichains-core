@@ -22,24 +22,38 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
-import net.algart.contexts.InterruptionException;
+import java.util.Objects;
 
-import java.io.Serial;
+final class ChainPortKey {
+    private final ChainPortType type;
+    private final String name;
 
-public class ChainRunningException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 4230778309752343933L;
-
-    public ChainRunningException(String message, Throwable cause) {
-        super(correctMessage(message, cause), cause);
+    ChainPortKey(ChainPortType type, String name) {
+        this.name = Objects.requireNonNull(name);
+        this.type = Objects.requireNonNull(type);
     }
 
-    private static String correctMessage(String message, Throwable cause) {
-        return (cause instanceof InterruptionException ?
-                "INTERRUPTING\n" :
-                "[caused by " + cause + "]\n")
-                + message;
+    @Override
+    public String toString() {
+        return name + "[" + type + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChainPortKey that = (ChainPortKey) o;
+        return name.equals(that.name) && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type);
     }
 }

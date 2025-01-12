@@ -22,38 +22,19 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
-import java.util.Objects;
+import java.io.Serial;
 
-final class ChainPortKey {
-    private final ChainPortType type;
-    private final String name;
+public class ChainLoadingException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = -8781925655456853821L;
 
-    ChainPortKey(ChainPortType type, String name) {
-        this.name = Objects.requireNonNull(name);
-        this.type = Objects.requireNonNull(type);
+    public ChainLoadingException(String message, Throwable cause) {
+        super(correctMessage(message, cause), cause);
     }
 
-    @Override
-    public String toString() {
-        return name + "[" + type + "]";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ChainPortKey that = (ChainPortKey) o;
-        return name.equals(that.name) && type == that.type;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, type);
+    private static String correctMessage(String message, Throwable cause) {
+        return "[caused by " + cause + "]\n" + message;
     }
 }

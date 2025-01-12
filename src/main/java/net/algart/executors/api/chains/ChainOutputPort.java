@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

@@ -24,8 +24,8 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.system.ExtensionSpecification;
-import net.algart.executors.api.system.InstalledExtensions;
+import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.extensions.InstalledExtensions;
 
 import java.util.List;
 

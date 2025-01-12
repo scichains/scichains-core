@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.extensions;
 
 import java.util.ArrayList;
 import java.util.Collections;

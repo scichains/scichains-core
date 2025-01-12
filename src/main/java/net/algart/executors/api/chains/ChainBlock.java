@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
 import net.algart.arrays.Arrays;
 import net.algart.contexts.InterruptionException;
@@ -33,6 +33,7 @@ import net.algart.executors.api.HighLevelException;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 
@@ -57,7 +58,7 @@ public final class ChainBlock {
     Chain chain;
     final String id;
     private final String executorId;
-    final ExecutorSpecification executorSpecification;
+    private final ExecutorSpecification executorSpecification;
     // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
     // We use this information:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
@@ -233,9 +234,10 @@ public final class ChainBlock {
     }
 
     /**
-     * Returns executor's JSON or <code>null</code> if it is unknown (possible for dynamically loaded executors).
+     * Returns executor's specification or <code>null</code> if it is unknown
+     * (possible for dynamically loaded executors).
      *
-     * @return description of the executor.
+     * @return specification of the executor.
      */
     public ExecutorSpecification getExecutorSpecification() {
         return executorSpecification;
@@ -860,7 +862,7 @@ public final class ChainBlock {
         }
     }
 
-    void copyInputPortsToExecutor() {
+    public void copyInputPortsToExecutor() {
         copyInputPortsToExecutor(inputPorts.values());
     }
 

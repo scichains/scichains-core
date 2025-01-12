@@ -25,7 +25,7 @@
 package net.algart.executors.api.system.tests;
 
 import jakarta.json.JsonException;
-import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;

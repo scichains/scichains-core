@@ -26,7 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.system.Chain;
+import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;

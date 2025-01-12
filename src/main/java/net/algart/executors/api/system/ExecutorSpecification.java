@@ -26,6 +26,7 @@ package net.algart.executors.api.system;
 
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.Port;
@@ -1997,10 +1998,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 // (though can be used as internal chain constants)
                 final ControlConf controlConf = controls.getOrDefault(parameterName, new ControlConf());
                 controlConf.setName(parameterName);
-                ParameterValueType valueType = block.executorSpecification != null ?
-                        block.executorSpecification.dataType() : null;
-                ControlEditionType editionType = block.executorSpecification != null ?
-                        block.executorSpecification.editionType() : null;
+                final ExecutorSpecification specification = block.getExecutorSpecification();
+                ParameterValueType valueType = specification != null ? specification.dataType() : null;
+                ControlEditionType editionType = specification != null ? specification.editionType() : null;
                 if (valueType == null) {
                     valueType = ParameterValueType.STRING;
                 }

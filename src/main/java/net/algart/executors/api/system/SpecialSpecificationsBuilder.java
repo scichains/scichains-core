@@ -25,6 +25,8 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.CommonPlatformInformation;
+import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.extensions.InstalledExtensions;
 
 import java.util.Objects;
 import java.util.UUID;

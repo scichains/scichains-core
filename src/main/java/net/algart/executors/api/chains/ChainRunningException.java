@@ -22,48 +22,24 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
+package net.algart.executors.api.chains;
 
-import net.algart.executors.api.data.Port;
+import net.algart.contexts.InterruptionException;
 
-public enum ChainPortType {
-    INPUT_PORT(1, Port.Type.INPUT, true),
-    OUTPUT_PORT(2, Port.Type.OUTPUT, true),
-    INPUT_CONTROL_AS_PORT(3, Port.Type.INPUT, false),
-    OUTPUT_CONTROL_AS_PORT(4, Port.Type.OUTPUT, false);
+import java.io.Serial;
 
-    private final int code;
-    private final Port.Type actualPortType;
-    private final boolean actual;
+public class ChainRunningException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 4230778309752343933L;
 
-    ChainPortType(int code, Port.Type actualPortType, boolean actual) {
-        this.code = code;
-        this.actualPortType = actualPortType;
-        this.actual = actual;
+    public ChainRunningException(String message, Throwable cause) {
+        super(correctMessage(message, cause), cause);
     }
 
-    public int code() {
-        return code;
-    }
-
-    public static ChainPortType valueOfCodeOrNull(int code) {
-        for (ChainPortType portType : values()) {
-            if (portType.code == code) {
-                return portType;
-            }
-        }
-        return null;
-    }
-
-    public boolean isActual() {
-        return actual;
-    }
-
-    public boolean isVirtual() {
-        return !actual;
-    }
-
-    public Port.Type actualPortType() {
-        return actualPortType;
+    private static String correctMessage(String message, Throwable cause) {
+        return (cause instanceof InterruptionException ?
+                "INTERRUPTING\n" :
+                "[caused by " + cause + "]\n")
+                + message;
     }
 }

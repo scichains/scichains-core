@@ -26,8 +26,8 @@ package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.Chain;
-import net.algart.executors.api.system.ChainSpecification;
+import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
 
