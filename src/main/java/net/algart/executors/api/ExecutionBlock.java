@@ -45,6 +45,15 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class ExecutionBlock extends PropertyChecker implements AutoCloseable {
+    public enum ExecutionMode {
+        NORMAL,
+        SILENT;
+
+        public boolean isNormalLogging() {
+            return this == NORMAL;
+        }
+    }
+
     public static String DEFAULT_INPUT_PORT = "input";
     public static String DEFAULT_OUTPUT_PORT = "output";
 
@@ -933,8 +942,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Function called before {@link #execute()}, but, if there is a loop, called only before <b>1st iteration</b>
-     * of the loop.
+     * Function called before {@link #execute(ExecutionMode)}, but,
+     * if there is a loop, called only before <b>first iteration</b> of the loop.
      * If this executor stores some state (like index of the processed
      * file inside a folder), this method should reset it to initial state.
      *
@@ -960,7 +969,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     @UsedForExternalCommunication
     public abstract void execute();
 
-    public void execute(boolean silentMode) {
+    public void execute(ExecutionMode executionMode) {
+        Objects.requireNonNull(executionMode, "Null executionMode");
         execute();
     }
 

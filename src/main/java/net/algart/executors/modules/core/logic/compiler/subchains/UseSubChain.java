@@ -596,7 +596,7 @@ public final class UseSubChain extends FileOperation {
                         // Note: UseSettings and UseChainSettings are executed always
                         try {
                             executor.reset();
-                            executor.execute(true);
+                            executor.execute(ExecutionMode.SILENT);
                         } catch (ChainLoadingException e) {
                             throw e;
                         } catch (RuntimeException | AssertionError | IOError e) {

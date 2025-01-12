@@ -393,17 +393,17 @@ public abstract class Executor extends ExecutionBlock {
 
     @Override
     public void execute() {
-        execute(false);
+        execute(ExecutionMode.NORMAL);
     }
 
     @Override
-    public void execute(boolean silentMode) {
-//        System.out.println("Executing...");
+    public void execute(ExecutionMode executionMode) {
+        Objects.requireNonNull(executionMode, "Null executionMode");
         long t1 = System.nanoTime(), t1Processing, t2Processing;
         resetTiming();
         if (isCancellingExecutionRequested()) {
             requestCancellingFurtherExecution();
-            if (!silentMode && loggingEnabled() && LOGGABLE_DEBUG) {
+            if (executionMode.isNormalLogging() && loggingEnabled() && LOGGABLE_DEBUG) {
                 logDebug(() -> (getExecutorId() == null ? "  " : "  [" + getExecutorId() + "] ")
                         + getClass().getName() + " - execution SKIPPED");
             }
@@ -432,7 +432,7 @@ public abstract class Executor extends ExecutionBlock {
             postprocess();
             t2Processing = System.nanoTime();
         } catch (RuntimeException | Error e) {
-            if (!silentMode) {
+            if (executionMode.isNormalLogging()) {
                 LOG.log(System.Logger.Level.ERROR, "Cannot execute " +
                         getClass().getSimpleName() + " due to: " + e);
             }
@@ -464,7 +464,7 @@ public abstract class Executor extends ExecutionBlock {
             outputTime = t2Processing - endTime;
             processingTime = endTime - startTime - serviceTime.get();
         }
-        if (!silentMode && loggingEnabled() && LOGGABLE_DEBUG) {
+        if (executionMode.isNormalLogging() && loggingEnabled() && LOGGABLE_DEBUG) {
             String timing = (getExecutorId() == null ? "  " : "  [" + getExecutorId() + "] ")
                     + String.format("@%08X ", System.identityHashCode(this))
                     + getClass().getName() + " executed in "
