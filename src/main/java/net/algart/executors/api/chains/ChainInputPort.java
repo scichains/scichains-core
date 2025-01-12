@@ -26,9 +26,9 @@ package net.algart.executors.api.chains;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 public final class ChainInputPort extends ChainPort<ChainOutputPort> {

@@ -24,8 +24,8 @@
 
 package net.algart.executors.api;
 
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.parameters.NoValidParameterException;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
 
 import java.awt.*;

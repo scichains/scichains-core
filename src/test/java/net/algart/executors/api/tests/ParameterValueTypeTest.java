@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.tests;
 
-import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.parameters.ParameterValueType;
 
 public class ParameterValueTypeTest {
     public static void main(String[] args) {

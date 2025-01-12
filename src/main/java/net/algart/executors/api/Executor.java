@@ -26,10 +26,10 @@ package net.algart.executors.api;
 
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledExtensions;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.modules.core.scalars.creation.CreateScalar;
 import net.algart.external.UsedForExternalCommunication;
 

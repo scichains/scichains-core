@@ -1,4 +1,4 @@
-import { toJsonString } from "./jsons.mjs"
+import {toJsonString} from "./jsons.mjs"
 
 export function test(o) {
     console.log("versionECMAScript: " + Graal.versionECMAScript)

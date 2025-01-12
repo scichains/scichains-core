@@ -26,9 +26,10 @@ package net.algart.executors.api.system.tests;
 
 import jakarta.json.JsonException;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.system.*;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorSpecificationSet;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

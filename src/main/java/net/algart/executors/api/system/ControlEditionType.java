@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.parameters.ParameterValueType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -22,11 +22,9 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.data;
+package net.algart.executors.api.parameters;
 
 import jakarta.json.*;
-import net.algart.executors.api.parameters.NoValidParameterException;
-import net.algart.executors.api.parameters.Parameters;
 import net.algart.json.Jsons;
 
 import java.util.Arrays;

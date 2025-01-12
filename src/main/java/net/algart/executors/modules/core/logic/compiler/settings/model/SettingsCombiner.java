@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.logic.compiler.settings.model;
 
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;

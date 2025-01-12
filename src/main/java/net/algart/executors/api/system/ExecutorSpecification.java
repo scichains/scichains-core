@@ -28,8 +28,8 @@ import jakarta.json.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.data.Port;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 

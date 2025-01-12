@@ -26,11 +26,11 @@ package net.algart.executors.modules.core.logic.compiler.mappings.model;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.data.ParameterValueType;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.extensions.ExtensionSpecification;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ControlEditionType;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;

@@ -25,7 +25,7 @@
 package net.algart.executors.api.chains;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.Objects;

@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.logic.compiler.mappings.model;
 
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.math.IRange;
 

@@ -25,7 +25,7 @@
 package net.algart.executors.api.tests;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.ParameterValueType;
+import net.algart.executors.api.parameters.ParameterValueType;
 
 public final class ExecutorParametersTest {
     public static void main(String[] args) throws Exception {
