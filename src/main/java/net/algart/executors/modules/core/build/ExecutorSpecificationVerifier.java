@@ -33,7 +33,8 @@ import net.algart.executors.api.data.Port;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.extensions.ExtensionSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.mappings.model.MappingSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -67,15 +68,15 @@ public final class ExecutorSpecificationVerifier {
         }
         final String app = json.getString("app", null);
         if (app == null) {
-            // It is not a json for execution block
+            // It is not a JSON for execution block
             return null;
         }
         if (!app.equals(ExecutorSpecification.APP_NAME)) {
             if (ignoreOtherApps) {
                 return null;
             }
-            if (app.equals(SettingsCombinerSpecification.APP_NAME)
-                    || app.equals(SettingsCombinerSpecification.APP_NAME_FOR_MAIN)
+            if (app.equals(SettingsSpecification.APP_NAME)
+                    || app.equals(SettingsSpecification.APP_NAME_FOR_MAIN)
                     || app.equals(ExtensionSpecification.APP_NAME)
                     || ChainSpecification.isChainSpecificationContainer(json)) {
                 // - not an error, just another known specification type
@@ -327,11 +328,18 @@ public final class ExecutorSpecificationVerifier {
             for (Path file : files) {
                 if (Files.isDirectory(file)) {
                     verifyAll(file);
-                } else if (file.getFileName().toString().endsWith(".json")) {
+                } else if (needToCheck(file)) {
                     verify(file);
                 }
             }
         }
+    }
+
+    private boolean needToCheck(Path path) {
+        return ExecutorSpecification.isExecutorSpecificationFile(path)
+                || ChainSpecification.isChainSpecificationFile(path)
+                || SettingsSpecification.isSettingsSpecificationFile(path)
+                || MappingSpecification.isMappingSpecificationFile(path);
     }
 
     private static void readPorts(Map<String, DataType> result, JsonObject conf, String portArrayName, Path f) {
@@ -343,8 +351,8 @@ public final class ExecutorSpecificationVerifier {
             if (!(value instanceof JsonObject port)) {
                 throw new JsonException("One of ports is not Json object: " + value);
             }
-            final String name = port.getString("name");
-            final DataType dataType = DataType.valueOfTypeName(port.getString("value_type"));
+            final String name = Jsons.reqString(port, "name", f);
+            final DataType dataType = DataType.valueOfTypeName(Jsons.reqString(port, "value_type", f));
             if (result.put(name, dataType) != null) {
                 throw new JsonException("Duplicate port with name " + name + " in " + f);
             }

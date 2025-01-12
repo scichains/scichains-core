@@ -46,8 +46,8 @@ public final class SettingsCombiner implements Cloneable {
     public static final String PATH_PARENT_FOLDER_SUFFIX = "_parent";
     public static final String PATH_FILE_NAME_SUFFIX = "_name";
 
-    private final SettingsCombinerSpecification specification;
-    // - unlike such classes as Chain or Executor, JSON specification exactly describes the content of this object
+    private final SettingsSpecification specification;
+    // - unlike such classes as Chain or Executor, the settings specification exactly describes this object
 
     private boolean absolutePaths = ABSOLUTE_PATHS_DEFAULT_VALUE;
     private boolean addSettingsClass = false;
@@ -55,12 +55,12 @@ public final class SettingsCombiner implements Cloneable {
 
     private volatile Object customSettingsInformation = null;
 
-    private SettingsCombiner(SettingsCombinerSpecification specification) {
+    private SettingsCombiner(SettingsSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.specification.checkCompleteness();
     }
 
-    public static SettingsCombiner valueOf(SettingsCombinerSpecification specification) {
+    public static SettingsCombiner valueOf(SettingsSpecification specification) {
         return new SettingsCombiner(specification);
     }
 
@@ -100,7 +100,7 @@ public final class SettingsCombiner implements Cloneable {
         return this;
     }
 
-    public SettingsCombinerSpecification specification() {
+    public SettingsSpecification specification() {
         return specification;
     }
 
@@ -200,7 +200,7 @@ public final class SettingsCombiner implements Cloneable {
             final String name = portName(controlConf);
             if (executor.hasOutputPort(name)) {
                 final ParameterValueType valueType = controlConf.getValueType();
-                final String jsonKey = SettingsCombinerSpecification.controlKey(controlConf);
+                final String jsonKey = SettingsSpecification.controlKey(controlConf);
                 JsonValue jsonValue = settings.get(jsonKey);
                 if (jsonValue == null) {
                     jsonValue = controlConf.getDefaultJsonValue();
@@ -276,7 +276,7 @@ public final class SettingsCombiner implements Cloneable {
 
     public static JsonObject getSubSettingsByName(JsonObject parentSettings, String subSettingsName) {
         Objects.requireNonNull(subSettingsName, "Null sub-settings name");
-        return getSubSettingsByKey(parentSettings, SettingsCombinerSpecification.settingsKey(subSettingsName));
+        return getSubSettingsByKey(parentSettings, SettingsSpecification.settingsKey(subSettingsName));
     }
 
     public static JsonObject getSubSettingsByKey(JsonObject parentSettings, String subSettingsKey) {
@@ -303,7 +303,7 @@ public final class SettingsCombiner implements Cloneable {
         Objects.requireNonNull(sourceJson, "Null sourceJson");
         Objects.requireNonNull(overridingJson, "Null overridingJson");
         final Set<String> ignoredKeys = Arrays.stream(ignoredSettingsNames).map(
-                SettingsCombinerSpecification::settingsKey).collect(Collectors.toSet());
+                SettingsSpecification::settingsKey).collect(Collectors.toSet());
         final JsonObjectBuilder builder = Jsons.createObjectBuilder(sourceJson);
         for (Map.Entry<String, JsonValue> entry : overridingJson.entrySet()) {
             if (!ignoredKeys.contains(entry.getKey())) {
@@ -335,13 +335,13 @@ public final class SettingsCombiner implements Cloneable {
         Objects.requireNonNull(executor, "Null executor");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         if (addSettingsClass) {
-            builder.add(SettingsCombinerSpecification.CLASS_KEY, specification.settingsClassMame());
+            builder.add(SettingsSpecification.CLASS_KEY, specification.settingsClassMame());
         }
         for (ExecutorSpecification.ControlConf controlConf : specification.getControls().values()) {
             JsonValue jsonValue = getJsonValue(controlConf, useExecutorParameters ? executor : null);
             assert jsonValue != null;
             jsonValue = replaceToAbsolutePath(executor, controlConf, jsonValue);
-            final String jsonKey = SettingsCombinerSpecification.controlKey(controlConf);
+            final String jsonKey = SettingsSpecification.controlKey(controlConf);
             builder.add(jsonKey, jsonValue);
         }
         return builder.build();

@@ -32,7 +32,7 @@ import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.MainChainSettingsInformation;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChainSettings;
 import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
@@ -373,10 +373,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     // Note: this.chainSpecifications must be already built
-    private SettingsCombinerSpecification buildMultiChainSettingsSpecification(
+    private SettingsSpecification buildMultiChainSettingsSpecification(
             boolean addSubSettingsForVariants,
             Map<String, Chain> helpingChainMap) {
-        final SettingsCombinerSpecification result = new SettingsCombinerSpecification();
+        final SettingsSpecification result = new SettingsSpecification();
         result.setId(specification.getSettingsId());
         result.setName(specification.getName());
         result.setCombineName(specification.getSettingsName());
@@ -394,7 +394,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 final ChainSpecification.Executor executor = chainSpecification.getExecutor();
                 final String name = executor.getName();
                 try {
-                    SettingsCombinerSpecification.checkParameterName(name, null);
+                    SettingsSpecification.checkParameterName(name, null);
                 } catch (JsonException e) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name: "
                             + "it is not allowed as a parameter name in the settings" + multiChainSpecificationFileMessage, e);

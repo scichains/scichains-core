@@ -28,7 +28,7 @@ import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -58,11 +58,11 @@ public final class SubChainToSettingsCombiner {
         final Chain chain = Chain.valueOf(null, executorFactory, chainSpecification);
         final ExecutorSpecification executorSpecification = new ExecutorSpecification();
         executorSpecification.setTo(chain);
-        final SettingsCombinerSpecification settingsCombinerSpecification = new SettingsCombinerSpecification();
-        settingsCombinerSpecification.setId(UUID.randomUUID().toString());
-        settingsCombinerSpecification.setCombineName(
-                SettingsCombinerSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + executorName);
-        settingsCombinerSpecification.setControls(executorSpecification.getControls());
-        settingsCombinerSpecification.write(settingsCombinerSpecificationFile);
+        final SettingsSpecification settingsSpecification = new SettingsSpecification();
+        settingsSpecification.setId(UUID.randomUUID().toString());
+        settingsSpecification.setCombineName(
+                SettingsSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + executorName);
+        settingsSpecification.setControls(executorSpecification.getControls());
+        settingsSpecification.write(settingsCombinerSpecificationFile);
     }
 }

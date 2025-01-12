@@ -38,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
  * in several ports.</p>
  */
 public class ExecutorSpecification extends AbstractConvertibleToJson {
+    public static final String EXECUTOR_FILE_PATTERN = ".*\\.json$";
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
 
@@ -62,6 +64,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final String OUTPUT_RESOURCE_FOLDER_CAPTION = "Resource\u00A0folder";
     public static final String OUTPUT_RESOURCE_FOLDER_ID_HINT =
             "Resource folder (if exist) of the platform, where this executor is installed";
+
+    private static final Pattern COMPILED_EXECUTOR_FILE_PATTERN = Pattern.compile(EXECUTOR_FILE_PATTERN);
 
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Role extends AbstractConvertibleToJson {
@@ -1483,6 +1487,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         result.setTo(executor);
         result.setExecutorId(executorId);
         return result;
+    }
+
+    public static boolean isExecutorSpecificationFile(Path file) {
+        Objects.requireNonNull(file, "Null file");
+        return COMPILED_EXECUTOR_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
     }
 
     public static boolean isExecutorSpecification(JsonObject executorSpecification) {

@@ -29,11 +29,11 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.logic.compiler.settings.model.ReplaceExistingSettingsMode;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.json.Jsons;
 
 public final class AddSubSettings extends Executor implements ReadOnlyExecutionInput {
-    public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
+    public static final String SETTINGS = SettingsSpecification.SETTINGS;
     public static final String SUB_SETTINGS = "sub-settings";
 
     private String subSettingsName = "subsettings";
@@ -78,7 +78,7 @@ public final class AddSubSettings extends Executor implements ReadOnlyExecutionI
         final JsonObject settings = scalarToJson(getInputScalar(SETTINGS, true));
         final JsonObject addedSubSettings = scalarToJson(getInputScalar(SUB_SETTINGS, true));
         final String subSettingsKey = useSubSettingsPrefix ?
-                SettingsCombinerSpecification.settingsKey(subSettingsName) :
+                SettingsSpecification.settingsKey(subSettingsName) :
                 subSettingsName;
         final JsonObject existingSubSettings = settings.getJsonObject(subSettingsKey);
         final JsonObject newSubSettings = replaceExistingSettingsMode.replace(existingSubSettings, addedSubSettings);

@@ -42,8 +42,10 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public final class MappingSpecification extends AbstractConvertibleToJson {
+    public static final String MAPPING_FILE_PATTERN = ".*\\.(json|mapping)$";
     public static final String APP_NAME = "mapping";
     public static final String CURRENT_VERSION = "1.0";
 
@@ -51,6 +53,8 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     public static final String DEFAULT_MAPPING_CATEGORY = "mappings";
     public static final String DEFAULT_MAPPING_CATEGORY_PREFIX =
             DEFAULT_MAPPING_CATEGORY + ChainSpecification.CATEGORY_SEPARATOR;
+
+    private static final Pattern COMPILED_MAPPING_FILE_PATTERN = Pattern.compile(MAPPING_FILE_PATTERN);
 
     public static final class ControlConfTemplate extends AbstractConvertibleToJson {
         private ParameterValueType valueType = ParameterValueType.STRING;
@@ -226,6 +230,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
 
     public static MappingSpecification valueOf(JsonObject mappingSpecification, boolean strictMode) {
         return new MappingSpecification(mappingSpecification, strictMode, null);
+    }
+
+    public static boolean isMappingSpecificationFile(Path file) {
+        Objects.requireNonNull(file, "Null file");
+        return COMPILED_MAPPING_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
     }
 
     public static boolean isMappingSpecification(JsonObject mappingSpecification) {

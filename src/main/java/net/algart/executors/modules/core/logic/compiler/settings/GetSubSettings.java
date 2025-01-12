@@ -27,12 +27,12 @@ package net.algart.executors.modules.core.logic.compiler.settings;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SubSettingsInheritanceMode;
 import net.algart.json.Jsons;
 
 public final class GetSubSettings extends Executor implements ReadOnlyExecutionInput {
-    public static final String SETTINGS = SettingsCombinerSpecification.SETTINGS;
+    public static final String SETTINGS = SettingsSpecification.SETTINGS;
     public static final String SUB_SETTINGS = "sub-settings";
 
     private String subSettingsName = "subsettings";
@@ -75,7 +75,7 @@ public final class GetSubSettings extends Executor implements ReadOnlyExecutionI
     public void process() {
         final JsonObject settings = AddSubSettings.scalarToJson(getInputScalar(SETTINGS, true));
         final String subSettingsKey = useSubSettingsPrefix ?
-                SettingsCombinerSpecification.settingsKey(subSettingsName) :
+                SettingsSpecification.settingsKey(subSettingsName) :
                 subSettingsName;
         JsonObject subSettings = settings.getJsonObject(subSettingsKey);
         if (subSettings == null) {

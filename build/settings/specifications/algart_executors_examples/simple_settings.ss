@@ -1,5 +1,5 @@
 {
-  "app": "settings-combiner",
+  "app": "settings",
   "category": "$no-prefix$~examples.settings",
   "id": "832dc8af-488c-4392-aa01-19f2848e038e",
   "controls": [

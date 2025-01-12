@@ -34,7 +34,7 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
 import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombiner;
-import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsCombinerSpecification;
+import net.algart.executors.modules.core.logic.compiler.settings.model.SettingsSpecification;
 import net.algart.executors.modules.core.logic.compiler.subchains.interpreters.InterpretMultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChain;
 import net.algart.executors.modules.core.logic.compiler.subchains.model.MultiChainSpecification;
@@ -70,7 +70,7 @@ public final class UseMultiChain extends FileOperation {
             "Extract sub-settings \"%%%\" from source JSON";
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION =
             "If set, the parameters of this multi-chain are determined by the section \""
-                    + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
+                    + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
                     + "of the input settings JSON. If cleared, the parameters of this multi-chain "
                     + "are extracted directly from the top level of the input settings JSON. "
                     + "Parameters below have less priority, then the content of input settings.";
@@ -86,7 +86,7 @@ public final class UseMultiChain extends FileOperation {
             "If set, the behavior is fully determined by the input settings port and internal settings "
                     + "of the sub-chain. All parameters below are fully ignored, even "
                     + "if they are not specified in the section \""
-                    + SettingsCombinerSpecification.SUBSETTINGS_PREFIX + "%%%\" "
+                    + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
                     + "of the input settings JSON.\n"
                     + "We recommend to set this flag always in multi-chain configuration, "
                     + "if you are allowing and planning to replace some sub-chains in future.";

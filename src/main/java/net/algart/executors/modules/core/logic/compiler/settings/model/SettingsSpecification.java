@@ -46,11 +46,11 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public final class SettingsCombinerSpecification extends AbstractConvertibleToJson {
-    public static final String SETTINGS_COMBINER_FILE_PATTERN = ".*\\.(json|scm)$";
+public final class SettingsSpecification extends AbstractConvertibleToJson {
+    public static final String SETTINGS_FILE_PATTERN = ".*\\.(json|ss|mss)$";
 
-    public static final String APP_NAME = "settings-combiner";
-    public static final String APP_NAME_FOR_MAIN = "main-settings-combiner";
+    public static final String APP_NAME = "settings";
+    public static final String APP_NAME_FOR_MAIN = "main-settings";
     public static final String CURRENT_VERSION = "1.0";
 
     public static final String SUBSETTINGS_PREFIX = "@";
@@ -64,8 +64,10 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     public static final String DEFAULT_SETTINGS_GET_NAMES_PREFIX = "Get names of ";
     // Note: split and get-names executors are optional, they are created only if splitId/getNamesId are specified!
 
-    private static final Pattern COMPILED_SETTINGS_COMBINER_FILE_PATTERN =
-            Pattern.compile(SETTINGS_COMBINER_FILE_PATTERN);
+    private static final Pattern COMPILED_SETTINGS_FILE_PATTERN = Pattern.compile(SETTINGS_FILE_PATTERN);
+
+    private static final String APP_NAME_ALIAS = "settings-combiner";
+    private static final String APP_NAME_FOR_MAIN_ALIAS = "main-settings-combiner";
 
     private static final int CODE_FOR_MAIN = 2;
     private static final int CODE_FOR_ORDINARY = 1;
@@ -92,7 +94,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
             return this;
         }
 
-        public Path enumItemsFile(SettingsCombinerSpecification specification) {
+        public Path enumItemsFile(SettingsSpecification specification) {
             return enumItemsFile == null ?
                     null :
                     specification.resolve(Paths.get(enumItemsFile), "enum items");
@@ -110,7 +112,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         public void checkCompleteness() {
         }
 
-        public void load(SettingsCombinerSpecification specification) {
+        public void load(SettingsSpecification specification) {
             final Path file = enumItemsFile(specification);
             if (file == null) {
                 return;
@@ -175,11 +177,11 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     private String platformId = null;
     private String platformCategory = null;
 
-    public SettingsCombinerSpecification() {
+    public SettingsSpecification() {
     }
 
-    private SettingsCombinerSpecification(JsonObject json, boolean strictMode, Path file) {
-        final int settingsCombinerType = settingsCombinerType(json);
+    private SettingsSpecification(JsonObject json, boolean strictMode, Path file) {
+        final int settingsCombinerType = settingsType(json);
         if (settingsCombinerType == CODE_FOR_INVALID && strictMode) {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not a settings combiner configuration: no \"app\":\""
@@ -220,13 +222,13 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         }
     }
 
-    public static SettingsCombinerSpecification read(Path settingsCombinerSpecificationFile) throws IOException {
+    public static SettingsSpecification read(Path settingsCombinerSpecificationFile) throws IOException {
         Objects.requireNonNull(settingsCombinerSpecificationFile, "Null settingsCombinerSpecificationFile");
         final JsonObject json = Jsons.readJson(settingsCombinerSpecificationFile);
-        return new SettingsCombinerSpecification(json, true, settingsCombinerSpecificationFile);
+        return new SettingsSpecification(json, true, settingsCombinerSpecificationFile);
     }
 
-    public static SettingsCombinerSpecification readIfValid(
+    public static SettingsSpecification readIfValid(
             Path settingsCombinerSpecificationFile,
             boolean onlyMainCombiner) {
         Objects.requireNonNull(settingsCombinerSpecificationFile, "Null settingsCombinerSpecificationFile");
@@ -237,14 +239,14 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
             // - usually called while scanning folder with .json-files, so, exception should not occur here
             throw new IOError(e);
         }
-        final int settingsCombinerType = settingsCombinerType(json);
+        final int settingsCombinerType = settingsType(json);
         if (settingsCombinerType == CODE_FOR_INVALID || (onlyMainCombiner && settingsCombinerType != CODE_FOR_MAIN)) {
             return null;
         }
-        return new SettingsCombinerSpecification(json, true, settingsCombinerSpecificationFile);
+        return new SettingsSpecification(json, true, settingsCombinerSpecificationFile);
     }
 
-    public static List<SettingsCombinerSpecification> readAllIfValid(
+    public static List<SettingsSpecification> readAllIfValid(
             Path containingJsonPath,
             boolean recursive,
             boolean onlyMainCombiners)
@@ -254,7 +256,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
                 containingJsonPath,
                 recursive,
                 path -> readIfValid(path, onlyMainCombiners),
-                SettingsCombinerSpecification::isSettingsCombinerSpecificationFile);
+                SettingsSpecification::isSettingsSpecificationFile);
     }
 
     public void write(Path settingsCombinerSpecificationFile, OpenOption... options) throws IOException {
@@ -262,17 +264,17 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         Files.writeString(settingsCombinerSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
-    public static SettingsCombinerSpecification valueOf(JsonObject settingsCombinerSpecification, boolean strictMode) {
-        return new SettingsCombinerSpecification(settingsCombinerSpecification, strictMode, null);
+    public static SettingsSpecification valueOf(JsonObject settingsCombinerSpecification, boolean strictMode) {
+        return new SettingsSpecification(settingsCombinerSpecification, strictMode, null);
     }
 
-    public static boolean isSettingsCombinerSpecificationFile(Path file) {
+    public static boolean isSettingsSpecificationFile(Path file) {
         Objects.requireNonNull(file, "Null file");
-        return COMPILED_SETTINGS_COMBINER_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
+        return COMPILED_SETTINGS_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
     }
 
-    public static boolean isSettingsCombinerSpecification(JsonObject settingsCombinerSpecification) {
-        return settingsCombinerType(settingsCombinerSpecification) != CODE_FOR_INVALID;
+    public static boolean isSettingsSpecification(JsonObject settingsSpecification) {
+        return settingsType(settingsSpecification) != CODE_FOR_INVALID;
     }
 
     public static boolean isSettingsKey(String key) {
@@ -293,38 +295,38 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return SUBSETTINGS_PREFIX + subSettingsName;
     }
 
-    public static void checkIdDifference(Collection<SettingsCombinerSpecification> settingsCombinerSpecifications) {
-        Objects.requireNonNull(settingsCombinerSpecifications, "Null settings combiner JSONs collection");
+    public static void checkIdDifference(Collection<SettingsSpecification> settingsSpecifications) {
+        Objects.requireNonNull(settingsSpecifications, "Null settings combiner JSONs collection");
         final Set<String> ids = new HashSet<>();
-        for (SettingsCombinerSpecification settingsCombinerSpecification : settingsCombinerSpecifications) {
-            final String id = settingsCombinerSpecification.getId();
+        for (SettingsSpecification settingsSpecification : settingsSpecifications) {
+            final String id = settingsSpecification.getId();
             assert id != null;
-            final String splitId = settingsCombinerSpecification.getSplitId();
-            final String getNamesId = settingsCombinerSpecification.getGetNamesId();
+            final String splitId = settingsSpecification.getSplitId();
+            final String getNamesId = settingsSpecification.getGetNamesId();
             // - note: splitId/getNamesId MAY be null
             if (id.equals(splitId)) {
                 throw new IllegalArgumentException("Identical id and split_id for settings combiner \""
-                        + settingsCombinerSpecification.getName() + "\": " + id);
+                        + settingsSpecification.getName() + "\": " + id);
             }
             if (id.equals(getNamesId)) {
                 throw new IllegalArgumentException("Identical id and get_names_id for settings combiner \""
-                        + settingsCombinerSpecification.getName() + "\": " + id);
+                        + settingsSpecification.getName() + "\": " + id);
             }
             if (splitId != null && splitId.equals(getNamesId)) {
                 throw new IllegalArgumentException("Identical split_id and get_names_id for settings combiner \""
-                        + settingsCombinerSpecification.getName() + "\": " + splitId);
+                        + settingsSpecification.getName() + "\": " + splitId);
             }
             if (!ids.add(id)) {
                 throw new IllegalArgumentException("Two settings-combiner JSONs have identical IDs " + id
-                        + ", one of them is \"" + settingsCombinerSpecification.getName() + "\"");
+                        + ", one of them is \"" + settingsSpecification.getName() + "\"");
             }
             if (splitId != null && !ids.add(splitId)) {
                 throw new IllegalArgumentException("Two settings-combiner JSONs have identical IDs " + splitId
-                        + ", one of them is \"" + settingsCombinerSpecification.getName() + "\"");
+                        + ", one of them is \"" + settingsSpecification.getName() + "\"");
             }
             if (getNamesId != null && !ids.add(getNamesId)) {
                 throw new IllegalArgumentException("Two settings-combiner JSONs have identical IDs " + getNamesId
-                        + ", one of them is \"" + settingsCombinerSpecification.getName() + "\"");
+                        + ", one of them is \"" + settingsSpecification.getName() + "\"");
             }
         }
     }
@@ -348,7 +350,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return main;
     }
 
-    public SettingsCombinerSpecification setMain(boolean main) {
+    public SettingsSpecification setMain(boolean main) {
         this.main = main;
         return this;
     }
@@ -357,7 +359,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return version;
     }
 
-    public SettingsCombinerSpecification setVersion(String version) {
+    public SettingsSpecification setVersion(String version) {
         this.version = Objects.requireNonNull(version, "Null version");
         return this;
     }
@@ -370,7 +372,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return category;
     }
 
-    public SettingsCombinerSpecification setCategory(String category) {
+    public SettingsSpecification setCategory(String category) {
         this.category = Objects.requireNonNull(category, "Null category");
         this.autogeneratedCategory = false;
         return this;
@@ -384,7 +386,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return name;
     }
 
-    public SettingsCombinerSpecification setName(String name) {
+    public SettingsSpecification setName(String name) {
         Objects.requireNonNull(name, "Null name");
         checkSettingsName(name, null);
         this.name = name;
@@ -400,7 +402,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return combineName;
     }
 
-    public SettingsCombinerSpecification setCombineName(String combineName) {
+    public SettingsSpecification setCombineName(String combineName) {
         this.combineName = Objects.requireNonNull(combineName, "Null combineName");
         return this;
     }
@@ -413,7 +415,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return splitName;
     }
 
-    public SettingsCombinerSpecification setSplitName(String splitName) {
+    public SettingsSpecification setSplitName(String splitName) {
         this.splitName = Objects.requireNonNull(splitName, "Null splitName");
         return this;
     }
@@ -426,7 +428,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return getNamesName;
     }
 
-    public SettingsCombinerSpecification setGetNamesName(String getNamesName) {
+    public SettingsSpecification setGetNamesName(String getNamesName) {
         this.getNamesName = Objects.requireNonNull(getNamesName, "Null getNamesName");
         return this;
     }
@@ -435,7 +437,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return combineDescription;
     }
 
-    public SettingsCombinerSpecification setCombineDescription(String combineDescription) {
+    public SettingsSpecification setCombineDescription(String combineDescription) {
         this.combineDescription = combineDescription;
         return this;
     }
@@ -444,7 +446,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return splitDescription;
     }
 
-    public SettingsCombinerSpecification setSplitDescription(String splitDescription) {
+    public SettingsSpecification setSplitDescription(String splitDescription) {
         this.splitDescription = splitDescription;
         return this;
     }
@@ -453,7 +455,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return getNamesDescription;
     }
 
-    public SettingsCombinerSpecification setGetNamesDescription(String getNamesDescription) {
+    public SettingsSpecification setGetNamesDescription(String getNamesDescription) {
         this.getNamesDescription = getNamesDescription;
         return this;
     }
@@ -462,7 +464,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return id;
     }
 
-    public SettingsCombinerSpecification setId(String id) {
+    public SettingsSpecification setId(String id) {
         this.id = Objects.requireNonNull(id, "Null id");
         return this;
     }
@@ -471,7 +473,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return splitId;
     }
 
-    public SettingsCombinerSpecification setSplitId(String splitId) {
+    public SettingsSpecification setSplitId(String splitId) {
         this.splitId = splitId;
         return this;
     }
@@ -480,7 +482,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return getNamesId;
     }
 
-    public SettingsCombinerSpecification setGetNamesId(String getNamesId) {
+    public SettingsSpecification setGetNamesId(String getNamesId) {
         this.getNamesId = getNamesId;
         return this;
     }
@@ -489,7 +491,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return Collections.unmodifiableMap(controls);
     }
 
-    public SettingsCombinerSpecification setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
+    public SettingsSpecification setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
         controls = ExecutorSpecification.checkControls(controls);
         this.controls = controls;
         for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
@@ -506,7 +508,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return controlExtensions;
     }
 
-    public SettingsCombinerSpecification setControlExtensions(Map<String, ControlConfExtension> controlExtensions) {
+    public SettingsSpecification setControlExtensions(Map<String, ControlConfExtension> controlExtensions) {
         this.controlExtensions = Objects.requireNonNull(controlExtensions, "Null controlExtensions");
         return this;
     }
@@ -515,7 +517,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return Collections.unmodifiableSet(tags);
     }
 
-    public SettingsCombinerSpecification setTags(Set<String> tags) {
+    public SettingsSpecification setTags(Set<String> tags) {
         Objects.requireNonNull(tags, "Null tags");
         this.tags = new LinkedHashSet<>(tags);
         return this;
@@ -534,7 +536,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return platformId;
     }
 
-    public SettingsCombinerSpecification setPlatformId(String platformId) {
+    public SettingsSpecification setPlatformId(String platformId) {
         this.platformId = platformId;
         return this;
     }
@@ -543,7 +545,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         return platformCategory;
     }
 
-    public SettingsCombinerSpecification setPlatformCategory(String platformCategory) {
+    public SettingsSpecification setPlatformCategory(String platformCategory) {
         this.platformCategory = platformCategory;
         return this;
     }
@@ -564,7 +566,7 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     }
 
     public Set<String> controlKeySet() {
-        return controls.values().stream().map(SettingsCombinerSpecification::controlKey).collect(Collectors.toSet());
+        return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
     }
 
     public String settingsClassMame() {
@@ -652,8 +654,8 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
 
     @Override
     public String toString() {
-        return "SettingsCombinerSpecification{" +
-                "settingsCombinerSpecificationFile=" + settingsCombinerSpecificationFile +
+        return "SettingsSpecification{" +
+                "settingsSpecificationFile=" + settingsCombinerSpecificationFile +
                 ", main=" + main +
                 ", version='" + version + '\'' +
                 ", tags='" + tags + '\'' +
@@ -725,12 +727,13 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
         builder.add("controls", controlsBuilder.build());
     }
 
-    private static int settingsCombinerType(JsonObject settingsCombinerSpecification) {
+    private static int settingsType(JsonObject settingsCombinerSpecification) {
         Objects.requireNonNull(settingsCombinerSpecification, "Null settingsCombinerSpecification");
         final String app = settingsCombinerSpecification.getString("app", null);
-        return APP_NAME.equals(app) ?
-                CODE_FOR_ORDINARY : APP_NAME_FOR_MAIN.equals(app) ?
-                CODE_FOR_MAIN : CODE_FOR_INVALID;
+        return APP_NAME.equals(app) || APP_NAME_ALIAS.equals(app) ?
+                CODE_FOR_ORDINARY :
+                APP_NAME_FOR_MAIN.equals(app) || APP_NAME_FOR_MAIN_ALIAS.equals(app) ?
+                        CODE_FOR_MAIN : CODE_FOR_INVALID;
     }
 
     private static void checkSettingsName(String name, Path file) throws JsonException {
@@ -754,8 +757,8 @@ public final class SettingsCombinerSpecification extends AbstractConvertibleToJs
     }
 
     public static void main(String[] args) throws IOException {
-        SettingsCombinerSpecification settingsCombinerSpecification = read(Paths.get(args[0]));
-        System.out.println(settingsCombinerSpecification);
-        System.out.println(Jsons.toPrettyString(settingsCombinerSpecification.toJson()));
+        final SettingsSpecification settingsSpecification = read(Paths.get(args[0]));
+        System.out.println(settingsSpecification);
+        System.out.println(Jsons.toPrettyString(settingsSpecification.toJson()));
     }
 }
