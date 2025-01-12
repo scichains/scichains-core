@@ -283,9 +283,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     public static String controlKey(ExecutorSpecification.ControlConf controlConf) {
         Objects.requireNonNull(controlConf, "Null controlConf");
         final String name = controlConf.getName();
-        return controlConf.getValueType() == ParameterValueType.SETTINGS ?
-                settingsKey(name) :
-                name;
+        return controlConf.getValueType().isSettings() ? settingsKey(name) : name;
     }
 
     public static String settingsKey(String subSettingsName) {

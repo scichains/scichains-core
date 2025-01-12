@@ -601,7 +601,7 @@ public class UseSettings extends FileOperation {
         for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : specification.getControls().entrySet()) {
             final String name = entry.getKey();
             ExecutorSpecification.ControlConf controlConf = entry.getValue().clone();
-            if (controlConf.getValueType() == ParameterValueType.SETTINGS && !subChainMode) {
+            if (controlConf.getValueType().isSettings() && !subChainMode) {
                 final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf();
                 portConf.setName(name);
                 portConf.setCaption(controlConf.getCaption());
@@ -627,7 +627,7 @@ public class UseSettings extends FileOperation {
                     .setCaption(controlConf.getCaption())
                     .setHint(controlConf.getDescription())
                     .setValueType(DataType.SCALAR);
-            if (controlConf.getValueType() == ParameterValueType.SETTINGS) {
+            if (controlConf.getValueType().isSettings()) {
                 portConf.setAdvanced(true);
             }
             result.addOutPort(portConf);

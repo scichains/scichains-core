@@ -41,6 +41,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Settings combiner, allowing to make and parse settings JSON.
+ *
+ * <p>Note: there is no special class "Settings", because we use JSON to store hierarchical settings.
+ */
 public final class SettingsCombiner implements Cloneable {
     public static final boolean ABSOLUTE_PATHS_DEFAULT_VALUE = true;
     public static final String PATH_PARENT_FOLDER_SUFFIX = "_parent";
@@ -210,7 +215,7 @@ public final class SettingsCombiner implements Cloneable {
                 }
                 assert jsonValue != null;
                 final Object value;
-                if (valueType == ParameterValueType.SETTINGS) {
+                if (valueType.isSettings()) {
                     JsonObject subSettings = jsonValue instanceof JsonObject ?
                             (JsonObject) jsonValue :
                             Jsons.newEmptyJson();
@@ -353,7 +358,7 @@ public final class SettingsCombiner implements Cloneable {
         JsonValue jsonValue = null;
         if (executor != null) {
             final Parameters properties = executor.parameters();
-            if (valueType == ParameterValueType.SETTINGS && executor.hasInputPort(name)) {
+            if (valueType.isSettings() && executor.hasInputPort(name)) {
                 final SScalar scalar = executor.getInputScalar(name, true);
                 if (scalar.isInitialized()) {
                     final String s = scalar.getValueOrDefault("").trim();

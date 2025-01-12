@@ -457,6 +457,10 @@ public enum ParameterValueType {
         return this != SETTINGS;
     }
 
+    public boolean isSettings() {
+        return this == SETTINGS;
+    }
+
     public static ParameterValueType valueOfTypeName(String name) {
         final ParameterValueType result = ALL_TYPES.get(name);
         if (result == null) {
