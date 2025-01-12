@@ -43,7 +43,7 @@ public final class ReloadInstalledChainSettings extends UseChainSettings {
     }
 
     @Override
-    protected boolean isExistingSettingsCombinersRequired() {
+    protected boolean isExistingSettingsRequired() {
         return false;
     }
 

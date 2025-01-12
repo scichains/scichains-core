@@ -47,7 +47,7 @@ public final class SubChainToSettingsCombiner {
         }
 
         final Path chainSpecificationFile = Paths.get(args[0]);
-        final Path settingsCombinerSpecificationFile = Paths.get(args[1]);
+        final Path settingsSpecificationFile = Paths.get(args[1]);
         final String executorName = args[2];
 
         final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance(SESSION_ID);
@@ -63,6 +63,6 @@ public final class SubChainToSettingsCombiner {
         settingsSpecification.setCombineName(
                 SettingsSpecification.DEFAULT_SETTINGS_COMBINE_PREFIX + executorName);
         settingsSpecification.setControls(executorSpecification.getControls());
-        settingsSpecification.write(settingsCombinerSpecificationFile);
+        settingsSpecification.write(settingsSpecificationFile);
     }
 }

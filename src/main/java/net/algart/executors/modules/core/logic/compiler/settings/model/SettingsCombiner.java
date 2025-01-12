@@ -104,8 +104,8 @@ public final class SettingsCombiner implements Cloneable {
         return specification;
     }
 
-    public Path settingsCombinerSpecificationFile() {
-        return specification.getSettingsCombinerSpecificationFile();
+    public Path settingsSpecificationFile() {
+        return specification.getSettingsSpecificationFile();
     }
 
     public String id() {

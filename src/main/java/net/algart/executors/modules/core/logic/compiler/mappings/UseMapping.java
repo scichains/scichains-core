@@ -130,10 +130,10 @@ public class UseMapping extends FileOperation {
                 + "or \"Mapping JSON content\" must be non-empty");
     }
 
-    public void useSeveralPaths(List<Path> settingsCombinerSpecificationPaths) throws IOException {
-        Objects.requireNonNull(settingsCombinerSpecificationPaths, "Null settings combiner paths");
+    public void useSeveralPaths(List<Path> mappingSpecificationsPaths) throws IOException {
+        Objects.requireNonNull(mappingSpecificationsPaths, "Null mapping paths");
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : settingsCombinerSpecificationPaths) {
+        for (Path path : mappingSpecificationsPaths) {
             usePath(path, sb);
         }
         if (sb != null) {

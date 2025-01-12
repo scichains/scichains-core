@@ -209,16 +209,16 @@ public class UseSettings extends FileOperation {
                 + "or \"Settings combiner JSON content\" must be non-empty");
     }
 
-    public void useSeveralPaths(List<Path> settingsCombinerSpecificationPaths) throws IOException {
-        Objects.requireNonNull(settingsCombinerSpecificationPaths, "Null settings combiner paths");
+    public void useSeveralPaths(List<Path> settingsSpecificationPaths) throws IOException {
+        Objects.requireNonNull(settingsSpecificationPaths, "Null settings paths");
         mainSettings = false;
-        // - we need to reinitialize this field for improbable case of re-using this executor
-        if (isMainChainSettings() && settingsCombinerSpecificationPaths.size() > 1) {
+        // - we need to reinitialize this field for an improbable case of re-using this executor
+        if (isMainChainSettings() && settingsSpecificationPaths.size() > 1) {
             throw new IllegalArgumentException("Processing several paths is not allowed here, but you specified "
-                    + settingsCombinerSpecificationPaths.size() + " paths: " + settingsCombinerSpecificationPaths);
+                    + settingsSpecificationPaths.size() + " paths: " + settingsSpecificationPaths);
         }
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : settingsCombinerSpecificationPaths) {
+        for (Path path : settingsSpecificationPaths) {
             usePath(path, null, sb);
         }
         if (sb != null) {
@@ -226,30 +226,30 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    public void usePath(Path settingsCombinerSpecificationPath) throws IOException {
-        usePath(settingsCombinerSpecificationPath, null, null);
+    public void usePath(Path settingsSpecificationPath) throws IOException {
+        usePath(settingsSpecificationPath, null, null);
     }
 
     public void usePath(
-            Path settingsCombinerSpecificationPath,
+            Path settingsSpecificationPath,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(settingsCombinerSpecificationPath, "Null settings combiner path");
+        Objects.requireNonNull(settingsSpecificationPath, "Null settings combiner path");
         mainSettings = false;
         // - we need to reinitialize this field for improbable case of re-using this executor
         // (well be set again in use() method)
         final List<SettingsSpecification> settingsSpecifications;
-        if (Files.isDirectory(settingsCombinerSpecificationPath)) {
+        if (Files.isDirectory(settingsSpecificationPath)) {
             settingsSpecifications = SettingsSpecification.readAllIfValid(
-                    settingsCombinerSpecificationPath, recursiveScanning, isMainChainSettings());
-            if (isExistingSettingsCombinersRequired() && settingsSpecifications.isEmpty()) {
+                    settingsSpecificationPath, recursiveScanning, isMainChainSettings());
+            if (isExistingSettingsRequired() && settingsSpecifications.isEmpty()) {
                 throw new IllegalArgumentException("No any standard chain settings was found in a folder "
-                        + settingsCombinerSpecificationPath);
+                        + settingsSpecificationPath);
             }
         } else {
             settingsSpecifications =
-                    Collections.singletonList(SettingsSpecification.read(settingsCombinerSpecificationPath));
+                    Collections.singletonList(SettingsSpecification.read(settingsSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         SettingsSpecification.checkIdDifference(settingsSpecifications);
@@ -258,7 +258,7 @@ public class UseSettings extends FileOperation {
         for (int i = 0; i < n; i++) {
             final SettingsSpecification settingsSpecification = settingsSpecifications.get(i);
             logDebug("Loading settings combiner " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + settingsSpecification.getSettingsCombinerSpecificationFile().toAbsolutePath() + "...");
+                    + "from " + settingsSpecification.getSettingsSpecificationFile().toAbsolutePath() + "...");
             if (platform != null) {
                 settingsSpecification.addTags(platform.getTags());
                 settingsSpecification.setPlatformId(platform.getId());
@@ -271,7 +271,7 @@ public class UseSettings extends FileOperation {
         }
         if (!showContent && report != null) {
             for (SettingsSpecification settingsSpecification : settingsSpecifications) {
-                report.append(settingsSpecification.getSettingsCombinerSpecificationFile()).append("\n");
+                report.append(settingsSpecification.getSettingsSpecificationFile()).append("\n");
             }
         }
         if (n == 1) {
@@ -288,9 +288,9 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    public void useContent(String settingsCombinerSpecificationContent) {
+    public void useContent(String settingsSpecificationContent) {
         final SettingsSpecification settingsSpecification = SettingsSpecification.valueOf(
-                Jsons.toJson(settingsCombinerSpecificationContent),
+                Jsons.toJson(settingsSpecificationContent),
                 false);
         // - we don't require strict accuracy for JSON, entered in a little text area
         logDebug("Using settings combiner '"
@@ -445,7 +445,7 @@ public class UseSettings extends FileOperation {
      * <ol>
      *     <li>if this function uses a directory, then only "main-settings-combiner" JSONs will be loaded;</li>
      *     <li>at least 1 actual executor must exist in the list of all executors, used by this function (but it
-     *     can be changed by overriding {@link #isExistingSettingsCombinersRequired()});</li>
+     *     can be changed by overriding {@link #isExistingSettingsRequired()});</li>
      *     <li>list of more than 1 paths is not supported;</li>
      *     <li>executors will contain "owner" section and the "role" will be set to "main":
      *     it helps execution system to detect, which
@@ -479,7 +479,7 @@ public class UseSettings extends FileOperation {
         return isMainChainSettings();
     }
 
-    protected boolean isExistingSettingsCombinersRequired() {
+    protected boolean isExistingSettingsRequired() {
         return isMainChainSettings();
     }
 
@@ -524,7 +524,7 @@ public class UseSettings extends FileOperation {
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         // - adds JavaConf, (maybe) parameters and some ports
-        result.setSourceInfo(settingsCombiner.settingsCombinerSpecificationFile(), null);
+        result.setSourceInfo(settingsCombiner.settingsSpecificationFile(), null);
         if (settingsCombiner.hasPlatformId()) {
             result.setPlatformId(settingsCombiner.platformId());
         }
