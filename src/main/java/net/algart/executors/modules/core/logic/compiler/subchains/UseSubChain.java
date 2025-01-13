@@ -523,11 +523,11 @@ public final class UseSubChain extends FileOperation {
     }
 
     static ExecutorSpecification.ControlConf createVisibleResultControl(
-            ExecutorSpecification executorSpecification,
+            ExecutorSpecification specification,
             String parameterName) {
         String firstEnumValue = null;
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ExecutorSpecification.PortConf portConf : executorSpecification.getOutPorts().values()) {
+        for (ExecutorSpecification.PortConf portConf : specification.getOutPorts().values()) {
             final String executorPortName = portConf.getName();
             if (firstEnumValue == null && !executorPortName.equals(CombineSettings.SETTINGS)) {
                 firstEnumValue = executorPortName;
@@ -540,7 +540,7 @@ public final class UseSubChain extends FileOperation {
         }
         if (firstEnumValue == null) {
             // - there is only SETTINGS port
-            firstEnumValue = executorSpecification.getOutPorts().values().iterator().next().getName();
+            firstEnumValue = specification.getOutPorts().values().iterator().next().getName();
         }
         ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(parameterName);
@@ -611,7 +611,7 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    private static void addChainSettingsCombiner(ExecutorSpecification executorSpecification, Chain chain) {
+    private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
         final ChainBlock useChainSettingsBlock = findUseSettings(chain);
         if (useChainSettingsBlock == null) {
             return;
@@ -620,9 +620,9 @@ public final class UseSubChain extends FileOperation {
         final SettingsCombiner combiner = useChainSettings.settingsCombiner();
         // - combiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
         chain.setCustomChainInformation(new MainChainSettingsInformation(chain, combiner));
-        UseSettings.addExecuteSubChainControlsAndPorts(executorSpecification, combiner);
-        executorSpecification.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(combiner.id());
-        addSettingsPorts(executorSpecification);
+        UseSettings.addExecuteSubChainControlsAndPorts(result, combiner);
+        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(combiner.id());
+        addSettingsPorts(result);
     }
 
     public static ChainBlock findUseSettings(Chain chain) {

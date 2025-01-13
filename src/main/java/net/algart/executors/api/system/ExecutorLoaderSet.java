@@ -38,9 +38,9 @@ public final class ExecutorLoaderSet {
         }
     }
 
-    public List<ExecutorLoader> loaderList() {
+    public List<ExecutorLoader> list() {
         synchronized (loaders) {
-            return new ArrayList<>(loaders);
+            return Collections.unmodifiableList(loaders);
         }
     }
 
@@ -72,7 +72,7 @@ public final class ExecutorLoaderSet {
             InstantiationMode instantiationMode)
             throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
-        final List<ExecutorLoader> loaders = loaderList();
+        final List<ExecutorLoader> loaders = list();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
             final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification, instantiationMode);
@@ -171,7 +171,7 @@ public final class ExecutorLoaderSet {
      */
     public Map<String, String> serializedSessionSpecifications(String sessionId, boolean includeGlobalSession) {
         final Map<String, String> result = new LinkedHashMap<>();
-        for (ExecutorLoader loader : loaderList()) {
+        for (ExecutorLoader loader : list()) {
             if (includeGlobalSession) {
                 result.putAll(loader.serializedSessionSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
@@ -185,7 +185,7 @@ public final class ExecutorLoaderSet {
 
     public Set<String> allSessionExecutorIds(String sessionId, boolean includeGlobalSession) {
         final Set<String> result = new LinkedHashSet<>();
-        for (ExecutorLoader loader : loaderList()) {
+        for (ExecutorLoader loader : list()) {
             if (includeGlobalSession) {
                 result.addAll(loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
@@ -199,7 +199,7 @@ public final class ExecutorLoaderSet {
 
     public void clearSession(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
-        for (ExecutorLoader loader : loaderList()) {
+        for (ExecutorLoader loader : list()) {
             loader.clearSession(sessionId);
         }
     }

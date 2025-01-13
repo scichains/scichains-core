@@ -1502,12 +1502,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static void checkIdDifference(Collection<? extends ExecutorSpecification> executorSpecifications) {
         Objects.requireNonNull(executorSpecifications, "Null executor specifications collection");
         final Set<String> ids = new HashSet<>();
-        for (ExecutorSpecification executorSpecification : executorSpecifications) {
-            final String id = executorSpecification.getExecutorId();
+        for (ExecutorSpecification specification : executorSpecifications) {
+            final String id = specification.getExecutorId();
             assert id != null;
             if (!ids.add(id)) {
                 throw new IllegalArgumentException("Two executor JSONs have identical IDs " + id
-                        + ", one of them is \"" + executorSpecification.getName() + "\"");
+                        + ", one of them is \"" + specification.getName() + "\"");
             }
         }
     }

@@ -36,7 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-// Note: current version does not actually need cloning, but we implement clone() for possible future extensions.
+// Note: the current version does not need cloning, but we implement clone() for possible future extensions.
 public final class Mapping implements Cloneable {
     private final MappingSpecification specification;
     private final List<String> keys;

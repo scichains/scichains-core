@@ -62,13 +62,13 @@ public final class ExecutorSpecificationSet {
         return InstalledSetHolder.builtInSet();
     }
 
-    public void add(ExecutorSpecification executorSpecification) {
-        Objects.requireNonNull(executorSpecification, "Null executorSpecification");
-        add(executorSpecification.getExecutorId(), executorSpecification);
+    public void add(ExecutorSpecification specification) {
+        Objects.requireNonNull(specification, "Null specification");
+        add(specification.getExecutorId(), specification);
     }
 
-    public void add(String executorId, ExecutorSpecification executorSpecification) {
-        add(executorId, executorSpecification, null);
+    public void add(String executorId, ExecutorSpecification specification) {
+        add(executorId, specification, null);
     }
 
     public ExecutorSpecificationSet addFolder(Path folder, boolean onlyBuiltIn) throws IOException {
@@ -96,23 +96,23 @@ public final class ExecutorSpecificationSet {
                     continue;
                 }
                 if (Files.isRegularFile(file) && file.getFileName().toString().toLowerCase().endsWith(".json")) {
-                    ExecutorSpecification executorSpecification = ExecutorSpecification.readIfValid(file);
-                    if (executorSpecification != null) {
-                        if (onlyBuiltIn && !executorSpecification.isJavaExecutor()) {
+                    ExecutorSpecification specification = ExecutorSpecification.readIfValid(file);
+                    if (specification != null) {
+                        if (onlyBuiltIn && !specification.isJavaExecutor()) {
                             continue;
                         }
-                        executorSpecification.addSystemExecutorIdPort();
+                        specification.addSystemExecutorIdPort();
                         if (platform != null) {
-                            executorSpecification.updateCategoryPrefix(platform.getCategory());
-                            executorSpecification.addTags(platform.getTags());
-                            executorSpecification.setPlatformId(platform.getId());
-                            executorSpecification.addSystemPlatformIdPort();
+                            specification.updateCategoryPrefix(platform.getCategory());
+                            specification.addTags(platform.getTags());
+                            specification.setPlatformId(platform.getId());
+                            specification.addSystemPlatformIdPort();
                             // - but not resource folder: for Java executors it is usually not helpful
                             // (PathPropertyReplacement works better)
                         }
-                        add(executorSpecification.getExecutorId(), executorSpecification, file);
+                        add(specification.getExecutorId(), specification, file);
                         LOG.log(System.Logger.Level.TRACE,
-                                () -> "Executor " + executorSpecification.getExecutorId() + " loaded from " + file);
+                                () -> "Executor " + specification.getExecutorId() + " loaded from " + file);
                     } else {
                         LOG.log(System.Logger.Level.TRACE,
                                 () -> "File " + file + " skipped: it is not an executor's JSON");

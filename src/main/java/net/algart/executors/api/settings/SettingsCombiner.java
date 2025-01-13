@@ -113,14 +113,31 @@ public final class SettingsCombiner implements Cloneable {
         return specification.getSettingsSpecificationFile();
     }
 
+    /**
+     * Return settings ID. This is always equal to executor ID of the corresponding "Combine settings" executor.
+     *
+     * @return settings ID.
+     */
     public String id() {
         return specification.getId();
     }
 
+    /**
+     * Returns executor ID for the corresponding "Split settings" executor.
+     * May be <code>null</code>, in which case that executor is not created.
+     *
+     * @return executor ID for "Split settings".
+     */
     public String splitId() {
         return specification.getSplitId();
     }
 
+    /**
+     * Returns executor ID for the corresponding "Get names" executor.
+     * May be <code>null</code>, in which case that executor is not created.
+     *
+     * @return executor ID for "Get names of settings".
+     */
     public String getNamesId() {
         return specification.getGetNamesId();
     }

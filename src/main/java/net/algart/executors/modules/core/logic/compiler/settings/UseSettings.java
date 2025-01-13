@@ -57,24 +57,26 @@ public class UseSettings extends FileOperation {
     public static final String ALL_SETTINGS_PARAMETER_NAME = SettingsSpecification.SETTINGS;
     public static final String ALL_SETTINGS_PARAMETER_CAPTION = "settings (all)";
     public static final String ALL_SETTINGS_PARAMETER_DESCRIPTION =
-            "If contains non-empty string and if the input \"settings\" port is NOT initialized, "
-                    + "it should be JSON, containing ALL settings for this combiner "
-                    + "(in other words, full settings set for the chain). "
-                    + "It will be used instead of input \"settings\" JSON. "
-                    + "In this case, as well as \"settings\" port is initialized by some JSON, "
-                    + "all parameters below will be overridden by this JSON.\n"
-                    + "Note: \"overriding\" does not mean \"replacing\": if JSON does not contain some settings, "
-                    + "this function will use settings from parameters below or from other input settings ports.";
+            "If contains non-empty string and if the input \"settings\" port is NOT initialized, " +
+                    "it should be JSON, containing ALL settings for this combiner " +
+                    "(in other words, full settings set for the chain). " +
+                    "It will be used instead of input \"settings\" JSON. " +
+                    "In this case, as well as \"settings\" port is initialized by some JSON, " +
+                    "all parameters below will be overridden by this JSON.\n" +
+                    "Note: \"overriding\" does not mean \"replacing\": if JSON does not contain some settings, " +
+                    "this function will use settings from parameters below or from other input settings ports.";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_NAME = "_cs___absolutePaths";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_CAPTION = "Auto-replace paths to absolute";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_DESCRIPTION =
-            "If set, all parameters below, describing paths to files or folders, are automatically replaced "
-                    + "with full absolute disk paths. It is useful, if you need to pass these parameters "
-                    + "to other sub-chains, that probably work in other \"current\" directories.\n"
-                    + "Also in this case you can use in such parameters Java system properties: "
-                    + "\"${name}\", like \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", "
-                    + "\"${path.name}\", \"${file.name.ext}\", \"${file.name}\" "
-                    + "(chain path/file name with/without extension).";
+            "If set, all parameters below, describing paths to files or folders, are automatically replaced " +
+                    "with full absolute disk paths. It can be useful if you need to pass these parameters " +
+                    "to other sub-chains, that probably work in other \"current\" directories.\n" +
+                    "Also, in this case you can use in such parameters Java system properties: " +
+                    "\"${name}\", like \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", " +
+                    "\"${path.name}\", \"${file.name.ext}\", \"${file.name}\" " +
+                    "(chain path/file name with/without extension).\n" +
+                    "NOTE: this flag does not affect the settings JSON passed via \"settings (all)\" " +
+                    "parameter or via the input \"settings\" port.";
 
 // See commented code in CombineSettings.process() and addInputControlsAndPorts()
 //    public static final String ADD_SETTINGS_CLASS_PARAMETER_NAME = "_cs___addSettingsName";
@@ -89,34 +91,34 @@ public class UseSettings extends FileOperation {
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION =
             "Extract sub-settings \"%%%\" from input \"settings\" JSON";
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DESCRIPTION =
-            "If set, the parameters of this sub-chain are determined by the section \""
-                    + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
-                    + "of the input settings JSON. If cleared, the parameters of this sub-chain "
-                    + "are extracted directly from the top level of the input settings JSON. "
-                    + "Parameters below have less priority, they are used only if there are no "
-                    + "parameters with same names in the input settings JSON or its section \""
-                    + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
-                    + "and if the following flag is not set.\n"
-                    + "Normal state of this flag — set to true. Usually every sub-chain B1, B2, ... of your chain B "
-                    + "is customized by some sub-settings of main JSON settings, specifying behaviour of the chain B."
-                    + "However, sometimes you need just to pass all settings to next sub-chaining level "
-                    + "without changes; then you can clear this flag.";
+            "If set, the parameters of this sub-chain are determined by the section \"" +
+                    SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
+                    "of the input settings JSON. If cleared, the parameters of this sub-chain " +
+                    "are extracted directly from the top level of the input settings JSON. " +
+                    "Parameters below have less priority, they are used only if there are no " +
+                    "parameters with same names in the input settings JSON or its section \"" +
+                    SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
+                    "and if the following flag is not set.\n" +
+                    "Normal state of this flag — set to true. Usually every sub-chain B1, B2, ... of your chain B " +
+                    "is customized by some sub-settings of main JSON settings, specifying behaviour of the chain B." +
+                    "However, sometimes you need just to pass all settings to next sub-chaining level " +
+                    "without changes; then you can clear this flag.";
     public static final boolean EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT = true;
     public static final String IGNORE_PARAMETERS_PARAMETER_NAME = "_cs___ignoreInputParameter";
     public static final String IGNORE_PARAMETERS_PARAMETER_CAPTION = "Ignore parameters below";
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
-            "If set, the behavior is completely determined by the input settings port and internal settings "
-                    + "of the sub-chain. All parameters below are ignored.\n"
-                    + "We recommend to set this flag always in multi-chain configuration, "
-                    + "if you allow and plan replacing some sub-chains in future.";
+            "If set, the behavior is completely determined by the input settings port and internal settings " +
+                    "of the sub-chain. All parameters below are ignored.\n" +
+                    "We recommend to set this flag always in multi-chain configuration, " +
+                    "if you allow and plan replacing some sub-chains in future.";
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
     // - Note: when we add IGNORE_PARAMETERS_PARAMETER_DESCRIPTION, we never add PORTS for sub-settings,
     // only (usually advanced) parameters - see UseSettings.addInputControlsAndPorts
     public static final String LOG_SETTINGS_PARAMETER_NAME = "_cs___logSettings";
     public static final String LOG_SETTINGS_PARAMETER_CAPTION = "Log settings";
     public static final String LOG_SETTINGS_PARAMETER_DESCRIPTION =
-            "If set, all settings, passed to the sub-chain, are logged with level WARNING. "
-                    + "May be used for debugging needs.";
+            "If set, all settings, passed to the sub-chain, are logged with level WARNING. " +
+                    "Can be used for debugging needs.";
 
     public static final String PATH_PARENT_FOLDER_HINT =
             "Parent folder of the previous path.";
@@ -137,7 +139,7 @@ public class UseSettings extends FileOperation {
 
     private boolean mainSettings;
     // - See comments to isMainChainSettings()
-    // This variable affects to result of that function (when it is not overridden)
+    // This variable affects the result of that function (when it is not overridden)
     // only in points 4 and later. Points 1-3 are always checked when mainSettings=false.
     private SettingsCombiner settingsCombiner = null;
     private ExecutorSpecification combineExecutorSpecification = null;
@@ -460,7 +462,7 @@ public class UseSettings extends FileOperation {
      * <p>This function (by default) returns a value of internal field, that is loaded from the specification file
      * (excepting points 1-3, where this function returns <code>false</code>).
      * In {@link UseChainSettings} class, this function is overridden always returns <code>true</code>.
-     * So, the behaviour is usually uniquely defined by the specification file.</p>
+     * So, the behavior is usually uniquely defined by the specification file.</p>
      * <p>There is only one exception. If, in some chain A, you call
      * {@link UseChainSettings} for <i>usual</i> (non-main) settings, and also,
      * in other chain B, load the same settings via {@link UseSettings}, then the results will depend
@@ -531,6 +533,7 @@ public class UseSettings extends FileOperation {
         result.setLanguage(SETTINGS_LANGUAGE);
         result.setTags(settingsCombiner.tags());
         result.setCategory(ExecutorSpecification.correctDynamicCategory(settingsCombiner.category()));
+        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(settingsCombiner.id());
         result.updateCategoryPrefix(settingsCombiner.platformCategory());
         return result;
     }
