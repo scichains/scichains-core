@@ -619,6 +619,7 @@ public class UseSettings extends FileOperation {
             }
             result.addControl(controlConf);
         }
+        result.setSettings(settingsCombiner.specification());
     }
 
     private static void addOutputPorts(ExecutorSpecification result, SettingsCombiner settingsCombiner) {

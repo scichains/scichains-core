@@ -30,6 +30,7 @@ import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -1372,6 +1373,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private Map<String, PortConf> inPorts = new LinkedHashMap<>();
     private Map<String, PortConf> outPorts = new LinkedHashMap<>();
     private Map<String, ControlConf> controls = new LinkedHashMap<>();
+    private SettingsSpecification settings = null;
     private SourceInfo sourceInfo = null;
     // - note: "sourceInfo" field is not usually loaded from FILE, it should be defined by external means
     // (but it can be loaded from JSON STRING while program interactions)
@@ -1434,6 +1436,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     final ControlConf control = new ControlConf(jsonObject, file);
                     putOrException(controls, control.name, control, file, "controls");
                 }
+            }
+            final JsonObject settingsJson = json.getJsonObject("settings");
+            if (settingsJson != null) {
+                this.settings = SettingsSpecification.valueOf(settingsJson);
             }
             final JsonObject sourceJson = json.getJsonObject("source");
             if (sourceJson != null) {
@@ -1687,6 +1693,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public final ExecutorSpecification setControls(Map<String, ControlConf> controls) {
         this.controls = checkControls(controls);
+        return this;
+    }
+
+    public SettingsSpecification getSettings() {
+        return settings;
+    }
+
+    public ExecutorSpecification setSettings(SettingsSpecification settings) {
+        this.settings = settings;
         return this;
     }
 
@@ -2068,6 +2083,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 ",\n  inPorts=" + inPorts +
                 ",\n  outPorts=" + outPorts +
                 ",\n  controls=" + controls +
+                ",\n  settings=" + settings +
                 ",\n  javaExecutor=" + javaExecutor +
                 ",\n  chainExecutor=" + chainExecutor +
                 ",\n  sourceInfo=" + sourceInfo +
@@ -2192,6 +2208,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             controlsBuilder.add(control.toJson());
         }
         builder.add("controls", controlsBuilder.build());
+        if (settings != null) {
+            builder.add("settings", settings.toJson());
+        }
         if (sourceInfo != null) {
             builder.add("source", sourceInfo.toJson());
         }

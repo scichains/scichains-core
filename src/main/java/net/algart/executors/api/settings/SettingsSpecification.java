@@ -261,6 +261,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         Files.writeString(settingsSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
+    public static SettingsSpecification valueOf(JsonObject settingsSpecification) {
+        return valueOf(settingsSpecification, true);
+    }
+
     public static SettingsSpecification valueOf(JsonObject settingsSpecification, boolean strictMode) {
         return new SettingsSpecification(settingsSpecification, strictMode, null);
     }

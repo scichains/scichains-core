@@ -612,20 +612,20 @@ public final class UseSubChain extends FileOperation {
     }
 
     private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
-        final ChainBlock useChainSettingsBlock = findUseSettings(chain);
+        final ChainBlock useChainSettingsBlock = findUseChainSettings(chain);
         if (useChainSettingsBlock == null) {
             return;
         }
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
-        final SettingsCombiner combiner = useChainSettings.settingsCombiner();
-        // - combiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setCustomChainInformation(new MainChainSettingsInformation(chain, combiner));
-        UseSettings.addExecuteSubChainControlsAndPorts(result, combiner);
-        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(combiner.id());
+        final SettingsCombiner mainSettingsCombiner = useChainSettings.settingsCombiner();
+        // - mainSettingsCombiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
+        chain.setCustomChainInformation(new MainChainSettingsInformation(chain, mainSettingsCombiner));
+        UseSettings.addExecuteSubChainControlsAndPorts(result, mainSettingsCombiner);
+        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettingsCombiner.id());
         addSettingsPorts(result);
     }
 
-    public static ChainBlock findUseSettings(Chain chain) {
+    public static ChainBlock findUseChainSettings(Chain chain) {
         for (ChainBlock block : chain.getAllBlocks().values()) {
             if (block.isExecutedAtLoadingTime()) {
                 if (block.getExecutor() instanceof UseChainSettings) {
