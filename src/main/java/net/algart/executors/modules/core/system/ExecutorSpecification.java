@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.system;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
 
@@ -35,7 +35,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class InstalledExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
+public class ExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
+    public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_PLATFORM_ID = "platform_id";
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
@@ -46,6 +47,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
+            OUTPUT_SETTINGS_SPECIFICATION,
             OUTPUT_PLATFORM_ID,
             OUTPUT_CATEGORY,
             OUTPUT_NAME,
@@ -57,7 +59,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
     private String id = "n/a";
     private boolean specialSearchInBuiltIn = true;
 
-    public InstalledExecutorSpecification() {
+    public ExecutorSpecification() {
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
 
@@ -65,7 +67,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         return id;
     }
 
-    public InstalledExecutorSpecification setId(String id) {
+    public ExecutorSpecification setId(String id) {
         this.id = nonEmpty(id);
         return this;
     }
@@ -74,7 +76,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         return specialSearchInBuiltIn;
     }
 
-    public InstalledExecutorSpecification setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
+    public ExecutorSpecification setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
         this.specialSearchInBuiltIn = specialSearchInBuiltIn;
         return this;
     }
@@ -82,11 +84,13 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
-        final ExecutorSpecification specification = findSpecification(id);
+        final net.algart.executors.api.system.ExecutorSpecification specification = findSpecification(id);
         if (specification == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
             return;
         }
+        final SettingsSpecification settings = specification.getSettings();
+        getScalar(OUTPUT_SETTINGS_SPECIFICATION).setTo(settings == null ? null : settings.jsonString());
         getScalar(OUTPUT_PLATFORM_ID).setTo(specification.getPlatformId());
         getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
         getScalar(OUTPUT_NAME).setTo(specification.getName());
@@ -95,10 +99,10 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
         getScalar(OUTPUT_LANGUAGE).setTo(specification.getLanguage());
     }
 
-    public ExecutorSpecification findSpecification(String executorId) {
+    public net.algart.executors.api.system.ExecutorSpecification findSpecification(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
-        final ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);
+        final net.algart.executors.api.system.ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);
         getScalar(OUTPUT_BUILT_IN).setTo(builtIn != null);
         long t2 = debugTime();
         if (builtIn != null && specialSearchInBuiltIn) {
@@ -113,8 +117,7 @@ public class InstalledExecutorSpecification extends Executor implements ReadOnly
                     (t4 - t1) * 1e-6, (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
             return builtIn;
         }
-        final ExecutorSpecification extended = globalLoaders().getSpecification(
-                getSessionId(), executorId, true);
+        final var extended = globalLoaders().getSpecification(getSessionId(), executorId, true);
         if (extended == null) {
             return null;
         }

@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "system",
-  "name": "Installed executor specification",
+  "name": "Specification of the installed executor",
   "id": "6a19d627-8805-4047-813b-bd2c48083c63",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.system.InstalledExecutorSpecification"
+    "class": "net.algart.executors.modules.core.system.ExecutorSpecification"
   },
   "in_ports": [
   ],
@@ -14,7 +14,12 @@
     {
       "value_type": "scalar",
       "name": "output",
-      "hint": "Full executor specification (usually JSON)"
+      "hint": "Full executor specification JSON"
+    },
+    {
+      "value_type": "scalar",
+      "name": "settings_specification",
+      "hint": "If this executor has the associated settings specification JSON,\nas settings combiners, sub-chains or multi-chains,\nit is returned, otherwise this port stays empty"
     },
     {
       "value_type": "scalar",

@@ -16,23 +16,30 @@
     },
     {
       "value_type": "scalar",
-      "name": "current_directory"
+      "name": "current_directory",
+      "caption": "Current directory",
+      "hint": "The folder containing the chain containing this executor"
     },
     {
       "value_type": "scalar",
-      "name": "session_id"
+      "name": "session_id",
+      "caption": "Session ID"
     },
     {
       "value_type": "scalar",
-      "name": "context_id"
+      "name": "context_id",
+      "caption": "Context ID"
     },
     {
       "value_type": "scalar",
-      "name": "context_name"
+      "name": "context_name",
+      "caption": "Context name"
     },
     {
       "value_type": "scalar",
-      "name": "context_path"
+      "name": "context_path",
+      "caption": "Context path",
+      "hint": "Full path to the chain file containing this executor"
     }
   ],
   "controls": [

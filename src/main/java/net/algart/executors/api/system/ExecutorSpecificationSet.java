@@ -95,7 +95,7 @@ public final class ExecutorSpecificationSet {
                     addFolder(file, platform, onlyBuiltIn);
                     continue;
                 }
-                if (Files.isRegularFile(file) && file.getFileName().toString().toLowerCase().endsWith(".json")) {
+                if (Files.isRegularFile(file) && ExecutorSpecification.isExecutorSpecificationFile(file)) {
                     ExecutorSpecification specification = ExecutorSpecification.readIfValid(file);
                     if (specification != null) {
                         if (onlyBuiltIn && !specification.isJavaExecutor()) {
