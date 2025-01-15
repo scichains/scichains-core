@@ -70,7 +70,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     }
 
     public String executorId() {
-        return specification.getExecutorId();
+        return specification.getId();
     }
 
     public String name() {

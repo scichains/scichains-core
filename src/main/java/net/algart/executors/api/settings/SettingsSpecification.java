@@ -30,6 +30,7 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationFactory;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -686,8 +687,42 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 '}';
     }
 
+    public String jsonTreeString(ExecutorSpecificationFactory specificationFactory) {
+        return Jsons.toPrettyString(toJsonTree(specificationFactory));
+    }
+
+    public JsonObject toJsonTree(ExecutorSpecificationFactory specificationFactory) {
+        Objects.requireNonNull(specificationFactory, "Null specification factory");
+        checkCompleteness();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        buildJson(builder);
+        //TODO!!
+        return builder.build();
+    }
+
     @Override
     public void buildJson(JsonObjectBuilder builder) {
+        buildJson(builder, null);
+    }
+
+    private static int settingsType(JsonObject settingsSpecification) {
+        Objects.requireNonNull(settingsSpecification, "Null settingsSpecification");
+        final String app = settingsSpecification.getString("app", null);
+        return APP_NAME.equals(app) || APP_NAME_ALIAS.equals(app) ?
+                CODE_FOR_ORDINARY :
+                APP_NAME_FOR_MAIN.equals(app) || APP_NAME_FOR_MAIN_ALIAS.equals(app) ?
+                        CODE_FOR_MAIN : CODE_FOR_INVALID;
+    }
+
+    private static void checkSettingsName(String name, Path file) throws JsonException {
+        if (name.contains(String.valueOf(ChainSpecification.CATEGORY_SEPARATOR))) {
+            throw new JsonException("Non-allowed settings name \"" + name
+                    + "\"" + (file == null ? "" : " in JSON " + file)
+                    + ": it contains \"" + ChainSpecification.CATEGORY_SEPARATOR + "\" character");
+        }
+    }
+
+    private void buildJson(JsonObjectBuilder builder, ExecutorSpecificationFactory factoryForBuildingTree) {
         builder.add("app", main ? APP_NAME_FOR_MAIN : APP_NAME);
         builder.add("version", version);
         builder.add("category", category);
@@ -733,23 +768,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             }
         }
         builder.add("controls", controlsBuilder.build());
-    }
-
-    private static int settingsType(JsonObject settingsSpecification) {
-        Objects.requireNonNull(settingsSpecification, "Null settingsSpecification");
-        final String app = settingsSpecification.getString("app", null);
-        return APP_NAME.equals(app) || APP_NAME_ALIAS.equals(app) ?
-                CODE_FOR_ORDINARY :
-                APP_NAME_FOR_MAIN.equals(app) || APP_NAME_FOR_MAIN_ALIAS.equals(app) ?
-                        CODE_FOR_MAIN : CODE_FOR_INVALID;
-    }
-
-    private static void checkSettingsName(String name, Path file) throws JsonException {
-        if (name.contains(String.valueOf(ChainSpecification.CATEGORY_SEPARATOR))) {
-            throw new JsonException("Non-allowed settings name \"" + name
-                    + "\"" + (file == null ? "" : " in JSON " + file)
-                    + ": it contains \"" + ChainSpecification.CATEGORY_SEPARATOR + "\" character");
-        }
     }
 
     private Path resolve(Path path, String whatFile) {

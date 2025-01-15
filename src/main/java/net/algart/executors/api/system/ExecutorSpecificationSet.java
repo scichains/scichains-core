@@ -64,7 +64,7 @@ public final class ExecutorSpecificationSet {
 
     public void add(ExecutorSpecification specification) {
         Objects.requireNonNull(specification, "Null specification");
-        add(specification.getExecutorId(), specification);
+        add(specification.getId(), specification);
     }
 
     public void add(String executorId, ExecutorSpecification specification) {
@@ -110,9 +110,9 @@ public final class ExecutorSpecificationSet {
                             // - but not resource folder: for Java executors it is usually not helpful
                             // (PathPropertyReplacement works better)
                         }
-                        add(specification.getExecutorId(), specification, file);
+                        add(specification.getId(), specification, file);
                         LOG.log(System.Logger.Level.TRACE,
-                                () -> "Executor " + specification.getExecutorId() + " loaded from " + file);
+                                () -> "Executor " + specification.getId() + " loaded from " + file);
                     } else {
                         LOG.log(System.Logger.Level.TRACE,
                                 () -> "File " + file + " skipped: it is not an executor's JSON");

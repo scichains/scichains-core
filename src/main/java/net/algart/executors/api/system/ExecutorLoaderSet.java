@@ -59,7 +59,7 @@ public final class ExecutorLoaderSet {
             throws ClassNotFoundException {
         final ExecutionBlock executor = loadExecutor(sessionId, specification, instantiationMode);
         if (executor == null) {
-            throw new IllegalArgumentException("Cannot load executor with ID " + specification.getExecutorId()
+            throw new IllegalArgumentException("Cannot load executor with ID " + specification.getId()
                     + ": unknown executor specification");
         }
 //                System.out.println("Specification: " + specification);

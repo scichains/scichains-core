@@ -43,7 +43,7 @@ class SpecialSpecificationsBuilder {
     public boolean addSpecifications() {
         final ExecutorSpecification pattern = findCommonPlatformInformationPattern();
         if (pattern != null) {
-            specifications.remove(pattern.getExecutorId());
+            specifications.remove(pattern.getId());
             for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
                 specifications.add(newCommonPlatformInformationSpecification(pattern, platform));
             }
@@ -73,7 +73,7 @@ class SpecialSpecificationsBuilder {
         Objects.requireNonNull(pattern, "Null pattern");
         Objects.requireNonNull(platform, "Null platform");
         ExecutorSpecification result = new ExecutorSpecification();
-        result.setExecutorId(makeId(pattern.getExecutorId(), platform));
+        result.setId(makeId(pattern.getId(), platform));
         result.setPlatformId(platform.getId());
         result.setName(replacePlatformName(pattern.getName(), platform));
         result.setCategory(pattern.getCategory());

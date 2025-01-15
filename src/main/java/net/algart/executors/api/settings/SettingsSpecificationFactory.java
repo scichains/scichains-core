@@ -22,24 +22,15 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system;
-
-import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.SettingsSpecificationFactory;
+package net.algart.executors.api.settings;
 
 @FunctionalInterface
-public interface ExecutorSpecificationFactory extends SettingsSpecificationFactory {
+public interface SettingsSpecificationFactory {
     /**
-     * Returns the specification of the given executor.
+     * Returns the specification of the given settings.
      *
-     * @param executorId unique {@link ExecutorSpecification#getId() executor ID}.
-     * @return executor specification with this ID, or <code>null</code> if there is no requested executor.
+     * @param settingsId unique {@link SettingsSpecification#getId() settings ID}.
+     * @return settings specification with this ID, or <code>null</code> if there is no requested specification.
      */
-    ExecutorSpecification getExecutorSpecification(String executorId);
-
-    @Override
-    default SettingsSpecification getSettingsSpecification(String settingsId) {
-        final ExecutorSpecification specification = getExecutorSpecification(settingsId);
-        return specification == null ? null : specification.getSettings();
-    }
+    SettingsSpecification getSettingsSpecification(String settingsId);
 }

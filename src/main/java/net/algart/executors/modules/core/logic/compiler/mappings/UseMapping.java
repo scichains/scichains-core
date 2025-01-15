@@ -195,7 +195,7 @@ public class UseMapping extends FileOperation {
         // - adds JavaConf, (maybe) parameters and some ports
         result.setSourceInfo(mapping.mappingSpecificationFile(), null);
         result.setLanguage(MAPPING_LANGUAGE);
-        result.setExecutorId(mapping.id());
+        result.setId(mapping.id());
         result.setCategory(CATEGORY_PREFIX + mapping.category());
         result.setName(mapping.name());
         result.setDescription(mapping.description());

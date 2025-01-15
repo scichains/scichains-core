@@ -74,7 +74,7 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
         Objects.requireNonNull(worker, "Null worker");
         synchronized (lock) {
             setSpecification(sessionId, specification);
-            final W previosWorker = setWorker(sessionId, specification.getExecutorId(), worker);
+            final W previosWorker = setWorker(sessionId, specification.getId(), worker);
             try {
                 if (previosWorker instanceof AutoCloseable) {
                     ((AutoCloseable) previosWorker).close();

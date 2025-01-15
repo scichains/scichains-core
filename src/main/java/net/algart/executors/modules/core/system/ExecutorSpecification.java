@@ -95,7 +95,7 @@ public class ExecutorSpecification extends Executor implements ReadOnlyExecution
         getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
         getScalar(OUTPUT_NAME).setTo(specification.getName());
         getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
-        getScalar(OUTPUT_ID).setTo(specification.getExecutorId());
+        getScalar(OUTPUT_ID).setTo(specification.getId());
         getScalar(OUTPUT_LANGUAGE).setTo(specification.getLanguage());
     }
 

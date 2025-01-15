@@ -63,7 +63,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public String executorId() {
-        return specification.getExecutorId();
+        return specification.getId();
     }
 
     public String name() {

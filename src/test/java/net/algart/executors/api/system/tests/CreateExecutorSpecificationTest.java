@@ -63,7 +63,7 @@ public class CreateExecutorSpecificationTest {
         specification.setPlatformId("~~~SOME_PLATFORM");
         specification.setCategory("some.category");
         specification.setName("some executor");
-        specification.setExecutorId("144f8656-91c7-45a8-9e32-c19b179b9d34");
+        specification.setId("144f8656-91c7-45a8-9e32-c19b179b9d34");
         specification.setLanguage("java");
         final ExecutorSpecification.JavaConf javaConf = new ExecutorSpecification.JavaConf();
         javaConf.setJson("{\"class\":\"" + TestExecutor.class.getName() + "\"}");

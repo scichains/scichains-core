@@ -113,8 +113,8 @@ public final class ChainBlock {
         this.chain = Objects.requireNonNull(chain, "Null containing chain");
         this.id = Objects.requireNonNull(id, "Null block id");
         this.executorId = Objects.requireNonNull(executorId, "Null block executorId");
-        final ExecutorFactory executorFactory = chain.getExecutorFactory();
-        this.executorSpecification = executorFactory == null ? null : executorFactory.getSpecification(executorId);
+        final ExecutorFactory factory = chain.getExecutorFactory();
+        this.executorSpecification = factory == null ? null : factory.getExecutorSpecification(executorId);
         // - Note: executorSpecification MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:

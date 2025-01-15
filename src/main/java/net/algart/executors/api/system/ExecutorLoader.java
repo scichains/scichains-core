@@ -210,7 +210,7 @@ public abstract class ExecutorLoader {
 
     /**
      * Registers new executor according to the specification with its ID
-     * {@link ExecutorSpecification#getExecutorId() specification.getExecutorId()}.
+     * {@link ExecutorSpecification#getId()}.
      * If this specification is already present, this method overrides it with the new value.
      *
      * <p>This method is called from {@link DefaultExecutorLoader#registerWorker} method.</p>
@@ -224,7 +224,7 @@ public abstract class ExecutorLoader {
         final String serialized = specification.toJson().toString();
         synchronized (allSpecifications) {
             allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .put(specification.getExecutorId(), serialized);
+                    .put(specification.getId(), serialized);
         }
     }
 
@@ -235,7 +235,7 @@ public abstract class ExecutorLoader {
             final var serialized = allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>());
             for (ExecutorSpecification specification : specifications) {
                 Objects.requireNonNull(specification, "Null specification in the collection");
-                serialized.put(specification.getExecutorId(), specification.toJson().toString());
+                serialized.put(specification.getId(), specification.toJson().toString());
             }
         }
     }
@@ -269,7 +269,7 @@ public abstract class ExecutorLoader {
     }
 
     private Executable findNewInstance(ExecutorSpecification specification) throws ClassNotFoundException {
-        final String executorId = specification.getExecutorId();
+        final String executorId = specification.getId();
         synchronized (newInstanceMakers) {
             if (newInstanceMakers.containsKey(executorId)) {
                 return newInstanceMakers.get(executorId);

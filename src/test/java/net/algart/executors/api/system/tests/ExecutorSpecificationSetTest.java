@@ -105,7 +105,6 @@ public class ExecutorSpecificationSetTest {
 //                        specification.getJavaConf().getClass().newInstance();
 //                    } catch (Exception e) {
 //                    }
-                        final String id = specification.getExecutorId();
                         final String javaConfiguration = specification.minimalSpecification();
                         //noinspection resource
                         ExecutionBlock.newExecutor(null, javaConfiguration);

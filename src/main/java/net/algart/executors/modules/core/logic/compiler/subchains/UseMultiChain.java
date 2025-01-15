@@ -291,7 +291,7 @@ public final class UseMultiChain extends FileOperation {
         result.setTo(new InterpretMultiChain());
         // - adds JavaConf and (maybe) parameters with setters
         result.setSourceInfo(multiChain.multiChainSpecificationFile(), null);
-        result.setExecutorId(multiChain.id());
+        result.setId(multiChain.id());
         result.setCategory(ExecutorSpecification.correctDynamicCategory(multiChain.category()));
         result.setName(multiChain.name());
         result.setDescription(multiChain.description());

@@ -478,7 +478,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     private String checkImplementationMessageStart(ExecutorSpecification implementationSpecification) {
         return "Implementation \""
                 + implementationSpecification.getName() + "\" (ID \""
-                + implementationSpecification.getExecutorId() + "\") of multi-chain \""
+                + implementationSpecification.getId() + "\") of multi-chain \""
                 + name + "\" (ID \"" + id + "\")";
     }
 

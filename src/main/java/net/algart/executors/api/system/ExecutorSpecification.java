@@ -1349,7 +1349,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private String name;
     private String description = null;
     private Set<String> tags = new LinkedHashSet<>();
-    private String executorId;
+    private String id;
     private Options options = null;
     private String language = null;
     private JavaConf java = null;
@@ -1377,7 +1377,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.version = json.getString("version", CURRENT_VERSION);
         this.platformId = json.getString("platform_id", null);
         try {
-            this.executorId = Jsons.reqStringWithAlias(json, "id", "uuid", file);
+            this.id = Jsons.reqStringWithAlias(json, "id", "uuid", file);
             this.category = Jsons.reqString(json, "category", file);
             this.name = Jsons.reqString(json, "name", file);
             this.description = json.getString("description", null);
@@ -1429,11 +1429,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 this.sourceInfo = new SourceInfo(sourceJson, file);
             }
         } catch (JsonException e) {
-            if (file != null || executorId == null) {
+            if (file != null || id == null) {
                 throw e;
                 // - file name is enough information to find a mistake
             }
-            throw new JsonException("Problem in JSON specification for executor with ID '" + executorId + "\'"
+            throw new JsonException("Problem in JSON specification for executor with ID '" + id + "\'"
                     + (name == null ? "" : ", name \'" + name + "\'")
                     + (description == null ? "" : ", description \'" + name + "\'"), e);
         }
@@ -1474,7 +1474,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         Objects.requireNonNull(executorId, "Null executor ID");
         final ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
-        result.setExecutorId(executorId);
+        result.setId(executorId);
         return result;
     }
 
@@ -1492,7 +1492,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         Objects.requireNonNull(executorSpecifications, "Null executor specifications collection");
         final Set<String> ids = new HashSet<>();
         for (ExecutorSpecification specification : executorSpecifications) {
-            final String id = specification.getExecutorId();
+            final String id = specification.getId();
             assert id != null;
             if (!ids.add(id)) {
                 throw new IllegalArgumentException("Two executor JSONs have identical IDs " + id
@@ -1572,12 +1572,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public final String getExecutorId() {
-        return executorId;
+    public final String getId() {
+        return id;
     }
 
-    public final ExecutorSpecification setExecutorId(String executorId) {
-        this.executorId = Objects.requireNonNull(executorId, "Null executor ID");
+    public final ExecutorSpecification setId(String id) {
+        this.id = Objects.requireNonNull(id, "Null executor ID");
         return this;
     }
 
@@ -1844,7 +1844,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             builder.add("app", APP_NAME);
             builder.add("category", category);
             builder.add("name", name);
-            builder.add("id", executorId);
+            builder.add("id", id);
             if (java != null) {
                 builder.add(JavaConf.JAVA_CONF_NAME, java.toJson());
             }
@@ -1947,7 +1947,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setName(chain.name());
         this.setDescription(chain.description());
         this.setTags(chain.tags());
-        this.setExecutorId(chain.id());
+        this.setId(chain.id());
         this.setLanguage(ChainSpecification.CHAIN_LANGUAGE);
         final Map<String, PortConf> inPorts = new LinkedHashMap<>(this.inPorts);
         for (ChainBlock block : chain.getAllInputs()) {
@@ -2043,7 +2043,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public void checkCompleteness() {
         checkNull(category, "category");
         checkNull(name, "name");
-        checkNull(executorId, "id");
+        checkNull(id, "id");
         if (javaExecutor) {
             checkNull(java, JavaConf.JAVA_CONF_NAME);
         }
@@ -2059,7 +2059,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 ",\n  name='" + name + '\'' +
                 ",\n  description=" + (description == null ? null : "'" + description + "'") +
                 ",\n  tags=" + tags +
-                ",\n  id='" + executorId + '\'' +
+                ",\n  id='" + id + '\'' +
                 ",\n  options=" + options +
                 ",\n  language=" + language +
                 ",\n  javaConf=" + java +
@@ -2168,7 +2168,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
             builder.add("tags", tagsBuilder.build());
         }
-        builder.add("id", executorId);
+        builder.add("id", id);
         if (options != null) {
             builder.add("options", options.toJson());
         }

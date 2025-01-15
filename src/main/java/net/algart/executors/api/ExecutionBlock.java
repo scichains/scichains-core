@@ -754,7 +754,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     public final String getExecutorId() {
-        return executorSpecification == null ? null : executorSpecification.getExecutorId();
+        return executorSpecification == null ? null : executorSpecification.getId();
     }
 
     /**

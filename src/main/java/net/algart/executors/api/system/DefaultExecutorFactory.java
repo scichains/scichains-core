@@ -56,7 +56,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * {@link ExecutionBlock#GLOBAL_SHARED_SESSION_ID}.</p>
      *
      * <p>The set of specifications <code>preloadedSpecifications</code> changes the behavior
-     * of the main method {@link #getSpecification(String)}. If any executor ID is found in this set,
+     * of the main method {@link #getExecutorSpecification(String)}. If any executor ID is found in this set,
      * it is returned without any additional checks of the loader set.
      * This can be used for optimization.
      * Typical variants of this parameter are {@link ExecutorSpecificationSet#allBuiltIn()}
@@ -113,7 +113,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * @return executor specification for creating new executor.
      */
     @Override
-    public ExecutorSpecification getSpecification(String executorId) {
+    public ExecutorSpecification getExecutorSpecification(String executorId) {
         synchronized (lock) {
             ExecutorSpecification specification = preloadedSpecifications.get(executorId);
             if (specification != null) {
@@ -162,7 +162,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
     }
 
     /**
-     * <p>Creates new instance of {@link ExecutionBlock} on the base of its {@link #getSpecification(String)
+     * <p>Creates new instance of {@link ExecutionBlock} on the base of its {@link #getExecutorSpecification(String)
      * specification} with help of the following call:
      * <pre>
      *      {@link #loaderSet() loaderSet()}.{@link ExecutorLoaderSet#newExecutor
@@ -183,7 +183,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
         Objects.requireNonNull(executorId, "Null executorId");
         Objects.requireNonNull(instantiationMode, "Null instantiationMode");
         synchronized (lock) {
-            final ExecutorSpecification specification = getSpecification(executorId);
+            final ExecutorSpecification specification = getExecutorSpecification(executorId);
             if (specification == null) {
                 throw new ExecutorNotFoundException("Cannot create executor: non-registered ID " + executorId);
             }

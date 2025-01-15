@@ -359,7 +359,7 @@ public class UseSettings extends FileOperation {
     public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
         Objects.requireNonNull(settingsCombiner, "Null settingsCombiner");
         ExecutorSpecification result = buildCommon(newCombineSettings(), settingsCombiner);
-        result.setExecutorId(settingsCombiner.id());
+        result.setId(settingsCombiner.id());
         result.setName(settingsCombiner.combineName());
         result.setDescription(settingsCombiner.combineDescription());
         addOwner(result, settingsCombiner);
@@ -385,7 +385,7 @@ public class UseSettings extends FileOperation {
             return splitExecutorSpecification = null;
         }
         ExecutorSpecification result = buildCommon(newSplitSettings(), settingsCombiner);
-        result.setExecutorId(settingsCombiner.splitId());
+        result.setId(settingsCombiner.splitId());
         result.setName(settingsCombiner.splitName());
         result.setDescription(settingsCombiner.splitDescription());
         addOwner(result, settingsCombiner);
@@ -411,7 +411,7 @@ public class UseSettings extends FileOperation {
             }
         }
         result.setControls(executorControls);
-        result.setExecutorId(settingsCombiner.getNamesId());
+        result.setId(settingsCombiner.getNamesId());
         result.setName(settingsCombiner.getNamesName());
         result.setDescription(settingsCombiner.getNamesDescription());
         addOwner(result, settingsCombiner);
