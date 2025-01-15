@@ -46,11 +46,11 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
 
     /**
      * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification,
-     * returned by {@link #getExecutorSpecification(String)} method.
+     * returned by {@link #getSpecification(String)} method.
      * This method also performs some initialization of the newly created object
      * according the <code>instantiationMode</code> argument.</p>
      *
-     * <p>If {@link #getExecutorSpecification(String)} method returns <code>null</code>, this method
+     * <p>If {@link #getSpecification(String)} method returns <code>null</code>, this method
      * throws {@link ExecutorNotFoundException}; this method never returns <code>null</code>.</p>
      *
      * @param executorId        unique ID of the executor.

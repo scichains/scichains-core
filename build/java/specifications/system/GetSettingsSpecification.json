@@ -1,0 +1,70 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "system",
+  "name": "Get settings specification of the installed executor",
+  "id": "686710bb-f11a-40e8-afbb-e5e6adfa3791",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.system.GetSettingsSpecification"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output",
+      "hint": "Full settings specification JSON"
+    },
+    {
+      "value_type": "scalar",
+      "name": "category",
+      "hint": "Settings category"
+    },
+    {
+      "value_type": "scalar",
+      "name": "name",
+      "hint": "Settings name"
+    },
+    {
+      "value_type": "scalar",
+      "name": "description",
+      "hint": "Settings description",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "id",
+      "hint": "Settings ID (equal to the \"Settings ID\" parameter)"
+    },
+    {
+      "value_type": "scalar",
+      "name": "language",
+      "hint": "Executor language",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "built_in",
+      "hint": "Will contain \"true\" if this executor is built-in — it is a Java-executor, available directly after starting JVM.\nWill contain \"false\" for extended executors like Python, JavaScript, sub-chains etc."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Settings ID",
+      "name": "id",
+      "description": "Unique identifier of the settings.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Build settings tree",
+      "name": "buildTree",
+      "description": "If set (default behaviour), this function returns JSON with the tree of sub-settings, if any exist. If cleared, this function just returns this settings specification without JSON of the children.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

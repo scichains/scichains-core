@@ -30,7 +30,6 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationFactory;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -687,22 +686,21 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 '}';
     }
 
-    public String jsonTreeString(ExecutorSpecificationFactory specificationFactory) {
+    public String jsonTreeString(SettingsSpecificationFactory specificationFactory) {
         return Jsons.toPrettyString(toJsonTree(specificationFactory));
     }
 
-    public JsonObject toJsonTree(ExecutorSpecificationFactory specificationFactory) {
+    public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {
         Objects.requireNonNull(specificationFactory, "Null specification factory");
         checkCompleteness();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        buildJson(builder);
-        //TODO!!
+        buildJson(builder, specificationFactory, new HashSet<>());
         return builder.build();
     }
 
     @Override
     public void buildJson(JsonObjectBuilder builder) {
-        buildJson(builder, null);
+        buildJson(builder, null, null);
     }
 
     private static int settingsType(JsonObject settingsSpecification) {
@@ -722,7 +720,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private void buildJson(JsonObjectBuilder builder, ExecutorSpecificationFactory factoryForBuildingTree) {
+    private void buildJson(
+            JsonObjectBuilder builder,
+            SettingsSpecificationFactory factoryForBuildingTree,
+            Set<String> stackForDetectingRecursion) {
         builder.add("app", main ? APP_NAME_FOR_MAIN : APP_NAME);
         builder.add("version", version);
         builder.add("category", category);
@@ -763,6 +764,19 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
                 if (controlExtension != null) {
                     controlExtension.buildJson(controlBuilder);
+                }
+                final String childId = control.getSettingsID();
+                if (factoryForBuildingTree != null && childId != null) {
+                    if (stackForDetectingRecursion.contains(childId)) {
+                        throw new IllegalStateException("Recursive link to child settings detected " +
+                                "for settings ID \"" + childId + "\": the tree cannot be built");
+                    }
+                    stackForDetectingRecursion.add(childId);
+                    final JsonObjectBuilder subSettingsBuilder = Json.createObjectBuilder();
+                    factoryForBuildingTree.getSettingsSpecification(childId).buildJson(
+                            subSettingsBuilder, factoryForBuildingTree, stackForDetectingRecursion);
+                    stackForDetectingRecursion.remove(childId);
+                    controlBuilder.add(SETTINGS, subSettingsBuilder.build());
                 }
                 controlsBuilder.add(controlBuilder.build());
             }

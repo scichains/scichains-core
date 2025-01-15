@@ -28,6 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
 import net.algart.json.Jsons;
 
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
+public class GetExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_PLATFORM_ID = "platform_id";
     public static final String OUTPUT_CATEGORY = "category";
@@ -59,7 +60,7 @@ public class ExecutorSpecification extends Executor implements ReadOnlyExecution
     private String id = "n/a";
     private boolean specialSearchInBuiltIn = true;
 
-    public ExecutorSpecification() {
+    public GetExecutorSpecification() {
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
 
@@ -67,7 +68,7 @@ public class ExecutorSpecification extends Executor implements ReadOnlyExecution
         return id;
     }
 
-    public ExecutorSpecification setId(String id) {
+    public GetExecutorSpecification setId(String id) {
         this.id = nonEmpty(id);
         return this;
     }
@@ -76,7 +77,7 @@ public class ExecutorSpecification extends Executor implements ReadOnlyExecution
         return specialSearchInBuiltIn;
     }
 
-    public ExecutorSpecification setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
+    public GetExecutorSpecification setSpecialSearchInBuiltIn(boolean specialSearchInBuiltIn) {
         this.specialSearchInBuiltIn = specialSearchInBuiltIn;
         return this;
     }
@@ -84,25 +85,25 @@ public class ExecutorSpecification extends Executor implements ReadOnlyExecution
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
-        final net.algart.executors.api.system.ExecutorSpecification specification = findSpecification(id);
-        if (specification == null) {
+        final ExecutorSpecification executorSpecification = findSpecification(id);
+        if (executorSpecification == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
             return;
         }
-        final SettingsSpecification settings = specification.getSettings();
+        final SettingsSpecification settings = executorSpecification.getSettings();
         getScalar(OUTPUT_SETTINGS_SPECIFICATION).setTo(settings == null ? null : settings.jsonString());
-        getScalar(OUTPUT_PLATFORM_ID).setTo(specification.getPlatformId());
-        getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
-        getScalar(OUTPUT_NAME).setTo(specification.getName());
-        getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
-        getScalar(OUTPUT_ID).setTo(specification.getId());
-        getScalar(OUTPUT_LANGUAGE).setTo(specification.getLanguage());
+        getScalar(OUTPUT_PLATFORM_ID).setTo(executorSpecification.getPlatformId());
+        getScalar(OUTPUT_CATEGORY).setTo(executorSpecification.getCategory());
+        getScalar(OUTPUT_NAME).setTo(executorSpecification.getName());
+        getScalar(OUTPUT_DESCRIPTION).setTo(executorSpecification.getDescription());
+        getScalar(OUTPUT_ID).setTo(executorSpecification.getId());
+        getScalar(OUTPUT_LANGUAGE).setTo(executorSpecification.getLanguage());
     }
 
-    public net.algart.executors.api.system.ExecutorSpecification findSpecification(String executorId) {
+    public ExecutorSpecification findSpecification(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
-        final net.algart.executors.api.system.ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);
+        final ExecutorSpecification builtIn = ExecutorSpecificationSet.allBuiltIn().get(executorId);
         getScalar(OUTPUT_BUILT_IN).setTo(builtIn != null);
         long t2 = debugTime();
         if (builtIn != null && specialSearchInBuiltIn) {

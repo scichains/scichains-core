@@ -35,11 +35,11 @@ public interface ExecutorSpecificationFactory extends SettingsSpecificationFacto
      * @param executorId unique {@link ExecutorSpecification#getId() executor ID}.
      * @return executor specification with this ID, or <code>null</code> if there is no requested executor.
      */
-    ExecutorSpecification getExecutorSpecification(String executorId);
+    ExecutorSpecification getSpecification(String executorId);
 
     @Override
     default SettingsSpecification getSettingsSpecification(String settingsId) {
-        final ExecutorSpecification specification = getExecutorSpecification(settingsId);
+        final ExecutorSpecification specification = getSpecification(settingsId);
         return specification == null ? null : specification.getSettings();
     }
 }

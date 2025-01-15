@@ -430,6 +430,7 @@ public class UseSettings extends FileOperation {
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, true, false);
+        addSystemOutputPorts(result);
     }
 
     // Used for adding controls and ports to ExecuteMultiChain executor
@@ -437,6 +438,7 @@ public class UseSettings extends FileOperation {
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, false, true);
+        addSystemOutputPorts(result);
     }
 
     // Note: overridden in UseChainSettings (where it always returns true)
@@ -650,16 +652,19 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static void addSpecialOutputPorts(ExecutorSpecification result) {
-        // - to be on the safe side (maybe, the user defined the output port with the same name)
+    private static void addSystemOutputPorts(ExecutorSpecification result) {
         result.addSystemExecutorIdPort();
         if (result.hasPlatformId()) {
             result.addSystemPlatformIdPort();
             result.addSystemResourceFolderPort();
             // - resource folder may be especially convenient for settings,
-            // where we have no functions like "ReadScalar" with ability
+            // where we have no functions like "ReadScalar" with the ability
             // to replace ${resource} string (see PathPropertyReplacement)
         }
+    }
+
+    private static void addSpecialOutputPorts(ExecutorSpecification result) {
+        addSystemOutputPorts(result);
         if (!result.getOutPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
             result.addOutPort(new ExecutorSpecification.PortConf()
                     .setName(SETTINGS_NAME_OUTPUT_NAME)

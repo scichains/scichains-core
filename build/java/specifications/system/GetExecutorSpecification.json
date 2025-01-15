@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "system",
-  "name": "Specification of the installed executor",
+  "name": "Get specification of the installed executor",
   "id": "6a19d627-8805-4047-813b-bd2c48083c63",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.system.ExecutorSpecification"
+    "class": "net.algart.executors.modules.core.system.GetExecutorSpecification"
   },
   "in_ports": [
   ],
@@ -45,7 +45,7 @@
     {
       "value_type": "scalar",
       "name": "id",
-      "hint": "Executor ID"
+      "hint": "Executor ID (equal to the \"Executor ID\" parameter)"
     },
     {
       "value_type": "scalar",
