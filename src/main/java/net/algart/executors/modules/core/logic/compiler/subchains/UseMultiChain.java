@@ -299,17 +299,19 @@ public final class UseMultiChain extends FileOperation {
         result.setInPorts(specification.getInPorts());
         result.setOutPorts(specification.getOutPorts());
         UseSubChain.addSettingsPorts(result);
-        final SettingsCombiner settingsCombinerForMultiChain = multiChain.multiChainOnlyCommonSettingsCombiner();
+        final SettingsCombiner multiChainSettingsCombiner = multiChain.multiChainSettingsCombiner();
         addSystemParameters(result, multiChain);
-        UseSettings.addExecuteMultiChainControlsAndPorts(result, settingsCombinerForMultiChain);
+        UseSettings.addExecuteMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsCombiner());
         // - also adds ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary;
         // note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsCombiner
+        result.setSettings(multiChainSettingsCombiner.specification());
+        // - important: we MUST store the full multi-chain settings combiner as settings,
+        // not a reduced version from multiChainOnlyCommonSettingsCombiner()
         final ExecutorSpecification.Options options = result.createOptionsIfAbsent();
         options.createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);
-        options.createServiceIfAbsent()
-                .setSettingsId(settingsCombinerForMultiChain.id());
+        options.createServiceIfAbsent().setSettingsId(multiChainSettingsCombiner.id());
         final ExecutorSpecification.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {

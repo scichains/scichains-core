@@ -372,9 +372,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         freeResources();
     }
 
-    // Note: this.chainSpecifications must be already built
+    // Note: this.specification must be already built
     private SettingsSpecification buildMultiChainSettingsSpecification(
-            boolean addSubSettingsForVariants,
+            boolean addSubSettingsForSelectedChainVariants,
             Map<String, Chain> helpingChainMap) {
         final SettingsSpecification result = new SettingsSpecification();
         result.setId(specification.getSettingsId());
@@ -385,7 +385,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         final ExecutorSpecification.ControlConf currentChainIdControl = createCurrentChainIdControl();
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
         controls.putAll(specification.getControls());
-        if (addSubSettingsForVariants) {
+        if (addSubSettingsForSelectedChainVariants) {
             final String multiChainSpecificationFileMessage =
                     specification.getMultiChainSpecificationFile() == null ? "" :
                             " (problem occurred in multi-chain, loaded from the file " +

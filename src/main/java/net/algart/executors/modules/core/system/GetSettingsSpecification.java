@@ -34,7 +34,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class GetSettingsSpecification extends Executor implements ReadOnlyExecutionInput {
-    public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
     public static final String OUTPUT_DESCRIPTION = "description";
@@ -42,7 +41,6 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
-            OUTPUT_SETTINGS_SPECIFICATION,
             OUTPUT_CATEGORY,
             OUTPUT_NAME,
             OUTPUT_DESCRIPTION,
@@ -52,6 +50,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
     private boolean buildTree = true;
 
     public GetSettingsSpecification() {
+        addInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID);
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
 
@@ -60,7 +59,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
     }
 
     public GetSettingsSpecification setId(String id) {
-        this.id = nonEmpty(id);
+        this.id = nonNull(id);
         return this;
     }
 
@@ -76,6 +75,10 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
+        String id = getInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID, true).getValue();
+        if (id == null) {
+            id = this.id;
+        }
         final SettingsSpecification specification = findSpecification(id);
         if (specification == null) {
             getScalar().setTo("No settings with ID \"" + id + "\"");

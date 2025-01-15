@@ -9,6 +9,12 @@
     "class": "net.algart.executors.modules.core.system.GetExecutorSpecification"
   },
   "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "executor_id",
+      "caption": "Executor ID",
+      "hint": "[Optional] Executor ID. If specified, it is used instead of \"Executor ID\" parameter"
+    }
   ],
   "out_ports": [
     {

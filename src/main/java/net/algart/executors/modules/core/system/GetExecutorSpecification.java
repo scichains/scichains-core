@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class GetExecutorSpecification extends Executor implements ReadOnlyExecutionInput {
+    public static final String INPUT_EXECUTOR_ID = "executor_id";
     public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_PLATFORM_ID = "platform_id";
     public static final String OUTPUT_CATEGORY = "category";
@@ -61,6 +62,7 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
     private boolean specialSearchInBuiltIn = true;
 
     public GetExecutorSpecification() {
+        addInputScalar(INPUT_EXECUTOR_ID);
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
 
@@ -69,7 +71,7 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
     }
 
     public GetExecutorSpecification setId(String id) {
-        this.id = nonEmpty(id);
+        this.id = nonNull(id);
         return this;
     }
 
@@ -85,6 +87,10 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
+        String id = getInputScalar(INPUT_EXECUTOR_ID, true).getValue();
+        if (id == null) {
+            id = this.id;
+        }
         final ExecutorSpecification executorSpecification = findSpecification(id);
         if (executorSpecification == null) {
             getScalar().setTo("No executor with ID \"" + id + "\"");
