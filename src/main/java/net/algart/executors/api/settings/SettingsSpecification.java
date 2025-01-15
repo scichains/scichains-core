@@ -176,6 +176,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     private String platformId = null;
     private String platformCategory = null;
 
+    private final Object controlsLock = new Object();
+    // - allows correct changes in the controls from parallel threads:
+    // can be useful while building settings tree
+
     public SettingsSpecification() {
     }
 
@@ -487,20 +491,26 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public Map<String, ExecutorSpecification.ControlConf> getControls() {
-        return Collections.unmodifiableMap(controls);
+        synchronized (controlsLock) {
+            return Collections.unmodifiableMap(controls);
+        }
     }
 
     public SettingsSpecification setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
         controls = ExecutorSpecification.checkControls(controls);
-        this.controls = controls;
         for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
             checkParameterName(controlConf.getName(), null);
+        }
+        synchronized (controlsLock) {
+            this.controls = controls;
         }
         return this;
     }
 
     public ExecutorSpecification.ControlConf getControl(String name) {
-        return controls.get(name);
+        synchronized (controlsLock) {
+            return controls.get(name);
+        }
     }
 
     public Map<String, ControlConfExtension> getControlExtensions() {
@@ -552,20 +562,15 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     public void addControl(ExecutorSpecification.ControlConf control) {
         Objects.requireNonNull(control, "Null control");
         control.checkCompleteness();
-        controls.put(control.getName(), control);
-    }
-
-    public void addFirstControl(ExecutorSpecification.ControlConf control) {
-        Objects.requireNonNull(control, "Null control");
-        control.checkCompleteness();
-        final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
-        controls.put(control.getName(), control);
-        controls.putAll(this.controls);
-        this.controls = controls;
+        synchronized (controlsLock) {
+            controls.put(control.getName(), control);
+        }
     }
 
     public Set<String> controlKeySet() {
-        return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
+        synchronized (controlsLock) {
+            return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
+        }
     }
 
     public String settingsClassMame() {
@@ -641,7 +646,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public boolean hasPathControl() {
-        return controls.values().stream().anyMatch(controlConf -> controlConf.getEditionType().isPath());
+        synchronized (controlsLock) {
+            return controls.values().stream().anyMatch(
+                    controlConf -> controlConf.getEditionType().isPath());
+        }
     }
 
     @Override
@@ -711,17 +719,18 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             builder.add("get_names_id", getNamesId);
         }
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
-            final ExecutorSpecification.ControlConf control = entry.getValue();
-            control.checkCompleteness();
-            final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
-            control.buildJson(controlBuilder);
-            final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
-            if (controlExtension != null) {
-                controlExtension.buildJson(controlBuilder);
+        synchronized (controlsLock) {
+            for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
+                final ExecutorSpecification.ControlConf control = entry.getValue();
+                control.checkCompleteness();
+                final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
+                control.buildJson(controlBuilder);
+                final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
+                if (controlExtension != null) {
+                    controlExtension.buildJson(controlBuilder);
+                }
+                controlsBuilder.add(controlBuilder.build());
             }
-            controlsBuilder.add(controlBuilder.build());
-
         }
         builder.add("controls", controlsBuilder.build());
     }
