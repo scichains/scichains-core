@@ -981,15 +981,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private String caption = null;
         private String hint = null;
         private ParameterValueType valueType;
-        private String valueClass = null;
+        private volatile String valueClass = null;
         // - can be the name of some class of similar values; for example,
         // for value-type "settings" it may be the name of the settings specification
         private ControlEditionType editionType = ControlEditionType.VALUE;
-        private String builderId = null;
-        // - can be executor ID of some executor, that can create this parameter (usually value-type "settings"),
-        // for example, may be ID of some settings combiner
-        private String groupId = null;
-        // - if controls are grouped into some logical groups, here may be ID of the group, containing this control
+        private volatile String settingsID = null;
+        // - settings ID (for value-type "settings"); usually it is unknown until building the settings tree
         private boolean multiline = false;
         private Integer lines = null;
         // - recommended number of lines in "multiline" mode
@@ -1017,8 +1014,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
             Jsons.requireNonNull(this.editionType, json, "edition_type",
                     "unknown (\"" + editionType + "\")", file);
-            this.builderId = json.getString("builder_id", null);
-            this.groupId = json.getString("group_id", null);
+            this.settingsID = json.getString("settings_id", null);
             this.multiline = json.getBoolean("multiline", false);
             final JsonNumber lines = json.getJsonNumber("lines");
             this.lines = lines == null ? null : lines.intValue();
@@ -1134,21 +1130,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public String getBuilderId() {
-            return builderId;
+        public String getSettingsID() {
+            return settingsID;
         }
 
-        public ControlConf setBuilderId(String builderId) {
-            this.builderId = builderId;
-            return this;
-        }
-
-        public String getGroupId() {
-            return groupId;
-        }
-
-        public ControlConf setGroupId(String groupId) {
-            this.groupId = groupId;
+        public ControlConf setSettingsID(String settingsID) {
+            this.settingsID = settingsID;
             return this;
         }
 
@@ -1275,8 +1262,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     ", valueType=" + valueType +
                     ", valueClass='" + valueClass + '\'' +
                     ", editionType=" + editionType +
-                    ", builderId='" + builderId + '\'' +
-                    ", groupId='" + groupId + '\'' +
+                    ", settingsID='" + settingsID + '\'' +
                     ", multiline=" + multiline +
                     ", lines=" + lines +
                     ", resources=" + resources +
@@ -1320,11 +1306,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 builder.add("value_class", valueClass);
             }
             builder.add("edition_type", editionType.editionTypeName());
-            if (builderId != null) {
-                builder.add("builder_id", builderId);
-            }
-            if (groupId != null) {
-                builder.add("group_id", groupId);
+            if (settingsID != null) {
+                builder.add("settings_id", settingsID);
             }
             if (multiline) {
                 builder.add("multiline", multiline);

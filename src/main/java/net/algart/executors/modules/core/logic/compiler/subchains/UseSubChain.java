@@ -33,6 +33,7 @@ import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.settings.UseChainSettings;
@@ -354,9 +355,9 @@ public final class UseSubChain extends FileOperation {
         return result instanceof MainChainSettingsInformation ? (MainChainSettingsInformation) result : null;
     }
 
-    public static String getMainChainSettingsCombinerId(Chain chain) {
+    public static SettingsSpecification getMainChainSettingsSpecification(Chain chain) {
         final MainChainSettingsInformation information = getMainChainSettingsInformation(chain);
-        return information != null ? information.chainSettingsCombiner().id() : null;
+        return information != null ? information.chainSettingsCombiner().specification() : null;
     }
 
     private void use(

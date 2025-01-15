@@ -408,11 +408,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    settingsControlConf.setGroupId(chain.id());
-                    final String combinerId = UseSubChain.getMainChainSettingsCombinerId(chain);
-                    if (combinerId != null) {
+                    // settingsControlConf.setGroupId(chain.id());
+                    // - some deprecated idea:
+                    // if the controls are grouped into some logical groups, it may be ID of the group
+                    final var specification = UseSubChain.getMainChainSettingsSpecification(chain);
+                    if (specification != null) {
                         // - to be on the safe side (should not occur for a normal multi-chain)
-                        settingsControlConf.setBuilderId(combinerId);
+                        settingsControlConf.setSettingsID(specification.getId());
+                        settingsControlConf.setValueClass(specification.getName());
                     }
                 }
                 if (controls.put(name, settingsControlConf) != null) {
