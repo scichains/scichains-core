@@ -985,7 +985,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // - can be the name of some class of similar values; for example,
         // for value-type "settings" it may be the name of the settings specification
         private ControlEditionType editionType = ControlEditionType.VALUE;
-        private volatile String settingsID = null;
+        private volatile String settingsId = null;
         // - settings ID (for value-type "settings"); usually it is unknown until building the settings tree
         private boolean multiline = false;
         private Integer lines = null;
@@ -1014,7 +1014,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
             Jsons.requireNonNull(this.editionType, json, "edition_type",
                     "unknown (\"" + editionType + "\")", file);
-            this.settingsID = json.getString("settings_id", null);
+            this.settingsId = json.getString("settings_id", null);
             this.multiline = json.getBoolean("multiline", false);
             final JsonNumber lines = json.getJsonNumber("lines");
             this.lines = lines == null ? null : lines.intValue();
@@ -1130,12 +1130,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public String getSettingsID() {
-            return settingsID;
+        public String getSettingsId() {
+            return settingsId;
         }
 
-        public ControlConf setSettingsID(String settingsID) {
-            this.settingsID = settingsID;
+        public ControlConf setSettingsId(String settingsId) {
+            this.settingsId = settingsId;
             return this;
         }
 
@@ -1262,7 +1262,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     ", valueType=" + valueType +
                     ", valueClass='" + valueClass + '\'' +
                     ", editionType=" + editionType +
-                    ", settingsID='" + settingsID + '\'' +
+                    ", settingsID='" + settingsId + '\'' +
                     ", multiline=" + multiline +
                     ", lines=" + lines +
                     ", resources=" + resources +
@@ -1306,8 +1306,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 builder.add("value_class", valueClass);
             }
             builder.add("edition_type", editionType.editionTypeName());
-            if (settingsID != null) {
-                builder.add("settings_id", settingsID);
+            if (settingsId != null) {
+                builder.add("settings_id", settingsId);
             }
             if (multiline) {
                 builder.add("multiline", multiline);

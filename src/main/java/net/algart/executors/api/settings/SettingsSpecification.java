@@ -765,7 +765,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 if (controlExtension != null) {
                     controlExtension.buildJson(controlBuilder);
                 }
-                final String childId = control.getSettingsID();
+                final String childId = control.getSettingsId();
                 if (factoryForBuildingTree != null && childId != null) {
                     if (stackForDetectingRecursion.contains(childId)) {
                         throw new IllegalStateException("Recursive link to child settings detected " +
