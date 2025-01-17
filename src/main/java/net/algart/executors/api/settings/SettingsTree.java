@@ -103,7 +103,8 @@ public class SettingsTree {
         }
 
         public void findChildren() {
-            //TODO!! fill complete, hasDuplicates
+            //TODO!! fill complete, hasDuplicates (??)
+            //TODO!! don't forget about synchronization by SettingsSpecification.controlsLock
         }
 
         public boolean isComplete() {
