@@ -356,7 +356,7 @@ public final class SettingsCombiner implements Cloneable {
         Objects.requireNonNull(executor, "Null executor");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         if (addSettingsClass) {
-            builder.add(SettingsSpecification.CLASS_KEY, specification.settingsClassMame());
+            builder.add(SettingsSpecification.CLASS_KEY, specification.settingsClass());
         }
         for (ExecutorSpecification.ControlConf controlConf : specification.getControls().values()) {
             JsonValue jsonValue = getJsonValue(controlConf, useExecutorParameters ? executor : null);

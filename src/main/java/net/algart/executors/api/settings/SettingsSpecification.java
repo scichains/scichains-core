@@ -573,7 +573,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public String settingsClassMame() {
+    public String settingsClass() {
         return category + ChainSpecification.CATEGORY_SEPARATOR + name;
     }
 
@@ -635,14 +635,14 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public boolean matchesClassName(String settingsClassName) {
-        Objects.requireNonNull(settingsClassName, "Null settingsClassName");
+    public boolean matchesClass(String settingsClass) {
+        Objects.requireNonNull(settingsClass, "Null settingsClass");
         try {
             checkSettingsName(name, null);
         } catch (JsonException e) {
             throw new AssertionError("Was not checked before!", e);
         }
-        return settingsClassName.endsWith(ChainSpecification.CATEGORY_SEPARATOR + name);
+        return settingsClass.endsWith(ChainSpecification.CATEGORY_SEPARATOR + name);
     }
 
     public boolean hasPathControl() {
