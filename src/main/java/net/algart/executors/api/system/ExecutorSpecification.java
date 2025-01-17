@@ -983,7 +983,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private ParameterValueType valueType;
         private volatile String valueClass = null;
         // - can be the name of some class of similar values; for example,
-        // for value-type "settings" it may be the name of the settings specification
+        // for value-type "settings" it may be the SettingsSpecification.settingsClassMame()
         private ControlEditionType editionType = ControlEditionType.VALUE;
         private volatile String settingsId = null;
         // - settings ID (for value-type "settings"); usually it is unknown until building the settings tree

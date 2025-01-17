@@ -82,6 +82,8 @@ public final class SettingsCombiner implements Cloneable {
         return addSettingsClass;
     }
 
+    // We decided not to add this information by UseSettings.ADD_SETTINGS_CLASS_PARAMETER_NAME:
+    // the settings are usually created by external dashboard, direct using combiner is not a typical case
     public SettingsCombiner setAddSettingsClass(boolean addSettingsClass) {
         this.addSettingsClass = addSettingsClass;
         return this;

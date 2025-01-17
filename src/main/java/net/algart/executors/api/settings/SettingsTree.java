@@ -43,6 +43,10 @@ public class SettingsTree {
                 Objects.requireNonNull(settingsSpecification, "Null settings specification");
     }
 
+    public static SettingsTree getInstance(SettingsSpecification settingsSpecification) {
+        return new SettingsTree(settingsSpecification);
+    }
+
     /**
      * Returns <code>true</code> if all children are successfully found by
      * {@link ExecutorSpecification.ControlConf#getSettingsId() settings ID} and
@@ -56,6 +60,7 @@ public class SettingsTree {
 
     public SettingsTree buildTree(SettingsSpecificationFactory specificationFactory) {
         //TODO!! just analyse settingsId, build links
+        //TODO!! atomic for failure! call for new children map, only then copy into this.children
         return this;
     }
 
@@ -69,16 +74,44 @@ public class SettingsTree {
         throw new UnsupportedOperationException();
     }
 
-    public static void smartConnectionSearch(
-            Supplier<? extends Collection<String>> allSettingsIds,
-            SettingsSpecificationFactory specificationFactory) {
-        //TODO!! analyse names
-    }
+    public static class SmartSearch {
+        private final Supplier<? extends Collection<String>> allSettingsIds;
+        private final SettingsSpecificationFactory settingsSpecificationFactory;
 
-    public static void smartConnectionSearch(ExecutorLoaderSet executorLoaderSet, String sessionId) {
-        Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
-        smartConnectionSearch(
-                () -> executorLoaderSet.allSessionExecutorIds(sessionId, true),
-                executorLoaderSet.newFactory(sessionId));
+        private boolean complete = false;
+        private boolean hasDuplicates = false;
+
+        private SmartSearch(
+                Supplier<? extends Collection<String>> allSettingsIds,
+                SettingsSpecificationFactory settingsSpecificationFactory) {
+            this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
+            this.settingsSpecificationFactory = Objects.requireNonNull(
+                    settingsSpecificationFactory, "Null settingsSpecificationFactory");
+        }
+
+        public static SmartSearch getInstance(
+                Supplier<? extends Collection<String>> allSettingsIds,
+                SettingsSpecificationFactory settingsSpecificationFactory) {
+            return new SmartSearch(allSettingsIds, settingsSpecificationFactory);
+        }
+
+        public static SmartSearch getInstance(ExecutorLoaderSet executorLoaderSet, String sessionId) {
+            Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
+            return getInstance(
+                    () -> executorLoaderSet.allSessionExecutorIds(sessionId, true),
+                    executorLoaderSet.newFactory(sessionId));
+        }
+
+        public void findChildren() {
+            //TODO!! fill complete, hasDuplicates
+        }
+
+        public boolean isComplete() {
+            return complete;
+        }
+
+        public boolean hasDuplicates() {
+            return hasDuplicates;
+        }
     }
 }
