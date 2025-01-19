@@ -34,6 +34,7 @@ public enum ControlEditionType {
     VALUE("value", false),
     ENUM("enum", false),
     FILE("file", true),
+    FILE_TO_SAVE("file_to_save", true),
     FOLDER("folder", true),
     COLOR("color", false),
     RANGE("range", false);
