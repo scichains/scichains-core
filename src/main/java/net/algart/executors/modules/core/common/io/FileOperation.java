@@ -248,26 +248,41 @@ public abstract class FileOperation extends Executor {
     }
 
     /**
-     * Returns the relative form of the specified absolute path if it is a sub-path of the current OS directory,
-     * or the source argument in the other case.
-     * Equivalent to<pre>
-     *      absolutePath.startsWith({@link #currentOSPath()}) ?
-     *          {@link #currentOSPath()}.{@link Path#relativize(Path) relativize}(absolutePath) :
-     *          absolutePath;
+     * Returns the relative form of the specified absolute path if it is a sub-path of the current OS directory
+     * <code>{@link #currentOSPath()}</code>
+     * <i>or</i> its parent directory <code>{@link #currentOSPath()}.getParent()</code>.
+     * In both cases, the result will be
+     * <pre>
+     *     {@link #currentOSPath()}.{@link Path#relativize(Path) relativize}(absolutePath)
      * </pre>
+     * Otherwise, the <code>absolutePath</code> argument is returned unchanged.
+     *
+     * <p>Additional check of the parent folder helps to handle the situation
+     * when the application executable file (like "java.exe") is located in a folder as "MySoftware/bin"
+     * and the specified file is in its "sibling" as "MySoftware/demo/xxx.dat".
+     * Then the current OS folder by default is "MySoftware/bin",
+     * and the function returns "../demo/xxx.dat".</p>
      *
      * @param absolutePath the path to relativize.
-     * @return a shortened form of the given path when it is located inside the current OS directory.
+     * @return a shortened form of the given path when it is located inside the current OS directory '
+     * or its parent directory.
      */
-    public static Path relativizePathInsideCurrent(Path absolutePath) {
+    public static Path relativizePathInsideCurrentOrParent(Path absolutePath) {
         Objects.requireNonNull(absolutePath, "Null absolutePath");
         final Path osPath = currentOSPath();
-        return absolutePath.startsWith(osPath) ? osPath.relativize(absolutePath) : absolutePath;
+        if (absolutePath.startsWith(osPath)) {
+            return osPath.relativize(absolutePath);
+        }
+        final Path osParent = osPath.getParent();
+        if (osParent != null && absolutePath.startsWith(osParent)) {
+            return osPath.relativize(absolutePath);
+        }
+        return absolutePath;
     }
 
     /**
      * Equivalent to <pre>
-     * relativize ? {@link #relativizePathInsideCurrent
+     * relativize ? {@link #relativizePathInsideCurrentOrParent
      * relativizePathInsideCurrent}(path.toAbsolutePath()) : path.toAbsolutePath()
      * </pre>
      *
@@ -278,6 +293,17 @@ public abstract class FileOperation extends Executor {
      */
     public static Path simplifyOSPath(Path path, boolean relativize) {
         Objects.requireNonNull(path, "Null path");
-        return relativize ? relativizePathInsideCurrent(path.toAbsolutePath()) : path.toAbsolutePath();
+        return relativize ? relativizePathInsideCurrentOrParent(path.toAbsolutePath()) : path.toAbsolutePath();
+//        System.out.printf("Simplify OS path: %s%n", result);
+//        return result;
     }
+
+//    public static void main(String[] args) {
+//        Path osPath = Paths.get("/SciChains/bin/").toAbsolutePath();
+//        Path absolutePath = Paths.get("C:\\SciChains\\ext\\base-core\\extension.json").toAbsolutePath();
+//        System.out.println(osPath);
+//        System.out.println(absolutePath);
+//        System.out.println(osPath.relativize(absolutePath));
+//
+//    }
 }

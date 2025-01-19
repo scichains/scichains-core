@@ -47,7 +47,7 @@ public class RelativeOSPathTest {
             for (Path p : List.of(Path.of(s), Path.of(s).toAbsolutePath(), Path.of(current + s))) {
                 try {
                     System.out.printf("\"%s\" relative form:%n    \"%s\"%n", p,
-                            FileOperation.relativizePathInsideCurrent(p));
+                            FileOperation.relativizePathInsideCurrentOrParent(p));
                 } catch (Exception e) {
                     System.out.printf("\"%s\" path cannot be relativized: %s%n", p, e.getMessage());
                 }
