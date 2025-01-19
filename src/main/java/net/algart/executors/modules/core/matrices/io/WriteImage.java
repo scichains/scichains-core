@@ -133,10 +133,12 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
     private void setQuality(ImageWriteParam param, Path file) {
         final String compressionType = this.compressionType;
         final boolean hasCompression = !compressionType.isEmpty();
-        String[] legalTypes = null;
+        final String[] legalTypes;
         if (quality != null || hasCompression) {
             param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
             legalTypes = param.getCompressionTypes();
+        } else {
+            legalTypes = null;
         }
         if (hasCompression) {
             if (legalTypes == null) {
@@ -157,10 +159,11 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
                     // no need to manually set the compression type, if there is only 1 case
                     param.setCompressionType(legalTypes[0]);
                 } else {
-                    throw new UnsupportedOperationException("Can't set compression quality to " + quality +
+                    logDebug(() -> "Can't set compression quality to " + quality +
                             ": there is no default compression type, " +
                             "you should manually select one of the following legal compressions: " +
                             Arrays.toString(legalTypes) + ", allowed for the extension of the file " + file);
+                    return;
                 }
             }
             param.setCompressionQuality(quality.floatValue());

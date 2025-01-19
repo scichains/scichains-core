@@ -120,7 +120,7 @@
     {
       "caption": "Quality",
       "name": "quality",
-      "description": "May contain some real value between 0.0 (worst) and 1.0 (best), specifying the desired quality of the compression image. This parameter does not apply to all file formats (determined by the file extension). Usually you may set the quality for JPEG-files (xxxx.jpg or xxxxx.jpeg). For other formats, you can leave this parameter blank; if you still specify it, it is possible that you will need also the \"Compression type\" parameter.",
+      "description": "May contain some real value between 0.0 (worst) and 1.0 (best), specifying the desired quality of the compression image. This parameter applies only to some file formats (determined by the file extension), like JPEG; if it is not supported, it is ignored.\nUsually you may set the quality for JPEG-files (xxxx.jpg or xxxxx.jpeg). For other formats, you can leave this parameter blank; if you still specify it, it is possible that you will need also the \"Compression type\" parameter.",
       "value_type": "String",
       "edition_type": "value",
       "default": ""
@@ -128,7 +128,7 @@
     {
       "caption": "Compression type",
       "name": "compressionType",
-      "description": "Compression type: for example, \"JPEG\" for .jpg/.jpeg image files, \"LZW\" for .gif, \"Deflate\" for .png, wide set of compressions (like \"JPEG\", \"Deflate\", \"ZLib\") for .tif/.tiff files. Usually you may leave this parameter blank, which means using default compression.",
+      "description": "Compression type: for example, \"JPEG\" for .jpg/.jpeg image files, \"LZW\" for .gif, \"Deflate\" for .png, wide set of compressions (like \"JPEG\", \"Deflate\", \"ZLib\") for .tif/.tiff files.\nUsually you may leave this parameter blank, which means using default compression, with the possible excepting of TIFF. Warning: if this parameter is set, but incompatible with the file format detected by the file extension, this function throws an exception.",
       "value_type": "String",
       "edition_type": "value",
       "default": ""
