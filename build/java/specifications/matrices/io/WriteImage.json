@@ -56,7 +56,7 @@
       "name": "file",
       "description": "Note: the format of the written file is determined by file EXTENSION (suffix) like \"jpg\" in \"test.jpg\". The following formats are supported always:\n    .bmp  (BMP format)\n    .jpg, .jpeg  (JPEG format)\n    .png  (PNG format)\n    .gif  (GIF format)\n    .tif, .tiff  (TIFF format)\n    .jp2  (JPEG-2000 format)\nThe function \"Supported image formats\" allows to know the full list of supported format suffixes.\n\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test.jpg\" or \"images/test.jpg\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
       "value_type": "String",
-      "edition_type": "file",
+      "edition_type": "file_to_save",
       "default": ""
     },
     {
