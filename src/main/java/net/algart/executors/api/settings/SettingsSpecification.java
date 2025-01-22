@@ -209,7 +209,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         this.combineName = json.getString("combine_name", null);
         this.splitName = json.getString("split_name", null);
         this.getNamesName = json.getString("get_names_name", null);
-        this.className = json.getString("class_name", null);
+        this.className = json.getString("class", null);
         this.description = json.getString("description", null);
         this.combineDescription = json.getString("combine_description", description);
         this.splitDescription = json.getString("split_description", description);
@@ -767,7 +767,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 builder.add("get_names_name", getNamesName);
             }
             if (className != null) {
-                builder.add("class_name", className);
+                builder.add("class", className);
             }
             if (description != null) {
                 builder.add("description", description);
