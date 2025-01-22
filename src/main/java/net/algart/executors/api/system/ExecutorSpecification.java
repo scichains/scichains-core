@@ -56,6 +56,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public static final String DYNAMIC_CATEGORY_PREFIX = "$";
     public static final String CATEGORY_PREFIX_DISABLING_DYNAMIC = "$no-prefix$";
+    public static final char CATEGORY_SEPARATOR = '.';
 
     public static final String OUTPUT_EXECUTOR_ID_CAPTION = "Executor\u00A0ID";
     public static final String OUTPUT_EXECUTOR_ID_HINT = "ID of this executor";

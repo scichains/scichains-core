@@ -164,7 +164,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         final String recommendedCategory = ExecutionBlock.recommendedCategory(fileName);
         this.category = json.getString("category",
                 recommendedCategory != null ?
-                        DEFAULT_MULTICHAIN_CATEGORY + ChainSpecification.CATEGORY_SEPARATOR + recommendedCategory :
+                        DEFAULT_MULTICHAIN_CATEGORY + ExecutorSpecification.CATEGORY_SEPARATOR + recommendedCategory :
                         DEFAULT_MULTICHAIN_CATEGORY);
         this.settingsCategory = json.getString("settings_category",
                 recommendedCategory != null ?
@@ -419,7 +419,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public String canonicalName() {
-        return category + ChainSpecification.CATEGORY_SEPARATOR + name;
+        return category + ExecutorSpecification.CATEGORY_SEPARATOR + name;
     }
 
     public List<Path> resolveChainVariantPaths() {

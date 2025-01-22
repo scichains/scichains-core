@@ -341,7 +341,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("multi-chain \"" + category()
-                + ChainSpecification.CATEGORY_SEPARATOR + name()
+                + ExecutorSpecification.CATEGORY_SEPARATOR + name()
                 + "\", containing " + chainSpecifications.size() + " chains:\n");
         for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
             ChainSpecification chainchainSpecification = chainSpecifications.get(i);
