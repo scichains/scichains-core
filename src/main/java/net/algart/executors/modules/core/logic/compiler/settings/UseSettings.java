@@ -364,6 +364,7 @@ public class UseSettings extends FileOperation {
         result.setDescription(settingsCombiner.combineDescription());
         addOwner(result, settingsCombiner);
         result.createOptionsIfAbsent().createRoleIfAbsent()
+//                .setName(settingsCombiner.className())
                 .setName(settingsCombiner.name())
                 .setSettings(true)
                 .setResultPort(SettingsSpecification.SETTINGS)
@@ -620,6 +621,13 @@ public class UseSettings extends FileOperation {
                 controlExtension.load(specification);
                 controlExtension.completeControlConf(controlConf);
             }
+            // Here we could set controlConf.setValueClass, when it does not exist, according the current
+            // settings category:
+            //      ExecutorSpecification.defaultClassName(specification.getCategory(), name)
+            // But this is a bad idea!
+            // Then we will not be able to find it from a chain (settings) with another category,
+            // but this is sometimes necessary.
+            // It is better to keep non-specified value class: this is a signal that we need more smart search.
             result.addControl(controlConf);
         }
     }

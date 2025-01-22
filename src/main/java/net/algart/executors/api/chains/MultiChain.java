@@ -340,8 +340,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("multi-chain \"" + category()
-                + ExecutorSpecification.CATEGORY_SEPARATOR + name()
+        final StringBuilder sb = new StringBuilder("multi-chain \""
+                + ExecutorSpecification.defaultClassName(category(), name())
                 + "\", containing " + chainSpecifications.size() + " chains:\n");
         for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
             ChainSpecification chainchainSpecification = chainSpecifications.get(i);
@@ -416,6 +416,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setSettingsId(specification.getId());
                         settingsControlConf.setValueClass(specification.getName());
+//                        System.out.printf("Variant %s -> %s%n", specification.getName(), specification.className());
                         //TODO!! change to specification.settingsClass() with C++ part
                     }
                 }

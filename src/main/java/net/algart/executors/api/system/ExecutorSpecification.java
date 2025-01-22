@@ -54,9 +54,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
 
+    public static final char CATEGORY_SEPARATOR = '.';
     public static final String DYNAMIC_CATEGORY_PREFIX = "$";
     public static final String CATEGORY_PREFIX_DISABLING_DYNAMIC = "$no-prefix$";
-    public static final char CATEGORY_SEPARATOR = '.';
 
     public static final String OUTPUT_EXECUTOR_ID_CAPTION = "Executor\u00A0ID";
     public static final String OUTPUT_EXECUTOR_ID_HINT = "ID of this executor";
@@ -2122,6 +2122,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             Objects.requireNonNull(objects.get(k), "Null element #" + k + " in list \"" + objects + "\"");
         }
         return objects;
+    }
+
+    public static String defaultClassName(String category, String name) {
+        return category + CATEGORY_SEPARATOR + name;
     }
 
     public static String correctDynamicCategory(String category) {

@@ -419,7 +419,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public String canonicalName() {
-        return category + ExecutorSpecification.CATEGORY_SEPARATOR + name;
+        return ExecutorSpecification.defaultClassName(category, name);
     }
 
     public List<Path> resolveChainVariantPaths() {
