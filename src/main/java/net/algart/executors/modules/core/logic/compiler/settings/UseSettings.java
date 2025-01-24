@@ -364,7 +364,7 @@ public class UseSettings extends FileOperation {
         result.setDescription(settingsCombiner.combineDescription());
         addOwner(result, settingsCombiner);
         result.createOptionsIfAbsent().createRoleIfAbsent()
-                .setName(settingsCombiner.className())
+                .setClassName(settingsCombiner.className())
                 .setSettings(true)
                 .setResultPort(SettingsSpecification.SETTINGS)
                 .setMain(isMainChainSettings());

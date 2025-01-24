@@ -415,7 +415,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     if (specification != null) {
                         // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setSettingsId(specification.getId());
-                        settingsControlConf.setValueClass(specification.className());
+                        settingsControlConf.setValueClassName(specification.className());
 //                        System.out.printf("Variant %s -> %s%n", specification.getName(), specification.className());
                     }
                 }

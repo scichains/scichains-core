@@ -200,7 +200,7 @@ public class UseMapping extends FileOperation {
         result.setName(mapping.name());
         result.setDescription(mapping.description());
         result.createOptionsIfAbsent().createRoleIfAbsent()
-                .setName(mapping.name())
+                .setClassName(mapping.name())
                 .setSettings(true)
                 .setResultPort(InterpretMapping.OUTPUT_MAPPING);
         addInputControls(result, mapping);

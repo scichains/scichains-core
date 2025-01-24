@@ -71,9 +71,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Role extends AbstractConvertibleToJson {
-            private String name = null;
-            // - Some "name" of this role. For example, for settings combiners it can be a name of this setting type
-            // (for main chain settings it is usually just the name of the chain, like Owner.name).
+            private String className = null;
+            // - Some "class" of this role.
+            // For example, for settings combiners, by default, it is the settings className
             private String resultPort = null;
             // - Port, containing the main results of this executor.
             // Not important for usual executors, but can be useful for special roles like "settings",
@@ -88,18 +88,18 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
 
             private Role(JsonObject json, Path file) {
-                this.name = json.getString("name", null);
+                this.className = json.getString("class_name", null);
                 this.resultPort = json.getString("result_port", null);
                 this.settings = json.getBoolean("settings", false);
                 this.main = json.getBoolean("main", false);
             }
 
-            public String getName() {
-                return name;
+            public String getClassName() {
+                return className;
             }
 
-            public Role setName(String name) {
-                this.name = name;
+            public Role setClassName(String className) {
+                this.className = className;
                 return this;
             }
 
@@ -137,7 +137,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             @Override
             public String toString() {
                 return "Role{" +
-                        "name='" + name + '\'' +
+                        "className='" + className + '\'' +
                         ", resultPort='" + resultPort + '\'' +
                         ", settings=" + settings +
                         ", main=" + main +
@@ -146,8 +146,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
             @Override
             public void buildJson(JsonObjectBuilder builder) {
-                if (name != null) {
-                    builder.add("name", name);
+                if (className != null) {
+                    builder.add("class_name", className);
                 }
                 if (resultPort != null) {
                     builder.add("result_port", resultPort);
@@ -982,7 +982,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private String caption = null;
         private String hint = null;
         private ParameterValueType valueType;
-        private volatile String valueClass = null;
+        private volatile String valueClassName = null;
         // - can be the name of some class of similar values; for example,
         // for value-type "settings" it may be the SettingsSpecification.settingsClass()
         private ControlEditionType editionType = ControlEditionType.VALUE;
@@ -1010,7 +1010,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.valueType = ParameterValueType.valueOfTypeNameOrNull(valueType);
             Jsons.requireNonNull(this.valueType, json, "value_type",
                     "unknown (\"" + valueType + "\")", file);
-            this.valueClass = json.getString("value_class", null);
+            this.valueClassName = json.getString("value_class_name", null);
             String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
             this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
             Jsons.requireNonNull(this.editionType, json, "edition_type",
@@ -1113,12 +1113,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public String getValueClass() {
-            return valueClass;
+        public String getValueClassName() {
+            return valueClassName;
         }
 
-        public ControlConf setValueClass(String valueClass) {
-            this.valueClass = valueClass;
+        public ControlConf setValueClassName(String valueClassName) {
+            this.valueClassName = valueClassName;
             return this;
         }
 
@@ -1261,7 +1261,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     ", caption='" + caption + '\'' +
                     ", hint='" + hint + '\'' +
                     ", valueType=" + valueType +
-                    ", valueClass='" + valueClass + '\'' +
+                    ", valueClassName='" + valueClassName + '\'' +
                     ", editionType=" + editionType +
                     ", settingsID='" + settingsId + '\'' +
                     ", multiline=" + multiline +
@@ -1303,8 +1303,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 builder.add("hint", hint);
             }
             builder.add("value_type", valueType.typeName());
-            if (valueClass != null) {
-                builder.add("value_class", valueClass);
+            if (valueClassName != null) {
+                builder.add("value_class_name", valueClassName);
             }
             builder.add("edition_type", editionType.editionTypeName());
             if (settingsId != null) {
