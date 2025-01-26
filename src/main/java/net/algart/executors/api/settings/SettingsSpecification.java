@@ -41,6 +41,7 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -674,6 +675,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
+    public SettingsTree buildTree(SettingsSpecificationFactory factory) {
+        return new SettingsTree(factory, this);
+    }
+
     @Override
     public void checkCompleteness() {
         checkNull(category, "category");
@@ -710,21 +715,15 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 '}';
     }
 
-    public String jsonTreeString(SettingsSpecificationFactory specificationFactory) {
-        return Jsons.toPrettyString(toJsonTree(specificationFactory));
-    }
-
     public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {
         Objects.requireNonNull(specificationFactory, "Null specification factory");
         checkCompleteness();
-        final JsonObjectBuilder builder = Json.createObjectBuilder();
-        buildJson(builder, specificationFactory, new HashSet<>());
-        return builder.build();
+        return buildTree(specificationFactory).toJson();
     }
 
     @Override
     public void buildJson(JsonObjectBuilder builder) {
-        buildJson(builder, null, null);
+        buildJson(builder, null);
     }
 
     private static int settingsType(JsonObject settingsSpecification) {
@@ -744,84 +743,63 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private void buildJson(
-            JsonObjectBuilder builder,
-            SettingsSpecificationFactory factoryForBuildingTree,
-            Set<String> stackForDetectingRecursion) {
-        if (stackForDetectingRecursion != null) {
-            stackForDetectingRecursion.add(id);
+    void buildJson(JsonObjectBuilder builder, Function<String, JsonObject> subSettingsJsonBuilder) {
+        builder.add("app", main ? APP_NAME_FOR_MAIN : APP_NAME);
+        builder.add("version", version);
+        builder.add("category", category);
+        builder.add("name", name);
+        if (combineName != null) {
+            // - possible when this object is built by public constructor and setters
+            builder.add("combine_name", combineName);
         }
-        try {
-            builder.add("app", main ? APP_NAME_FOR_MAIN : APP_NAME);
-            builder.add("version", version);
-            builder.add("category", category);
-            builder.add("name", name);
-            if (combineName != null) {
-                // - possible when this object is built by public constructor and setters
-                builder.add("combine_name", combineName);
+        if (splitName != null) {
+            builder.add("split_name", splitName);
+        }
+        if (getNamesName != null) {
+            builder.add("get_names_name", getNamesName);
+        }
+        if (className != null) {
+            builder.add("class_name", className);
+        }
+        if (description != null) {
+            builder.add("description", description);
+        }
+        if (combineDescription != null && !combineDescription.equals(description)) {
+            builder.add("combine_description", combineDescription);
+        }
+        if (splitDescription != null && !splitDescription.equals(description)) {
+            builder.add("split_description", splitDescription);
+        }
+        if (getNamesDescription != null && !getNamesDescription.equals(description)) {
+            builder.add("get_names_description", getNamesDescription);
+        }
+        builder.add("id", id);
+        if (splitId != null) {
+            builder.add("split_id", splitId);
+        }
+        if (getNamesId != null) {
+            builder.add("get_names_id", getNamesId);
+        }
+        final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
+        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
+            final String name = entry.getKey();
+            final ExecutorSpecification.ControlConf control = entry.getValue();
+            control.checkCompleteness();
+            final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
+            control.buildJson(controlBuilder);
+            final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
+            if (controlExtension != null) {
+                controlExtension.buildJson(controlBuilder);
             }
-            if (splitName != null) {
-                builder.add("split_name", splitName);
-            }
-            if (getNamesName != null) {
-                builder.add("get_names_name", getNamesName);
-            }
-            if (className != null) {
-                builder.add("class_name", className);
-            }
-            if (description != null) {
-                builder.add("description", description);
-            }
-            if (combineDescription != null && !combineDescription.equals(description)) {
-                builder.add("combine_description", combineDescription);
-            }
-            if (splitDescription != null && !splitDescription.equals(description)) {
-                builder.add("split_description", splitDescription);
-            }
-            if (getNamesDescription != null && !getNamesDescription.equals(description)) {
-                builder.add("get_names_description", getNamesDescription);
-            }
-            builder.add("id", id);
-            if (splitId != null) {
-                builder.add("split_id", splitId);
-            }
-            if (getNamesId != null) {
-                builder.add("get_names_id", getNamesId);
-            }
-            final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-            synchronized (controlsLock) {
-                for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
-                    final ExecutorSpecification.ControlConf control = entry.getValue();
-                    control.checkCompleteness();
-                    final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
-                    control.buildJson(controlBuilder);
-                    final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
-                    if (controlExtension != null) {
-                        controlExtension.buildJson(controlBuilder);
-                    }
-                    final String childId = control.getSettingsId();
-                    if (factoryForBuildingTree != null && childId != null) {
-                        SettingsSpecification child = factoryForBuildingTree.getSettingsSpecification(childId);
-                        if (child == null) {
-                            throw new IllegalStateException("Child settings with ID \"" + childId + "\" is not found");
-                        }
-                        if (stackForDetectingRecursion != null && stackForDetectingRecursion.contains(childId)) {
-                            throw new IllegalStateException("Recursive link to child settings ID \"" + childId +
-                                    "\"detected in the settings with ID \"" + id + "\": the tree cannot be built");
-                        }
-                        final JsonObjectBuilder subSettingsBuilder = Json.createObjectBuilder();
-                        child.buildJson(subSettingsBuilder, factoryForBuildingTree, stackForDetectingRecursion);
-                        controlBuilder.add(SETTINGS, subSettingsBuilder.build());
-                    }
-                    controlsBuilder.add(controlBuilder.build());
+            if (subSettingsJsonBuilder != null && control.getValueType().isSettings()) {
+                JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
+                if (subSettingsJson != null) {
+                    controlBuilder.add(SETTINGS, subSettingsJson);
                 }
             }
-            builder.add("controls", controlsBuilder.build());
-        } finally {
-            if (stackForDetectingRecursion != null) {
-                stackForDetectingRecursion.remove(id);
-            }
+            controlsBuilder.add(controlBuilder.build());
         }
+        builder.add("controls", controlsBuilder.build());
     }
 
     private Path resolve(Path path, String whatFile) {

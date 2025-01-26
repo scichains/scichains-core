@@ -25,26 +25,50 @@
 package net.algart.executors.api.settings;
 
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.json.AbstractConvertibleToJson;
 
 import java.util.*;
 import java.util.function.Supplier;
 
-//TODO!!
-public class SettingsTree {
-    private final SettingsSpecification settingsSpecification;
+public final class SettingsTree extends AbstractConvertibleToJson {
+    private final SettingsSpecificationFactory factory;
+    private final SettingsSpecification specification;
     private final Map<String, SettingsTree> children = new LinkedHashMap<>();
-    private SettingsTree parent = null;
-    private boolean complete = false;
+    private final SettingsTree parent;
+    private final boolean complete;
 
-    private SettingsTree(SettingsSpecification settingsSpecification) {
-        this.settingsSpecification =
-                Objects.requireNonNull(settingsSpecification, "Null settings specification");
+    SettingsTree(SettingsSpecificationFactory factory, SettingsSpecification specification) {
+        this(factory, specification, null, new HashSet<>());
     }
 
-    public static SettingsTree getInstance(SettingsSpecification settingsSpecification) {
-        return new SettingsTree(settingsSpecification);
+    private SettingsTree(
+            SettingsSpecificationFactory factory,
+            SettingsSpecification specification,
+            SettingsTree parent,
+            Set<String> stackForDetectingRecursion) {
+        this.factory = Objects.requireNonNull(factory, "Null specification factory");
+        this.specification = Objects.requireNonNull(specification, "Null settings specification");
+        this.parent = parent;
+        this.complete = buildTree(stackForDetectingRecursion);
+    }
+
+    public SettingsTree parent() {
+        return parent;
+    }
+
+    public SettingsSpecificationFactory factory() {
+        return factory;
+    }
+
+    public SettingsSpecification specification() {
+        return specification;
+    }
+
+    public String id() {
+        return specification.getId();
     }
 
     /**
@@ -58,32 +82,72 @@ public class SettingsTree {
         return complete;
     }
 
-    public SettingsTree buildTree(SettingsSpecificationFactory specificationFactory) {
-        //TODO!! just analyse settingsId, build links
-        //TODO!! atomic for failure! call for new children map, only then copy into this.children
-        return this;
+    private boolean buildTree(Set<String> stackForDetectingRecursion) {
+        Map<String, SettingsTree> children = new LinkedHashMap<>();
+        boolean complete = true;
+        stackForDetectingRecursion.add(specification.getId());
+        try {
+            for (var entry : specification.getControls().entrySet()) {
+                final String name = entry.getKey();
+                final ExecutorSpecification.ControlConf control = entry.getValue();
+                if (control.getValueType().isSettings()) {
+                    final String settingsId = control.getSettingsId();
+                    final boolean found = settingsId != null;
+                    complete &= found;
+//                    if (!found) System.out.printf("%s: not found%n", name);
+                    if (found) {
+                        final SettingsSpecification childSettings = factory.getSettingsSpecification(settingsId);
+                        if (childSettings == null) {
+                            throw new IllegalStateException("Child settings with ID \"" + settingsId +
+                                    "\" (child control \"" + name + "\") is not found");
+                        }
+                        if (stackForDetectingRecursion.contains(settingsId)) {
+                            throw new IllegalStateException("Cannot build tree due to recursive link to " +
+                                    "settings ID \"" + settingsId +
+                                    "\" (child control \"" + name +
+                                    "\") detected in the settings with ID \"" + specification.getId() +
+                                    "\" (\"" + specification.getName() +
+                                    "\" in category \"" + specification.getCategory() + "\")");
+                        }
+                        final SettingsTree child = new SettingsTree(
+                                factory, childSettings, this, stackForDetectingRecursion);
+                        complete &= child.complete;
+                        children.put(name, child);
+                    }
+                }
+            }
+        } finally {
+            stackForDetectingRecursion.remove(specification.getId());
+        }
+        // Note: we did not modify this object before this moment to make this method atomic regarding a failure
+        this.children.clear();
+        this.children.putAll(children);
+        return complete;
     }
 
-    public JsonObject toJson() {
-        //TODO!! without build, works like settingsSpecification.toJson();
-        return settingsSpecification.toJson();
+    public void buildJson(JsonObjectBuilder builder) {
+        specification.buildJson(builder, this::childJsonTree);
     }
 
-    public JsonObject defaultsJson() {
-        //TODO!!
+    public JsonObject defaultValuesJson() {
+        //TODO!! recursive JSON with all default settings
         throw new UnsupportedOperationException();
     }
 
+    private JsonObject childJsonTree(String name) {
+        return children.containsKey(name) ? children.get(name).toJson() : null;
+    }
+
     public static class SmartSearch {
-        private final Supplier<? extends Collection<String>> allSettingsIds;
         private final SettingsSpecificationFactory settingsSpecificationFactory;
+        private final Supplier<? extends Collection<String>> allSettingsIds;
 
         private boolean complete = false;
         private boolean hasDuplicates = false;
 
         private SmartSearch(
-                Supplier<? extends Collection<String>> allSettingsIds,
-                SettingsSpecificationFactory settingsSpecificationFactory) {
+                SettingsSpecificationFactory settingsSpecificationFactory,
+                Supplier<? extends Collection<String>> allSettingsIds) {
             this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
             this.settingsSpecificationFactory = Objects.requireNonNull(
                     settingsSpecificationFactory, "Null settingsSpecificationFactory");
@@ -92,7 +156,7 @@ public class SettingsTree {
         public static SmartSearch getInstance(
                 Supplier<? extends Collection<String>> allSettingsIds,
                 SettingsSpecificationFactory settingsSpecificationFactory) {
-            return new SmartSearch(allSettingsIds, settingsSpecificationFactory);
+            return new SmartSearch(settingsSpecificationFactory, allSettingsIds);
         }
 
         public static SmartSearch getInstance(ExecutorLoaderSet executorLoaderSet, String sessionId) {

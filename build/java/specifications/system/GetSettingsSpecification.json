@@ -45,14 +45,8 @@
     },
     {
       "value_type": "scalar",
-      "name": "language",
-      "hint": "Executor language",
-      "advanced": true
-    },
-    {
-      "value_type": "scalar",
-      "name": "built_in",
-      "hint": "Will contain \"true\" if this executor is built-in — it is a Java-executor, available directly after starting JVM.\nWill contain \"false\" for extended executors like Python, JavaScript, sub-chains etc."
+      "name": "complete",
+      "hint": "Will contain \"true\" if the tree was completely built, \"false\" if some sub-settings were not found."
     }
   ],
   "controls": [
