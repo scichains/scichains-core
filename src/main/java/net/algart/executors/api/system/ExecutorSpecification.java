@@ -2124,7 +2124,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return objects;
     }
 
-    public static String defaultClassName(String category, String name) {
+    public static String className(String category, String name) {
         return category + CATEGORY_SEPARATOR + name;
     }
 

@@ -443,7 +443,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public String className() {
-        return className == null ? ExecutorSpecification.defaultClassName(category, name) : className;
+        return className == null ? ExecutorSpecification.className(category, name) : className;
     }
 
     public SettingsSpecification setClassName(String className) {
