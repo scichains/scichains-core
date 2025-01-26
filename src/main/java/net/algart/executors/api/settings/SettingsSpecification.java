@@ -679,6 +679,12 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         return new SettingsTree(factory, this);
     }
 
+    public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {
+        Objects.requireNonNull(specificationFactory, "Null specification factory");
+        checkCompleteness();
+        return buildTree(specificationFactory).toJson();
+    }
+
     @Override
     public void checkCompleteness() {
         checkNull(category, "category");
@@ -713,12 +719,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 ", controls=" + controls +
                 ", controlExtensions=" + controlExtensions +
                 '}';
-    }
-
-    public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {
-        Objects.requireNonNull(specificationFactory, "Null specification factory");
-        checkCompleteness();
-        return buildTree(specificationFactory).toJson();
     }
 
     @Override
