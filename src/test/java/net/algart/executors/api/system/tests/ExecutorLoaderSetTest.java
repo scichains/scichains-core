@@ -26,13 +26,19 @@ package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.settings.SettingsTree;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorLoaderSet;
+import net.algart.executors.api.system.*;
 
 import java.io.IOException;
 import java.util.Set;
 
 public class ExecutorLoaderSetTest {
+    private static ExecutorSpecificationFactory factory() {
+        ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
+        return global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+        // return executorId -> global.getSpecification(null, executorId, true);
+        // - this is non-optimized simple alternative
+    }
+
     public static void main(String[] args) throws IOException {
         long t1 = System.nanoTime();
         ExecutionBlock.initializeExecutionSystem();
@@ -43,7 +49,7 @@ public class ExecutorLoaderSetTest {
 
         long n = 0;
         for (int test = 1; test <= 16; test++) {
-            final ExecutorFactory factory = global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+            final ExecutorSpecificationFactory factory = factory();
             t1 = System.nanoTime();
             n = allIds.stream().filter(id -> factory.getSettingsSpecification(id) != null).count();
             t2 = System.nanoTime();
@@ -52,7 +58,7 @@ public class ExecutorLoaderSetTest {
         }
         System.out.println();
         for (int test = 1; test <= 16; test++) {
-            final ExecutorFactory factory = global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+            final ExecutorSpecificationFactory factory = factory();
             // The following optimization is not too efficient, unless there are a lot of dynamic executors:
             // usually most specifications in the standard factory are built-in and preloaded
             t1 = System.nanoTime();
