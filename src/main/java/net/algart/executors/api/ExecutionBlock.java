@@ -1169,8 +1169,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     @UsedForExternalCommunication
-    public static String[] serializedSessionSpecificationsArray(String sessionId) {
-        return GLOBAL_LOADERS.serializedSessionSpecifications(sessionId, true)
+    public static String[] allSerializedSpecificationsArray(String sessionId) {
+        return GLOBAL_LOADERS.allSerializedSpecifications(sessionId, true)
                 .values().toArray(new String[0]);
     }
 

@@ -166,7 +166,7 @@ public abstract class ExecutorLoader {
      * @return specifications for all executors, created by this loader.
      * @throws NullPointerException if <code>sessionId==null</code>.
      */
-    public final Map<String, String> serializedSessionSpecifications(String sessionId) {
+    public final Map<String, String> allSerializedSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
             return Collections.unmodifiableMap(
@@ -175,7 +175,7 @@ public abstract class ExecutorLoader {
     }
 
     public Set<String> allSessionExecutorIds(String sessionId) {
-        return serializedSessionSpecifications(sessionId).keySet();
+        return allSerializedSpecifications(sessionId).keySet();
     }
 
     /**

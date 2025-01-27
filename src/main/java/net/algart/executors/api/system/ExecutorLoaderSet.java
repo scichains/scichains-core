@@ -86,7 +86,7 @@ public final class ExecutorLoaderSet {
     /**
      * Returns specification with the given <code>executorId</code>,
      * that can be found in
-     * <pre>{@link #serializedSessionSpecifications(String, boolean)
+     * <pre>{@link #allSerializedSpecifications(String, boolean)
      * serializedSessionSpecifications}(sessionId, includeGlobalSession),</pre>
      * and parses it.
      * This method searches all the registered loaders for the requested executor.
@@ -123,7 +123,7 @@ public final class ExecutorLoaderSet {
     /**
      * Returns specification with the given <code>executorId</code>,
      * that can be found in
-     * <pre>{@link #serializedSessionSpecifications(String, boolean)
+     * <pre>{@link #allSerializedSpecifications(String, boolean)
      * serializedSessionSpecifications}(sessionId, includeGlobalSession)</pre>
      * This method searches all the registered loaders for the requested executor.
      *
@@ -169,14 +169,14 @@ public final class ExecutorLoaderSet {
      *                             registered in the global session.
      * @return all available executor specifications for this and (possibly) the global session.
      */
-    public Map<String, String> serializedSessionSpecifications(String sessionId, boolean includeGlobalSession) {
+    public Map<String, String> allSerializedSpecifications(String sessionId, boolean includeGlobalSession) {
         final Map<String, String> result = new LinkedHashMap<>();
         for (ExecutorLoader loader : list()) {
             if (includeGlobalSession) {
-                result.putAll(loader.serializedSessionSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+                result.putAll(loader.allSerializedSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
             if (sessionId != null) {
-                result.putAll(loader.serializedSessionSpecifications(sessionId));
+                result.putAll(loader.allSerializedSpecifications(sessionId));
             }
 //            System.out.println("!!! " + loader + ": " + result.size() + " executors");
         }
@@ -194,7 +194,6 @@ public final class ExecutorLoaderSet {
             }
         }
         return result;
-
     }
 
     public void clearSession(String sessionId) {

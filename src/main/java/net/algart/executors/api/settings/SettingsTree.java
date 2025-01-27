@@ -148,22 +148,28 @@ public final class SettingsTree extends AbstractConvertibleToJson {
         private SmartSearch(
                 SettingsSpecificationFactory settingsSpecificationFactory,
                 Supplier<? extends Collection<String>> allSettingsIds) {
-            this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
             this.settingsSpecificationFactory = Objects.requireNonNull(
                     settingsSpecificationFactory, "Null settingsSpecificationFactory");
+            this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
         }
 
         public static SmartSearch getInstance(
-                Supplier<? extends Collection<String>> allSettingsIds,
-                SettingsSpecificationFactory settingsSpecificationFactory) {
+                SettingsSpecificationFactory settingsSpecificationFactory,
+                Supplier<? extends Collection<String>> allSettingsIds) {
             return new SmartSearch(settingsSpecificationFactory, allSettingsIds);
+        }
+
+        public static SmartSearch getInstance(Map<String, SettingsSpecification> settingsSpecifications) {
+            Objects.requireNonNull(settingsSpecifications, "Null settingsSpecifications");
+            return new SmartSearch(settingsSpecifications::get, settingsSpecifications::keySet);
         }
 
         public static SmartSearch getInstance(ExecutorLoaderSet executorLoaderSet, String sessionId) {
             Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
             return getInstance(
-                    () -> executorLoaderSet.allSessionExecutorIds(sessionId, true),
-                    executorLoaderSet.newFactory(sessionId));
+                    executorLoaderSet.newFactory(sessionId),
+                    () -> executorLoaderSet.allSessionExecutorIds(sessionId, true)
+            );
         }
 
         public void findChildren() {

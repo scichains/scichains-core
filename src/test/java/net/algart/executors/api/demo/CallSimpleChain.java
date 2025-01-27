@@ -90,7 +90,7 @@ public class CallSimpleChain {
         System.out.printf("All registered sub-chain IDs: %s%n",
                 loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
         System.out.println("All registered sub-chains:");
-        for (String serialized : loader.serializedSessionSpecifications(
+        for (String serialized : loader.allSerializedSpecifications(
                 ExecutionBlock.GLOBAL_SHARED_SESSION_ID).values()) {
             ExecutorSpecification specification = ExecutorSpecification.valueOf(serialized);
             System.out.printf("    %s%n", specification.getName());
