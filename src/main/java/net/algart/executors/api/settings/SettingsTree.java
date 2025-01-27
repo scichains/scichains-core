@@ -32,6 +32,7 @@ import net.algart.json.AbstractConvertibleToJson;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public final class SettingsTree extends AbstractConvertibleToJson {
     private final SettingsSpecificationFactory factory;
@@ -139,6 +140,8 @@ public final class SettingsTree extends AbstractConvertibleToJson {
     }
 
     public static class SmartSearch {
+        private static final String TESTED_SUBSTRING = "\"" + ExecutorSpecification.SETTINGS_MAME + "\"";
+
         private final SettingsSpecificationFactory settingsSpecificationFactory;
         private final Supplier<? extends Collection<String>> allSettingsIds;
 
@@ -159,18 +162,32 @@ public final class SettingsTree extends AbstractConvertibleToJson {
             return new SmartSearch(settingsSpecificationFactory, allSettingsIds);
         }
 
-        public static SmartSearch getInstance(Map<String, SettingsSpecification> settingsSpecifications) {
-            Objects.requireNonNull(settingsSpecifications, "Null settingsSpecifications");
-            return new SmartSearch(settingsSpecifications::get, settingsSpecifications::keySet);
-        }
-
-        public static SmartSearch getInstance(ExecutorLoaderSet executorLoaderSet, String sessionId) {
+        public static SmartSearch getInstance(
+                SettingsSpecificationFactory settingsSpecificationFactory,
+                ExecutorLoaderSet executorLoaderSet,
+                String sessionId) {
+            Objects.requireNonNull(settingsSpecificationFactory, "Null settingsSpecificationFactory");
             Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
             return getInstance(
-                    executorLoaderSet.newFactory(sessionId),
-                    () -> executorLoaderSet.allSessionExecutorIds(sessionId, true)
+                    settingsSpecificationFactory,
+                    () -> probableSettingsIds(executorLoaderSet, sessionId)
             );
         }
+
+        public static Set<String> probableSettingsIds(ExecutorLoaderSet executorLoaderSet, String sessionId) {
+            return probableSerializedSettings(executorLoaderSet, sessionId).keySet();
+        }
+
+        public static Map<String, String> probableSerializedSettings(
+                ExecutorLoaderSet executorLoaderSet,
+                String sessionId) {
+            Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
+            final Map<String, String> serialized = executorLoaderSet.allSerializedSpecifications(
+                    sessionId, true);
+            return serialized.entrySet().stream().filter(SmartSearch::probableSettings)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+
 
         public void findChildren() {
             //TODO!! fill complete, hasDuplicates (??)
@@ -183,6 +200,10 @@ public final class SettingsTree extends AbstractConvertibleToJson {
 
         public boolean hasDuplicates() {
             return hasDuplicates;
+        }
+
+        private static boolean probableSettings(Map.Entry<String, String> entry) {
+            return entry.getValue().contains(TESTED_SUBSTRING);
         }
     }
 }

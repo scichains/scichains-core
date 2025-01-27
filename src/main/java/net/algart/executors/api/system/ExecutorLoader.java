@@ -174,7 +174,7 @@ public abstract class ExecutorLoader {
         }
     }
 
-    public Set<String> allSessionExecutorIds(String sessionId) {
+    public Set<String> allExecutorIds(String sessionId) {
         return allSerializedSpecifications(sessionId).keySet();
     }
 

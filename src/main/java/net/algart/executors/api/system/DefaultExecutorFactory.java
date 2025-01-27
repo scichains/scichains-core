@@ -130,7 +130,6 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // We DO NOT TRY to cache null specification: it MAY become non-null as a result of registering
                 // new dynamic executors.
             }
-//            System.out.println("!!! Requesting specification for executor " + executorId);
             specification = loaderSet.getSpecification(sessionId, executorId, true);
             if (specification == null) {
                 // - It will be null, when there is no available executor: for example, it is a dynamic executor
@@ -156,6 +155,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // - No sense to add null to dynamicExecutorsCache;
                 // moreover, it is prohibited ("add" method will throw an exception)
             }
+//            System.out.println("!!! Add specification for executor " + executorId + ": " + specification.getName());
             dynamicSpecificationsCache.add(executorId, specification);
             return specification;
         }

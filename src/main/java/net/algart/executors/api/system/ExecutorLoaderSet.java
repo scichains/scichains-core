@@ -183,14 +183,14 @@ public final class ExecutorLoaderSet {
         return result;
     }
 
-    public Set<String> allSessionExecutorIds(String sessionId, boolean includeGlobalSession) {
+    public Set<String> allExecutorIds(String sessionId, boolean includeGlobalSession) {
         final Set<String> result = new LinkedHashSet<>();
         for (ExecutorLoader loader : list()) {
             if (includeGlobalSession) {
-                result.addAll(loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+                result.addAll(loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
             }
             if (sessionId != null) {
-                result.addAll(loader.allSessionExecutorIds(sessionId));
+                result.addAll(loader.allExecutorIds(sessionId));
             }
         }
         return result;

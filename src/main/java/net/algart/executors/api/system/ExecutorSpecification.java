@@ -53,6 +53,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final String EXECUTOR_FILE_PATTERN = ".*\\.json$";
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
+    public static final String SETTINGS_MAME = "settings";
 
     public static final char CATEGORY_SEPARATOR = '.';
     public static final String DYNAMIC_CATEGORY_PREFIX = "$";
@@ -1421,7 +1422,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }
-            final JsonObject settingsJson = json.getJsonObject("settings");
+            final JsonObject settingsJson = json.getJsonObject(SETTINGS_MAME);
             if (settingsJson != null) {
                 this.settings = SettingsSpecification.valueOf(settingsJson);
             }
@@ -2197,7 +2198,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
         builder.add("controls", controlsBuilder.build());
         if (settings != null) {
-            builder.add("settings", settings.toJson());
+            builder.add(SETTINGS_MAME, settings.toJson());
         }
         if (sourceInfo != null) {
             builder.add("source", sourceInfo.toJson());

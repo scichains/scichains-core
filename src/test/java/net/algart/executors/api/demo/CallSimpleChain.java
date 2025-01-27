@@ -88,7 +88,7 @@ public class CallSimpleChain {
     static void printSubChainExecutors() {
         final DefaultExecutorLoader<Chain> loader = UseSubChain.subChainLoader();
         System.out.printf("All registered sub-chain IDs: %s%n",
-                loader.allSessionExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
+                loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
         System.out.println("All registered sub-chains:");
         for (String serialized : loader.allSerializedSpecifications(
                 ExecutionBlock.GLOBAL_SHARED_SESSION_ID).values()) {

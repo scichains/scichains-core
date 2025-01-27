@@ -25,6 +25,8 @@
 package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.settings.SettingsTree;
+import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorLoaderSet;
 
 import java.io.IOException;
@@ -35,10 +37,35 @@ public class ExecutorLoaderSetTest {
         long t1 = System.nanoTime();
         ExecutionBlock.initializeExecutionSystem();
         long t2 = System.nanoTime();
-        final ExecutorLoaderSet loaders = ExecutionBlock.globalLoaders();
-        final Set<String> allIds = loaders.allSessionExecutorIds(null, true);
+        final ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
+        final Set<String> allIds = global.allExecutorIds(null, true);
         System.out.printf("Found %d standard executors in %.3f ms%n", allIds.size(), (t2 - t1) * 1e-6);
 
+        long n = 0;
+        for (int test = 1; test <= 16; test++) {
+            final ExecutorFactory factory = global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+            t1 = System.nanoTime();
+            n = allIds.stream().filter(id -> factory.getSettingsSpecification(id) != null).count();
+            t2 = System.nanoTime();
+            System.out.printf("Test #%d: found %d settings among all %d in %.3f ms%n",
+                    test, n, allIds.size(), (t2 - t1) * 1e-6);
+        }
+        System.out.println();
+        for (int test = 1; test <= 16; test++) {
+            final ExecutorFactory factory = global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+            // The following optimization is not too efficient, unless there are a lot of dynamic executors:
+            // usually most specifications in the standard factory are built-in and preloaded
+            t1 = System.nanoTime();
+            Set<String> probableIds = SettingsTree.SmartSearch.probableSettingsIds(global, null);
+            t2 = System.nanoTime();
+            long m = probableIds.stream().filter(id -> factory.getSettingsSpecification(id) != null).count();
+            long t3 = System.nanoTime();
+            if (n != m) {
+                throw new AssertionError(m + " != " + n);
+            }
+            System.out.printf("Test #%d: found %d settings among %d probables in %.3f ms + %.3f ms%n",
+                    test, n, probableIds.size(), (t2 - t1) * 1e-6, (t3 - t2) * 1e-6);
 
+        }
     }
 }

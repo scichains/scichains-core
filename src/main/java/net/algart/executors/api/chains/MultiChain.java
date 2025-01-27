@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public final class MultiChain implements Cloneable, AutoCloseable {
     public static final String SELECTED_CHAIN_ID_PARAMETER_NAME = "___selectedChainId";
-    public static final String SELECTED_CHAIN_NAME_JSON_KEY = "___selectedChainName";
+    public static final String SELECTED_CHAIN_PROPERTY_NAME = "___selectedChainName";
     // - unlike chain ID, it is not a parameter of combiner, but only additional information inside result JSON
     public static final String SELECTED_CHAIN_ID_PARAMETER_CAPTION = "Selected chain";
 
