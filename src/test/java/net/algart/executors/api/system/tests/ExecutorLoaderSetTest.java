@@ -32,14 +32,19 @@ import java.io.IOException;
 import java.util.Set;
 
 public class ExecutorLoaderSetTest {
-    private static ExecutorSpecificationFactory factory() {
+    private static ExecutorSpecificationFactory factory(boolean parseAll) {
         ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
-        return global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
-        // return executorId -> global.getSpecification(null, executorId, true);
-        // - this is non-optimized simple alternative
+        return parseAll ?
+                executorId -> global.getSpecification(null, executorId, true) :
+                global.newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+        // - parseAll means non-optimized simple alternative
     }
 
     public static void main(String[] args) throws IOException {
+        final boolean parseAll = args.length > 0 && args[0].equals("--parse-all");
+        System.out.println(parseAll ?
+                "Using slow non-optimized factory (parsing all)" :
+                "Using standard factory");
         long t1 = System.nanoTime();
         ExecutionBlock.initializeExecutionSystem();
         long t2 = System.nanoTime();
@@ -49,7 +54,7 @@ public class ExecutorLoaderSetTest {
 
         long n = 0;
         for (int test = 1; test <= 16; test++) {
-            final ExecutorSpecificationFactory factory = factory();
+            final ExecutorSpecificationFactory factory = factory(parseAll);
             t1 = System.nanoTime();
             n = allIds.stream().filter(id -> factory.getSettingsSpecification(id) != null).count();
             t2 = System.nanoTime();
@@ -58,7 +63,7 @@ public class ExecutorLoaderSetTest {
         }
         System.out.println();
         for (int test = 1; test <= 16; test++) {
-            final ExecutorSpecificationFactory factory = factory();
+            final ExecutorSpecificationFactory factory = factory(parseAll);
             // The following optimization is not too efficient, unless there are a lot of dynamic executors:
             // usually most specifications in the standard factory are built-in and preloaded
             t1 = System.nanoTime();
@@ -71,7 +76,6 @@ public class ExecutorLoaderSetTest {
             }
             System.out.printf("Test #%d: found %d settings among %d probables in %.3f ms + %.3f ms%n",
                     test, n, probableIds.size(), (t2 - t1) * 1e-6, (t3 - t2) * 1e-6);
-
         }
     }
 }
