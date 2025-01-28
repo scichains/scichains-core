@@ -37,6 +37,8 @@ import java.util.*;
  * real {@link SettingsSpecification settings}, mappings and so on.
  */
 public final class SettingsTree extends AbstractConvertibleToJson {
+    private static final System.Logger LOG = System.getLogger(SettingsTree.class.getName());
+
     private final SmartSearchSettings smartSearch;
     private final ExecutorSpecificationFactory factory;
     private final ExecutorSpecification specification;
@@ -104,13 +106,12 @@ public final class SettingsTree extends AbstractConvertibleToJson {
                 if (control.isSubSettings()) {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null && smartSearch != null) {
-                        smartSearch.process();
+                        smartSearch.search();
                         // ...and try again!
                         settingsId = control.getSettingsId();
                     }
                     final boolean found = settingsId != null;
                     complete &= found;
-//                    if (!found) System.out.printf("%s: not found%n", name);
                     if (found) {
                         final ExecutorSpecification childSettings = factory.getSpecification(settingsId);
                         if (childSettings == null) {
@@ -133,6 +134,8 @@ public final class SettingsTree extends AbstractConvertibleToJson {
                                 stackForDetectingRecursion);
                         complete &= child.complete;
                         children.put(name, child);
+                    } else {
+                        LOG.log(System.Logger.Level.DEBUG, () -> "Sub-settings " + name + " not found");
                     }
                 }
             }

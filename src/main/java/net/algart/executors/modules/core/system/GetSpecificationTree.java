@@ -27,7 +27,9 @@ package net.algart.executors.modules.core.system;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.settings.SettingsTree;
+import net.algart.executors.api.settings.SmartSearchSettings;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.List;
@@ -51,8 +53,10 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
 
     private String id = "n/a";
     private boolean buildTree = true;
+    private boolean smartSearch = true;
 
     private volatile ExecutorFactory factory = null;
+    private volatile SmartSearchSettings smartSearchSettings = null;
 
     public GetSpecificationTree() {
         addInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID);
@@ -77,6 +81,15 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         return this;
     }
 
+    public boolean isSmartSearch() {
+        return smartSearch;
+    }
+
+    public GetSpecificationTree setSmartSearch(boolean smartSearch) {
+        this.smartSearch = smartSearch;
+        return this;
+    }
+
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
@@ -98,8 +111,11 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
     public ExecutorSpecification findSpecification(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
-        if (factory == null) {
-            factory = globalLoaders().newFactory(getSessionId());
+        if (factory == null || smartSearchSettings == null) {
+            final ExecutorLoaderSet globalLoaders = globalLoaders();
+            final String sessionId = getSessionId();
+            factory = globalLoaders.newFactory(sessionId);
+            smartSearchSettings = SmartSearchSettings.of(factory, globalLoaders, sessionId);
         }
         final ExecutorSpecification specification = factory.getSpecification(executorId);
         if (specification == null) {
@@ -108,8 +124,9 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         long t2 = debugTime(), t3;
         final String result;
         if (buildTree) {
-            // TODO!! find children IDs (should be new specification method)
-            SettingsTree tree = SettingsTree.of(factory, specification);
+            SettingsTree tree = smartSearch ?
+                    SettingsTree.of(smartSearchSettings, specification) :
+                    SettingsTree.of(factory, specification);
             t3 = debugTime();
             getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
             result = tree.jsonString();

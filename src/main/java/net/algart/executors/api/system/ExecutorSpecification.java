@@ -138,8 +138,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
 
             public boolean matchesClass(String someEntityName) {
-                Objects.requireNonNull(someEntityName, "Null someEntityName");
-                if (className == null) {
+                if (someEntityName == null || className == null) {
                     return false;
                 }
                 return className.equals(someEntityName) || className.endsWith(CATEGORY_SEPARATOR + someEntityName);
@@ -254,6 +253,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         public static final class Service extends AbstractConvertibleToJson {
             private String settingsId = null;
+            // - for example, for a chain executor, this is an ID of the main settings combiner
 
             public Service() {
             }

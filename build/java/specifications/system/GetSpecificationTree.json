@@ -61,10 +61,18 @@
     {
       "caption": "Build settings tree",
       "name": "buildTree",
-      "description": "If set (default behaviour), this function returns JSON with the tree of sub-settings, if any exist. If cleared, this function just returns this settings specification without JSON of the children.",
+      "description": "If set (default behaviour), this function builds JSON with the tree of sub-settings, if any exist. If cleared, this function just returns this executor specification without JSONs of the children.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true
+    },
+    {
+      "caption": "Smart search",
+      "name": "smartSearch",
+      "description": "If set, this function uses the smart algorithm for building settings tree: if settings_id is not specified, it tries to find sub-settings by the control attribute \"value_class_name\" (if exist) and its name.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
     }
   ]
 }

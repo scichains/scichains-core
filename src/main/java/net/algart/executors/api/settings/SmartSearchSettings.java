@@ -33,14 +33,14 @@ import java.util.function.Supplier;
 
 public class SmartSearchSettings {
     private static final String TESTED_SUBSTRING = "\"" + ExecutorSpecification.SETTINGS + "\"";
+    private static final System.Logger LOG = System.getLogger(SettingsTree.class.getName());
 
     private final ExecutorSpecificationFactory factory;
     private final Supplier<? extends Collection<String>> allSettingsIds;
 
     private volatile boolean ready = false;
     private volatile Map<String, ExecutorSpecification> allSettings = null;
-    private boolean complete = false;
-    private boolean hasDuplicates = false;
+    private volatile boolean complete = false;
 
     private SmartSearchSettings(
             ExecutorSpecificationFactory factory,
@@ -49,19 +49,19 @@ public class SmartSearchSettings {
         this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
     }
 
-    public static SmartSearchSettings getInstance(
+    public static SmartSearchSettings of(
             ExecutorSpecificationFactory factory,
-            Supplier<? extends Collection<String>> allSettingsIds) {
-        return new SmartSearchSettings(factory, allSettingsIds);
+            Supplier<? extends Collection<String>> allExecutorsIdsToCheck) {
+        return new SmartSearchSettings(factory, allExecutorsIdsToCheck);
     }
 
-    public static SmartSearchSettings getInstance(
+    public static SmartSearchSettings of(
             ExecutorSpecificationFactory factory,
             ExecutorLoaderSet executorLoaderSet,
             String sessionId) {
         Objects.requireNonNull(factory, "Null factory");
         Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
-        return getInstance(factory, () -> probableSettingsIds(executorLoaderSet, sessionId));
+        return of(factory, () -> probableSettingsIds(executorLoaderSet, sessionId));
     }
 
     public ExecutorSpecificationFactory factory() {
@@ -73,28 +73,35 @@ public class SmartSearchSettings {
         return allSettings;
     }
 
-    public void process() {
-        if (!ready) {
-            return;
+    public boolean search() {
+        if (ready) {
+            return complete;
         }
         this.allSettings = makeAllSettings();
+        boolean complete = true;
         for (ExecutorSpecification specification : allSettings.values()) {
             final Map<String, ExecutorSpecification.ControlConf> controls = specification.getControls();
-            // note: getControls() is synchronized
+            // - note: getControls() is synchronized
             for (var entry : controls.entrySet()) {
                 final String name = entry.getKey();
                 final ExecutorSpecification.ControlConf control = entry.getValue();
-                if (!control.isSubSettings()) {
-                    continue;
-                }
-                String settingsId = control.getSettingsId();
-                if (settingsId == null) {
-
+                if (control.isSubSettings()) {
+                    String settingsId = control.getSettingsId();
+                    if (settingsId == null) {
+                        settingsId = tryToFindSettings(control.getValueClassName(), name);
+                        if (settingsId == null) {
+                            complete = false;
+                        } else {
+                            specification.updateControlSettingsId(name, settingsId);
+                            // - note: updateControlSettingsId() is synchronized
+                        }
+                    }
                 }
             }
         }
-
-        ready = true;
+        this.complete = complete;
+        this.ready = true;
+        return complete;
     }
 
     public static Set<String> probableSettingsIds(ExecutorLoaderSet executorLoaderSet, String sessionId) {
@@ -117,19 +124,6 @@ public class SmartSearchSettings {
     }
 
 
-    public void findChildren() {
-        //TODO!! fill complete, hasDuplicates (??)
-        //TODO!! don't forget about synchronization by ExecutorSpecification.controlsLock
-    }
-
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public boolean hasDuplicates() {
-        return hasDuplicates;
-    }
-
     private Map<String, ExecutorSpecification> makeAllSettings() {
         final Map<String, ExecutorSpecification> result = new LinkedHashMap<>();
         for (String settingsId : this.allSettingsIds.get()) {
@@ -144,8 +138,17 @@ public class SmartSearchSettings {
     private String tryToFindSettings(String valueClassName, String controlName) {
         for (Map.Entry<String, ExecutorSpecification> entry : this.allSettings.entrySet()) {
             final ExecutorSpecification specification = entry.getValue();
-//TODO!!
+            final ExecutorSpecification.Options.Role role = specification.getRole();
+            if (role == null) {
+                // - improbable: possible only due to modification from parallel thread
+                continue;
+            }
+            if (role.matchesClass(valueClassName) || role.matchesClass(controlName)) {
+                return specification.getId();
+            }
         }
+        LOG.log(System.Logger.Level.DEBUG, () -> "Cannot find sub-settings for control " + controlName +
+                (valueClassName != null ? " with value class " + valueClassName : ""));
         return null;
     }
 
