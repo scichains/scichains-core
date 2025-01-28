@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "system",
-  "name": "Get settings specification of the installed executor",
+  "name": "Get settings specification tree of the installed executor",
   "id": "686710bb-f11a-40e8-afbb-e5e6adfa3791",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.system.GetSettingsSpecification"
+    "class": "net.algart.executors.modules.core.system.GetSpecificationTree"
   },
   "in_ports": [
     {

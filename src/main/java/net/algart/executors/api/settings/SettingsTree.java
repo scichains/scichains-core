@@ -27,30 +27,27 @@ package net.algart.executors.api.settings;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationFactory;
 import net.algart.json.AbstractConvertibleToJson;
 
 import java.util.*;
 
+/**
+ * Specification tree of executors, playing a role of settings:
+ * real {@link SettingsSpecification settings}, mappings and so on.
+ */
 public final class SettingsTree extends AbstractConvertibleToJson {
     private final SmartSearchSettings smartSearch;
-    private final SettingsSpecificationFactory factory;
-    private final SettingsSpecification specification;
+    private final ExecutorSpecificationFactory factory;
+    private final ExecutorSpecification specification;
     private final Map<String, SettingsTree> children = new LinkedHashMap<>();
     private final SettingsTree parent;
     private final boolean complete;
 
-    SettingsTree(SmartSearchSettings smartSearch, SettingsSpecification specification) {
-        this(smartSearch, smartSearch.factory(), specification, null, new HashSet<>());
-    }
-
-    SettingsTree(SettingsSpecificationFactory factory, SettingsSpecification specification) {
-        this(null, factory, specification, null, new HashSet<>());
-    }
-
     private SettingsTree(
             SmartSearchSettings smartSearch,
-            SettingsSpecificationFactory factory,
-            SettingsSpecification specification,
+            ExecutorSpecificationFactory factory,
+            ExecutorSpecification specification,
             SettingsTree parent,
             Set<String> stackForDetectingRecursion) {
         this.smartSearch = smartSearch;
@@ -61,15 +58,23 @@ public final class SettingsTree extends AbstractConvertibleToJson {
         this.complete = buildTree(stackForDetectingRecursion);
     }
 
+    public static SettingsTree of(SmartSearchSettings smartSearch, ExecutorSpecification specification) {
+        return new SettingsTree(smartSearch, smartSearch.factory(), specification, null, new HashSet<>());
+    }
+
+    public static SettingsTree of(ExecutorSpecificationFactory factory, ExecutorSpecification specification) {
+        return new SettingsTree(null, factory, specification, null, new HashSet<>());
+    }
+
     public SettingsTree parent() {
         return parent;
     }
 
-    public SettingsSpecificationFactory factory() {
+    public ExecutorSpecificationFactory factory() {
         return factory;
     }
 
-    public SettingsSpecification specification() {
+    public ExecutorSpecification specification() {
         return specification;
     }
 
@@ -96,7 +101,7 @@ public final class SettingsTree extends AbstractConvertibleToJson {
             for (var entry : specification.getControls().entrySet()) {
                 final String name = entry.getKey();
                 final ExecutorSpecification.ControlConf control = entry.getValue();
-                if (control.getValueType().isSettings()) {
+                if (control.isSubSettings()) {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null && smartSearch != null) {
                         smartSearch.process();
@@ -107,7 +112,7 @@ public final class SettingsTree extends AbstractConvertibleToJson {
                     complete &= found;
 //                    if (!found) System.out.printf("%s: not found%n", name);
                     if (found) {
-                        final SettingsSpecification childSettings = factory.getSettingsSpecification(settingsId);
+                        final ExecutorSpecification childSettings = factory.getSpecification(settingsId);
                         if (childSettings == null) {
                             throw new IllegalStateException("Child settings with ID \"" + settingsId +
                                     "\" (child control \"" + name + "\") is not found");

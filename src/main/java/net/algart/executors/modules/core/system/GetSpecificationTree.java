@@ -26,15 +26,15 @@ package net.algart.executors.modules.core.system;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.SettingsTree;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class GetSettingsSpecification extends Executor implements ReadOnlyExecutionInput {
+public class GetSpecificationTree extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
     public static final String OUTPUT_DESCRIPTION = "description";
@@ -54,7 +54,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
 
     private volatile ExecutorFactory factory = null;
 
-    public GetSettingsSpecification() {
+    public GetSpecificationTree() {
         addInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID);
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
@@ -63,7 +63,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
         return id;
     }
 
-    public GetSettingsSpecification setId(String id) {
+    public GetSpecificationTree setId(String id) {
         this.id = nonNull(id);
         return this;
     }
@@ -72,7 +72,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
         return buildTree;
     }
 
-    public GetSettingsSpecification setBuildTree(boolean buildTree) {
+    public GetSpecificationTree setBuildTree(boolean buildTree) {
         this.buildTree = buildTree;
         return this;
     }
@@ -84,24 +84,24 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
         if (id == null) {
             id = this.id;
         }
-        final SettingsSpecification specification = findSpecification(id);
+        final ExecutorSpecification specification = findSpecification(id);
         if (specification == null) {
             getScalar().remove();
             return;
         }
         getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
         getScalar(OUTPUT_NAME).setTo(specification.getName());
-        getScalar(OUTPUT_DESCRIPTION).setTo(specification.getCombineDescription());
+        getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
         getScalar(OUTPUT_ID).setTo(specification.getId());
     }
 
-    public SettingsSpecification findSpecification(String executorId) {
+    public ExecutorSpecification findSpecification(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
         if (factory == null) {
             factory = globalLoaders().newFactory(getSessionId());
         }
-        final SettingsSpecification specification = factory.getSettingsSpecification(executorId);
+        final ExecutorSpecification specification = factory.getSpecification(executorId);
         if (specification == null) {
             return null;
         }
@@ -109,7 +109,7 @@ public class GetSettingsSpecification extends Executor implements ReadOnlyExecut
         final String result;
         if (buildTree) {
             // TODO!! find children IDs (should be new specification method)
-            SettingsTree tree = specification.buildTree(factory);
+            SettingsTree tree = SettingsTree.of(factory, specification);
             t3 = debugTime();
             getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
             result = tree.jsonString();

@@ -31,6 +31,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.SettingsTree;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -39,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -53,7 +55,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public static final String EXECUTOR_FILE_PATTERN = ".*\\.json$";
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
-    public static final String SETTINGS_MAME = "settings";
+    public static final String SETTINGS = "settings";
 
     public static final char CATEGORY_SEPARATOR = '.';
     public static final String DYNAMIC_CATEGORY_PREFIX = "$";
@@ -1256,6 +1258,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
+        public boolean isSubSettings() {
+            return getValueType().isSettings() && !SettingsSpecification.SETTINGS.equals(name);
+            // - SETTINGS is a special parameter (probably in a settings combiner)
+            // for customizing all settings tree, this is not a SUB-settings
+        }
+
         @Override
         public void checkCompleteness() {
             checkNull(name, "name");
@@ -1374,6 +1382,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private boolean javaExecutor = false;
     private boolean chainExecutor = false;
 
+    private final Object controlsLock = new Object();
+    // - allows correct changes in the controls from parallel threads:
+    // can be useful while building settings tree
+
     private volatile String minimalSpecification = null;
 
     public ExecutorSpecification() {
@@ -1431,7 +1443,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }
-            final JsonObject settingsJson = json.getJsonObject(SETTINGS_MAME);
+            final JsonObject settingsJson = json.getJsonObject(SETTINGS);
             if (settingsJson != null) {
                 this.settings = SettingsSpecification.valueOf(settingsJson);
             }
@@ -1608,6 +1620,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
+    public final Options.Role getRole() {
+        return options == null ? null : options.getRole();
+    }
+
+    public final boolean isRoleSettings() {
+        final Options.Role role = getRole();
+        return role != null && role.isSettings();
+    }
+
     public final String getLanguage() {
         return language;
     }
@@ -1678,17 +1699,35 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     public final ControlConf getControl(String name) {
-        return controls.get(name);
+        synchronized (controlsLock) {
+            return controls.get(name);
+        }
     }
 
     public final Map<String, ControlConf> getControls() {
-        return Collections.unmodifiableMap(controls);
+        synchronized (controlsLock) {
+            return Collections.unmodifiableMap(controls);
+        }
     }
 
     public final ExecutorSpecification setControls(Map<String, ControlConf> controls) {
-        this.controls = checkControls(controls);
+        synchronized (controlsLock) {
+            this.controls = checkControls(controls);
+        }
         return this;
     }
+
+    public void updateControlSettingsId(String name, String settingsId) {
+        Objects.requireNonNull(name, "Null control name");
+        synchronized (controlsLock) {
+            ExecutorSpecification.ControlConf control = controls.get(name);
+            if (control == null) {
+                throw new IllegalArgumentException("No control with name " + name);
+            }
+            control.setSettingsId(settingsId);
+        }
+    }
+
 
     public SettingsSpecification getSettings() {
         return settings;
@@ -2060,6 +2099,78 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
+    public JsonObject toJsonTree(ExecutorSpecificationFactory specificationFactory) {
+        Objects.requireNonNull(specificationFactory, "Null specification factory");
+        checkCompleteness();
+        return SettingsTree.of(specificationFactory, this).toJson();
+    }
+
+
+    @Override
+    public void buildJson(JsonObjectBuilder builder) {
+        buildJson(builder, null);
+    }
+
+    public void buildJson(JsonObjectBuilder builder, Function<String, JsonObject> subSettingsJsonBuilder) {
+        builder.add("app", APP_NAME);
+        builder.add("version", version);
+        if (platformId != null) {
+            builder.add("platform_id", platformId);
+        }
+        builder.add("category", category);
+        builder.add("name", name);
+        if (description != null) {
+            builder.add("description", description);
+        }
+        if (!tags.isEmpty()) {
+            final JsonArrayBuilder tagsBuilder = Json.createArrayBuilder();
+            for (String tag : tags) {
+                tagsBuilder.add(tag);
+            }
+            builder.add("tags", tagsBuilder.build());
+        }
+        builder.add("id", id);
+        if (options != null) {
+            builder.add("options", options.toJson());
+        }
+        if (language != null) {
+            builder.add("language", language);
+        }
+        buildLanguageJson(builder);
+        final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
+        for (PortConf port : inPorts.values()) {
+            inPortsBuilder.add(port.toJson());
+        }
+        builder.add("in_ports", inPortsBuilder.build());
+        final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
+        for (PortConf port : outPorts.values()) {
+            outPortsBuilder.add(port.toJson());
+        }
+        builder.add("out_ports", outPortsBuilder.build());
+        final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
+        for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
+            final String name = entry.getKey();
+            final ControlConf control = entry.getValue();
+            control.checkCompleteness();
+            final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
+            control.buildJson(controlBuilder);
+            if (subSettingsJsonBuilder != null && control.getValueType().isSettings()) {
+                JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
+                if (subSettingsJson != null) {
+                    controlBuilder.add(SETTINGS, subSettingsJson);
+                }
+            }
+            controlsBuilder.add(controlBuilder.build());
+        }
+        builder.add("controls", controlsBuilder.build());
+        if (settings != null) {
+            builder.add(SETTINGS, settings.toJson());
+        }
+        if (sourceInfo != null) {
+            builder.add("source", sourceInfo.toJson());
+        }
+    }
+
     @Override
     public String toString() {
         return "ExecutorSpecification{\n" +
@@ -2162,56 +2273,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public static String quote(String value) {
         return value == null ? null : "\"" + value + "\"";
-    }
-
-    @Override
-    public void buildJson(JsonObjectBuilder builder) {
-        builder.add("app", APP_NAME);
-        builder.add("version", version);
-        if (platformId != null) {
-            builder.add("platform_id", platformId);
-        }
-        builder.add("category", category);
-        builder.add("name", name);
-        if (description != null) {
-            builder.add("description", description);
-        }
-        if (!tags.isEmpty()) {
-            final JsonArrayBuilder tagsBuilder = Json.createArrayBuilder();
-            for (String tag : tags) {
-                tagsBuilder.add(tag);
-            }
-            builder.add("tags", tagsBuilder.build());
-        }
-        builder.add("id", id);
-        if (options != null) {
-            builder.add("options", options.toJson());
-        }
-        if (language != null) {
-            builder.add("language", language);
-        }
-        buildLanguageJson(builder);
-        final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
-        for (PortConf port : inPorts.values()) {
-            inPortsBuilder.add(port.toJson());
-        }
-        builder.add("in_ports", inPortsBuilder.build());
-        final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
-        for (PortConf port : outPorts.values()) {
-            outPortsBuilder.add(port.toJson());
-        }
-        builder.add("out_ports", outPortsBuilder.build());
-        final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-        for (ControlConf control : controls.values()) {
-            controlsBuilder.add(control.toJson());
-        }
-        builder.add("controls", controlsBuilder.build());
-        if (settings != null) {
-            builder.add(SETTINGS_MAME, settings.toJson());
-        }
-        if (sourceInfo != null) {
-            builder.add("source", sourceInfo.toJson());
-        }
     }
 
     protected void buildLanguageJson(JsonObjectBuilder builder) {

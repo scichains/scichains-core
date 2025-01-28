@@ -55,7 +55,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     public static final String SUBSETTINGS_PREFIX = "@";
     public static final String SYSTEM_PREFIX = "$";
     public static final String CLASS_KEY = SYSTEM_PREFIX + "class";
-    public static final String SETTINGS = "settings";
+    public static final String SETTINGS = ExecutorSpecification.SETTINGS;
     public static final String DEFAULT_SETTINGS_CATEGORY = SETTINGS;
     public static final String DEFAULT_SETTINGS_CATEGORY_PREFIX = SETTINGS + ExecutorSpecification.CATEGORY_SEPARATOR;
     public static final String DEFAULT_SETTINGS_COMBINE_PREFIX = "Combine ";
@@ -177,10 +177,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     private Set<String> tags = new LinkedHashSet<>();
     private String platformId = null;
     private String platformCategory = null;
-
-    private final Object controlsLock = new Object();
-    // - allows correct changes in the controls from parallel threads:
-    // can be useful while building settings tree
 
     public SettingsSpecification() {
     }
@@ -338,6 +334,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public static void checkParameterName(String name, Path file) throws JsonException {
+        Objects.requireNonNull(name, "Null parameter name");
         if (name.equals(SETTINGS)) {
             throw new JsonException("Non-allowed parameter name \"" + name
                     + "\"" + (file == null ? "" : " in JSON " + file));
@@ -516,9 +513,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public Map<String, ExecutorSpecification.ControlConf> getControls() {
-        synchronized (controlsLock) {
             return Collections.unmodifiableMap(controls);
-        }
     }
 
     public SettingsSpecification setControls(Map<String, ExecutorSpecification.ControlConf> controls) {
@@ -526,16 +521,12 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
             checkParameterName(controlConf.getName(), null);
         }
-        synchronized (controlsLock) {
-            this.controls = controls;
-        }
+        this.controls = controls;
         return this;
     }
 
     public ExecutorSpecification.ControlConf getControl(String name) {
-        synchronized (controlsLock) {
             return controls.get(name);
-        }
     }
 
     public Map<String, ControlConfExtension> getControlExtensions() {
@@ -584,21 +575,8 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public void updateControlSettingsId(String name, String settingsId) {
-        Objects.requireNonNull(name, "Null control name");
-        synchronized (controlsLock) {
-            ExecutorSpecification.ControlConf control = controls.get(name);
-            if (control == null) {
-                throw new IllegalArgumentException("No control with name " + name);
-            }
-            control.setSettingsId(settingsId);
-        }
-    }
-
     public Set<String> controlKeySet() {
-        synchronized (controlsLock) {
-            return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
-        }
+       return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
     }
 
     public String parentFolderName() {
@@ -661,24 +639,8 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public boolean hasPathControl() {
-        synchronized (controlsLock) {
-            return controls.values().stream().anyMatch(
-                    controlConf -> controlConf.getEditionType().isPath());
-        }
-    }
-
-    public SettingsTree buildTree(SettingsSpecificationFactory factory) {
-        return new SettingsTree(factory, this);
-    }
-
-    public SettingsTree buildTree(SmartSearchSettings smartSearch) {
-        return new SettingsTree(smartSearch, this);
-    }
-
-    public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {
-        Objects.requireNonNull(specificationFactory, "Null specification factory");
-        checkCompleteness();
-        return buildTree(specificationFactory).toJson();
+        return controls.values().stream().anyMatch(
+                controlConf -> controlConf.getEditionType().isPath());
     }
 
     @Override
@@ -778,7 +740,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
         for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : controls.entrySet()) {
-            final String name = entry.getKey();
             final ExecutorSpecification.ControlConf control = entry.getValue();
             control.checkCompleteness();
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
@@ -786,12 +747,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
             if (controlExtension != null) {
                 controlExtension.buildJson(controlBuilder);
-            }
-            if (subSettingsJsonBuilder != null && control.getValueType().isSettings()) {
-                JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
-                if (subSettingsJson != null) {
-                    controlBuilder.add(SETTINGS, subSettingsJson);
-                }
             }
             controlsBuilder.add(controlBuilder.build());
         }

@@ -26,37 +26,37 @@ package net.algart.executors.api.settings;
 
 import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ExecutorSpecificationFactory;
 
 import java.util.*;
 import java.util.function.Supplier;
 
 public class SmartSearchSettings {
-    private static final String TESTED_SUBSTRING = "\"" + ExecutorSpecification.SETTINGS_MAME + "\"";
+    private static final String TESTED_SUBSTRING = "\"" + ExecutorSpecification.SETTINGS + "\"";
 
-    private final SettingsSpecificationFactory factory;
+    private final ExecutorSpecificationFactory factory;
     private final Supplier<? extends Collection<String>> allSettingsIds;
 
     private volatile boolean ready = false;
-    private volatile Map<String, SettingsSpecification> allSettings = null;
+    private volatile Map<String, ExecutorSpecification> allSettings = null;
     private boolean complete = false;
     private boolean hasDuplicates = false;
 
     private SmartSearchSettings(
-            SettingsSpecificationFactory factory,
+            ExecutorSpecificationFactory factory,
             Supplier<? extends Collection<String>> allSettingsIds) {
-        this.factory = Objects.requireNonNull(
-                factory, "Null settingsSpecificationFactory");
+        this.factory = Objects.requireNonNull(factory, "Null factory");
         this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
     }
 
     public static SmartSearchSettings getInstance(
-            SettingsSpecificationFactory factory,
+            ExecutorSpecificationFactory factory,
             Supplier<? extends Collection<String>> allSettingsIds) {
         return new SmartSearchSettings(factory, allSettingsIds);
     }
 
     public static SmartSearchSettings getInstance(
-            SettingsSpecificationFactory factory,
+            ExecutorSpecificationFactory factory,
             ExecutorLoaderSet executorLoaderSet,
             String sessionId) {
         Objects.requireNonNull(factory, "Null factory");
@@ -64,11 +64,11 @@ public class SmartSearchSettings {
         return getInstance(factory, () -> probableSettingsIds(executorLoaderSet, sessionId));
     }
 
-    public SettingsSpecificationFactory factory() {
+    public ExecutorSpecificationFactory factory() {
         return factory;
     }
 
-    public Map<String, SettingsSpecification> allSettings() {
+    public Map<String, ExecutorSpecification> allSettings() {
         checkReady();
         return allSettings;
     }
@@ -78,9 +78,15 @@ public class SmartSearchSettings {
             return;
         }
         this.allSettings = makeAllSettings();
-        for (SettingsSpecification specification : allSettings.values()) {
-            for (ExecutorSpecification.ControlConf control : specification.getControls().values()) {
-                // note: getControls() is synchronized
+        for (ExecutorSpecification specification : allSettings.values()) {
+            final Map<String, ExecutorSpecification.ControlConf> controls = specification.getControls();
+            // note: getControls() is synchronized
+            for (var entry : controls.entrySet()) {
+                final String name = entry.getKey();
+                final ExecutorSpecification.ControlConf control = entry.getValue();
+                if (!control.isSubSettings()) {
+                    continue;
+                }
                 String settingsId = control.getSettingsId();
                 if (settingsId == null) {
 
@@ -113,7 +119,7 @@ public class SmartSearchSettings {
 
     public void findChildren() {
         //TODO!! fill complete, hasDuplicates (??)
-        //TODO!! don't forget about synchronization by SettingsSpecification.controlsLock
+        //TODO!! don't forget about synchronization by ExecutorSpecification.controlsLock
     }
 
     public boolean isComplete() {
@@ -124,11 +130,11 @@ public class SmartSearchSettings {
         return hasDuplicates;
     }
 
-    private Map<String, SettingsSpecification> makeAllSettings() {
-        final Map<String, SettingsSpecification> result = new LinkedHashMap<>();
+    private Map<String, ExecutorSpecification> makeAllSettings() {
+        final Map<String, ExecutorSpecification> result = new LinkedHashMap<>();
         for (String settingsId : this.allSettingsIds.get()) {
-            final SettingsSpecification specification = factory.getSettingsSpecification(settingsId);
-            if (specification != null) {
+            final ExecutorSpecification specification = factory.getSpecification(settingsId);
+            if (specification != null && specification.isRoleSettings()) {
                 result.put(settingsId, specification);
             }
         }
@@ -136,8 +142,8 @@ public class SmartSearchSettings {
     }
 
     private String tryToFindSettings(String valueClassName, String controlName) {
-        for (Map.Entry<String, SettingsSpecification> entry : this.allSettings.entrySet()) {
-            final SettingsSpecification specification = entry.getValue();
+        for (Map.Entry<String, ExecutorSpecification> entry : this.allSettings.entrySet()) {
+            final ExecutorSpecification specification = entry.getValue();
 //TODO!!
         }
         return null;
