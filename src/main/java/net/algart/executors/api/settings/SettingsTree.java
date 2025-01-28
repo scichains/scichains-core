@@ -26,31 +26,36 @@ package net.algart.executors.api.settings;
 
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public final class SettingsTree extends AbstractConvertibleToJson {
+    private final SmartSearchSettings smartSearch;
     private final SettingsSpecificationFactory factory;
     private final SettingsSpecification specification;
     private final Map<String, SettingsTree> children = new LinkedHashMap<>();
     private final SettingsTree parent;
     private final boolean complete;
 
+    SettingsTree(SmartSearchSettings smartSearch, SettingsSpecification specification) {
+        this(smartSearch, smartSearch.factory(), specification, null, new HashSet<>());
+    }
+
     SettingsTree(SettingsSpecificationFactory factory, SettingsSpecification specification) {
-        this(factory, specification, null, new HashSet<>());
+        this(null, factory, specification, null, new HashSet<>());
     }
 
     private SettingsTree(
+            SmartSearchSettings smartSearch,
             SettingsSpecificationFactory factory,
             SettingsSpecification specification,
             SettingsTree parent,
             Set<String> stackForDetectingRecursion) {
+        this.smartSearch = smartSearch;
         this.factory = Objects.requireNonNull(factory, "Null specification factory");
+        assert smartSearch == null || smartSearch.factory() == factory;
         this.specification = Objects.requireNonNull(specification, "Null settings specification");
         this.parent = parent;
         this.complete = buildTree(stackForDetectingRecursion);
@@ -92,7 +97,12 @@ public final class SettingsTree extends AbstractConvertibleToJson {
                 final String name = entry.getKey();
                 final ExecutorSpecification.ControlConf control = entry.getValue();
                 if (control.getValueType().isSettings()) {
-                    final String settingsId = control.getSettingsId();
+                    String settingsId = control.getSettingsId();
+                    if (settingsId == null && smartSearch != null) {
+                        smartSearch.process();
+                        // ...and try again!
+                        settingsId = control.getSettingsId();
+                    }
                     final boolean found = settingsId != null;
                     complete &= found;
 //                    if (!found) System.out.printf("%s: not found%n", name);
@@ -111,7 +121,11 @@ public final class SettingsTree extends AbstractConvertibleToJson {
                                     "\" in category \"" + specification.getCategory() + "\")");
                         }
                         final SettingsTree child = new SettingsTree(
-                                factory, childSettings, this, stackForDetectingRecursion);
+                                smartSearch,
+                                factory,
+                                childSettings,
+                                this,
+                                stackForDetectingRecursion);
                         complete &= child.complete;
                         children.put(name, child);
                     }
@@ -139,71 +153,4 @@ public final class SettingsTree extends AbstractConvertibleToJson {
         return children.containsKey(name) ? children.get(name).toJson() : null;
     }
 
-    public static class SmartSearch {
-        private static final String TESTED_SUBSTRING = "\"" + ExecutorSpecification.SETTINGS_MAME + "\"";
-
-        private final SettingsSpecificationFactory settingsSpecificationFactory;
-        private final Supplier<? extends Collection<String>> allSettingsIds;
-
-        private boolean complete = false;
-        private boolean hasDuplicates = false;
-
-        private SmartSearch(
-                SettingsSpecificationFactory settingsSpecificationFactory,
-                Supplier<? extends Collection<String>> allSettingsIds) {
-            this.settingsSpecificationFactory = Objects.requireNonNull(
-                    settingsSpecificationFactory, "Null settingsSpecificationFactory");
-            this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
-        }
-
-        public static SmartSearch getInstance(
-                SettingsSpecificationFactory settingsSpecificationFactory,
-                Supplier<? extends Collection<String>> allSettingsIds) {
-            return new SmartSearch(settingsSpecificationFactory, allSettingsIds);
-        }
-
-        public static SmartSearch getInstance(
-                SettingsSpecificationFactory settingsSpecificationFactory,
-                ExecutorLoaderSet executorLoaderSet,
-                String sessionId) {
-            Objects.requireNonNull(settingsSpecificationFactory, "Null settingsSpecificationFactory");
-            Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
-            return getInstance(
-                    settingsSpecificationFactory,
-                    () -> probableSettingsIds(executorLoaderSet, sessionId)
-            );
-        }
-
-        public static Set<String> probableSettingsIds(ExecutorLoaderSet executorLoaderSet, String sessionId) {
-            return probableSerializedSettings(executorLoaderSet, sessionId).keySet();
-        }
-
-        public static Map<String, String> probableSerializedSettings(
-                ExecutorLoaderSet executorLoaderSet,
-                String sessionId) {
-            Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
-            final Map<String, String> serialized = executorLoaderSet.allSerializedSpecifications(
-                    sessionId, true);
-            return serialized.entrySet().stream().filter(SmartSearch::probableSettings)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
-
-
-        public void findChildren() {
-            //TODO!! fill complete, hasDuplicates (??)
-            //TODO!! don't forget about synchronization by SettingsSpecification.controlsLock
-        }
-
-        public boolean isComplete() {
-            return complete;
-        }
-
-        public boolean hasDuplicates() {
-            return hasDuplicates;
-        }
-
-        private static boolean probableSettings(Map.Entry<String, String> entry) {
-            return entry.getValue().contains(TESTED_SUBSTRING);
-        }
-    }
 }

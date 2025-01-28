@@ -584,11 +584,14 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public void addControl(ExecutorSpecification.ControlConf control) {
-        Objects.requireNonNull(control, "Null control");
-        control.checkCompleteness();
+    public void updateControlSettingsId(String name, String settingsId) {
+        Objects.requireNonNull(name, "Null control name");
         synchronized (controlsLock) {
-            controls.put(control.getName(), control);
+            ExecutorSpecification.ControlConf control = controls.get(name);
+            if (control == null) {
+                throw new IllegalArgumentException("No control with name " + name);
+            }
+            control.setSettingsId(settingsId);
         }
     }
 
@@ -657,17 +660,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    // Idea for the future?
-    private boolean matchesClass(String settingsClass) {
-        Objects.requireNonNull(settingsClass, "Null settingsClass");
-        try {
-            checkSettingsName(name, null);
-        } catch (JsonException e) {
-            throw new AssertionError("Was not checked before!", e);
-        }
-        return settingsClass.endsWith(ExecutorSpecification.CATEGORY_SEPARATOR + name);
-    }
-
     public boolean hasPathControl() {
         synchronized (controlsLock) {
             return controls.values().stream().anyMatch(
@@ -677,6 +669,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
 
     public SettingsTree buildTree(SettingsSpecificationFactory factory) {
         return new SettingsTree(factory, this);
+    }
+
+    public SettingsTree buildTree(SmartSearchSettings smartSearch) {
+        return new SettingsTree(smartSearch, this);
     }
 
     public JsonObject toJsonTree(SettingsSpecificationFactory specificationFactory) {

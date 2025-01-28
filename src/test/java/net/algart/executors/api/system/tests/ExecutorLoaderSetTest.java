@@ -25,7 +25,7 @@
 package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.settings.SettingsTree;
+import net.algart.executors.api.settings.SmartSearchSettings;
 import net.algart.executors.api.system.*;
 
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class ExecutorLoaderSetTest {
             // The following optimization is not too efficient, unless there are a lot of dynamic executors:
             // usually most specifications in the standard factory are built-in and preloaded
             t1 = System.nanoTime();
-            Set<String> probableIds = SettingsTree.SmartSearch.probableSettingsIds(global, null);
+            Set<String> probableIds = SmartSearchSettings.probableSettingsIds(global, null);
             t2 = System.nanoTime();
             long m = probableIds.stream().filter(id -> factory.getSettingsSpecification(id) != null).count();
             long t3 = System.nanoTime();

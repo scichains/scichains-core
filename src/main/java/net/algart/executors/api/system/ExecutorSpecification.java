@@ -135,6 +135,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             public void checkCompleteness() {
             }
 
+            public boolean matchesClass(String someEntityName) {
+                Objects.requireNonNull(someEntityName, "Null someEntityName");
+                if (className == null) {
+                    return false;
+                }
+                return className.equals(someEntityName) || className.endsWith(CATEGORY_SEPARATOR + someEntityName);
+            }
+
+
             @Override
             public String toString() {
                 return "Role{" +
