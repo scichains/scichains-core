@@ -104,6 +104,44 @@ public final class SettingsTree {
         return complete;
     }
 
+    public JsonObject toJson() {
+        return toJson(ExecutorSpecification.JsonMode.MEDIUM);
+        // - by default, there are no reasons to duplicate settings information in the tree
+    }
+
+    public JsonObject toJson(ExecutorSpecification.JsonMode mode) {
+        specification.checkCompleteness();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        specification.buildJson(builder, mode, name -> childJsonTree(name, mode));
+        return builder.build();
+    }
+
+    public JsonObject defaultSettingsJson() {
+        specification.checkCompleteness();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        specification.buildDefaultSettingsJson(builder, this::childDefaultSettingsJsonTree);
+        return builder.build();
+    }
+
+    public String jsonString() {
+        return Jsons.toPrettyString(toJson());
+    }
+
+    public String jsonString(ExecutorSpecification.JsonMode mode) {
+        return Jsons.toPrettyString(toJson(mode));
+    }
+
+    public String defaultSettingsJsonString() {
+        return Jsons.toPrettyString(defaultSettingsJson());
+    }
+
+    @Override
+    public String toString() {
+        return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
+                "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")" +
+                ": " + children.size() + " children";
+    }
+
     private boolean buildTree(Set<String> stackForDetectingRecursion) {
         Map<String, SettingsTree> children = new LinkedHashMap<>();
         boolean complete = true;
@@ -160,43 +198,11 @@ public final class SettingsTree {
         return complete;
     }
 
-    public JsonObject toJson() {
-        return toJson(ExecutorSpecification.JsonMode.MEDIUM);
-        // - no reasons to duplicate settings information in the tree
-    }
-
-    public JsonObject toJson(ExecutorSpecification.JsonMode mode) {
-        specification.checkCompleteness();
-        final JsonObjectBuilder builder = Json.createObjectBuilder();
-        specification.buildJson(builder, mode, name -> childJsonTree(name, mode));
-        return builder.build();
-    }
-
-    public JsonObject defaultValuesJson() {
-        //TODO!! recursive JSON with all default settings
-        throw new UnsupportedOperationException();
-    }
-
-    public String jsonString() {
-        return Jsons.toPrettyString(toJson());
-    }
-
-    public String jsonString(ExecutorSpecification.JsonMode mode) {
-        return Jsons.toPrettyString(toJson(mode));
-    }
-
-    public String defaultValuesJsonString() {
-        return Jsons.toPrettyString(defaultValuesJson());
-    }
-
-    @Override
-    public String toString() {
-        return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
-                "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")" +
-                ": " + children.size() + " children";
-    }
-
     private JsonObject childJsonTree(String name, ExecutorSpecification.JsonMode mode) {
         return children.containsKey(name) ? children.get(name).toJson(mode) : null;
+    }
+
+    private JsonObject childDefaultSettingsJsonTree(String name) {
+        return children.containsKey(name) ? children.get(name).defaultSettingsJson() : null;
     }
 }

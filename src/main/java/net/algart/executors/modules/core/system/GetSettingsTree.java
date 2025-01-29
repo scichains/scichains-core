@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput {
+    public static final String OUTPUT_DEFAULT_SETTINGS = "default_settings";
     public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
@@ -43,6 +44,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
+            OUTPUT_DEFAULT_SETTINGS,
             OUTPUT_SETTINGS_SPECIFICATION,
             OUTPUT_CATEGORY,
             OUTPUT_NAME,
@@ -151,27 +153,32 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         if (specification == null) {
             return null;
         }
-        long t2 = debugTime(), t3;
-        final String jsonTree;
+        long t2 = debugTime();
         final SettingsTree tree = smartSearch ?
                 SettingsTree.of(smartSearchSettings, specification) :
                 SettingsTree.of(factory, specification);
         // - actually, we build the tree always: this is a quick operation
-        t3 = debugTime();
+        long t3 = debugTime(), t4;
+        final String treeJson, defaultSettingsJson;
         if (buildTree) {
-            jsonTree = tree.jsonString(jsonMode);
+            treeJson = tree.jsonString(jsonMode);
+            t4 = debugTime();
+            defaultSettingsJson = tree.defaultSettingsJsonString();
         } else {
-            jsonTree = specification.jsonString(jsonMode);
+            treeJson = specification.jsonString(jsonMode);
+            t4 = debugTime();
+            defaultSettingsJson = specification.defaultSettingsJsonString();
         }
-        long t4 = debugTime();
-        getScalar().setTo(jsonTree);
+        long t5 = debugTime();
+        getScalar().setTo(treeJson);
+        getScalar(OUTPUT_DEFAULT_SETTINGS).setTo(defaultSettingsJson);
         logDebug(() -> String.format(Locale.US,
                 "Settings \"%s\": %.5f ms = " +
-                        "%.3f mcs requesting description + %.3f mcs building tree " +
-                        "+ %.3f mcs building JSON",
+                        "%.3f ms requesting description + %.3f ms building tree " +
+                        "+ %.3f ms specification JSON + %.3f ms default values JSON ",
                 executorId,
-                (t4 - t1) * 1e-6,
-                (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
+                (t5 - t1) * 1e-6,
+                (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6, (t5 - t4) * 1e-6));
         return tree;
     }
 }

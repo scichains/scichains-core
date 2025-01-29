@@ -158,6 +158,14 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             public void checkCompleteness() {
             }
 
+
+            public boolean equalsClass(String className) {
+                if (className == null || this.className == null) {
+                    return false;
+                }
+                return this.className.equals(className);
+            }
+
             public boolean matchesClass(String someEntityName) {
                 if (someEntityName == null || className == null) {
                     return false;
@@ -165,8 +173,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 return className.equals(someEntityName) || className.endsWith(CATEGORY_SEPARATOR + someEntityName);
             }
 
-
-            @Override
+7            @Override
             public String toString() {
                 return "Role{" +
                         "className='" + className + '\'' +
@@ -1269,7 +1276,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 String enumItem = itemValues.get(i);
                 EnumItem item = new EnumItem(enumItem);
                 if (i < itemCaptionsSize) {
-                    assert itemCaptions != null : i + " cannot be negative";
                     item.setCaption(itemCaptions.get(i));
                 }
                 this.items.add(item);
@@ -2147,6 +2153,17 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return Jsons.toPrettyString(toJson(mode));
     }
 
+    public final JsonObject defaultSettingsJson() {
+        checkCompleteness();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        buildDefaultSettingsJson(builder, null);
+        return builder.build();
+    }
+
+    public final String defaultSettingsJsonString() {
+        return Jsons.toPrettyString(defaultSettingsJson());
+    }
+
     @Override
     public void buildJson(JsonObjectBuilder builder) {
         buildJson(builder, JsonMode.FULL);
@@ -2207,7 +2224,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
             control.buildJson(controlBuilder);
             if (subSettingsJsonBuilder != null && control.isSubSettings()) {
-                JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
+                final JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
                 if (subSettingsJson != null) {
                     controlBuilder.add(SETTINGS, subSettingsJson);
                 }
@@ -2220,6 +2237,34 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
         if (sourceInfo != null) {
             builder.add("source", sourceInfo.toJson());
+        }
+    }
+
+    void buildDefaultSettingsJson(
+            JsonObjectBuilder builder,
+            Function<String, JsonObject> subSettingsJsonBuilder) {
+        Objects.requireNonNull(builder, "Null builder");
+        for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
+            final String name = entry.getKey();
+            final ControlConf control = entry.getValue();
+            control.checkCompleteness();
+            if (subSettingsJsonBuilder != null) {
+                if (SETTINGS.equals(name)) {
+                    // - no sense to include this parameter while building tree:
+                    // this should be filled by resulting JSON tree
+                    continue;
+                }
+                if (control.isSubSettings()) {
+                    final JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
+                    if (subSettingsJson != null) {
+                        builder.add(SettingsSpecification.settingsKey(name), subSettingsJson);
+                        continue;
+                    }
+                }
+            }
+            if (control.defaultJsonValue != null) {
+                builder.add(name, control.defaultJsonValue);
+            }
         }
     }
 

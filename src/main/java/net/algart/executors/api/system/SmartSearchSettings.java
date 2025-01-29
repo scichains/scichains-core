@@ -161,7 +161,7 @@ public class SmartSearchSettings {
                 // - improbable: possible only due to modification from parallel thread
                 continue;
             }
-            if (role.matchesClass(valueClassName) || role.matchesClass(controlName)) {
+            if (role.equalsClass(valueClassName) || role.matchesClass(controlName)) {
                 return specification.getId();
             }
         }

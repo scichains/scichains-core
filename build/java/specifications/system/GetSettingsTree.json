@@ -24,6 +24,12 @@
     },
     {
       "value_type": "scalar",
+      "name": "default_settings",
+      "caption": "default settings",
+      "hint": "Default settings JSON tree containing default values for the full settings tree"
+    },
+    {
+      "value_type": "scalar",
       "name": "settings_specification",
       "caption": "settings specification",
       "hint": "Settings specification JSON section if it exists"
