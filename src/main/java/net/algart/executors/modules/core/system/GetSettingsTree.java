@@ -101,6 +101,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
+        getScalar(OUTPUT_COMPLETE).setTo(false);
         String id = getInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID, true).getValue();
         if (id == null) {
             id = this.id;
@@ -135,7 +136,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         }
         long t2 = debugTime(), t3;
         final String jsonTree;
-        SettingsTree tree = smartSearch ?
+        final SettingsTree tree = smartSearch ?
                 SettingsTree.of(smartSearchSettings, specification) :
                 SettingsTree.of(factory, specification);
         // - actually, we build the tree always: this is a quick operation

@@ -1,7 +1,9 @@
 {
   "app": "settings",
-  "name": "Simple_settings_1",
+  "name": "Simple settings 1",
   "category": "$no-prefix$~examples.settings",
+  "class_name": "core.examples.settings.SimpleSettings1",
+  "_rem": "(Class name helps to smart find this settings, because its name is not a valid identifier)",
   "id": "832dc8af-488c-4392-aa01-19f2848e038e",
   "controls": [
     {

@@ -87,6 +87,7 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
     @Override
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
+        getScalar(OUTPUT_BUILT_IN).setTo(false);
         String id = getInputScalar(INPUT_EXECUTOR_ID, true).getValue();
         if (id == null) {
             id = this.id;
