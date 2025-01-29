@@ -2,11 +2,11 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "system",
-  "name": "Get settings specification tree of the installed executor",
+  "name": "Get settings tree for the installed executor",
   "id": "686710bb-f11a-40e8-afbb-e5e6adfa3791",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.system.GetSpecificationTree"
+    "class": "net.algart.executors.modules.core.system.GetSettingsTree"
   },
   "in_ports": [
     {
@@ -20,22 +20,27 @@
     {
       "value_type": "scalar",
       "name": "output",
-      "hint": "Full settings specification JSON"
+      "hint": "Full settings tree JSON, or the executor specification if \"Build settings tree\" is not set"
+    },
+    {
+      "value_type": "scalar",
+      "name": "settings_specification",
+      "hint": "Settings specification JSON section if it exists"
     },
     {
       "value_type": "scalar",
       "name": "category",
-      "hint": "Settings category"
+      "hint": "Executor category"
     },
     {
       "value_type": "scalar",
       "name": "name",
-      "hint": "Settings name"
+      "hint": "Executor name"
     },
     {
       "value_type": "scalar",
       "name": "description",
-      "hint": "Settings description",
+      "hint": "Executor description",
       "advanced": true
     },
     {
@@ -87,7 +92,11 @@
         },
         {
           "value": "MEDIUM",
-          "caption": "without \"settings\" section when exists"
+          "caption": "skip \"settings\" section when exists"
+        },
+        {
+          "value": "CONTROLS_ONLY",
+          "caption": "only controls (parameter settings)"
         }
       ],
       "default": "MEDIUM"

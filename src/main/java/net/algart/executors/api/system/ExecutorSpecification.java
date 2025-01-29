@@ -53,10 +53,23 @@ import java.util.stream.Collectors;
 public class ExecutorSpecification extends AbstractConvertibleToJson {
     public enum JsonMode {
         FULL,
-        MEDIUM;
+        MEDIUM,
+        CONTROLS_ONLY;
 
-        public boolean isSettingsIncluded() {
+        public boolean isSettingsSectionIncluded() {
             return this == FULL;
+        }
+
+        public boolean isTagsIncluded() {
+            return this != CONTROLS_ONLY;
+        }
+
+        public boolean isOptionsIncluded() {
+            return this != CONTROLS_ONLY;
+        }
+
+        public boolean isPortsIncluded() {
+            return this != CONTROLS_ONLY;
         }
     }
 
@@ -1748,6 +1761,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
+    public boolean hasSettings() {
+        return settings != null;
+    }
+
     public final SourceInfo getSourceInfo() {
         return sourceInfo;
     }
@@ -1755,6 +1772,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public final ExecutorSpecification setSourceInfo(SourceInfo sourceInfo) {
         this.sourceInfo = sourceInfo;
         return this;
+    }
+
+    public boolean hasSourceInfo() {
+        return sourceInfo != null;
     }
 
     /**
@@ -2145,7 +2166,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         if (description != null) {
             builder.add("description", description);
         }
-        if (!tags.isEmpty()) {
+        if (mode.isTagsIncluded() && !tags.isEmpty()) {
             final JsonArrayBuilder tagsBuilder = Json.createArrayBuilder();
             for (String tag : tags) {
                 tagsBuilder.add(tag);
@@ -2153,23 +2174,25 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             builder.add("tags", tagsBuilder.build());
         }
         builder.add("id", id);
-        if (options != null) {
+        if (mode.isOptionsIncluded() && options != null) {
             builder.add("options", options.toJson());
         }
         if (language != null) {
             builder.add("language", language);
         }
         buildLanguageJson(builder);
-        final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
-        for (PortConf port : inPorts.values()) {
-            inPortsBuilder.add(port.toJson());
+        if (mode.isPortsIncluded()) {
+            final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
+            for (PortConf port : inPorts.values()) {
+                inPortsBuilder.add(port.toJson());
+            }
+            builder.add("in_ports", inPortsBuilder.build());
+            final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
+            for (PortConf port : outPorts.values()) {
+                outPortsBuilder.add(port.toJson());
+            }
+            builder.add("out_ports", outPortsBuilder.build());
         }
-        builder.add("in_ports", inPortsBuilder.build());
-        final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
-        for (PortConf port : outPorts.values()) {
-            outPortsBuilder.add(port.toJson());
-        }
-        builder.add("out_ports", outPortsBuilder.build());
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
         for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
             final String name = entry.getKey();
@@ -2177,7 +2200,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             control.checkCompleteness();
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
             control.buildJson(controlBuilder);
-            if (subSettingsJsonBuilder != null && control.getValueType().isSettings()) {
+            if (subSettingsJsonBuilder != null && control.isSubSettings()) {
                 JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
                 if (subSettingsJson != null) {
                     controlBuilder.add(SETTINGS, subSettingsJson);
@@ -2186,7 +2209,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             controlsBuilder.add(controlBuilder.build());
         }
         builder.add("controls", controlsBuilder.build());
-        if (mode.isSettingsIncluded() && settings != null) {
+        if (mode.isSettingsSectionIncluded() && settings != null) {
             builder.add(SETTINGS, settings.toJson());
         }
         if (sourceInfo != null) {

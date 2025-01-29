@@ -26,17 +26,14 @@ package net.algart.executors.modules.core.system;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.system.SettingsTree;
-import net.algart.executors.api.system.SmartSearchSettings;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorLoaderSet;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.*;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class GetSpecificationTree extends Executor implements ReadOnlyExecutionInput {
+public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput {
+    public static final String OUTPUT_SETTINGS_SPECIFICATION = "settings_specification";
     public static final String OUTPUT_CATEGORY = "category";
     public static final String OUTPUT_NAME = "name";
     public static final String OUTPUT_DESCRIPTION = "description";
@@ -45,6 +42,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
+            OUTPUT_SETTINGS_SPECIFICATION,
             OUTPUT_CATEGORY,
             OUTPUT_NAME,
             OUTPUT_DESCRIPTION,
@@ -59,7 +57,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
     private volatile ExecutorFactory factory = null;
     private volatile SmartSearchSettings smartSearchSettings = null;
 
-    public GetSpecificationTree() {
+    public GetSettingsTree() {
         addInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID);
         ALL_OUTPUT_PORTS.forEach(this::addOutputScalar);
     }
@@ -68,7 +66,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         return id;
     }
 
-    public GetSpecificationTree setId(String id) {
+    public GetSettingsTree setId(String id) {
         this.id = nonNull(id);
         return this;
     }
@@ -77,7 +75,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         return buildTree;
     }
 
-    public GetSpecificationTree setBuildTree(boolean buildTree) {
+    public GetSettingsTree setBuildTree(boolean buildTree) {
         this.buildTree = buildTree;
         return this;
     }
@@ -86,7 +84,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         return smartSearch;
     }
 
-    public GetSpecificationTree setSmartSearch(boolean smartSearch) {
+    public GetSettingsTree setSmartSearch(boolean smartSearch) {
         this.smartSearch = smartSearch;
         return this;
     }
@@ -95,7 +93,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         return jsonMode;
     }
 
-    public GetSpecificationTree setJsonMode(ExecutorSpecification.JsonMode jsonMode) {
+    public GetSettingsTree setJsonMode(ExecutorSpecification.JsonMode jsonMode) {
         this.jsonMode = nonNull(jsonMode);
         return this;
     }
@@ -107,10 +105,14 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         if (id == null) {
             id = this.id;
         }
-        final ExecutorSpecification specification = findSpecification(id);
-        if (specification == null) {
-            getScalar().remove();
+        SettingsTree tree = buildSettingsTree(id);
+        if (tree == null) {
+            // - result remains empty
             return;
+        }
+        final ExecutorSpecification specification = tree.specification();
+        if (specification.hasSettings()) {
+            getScalar(OUTPUT_SETTINGS_SPECIFICATION).setTo(specification.getSettings().jsonString());
         }
         getScalar(OUTPUT_CATEGORY).setTo(specification.getCategory());
         getScalar(OUTPUT_NAME).setTo(specification.getName());
@@ -118,7 +120,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
         getScalar(OUTPUT_ID).setTo(specification.getId());
     }
 
-    public ExecutorSpecification findSpecification(String executorId) {
+    public SettingsTree buildSettingsTree(String executorId) {
         Objects.requireNonNull(executorId, "Null executorId");
         long t1 = debugTime();
         if (factory == null || smartSearchSettings == null) {
@@ -132,28 +134,27 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
             return null;
         }
         long t2 = debugTime(), t3;
-        final String result;
+        final String jsonTree;
+        SettingsTree tree = smartSearch ?
+                SettingsTree.of(smartSearchSettings, specification) :
+                SettingsTree.of(factory, specification);
+        // - actually, we build the tree always: this is a quick operation
+        t3 = debugTime();
         if (buildTree) {
-            SettingsTree tree = smartSearch ?
-                    SettingsTree.of(smartSearchSettings, specification) :
-                    SettingsTree.of(factory, specification);
-            t3 = debugTime();
             getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
-            result = tree.jsonString(jsonMode);
+            jsonTree = tree.jsonString(jsonMode);
         } else {
-            t3 = t2;
-            result = specification.jsonString(jsonMode);
+            jsonTree = specification.jsonString(jsonMode);
         }
         long t4 = debugTime();
-        getScalar().setTo(result);
-        long t5 = debugTime();
+        getScalar().setTo(jsonTree);
         logDebug(() -> String.format(Locale.US,
                 "Settings \"%s\": %.5f ms = " +
                         "%.3f mcs requesting description + %.3f mcs building tree " +
-                        "+ %.3f mcs building JSON + %.3f mcs returning",
+                        "+ %.3f mcs building JSON",
                 executorId,
-                (t5 - t1) * 1e-6,
-                (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, (t5 - t4) * 1e-3));
-        return specification;
+                (t4 - t1) * 1e-6,
+                (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3));
+        return tree;
     }
 }

@@ -93,7 +93,7 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
         }
         final ExecutorSpecification executorSpecification = findSpecification(id);
         if (executorSpecification == null) {
-            getScalar().setTo("No executor with ID \"" + id + "\"");
+            getScalar().remove();
             return;
         }
         final SettingsSpecification settings = executorSpecification.getSettings();

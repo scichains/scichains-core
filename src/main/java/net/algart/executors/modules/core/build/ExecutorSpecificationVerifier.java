@@ -108,7 +108,7 @@ public final class ExecutorSpecificationVerifier {
             throw new JsonException("ID " + id + " is not in lower case in " + f);
         }
         if (!ids.add(id)) {
-            throw new JsonException("Duplicate of ID " + id + " in " + f);
+            throw new JsonException("Duplicate of ID \"" + id + "\" in " + f);
         }
         final String kind = json.getString("kind", POSSIBLE_BLOCK_KINDS.get(0));
         if (!POSSIBLE_BLOCK_KINDS.contains(kind)) {
@@ -216,7 +216,7 @@ public final class ExecutorSpecificationVerifier {
                         + "or has non-string  \"name\" in " + f + " (" + control + ")");
             }
             if (!controlNames.add(name)) {
-                throw new JsonException("Duplicate control with name " + name + " in " + f);
+                throw new JsonException("Duplicate control with name \"" + name + "\" in " + f);
             }
             final String valueType = control.getString("value_type", null);
             if (valueType == null) {
@@ -354,7 +354,7 @@ public final class ExecutorSpecificationVerifier {
             final String name = Jsons.reqString(port, "name", f);
             final DataType dataType = DataType.valueOfTypeName(Jsons.reqString(port, "value_type", f));
             if (result.put(name, dataType) != null) {
-                throw new JsonException("Duplicate port with name " + name + " in " + f);
+                throw new JsonException("Duplicate port with name \"" + name + "\" in " + f);
             }
         }
     }
