@@ -26,8 +26,8 @@ package net.algart.executors.modules.core.system;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.settings.SettingsTree;
-import net.algart.executors.api.settings.SmartSearchSettings;
+import net.algart.executors.api.system.SettingsTree;
+import net.algart.executors.api.system.SmartSearchSettings;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;

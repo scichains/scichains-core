@@ -25,10 +25,9 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.SettingsSpecificationFactory;
 
 @FunctionalInterface
-public interface ExecutorSpecificationFactory extends SettingsSpecificationFactory {
+public interface ExecutorSpecificationFactory  {
     /**
      * Returns the specification of the given executor.
      *
@@ -37,7 +36,6 @@ public interface ExecutorSpecificationFactory extends SettingsSpecificationFacto
      */
     ExecutorSpecification getSpecification(String executorId);
 
-    @Override
     default SettingsSpecification getSettingsSpecification(String settingsId) {
         final ExecutorSpecification specification = getSpecification(settingsId);
         return specification == null ? null : specification.getSettings();

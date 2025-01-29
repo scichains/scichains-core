@@ -22,11 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings;
-
-import net.algart.executors.api.system.ExecutorLoaderSet;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationFactory;
+package net.algart.executors.api.system;
 
 import java.util.*;
 import java.util.function.Supplier;

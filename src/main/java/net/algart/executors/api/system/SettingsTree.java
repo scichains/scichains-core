@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings;
+package net.algart.executors.api.system;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.ExecutorSpecificationFactory;
-import net.algart.json.AbstractConvertibleToJson;
+import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.json.Jsons;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ import java.util.*;
  * Specification tree of executors, playing a role of settings:
  * real {@link SettingsSpecification settings}, mappings and so on.
  */
-public final class SettingsTree extends AbstractConvertibleToJson {
+public final class SettingsTree {
     private static final System.Logger LOG = System.getLogger(SettingsTree.class.getName());
 
     private final SmartSearchSettings smartSearch;
@@ -148,8 +148,11 @@ public final class SettingsTree extends AbstractConvertibleToJson {
         return complete;
     }
 
-    public void buildJson(JsonObjectBuilder builder) {
+    public JsonObject toJson() {
+        specification.checkCompleteness();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
         specification.buildJson(builder, this::childJsonTree);
+        return builder.build();
     }
 
     public JsonObject defaultValuesJson() {
@@ -157,8 +160,15 @@ public final class SettingsTree extends AbstractConvertibleToJson {
         throw new UnsupportedOperationException();
     }
 
+    public String jsonString() {
+        return Jsons.toPrettyString(toJson());
+    }
+
+    public String defaultValuesJsonString() {
+        return Jsons.toPrettyString(defaultValuesJson());
+    }
+
     private JsonObject childJsonTree(String name) {
         return children.containsKey(name) ? children.get(name).toJson() : null;
     }
-
 }

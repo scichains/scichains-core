@@ -31,7 +31,6 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.SettingsTree;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -999,7 +998,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // for value-type "settings" it may be the SettingsSpecification.settingsClass()
         private ControlEditionType editionType = ControlEditionType.VALUE;
         private volatile String settingsId = null;
-        // - settings ID (for value-type "settings"); usually it is unknown until building the settings tree
+        // - settings ID (for value-type "settings");
+        // it is the only field that is sometimes modifying in a ready specification
+        // (by SmartSearchSettings class)
         private boolean multiline = false;
         private Integer lines = null;
         // - recommended number of lines in "multiline" mode

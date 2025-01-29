@@ -25,7 +25,6 @@
 package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.settings.SmartSearchSettings;
 import net.algart.executors.api.system.*;
 
 import java.io.IOException;
