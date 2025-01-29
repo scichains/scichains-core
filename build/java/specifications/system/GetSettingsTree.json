@@ -100,6 +100,38 @@
         }
       ],
       "default": "MEDIUM"
+    },
+    {
+      "caption": "Logging level",
+      "name": "logLevel",
+      "value_type": "String",
+      "description": "Logging level when problems occur during smart search.",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "OFF"
+        },
+        {
+          "value": "ERROR"
+        },
+        {
+          "value": "WARNING"
+        },
+        {
+          "value": "INFO"
+        },
+        {
+          "value": "DEBUG"
+        },
+        {
+          "value": "TRACE"
+        },
+        {
+          "value": "ALL"
+        }
+      ],
+      "default": "DEBUG",
+      "advanced": true
     }
   ]
 }

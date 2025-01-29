@@ -34,6 +34,8 @@ public class SmartSearchSettings {
     private final ExecutorSpecificationFactory factory;
     private final Supplier<? extends Collection<String>> allSettingsIds;
 
+    private System.Logger.Level logLevel = System.Logger.Level.DEBUG;
+
     private volatile boolean ready = false;
     private volatile Map<String, ExecutorSpecification> allSettings = null;
     private volatile boolean complete = false;
@@ -64,6 +66,15 @@ public class SmartSearchSettings {
         return factory;
     }
 
+    public System.Logger.Level getLogLevel() {
+        return logLevel;
+    }
+
+    public SmartSearchSettings setLogLevel(System.Logger.Level logLevel) {
+        this.logLevel = Objects.requireNonNull(logLevel, "Null logLevel");
+        return this;
+    }
+
     public Map<String, ExecutorSpecification> allSettings() {
         checkReady();
         return allSettings;
@@ -85,11 +96,14 @@ public class SmartSearchSettings {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null) {
                         settingsId = tryToFindSettings(control.getValueClassName(), name);
-                        if (settingsId == null) {
-                            complete = false;
-                        } else {
+                        if (settingsId != null) {
                             specification.updateControlSettingsId(name, settingsId);
                             // - note: updateControlSettingsId() is synchronized
+                        } else {
+                            complete = false;
+                            LOG.log(logLevel, () -> "Cannot find sub-settings for control \"" + name +
+                                    "\" of the executor " +
+                                    "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")");
                         }
                     }
                 }
@@ -143,8 +157,6 @@ public class SmartSearchSettings {
                 return specification.getId();
             }
         }
-        LOG.log(System.Logger.Level.DEBUG, () -> "Cannot find sub-settings for control " + controlName +
-                (valueClassName != null ? " with value class " + valueClassName : ""));
         return null;
     }
 

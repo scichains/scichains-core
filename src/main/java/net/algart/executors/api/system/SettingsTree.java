@@ -180,8 +180,8 @@ public final class SettingsTree {
     @Override
     public String toString() {
         return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
-                specification.getId() + " (" + specification.canonicalName() + "): " +
-                children.size() + " children";
+                "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")" +
+                ": " + children.size() + " children";
     }
 
     private JsonObject childJsonTree(String name, ExecutorSpecification.JsonMode mode) {
