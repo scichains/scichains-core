@@ -30,6 +30,7 @@ import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.io.IOAccess;
 
 import java.util.*;
 
@@ -43,8 +44,8 @@ public enum GraalSafety implements GraalContextCustomizer {
     SAFE(true, "safe") {
         @Override
         public void customize(Context.Builder builder) {
-            builder.allowIO(true);
-            // - necessary, in particular, to import JavaScript modules
+            builder.allowIO(IOAccess.ALL);
+            // - necessary to import JavaScript modules
             builder.allowHostAccess(HostAccess.ALL);
             builder.allowHostClassLookup(GraalSafety::isSafeClass);
         }
