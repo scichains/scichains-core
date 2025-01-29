@@ -73,6 +73,24 @@
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
+    },
+    {
+      "caption": "JSON mode",
+      "name": "jsonMode",
+      "value_type": "String",
+      "description": "How detailed should JSON be?",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "FULL",
+          "caption": "full (all details)"
+        },
+        {
+          "value": "MEDIUM",
+          "caption": "without \"settings\" section when exists"
+        }
+      ],
+      "default": "MEDIUM"
     }
   ]
 }

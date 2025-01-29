@@ -8,7 +8,7 @@
       "caption": "Task name",
       "value_type": "String",
       "edition_type": "value",
-      "default": "My first task"
+      "default": "My first work"
     },
     {
       "name": "simple_settings",
@@ -17,7 +17,7 @@
       "description": "This is sub-settings: JSON, build according to \"simple_settings\" specification",
       "value_type": "settings",
       "edition_type": "value",
-      "default": ""
+      "default": {}
     }
   ]
 }
