@@ -173,7 +173,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 return className.equals(someEntityName) || className.endsWith(CATEGORY_SEPARATOR + someEntityName);
             }
 
-7            @Override
+            @Override
             public String toString() {
                 return "Role{" +
                         "className='" + className + '\'' +
