@@ -643,6 +643,18 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 controlConf -> controlConf.getEditionType().isPath());
     }
 
+    public void setTo(ExecutorSpecification specification) {
+        Objects.requireNonNull(specification, "Null executor specification");
+        setCategory(specification.getCategory());
+        setName(specification.getName());
+        setDescription(specification.getDescription());
+        setId(specification.getId());
+        Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>(specification.getControls());
+        controls.remove(SETTINGS);
+        // - non-allowed parameter name, which is added automatically by settings combiners
+        setControls(controls);
+    }
+
     @Override
     public void checkCompleteness() {
         checkNull(category, "category");

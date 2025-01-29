@@ -25,6 +25,7 @@
     {
       "value_type": "scalar",
       "name": "settings_specification",
+      "caption": "settings specification",
       "hint": "Settings specification JSON section if it exists"
     },
     {
@@ -52,6 +53,11 @@
       "value_type": "scalar",
       "name": "complete",
       "hint": "Will contain \"true\" if the tree was completely built, \"false\" if some sub-settings were not found."
+    },
+    {
+      "value_type": "scalar",
+      "name": "number_of_subtrees",
+      "hint": "Will contain the number of sub-settings found in this executor and its descendants. Zero values mean that this executor has no child sub-settings."
     }
   ],
   "controls": [
@@ -66,7 +72,7 @@
     {
       "caption": "Build settings tree",
       "name": "buildTree",
-      "description": "If set (default behaviour), this function builds JSON with the tree of sub-settings, if any exist. If cleared, this function just returns this executor specification without JSONs of the children.",
+      "description": "If set (default behaviour), this function builds JSON with the tree of sub-settings, if any exist. If cleared, this function just returns this executor specification without JSONs of the children. (The tree is still built in this case, but is not converted to JSON.)",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

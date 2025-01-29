@@ -39,6 +39,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     public static final String OUTPUT_DESCRIPTION = "description";
     public static final String OUTPUT_ID = "id";
     public static final String OUTPUT_COMPLETE = "complete";
+    public static final String OUTPUT_NUMBER_OF_SUBTREES = "number_of_subtrees";
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
@@ -47,7 +48,8 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
             OUTPUT_NAME,
             OUTPUT_DESCRIPTION,
             OUTPUT_ID,
-            OUTPUT_COMPLETE);
+            OUTPUT_COMPLETE,
+            OUTPUT_NUMBER_OF_SUBTREES);
 
     private String id = "n/a";
     private boolean buildTree = true;
@@ -112,6 +114,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
         getScalar(OUTPUT_COMPLETE).setTo(false);
+        getScalar(OUTPUT_NUMBER_OF_SUBTREES).setTo(0);
         String id = getInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID, true).getValue();
         if (id == null) {
             id = this.id;
@@ -129,6 +132,8 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         getScalar(OUTPUT_NAME).setTo(specification.getName());
         getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
         getScalar(OUTPUT_ID).setTo(specification.getId());
+        getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
+        getScalar(OUTPUT_NUMBER_OF_SUBTREES).setTo(tree.numberOfSubTrees());
     }
 
     public SettingsTree buildSettingsTree(String executorId) {
@@ -154,7 +159,6 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         // - actually, we build the tree always: this is a quick operation
         t3 = debugTime();
         if (buildTree) {
-            getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
             jsonTree = tree.jsonString(jsonMode);
         } else {
             jsonTree = specification.jsonString(jsonMode);

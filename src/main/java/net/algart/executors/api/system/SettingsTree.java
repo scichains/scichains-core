@@ -43,6 +43,7 @@ public final class SettingsTree {
     private final ExecutorSpecificationFactory factory;
     private final ExecutorSpecification specification;
     private final Map<String, SettingsTree> children = new LinkedHashMap<>();
+    private int numberOfSubTrees;
     private final SettingsTree parent;
     private final boolean complete;
 
@@ -80,6 +81,14 @@ public final class SettingsTree {
         return specification;
     }
 
+    public Map<String, SettingsTree> children() {
+        return Collections.unmodifiableMap(children);
+    }
+
+    public int numberOfSubTrees() {
+        return numberOfSubTrees;
+    }
+
     public String id() {
         return specification.getId();
     }
@@ -98,6 +107,7 @@ public final class SettingsTree {
     private boolean buildTree(Set<String> stackForDetectingRecursion) {
         Map<String, SettingsTree> children = new LinkedHashMap<>();
         boolean complete = true;
+        int count = 0;
         stackForDetectingRecursion.add(specification.getId());
         try {
             for (var entry : specification.getControls().entrySet()) {
@@ -133,6 +143,7 @@ public final class SettingsTree {
                                 this,
                                 stackForDetectingRecursion);
                         complete &= child.complete;
+                        count += child.numberOfSubTrees() + 1;
                         children.put(name, child);
                     } else {
                         LOG.log(System.Logger.Level.DEBUG, () -> "Sub-settings " + name + " not found");
@@ -145,6 +156,7 @@ public final class SettingsTree {
         // Note: we did not modify this object before this moment to make this method atomic regarding a failure
         this.children.clear();
         this.children.putAll(children);
+        this.numberOfSubTrees = count;
         return complete;
     }
 

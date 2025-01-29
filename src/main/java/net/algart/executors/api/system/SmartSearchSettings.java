@@ -80,6 +80,14 @@ public class SmartSearchSettings {
         return allSettings;
     }
 
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
     public boolean search() {
         if (ready) {
             return complete;

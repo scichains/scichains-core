@@ -1783,7 +1783,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
      *
      * <p>Usually it is set by {@link #setSourceInfoForSpecification()} method, which uses JSON file, passed
      * to  {@link #read(Path)} or {@link #readIfValid(Path)} methods, as a specification file, and does not try
-     * to set module source file (if that method is not overridden).
+     * to set the module source file (if that method is not overridden).
      * However, it can be useful to set some of these two paths manually even in a case, when this object
      * is built on the base some other source, for example, a chain ({@link #setTo(Chain)} method).
      * For example, it can be used to allow GUI to open the source file of the given executor.</p>
@@ -2120,6 +2120,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setControls(controls);
     }
 
+    public final SettingsSpecification toSettingsSpecification() {
+        SettingsSpecification result = new SettingsSpecification();
+        result.setTo(this);
+        return result;
+    }
+
     @Override
     public void checkCompleteness() {
         checkNull(category, "category");
@@ -2146,7 +2152,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         buildJson(builder, JsonMode.FULL);
     }
 
-    public void buildJson(JsonObjectBuilder builder, JsonMode mode) {
+    public final void buildJson(JsonObjectBuilder builder, JsonMode mode) {
         buildJson(builder, mode, null);
     }
 
