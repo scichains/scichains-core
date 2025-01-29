@@ -149,9 +149,14 @@ public final class SettingsTree {
     }
 
     public JsonObject toJson() {
+        return toJson(ExecutorSpecification.JsonMode.MEDIUM);
+        // - no reasons to duplicate settings information in the tree
+    }
+
+    public JsonObject toJson(ExecutorSpecification.JsonMode mode) {
         specification.checkCompleteness();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        specification.buildJson(builder, this::childJsonTree);
+        specification.buildJson(builder, mode, name -> childJsonTree(name, mode));
         return builder.build();
     }
 
@@ -164,11 +169,22 @@ public final class SettingsTree {
         return Jsons.toPrettyString(toJson());
     }
 
+    public String jsonString(ExecutorSpecification.JsonMode mode) {
+        return Jsons.toPrettyString(toJson(mode));
+    }
+
     public String defaultValuesJsonString() {
         return Jsons.toPrettyString(defaultValuesJson());
     }
 
-    private JsonObject childJsonTree(String name) {
-        return children.containsKey(name) ? children.get(name).toJson() : null;
+    @Override
+    public String toString() {
+        return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
+                specification.getId() + " (" + specification.canonicalName() + "): " +
+                children.size() + " children";
+    }
+
+    private JsonObject childJsonTree(String name, ExecutorSpecification.JsonMode mode) {
+        return children.containsKey(name) ? children.get(name).toJson(mode) : null;
     }
 }

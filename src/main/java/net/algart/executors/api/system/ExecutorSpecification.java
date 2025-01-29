@@ -51,6 +51,15 @@ import java.util.stream.Collectors;
  * in several ports.</p>
  */
 public class ExecutorSpecification extends AbstractConvertibleToJson {
+    public enum JsonMode {
+        FULL,
+        MEDIUM;
+
+        public boolean isSettingsIncluded() {
+            return this == FULL;
+        }
+    }
+
     public static final String EXECUTOR_FILE_PATTERN = ".*\\.json$";
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
@@ -1573,7 +1582,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public final String getCanonicalName() {
+    public final String canonicalName() {
         return category + "." + name;
     }
 
@@ -2100,19 +2109,32 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public JsonObject toJsonTree(ExecutorSpecificationFactory specificationFactory) {
-        Objects.requireNonNull(specificationFactory, "Null specification factory");
+    public final JsonObject toJson(JsonMode mode) {
         checkCompleteness();
-        return SettingsTree.of(specificationFactory, this).toJson();
+        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        buildJson(builder, mode);
+        return builder.build();
     }
 
+    public final String jsonString(JsonMode mode) {
+        return Jsons.toPrettyString(toJson(mode));
+    }
 
     @Override
     public void buildJson(JsonObjectBuilder builder) {
-        buildJson(builder, null);
+        buildJson(builder, JsonMode.FULL);
     }
 
-    public void buildJson(JsonObjectBuilder builder, Function<String, JsonObject> subSettingsJsonBuilder) {
+    public void buildJson(JsonObjectBuilder builder, JsonMode mode) {
+        buildJson(builder, mode, null);
+    }
+
+    void buildJson(
+            JsonObjectBuilder builder,
+            JsonMode mode,
+            Function<String, JsonObject> subSettingsJsonBuilder) {
+        Objects.requireNonNull(builder, "Null builder");
+        Objects.requireNonNull(mode, "Null JSON mode");
         builder.add("app", APP_NAME);
         builder.add("version", version);
         if (platformId != null) {
@@ -2164,7 +2186,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             controlsBuilder.add(controlBuilder.build());
         }
         builder.add("controls", controlsBuilder.build());
-        if (settings != null) {
+        if (mode.isSettingsIncluded() && settings != null) {
             builder.add(SETTINGS, settings.toJson());
         }
         if (sourceInfo != null) {

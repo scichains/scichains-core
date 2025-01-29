@@ -116,7 +116,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("%n%nAll %d executor specifications:%n", allExecutors.size()));
         allExecutors.forEach(
                 executor -> sb.append(String.format("    %s    %s%n",
-                        executor.getCanonicalName(),
+                        executor.canonicalName(),
                         executor.hasExecutorSpecificationFile() ? "--    " + executor.getExecutorSpecificationFile() : "(no file)")));
         return sb.toString();
     }

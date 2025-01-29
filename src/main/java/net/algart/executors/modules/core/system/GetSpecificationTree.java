@@ -54,6 +54,7 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
     private String id = "n/a";
     private boolean buildTree = true;
     private boolean smartSearch = true;
+    private ExecutorSpecification.JsonMode jsonMode = ExecutorSpecification.JsonMode.MEDIUM;
 
     private volatile ExecutorFactory factory = null;
     private volatile SmartSearchSettings smartSearchSettings = null;
@@ -87,6 +88,15 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
 
     public GetSpecificationTree setSmartSearch(boolean smartSearch) {
         this.smartSearch = smartSearch;
+        return this;
+    }
+
+    public ExecutorSpecification.JsonMode getJsonMode() {
+        return jsonMode;
+    }
+
+    public GetSpecificationTree setJsonMode(ExecutorSpecification.JsonMode jsonMode) {
+        this.jsonMode = nonNull(jsonMode);
         return this;
     }
 
@@ -129,10 +139,10 @@ public class GetSpecificationTree extends Executor implements ReadOnlyExecutionI
                     SettingsTree.of(factory, specification);
             t3 = debugTime();
             getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
-            result = tree.jsonString();
+            result = tree.jsonString(jsonMode);
         } else {
             t3 = t2;
-            result = specification.jsonString();
+            result = specification.jsonString(jsonMode);
         }
         long t4 = debugTime();
         getScalar().setTo(result);
