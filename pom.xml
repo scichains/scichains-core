@@ -51,7 +51,7 @@
 
         <build.directory>${project.build.directory}/build</build.directory>
 
-        <algart.version>1.4.23</algart.version>
+        <algart.version>1.4.24</algart.version>
         <graalvm.version>24.0.2</graalvm.version>
         <jep.version>4.2.0</jep.version>
     </properties>
