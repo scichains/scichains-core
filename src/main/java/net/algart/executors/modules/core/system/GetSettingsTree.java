@@ -121,7 +121,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         if (id == null) {
             id = this.id;
         }
-        SettingsTree tree = buildSettingsTree(id);
+        final SettingsTree tree = buildSettingsTree(id);
         if (tree == null) {
             // - result remains empty
             return;

@@ -104,12 +104,12 @@ public final class SettingsTree {
         return complete;
     }
 
-    public JsonObject toJson() {
-        return toJson(ExecutorSpecification.JsonMode.MEDIUM);
+    public JsonObject specificationJson() {
+        return specificationJson(ExecutorSpecification.JsonMode.MEDIUM);
         // - by default, there are no reasons to duplicate settings information in the tree
     }
 
-    public JsonObject toJson(ExecutorSpecification.JsonMode mode) {
+    public JsonObject specificationJson(ExecutorSpecification.JsonMode mode) {
         specification.checkCompleteness();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         specification.buildJson(builder, mode, name -> childJsonTree(name, mode));
@@ -124,11 +124,11 @@ public final class SettingsTree {
     }
 
     public String jsonString() {
-        return Jsons.toPrettyString(toJson());
+        return Jsons.toPrettyString(specificationJson());
     }
 
     public String jsonString(ExecutorSpecification.JsonMode mode) {
-        return Jsons.toPrettyString(toJson(mode));
+        return Jsons.toPrettyString(specificationJson(mode));
     }
 
     public String defaultSettingsJsonString() {
@@ -199,7 +199,7 @@ public final class SettingsTree {
     }
 
     private JsonObject childJsonTree(String name, ExecutorSpecification.JsonMode mode) {
-        return children.containsKey(name) ? children.get(name).toJson(mode) : null;
+        return children.containsKey(name) ? children.get(name).specificationJson(mode) : null;
     }
 
     private JsonObject childDefaultSettingsJsonTree(String name) {
