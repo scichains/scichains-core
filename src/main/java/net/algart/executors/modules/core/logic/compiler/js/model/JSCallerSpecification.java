@@ -150,7 +150,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
         return new JSCallerSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification ofValid(String executorSpecificationString) {
+    public static JSCallerSpecification ofOrNull(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {

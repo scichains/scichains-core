@@ -849,7 +849,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         return of(chainSpecificationString, true);
     }
 
-    public static ChainSpecification ofValid(String chainSpecificationString) {
+    public static ChainSpecification ofOrNull(String chainSpecificationString) {
         return of(chainSpecificationString, false);
     }
 

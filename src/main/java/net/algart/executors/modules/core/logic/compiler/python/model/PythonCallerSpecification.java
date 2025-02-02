@@ -207,7 +207,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         return new PythonCallerSpecification(executorSpecification, null);
     }
 
-    public static PythonCallerSpecification ofValid(String executorSpecificationString) {
+    public static PythonCallerSpecification ofOrNull(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {
