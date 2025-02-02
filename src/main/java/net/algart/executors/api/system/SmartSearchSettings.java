@@ -25,6 +25,7 @@
 package net.algart.executors.api.system;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class SmartSearchSettings {
@@ -154,14 +155,25 @@ public class SmartSearchSettings {
     }
 
     private String tryToFindSettings(String valueClassName, String controlName) {
+        String settingsId = null;
+        if (valueClassName != null) {
+            settingsId = tryToFindSettings(role -> role.equalsClass(valueClassName));
+            if (settingsId == null) {
+                settingsId = tryToFindSettings(role -> role.matchesClass(valueClassName));
+            }
+        }
+        if (settingsId == null) {
+            settingsId = tryToFindSettings(role -> role.matchesClass(controlName));
+        }
+        return settingsId;
+    }
+
+    private String tryToFindSettings(Predicate<ExecutorSpecification.Options.Role> matchesRole) {
         for (Map.Entry<String, ExecutorSpecification> entry : this.allSettings.entrySet()) {
             final ExecutorSpecification specification = entry.getValue();
             final ExecutorSpecification.Options.Role role = specification.getRole();
-            if (role == null) {
-                // - improbable: possible only due to modification from parallel thread
-                continue;
-            }
-            if (role.equalsClass(valueClassName) || role.matchesClass(controlName)) {
+            if (role != null && matchesRole.test(role)) {
+                // - role==null is very improbable: possible only due to modification from parallel thread
                 return specification.getId();
             }
         }
