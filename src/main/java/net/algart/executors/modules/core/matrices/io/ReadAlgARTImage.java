@@ -72,7 +72,7 @@ public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExec
         logDebug(() -> "Reading AlgART multi-matrix from " + file);
         try {
             final List<Matrix<? extends PArray>> matrices = MatrixIO.readImageFolder(file);
-            final MultiMatrix multiMatrix = MultiMatrix.valueOfRGBA(matrices);
+            final MultiMatrix multiMatrix = MultiMatrix.ofRGBA(matrices);
             final MultiMatrix result = multiMatrix.clone();
             multiMatrix.freeResources();
             // - close files

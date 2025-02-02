@@ -99,6 +99,6 @@ public final class MatrixDifferenceFromPair extends SeveralMultiMatricesOperatio
         final MultiMatrix a = sources.get(1);
         final MultiMatrix b = sources.get(2);
         logDebug(() -> "Difference from pair: " + operation + " for matrices " + x + "; " + a + "; " + b);
-        return MultiMatrix.valueOf2DMono(operation.calculate(x, a, b));
+        return MultiMatrix.of2DMono(operation.calculate(x, a, b));
     }
 }

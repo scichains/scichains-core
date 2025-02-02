@@ -98,7 +98,7 @@ public final class MatrixArctangent extends SeveralMultiMatricesOperation {
     @Override
     public MultiMatrix process(List<MultiMatrix> sources) {
         Objects.requireNonNull(sources, "Null sources");
-        return MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(
+        return MultiMatrix.of2DMono(Matrices.asFuncMatrix(
                 (Func2) (x, y) ->
                         x * x + y * y <= epsilonForLittleSquare ?
                                 resultForLittleSquare :

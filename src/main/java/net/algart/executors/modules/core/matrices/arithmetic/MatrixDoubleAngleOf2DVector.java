@@ -97,7 +97,7 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
             getMat(OUTPUT_Y).setTo(result[2]);
         }
         if (necessaryXY) {
-            getMat(OUTPUT_XY).setTo(MultiMatrix.valueOf2D(Arrays.asList(
+            getMat(OUTPUT_XY).setTo(MultiMatrix.of2D(Arrays.asList(
                     result[1].channel(0),
                     result[2].channel(0))));
         }
@@ -122,10 +122,10 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
         }
         final MultiMatrix2D[] result = new MultiMatrix2D[3];
         // - filled by null
-        result[0] = MultiMatrix.valueOf2DMono(magnitude);
+        result[0] = MultiMatrix.of2DMono(magnitude);
         if (requestX) {
             if (!normalizedSource && !normalizedResult) {
-                result[1] = MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
+                result[1] = MultiMatrix.of2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
                     @Override
                     public double get(double... x) {
                         return get(x[0], x[1], x[2]);
@@ -137,7 +137,7 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
                     }
                 }, FloatArray.class, cos, sin, magnitude)).clone();
             } else {
-                result[1] = MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
+                result[1] = MultiMatrix.of2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
                     @Override
                     public double get(double... x) {
                         return get(x[0], x[1]);
@@ -152,7 +152,7 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
         }
         if (requestY) {
             if (!normalizedSource && !normalizedResult) {
-                result[2] = MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
+                result[2] = MultiMatrix.of2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
                     @Override
                     public double get(double... x) {
                         return get(x[0], x[1], x[2]);
@@ -164,7 +164,7 @@ public final class MatrixDoubleAngleOf2DVector extends SeveralMultiMatricesOpera
                     }
                 }, FloatArray.class, cos, sin, magnitude)).clone();
             } else {
-                result[2] = MultiMatrix.valueOf2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
+                result[2] = MultiMatrix.of2DMono(Matrices.asFuncMatrix(new AbstractFunc() {
                     @Override
                     public double get(double... x) {
                         return get(x[0], x[1]);

@@ -74,12 +74,12 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
                 }
             }
             if (s != null) {
-                if (sb.length() > 0) {
+                if (!sb.isEmpty()) {
                     sb.append(separator);
                 }
                 sb.append(s);
             }
         }
-        return SScalar.valueOf(sb);
+        return SScalar.of(sb);
     }
 }

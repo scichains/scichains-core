@@ -167,7 +167,7 @@ public final class Chain implements AutoCloseable {
 //        return clone;
     }
 
-    public static Chain valueOf(
+    public static Chain of(
             Executor executionContext,
             ExecutorFactory executorFactory,
             ChainSpecification chainSpecification) {
@@ -191,10 +191,10 @@ public final class Chain implements AutoCloseable {
         result.setMultithreading(execution.isMultithreading());
         result.setIgnoreExceptions(execution.isIgnoreExceptions());
         for (ChainSpecification.ChainBlockConf blockConf : chainSpecification.getBlocks()) {
-            result.addBlock(ChainBlock.valueOf(result, blockConf));
+            result.addBlock(ChainBlock.of(result, blockConf));
         }
         for (ChainSpecification.ChainLinkConf linkConf : chainSpecification.getLinks()) {
-            result.addLink(ChainLink.valueOf(linkConf));
+            result.addLink(ChainLink.of(linkConf));
         }
         if (chainSpecification.hasChainSpecificationFile()) {
             result.setCurrentDirectory(chainSpecification.getChainSpecificationFile().getParent());

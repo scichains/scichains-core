@@ -389,13 +389,13 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 this.copy = json.getBoolean("copy", false);
                 final String dataType = json.getString("data_type", null);
                 if (dataType != null) {
-                    this.dataType = ParameterValueType.valueOfTypeNameOrNull(dataType);
+                    this.dataType = ParameterValueType.ofOrNull(dataType);
                     Jsons.requireNonNull(this.dataType, json, "data_type",
                             "unknown (\"" + dataType + "\")", file);
                 }
                 final String editionType = json.getString("edition_type", null);
                 if (editionType != null) {
-                    this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
+                    this.editionType = ControlEditionType.ofOrNull(editionType);
                     Jsons.requireNonNull(this.editionType, json, "edition_type",
                             "unknown (\"" + editionType + "\")", file);
                 }
@@ -504,7 +504,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         public Options(JsonObject json, Path file) {
             final String stage = json.getString("stage", ExecutionStage.RUN_TIME.stageName());
-            this.stage = ExecutionStage.valueOfStageNameOrNull(stage);
+            this.stage = ExecutionStage.ofOrNull(stage);
             Jsons.requireNonNull(this.stage, json, "stage", "unknown (\"" + stage + "\")", file);
             final JsonObject roleJson = json.getJsonObject("role");
             if (roleJson != null) {
@@ -849,7 +849,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         public PortConf(JsonObject json, Path file) {
             this.name = Jsons.reqString(json, "name", file);
-            this.valueType = DataType.valueOfTypeNameOrNull(Jsons.reqString(json, "value_type", file));
+            this.valueType = DataType.ofTypeNameOrNull(Jsons.reqString(json, "value_type", file));
             Jsons.requireNonNull(valueType, json, "value_type", file);
             this.caption = json.getString("caption", null);
             this.hint = json.getString("hint", null);
@@ -1049,12 +1049,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.caption = json.getString("caption", null);
             this.hint = json.getString("hint", null);
             String valueType = Jsons.reqString(json, "value_type", file);
-            this.valueType = ParameterValueType.valueOfTypeNameOrNull(valueType);
+            this.valueType = ParameterValueType.ofOrNull(valueType);
             Jsons.requireNonNull(this.valueType, json, "value_type",
                     "unknown (\"" + valueType + "\")", file);
             this.valueClassName = json.getString("value_class_name", null);
             String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
-            this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
+            this.editionType = ControlEditionType.ofOrNull(editionType);
             Jsons.requireNonNull(this.editionType, json, "edition_type",
                     "unknown (\"" + editionType + "\")", file);
             this.settingsId = json.getString("settings_id", null);
@@ -1474,7 +1474,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
             final JsonObject settingsJson = json.getJsonObject(SETTINGS);
             if (settingsJson != null) {
-                this.settings = SettingsSpecification.valueOf(settingsJson);
+                this.settings = SettingsSpecification.of(settingsJson);
             }
             final JsonObject sourceJson = json.getJsonObject("source");
             if (sourceJson != null) {
@@ -1511,17 +1511,17 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         Files.writeString(executorSpecificationFile, jsonString(), options);
     }
 
-    public static ExecutorSpecification valueOf(JsonObject executorSpecification) {
+    public static ExecutorSpecification of(JsonObject executorSpecification) {
         return new ExecutorSpecification(executorSpecification, null);
     }
 
-    public static ExecutorSpecification valueOf(String executorSpecificationString) throws JsonException {
+    public static ExecutorSpecification of(String executorSpecificationString) throws JsonException {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
         return new ExecutorSpecification(executorSpecification, null);
     }
 
-    public static ExecutorSpecification valueOf(Executor executor, String executorId) {
+    public static ExecutorSpecification of(Executor executor, String executorId) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(executorId, "Null executor ID");
         final ExecutorSpecification result = new ExecutorSpecification();

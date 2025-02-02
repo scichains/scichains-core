@@ -32,7 +32,7 @@ public class ParameterValueTypeTest {
             System.out.printf("%s; reverse valueOf the same: %s, %s; empty value: %s (%s)%n",
                     valueType,
                     ParameterValueType.valueOf(valueType.name()),
-                    ParameterValueType.valueOfTypeName(valueType.typeName()),
+                    ParameterValueType.of(valueType.typeName()),
                     valueType.emptyJsonValue(),
                     valueType.emptyJsonValue().getClass());
         }

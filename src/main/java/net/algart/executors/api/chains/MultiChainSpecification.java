@@ -231,7 +231,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         Files.writeString(multiChainSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
-    public static MultiChainSpecification valueOf(JsonObject multiSpecificationJson, boolean strictMode) {
+    public static MultiChainSpecification of(JsonObject multiSpecificationJson, boolean strictMode) {
         return new MultiChainSpecification(multiSpecificationJson, strictMode, null);
     }
 

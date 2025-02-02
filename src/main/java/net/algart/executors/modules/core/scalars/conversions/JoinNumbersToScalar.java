@@ -199,7 +199,7 @@ public class JoinNumbersToScalar extends NumbersToScalar implements ReadOnlyExec
 
     @Override
     public SScalar analyse(SNumbers source) {
-        return SScalar.valueOf(join(source));
+        return SScalar.of(join(source));
     }
 
     public String join(SNumbers source) {

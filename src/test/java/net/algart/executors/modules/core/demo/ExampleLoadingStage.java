@@ -101,7 +101,7 @@ public final class ExampleLoadingStage extends Executor {
     @Override
     public void process() {
         final String id = "7ec64582-de9e-4607-85ad-adfa97a3b0e5";
-        final var executorSpecification = ExecutorSpecification.valueOf(new TestExecutor(), id);
+        final var executorSpecification = ExecutorSpecification.of(new TestExecutor(), id);
         final String sessionId = getSessionId();
         MY_LOADER.setSpecification(sessionId, executorSpecification);
         getScalar(DEFAULT_OUTPUT_PORT).setTo(executorSpecification.jsonString());

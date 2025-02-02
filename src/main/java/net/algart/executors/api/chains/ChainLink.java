@@ -37,12 +37,12 @@ public final class ChainLink {
         this.destPortId = Objects.requireNonNull(destPortId, "Null destPortId");
     }
 
-    public static ChainLink newInstance(String srcPortId, String destPortId) {
+    public static ChainLink of(String srcPortId, String destPortId) {
         return new ChainLink(srcPortId, destPortId);
     }
 
-    public static ChainLink valueOf(ChainSpecification.ChainLinkConf linkConf) {
-        return newInstance(linkConf.getSrcPortUuid(), linkConf.getDestPortUuid());
+    public static ChainLink of(ChainSpecification.ChainLinkConf linkConf) {
+        return of(linkConf.getSrcPortUuid(), linkConf.getDestPortUuid());
     }
 
     public String getSrcPortId() {

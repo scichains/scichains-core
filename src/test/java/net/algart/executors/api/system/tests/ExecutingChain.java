@@ -137,7 +137,7 @@ public class ExecutingChain {
         System.out.printf("Reading %s...", chainFile);
         t1 = System.nanoTime();
         ChainSpecification chainSpecification = ChainSpecification.read(chainFile);
-        Chain originalChain = Chain.valueOf(null, executorFactory, chainSpecification);
+        Chain originalChain = Chain.of(null, executorFactory, chainSpecification);
         originalChain.setMultithreading(multithreading);
         originalChain.setExecuteAll(executeAll);
         originalChain.setIgnoreExceptions(ignoreExceptions);
@@ -154,11 +154,11 @@ public class ExecutingChain {
             System.out.println(originalChain.toString(true));
         }
 
-        SMat sourceMat = sourceFile == null ? null : SMat.valueOf(ImageIO.read(sourceFile.toFile()));
+        SMat sourceMat = sourceFile == null ? null : SMat.of(ImageIO.read(sourceFile.toFile()));
         final Map<String, Data> inputs = new HashMap<>();
         if (sourceMat != null) {
             if (monochrome) {
-                sourceMat = SMat.valueOf(sourceMat.toMultiMatrix2D().asMono().clone());
+                sourceMat = SMat.of(sourceMat.toMultiMatrix2D().asMono().clone());
             }
             System.out.printf("Reading source image %s%s: %s%n",
                     monochrome ? "(monochrome) " : "", sourceFile, sourceMat);

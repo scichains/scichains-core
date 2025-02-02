@@ -142,6 +142,6 @@ public final class CreateIntegerRectangle extends Executor implements ReadOnlyEx
         }
         final IRange rangeY = IRange.valueOf(y1, y2);
         this.getScalar(OUTPUT_SIZE_Y).setTo(rangeY.size());
-        return SNumbers.valueOf(IRectangularArea.valueOf(rangeX, rangeY));
+        return SNumbers.of(IRectangularArea.valueOf(rangeX, rangeY));
     }
 }

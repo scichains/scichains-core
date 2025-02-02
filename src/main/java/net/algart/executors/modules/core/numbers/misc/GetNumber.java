@@ -65,12 +65,12 @@ public final class GetNumber extends NumbersToScalar implements ReadOnlyExecutio
     public SScalar analyse(SNumbers source) {
         final int indexInArray = rawIndex != null ? rawIndex : blockIndex * source.getBlockLength() + indexInBlock;
         if (source.isLongArray()) {
-            return SScalar.valueOf(((long[]) source.arrayReference())[indexInArray]);
+            return SScalar.of(((long[]) source.arrayReference())[indexInArray]);
             // - in all other cases, double type always stores the result precisely always
         } else if (source.isFloatingPoint()) {
-            return SScalar.valueOf(source.getValue(indexInArray));
+            return SScalar.of(source.getValue(indexInArray));
         } else {
-            return SScalar.valueOf((long) source.getValue(indexInArray));
+            return SScalar.of((long) source.getValue(indexInArray));
         }
     }
 }

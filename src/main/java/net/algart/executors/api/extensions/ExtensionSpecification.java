@@ -810,7 +810,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static ExtensionSpecification valueOf(JsonObject extensionSpecification) {
+    public static ExtensionSpecification of(JsonObject extensionSpecification) {
         return new ExtensionSpecification(extensionSpecification, null);
     }
 

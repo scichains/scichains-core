@@ -267,7 +267,7 @@ public final class UseSubChain extends FileOperation {
     }
 
     public void useContent(String chainJsonContent) {
-        final ChainSpecification chainSpecification = ChainSpecification.valueOf(chainJsonContent);
+        final ChainSpecification chainSpecification = ChainSpecification.of(chainJsonContent);
         long t1 = infoTime();
         final Optional<Chain> chain = useIfNonRecursive(chainSpecification);
         long t2 = infoTime();
@@ -409,7 +409,7 @@ public final class UseSubChain extends FileOperation {
             throw new IllegalStateException("Cannot register new chain: session ID was not set");
         }
         final ExecutorFactory executorFactory = globalLoaders().newFactory(sessionId);
-        Chain chain = Chain.valueOf(this, executorFactory, chainSpecification);
+        Chain chain = Chain.of(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {
             // - If the chain was loaded not from file, but from the executor text parameter,
             // chainSpecification does not contain information about current folder;

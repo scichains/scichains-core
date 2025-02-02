@@ -72,8 +72,8 @@ public final class GetJsonValue extends ScalarFilter {
     public SScalar process(SScalar source) {
         final JsonObject json = Jsons.toJson(source.getValue(), true);
         final JsonValue jsonValue = json.get(key);
-        return jsonValue != null ? SScalar.valueOf(Jsons.toPrettyString(jsonValue)) :
-                useDefaultValue ? SScalar.valueOf(defaultValue) : new SScalar();
+        return jsonValue != null ? SScalar.of(Jsons.toPrettyString(jsonValue)) :
+                useDefaultValue ? SScalar.of(defaultValue) : new SScalar();
     }
 
     @Override

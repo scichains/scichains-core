@@ -105,7 +105,7 @@ public final class NumbersInfo extends NumbersToScalar implements ReadOnlyExecut
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, allQuick ? "initializing" : "extracting columns",
                 (t3 - t2) * 1e-6));
-        return SScalar.valueOf(source.n());
+        return SScalar.of(source.n());
     }
 
     @Override

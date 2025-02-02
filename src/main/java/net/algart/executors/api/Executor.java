@@ -238,7 +238,7 @@ public abstract class Executor extends ExecutionBlock {
 
     @Override
     public String statusData(int dataCode) {
-        final ExecutionStatus.DataKind dataKind = ExecutionStatus.DataKind.valueOfCodeOrNull(dataCode);
+        final ExecutionStatus.DataKind dataKind = ExecutionStatus.DataKind.ofOrNull(dataCode);
         return dataKind == null ? null : dataKind.data(status);
     }
 
@@ -798,7 +798,7 @@ public abstract class Executor extends ExecutionBlock {
      * @throws IllegalArgumentException – if the specified name does not match to {@link Logger.Level} enum type
      *                                  or constant listed above.
      */
-    protected static Logger.Level valueOfLogLevel(String name) {
+    protected static Logger.Level ofLogLevel(String name) {
         return switch (name) {
             case "SEVERE", "1000" -> Logger.Level.ERROR;
             case "900" -> Logger.Level.WARNING;

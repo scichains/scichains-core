@@ -119,7 +119,7 @@ public interface MultiMatrix extends Cloneable {
         }
         final List<Matrix<? extends PArray>> allChannels = allChannels();
         if (allChannels.get(0).dimCount() == 2) {
-            return valueOf2D(allChannels);
+            return of2D(allChannels);
         } else {
             throw new IllegalStateException("This matrix is not actually 2-dimensional: " + this);
         }
@@ -206,27 +206,27 @@ public interface MultiMatrix extends Cloneable {
     MultiMatrix actualizeLazy();
 
     default MultiMatrix nonZeroPixels(boolean checkOnlyRGBChannels) {
-        return valueOfMono(nonZeroPixelsMatrix(checkOnlyRGBChannels));
+        return ofMono(nonZeroPixelsMatrix(checkOnlyRGBChannels));
     }
 
     default MultiMatrix zeroPixels(boolean checkOnlyRGBChannels) {
-        return valueOfMono(zeroPixelsMatrix(checkOnlyRGBChannels));
+        return ofMono(zeroPixelsMatrix(checkOnlyRGBChannels));
     }
 
     default MultiMatrix nonZeroAnyChannel() {
-        return valueOfMono(nonZeroAnyChannelMatrix());
+        return ofMono(nonZeroAnyChannelMatrix());
     }
 
     default MultiMatrix zeroAllChannels() {
-        return valueOfMono(zeroAllChannelsMatrix());
+        return ofMono(zeroAllChannelsMatrix());
     }
 
     default MultiMatrix nonZeroRGB() {
-        return MultiMatrix.valueOfMono(nonZeroRGBMatrix());
+        return MultiMatrix.ofMono(nonZeroRGBMatrix());
     }
 
     default MultiMatrix zeroRGB() {
-        return MultiMatrix.valueOfMono(zeroRGBMatrix());
+        return MultiMatrix.ofMono(zeroRGBMatrix());
     }
 
     default Matrix<BitArray> nonZeroAnyChannelMatrix() {
@@ -286,7 +286,7 @@ public interface MultiMatrix extends Cloneable {
         for (int k = 0; k < n; k++) {
             channels.add(Matrices.asFuncMatrix(funcOfOneArgument, requiredType, channel(k)));
         }
-        return MultiMatrix.valueOf(channels);
+        return MultiMatrix.of(channels);
     }
 
     default MultiMatrix asFunc(Func funcOfTwoArguments, MultiMatrix other) {
@@ -302,11 +302,11 @@ public interface MultiMatrix extends Cloneable {
         for (int k = 0; k < n; k++) {
             channels.add(Matrices.asFuncMatrix(funcOfTwoArguments, requiredType, channel(k), other.channel(k)));
         }
-        return MultiMatrix.valueOf(channels);
+        return MultiMatrix.of(channels);
     }
 
     default MultiMatrix mapChannels(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {
-        return MultiMatrix.valueOf(allChannels().stream().map(function::apply).collect(Collectors.toList()));
+        return MultiMatrix.of(allChannels().stream().map(function::apply).collect(Collectors.toList()));
     }
 
     default List<Matrix<? extends PArray>> allChannelsInRGBAOrder() {
@@ -403,7 +403,7 @@ public interface MultiMatrix extends Cloneable {
             return this;
         }
         if (n == 1) {
-            return MultiMatrix.valueOfMono(Matrices.asFuncMatrix(
+            return MultiMatrix.ofMono(Matrices.asFuncMatrix(
                     intensityCorrectingFunctionOfOneArgument,
                     channel(0).type(PArray.class),
                     channel(0)));
@@ -431,7 +431,7 @@ public interface MultiMatrix extends Cloneable {
             Matrix<? extends PArray> result = Matrices.asFuncMatrix(f, m.type(PArray.class), m, i);
             channels.set(k, result);
         }
-        return MultiMatrix.valueOf(channels);
+        return MultiMatrix.of(channels);
 
     }
 
@@ -466,26 +466,26 @@ public interface MultiMatrix extends Cloneable {
         }
     }
 
-    static MultiMatrix valueOf(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix of(List<? extends Matrix<? extends PArray>> channels) {
         return new SimpleMultiMatrix(channels);
     }
 
-    static MultiMatrix valueOfRGBA(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix ofRGBA(List<? extends Matrix<? extends PArray>> channels) {
         SimpleMultiMatrix.checkNumberOfChannels(channels, false);
         return new SimpleMultiMatrix(channels);
     }
 
-    static MultiMatrix valueOfBGRA(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix ofBGRA(List<? extends Matrix<? extends PArray>> channels) {
         SimpleMultiMatrix.checkNumberOfChannels(channels, false);
         return new SimpleMultiMatrix(SimpleMultiMatrix.flipRB(channels));
     }
 
-    static MultiMatrix valueOfMono(Matrix<? extends PArray> singleChannel) {
+    static MultiMatrix ofMono(Matrix<? extends PArray> singleChannel) {
         Objects.requireNonNull(singleChannel, "Null single-channel matrix");
         return new SimpleMultiMatrix(Collections.singletonList(singleChannel));
     }
 
-    static MultiMatrix valueOfMerged(Matrix<? extends PArray> mergedChannels) {
+    static MultiMatrix ofMerged(Matrix<? extends PArray> mergedChannels) {
         Objects.requireNonNull(mergedChannels, "Null mergedChannels");
         return new SimpleMultiMatrix(Matrices.asLayers(mergedChannels, MAX_NUMBER_OF_CHANNELS));
     }
@@ -517,26 +517,26 @@ public interface MultiMatrix extends Cloneable {
         return new SimpleMultiMatrix2D(channels);
     }
 
-    static MultiMatrix2D valueOf2D(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix2D of2D(List<? extends Matrix<? extends PArray>> channels) {
         return new SimpleMultiMatrix2D(channels);
     }
 
-    static MultiMatrix2D valueOf2DRGBA(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix2D of2DRGBA(List<? extends Matrix<? extends PArray>> channels) {
         SimpleMultiMatrix.checkNumberOfChannels(channels, false);
         return new SimpleMultiMatrix2D(channels);
     }
 
-    static MultiMatrix2D valueOf2DBGRA(List<? extends Matrix<? extends PArray>> channels) {
+    static MultiMatrix2D of2DBGRA(List<? extends Matrix<? extends PArray>> channels) {
         SimpleMultiMatrix.checkNumberOfChannels(channels, false);
         return new SimpleMultiMatrix2D(SimpleMultiMatrix.flipRB(channels));
     }
 
-    static MultiMatrix2D valueOf2DMono(Matrix<? extends PArray> singleChannel) {
+    static MultiMatrix2D of2DMono(Matrix<? extends PArray> singleChannel) {
         Objects.requireNonNull(singleChannel, "Null single-channel matrix");
         return new SimpleMultiMatrix2D(Collections.singletonList(singleChannel));
     }
 
-    static MultiMatrix2D valueOf2DMerged(Matrix<? extends PArray> packedChannels) {
+    static MultiMatrix2D of2DMerged(Matrix<? extends PArray> packedChannels) {
         Objects.requireNonNull(packedChannels, "Null packedChannels");
         return new SimpleMultiMatrix2D(Matrices.asLayers(packedChannels, MAX_NUMBER_OF_CHANNELS));
     }
@@ -600,15 +600,15 @@ public interface MultiMatrix extends Cloneable {
         private PixelValue() {
         }
 
-        public static PixelValue valueOf(Object channelsJavaArray) {
-            return valueOf(channelsJavaArray, true);
+        public static PixelValue of(Object channelsJavaArray) {
+            return of(channelsJavaArray, true);
         }
 
         public static PixelValue newZeroPixelValue(Class<?> elementType, int numberOfChannels) {
-            return valueOf(java.lang.reflect.Array.newInstance(elementType, numberOfChannels), false);
+            return of(java.lang.reflect.Array.newInstance(elementType, numberOfChannels), false);
         }
 
-        static PixelValue valueOf(Object channelsJavaArray, boolean doClone) {
+        static PixelValue of(Object channelsJavaArray, boolean doClone) {
             Objects.requireNonNull(channelsJavaArray, "Null channels java array");
             if (channelsJavaArray instanceof boolean[] channels) {
                 return new Bit(doClone ? channels.clone() : channels);

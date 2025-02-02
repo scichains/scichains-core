@@ -61,7 +61,7 @@ public final class MatrixAngleDifference extends SeveralMultiMatricesOperation {
         final Matrix<? extends PArray> y1 = sources.get(1).asMultiMatrix2D().asFloatingPoint().intensityChannel();
         final Matrix<? extends PArray> x2 = sources.get(2).asMultiMatrix2D().asFloatingPoint().intensityChannel();
         final Matrix<? extends PArray> y2 = sources.get(3).asMultiMatrix2D().asFloatingPoint().intensityChannel();
-        return MultiMatrix.valueOf2DMono(
+        return MultiMatrix.of2DMono(
                         angleDistanceMetric.asAngleDifference(x1, y1, x2, y2, FloatArray.class))
                 .clone();
     }

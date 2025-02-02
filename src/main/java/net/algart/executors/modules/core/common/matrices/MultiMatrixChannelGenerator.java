@@ -57,7 +57,7 @@ public abstract class MultiMatrixChannelGenerator
         for (this.currentChannel = 0; this.currentChannel < numberOfChannels(); this.currentChannel++) {
             result.add(createChannel());
         }
-        return MultiMatrix.valueOf(result);
+        return MultiMatrix.of(result);
     }
 
     // This method is not public: usually it's direct call, not from process(), can lead to

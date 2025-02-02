@@ -54,7 +54,7 @@ public class SScalarMultiLineTest {
                 String.join(String.format(">%n<"), trimmedLinesWithComments.lines()),
                 String.join(String.format(">%n<"), trimmedLinesWithComments.comments()));
         final SScalar.MultiLineOrJsonSplitter trimmedLinesWithCommentsSecond =
-                SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(trimmedLines.toArray(new String[0]));
+                SScalar.MultiLineOrJsonSplitter.ofCommentedLines(trimmedLines.toArray(new String[0]));
         if (!trimmedLinesWithCommentsSecond.equals(trimmedLinesWithComments)) {
             throw new AssertionError(trimmedLinesWithComments + "\n !=\n"
                     + trimmedLinesWithCommentsSecond);

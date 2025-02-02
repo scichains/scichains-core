@@ -187,7 +187,7 @@ public final class ChainBlock {
         return systemName == null ? null : DEFAULT_CHAIN_PORT_CAPTION_PATTERN.replace("$$$", systemName);
     }
 
-    public static ChainBlock valueOf(Chain chain, ChainSpecification.ChainBlockConf blockConf) {
+    public static ChainBlock of(Chain chain, ChainSpecification.ChainBlockConf blockConf) {
         Objects.requireNonNull(blockConf, "Null blockConf");
         final String executorId = blockConf.getExecutorId();
         final ChainBlock result = newInstance(chain, blockConf.getUuid(), executorId);
@@ -972,7 +972,7 @@ public final class ChainBlock {
     private void loadParameters(ChainSpecification.ChainBlockConf blockConf) {
         this.parameters.clear();
         for (ChainSpecification.ChainBlockConf.ParameterConf parameterConf : blockConf.getNameToParameterMap().values()) {
-            addParameter(ChainParameter.valueOf(this, parameterConf));
+            addParameter(ChainParameter.of(this, parameterConf));
         }
     }
 
@@ -1001,14 +1001,14 @@ public final class ChainBlock {
         this.outputPorts.clear();
         if (this.executorSpecification != null) {
             for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getInPorts().values()) {
-                ChainInputPort inputPort = ChainInputPort.valueOf(this, portConf);
+                ChainInputPort inputPort = ChainInputPort.of(this, portConf);
                 Objects.requireNonNull(inputPort, "Null input port");
                 if (inputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                     throw new IllegalArgumentException("Duplicate input port name: " + inputPort.key);
                 }
             }
             for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getOutPorts().values()) {
-                ChainOutputPort outputPort = ChainOutputPort.valueOf(this, portConf);
+                ChainOutputPort outputPort = ChainOutputPort.of(this, portConf);
                 Objects.requireNonNull(outputPort, "Null output port");
                 if (outputPorts.putIfAbsent(outputPort.key, outputPort) != null) {
                     throw new IllegalArgumentException("Duplicate output port name: " + outputPort.key);
@@ -1024,14 +1024,14 @@ public final class ChainBlock {
                 // We must add here both actual and virtual ports;
                 // we distinguish them by ChainPort.key (i.e., by name + type)
                 case INPUT -> {
-                    final ChainInputPort inputPort = ChainInputPort.valueOf(this, portConf);
+                    final ChainInputPort inputPort = ChainInputPort.of(this, portConf);
                     if (chainInputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                         throw new IllegalArgumentException("Duplicate input port name \"" + inputPort.key
                                 + "\" in " + blockConf);
                     }
                 }
                 case OUTPUT -> {
-                    final ChainOutputPort outputPort = ChainOutputPort.valueOf(this, portConf);
+                    final ChainOutputPort outputPort = ChainOutputPort.of(this, portConf);
                     if (chainOutputPorts.putIfAbsent(outputPort.key, outputPort) != null) {
                         throw new IllegalArgumentException("Duplicate output port name \"" + outputPort.key
                                 + "\" in " + blockConf);

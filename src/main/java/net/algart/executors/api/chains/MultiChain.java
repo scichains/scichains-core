@@ -129,7 +129,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // - this information, set by previous operators, will be used only in the following operators,
         // to make a reference to this MultiChain and to set the correct owner information
         // inside newly created settings combiner
-        this.multiChainOnlyCommonSettingsCombiner = SettingsCombiner.valueOf(
+        this.multiChainOnlyCommonSettingsCombiner = SettingsCombiner.of(
                 buildMultiChainSettingsSpecification(false, partialChainMap));
         // - this (internally used) combiner does not contain advanced multi-line controls
         // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainSpecification()
@@ -139,7 +139,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 buildMultiChainSettingsSpecification(true, partialChainMap));
     }
 
-    public static MultiChain valueOf(
+    public static MultiChain of(
             MultiChainSpecification specification,
             UseSubChain chainFactory,
             UseMultiChainSettings settingsFactory)
@@ -324,7 +324,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
                     + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + selectedChain);
-        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.valueOf(selectedChainSettingsString));
+        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(selectedChainSettingsString));
     }
 
     public void freeResources() {

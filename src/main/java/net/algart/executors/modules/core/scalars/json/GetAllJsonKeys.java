@@ -39,7 +39,7 @@ public final class GetAllJsonKeys extends ScalarFilter {
     @Override
     public SScalar process(SScalar source) {
         final JsonObject json = Jsons.toJson(source.getValue(), true);
-        return SScalar.valueOf(String.join("\n", json.keySet()));
+        return SScalar.of(String.join("\n", json.keySet()));
     }
 
     @Override

@@ -136,12 +136,12 @@ public final class SMat extends Data {
                 if (!SimpleMemoryModel.isSimpleArray(matrix.array())) {
                     matrix = matrix.clone();
                 }
-                result = MultiMatrix.valueOfMono(matrix);
+                result = MultiMatrix.ofMono(matrix);
             } else {
                 var channels = Matrices.separate(null, m, MultiMatrix.MAX_NUMBER_OF_CHANNELS);
                 result = channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
-                        MultiMatrix.valueOf(channels) :
-                        MultiMatrix.valueOfBGRA(channels);
+                        MultiMatrix.of(channels) :
+                        MultiMatrix.ofBGRA(channels);
             }
             if (doCache) {
                 cachedMultiMatrix = result;
@@ -246,7 +246,7 @@ public final class SMat extends Data {
                     + (floatingPoint ? " (float)" : "");
         }
 
-        public static Depth valueOf(int code) {
+        public static Depth of(int code) {
             final Depth result;
             if (code < 0 || code >= CODE_TO_DEPTH.length || (result = CODE_TO_DEPTH[code]) == null) {
                 throw new IllegalArgumentException("Unsupported depth code: " + code);
@@ -254,13 +254,13 @@ public final class SMat extends Data {
             return result;
         }
 
-        public static Depth valueOf(Class<?> elementType) {
-            return valueOf(
+        public static Depth of(Class<?> elementType) {
+            return of(
                     elementType,
                     elementType == byte.class || elementType == short.class);
         }
 
-        public static Depth valueOf(Class<?> elementType, boolean unsigned) {
+        public static Depth of(Class<?> elementType, boolean unsigned) {
             Objects.requireNonNull(elementType, "Null elementType");
             if (elementType == boolean.class) {
                 return BIT;
@@ -454,7 +454,7 @@ public final class SMat extends Data {
             // - don't try to optimize non-standard order: it is used very rarely
             setNumberOfChannels(multiMatrix.numberOfChannels());
             setDimensions(multiMatrix.dimensions());
-            setDepth(SMat.Depth.valueOf(multiMatrix.elementType()));
+            setDepth(SMat.Depth.of(multiMatrix.elementType()));
             setPointer(new ConvertibleMultiMatrix(multiMatrix));
             setInitializedAndResetFlags(true);
             return this;
@@ -495,7 +495,7 @@ public final class SMat extends Data {
         assert BufferMemoryModel.isBufferArray(array);
         setNumberOfChannels((int) numberOfChannels);
         setDimensions(removeFirstElement(interleavedChannels.dimensions()));
-        setDepth(SMat.Depth.valueOf(interleavedChannels.elementType()));
+        setDepth(SMat.Depth.of(interleavedChannels.elementType()));
         setByteBuffer(BufferMemoryModel.getByteBuffer(array));
         setInitializedAndResetFlags(true);
 //        System.out.println("Returning data: " + interleavedChannels.array() + ": "
@@ -661,7 +661,7 @@ public final class SMat extends Data {
             return this;
         } else {
             final MultiMatrix matrix = toMultiMatrix(true);
-            return matrix == null ? this : valueOf(matrix.contrast());
+            return matrix == null ? this : of(matrix.contrast());
             // matrix == null if not initialized
         }
     }
@@ -689,16 +689,16 @@ public final class SMat extends Data {
         }
     }
 
-    public static SMat valueOf(
+    public static SMat of(
             long dimX,
             long dimY,
             Depth depth,
             int numberOfChannels,
             ByteBuffer byteBuffer) {
-        return valueOf(new long[]{dimX, dimY}, depth, numberOfChannels, byteBuffer);
+        return of(new long[]{dimX, dimY}, depth, numberOfChannels, byteBuffer);
     }
 
-    public static SMat valueOf(
+    public static SMat of(
             long[] dimensions,
             Depth depth,
             int numberOfChannels,
@@ -706,19 +706,19 @@ public final class SMat extends Data {
         return new SMat().setAll(dimensions, depth, numberOfChannels, byteBuffer, true);
     }
 
-    public static SMat valueOf(BufferedImage bufferedImage) {
+    public static SMat of(BufferedImage bufferedImage) {
         return new SMat().setTo(bufferedImage);
     }
 
-    public static SMat valueOf(MultiMatrix multiMatrix) {
+    public static SMat of(MultiMatrix multiMatrix) {
         return new SMat().setTo(multiMatrix);
     }
 
-    public static SMat valueOf(MultiMatrix multiMatrix, ChannelOrder channelOrder) {
+    public static SMat of(MultiMatrix multiMatrix, ChannelOrder channelOrder) {
         return new SMat().setTo(multiMatrix, channelOrder);
     }
 
-    public static SMat valueOfInterleavedMatrix(Matrix<? extends PArray> interleavedChannels) {
+    public static SMat ofInterleaved(Matrix<? extends PArray> interleavedChannels) {
         return new SMat().setToInterleavedMatrix(interleavedChannels);
     }
 
@@ -787,7 +787,7 @@ public final class SMat extends Data {
      */
     @UsedForExternalCommunication
     private void setDepthCode(int depth) {
-        this.depth = Depth.valueOf(depth);
+        this.depth = Depth.of(depth);
     }
 
     @UsedForExternalCommunication

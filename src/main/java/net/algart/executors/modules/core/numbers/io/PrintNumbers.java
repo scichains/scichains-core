@@ -90,7 +90,7 @@ public final class PrintNumbers extends JoinNumbersToScalar {
                 .setLogLevel(logLevel)
                 .setFile(file)
                 .print(() -> super.join(source), isOutputNecessary(defaultOutputPortName()));
-        return SScalar.valueOf(result);
+        return SScalar.of(result);
     }
 
     @Override

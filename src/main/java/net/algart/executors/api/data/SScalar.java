@@ -480,7 +480,7 @@ public final class SScalar extends Data {
         return value.length() > len ? value.substring(0, 128) + "..." : value;
     }
 
-    public static SScalar valueOf(Object value) {
+    public static SScalar of(Object value) {
         return new SScalar().setTo(value);
     }
 
@@ -669,15 +669,15 @@ public final class SScalar extends Data {
             this.nonString = null;
         }
 
-        public static MultiLineOrJsonSplitter valueOfSimpleLines(String[] lines) {
+        public static MultiLineOrJsonSplitter ofSimpleLines(String[] lines) {
             return new MultiLineOrJsonSplitter(lines);
         }
 
-        public static MultiLineOrJsonSplitter valueOfLinesAndComments(String[] lines, String[] comments) {
+        public static MultiLineOrJsonSplitter ofLinesAndComments(String[] lines, String[] comments) {
             return new MultiLineOrJsonSplitter(lines, comments);
         }
 
-        public static MultiLineOrJsonSplitter valueOfCommentedLines(String[] linesWithComments) {
+        public static MultiLineOrJsonSplitter ofCommentedLines(String[] linesWithComments) {
             return new MultiLineOrJsonSplitter(linesWithComments).extractComments(false);
         }
 

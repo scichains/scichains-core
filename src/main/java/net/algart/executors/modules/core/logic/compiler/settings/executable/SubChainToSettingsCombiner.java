@@ -55,7 +55,7 @@ public final class SubChainToSettingsCombiner {
         // 1) to find input/output/data blocks;
         // 2) to find default values of parameters in data blocks.
         final ChainSpecification chainSpecification = ChainSpecification.read(chainSpecificationFile);
-        final Chain chain = Chain.valueOf(null, executorFactory, chainSpecification);
+        final Chain chain = Chain.of(null, executorFactory, chainSpecification);
         final ExecutorSpecification executorSpecification = new ExecutorSpecification();
         executorSpecification.setTo(chain);
         final SettingsSpecification settingsSpecification = new SettingsSpecification();

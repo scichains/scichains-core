@@ -145,7 +145,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 // Let this chain contain some dynamic executors like CombineSettings or InterpretMultiChain,
                 // together with necessary static executors, which create them (UseSettings or UseMultiChain).
                 // Every ChainBlock tries to get ExecutorSpecification for its executor already at stage A,
-                // while its creation (ChainBlock.valueOf) - this is not obligatory, but helps in the case of
+                // while its creation (ChainBlock.of) - this is not obligatory, but helps in the case of
                 // possible diagnostic errors.
                 // However, the actual specification for them will become known only at stage B,
                 // while executing corresponding static executors.

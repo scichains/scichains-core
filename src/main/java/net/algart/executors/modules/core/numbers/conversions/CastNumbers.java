@@ -56,7 +56,7 @@ public final class CastNumbers extends NumberArrayFilter implements ReadOnlyExec
 
     @Override
     public PArray process(UpdatablePNumberArray array, int blockLength, int numberOfBlocks) {
-        SNumbers numbers = SNumbers.valueOfArray(array.toJavaArray(), 1);
+        SNumbers numbers = SNumbers.ofArray(array.toJavaArray(), 1);
         numbers = numbers.toPrecision(elementType);
         return (PNumberArray) SimpleMemoryModel.asUpdatableArray(numbers.getArray());
     }

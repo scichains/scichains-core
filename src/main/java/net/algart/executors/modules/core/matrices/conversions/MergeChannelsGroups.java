@@ -102,7 +102,7 @@ public final class MergeChannelsGroups extends SeveralMultiMatricesOperation {
             }
             result.addAll(source.allChannels());
         }
-        return MultiMatrix.valueOf(result);
+        return MultiMatrix.of(result);
     }
 
     @Override

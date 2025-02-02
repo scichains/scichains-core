@@ -75,7 +75,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                 Jsons.toJson(getInputScalar(SETTINGS, true).getValue(), true);
         chain.reinitializeAll();
         chain.setCaller(this);
-        final Level timingLogLevel = valueOfLogLevel(parameters().getString(
+        final Level timingLogLevel = ofLogLevel(parameters().getString(
                 UseSubChain.TIMING_LOG_LEVEL_NAME, UseSubChain.TIMING_LOG_LEVEL_DEFAULT));
         final int timingNumberOfCalls = LOG.isLoggable(timingLogLevel) ?
                 parameters().getInteger(
@@ -239,7 +239,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                 combiner.createSettings(this);
         final JsonObject overriddenSettings = combiner.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
-        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.valueOf(settingsString));
+        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(CombineSettings.SETTINGS)) {
             // - we check the port to be on the safe side; in correctly created chain, it must exist
             getScalar(CombineSettings.SETTINGS).setTo(settingsString);

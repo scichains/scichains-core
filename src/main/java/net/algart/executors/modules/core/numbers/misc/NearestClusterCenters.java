@@ -114,7 +114,7 @@ public final class NearestClusterCenters extends SeveralNumbersOperation impleme
         Arrays.fill(distanceArray, Float.NaN);
         final int[] result = process(valuesArray, centersArray, values.getBlockLength(), distanceArray);
         getNumbers(OUTPUT_DISTANCES).setTo(distanceArray, 1);
-        return SNumbers.valueOfArray(result);
+        return SNumbers.ofArray(result);
     }
 
     public int[] process(float[] values, float[] centers, final int blockLength, float[] minDistances) {

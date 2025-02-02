@@ -79,7 +79,7 @@ public final class SplitColorChannels extends ColorSpaceConversion {
                 final SMat outputPortMat = getMat(port);
                 logDebug(() -> "Extracting channel #" + (finalIndex + 1) + "/" + channels.size() + " -> "
                         + "monochrome matrix " + source.dimX() + "x" + source.dimY());
-                outputPortMat.setTo(MultiMatrix.valueOf2DMono(channels.get(channelIndex)).clone());
+                outputPortMat.setTo(MultiMatrix.of2DMono(channels.get(channelIndex)).clone());
             } else {
                 logDebug(() -> "(extracting channel #" + (finalIndex + 1) + "/" + channels.size()
                         + " skipped: it is not visible and not connected to any other processing)");

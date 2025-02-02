@@ -62,7 +62,7 @@ public abstract class SeveralNumberArraysOperation extends SeveralNumbersOperati
         }
         final PArray array = process(sourceList, blockLengthsArray);
         final Integer resultBlockLength = resultBlockLength();
-        return SNumbers.valueOfArray(
+        return SNumbers.ofArray(
                 array.toJavaArray(),
                 resultBlockLength == null ? firstBlockLength : resultBlockLength);
     }

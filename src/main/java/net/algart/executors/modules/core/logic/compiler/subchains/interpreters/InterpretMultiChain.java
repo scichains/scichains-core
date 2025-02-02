@@ -102,7 +102,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         final String selectedChainSettingsString = Jsons.toPrettyString(selectedChainSettings);
         selectedChain.reinitializeAll();
         selectedChain.setCaller(this);
-        final Level timingLogLevel = valueOfLogLevel(parameters().getString(
+        final Level timingLogLevel = ofLogLevel(parameters().getString(
                 UseMultiChain.TIMING_LOG_LEVEL_NAME, UseSubChain.TIMING_LOG_LEVEL_DEFAULT));
         final int timingNumberOfCalls = LOG.isLoggable(timingLogLevel) ?
                 parameters().getInteger(

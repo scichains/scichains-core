@@ -150,7 +150,7 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
             final SNumbers translationTable = translationTables[tableIndex];
             if (translationTable == null || !translationTable.isInitialized()) {
                 results[tableIndex] = tableIndex == 0 && !requireTable ?
-                        SNumbers.valueOfArray(indexArray, indexesBlockLength) :
+                        SNumbers.ofArray(indexArray, indexesBlockLength) :
                         new SNumbers();
                 // - note: we MUST NOT return a reference to source indexes in ReadOnlyExecutionInput
                 continue;

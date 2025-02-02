@@ -56,7 +56,7 @@ public class LoadingChainTest {
                 System.out.println(chainSpecification);
             }
 
-            try (Chain chain = Chain.valueOf(null, executorFactory, chainSpecification)) {
+            try (Chain chain = Chain.of(null, executorFactory, chainSpecification)) {
                 if (detailed) {
                     System.out.printf("%nFull chain:%n");
                     System.out.println(chain.toString(true));

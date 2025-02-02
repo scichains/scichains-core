@@ -59,7 +59,7 @@ public final class ExampleMultiMatrixGradients extends MultiMatrixGenerator {
     }
 
     public MultiMatrix create(long dimX, long dimY, int numberOfChannels) {
-        return MultiMatrix.valueOfMerged(
+        return MultiMatrix.ofMerged(
                 Matrices.matrix(makeSamples(dimX, dimY, numberOfChannels),
                         dimX, dimY, numberOfChannels));
     }

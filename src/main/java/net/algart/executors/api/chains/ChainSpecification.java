@@ -296,10 +296,10 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             private PortConf(JsonObject json, Path file) {
                 this.uuid = Jsons.reqString(json, "uuid", file);
                 this.name = Jsons.reqStringWithAlias(json, "name", "port_name", file);
-                this.portType = ChainPortType.valueOfCodeOrNull(
+                this.portType = ChainPortType.ofOrNull(
                         Jsons.reqIntWithAlias(json, "type", "port_type", file));
                 Jsons.requireNonNull(portType, json, "type", file);
-                this.dataType = DataType.valueOfUuidOrNull(
+                this.dataType = DataType.ofUUIDOrNull(
                         Jsons.reqString(json, "data_type_uuid", file));
                 Jsons.requireNonNull(dataType, json, "data_type_uuid", file);
                 assert portType != null : "was checked in requireNonNull";
@@ -539,7 +539,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorName = json.getString("executor_name", null);
             this.executorCategory = json.getString("executor_category", null);
             final String executionStage = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
-            this.executionStage = ExecutionStage.valueOfStageNameOrNull(executionStage);
+            this.executionStage = ExecutionStage.ofOrNull(executionStage);
             Jsons.requireNonNull(this.executionStage, json,
                     "execution_stage", "unknown (\"" + executionStage + "\")", file);
             boolean oldFormat = false;
@@ -841,16 +841,16 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static ChainSpecification valueOf(JsonObject chainSpecification) {
+    public static ChainSpecification of(JsonObject chainSpecification) {
         return new ChainSpecification(chainSpecification, null);
     }
 
-    public static ChainSpecification valueOf(String chainSpecificationString) {
-        return valueOf(chainSpecificationString, true);
+    public static ChainSpecification of(String chainSpecificationString) {
+        return of(chainSpecificationString, true);
     }
 
-    public static ChainSpecification valueOfIfValid(String chainSpecificationString) {
-        return valueOf(chainSpecificationString, false);
+    public static ChainSpecification ofValid(String chainSpecificationString) {
+        return of(chainSpecificationString, false);
     }
 
     public static ChainSpecification read(Path containingJsonFile) throws IOException {
@@ -1084,7 +1084,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         builder.add("links", linksBuilder.build());
     }
 
-    private static ChainSpecification valueOf(String chainSpecificationString, boolean requireValid) {
+    private static ChainSpecification of(String chainSpecificationString, boolean requireValid) {
         Objects.requireNonNull(chainSpecificationString, "Null chainSpecificationString");
         JsonObject json = Jsons.toJson(chainSpecificationString);
         json = getChainSpecification(json, json);

@@ -70,6 +70,6 @@ public final class ExtractChannelsGroup extends MultiMatrixFilter {
             result.add(i >= 0 && i < channels.size() ? channels.get(i) : zeroConstant);
             // note that (impossible) overflow in k+indexOfFirstChannel is also processed correctly (i<0)
         }
-        return MultiMatrix.valueOf(result);
+        return MultiMatrix.of(result);
     }
 }

@@ -171,7 +171,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
         if (operation == Operation.RGB_DISTANCE) {
             if (result.numberOfChannels() > 1) {
                 final Matrix<? extends PArray> sum = sumOfChannelsSquares(result, false);
-                result = MultiMatrix.valueOfMono(Matrices.asFuncMatrix(SQRT_FUNC, result.arrayType(), sum));
+                result = MultiMatrix.ofMono(Matrices.asFuncMatrix(SQRT_FUNC, result.arrayType(), sum));
             }
         }
         result = postprocessing.postprocess(result);

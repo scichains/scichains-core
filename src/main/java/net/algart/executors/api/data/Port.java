@@ -64,7 +64,7 @@ public final class Port {
             return typeName;
         }
 
-        public static Type valueOf(int code) {
+        public static Type of(int code) {
             return switch (code) {
                 case 1 -> INPUT;
                 case 2 -> OUTPUT;
@@ -130,7 +130,7 @@ public final class Port {
 
     @UsedForExternalCommunication
     public Port setPortTypeCode(int code) {
-        this.portType = Type.valueOf(code);
+        this.portType = Type.of(code);
         return this;
     }
 

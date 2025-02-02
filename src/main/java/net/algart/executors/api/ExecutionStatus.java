@@ -67,16 +67,16 @@ public class ExecutionStatus {
             return code;
         }
 
-        public static DataKind valueOfOrNull(String name) {
+        public static DataKind ofOrNull(String name) {
             return NAME_TO_KIND.get(name);
         }
 
-        public static DataKind valueOfCodeOrNull(int code) {
+        public static DataKind ofOrNull(int code) {
             return CODE_TO_KIND.get(code);
         }
 
-        public static DataKind valueOfCode(int code) {
-            final DataKind result = valueOfCodeOrNull(code);
+        public static DataKind of(int code) {
+            final DataKind result = ofOrNull(code);
             if (result == null) {
                 throw new IllegalArgumentException("Unknown status data code: " + code);
             }
@@ -89,7 +89,7 @@ public class ExecutionStatus {
 
     private static final String LOGGING_STATUS_LEVEL = net.algart.arrays.Arrays.SystemSettings.getStringProperty(
             "net.algart.executors.api.loggingStatusLevel", null);
-    private static final DataKind LOGGING_STATUS_KIND = DataKind.valueOfOrNull(
+    private static final DataKind LOGGING_STATUS_KIND = DataKind.ofOrNull(
             net.algart.arrays.Arrays.SystemSettings.getStringProperty(
                     "net.algart.executors.api.loggingStatusKind", null));
     private static final long MIN_TIME_BETWEEN_LOGGING_IN_NANOSECONDS = 500_000_000;
@@ -541,7 +541,7 @@ public class ExecutionStatus {
     }
 
     private static class DelayingLogger {
-        static final DelayingLogger INSTANCE = new DelayingLogger(LogLevel.valueOfLevelName(LOGGING_STATUS_LEVEL));
+        static final DelayingLogger INSTANCE = new DelayingLogger(LogLevel.of(LOGGING_STATUS_LEVEL));
 
         private final LogLevel level;
         private long lastTime = Long.MAX_VALUE;

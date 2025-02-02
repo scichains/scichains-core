@@ -72,7 +72,7 @@ public enum ControlEditionType {
         return this == ENUM;
     }
 
-    public static ControlEditionType valueOfEditionTypeName(String name) {
+    public static ControlEditionType of(String name) {
         final ControlEditionType result = ALL_TYPES.get(name);
         if (result == null) {
             throw new IllegalArgumentException("Unknown control edition type: " + name);
@@ -80,7 +80,7 @@ public enum ControlEditionType {
         return result;
     }
 
-    public static ControlEditionType valueOfEditionTypeNameOrNull(String name) {
+    public static ControlEditionType ofOrNull(String name) {
         return ALL_TYPES.get(name);
     }
 
@@ -91,7 +91,7 @@ public enum ControlEditionType {
 
     public static void main(String[] args) {
         for (ControlEditionType type : values()) {
-            System.out.printf("%s: %s%n", type.editionTypeName(), valueOfEditionTypeName(type.editionTypeName()));
+            System.out.printf("%s: %s%n", type.editionTypeName(), of(type.editionTypeName()));
         }
     }
 }

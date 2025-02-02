@@ -1151,7 +1151,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * <p>Equivalent to
      * <code>{@link #newExecutor(String, ExecutorSpecification)
-     * newExecutor}(sessionId, {@link ExecutorSpecification#valueOf(String)
+     * newExecutor}(sessionId, {@link ExecutorSpecification#of(String)
      * ExecutorSpecification.valueOf}(specification))</code>.
      *
      * @param sessionId     unique ID of current session while multi-session usage;
@@ -1165,7 +1165,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     @UsedForExternalCommunication
     public static ExecutionBlock newExecutor(String sessionId, String specification) throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
-        return newExecutor(sessionId, ExecutorSpecification.valueOf(specification));
+        return newExecutor(sessionId, ExecutorSpecification.of(specification));
     }
 
     @UsedForExternalCommunication

@@ -102,27 +102,27 @@ public interface MultiMatrix2D extends MultiMatrix {
     MultiMatrix2D clone();
 
     default MultiMatrix2D nonZeroPixels(boolean checkOnlyRGBChannels) {
-        return MultiMatrix.valueOf2DMono(nonZeroPixelsMatrix(checkOnlyRGBChannels));
+        return MultiMatrix.of2DMono(nonZeroPixelsMatrix(checkOnlyRGBChannels));
     }
 
     default MultiMatrix2D zeroPixels(boolean checkOnlyRGBChannels) {
-        return MultiMatrix.valueOf2DMono(zeroPixelsMatrix(checkOnlyRGBChannels));
+        return MultiMatrix.of2DMono(zeroPixelsMatrix(checkOnlyRGBChannels));
     }
 
     default MultiMatrix2D nonZeroAnyChannel() {
-        return MultiMatrix.valueOf2DMono(nonZeroAnyChannelMatrix());
+        return MultiMatrix.of2DMono(nonZeroAnyChannelMatrix());
     }
 
     default MultiMatrix2D zeroAllChannels() {
-        return MultiMatrix.valueOf2DMono(zeroAllChannelsMatrix());
+        return MultiMatrix.of2DMono(zeroAllChannelsMatrix());
     }
 
     default MultiMatrix2D nonZeroRGB() {
-        return MultiMatrix.valueOf2DMono(nonZeroRGBMatrix());
+        return MultiMatrix.of2DMono(nonZeroRGBMatrix());
     }
 
     default MultiMatrix2D zeroRGB() {
-        return MultiMatrix.valueOf2DMono(zeroRGBMatrix());
+        return MultiMatrix.of2DMono(zeroRGBMatrix());
     }
 
     default MultiMatrix2D min(MultiMatrix2D other) {
@@ -143,7 +143,7 @@ public interface MultiMatrix2D extends MultiMatrix {
         for (int k = 0; k < n; k++) {
             channels.add(Matrices.asFuncMatrix(funcOfOneArgument, requiredType, channel(k)));
         }
-        return MultiMatrix.valueOf2D(channels);
+        return MultiMatrix.of2D(channels);
     }
 
     default MultiMatrix2D asFunc(Func funcOfTwoArguments, MultiMatrix2D other) {
@@ -159,7 +159,7 @@ public interface MultiMatrix2D extends MultiMatrix {
         for (int k = 0; k < n; k++) {
             channels.add(Matrices.asFuncMatrix(funcOfTwoArguments, requiredType, channel(k), other.channel(k)));
         }
-        return MultiMatrix.valueOf2D(channels);
+        return MultiMatrix.of2D(channels);
     }
 
     default MultiMatrix mapChannels2D(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {

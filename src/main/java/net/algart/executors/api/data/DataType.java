@@ -91,15 +91,15 @@ public enum DataType {
     public abstract Class<? extends Data> typeClass();
 
     @UsedForExternalCommunication
-    public static DataType valueOfTypeName(String name) {
-        final DataType result = valueOfTypeNameOrNull(name);
+    public static DataType ofTypeName(String name) {
+        final DataType result = ofTypeNameOrNull(name);
         if (result == null) {
             throw new IllegalArgumentException("Unknown name " + name);
         }
         return result;
     }
 
-    public static DataType valueOfTypeNameOrNull(String name) {
+    public static DataType ofTypeNameOrNull(String name) {
         Objects.requireNonNull(name, "Null name");
         for (DataType type : values()) {
             if (type.typeName.equals(name)) {
@@ -109,8 +109,7 @@ public enum DataType {
         return null;
     }
 
-    @UsedForExternalCommunication
-    public static DataType valueOf(UUID uuid) {
+    public static DataType ofUUID(UUID uuid) {
         Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
             if (type.uuid.equals(uuid)) {
@@ -120,15 +119,15 @@ public enum DataType {
         throw new IllegalArgumentException("Unknown UUID " + uuid);
     }
 
-    public static DataType valueOfUuid(String uuid) {
-        final DataType result = valueOfUuidOrNull(uuid);
+    public static DataType ofUUID(String uuid) {
+        final DataType result = ofUUIDOrNull(uuid);
         if (result == null) {
             throw new IllegalArgumentException("Unknown UUID " + uuid);
         }
         return result;
     }
 
-    public static DataType valueOfUuidOrNull(String uuid) {
+    public static DataType ofUUIDOrNull(String uuid) {
         Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
             if (type.uuid.toString().equals(uuid)) {

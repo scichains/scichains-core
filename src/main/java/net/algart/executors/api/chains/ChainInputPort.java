@@ -41,7 +41,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
         }
     }
 
-    public static ChainInputPort newInstance(
+    public static ChainInputPort of(
             ChainBlock block,
             String id,
             String name,
@@ -50,8 +50,8 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
         return new ChainInputPort(block, id, name, portType, dataType);
     }
 
-    public static ChainInputPort valueOf(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
-        return newInstance(
+    public static ChainInputPort of(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
+        return of(
                 block,
                 portConf.getUuid(),
                 portConf.getName(),
@@ -59,8 +59,8 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                 portConf.getDataType());
     }
 
-    public static ChainInputPort valueOf(ChainBlock block, ExecutorSpecification.PortConf portConf) {
-        return newInstance(
+    public static ChainInputPort of(ChainBlock block, ExecutorSpecification.PortConf portConf) {
+        return of(
                 block,
                 null,
                 portConf.getName(),

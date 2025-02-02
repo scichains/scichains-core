@@ -140,17 +140,17 @@ public class JSCallerSpecification extends ExecutorSpecification {
         return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 
-    public static JSCallerSpecification valueOf(JsonObject executorSpecification) {
+    public static JSCallerSpecification of(JsonObject executorSpecification) {
         return new JSCallerSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification valueOf(String executorSpecificationString) {
+    public static JSCallerSpecification of(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
         return new JSCallerSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification valueOfIfValid(String executorSpecificationString) {
+    public static JSCallerSpecification ofValid(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {

@@ -42,7 +42,7 @@ public final class ChainParameter {
         return new ChainParameter(name);
     }
 
-    public static ChainParameter valueOf(
+    public static ChainParameter of(
             ChainBlock block,
             ChainSpecification.ChainBlockConf.ParameterConf parameterConf) {
         final ChainParameter result = newInstance(parameterConf.getName());

@@ -112,6 +112,6 @@ public final class MergeColorChannels extends ColorSpaceConversion {
             }
         }
         final List<Matrix<? extends PArray>> rgba = getChannelsColorSpace().merge(channels);
-        getMat().setTo(MultiMatrix.valueOf2DRGBA(rgba).clone());
+        getMat().setTo(MultiMatrix.of2DRGBA(rgba).clone());
     }
 }

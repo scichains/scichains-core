@@ -459,7 +459,7 @@ public enum ParameterValueType {
         return this == SETTINGS;
     }
 
-    public static ParameterValueType valueOfTypeName(String name) {
+    public static ParameterValueType of(String name) {
         final ParameterValueType result = ALL_TYPES.get(name);
         if (result == null) {
             throw new IllegalArgumentException("Unknown parameter value type: " + name);
@@ -467,7 +467,7 @@ public enum ParameterValueType {
         return result;
     }
 
-    public static ParameterValueType valueOfTypeNameOrNull(String name) {
+    public static ParameterValueType ofOrNull(String name) {
         return ALL_TYPES.get(name);
     }
 
@@ -477,7 +477,7 @@ public enum ParameterValueType {
                     type,
                     type.typeName(),
                     java.util.Arrays.toString(type.typeNameAliases),
-                    valueOfTypeName(type.typeName()),
+                    of(type.typeName()),
                     type.emptyJsonValue());
             for (String v : Arrays.asList("TRUE", "12", "12.3", "axd", "{\"key\":12}")) {
                 System.out.printf("  %s: %s%n", v, type.toJsonValue(v));

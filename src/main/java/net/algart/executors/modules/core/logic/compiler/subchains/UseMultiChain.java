@@ -275,7 +275,7 @@ public final class UseMultiChain extends FileOperation {
             UseSubChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
-        final MultiChain multiChain = MultiChain.valueOf(multiChainSpecification, chainFactory, settingsFactory);
+        final MultiChain multiChain = MultiChain.of(multiChainSpecification, chainFactory, settingsFactory);
         // - Actually use all sub-chains and built-in multi-chain settings combiner
         if (strictMode) {
             multiChain.checkImplementationCompatibility();

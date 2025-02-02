@@ -192,7 +192,7 @@ public abstract class ExecutorLoader {
             return null;
         }
         try {
-            return ExecutorSpecification.valueOf(serialized);
+            return ExecutorSpecification.of(serialized);
         } catch (JsonException e) {
             throw new AssertionError("Very strange: all registered specification " +
                     "were serialized via toJson().toString()!", e);

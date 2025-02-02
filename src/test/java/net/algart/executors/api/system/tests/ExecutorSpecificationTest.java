@@ -67,7 +67,7 @@ public class ExecutorSpecificationTest {
                 System.out.printf("%nReloaded full specification:%n");
                 System.out.println(specification);
 
-                specification = ExecutorSpecification.valueOf((Executor) executionBlock, "12345678");
+                specification = ExecutorSpecification.of((Executor) executionBlock, "12345678");
                 specification.write(resultFile3);
                 System.out.printf("%nSpecification, created from executor:%n");
                 System.out.println(specification);

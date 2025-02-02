@@ -46,7 +46,7 @@ public enum ChainPortType {
         return code;
     }
 
-    public static ChainPortType valueOfCodeOrNull(int code) {
+    public static ChainPortType ofOrNull(int code) {
         for (ChainPortType portType : values()) {
             if (portType.code == code) {
                 return portType;

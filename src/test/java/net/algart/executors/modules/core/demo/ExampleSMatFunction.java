@@ -66,7 +66,7 @@ public final class ExampleSMatFunction extends Executor {
             }
         };
 
-        getMat().setTo(MultiMatrix.valueOf2DRGBA(m).asPrecision(elementType));
+        getMat().setTo(MultiMatrix.of2DRGBA(m).asPrecision(elementType));
 //        throw new AssertionError("some error");
     }
 

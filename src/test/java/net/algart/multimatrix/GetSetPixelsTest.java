@@ -64,7 +64,7 @@ public class GetSetPixelsTest {
                 m.setPixel(m.indexInArray(x, y), pixel); // - really does not change anything
             }
         }
-        final BufferedImage image = SMat.valueOf(m).toBufferedImage();
+        final BufferedImage image = SMat.of(m).toBufferedImage();
         System.out.printf("Writing %s%n", fileName);
         assert image != null;
         MatrixIO.writeBufferedImage(Path.of(fileName), image);

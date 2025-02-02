@@ -142,6 +142,6 @@ public final class NumbersInRange extends NumbersFilter implements ReadOnlyExecu
                 array[k] = (float) (addOut ? k + outValue : outValue);
             }
         });
-        return SNumbers.valueOfArray(array, source.getBlockLength()).toPrecision(elementType);
+        return SNumbers.ofArray(array, source.getBlockLength()).toPrecision(elementType);
     }
 }

@@ -112,12 +112,12 @@ public final class MatrixNormalize2DVector extends SeveralMultiMatricesOperation
         final Matrix<? extends PArray> y = sources.get(1).asMultiMatrix2D().intensityChannel();
         final Matrix<? extends PArray> magnitude = magnitude(x, y);
         if (isOutputNecessary(OUTPUT_X)) {
-            getMat(OUTPUT_X).setTo(MultiMatrix.valueOf2DMono(normalizeX(x, y, magnitude)));
+            getMat(OUTPUT_X).setTo(MultiMatrix.of2DMono(normalizeX(x, y, magnitude)));
         }
         if (isOutputNecessary(OUTPUT_Y)) {
-            getMat(OUTPUT_Y).setTo(MultiMatrix.valueOf2DMono(normalizeY(x, y, magnitude)));
+            getMat(OUTPUT_Y).setTo(MultiMatrix.of2DMono(normalizeY(x, y, magnitude)));
         }
-        return MultiMatrix.valueOf2DMono(magnitude);
+        return MultiMatrix.of2DMono(magnitude);
     }
 
     public Matrix<? extends PArray> magnitude(Matrix<? extends PArray> x, Matrix<? extends PArray> y) {

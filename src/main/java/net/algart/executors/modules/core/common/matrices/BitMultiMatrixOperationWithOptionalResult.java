@@ -60,7 +60,7 @@ public abstract class BitMultiMatrixOperationWithOptionalResult extends BitMulti
             List<MultiMatrix2D> sources,
             boolean resultRequired) {
         final Matrix<? extends PArray> result = processMatrix(bitMatrices, sources, resultRequired);
-        return result == null ? null : MultiMatrix.valueOf2DMono(reduce(result));
+        return result == null ? null : MultiMatrix.of2DMono(reduce(result));
     }
 
     protected abstract Matrix<? extends PArray> processMatrix(

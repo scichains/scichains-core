@@ -142,7 +142,7 @@ public class UseJS extends FileOperation {
         final String sessionId = getSessionId();
         final Path workingDirectory = translateWorkingDirectory();
         correctJSExecutorSpecification(jsCallerSpecification, workingDirectory);
-        final JSCaller jsCaller = JSCaller.valueOf(jsCallerSpecification, workingDirectory);
+        final JSCaller jsCaller = JSCaller.of(jsCallerSpecification, workingDirectory);
         JS_CALLER_LOADER.registerWorker(sessionId, jsCallerSpecification, jsCaller);
     }
 

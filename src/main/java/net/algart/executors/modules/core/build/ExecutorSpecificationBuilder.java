@@ -43,7 +43,7 @@ public class ExecutorSpecificationBuilder {
         final String className = args[0];
         final Path resultFile = Paths.get(args[1]);
         final Executor executor = (Executor) Class.forName(className).getDeclaredConstructor().newInstance();
-        final ExecutorSpecification executorSpecification = ExecutorSpecification.valueOf(executor, UUID.randomUUID().toString());
+        final ExecutorSpecification executorSpecification = ExecutorSpecification.of(executor, UUID.randomUUID().toString());
         executorSpecification.write(resultFile, StandardOpenOption.CREATE_NEW);
         System.out.printf("JSON specification for %s successfully stored in %s%n", executor.getClass(), resultFile);
         executor.close();

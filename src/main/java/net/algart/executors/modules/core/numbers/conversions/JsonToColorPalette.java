@@ -138,7 +138,7 @@ public final class JsonToColorPalette extends Executor implements ReadOnlyExecut
                 }
             }
         }
-        return SNumbers.valueOfArray(resultTable, numberOfChannels);
+        return SNumbers.ofArray(resultTable, numberOfChannels);
     }
 
     private void fillColor(double[] values, int offset, double[] color) {

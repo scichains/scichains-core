@@ -33,7 +33,7 @@ public abstract class NumberArrayToScalar extends NumbersToScalar {
     }
 
     public SScalar analyse(SNumbers source) {
-        return SScalar.valueOf(analyseArray(source.asNumberArray(), source.getBlockLength(), source.n()));
+        return SScalar.of(analyseArray(source.asNumberArray(), source.getBlockLength(), source.n()));
     }
 
     public abstract Object analyseArray(PNumberArray array, int blockLength, int numberOfBlocks);

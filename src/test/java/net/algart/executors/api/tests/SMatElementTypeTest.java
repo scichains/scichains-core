@@ -31,13 +31,13 @@ public class SMatElementTypeTest {
         for (SMat.Depth depth : SMat.Depth.values()) {
             System.out.printf("%s; reverse valueOf is the same: %s, %s%n",
                     depth,
-                    SMat.Depth.valueOf(depth.code()) == depth,
-                    SMat.Depth.valueOf(depth.elementType(), depth.isUnsigned()) == depth);
+                    SMat.Depth.of(depth.code()) == depth,
+                    SMat.Depth.of(depth.elementType(), depth.isUnsigned()) == depth);
         }
         System.out.println();
         for (int code = -5; code <= 199; code++) {
             try {
-                final SMat.Depth depth = SMat.Depth.valueOf(code);
+                final SMat.Depth depth = SMat.Depth.of(code);
                 System.out.printf("Depth code %d: %s%n", code, depth);
             } catch (Exception e) {
                 System.out.printf("Depth code %d leads to exception: %s%n", code, e);

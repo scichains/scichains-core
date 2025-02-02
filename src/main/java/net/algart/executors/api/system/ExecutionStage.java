@@ -38,15 +38,15 @@ public enum ExecutionStage {
         return stageName;
     }
 
-    public static ExecutionStage valueOfStageName(String name) {
-        final ExecutionStage result = valueOfStageNameOrNull(name);
+    public static ExecutionStage of(String name) {
+        final ExecutionStage result = ofOrNull(name);
         if (result == null) {
             throw new IllegalArgumentException("Unknown stage name: " + name);
         }
         return result;
     }
 
-    public static ExecutionStage valueOfStageNameOrNull(String name) {
+    public static ExecutionStage ofOrNull(String name) {
         for (ExecutionStage stage : values()) {
             if (stage.stageName.equals(name)) {
                 return stage;
@@ -57,7 +57,7 @@ public enum ExecutionStage {
 
     public static void main(String[] args) {
         for (ExecutionStage stage : values()) {
-            System.out.printf("%s: %s, %s%n", stage, stage.stageName(), valueOfStageName(stage.stageName()));
+            System.out.printf("%s: %s, %s%n", stage, stage.stageName(), of(stage.stageName()));
         }
     }
 

@@ -123,7 +123,7 @@ public final class SetJsonValue extends ScalarFilter {
         final JsonObject json = Jsons.toJson(source.getValue(), true);
         final JsonObjectBuilder builder = Jsons.createObjectBuilder(json);
         jsonValueType.add(builder, key, value.trim());
-        return SScalar.valueOf(Jsons.toPrettyString(builder.build()));
+        return SScalar.of(Jsons.toPrettyString(builder.build()));
     }
 
     @Override

@@ -197,17 +197,17 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 
-    public static PythonCallerSpecification valueOf(JsonObject executorSpecification) {
+    public static PythonCallerSpecification of(JsonObject executorSpecification) {
         return new PythonCallerSpecification(executorSpecification, null);
     }
 
-    public static PythonCallerSpecification valueOf(String executorSpecificationString) {
+    public static PythonCallerSpecification of(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
         return new PythonCallerSpecification(executorSpecification, null);
     }
 
-    public static PythonCallerSpecification valueOfIfValid(String executorSpecificationString) {
+    public static PythonCallerSpecification ofValid(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {

@@ -164,7 +164,7 @@ public class UseMapping extends FileOperation {
 
     public void useContent(String mappingJsonContent) throws IOException {
         final MappingSpecification mappingSpecification =
-                MappingSpecification.valueOf(Jsons.toJson(mappingJsonContent), false);
+                MappingSpecification.of(Jsons.toJson(mappingJsonContent), false);
         // - we don't require strict accuracy for JSON, entered in a little text area
         logDebug("Using mapping '" + mappingSpecification.getName() + "' from the text argument...");
         use(mappingSpecification);
@@ -178,7 +178,7 @@ public class UseMapping extends FileOperation {
         final String sessionId = getSessionId();
         final SScalar.MultiLineOrJsonSplitter keys = keys(mappingSpecification);
         final SScalar.MultiLineOrJsonSplitter items = enumItems(mappingSpecification);
-        final Mapping mapping = Mapping.valueOf(
+        final Mapping mapping = Mapping.of(
                 mappingSpecification,
                 keys.lines(),
                 keys.comments(),
@@ -222,7 +222,7 @@ public class UseMapping extends FileOperation {
 
     private SScalar.MultiLineOrJsonSplitter keys(MappingSpecification specification) throws IOException {
         if (specification.hasKeys()) {
-            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(specification.getKeys().toArray(new String[0]));
+            return SScalar.MultiLineOrJsonSplitter.ofCommentedLines(specification.getKeys().toArray(new String[0]));
         }
         Path file = specification.keysFile();
         if (file == null) {
@@ -237,7 +237,7 @@ public class UseMapping extends FileOperation {
             return null;
         }
         if (specification.hasEnumItems()) {
-            return SScalar.MultiLineOrJsonSplitter.valueOfCommentedLines(
+            return SScalar.MultiLineOrJsonSplitter.ofCommentedLines(
                     specification.getEnumItems().toArray(new String[0]));
         }
         Path file = specification.enumItemsFile();

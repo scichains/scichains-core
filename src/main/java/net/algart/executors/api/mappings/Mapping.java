@@ -88,7 +88,7 @@ public final class Mapping implements Cloneable {
         }
     }
 
-    public static Mapping valueOf(
+    public static Mapping of(
             MappingSpecification specification,
             List<String> keys,
             List<String> keyCaptions,

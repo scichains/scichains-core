@@ -52,7 +52,7 @@ public final class ExecutorsDirectory {
         if (json == null) {
             return;
         }
-        final ExecutorSpecification specification = ExecutorSpecification.valueOf(json);
+        final ExecutorSpecification specification = ExecutorSpecification.of(json);
         final String category = specification.getCategory();
         if (!category.equals(lastCategory)) {
             System.out.printf("%n%s%n", category);

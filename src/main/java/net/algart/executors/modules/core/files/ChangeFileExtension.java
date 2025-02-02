@@ -58,7 +58,7 @@ public final class ChangeFileExtension extends ScalarFilter implements ReadOnlyE
     public SScalar process(SScalar source) {
         String s = source.getValue();
         s = changeExtension(s);
-        return SScalar.valueOf(s);
+        return SScalar.of(s);
     }
 
     public String changeExtension(String s) {

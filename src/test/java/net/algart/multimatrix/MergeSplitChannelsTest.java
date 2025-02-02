@@ -44,10 +44,10 @@ public class MergeSplitChannelsTest {
         final Path sourceFile = Paths.get(args[0]);
         final Path imageFolder = Paths.get(args[1]);
         BufferedImage image = MatrixIO.readBufferedImage(sourceFile);
-        MultiMatrix multiMatrix = SMat.valueOf(image).toMultiMatrix();
+        MultiMatrix multiMatrix = SMat.of(image).toMultiMatrix();
         Matrix<? extends PArray> matrix = multiMatrix.mergeChannels();
         MatrixIO.writeImageFolder(imageFolder, List.of(matrix));
-        MultiMatrix unpackedChannels = MultiMatrix.valueOfMerged(matrix);
+        MultiMatrix unpackedChannels = MultiMatrix.ofMerged(matrix);
         if (!unpackedChannels.dimEquals(multiMatrix)) {
             throw new AssertionError("Dimensions mismatch!");
         }

@@ -83,7 +83,7 @@ public final class ProductOfTwoPowers extends SeveralScalarsOperation {
         double r = y == null ?
                 StrictMath.pow(x, a) * m :
                 StrictMath.pow(x, a) * StrictMath.pow(y, b) * m;
-        return SScalar.valueOf(r);
+        return SScalar.of(r);
     }
 
     public static double smartParseDouble(String s) {

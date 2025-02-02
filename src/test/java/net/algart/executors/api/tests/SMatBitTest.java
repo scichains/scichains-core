@@ -45,7 +45,7 @@ public class SMatBitTest {
             return;
         }
         final Path sourceFile = Paths.get(args[0]);
-        final MultiMatrix2D multiMatrix = MultiMatrix.valueOf2DRGBA(MatrixIO.readImage(sourceFile));
+        final MultiMatrix2D multiMatrix = MultiMatrix.of2DRGBA(MatrixIO.readImage(sourceFile));
         final Matrix<? extends PArray> intensity = multiMatrix.intensityChannel();
         Matrix<BitArray> bits = Matrices.asFuncMatrix(
                 RectangularFunc.getInstance(
@@ -58,7 +58,7 @@ public class SMatBitTest {
         array.copy(bits.array());
         // - specific situation: matrix based on ByteBuffer, but not from very beginning
         bits = Matrices.matrix(array, bits.dimensions());
-        final MultiMatrix2D bitsMultiMatrix = MultiMatrix.valueOf2DMono(bits);
+        final MultiMatrix2D bitsMultiMatrix = MultiMatrix.of2DMono(bits);
         System.out.printf("Created MultiMatrix: %s - %s%n", bitsMultiMatrix, bitsMultiMatrix.intensityChannel());
         MatrixIO.writeImage(Paths.get(sourceFile + ".aa.bit.png"),
                 bitsMultiMatrix.allChannelsInRGBAOrder());

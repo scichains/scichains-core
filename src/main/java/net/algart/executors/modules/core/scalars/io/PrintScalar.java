@@ -90,7 +90,7 @@ public final class PrintScalar extends ScalarFilter {
         getNumbers(X).exchange(getInputNumbers(X, true));
         getMat(M).exchange(getInputMat(M, true));
         final String result = print(source::getValue, isOutputNecessary(defaultOutputPortName()));
-        return SScalar.valueOf(result);
+        return SScalar.of(result);
     }
 
     public String print(Supplier<String> source, boolean resultRequired) {

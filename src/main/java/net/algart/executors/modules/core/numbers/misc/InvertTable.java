@@ -55,7 +55,7 @@ public final class InvertTable extends NumbersFilter implements ReadOnlyExecutio
     @Override
     protected SNumbers processNumbers(SNumbers table) {
         Objects.requireNonNull(table, "Null table");
-        return SNumbers.valueOfArray(invert(table.toIntArray(), indexingBase.start), 1);
+        return SNumbers.ofArray(invert(table.toIntArray(), indexingBase.start), 1);
     }
 
     public static int[] invert(int[] table, int indexingBase) {

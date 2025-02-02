@@ -112,7 +112,7 @@ public enum GraalSafety implements GraalContextCustomizer {
         return safetyName;
     }
 
-    public static GraalSafety valueOfSafetyNameOrNull(String name) {
+    public static GraalSafety ofOrNull(String name) {
         Objects.requireNonNull(name, "Null safety name");
         for (GraalSafety safety : values()) {
             if (name.equals(safety.safetyName)) {

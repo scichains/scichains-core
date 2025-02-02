@@ -93,7 +93,7 @@ public final class ApplyMask extends SeveralMultiMatricesOperation {
             }
             result.add(clone);
         }
-        return MultiMatrix.valueOf(result);
+        return MultiMatrix.of(result);
     }
 
     @Override

@@ -134,7 +134,7 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
                     x.channel(k),
                     y.channel(k)));
         }
-        return MultiMatrix.valueOf(channels).clone();
+        return MultiMatrix.of(channels).clone();
     }
 
     @Override

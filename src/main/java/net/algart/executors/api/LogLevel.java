@@ -129,7 +129,7 @@ public enum LogLevel {
     public void finishStage() {
     }
 
-    public static LogLevel valueOfLevelName(String levelName) {
+    public static LogLevel of(String levelName) {
         final LogLevel result = ALL_TYPES.get(levelName);
         if (result == null) {
             throw new IllegalArgumentException("Unknown logging level name: " + levelName);
@@ -144,8 +144,8 @@ public enum LogLevel {
     }
 
     public static void main(String[] args) {
-        System.out.println(valueOfLevelName("print"));
-        System.out.println(valueOfLevelName("println"));
-        System.out.println(valueOfLevelName("OFF"));
+        System.out.println(of("print"));
+        System.out.println(of("println"));
+        System.out.println(of("OFF"));
     }
 }

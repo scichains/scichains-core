@@ -56,7 +56,7 @@ public final class SplitChannels extends Executor implements ReadOnlyExecutionIn
         for (int k = 0, m = source.numberOfChannels(); k < m; k++) {
             final String portName = outputPortName(k);
             if (isOutputNecessary(portName)) {
-                getMat(portName).setTo(MultiMatrix.valueOfMono(source.channel(k)));
+                getMat(portName).setTo(MultiMatrix.ofMono(source.channel(k)));
             }
         }
     }

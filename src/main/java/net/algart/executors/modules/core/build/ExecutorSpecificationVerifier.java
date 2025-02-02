@@ -312,7 +312,7 @@ public final class ExecutorSpecificationVerifier {
             }
         }
         try {
-            ExecutorSpecification.valueOf(json);
+            ExecutorSpecification.of(json);
             // - check for all other problems, possible while usage in sub-chains
         } catch (Exception e) {
             throw new JsonException("Some problem detected while parsing " + f, e);
@@ -352,7 +352,7 @@ public final class ExecutorSpecificationVerifier {
                 throw new JsonException("One of ports is not Json object: " + value);
             }
             final String name = Jsons.reqString(port, "name", f);
-            final DataType dataType = DataType.valueOfTypeName(Jsons.reqString(port, "value_type", f));
+            final DataType dataType = DataType.ofTypeName(Jsons.reqString(port, "value_type", f));
             if (result.put(name, dataType) != null) {
                 throw new JsonException("Duplicate port with name \"" + name + "\" in " + f);
             }

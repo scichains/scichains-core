@@ -265,7 +265,7 @@ public final class ContoursInsideStatusTest extends Executor {
                 }
             }
             long t3 = debugTime();
-            final MultiMatrix2D result = MultiMatrix.valueOf2DMono(Matrices.matrix(
+            final MultiMatrix2D result = MultiMatrix.of2DMono(Matrices.matrix(
                     SimpleMemoryModel.asUpdatableFloatArray(infoMap), sizeX, sizeY));
             logDebug(() -> String.format(Locale.US,
                     "Checking %d contours in %.3f ms, %.5f mcs/pixel; finding representatives %.3f ms",

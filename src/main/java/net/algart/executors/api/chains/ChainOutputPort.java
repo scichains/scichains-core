@@ -43,7 +43,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
         }
     }
 
-    public static ChainOutputPort newInstance(
+    public static ChainOutputPort of(
             ChainBlock block,
             String id,
             String name,
@@ -52,8 +52,8 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
         return new ChainOutputPort(block, id, name, portType, dataType);
     }
 
-    public static ChainOutputPort valueOf(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
-        return newInstance(
+    public static ChainOutputPort of(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
+        return of(
                 block,
                 portConf.getUuid(),
                 portConf.getName(),
@@ -61,8 +61,8 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                 portConf.getDataType());
     }
 
-    public static ChainOutputPort valueOf(ChainBlock block, ExecutorSpecification.PortConf portConf) {
-        return newInstance(
+    public static ChainOutputPort of(ChainBlock block, ExecutorSpecification.PortConf portConf) {
+        return of(
                 block,
                 null,
                 portConf.getName(),
@@ -83,7 +83,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
             case OUTPUT_CONTROL_AS_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
                     // exchanging/moving data between all ports blocks must be synchronized globally
-                    this.data.setTo(SScalar.valueOf(executor.parameters().getString(name)));
+                    this.data.setTo(SScalar.of(executor.parameters().getString(name)));
                 }
             }
             default -> {

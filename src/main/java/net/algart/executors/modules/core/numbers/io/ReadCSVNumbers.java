@@ -267,13 +267,13 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
             }
             final long currentLength = array.length();
             array.length(currentLength + singleBlock.length);
-            array.setData(currentLength, SNumbers.valueOfArray(singleBlock).toPrecision(elementType).getArray());
+            array.setData(currentLength, SNumbers.ofArray(singleBlock).toPrecision(elementType).getArray());
         }
         if (resultHeaders != null) {
             resultHeaders.clear();
             resultHeaders.addAll(java.util.Arrays.asList(headers));
         }
-        return SNumbers.valueOfArray(array.ja(), blockLength);
+        return SNumbers.ofArray(array.ja(), blockLength);
     }
 
     private static void skipBOM(Reader reader) throws IOException {

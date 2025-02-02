@@ -68,7 +68,7 @@ public class PathPropertyReplacement {
             this.getPath = getPath;
         }
 
-        public static Optional<Property> valueOfPropertyName(String propertyName) {
+        public static Optional<Property> of(String propertyName) {
             return Optional.ofNullable(ALL_PROPERTIES.get(propertyName));
         }
 
@@ -139,7 +139,7 @@ public class PathPropertyReplacement {
         final Matcher matcher = PROPERTY_NAME_PATTERN.matcher(s.trim());
         while (matcher.find()) {
             final String propertyName = matcher.group(1);
-            final Optional<Property> property = Property.valueOfPropertyName(propertyName);
+            final Optional<Property> property = Property.of(propertyName);
             if (property.isPresent()) {
                 return property;
             }
@@ -236,7 +236,7 @@ public class PathPropertyReplacement {
         final StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
             final String propertyName = matcher.group(1);
-            final Optional<Property> property = Property.valueOfPropertyName(propertyName);
+            final Optional<Property> property = Property.of(propertyName);
             final String propertyValue;
             propertyValue = property
                     .map(value -> value.replacement(path, executor, s))

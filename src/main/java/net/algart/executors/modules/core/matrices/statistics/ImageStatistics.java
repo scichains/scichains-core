@@ -185,7 +185,7 @@ public final class ImageStatistics extends MultiMatrixToSeveralNumbers {
             results.get(OUTPUT_NUMBER_OF_CHECKED_PIXELS).setValue(channelIndex, finder.count);
             if (histogramNumbers != null) {
                 histogramNumbers.replaceColumnRange(
-                        channelIndex, SNumbers.valueOfArray(finder.histogram), 0, 1);
+                        channelIndex, SNumbers.ofArray(finder.histogram), 0, 1);
             }
             if (finder.range.size() == 0.0) {
                 double r = finder.from / maxPossibleValue;

@@ -56,7 +56,7 @@ public abstract class AWTFilter extends Executor {
             if (source.bitsPerElement() == 1) {
                 source = source.asPrecision(byte.class);
             }
-            input = SMat.valueOf(source);
+            input = SMat.of(source);
         }
         final BufferedImage source = input.toBufferedImage();
         final BufferedImage target = process(source);

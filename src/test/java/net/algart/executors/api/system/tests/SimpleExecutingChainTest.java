@@ -47,7 +47,7 @@ public class SimpleExecutingChainTest {
     private static void executeChainDirectly(Path chainPath) throws IOException {
         ChainSpecification chainSpecification = ChainSpecification.read(chainPath);
         final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance("MySession");
-        try (Chain chain = Chain.valueOf(null, executorFactory, chainSpecification)) {
+        try (Chain chain = Chain.of(null, executorFactory, chainSpecification)) {
             chain.reinitializeAll();
             chain.execute();
             System.out.println("Chain finished: " + chain);

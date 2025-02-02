@@ -102,7 +102,7 @@ public class UsingPython {
     // Note: corrects the argument
     public static void use(String sessionId, PythonCallerSpecification pythonCallerSpecification) throws IOException {
         correctPythonExecutorSpecification(pythonCallerSpecification);
-        final PythonCaller pythonCaller = PythonCaller.valueOf(pythonCallerSpecification);
+        final PythonCaller pythonCaller = PythonCaller.of(pythonCallerSpecification);
         PYTHON_CALLER_LOADER.registerWorker(sessionId, pythonCallerSpecification, pythonCaller);
     }
 

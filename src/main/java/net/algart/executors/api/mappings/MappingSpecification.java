@@ -65,12 +65,12 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
 
         public ControlConfTemplate(JsonObject json, Path file) {
             final String valueType = json.getString("value_type", ParameterValueType.STRING.typeName());
-            this.valueType = ParameterValueType.valueOfTypeNameOrNull(valueType);
+            this.valueType = ParameterValueType.ofOrNull(valueType);
             Jsons.requireNonNull(this.valueType, json, "value_type",
                     "unknown (\"" + valueType + "\")", file);
             final String editionType = json.getString("edition_type", null);
             if (editionType != null) {
-                this.editionType = ControlEditionType.valueOfEditionTypeNameOrNull(editionType);
+                this.editionType = ControlEditionType.ofOrNull(editionType);
                 Jsons.requireNonNull(this.editionType, json, "edition_type",
                         "unknown (\"" + editionType + "\")", file);
             }
@@ -228,7 +228,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         Files.writeString(mappingSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
-    public static MappingSpecification valueOf(JsonObject mappingSpecification, boolean strictMode) {
+    public static MappingSpecification of(JsonObject mappingSpecification, boolean strictMode) {
         return new MappingSpecification(mappingSpecification, strictMode, null);
     }
 

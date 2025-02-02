@@ -264,11 +264,11 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         Files.writeString(settingsSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
-    public static SettingsSpecification valueOf(JsonObject settingsSpecification) {
-        return valueOf(settingsSpecification, true);
+    public static SettingsSpecification of(JsonObject settingsSpecification) {
+        return of(settingsSpecification, true);
     }
 
-    public static SettingsSpecification valueOf(JsonObject settingsSpecification, boolean strictMode) {
+    public static SettingsSpecification of(JsonObject settingsSpecification, boolean strictMode) {
         return new SettingsSpecification(settingsSpecification, strictMode, null);
     }
 

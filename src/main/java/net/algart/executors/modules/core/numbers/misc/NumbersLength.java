@@ -65,7 +65,7 @@ public final class NumbersLength extends NumbersToScalar implements ReadOnlyExec
     @Override
     public SScalar analyse(SNumbers source) {
         getScalar(OUTPUT_BLOCK_LENGTH).setTo(source.getBlockLength());
-        return SScalar.valueOf(lengthType == LengthType.NUMBER_OF_BLOCKS ? source.n() : source.getArrayLength());
+        return SScalar.of(lengthType == LengthType.NUMBER_OF_BLOCKS ? source.n() : source.getArrayLength());
     }
 
     @Override

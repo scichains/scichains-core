@@ -54,7 +54,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         this.container = JepAPI.getContainer();
     }
 
-    public static PythonCaller valueOf(PythonCallerSpecification specification) {
+    public static PythonCaller of(PythonCallerSpecification specification) {
         return new PythonCaller(specification);
     }
 

@@ -58,7 +58,7 @@ public class CallSimpleChain {
         final String parameterA = args.length > 3 ? args[3] : null;
         final String parameterB = args.length > 4 ? args[4] : null;
         System.out.println("Reading " + inputImagePath.toAbsolutePath() + "...");
-        final SMat inputMat = SMat.valueOf(ImageIO.read(inputImagePath.toFile()));
+        final SMat inputMat = SMat.of(ImageIO.read(inputImagePath.toFile()));
 
         ExecutionBlock.initializeExecutionSystem();
 
@@ -92,7 +92,7 @@ public class CallSimpleChain {
         System.out.println("All registered sub-chains:");
         for (String serialized : loader.allSerializedSpecifications(
                 ExecutionBlock.GLOBAL_SHARED_SESSION_ID).values()) {
-            ExecutorSpecification specification = ExecutorSpecification.valueOf(serialized);
+            ExecutorSpecification specification = ExecutorSpecification.of(serialized);
             System.out.printf("    %s%n", specification.getName());
         }
     }

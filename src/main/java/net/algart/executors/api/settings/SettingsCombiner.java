@@ -65,7 +65,7 @@ public final class SettingsCombiner implements Cloneable {
         this.specification.checkCompleteness();
     }
 
-    public static SettingsCombiner valueOf(SettingsSpecification specification) {
+    public static SettingsCombiner of(SettingsSpecification specification) {
         return new SettingsCombiner(specification);
     }
 

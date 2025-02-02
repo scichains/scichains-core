@@ -34,7 +34,7 @@ public class SNumbersFromListTest {
     private static void test(Collection<?> numbers, int blockLength) {
         final SNumbers result;
         try {
-            result = SNumbers.valueOf(numbers, blockLength);
+            result = SNumbers.of(numbers, blockLength);
             System.out.println(numbers + " converted to " + result);
         } catch (Exception e) {
             System.out.println(e);

@@ -128,7 +128,7 @@ public abstract class SeveralMultiMatricesChannelOperation
                 final Matrix<? extends PArray> resultChannel = processChannel(sourceMatrices);
                 result.add(resultChannel);
             }
-            return MultiMatrix.valueOf(result);
+            return MultiMatrix.of(result);
         } finally {
             this.sampleMultiMatrix = null;
             // - allow garbage collector to free this memory

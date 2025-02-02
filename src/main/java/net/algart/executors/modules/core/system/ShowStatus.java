@@ -113,7 +113,7 @@ public final class ShowStatus extends ScalarFilter {
         getMat(M2).exchange(getInputMat(M2, true));
         getMat(M3).exchange(getInputMat(M3, true));
         final String result = show(source.getValue());
-        return SScalar.valueOf(result);
+        return SScalar.of(result);
     }
 
     public String show(String s) {

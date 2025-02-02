@@ -2730,35 +2730,35 @@ public final class SNumbers extends Data implements Cloneable {
         return new SNumbers().setTo(this);
     }
 
-    public static SNumbers valueOf(IPoint point) {
+    public static SNumbers of(IPoint point) {
         return new SNumbers().setTo(point);
     }
 
-    public static SNumbers valueOf(IRectangularArea area) {
+    public static SNumbers of(IRectangularArea area) {
         return new SNumbers().setTo(area);
     }
 
-    public static SNumbers valueOf(Point point) {
+    public static SNumbers of(Point point) {
         return new SNumbers().setTo(point);
     }
 
-    public static SNumbers valueOf(RectangularArea area) {
+    public static SNumbers of(RectangularArea area) {
         return new SNumbers().setTo(area);
     }
 
-    public static SNumbers valueOf(Contours contours) {
+    public static SNumbers of(Contours contours) {
         return new SNumbers().setTo(contours);
     }
 
-    public static SNumbers valueOf(Collection<?> numbers, int blockLength) {
+    public static SNumbers of(Collection<?> numbers, int blockLength) {
         return new SNumbers().setTo(numbers, blockLength);
     }
 
-    public static SNumbers valueOfArray(Object javaArray) {
-        return valueOfArray(javaArray, 1);
+    public static SNumbers ofArray(Object javaArray) {
+        return ofArray(javaArray, 1);
     }
 
-    public static SNumbers valueOfArray(Object javaArray, int blockLength) {
+    public static SNumbers ofArray(Object javaArray, int blockLength) {
         return new SNumbers().setToArray(javaArray, blockLength);
     }
 

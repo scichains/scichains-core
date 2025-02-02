@@ -99,7 +99,7 @@ public final class LinearCombinationOfTwoScalars extends SeveralScalarsOperation
             r = -r;
         }
         final Number resultNumber = roundingMode.round(r);
-        return SScalar.valueOf(resultNumber);
+        return SScalar.of(resultNumber);
     }
 
     @Override

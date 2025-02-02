@@ -41,7 +41,7 @@ public abstract class NumberArrayFilter extends NumbersFilter {
             return null;
         }
         final Integer resultBlockLength = resultBlockLength();
-        return SNumbers.valueOfArray(result, resultBlockLength == null ? blockLength : resultBlockLength);
+        return SNumbers.ofArray(result, resultBlockLength == null ? blockLength : resultBlockLength);
     }
 
     public final Object processUnstructuredJavaArray(Object javaArray) {

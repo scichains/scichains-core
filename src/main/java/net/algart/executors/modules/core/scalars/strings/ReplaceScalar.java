@@ -55,7 +55,7 @@ public final class ReplaceScalar extends ScalarFilter {
         if (s != null) {
             s = pattern.replace(whatToReplace, s);
         }
-        return SScalar.valueOf(s);
+        return SScalar.of(s);
     }
 
     @Override

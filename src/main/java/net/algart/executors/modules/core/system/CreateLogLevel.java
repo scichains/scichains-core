@@ -103,6 +103,6 @@ public final class CreateLogLevel extends Executor {
         if (s == null) {
             return null;
         }
-        return valueOfLogLevel(s);
+        return ofLogLevel(s);
     }
 }

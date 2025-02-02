@@ -51,7 +51,7 @@ public final class MergeBinaryMasks extends SeveralMultiMatricesOperation {
         for (int k = 0; k < a.length; k++) {
             a[k] = aForNonNull.get(k);
         }
-        return MultiMatrix.valueOfMono(
+        return MultiMatrix.ofMono(
                 Matrices.asFuncMatrix(new AbstractFunc() {
                     @Override
                     public double get(double... x) {

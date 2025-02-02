@@ -56,7 +56,7 @@ public abstract class MultiMatrixChannelFilter extends MultiMatrixFilter impleme
             Matrix<? extends PArray> m = sourceChannels.get(currentChannel);
             result.add(processChannel(m));
         }
-        return MultiMatrix.valueOf(result);
+        return MultiMatrix.of(result);
     }
 
     // This method is not public: usually it's direct call, not from process(), can lead to

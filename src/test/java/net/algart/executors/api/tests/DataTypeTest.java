@@ -31,9 +31,9 @@ public class DataTypeTest {
         for (DataType dataType : DataType.values()) {
             System.out.printf("%s; reverse valueOf the same: %s, %s, %s%n",
                     dataType,
-                    DataType.valueOf(dataType.name()),
-                    DataType.valueOfTypeName(dataType.typeName()),
-                    DataType.valueOf(dataType.uuid()));
+                    DataType.ofUUID(dataType.name()),
+                    DataType.ofTypeName(dataType.typeName()),
+                    DataType.ofUUID(dataType.uuid()));
         }
     }
 }

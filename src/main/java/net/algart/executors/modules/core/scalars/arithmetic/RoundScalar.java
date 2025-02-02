@@ -77,6 +77,6 @@ public final class RoundScalar extends ScalarFilter {
             return source;
         }
         final Number result = roundingMode.round(source.toDouble());
-        return SScalar.valueOf(result);
+        return SScalar.of(result);
     }
 }
