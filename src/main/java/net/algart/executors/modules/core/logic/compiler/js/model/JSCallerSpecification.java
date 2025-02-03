@@ -137,7 +137,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
             List<JSCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, JSCallerSpecification::readIfValid);
+        return ExtensionSpecification.readAllIfValid(result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 
     public static JSCallerSpecification of(JsonObject executorSpecification) {
@@ -150,7 +150,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
         return new JSCallerSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification ofOrNull(String executorSpecificationString) {
+    public static JSCallerSpecification ofIfValid(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {

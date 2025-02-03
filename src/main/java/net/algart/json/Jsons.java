@@ -552,6 +552,49 @@ public class Jsons {
         return result;
     }
 
+    public static List<String> reqStrings(JsonObject json, String name) {
+        return reqStrings(json, name, null);
+    }
+
+    public static List<String> reqStrings(JsonObject json, String name, Path file) {
+        final List<String> result = getStrings(json, name, file);
+        if (result == null) {
+            throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                    + ": \"" + name + "\" JSON array required"
+                    + (file == null ? " <<<" + json + ">>>" : ""));
+        }
+        return result;
+    }
+
+    public static List<String> getStrings(JsonObject json, String name) {
+        return getStrings(json, name, null);
+    }
+
+    public static List<String> getStrings(JsonObject json, String name, Path file) {
+        Objects.requireNonNull(json, "Null json");
+        Objects.requireNonNull(name, "Null name");
+        final JsonArray jsonArray;
+        try {
+            jsonArray = json.getJsonArray(name);
+        } catch (ClassCastException e) {
+            throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                    + ": \"" + name + "\" value is not a JSON array"
+                    + (file == null ? " <<<" + json + ">>>" : ""));
+        }
+        if (jsonArray == null) {
+            return null;
+        }
+        final List<String> result = new ArrayList<>();
+        for (JsonValue jsonValue : jsonArray) {
+            if (!(jsonValue instanceof JsonString)) {
+                throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file) + ": \"" + name
+                        + "\" array contains non-string element " + jsonValue);
+            }
+            result.add(((JsonString) jsonValue).getString());
+        }
+        return result;
+    }
+
     public static List<JsonObject> reqJsonObjects(JsonObject json, String name) {
         return reqJsonObjects(json, name, null);
     }

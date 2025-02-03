@@ -30,6 +30,7 @@ import net.algart.executors.api.extensions.InstalledExtensions;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class ExtensionTest {
@@ -48,7 +49,7 @@ public class ExtensionTest {
         System.out.printf("Extension:%n%s%n", extension);
         System.out.printf("Its platforms:%n");
         for (ExtensionSpecification.Platform platform : extension.getPlatforms()) {
-            System.out.printf("    Technology: %s%n", platform.getTechnology());
+            System.out.printf("    Technologies: %s%n", platform.getTechnologies());
             System.out.printf("    Folders: %s%n", platform.getFolders());
             if (platform.isJvmTechnology()) {
                 final ExtensionSpecification.Platform.Configuration configuration = platform.getConfiguration();
@@ -61,7 +62,7 @@ public class ExtensionTest {
                 .setId("some id")
                 .setCategory("some category")
                 .setName("some name")
-                .setTechnology("jvm");
+                .setTechnologies(List.of("jvm"));
         System.out.printf("%nEmpty JVM platform:%n    %s%n%s%n", empty, empty.jsonString());
         System.out.printf("%n%n****************%nInstalled extensions:%n");
         for (ExtensionSpecification e : InstalledExtensions.allInstalledExtensions()) {

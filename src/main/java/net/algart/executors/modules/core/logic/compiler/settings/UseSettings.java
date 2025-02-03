@@ -126,7 +126,7 @@ public class UseSettings extends FileOperation {
             "File/subfolder name of the previous path (without parent folders).";
 
     private static final InstalledPlatformsForTechnology SETTINGS_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(SETTINGS_TECHNOLOGY);
+            InstalledPlatformsForTechnology.of(SETTINGS_TECHNOLOGY);
     private static final DefaultExecutorLoader<SettingsCombiner> SETTINGS_COMBINER_LOADER =
             new DefaultExecutorLoader<>("settings loader");
 
@@ -232,7 +232,7 @@ public class UseSettings extends FileOperation {
         usePath(settingsSpecificationPath, null, null);
     }
 
-    public void usePath(
+    public int usePath(
             Path settingsSpecificationPath,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
@@ -288,6 +288,7 @@ public class UseSettings extends FileOperation {
 //                System.out.println("!!!getNamesExecutorSpecification=" + getNamesExecutorSpecification.jsonString());
             }
         }
+        return n;
     }
 
     public void useContent(String settingsSpecificationContent) {
@@ -345,11 +346,12 @@ public class UseSettings extends FileOperation {
         for (ExtensionSpecification.Platform platform : SETTINGS_PLATFORMS.installedPlatforms()) {
             if (platform.hasSpecifications()) {
                 final long t1 = System.nanoTime();
-                usePath(platform.specificationsFolder(), platform, null);
+                final int n = usePath(platform.specificationsFolder(), platform, null);
                 final long t2 = System.nanoTime();
                 logInfo(() -> String.format(Locale.US,
-                        "Loading %s from %s: %.3f ms",
-                        installedSpecificationsCaption(), platform.specificationsFolder(), (t2 - t1) * 1e-6));
+                        "Loading %d %s from %s: %.3f ms",
+                        n, installedSpecificationsCaption(), platform.specificationsFolder(),
+                        (t2 - t1) * 1e-6));
             }
         }
     }

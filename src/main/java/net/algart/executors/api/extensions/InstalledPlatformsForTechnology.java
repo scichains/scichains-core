@@ -42,7 +42,7 @@ public class InstalledPlatformsForTechnology {
         this.platformTechnology = Objects.requireNonNull(platformTechnology, "Null platformTechnology");
     }
 
-    public static InstalledPlatformsForTechnology getInstance(String platformTechnology) {
+    public static InstalledPlatformsForTechnology of(String platformTechnology) {
         return new InstalledPlatformsForTechnology(platformTechnology);
     }
 
@@ -73,7 +73,7 @@ public class InstalledPlatformsForTechnology {
             final List<String> specificationFolders = new ArrayList<>();
             final List<String> implementationFolders = new ArrayList<>();
             for (ExtensionSpecification.Platform platform : InstalledExtensions.allInstalledPlatforms()) {
-                if (platform.getTechnology().equals(platformTechnology)) {
+                if (platform.containsTechnology(platformTechnology)) {
                     platforms.add(platform);
                     if (platform.hasSpecifications()) {
                         specificationFolders.add(platform.specificationsFolder().toString());

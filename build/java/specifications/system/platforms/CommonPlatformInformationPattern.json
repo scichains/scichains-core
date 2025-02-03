@@ -34,8 +34,8 @@
     },
     {
       "value_type": "scalar",
-      "name": "technology",
-      "hint": "Platform technology"
+      "name": "technologies",
+      "hint": "Platform technologies (separated by \\n if there is more than 1 technology)"
     },
     {
       "value_type": "scalar",

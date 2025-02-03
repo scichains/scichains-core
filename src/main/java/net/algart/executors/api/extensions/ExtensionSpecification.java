@@ -455,7 +455,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         private String name = DEFAULT_NAME;
         private String description = null;
         private Set<String> tags = new LinkedHashSet<>();
-        private String technology;
+        private Set<String> technologies;
         private boolean jvmTechnology;
         private String language = null;
         private Folders folders = new Folders();
@@ -473,17 +473,20 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             setCategory(json.getString("category", null));
             setName(json.getString("name", name));
             setDescription(json.getString("description", null));
-            JsonArray tags = Jsons.getJsonArray(json, "tags", file);
+            final List<String> tags = Jsons.getStrings(json, "tags", file);
             if (tags != null) {
-                for (JsonValue jsonValue : tags) {
-                    if (!(jsonValue instanceof JsonString)) {
-                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                                + ": \"tags\" array contains non-string element " + jsonValue);
-                    }
-                    this.tags.add(((JsonString) jsonValue).getString());
-                }
+                this.tags.addAll(tags);
             }
-            setTechnology(Jsons.reqString(json, "technology", file));
+            List<String> technologies = Jsons.getStrings(json,"technologies", file);
+            if (technologies == null) {
+                final String technology = json.getString("technology", null);
+                if (technology == null) {
+                    throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                            + ": \"technologies\" or \"technology\" value must exist");
+                }
+                technologies = List.of(technology);
+            }
+            setTechnologies(technologies);
             setLanguage(json.getString("language", null));
             final JsonObject foldersJson = json.getJsonObject("folders");
             if (foldersJson != null) {
@@ -495,14 +498,10 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             if (configurationJson != null) {
                 setConfiguration(new Configuration(configurationJson, file));
             }
-            final JsonArray dependenciesJson = json.getJsonArray("dependencies");
+            final JsonArray dependenciesJson = Jsons.getJsonArray(
+                    json, "dependencies", file, true);
             if (dependenciesJson != null) {
                 for (JsonValue jsonValue : dependenciesJson) {
-                    if (!(jsonValue instanceof JsonObject)) {
-                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                                + ": \"dependencies\" array contains non-object element "
-                                + jsonValue);
-                    }
                     this.dependencies.add(new Dependency((JsonObject) jsonValue, file));
                 }
             }
@@ -551,21 +550,32 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             return Collections.unmodifiableSet(tags);
         }
 
-        public Platform setTags(Set<String> tags) {
+        public Platform setTags(Collection<String> tags) {
             Objects.requireNonNull(tags, "Null tags");
+            checkImmutable();
             this.tags = new LinkedHashSet<>(tags);
             return this;
         }
 
-        public String getTechnology() {
-            return technology;
+        public Set<String> getTechnologies() {
+            return Collections.unmodifiableSet(technologies);
         }
 
-        public Platform setTechnology(String technology) {
+        public Platform setTechnologies(Collection<String> technologies) {
+            Objects.requireNonNull(technologies, "Null technologies");
             checkImmutable();
-            this.technology = nonEmpty(technology);
-            this.jvmTechnology = JVM_TECHNOLOGY.equalsIgnoreCase(technology);
+            LinkedHashSet<String> technologiesSet = new LinkedHashSet<>(technologies);
+            if (technologiesSet.isEmpty()) {
+                throw new IllegalArgumentException("Empty technologies");
+            }
+            this.technologies = technologiesSet;
+            this.jvmTechnology = this.technologies.size() == 1 && this.technologies.contains(JVM_TECHNOLOGY);
             return this;
+        }
+
+        public boolean containsTechnology(String technology) {
+            Objects.requireNonNull(technology, "Null technology");
+            return technologies.contains(technology);
         }
 
         public boolean isJvmTechnology() {
@@ -721,11 +731,9 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             }
         }
 
-
-
         @Override
         public void checkCompleteness() {
-            nonNull(technology, "technology");
+            nonNull(technologies, "technologies");
         }
 
         @Override
@@ -736,7 +744,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
                     ", name='" + name + '\'' +
                     ", description='" + description + '\'' +
                     ", tags=" + tags +
-                    ", technology='" + technology + '\'' +
+                    ", technologies='" + technologies + '\'' +
                     ", jvmTechnology=" + jvmTechnology +
                     ", language='" + language + '\'' +
                     ", folders=" + folders +
@@ -763,7 +771,19 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
                 }
                 builder.add("tags", tagsBuilder.build());
             }
-            builder.add("technology", technology);
+            if (technologies == null || technologies.isEmpty()) {
+                throw new AssertionError(
+                        "setTechnologies/checkCompleteness must check null/empty technologies");
+            }
+            if (technologies.size() == 1) {
+                builder.add("technology", technologies.iterator().next());
+            } else {
+                final JsonArrayBuilder technologiesBuilder = Json.createArrayBuilder();
+                for (String technology : technologies) {
+                    technologiesBuilder.add(technology);
+                }
+                builder.add("technologies", technologiesBuilder.build());
+            }
             if (language != null) {
                 builder.add("language", language);
             }
@@ -871,7 +891,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static <T> List<T> readAllJsonIfValid(
+    public static <T> List<T> readAllIfValid(
             List<T> result,
             Path containingJsonPath,
             Function<Path, T> reader)

@@ -194,7 +194,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             List<PythonCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(result, containingJsonPath, PythonCallerSpecification::readIfValid);
+        return ExtensionSpecification.readAllIfValid(result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 
     public static PythonCallerSpecification of(JsonObject executorSpecification) {
@@ -207,7 +207,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         return new PythonCallerSpecification(executorSpecification, null);
     }
 
-    public static PythonCallerSpecification ofOrNull(String executorSpecificationString) {
+    public static PythonCallerSpecification ofIfValid(String executorSpecificationString) {
         Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
         final JsonObject json = Jsons.toJson(executorSpecificationString);
         if (!isExecutorSpecification(json)) {

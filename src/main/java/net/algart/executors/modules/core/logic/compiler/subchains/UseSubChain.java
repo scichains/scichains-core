@@ -101,7 +101,7 @@ public final class UseSubChain extends FileOperation {
     static final String RECURSIVE_LOADING_BLOCKED_MESSAGE = "[recursive loading blocked]";
 
     private static final InstalledPlatformsForTechnology SUB_CHAIN_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(ChainSpecification.CHAIN_TECHNOLOGY);
+            InstalledPlatformsForTechnology.of(ChainSpecification.CHAIN_TECHNOLOGY);
     private static final DefaultExecutorLoader<Chain> SUB_CHAIN_LOADER =
             new DefaultExecutorLoader<>("sub-chains loader");
 
@@ -242,7 +242,7 @@ public final class UseSubChain extends FileOperation {
         usePath(chainSpecificationPath, null, null);
     }
 
-    public void usePath(
+    public int usePath(
             Path chainSpecificationPath,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
@@ -254,7 +254,7 @@ public final class UseSubChain extends FileOperation {
                 throw new FileNotFoundException("Sub-chain file or sub-chains folder " + chainSpecificationPath
                         + " does not exist");
             } else {
-                return;
+                return 0;
             }
         }
         if (Files.isDirectory(chainSpecificationPath)) {
@@ -264,6 +264,7 @@ public final class UseSubChain extends FileOperation {
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         use(chainSpecifications, platform, report);
+        return chainSpecifications.size();
     }
 
     public void useContent(String chainJsonContent) {
@@ -570,11 +571,11 @@ public final class UseSubChain extends FileOperation {
             ExtensionSpecification.Platform platform,
             String name) throws IOException {
         final long t1 = System.nanoTime();
-        useSubChain.usePath(folder, platform, null);
+        final int n = useSubChain.usePath(folder, platform, null);
         final long t2 = System.nanoTime();
         logInfo(() -> String.format(Locale.US,
-                "Loading %s from %s: %.3f ms",
-                name, folder, (t2 - t1) * 1e-6));
+                "Loading %d %s from %s: %.3f ms",
+                n, name, folder, (t2 - t1) * 1e-6));
     }
 
     private static String additionalChainInformation(Optional<Chain> chain) {

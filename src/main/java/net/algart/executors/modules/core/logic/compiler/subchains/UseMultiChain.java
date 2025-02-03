@@ -94,7 +94,7 @@ public final class UseMultiChain extends FileOperation {
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
 
     private static final InstalledPlatformsForTechnology MULTICHAIN_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(MULTICHAIN_TECHNOLOGY);
+            InstalledPlatformsForTechnology.of(MULTICHAIN_TECHNOLOGY);
     private static final DefaultExecutorLoader<MultiChain> MULTICHAIN_LOADER =
             new DefaultExecutorLoader<>("multi-chains loader");
 
@@ -168,11 +168,11 @@ public final class UseMultiChain extends FileOperation {
         }
     }
 
-    public void usePath(Path multiChainSpecificationPath) throws IOException {
-        usePath(multiChainSpecificationPath, null);
+    public int usePath(Path multiChainSpecificationPath) throws IOException {
+        return usePath(multiChainSpecificationPath, null);
     }
 
-    public void usePath(Path multiChainSpecificationPath, StringBuilder report) throws IOException {
+    public int usePath(Path multiChainSpecificationPath, StringBuilder report) throws IOException {
         Objects.requireNonNull(multiChainSpecificationPath, "Null multiChainSpecificationPath");
         final List<MultiChainSpecification> multiChainSpecifications;
         final List<ChainSpecification> chainSpecifications;
@@ -181,7 +181,7 @@ public final class UseMultiChain extends FileOperation {
                 throw new FileNotFoundException("Multi-chain file or multi-chains folder " +
                         multiChainSpecificationPath + " does not exist");
             } else {
-                return;
+                return 0;
             }
         }
         if (Files.isDirectory(multiChainSpecificationPath)) {
@@ -210,6 +210,7 @@ public final class UseMultiChain extends FileOperation {
         try (UseSubChain chainFactory = createChainFactory()) {
             chainFactory.use(chainSpecifications, report);
         }
+        return multiChainSpecifications.size();
     }
 
     public void use(List<MultiChainSpecification> multiChainSpecifications, StringBuilder report) throws IOException {
@@ -325,11 +326,11 @@ public final class UseMultiChain extends FileOperation {
         useMultiChain.setSessionId(GLOBAL_SHARED_SESSION_ID);
         for (String folder : MULTICHAIN_PLATFORMS.installedSpecificationFolders()) {
             final long t1 = System.nanoTime();
-            useMultiChain.usePath(Paths.get(folder));
+            final int n = useMultiChain.usePath(Paths.get(folder));
             final long t2 = System.nanoTime();
             logInfo(() -> String.format(Locale.US,
-                    "Loading installed multi-chain specifications from %s: %.3f ms",
-                    folder, (t2 - t1) * 1e-6));
+                    "Loading %d installed multi-chain specifications from %s: %.3f ms",
+                    n, folder, (t2 - t1) * 1e-6));
         }
     }
 

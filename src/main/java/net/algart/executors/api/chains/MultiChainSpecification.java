@@ -223,7 +223,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public static List<MultiChainSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(null, containingJsonPath, MultiChainSpecification::readIfValid);
+        return ExtensionSpecification.readAllIfValid(null, containingJsonPath, MultiChainSpecification::readIfValid);
     }
 
     public void write(Path multiChainSpecificationFile, OpenOption... options) throws IOException {

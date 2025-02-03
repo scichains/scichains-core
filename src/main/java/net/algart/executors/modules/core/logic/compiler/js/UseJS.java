@@ -107,7 +107,7 @@ public class UseJS extends FileOperation {
         usePath(jsCallerSpecificationsPaths, null, null);
     }
 
-    public void usePath(
+    public int usePath(
             Path jsCallerSpecificationsPaths,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
@@ -121,7 +121,8 @@ public class UseJS extends FileOperation {
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         ExecutorSpecification.checkIdDifference(jsCallerSpecifications);
-        for (int i = 0, n = jsCallerSpecifications.size(); i < n; i++) {
+        final int n = jsCallerSpecifications.size();
+        for (int i = 0; i < n; i++) {
             final JSCallerSpecification jsCallerSpecification = jsCallerSpecifications.get(i);
             logDebug("Loading JS caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + jsCallerSpecification.getExecutorSpecificationFile() + "...");
@@ -135,6 +136,7 @@ public class UseJS extends FileOperation {
                 report.append(jsCallerSpecification.getExecutorSpecificationFile()).append("\n");
             }
         }
+        return n;
     }
 
     // Note: corrects the argument
@@ -173,11 +175,11 @@ public class UseJS extends FileOperation {
                 if (platform.hasSpecifications() && platform.hasModules()) {
                     final long t1 = System.nanoTime();
                     useJS.setWorkingDirectory(platform.modulesFolder().toString());
-                    useJS.usePath(platform.specificationsFolder(), platform, null);
+                    final int n = useJS.usePath(platform.specificationsFolder(), platform, null);
                     final long t2 = System.nanoTime();
                     logInfo(() -> String.format(Locale.US,
-                            "Loading installed JS specifications from %s: %.3f ms",
-                            platform.specificationsFolder(), (t2 - t1) * 1e-6));
+                            "Loading %d installed JS specifications from %s: %.3f ms",
+                            n, platform.specificationsFolder(), (t2 - t1) * 1e-6));
                 }
             }
         }

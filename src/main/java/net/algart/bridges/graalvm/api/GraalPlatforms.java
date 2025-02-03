@@ -30,7 +30,7 @@ public class GraalPlatforms {
     public static final String GRAAL_TECHNOLOGY = "graal";
 
     private static final InstalledPlatformsForTechnology GRAAL_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(GRAAL_TECHNOLOGY);
+            InstalledPlatformsForTechnology.of(GRAAL_TECHNOLOGY);
 
     private GraalPlatforms() {
     }

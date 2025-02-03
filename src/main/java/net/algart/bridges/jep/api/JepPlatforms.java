@@ -32,7 +32,7 @@ public class JepPlatforms {
     public static final String JEP_TECHNOLOGY = "jep";
 
     private static final InstalledPlatformsForTechnology PYTHON_PLATFORMS =
-            InstalledPlatformsForTechnology.getInstance(JEP_TECHNOLOGY);
+            InstalledPlatformsForTechnology.of(JEP_TECHNOLOGY);
 
     private JepPlatforms() {
     }

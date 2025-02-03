@@ -33,7 +33,8 @@ import java.util.Set;
 
 public class SettingsTreeTest {
     public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
-    public static final String DEMO_CHAIN_SETTINGS_ID = "ec1e3898-e5b5-466e-91a8-61b5fb7f0894";
+    public static final String DEMO_CHAIN_SETTINGS_ID = "1f042f65-c5e5-4650-ae51-060a2df6a540";
+    // - the ID of build/settings/specifications/algart_executors_examples/demo_chain_settings.chain
 
     public static void main(String[] args) throws IOException {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");

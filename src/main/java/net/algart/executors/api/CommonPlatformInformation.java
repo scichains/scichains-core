@@ -33,7 +33,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
     public static final String OUTPUT_ID = "id";
     public static final String OUTPUT_NAME = "name";
     public static final String OUTPUT_DESCRIPTION = "description";
-    public static final String OUTPUT_TECHNOLOGY = "technology";
+    public static final String OUTPUT_TECHNOLOGIES = "technologies";
     public static final String OUTPUT_LANGUAGE = "language";
     public static final String OUTPUT_ROOT_FOLDER = "root_folder";
     public static final String OUTPUT_SPECIFICATIONS_FOLDER = "specifications_folder";
@@ -46,7 +46,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
             OUTPUT_ID,
             OUTPUT_NAME,
             OUTPUT_DESCRIPTION,
-            OUTPUT_TECHNOLOGY,
+            OUTPUT_TECHNOLOGIES,
             OUTPUT_LANGUAGE,
             OUTPUT_ROOT_FOLDER,
             OUTPUT_SPECIFICATIONS_FOLDER,
@@ -70,7 +70,7 @@ public class CommonPlatformInformation extends Executor implements ReadOnlyExecu
             getScalar(OUTPUT_ID).setTo(platform.getId());
             getScalar(OUTPUT_NAME).setTo(platform.getName());
             getScalar(OUTPUT_DESCRIPTION).setTo(platform.getDescription());
-            getScalar(OUTPUT_TECHNOLOGY).setTo(platform.getTechnology());
+            getScalar(OUTPUT_TECHNOLOGIES).setTo(String.join("\n", platform.getTechnologies()));
             getScalar(OUTPUT_LANGUAGE).setTo(platform.getLanguage());
             getScalar(OUTPUT_ROOT_FOLDER).setTo(platform.getFolders().getRoot());
             getScalar(OUTPUT_SPECIFICATIONS_FOLDER).setTo(platform.specificationsFolderOrNull());

@@ -114,8 +114,8 @@ public class LoadingChainTest {
         final Path chainFile = Paths.get(args[startArgIndex + 1]);
 
         System.out.printf("Reading %s...%n", specificationFolder);
-        final ExecutorSpecificationSet executorSpecificationSet =
-                ExecutorSpecificationSet.newInstance().addFolder(specificationFolder, true);
+        final ExecutorSpecificationSet executorSpecificationSet = ExecutorSpecificationSet.newInstance();
+        executorSpecificationSet.addFolder(specificationFolder, true);
         final ExecutorFactory executorFactory = ExecutionBlock.globalLoaders().newFactory(
                 "~~DUMMY", executorSpecificationSet);
 

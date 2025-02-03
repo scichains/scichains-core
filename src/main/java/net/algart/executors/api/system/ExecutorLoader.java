@@ -243,11 +243,11 @@ public abstract class ExecutorLoader {
     public final void addAllStandardJavaExecutorSpecifications() {
         if (REGISTER_BUILT_IN_EXECUTORS) {
             final long t1 = System.nanoTime();
-            final var allStandard = ExecutorSpecificationSet.allBuiltIn().all();
+            final Collection<ExecutorSpecification> allStandard = ExecutorSpecificationSet.allBuiltIn().all();
             final long t2 = System.nanoTime();
             LOG.log(Logger.Level.INFO, () -> String.format(Locale.US,
-                    "Storing descriptions of installed built-in executor specifications: %.3f ms",
-                    (t2 - t1) * 1e-6));
+                    "Storing descriptions of %d installed built-in executor specifications: %.3f ms",
+                    allStandard.size(), (t2 - t1) * 1e-6));
             setSpecifications(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, allStandard);
         }
     }

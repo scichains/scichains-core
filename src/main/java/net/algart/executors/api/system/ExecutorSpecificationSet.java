@@ -71,11 +71,11 @@ public final class ExecutorSpecificationSet {
         add(executorId, specification, null);
     }
 
-    public ExecutorSpecificationSet addFolder(Path folder, boolean onlyBuiltIn) throws IOException {
+    public int addFolder(Path folder, boolean onlyBuiltIn) throws IOException {
         return addFolder(folder, null, onlyBuiltIn);
     }
 
-    public ExecutorSpecificationSet addFolder(
+    public int addFolder(
             Path folder,
             ExtensionSpecification.Platform platform,
             boolean onlyBuiltIn)
@@ -86,13 +86,14 @@ public final class ExecutorSpecificationSet {
         if (!Files.exists(folder)) {
             throw new NoSuchFileException(folder.toString());
         }
+        int n = 0;
         try (DirectoryStream<Path> files = Files.newDirectoryStream(folder)) {
             for (Path file : files) {
                 if (file.getFileName().toString().startsWith(".")) {
                     continue;
                 }
                 if (Files.isDirectory(file)) {
-                    addFolder(file, platform, onlyBuiltIn);
+                    n += addFolder(file, platform, onlyBuiltIn);
                     continue;
                 }
                 if (Files.isRegularFile(file) && ExecutorSpecification.isExecutorSpecificationFile(file)) {
@@ -111,6 +112,7 @@ public final class ExecutorSpecificationSet {
                             // (PathPropertyReplacement works better)
                         }
                         add(specification.getId(), specification, file);
+                        n++;
                         LOG.log(System.Logger.Level.TRACE,
                                 () -> "Executor " + specification.getId() + " loaded from " + file);
                     } else {
@@ -120,7 +122,7 @@ public final class ExecutorSpecificationSet {
                 }
             }
         }
-        return this;
+        return n;
     }
 
     public void addInstalledModelFolders(boolean onlyBuiltIn) throws IOException {
@@ -133,11 +135,11 @@ public final class ExecutorSpecificationSet {
             }
             final Path folder = platform.specificationsFolder();
             final long t1 = System.nanoTime();
-            addFolder(folder, platform, onlyBuiltIn);
+            final int n = addFolder(folder, platform, onlyBuiltIn);
             final long t2 = System.nanoTime();
             LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
-                    "Loading installed built-in executor specifications from %s: %.3f ms",
-                    folder, (t2 - t1) * 1e-6));
+                    "Loading %d installed built-in executor specifications from %s: %.3f ms",
+                    n, folder, (t2 - t1) * 1e-6));
         }
     }
 

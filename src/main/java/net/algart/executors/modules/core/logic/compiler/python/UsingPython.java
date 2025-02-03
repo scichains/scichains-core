@@ -70,7 +70,7 @@ public class UsingPython {
         return PYTHON_CALLER_LOADER;
     }
 
-    public static void usePath(
+    public static int usePath(
             String sessionId,
             Path pythonCallerSpecificationPath,
             ExtensionSpecification.Platform platform)
@@ -85,7 +85,8 @@ public class UsingPython {
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         ExecutorSpecification.checkIdDifference(pythonCallerSpecifications);
-        for (int i = 0, n = pythonCallerSpecifications.size(); i < n; i++) {
+        final int n = pythonCallerSpecifications.size();
+        for (int i = 0; i < n; i++) {
             final PythonCallerSpecification pythonCallerSpecification = pythonCallerSpecifications.get(i);
             Executor.LOG.log(System.Logger.Level.DEBUG,
                     "Loading Python caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
@@ -97,6 +98,7 @@ public class UsingPython {
             }
             use(sessionId, pythonCallerSpecification);
         }
+        return n;
     }
 
     // Note: corrects the argument
@@ -110,11 +112,12 @@ public class UsingPython {
         for (ExtensionSpecification.Platform platform : JepPlatforms.pythonPlatforms().installedPlatforms()) {
             if (platform.hasSpecifications()) {
                 final long t1 = System.nanoTime();
-                UsingPython.usePath(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.specificationsFolder(), platform);
+                final int n = UsingPython.usePath(
+                        ExecutionBlock.GLOBAL_SHARED_SESSION_ID, platform.specificationsFolder(), platform);
                 final long t2 = System.nanoTime();
                 Executor.LOG.log(System.Logger.Level.INFO, () -> String.format(Locale.US,
-                        "Loading installed Python specifications from %s: %.3f ms",
-                        platform.specificationsFolder(), (t2 - t1) * 1e-6));
+                        "Loading %d installed Python specifications from %s: %.3f ms",
+                        n, platform.specificationsFolder(), (t2 - t1) * 1e-6));
             }
         }
     }
