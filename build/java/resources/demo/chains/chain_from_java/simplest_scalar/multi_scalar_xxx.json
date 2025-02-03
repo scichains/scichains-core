@@ -1,0 +1,32 @@
+{
+  "app": "multi-chain",
+  "id": "671c3559-e363-4c27-8626-76db860a9a58",
+  "options": {
+    "behavior": {
+      "skippable": true
+    }
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "x"
+    },
+    {
+      "value_type": "scalar",
+      "name": "y"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+  ],
+  "chain_variant_paths": [
+    "scalar_sum.chain",
+    "scalar_product.chain"
+  ],
+  "default_variant_id": "49d62877-227c-48e5-9107-33f996356146"
+}
