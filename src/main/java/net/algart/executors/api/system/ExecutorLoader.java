@@ -235,7 +235,7 @@ public abstract class ExecutorLoader {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(specification, "Null specification");
         checkEmptySessionId(sessionId);
-        final String serialized = specification.toJson().toString();
+        final String serialized = specification.toJson().toString().intern();
         synchronized (allSpecifications) {
             allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
                     .put(specification.getId(), serialized);
@@ -250,7 +250,9 @@ public abstract class ExecutorLoader {
             final var serialized = allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>());
             for (ExecutorSpecification specification : specifications) {
                 Objects.requireNonNull(specification, "Null specification in the collection");
-                serialized.put(specification.getId(), specification.toJson().toString());
+                serialized.put(specification.getId(), specification.toJson().toString().intern());
+                // - in fact, intern() method is not necessary here: toJson() creates interned strings;
+                // but an explicitly calling intern() provides the guarantee
             }
         }
     }
