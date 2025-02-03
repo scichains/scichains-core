@@ -436,7 +436,9 @@ public final class UseSubChain extends FileOperation {
         result.setTo(new InterpretSubChain());
         // - adds JavaConf and (maybe) parameters with setters
         result.setTo(chain);
-        result.setSourceInfo(null, chain.chainSpecificationPath()).setLanguageName(SUB_CHAIN_LANGUAGE_NAME);
+        result.setSourceInfo(
+                null,
+                chain.chainSpecificationPath()).setLanguageName(SUB_CHAIN_LANGUAGE_NAME);
         if (chain.hasPlatformId()) {
             result.setPlatformId(chain.platformId());
         }

@@ -25,10 +25,12 @@
 package net.algart.executors.modules.core.system;
 
 import net.algart.bridges.jep.api.JepPlatforms;
+import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledExtensions;
+import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
 
@@ -37,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -70,7 +73,15 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("Current OS directory: %s%n", currentRelativePath));
         sb.append(String.format("Current directory: %s%n", getCurrentDirectory()));
         sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
-        sb.append(String.format("Installed extensions root:%n    %s%n",
+
+        final ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
+        final Set<String> allSessions = global.allSessionIds();
+        sb.append(String.format("%n%d sessions with installed executors:%n", allSessions.size()));
+        for (String sessionId : allSessions) {
+            sb.append(String.format("    %s: %d executors%n", sessionId,
+                    global.allExecutorIds(sessionId, false).size()));
+        }
+        sb.append(String.format("%nInstalled extensions root:%n    %s%n",
                 InstalledExtensions.EXTENSIONS_ROOT));
         sb.append(String.format("Installed extensions path list:%n    %s%n",
                 InstalledExtensions.EXTENSIONS_PATH));

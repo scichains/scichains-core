@@ -1135,9 +1135,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * <p>The specification must contain all information, necessary for constructing and initializing the Java class
      * of the executor, in its {@link ExecutorSpecification#getJava() Java configuration}.
      *
-     * @param sessionId     unique ID of current session while multi-session usage;
+     * @param sessionId     unique non-empty ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.
-     * @param specification JSON specification of the executor.
+     * @param specification specification of the executor.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.
@@ -1154,9 +1154,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * newExecutor}(sessionId, {@link ExecutorSpecification#of(String)
      * ExecutorSpecification.valueOf}(specification))</code>.
      *
-     * @param sessionId     unique ID of current session while multi-session usage;
+     * @param sessionId     unique non-empty ID of current session while multi-session usage;
      *                      may be <code>null</code> while simple usage.
-     * @param specification specification of the executor, JSON format.
+     * @param specification specification of the executor.
      * @return newly created executor.
      * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.

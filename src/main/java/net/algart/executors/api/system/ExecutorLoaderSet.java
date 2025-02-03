@@ -139,7 +139,8 @@ public final class ExecutorLoaderSet {
         synchronized (loaders) {
             for (ExecutorLoader loader : loaders) {
                 if (includeGlobalSession) {
-                    final var result = loader.serializedSpecification(ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
+                    final var result = loader.serializedSpecification(
+                            ExecutionBlock.GLOBAL_SHARED_SESSION_ID, executorId);
                     if (result != null) {
                         return result;
                     }
@@ -163,8 +164,8 @@ public final class ExecutorLoaderSet {
      * Keys in the result are IDs of executors, values are serialized specifications.
      * This may be used for the user interface to show information for available executors.
      *
-     * @param sessionId  unique ID of the session; may be <code>null</code>, than only global session will be
-     *                   checked.
+     * @param sessionId            unique ID of the session;
+     *                             may be <code>null</code>, than only global session will be checked.
      * @param includeGlobalSession if <code>true</code>, the result includes the executors,
      *                             registered in the global session.
      * @return all available executor specifications for this and (possibly) the global session.
@@ -196,8 +197,15 @@ public final class ExecutorLoaderSet {
         return result;
     }
 
+    public Set<String> allSessionIds() {
+        final Set<String> result = new LinkedHashSet<>();
+        for (ExecutorLoader loader : list()) {
+            result.addAll(loader.allSessionIds());
+        }
+        return result;
+    }
+
     public void clearSession(String sessionId) {
-        Objects.requireNonNull(sessionId, "Null sessionId");
         for (ExecutorLoader loader : list()) {
             loader.clearSession(sessionId);
         }

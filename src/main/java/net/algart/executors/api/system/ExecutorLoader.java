@@ -84,8 +84,9 @@ public abstract class ExecutorLoader {
      * <p>Note: <code>sessionId</code> is typically used only to store it into the returned executor
      * according {@link InstantiationMode}. Usually this does not affect creating a class instance.
      *
-     * @param sessionId         see the same argument of {@link ExecutionBlock#newExecutor}; may be ignored.
-     * @param specification     see the same argument of {@link ExecutionBlock#newExecutor}.
+     * @param sessionId         unique non-empty ID of current session while multi-session usage;
+     *                          may be <code>null</code> while simple usage.
+     * @param specification     specification of the executor.
      * @param instantiationMode what should we do after successful instantiating the executor?
      * @return newly created executor or <code>null</code> if this loader does not "understand" this specification.
      * @throws NullPointerException   if <code>specification</code> or <code>instantiationMode</code> is
@@ -150,11 +151,15 @@ public abstract class ExecutorLoader {
      * and frees some caches, necessary for such executors.
      * Default implementation calls {@link #removeSpecifications(String)}.
      *
+     * <p>Note: <code>sessionId</code> can be <code>null</code> or an empty string;
+     * in these cases, this function does nothing (such sessions never exist).</p>
+     *
      * @param sessionId unique ID of current session.
-     * @throws NullPointerException if <code>sessionId==null</code>.
      */
     public void clearSession(String sessionId) {
-        removeSpecifications(sessionId);
+        if (sessionId != null) {
+            removeSpecifications(sessionId);
+        }
     }
 
     /**
@@ -169,14 +174,22 @@ public abstract class ExecutorLoader {
     public final Map<String, String> allSerializedSpecifications(String sessionId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         synchronized (allSpecifications) {
-            return Collections.unmodifiableMap(
-                    allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()));
+            // Note: Collections.unmodifiableMap is not enough, it will not be synchronized well
+            final Map<String, String> session = allSpecifications.get(sessionId);
+            return session == null ? new LinkedHashMap<>() : new LinkedHashMap<>(session);
         }
     }
 
     public Set<String> allExecutorIds(String sessionId) {
         return allSerializedSpecifications(sessionId).keySet();
     }
+
+    public Set<String> allSessionIds() {
+        synchronized (allSpecifications) {
+            return new LinkedHashSet<>(allSpecifications.keySet());
+        }
+    }
+
 
     /**
      * Returns the executor specification, registered for the specified session ID and executor ID.
@@ -197,14 +210,14 @@ public abstract class ExecutorLoader {
             throw new AssertionError("Very strange: all registered specification " +
                     "were serialized via toJson().toString()!", e);
         }
-
     }
 
     public final String serializedSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
         synchronized (allSpecifications) {
-            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>()).get(executorId);
+            final Map<String, String> session = allSpecifications.get(sessionId);
+            return session == null ? null : session.get(executorId);
         }
     }
 
@@ -215,12 +228,13 @@ public abstract class ExecutorLoader {
      *
      * <p>This method is called from {@link DefaultExecutorLoader#registerWorker} method.</p>
      *
-     * @param sessionId     unique ID of current session.
+     * @param sessionId     unique non-empty ID of current session.
      * @param specification new specification.
      */
     public final void setSpecification(String sessionId, ExecutorSpecification specification) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(specification, "Null specification");
+        checkEmptySessionId(sessionId);
         final String serialized = specification.toJson().toString();
         synchronized (allSpecifications) {
             allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
@@ -231,6 +245,7 @@ public abstract class ExecutorLoader {
     public final void setSpecifications(String sessionId, Collection<ExecutorSpecification> specifications) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(specifications, "Null specifications");
+        checkEmptySessionId(sessionId);
         synchronized (allSpecifications) {
             final var serialized = allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>());
             for (ExecutorSpecification specification : specifications) {
@@ -255,9 +270,14 @@ public abstract class ExecutorLoader {
     public final boolean removeSpecification(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Null sessionId");
         Objects.requireNonNull(executorId, "Null executorId");
+        checkEmptySessionId(sessionId);
         synchronized (allSpecifications) {
-            return allSpecifications.computeIfAbsent(sessionId, k -> new LinkedHashMap<>())
-                    .remove(executorId) != null;
+            final Map<String, String> session = allSpecifications.get(sessionId);
+            if (session != null) {
+                return session.remove(executorId) != null;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -277,6 +297,12 @@ public abstract class ExecutorLoader {
             Executable executable = getNewInstance(specification);
             newInstanceMakers.put(executorId, executable);
             return executable;
+        }
+    }
+
+    private static void checkEmptySessionId(String sessionId) {
+        if (sessionId.isEmpty()) {
+            throw new IllegalArgumentException("Empty sessionId");
         }
     }
 
