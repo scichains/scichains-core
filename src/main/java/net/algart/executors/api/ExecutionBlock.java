@@ -32,9 +32,9 @@ import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.logic.compiler.js.UseJS;
 import net.algart.executors.modules.core.logic.compiler.python.UsingPython;
-import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
-import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChain;
-import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
+import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.chains.UseSubChain;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.PropertyChecker;
 

@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.logic.compiler.settings.ReloadInstalledChainSettings"
+    "class": "net.algart.executors.api.settings.ReloadInstalledChainSettings"
   },
   "in_ports": [],
   "out_ports": [

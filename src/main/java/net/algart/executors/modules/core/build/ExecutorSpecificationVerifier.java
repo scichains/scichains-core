@@ -33,6 +33,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.mappings.MappingSpecification;
+import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.Jsons;
@@ -78,7 +79,8 @@ public final class ExecutorSpecificationVerifier {
             if (app.equals(SettingsSpecification.APP_NAME)
                     || app.equals(SettingsSpecification.APP_NAME_FOR_MAIN)
                     || app.equals(ExtensionSpecification.APP_NAME)
-                    || ChainSpecification.isChainSpecificationContainer(json)) {
+                    || ChainSpecification.isChainSpecificationContainer(json)
+                    || MultiChainSpecification.isMultiChainSpecification(json)) {
                 // - not an error, just another known specification type
                 return null;
             }

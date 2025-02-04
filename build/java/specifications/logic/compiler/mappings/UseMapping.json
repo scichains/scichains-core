@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.logic.compiler.mappings.UseMapping"
+    "class": "net.algart.executors.api.mappings.UseMapping"
   },
   "in_ports": [],
   "out_ports": [

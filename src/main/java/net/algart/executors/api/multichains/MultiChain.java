@@ -33,11 +33,10 @@ import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ControlEditionType;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineSettings;
-import net.algart.executors.modules.core.logic.compiler.subchains.MainChainSettingsInformation;
-import net.algart.executors.modules.core.logic.compiler.subchains.UseMultiChainSettings;
-import net.algart.executors.modules.core.logic.compiler.subchains.UseSubChain;
-import net.algart.executors.modules.core.logic.compiler.subchains.interpreters.InterpretSubChain;
+import net.algart.executors.api.settings.interpreters.CombineSettings;
+import net.algart.executors.api.chains.MainChainSettingsInformation;
+import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.json.Jsons;
 
 import java.io.IOException;

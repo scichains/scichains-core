@@ -31,9 +31,8 @@ import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
-import net.algart.executors.modules.core.logic.compiler.js.interpreters.InterpretJS;
-import net.algart.executors.modules.core.logic.compiler.js.model.JSCaller;
-import net.algart.executors.modules.core.logic.compiler.js.model.JSCallerSpecification;
+import net.algart.executors.modules.core.logic.compiler.js.api.JSCaller;
+import net.algart.executors.modules.core.logic.compiler.js.api.JSCallerSpecification;
 
 import java.io.IOError;
 import java.io.IOException;
