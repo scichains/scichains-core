@@ -54,6 +54,9 @@ public class UseSettings extends FileOperation {
 
     public static final String SETTINGS_NAME_OUTPUT_NAME = "_cs___settings_name";
     public static final String SETTINGS_NAME_OUTPUT_CAPTION = "settings_name";
+    public static final String SETTINGS_ID_OUTPUT_NAME = "_ss___settings_id";
+    public static final String SETTINGS_ID_OUTPUT_CAPTION = "Settings\u00A0ID";
+    public static final String SETTINGS_ID_OUTPUT_HINT = "ID of the corresponding settings combiner executor";
     public static final String ALL_SETTINGS_PARAMETER_NAME = SettingsSpecification.SETTINGS;
     public static final String ALL_SETTINGS_PARAMETER_CAPTION = "settings (all)";
     public static final String ALL_SETTINGS_PARAMETER_DESCRIPTION =
@@ -442,6 +445,12 @@ public class UseSettings extends FileOperation {
             SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, false, true);
         addSystemOutputPorts(result);
+        result.addOutPort(new ExecutorSpecification.PortConf()
+                .setName(SETTINGS_ID_OUTPUT_NAME)
+                .setCaption(SETTINGS_ID_OUTPUT_CAPTION)
+                .setHint(SETTINGS_ID_OUTPUT_HINT)
+                .setValueType(DataType.SCALAR)
+                .setAdvanced(true));
     }
 
     // Note: overridden in UseChainSettings (where it always returns true)

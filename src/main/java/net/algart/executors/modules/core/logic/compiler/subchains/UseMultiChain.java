@@ -28,8 +28,8 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
 import net.algart.executors.api.chains.ChainLoadingException;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.MultiChain;
-import net.algart.executors.api.chains.MultiChainSpecification;
+import net.algart.executors.api.multichains.MultiChain;
+import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
@@ -191,15 +191,19 @@ public final class UseMultiChain extends FileOperation {
                     ChainSpecification.readAllIfValid(multiChainSpecificationPath, true) :
                     Collections.emptyList();
         } else if (!alsoSubChains) {
-            multiChainSpecifications = Collections.singletonList(MultiChainSpecification.read(multiChainSpecificationPath));
+            multiChainSpecifications = Collections.singletonList(
+                    MultiChainSpecification.read(multiChainSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
             chainSpecifications = Collections.emptyList();
         } else {
-            final MultiChainSpecification multiChainSpecification = MultiChainSpecification.readIfValid(multiChainSpecificationPath);
+            final MultiChainSpecification multiChainSpecification = MultiChainSpecification.readIfValid(
+                    multiChainSpecificationPath);
             multiChainSpecifications = multiChainSpecification == null ?
                     Collections.emptyList() : Collections.singletonList(multiChainSpecification);
             final ChainSpecification chainSpecification = ChainSpecification.readIfValid(multiChainSpecificationPath);
-            chainSpecifications = chainSpecification == null ? Collections.emptyList() : Collections.singletonList(chainSpecification);
+            chainSpecifications = chainSpecification == null ?
+                    Collections.emptyList() :
+                    Collections.singletonList(chainSpecification);
             if (multiChainSpecification == null && chainSpecification == null) {
                 throw new JsonException("JSON " + multiChainSpecificationPath
                         + " is not a valid multi-chain or sub-chain configuration");

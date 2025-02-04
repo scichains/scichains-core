@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
@@ -52,7 +53,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private static final AtomicLong CURRENT_CONTEXT_ID = new AtomicLong(109099000000000L);
     // - Some magic value helps to reduce the chance of accidental coincidence with other contextIDs,
-    // probably used in the system in other ways (109, 99 are ASCII-codes of letters 'mc').
+    // probably used in the system in other ways (109, 99 are ASCII codes of letters 'mc').
 
     private volatile long contextId;
     // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
@@ -207,6 +208,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     public String description() {
         return specification.getDescription();
+    }
+
+    public String settingsId() {
+        return specification.getSettingsId();
     }
 
     public void checkImplementationCompatibility() {

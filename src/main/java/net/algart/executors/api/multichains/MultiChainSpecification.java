@@ -22,10 +22,12 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.multichains;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.chains.IncompatibleChainException;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -47,7 +49,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "multi-chain";
     public static final String CURRENT_VERSION = "1.0";
 
-    public static final String DEFAULT_MULTICHAIN_CATEGORY = "modules";
+    public static final String DEFAULT_MULTICHAIN_CATEGORY = "multichains";
     public static final String DEFAULT_MULTICHAIN_NAME = "multichain";
 
     private static final String DEFAULT_MULTICHAIN_SETTINGS_NAME = "Multi-settings";

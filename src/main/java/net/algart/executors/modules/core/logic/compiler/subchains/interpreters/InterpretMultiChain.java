@@ -28,7 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
-import net.algart.executors.api.chains.MultiChain;
+import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
@@ -164,8 +164,12 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
                 InterpretSubChain.quote(getContextName()),
                 selectedChainSettingsString));
         if (hasOutputPort(SETTINGS)) {
-            // - we check the port to be on the safe side; in correctly created chain, it must exist
+            // - we check the port to be on the safe side; in a correctly created chain, it must exist
             getScalar(SETTINGS).setTo(selectedChainSettingsString);
+        }
+        if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
+            // - we check the port to be on the safe side; in a correctly created chain, it must exist
+            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(multiChain.settingsId());
         }
     }
 

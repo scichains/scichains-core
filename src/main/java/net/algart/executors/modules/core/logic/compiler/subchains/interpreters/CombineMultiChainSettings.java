@@ -28,7 +28,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.MultiChain;
+import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.modules.core.logic.compiler.settings.interpreters.CombineChainSettings;
 import net.algart.json.Jsons;

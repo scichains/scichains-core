@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.subchains;
 
-import net.algart.executors.api.chains.MultiChain;
+import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.logic.compiler.settings.UseSettings;
