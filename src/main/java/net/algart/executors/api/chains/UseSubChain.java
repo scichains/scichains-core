@@ -37,7 +37,7 @@ import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.api.settings.UseChainSettings;
 import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.interpreters.CombineSettings;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.json.Jsons;
 
 import java.io.FileNotFoundException;

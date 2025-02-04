@@ -27,9 +27,9 @@ package net.algart.executors.api.multichains;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.interpreters.CombineSettings;
-import net.algart.executors.api.settings.interpreters.GetNamesOfSettings;
-import net.algart.executors.api.settings.interpreters.SplitSettings;
+import net.algart.executors.api.settings.CombineSettings;
+import net.algart.executors.api.settings.GetNamesOfSettings;
+import net.algart.executors.api.settings.SplitSettings;
 
 // Note: it is not an executor, it is an internal class for usage inside UseMultiChain and MultiChain
 public class UseMultiChainSettings extends UseSettings {

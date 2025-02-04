@@ -35,7 +35,7 @@ import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.interpreters.CombineSettings;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.json.Jsons;
 
 import java.lang.System.Logger.Level;

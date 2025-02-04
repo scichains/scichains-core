@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings.interpreters;
+package net.algart.executors.api.settings;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.Jsons;
 

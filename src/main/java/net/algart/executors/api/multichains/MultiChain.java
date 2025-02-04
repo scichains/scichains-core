@@ -33,7 +33,7 @@ import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ControlEditionType;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.settings.interpreters.CombineSettings;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.chains.MainChainSettingsInformation;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.chains.InterpretSubChain;

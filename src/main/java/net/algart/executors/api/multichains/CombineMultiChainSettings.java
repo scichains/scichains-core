@@ -29,7 +29,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.settings.SettingsCombiner;
-import net.algart.executors.api.settings.interpreters.CombineChainSettings;
+import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.json.Jsons;
 
 // Must be public with public constructor without arguments to be created by external systems.

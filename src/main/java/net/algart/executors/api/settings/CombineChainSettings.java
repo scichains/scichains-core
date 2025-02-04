@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings.interpreters;
+package net.algart.executors.api.settings;
 
 // Separate class helps the user to distinguish usual settings and chain settings
 public class CombineChainSettings extends CombineSettings {

@@ -22,12 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings.interpreters;
+package net.algart.executors.api.settings;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.settings.SettingsCombiner;
-import net.algart.executors.api.settings.UseSettings;
 
 public abstract class AbstractInterpretSettings extends Executor implements ReadOnlyExecutionInput {
     private volatile SettingsCombiner settingsCombiner = null;
