@@ -60,6 +60,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
 
     private static final String CHAIN_SECTION_ALIAS = "stare_chain";
     private static final String CHAIN_APP_NAME_ALIAS = "stare-chain";
+
     private static final Pattern COMPILED_CHAIN_FILE_PATTERN = Pattern.compile(CHAIN_FILE_PATTERN);
 
     public static final class Executor extends AbstractConvertibleToJson {

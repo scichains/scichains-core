@@ -275,8 +275,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
         final String multiChainName = name();
         final String selectedChainName = selectedChain.name();
-        final Set<String> selectedSubChainActualKeys = settingsInformation.chainSettingsCombiner()
-                .settingsKeySet();
+        final Set<String> selectedSubChainActualKeys = settingsInformation.chainSettingsCombiner().settingsKeySet();
 
         final JsonObject multiSettings = SettingsCombiner.getSubSettingsByName(parentSettings, multiChainName);
         final JsonObject parentSubSettings = SettingsCombiner.getSubSettingsByName(parentSettings, selectedChainName);

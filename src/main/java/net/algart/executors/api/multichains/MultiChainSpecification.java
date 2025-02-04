@@ -44,6 +44,7 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final String APP_NAME = "multi-chain";
@@ -51,9 +52,12 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
     public static final String DEFAULT_MULTICHAIN_CATEGORY = "multichains";
     public static final String DEFAULT_MULTICHAIN_NAME = "multichain";
+    public static final String MULTICHAIN_FILE_PATTERN = ".*\\.(json|mchain)$";
 
     private static final String DEFAULT_MULTICHAIN_SETTINGS_NAME = "Multi-settings";
     private static final String DEFAULT_MULTICHAIN_SETTINGS_PREFIX = "Multi-settings ";
+
+    private static final Pattern COMPILED_MULTICHAIN_FILE_PATTERN = Pattern.compile(MULTICHAIN_FILE_PATTERN);
 
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Behavior extends AbstractConvertibleToJson {
@@ -225,7 +229,12 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public static List<MultiChainSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllIfValid(null, containingJsonPath, MultiChainSpecification::readIfValid);
+        return ExtensionSpecification.readAllIfValid(
+                null,
+                containingJsonPath,
+                true,
+                MultiChainSpecification::readIfValid,
+                MultiChainSpecification::isMultiChainSpecificationFile);
     }
 
     public void write(Path multiChainSpecificationFile, OpenOption... options) throws IOException {
@@ -235,6 +244,11 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
     public static MultiChainSpecification of(JsonObject multiSpecificationJson, boolean strictMode) {
         return new MultiChainSpecification(multiSpecificationJson, strictMode, null);
+    }
+
+    public static boolean isMultiChainSpecificationFile(Path file) {
+        Objects.requireNonNull(file, "Null file");
+        return COMPILED_MULTICHAIN_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
     }
 
     public static boolean isMultiChainSpecification(JsonObject multiChainSpecification) {

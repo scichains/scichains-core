@@ -137,7 +137,8 @@ public class JSCallerSpecification extends ExecutorSpecification {
             List<JSCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllIfValid(result, containingJsonPath, JSCallerSpecification::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(
+                result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 
     public static JSCallerSpecification of(JsonObject executorSpecification) {

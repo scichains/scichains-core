@@ -220,7 +220,12 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     }
 
     public static List<MappingSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllIfValid(null, containingJsonPath, MappingSpecification::readIfValid);
+        return ExtensionSpecification.readAllIfValid(
+                null,
+                containingJsonPath,
+                true,
+                MappingSpecification::readIfValid,
+                MappingSpecification::isMappingSpecificationFile);
     }
 
     public void write(Path mappingSpecificationFile, OpenOption... options) throws IOException {

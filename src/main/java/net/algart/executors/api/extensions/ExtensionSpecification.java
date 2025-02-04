@@ -891,7 +891,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static <T> List<T> readAllIfValid(
+    public static <T> List<T> readAllJsonIfValid(
             List<T> result,
             Path containingJsonPath,
             Function<Path, T> reader)
@@ -912,6 +912,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             Predicate<Path> isAllowedPath)
             throws IOException {
         Objects.requireNonNull(containingJsonPath, "Null containingJsonPath");
+        Objects.requireNonNull(isAllowedPath, "Null isAllowedPath");
         if (result == null) {
             result = new ArrayList<>();
         }

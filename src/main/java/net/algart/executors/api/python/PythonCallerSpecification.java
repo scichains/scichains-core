@@ -194,7 +194,8 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             List<PythonCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllIfValid(result, containingJsonPath, PythonCallerSpecification::readIfValid);
+        return ExtensionSpecification.readAllJsonIfValid(
+                result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 
     public static PythonCallerSpecification of(JsonObject executorSpecification) {
