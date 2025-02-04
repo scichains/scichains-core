@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.python.api;
+package net.algart.executors.api.python;
 
 import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;

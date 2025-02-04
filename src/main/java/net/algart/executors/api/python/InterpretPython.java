@@ -22,13 +22,12 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.python;
+package net.algart.executors.api.python;
 
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.modules.core.logic.compiler.python.api.PythonCaller;
 
 import java.util.Locale;
 

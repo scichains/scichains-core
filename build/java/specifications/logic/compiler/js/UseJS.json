@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.logic.compiler.js.UseJS"
+    "class": "net.algart.executors.api.js.UseJS"
   },
   "in_ports": [],
   "out_ports": [

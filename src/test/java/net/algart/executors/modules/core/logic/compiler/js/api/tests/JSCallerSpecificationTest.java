@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.js.api.tests;
 
-import net.algart.executors.modules.core.logic.compiler.js.api.JSCallerSpecification;
+import net.algart.executors.api.js.JSCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;

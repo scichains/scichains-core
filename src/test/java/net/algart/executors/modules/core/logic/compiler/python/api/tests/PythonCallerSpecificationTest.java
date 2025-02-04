@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.compiler.python.api.tests;
 
-import net.algart.executors.modules.core.logic.compiler.python.api.PythonCallerSpecification;
+import net.algart.executors.api.python.PythonCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;

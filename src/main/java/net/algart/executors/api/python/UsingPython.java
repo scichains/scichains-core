@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.python;
+package net.algart.executors.api.python;
 
 import net.algart.bridges.jep.additions.JepGlobalConfig;
 import net.algart.bridges.jep.api.JepPlatforms;
@@ -32,8 +32,6 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.modules.core.logic.compiler.python.api.PythonCaller;
-import net.algart.executors.modules.core.logic.compiler.python.api.PythonCallerSpecification;
 
 import java.io.IOException;
 import java.nio.file.Files;

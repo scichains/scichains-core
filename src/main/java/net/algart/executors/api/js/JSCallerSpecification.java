@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.js.api;
+package net.algart.executors.api.js;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
