@@ -432,22 +432,24 @@ public class UseSettings extends FileOperation {
     public static void addSubChainControlsAndPorts(
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
-        addInputControlsAndPorts(result, settingsCombiner, false, true, false);
-        addSystemOutputPorts(result);
+        final boolean withSettings = settingsCombiner != null;
+        if (withSettings) {
+            addInputControlsAndPorts(
+                    result, settingsCombiner, false, true, false);
+        }
+        addSystemOutputPorts(result, withSettings);
     }
 
     // Used for adding controls and ports to InterpretMultiChain executor
     public static void addMultiChainControlsAndPorts(
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
-        addInputControlsAndPorts(result, settingsCombiner, false, false, true);
-        addSystemOutputPorts(result);
-        result.addOutPort(new ExecutorSpecification.PortConf()
-                .setName(SETTINGS_ID_OUTPUT_NAME)
-                .setCaption(SETTINGS_ID_OUTPUT_CAPTION)
-                .setHint(SETTINGS_ID_OUTPUT_HINT)
-                .setValueType(DataType.SCALAR)
-                .setAdvanced(true));
+        final boolean withSettings = settingsCombiner != null;
+        if (withSettings) {
+            addInputControlsAndPorts(
+                    result, settingsCombiner, false, false, true);
+        }
+        addSystemOutputPorts(result, withSettings);
     }
 
     // Note: overridden in UseChainSettings (where it always returns true)
@@ -667,8 +669,16 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static void addSystemOutputPorts(ExecutorSpecification result) {
+    private static void addSystemOutputPorts(ExecutorSpecification result, boolean addSettingsIdPort) {
         result.addSystemExecutorIdPort();
+        if (addSettingsIdPort) {
+            result.addOutPort(new ExecutorSpecification.PortConf()
+                    .setName(SETTINGS_ID_OUTPUT_NAME)
+                    .setCaption(SETTINGS_ID_OUTPUT_CAPTION)
+                    .setHint(SETTINGS_ID_OUTPUT_HINT)
+                    .setValueType(DataType.SCALAR)
+                    .setAdvanced(true));
+        }
         if (result.hasPlatformId()) {
             result.addSystemPlatformIdPort();
             result.addSystemResourceFolderPort();
@@ -679,7 +689,7 @@ public class UseSettings extends FileOperation {
     }
 
     private static void addSpecialOutputPorts(ExecutorSpecification result) {
-        addSystemOutputPorts(result);
+        addSystemOutputPorts(result, false);
         if (!result.getOutPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
             result.addOutPort(new ExecutorSpecification.PortConf()
                     .setName(SETTINGS_NAME_OUTPUT_NAME)

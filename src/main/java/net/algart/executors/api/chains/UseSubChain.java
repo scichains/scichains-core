@@ -572,9 +572,6 @@ public final class UseSubChain extends FileOperation {
         if (visibleResult != null) {
             result.addControl(visibleResult);
         }
-        if (result.hasPlatformId()) {
-            result.addSystemPlatformIdPort();
-        }
         return chainExecutorSpecification = result;
     }
 
@@ -630,6 +627,7 @@ public final class UseSubChain extends FileOperation {
     private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
         final ChainBlock useChainSettingsBlock = findUseChainSettings(chain);
         if (useChainSettingsBlock == null) {
+            UseSettings.addSubChainControlsAndPorts(result, null);
             return;
         }
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();

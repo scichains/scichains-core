@@ -237,8 +237,12 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(CombineSettings.SETTINGS)) {
-            // - we check the port to be on the safe side; in correctly created chain, it must exist
+            // - we check the port to be on the safe side; in a correctly created chain, it must exist
             getScalar(CombineSettings.SETTINGS).setTo(settingsString);
+        }
+        if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
+            // - we check the port to be on the safe side; in a correctly created chain, it must exist
+            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(combiner.id());
         }
         final Level level = logSettings ? Level.INFO : Level.DEBUG;
         if (!parentSettings.isEmpty()) {

@@ -356,15 +356,9 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void fillSystemOutputs() {
         setOutputScalar(OUTPUT_EXECUTOR_ID_NAME, this::getExecutorId);
-        final boolean platformNecessary = isOutputNecessary(OUTPUT_PLATFORM_ID_NAME)
-                || isOutputNecessary(OUTPUT_RESOURCE_FOLDER_NAME);
-        // - not always: parsing executorSpecification may require some time
-        if (platformNecessary) {
-            setOutputScalar(OUTPUT_PLATFORM_ID_NAME, getPlatformId());
-            setOutputScalar(OUTPUT_RESOURCE_FOLDER_NAME, this::executorResourceFolder);
-        }
+        setOutputScalar(OUTPUT_PLATFORM_ID_NAME, this::getPlatformId);
+        setOutputScalarIfNecessary(OUTPUT_RESOURCE_FOLDER_NAME, this::executorResourceFolder);
     }
-
 
     /**
      * Returns names of all parameters, for which this class provides standard setters (setXxx method).
