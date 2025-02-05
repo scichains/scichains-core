@@ -109,11 +109,13 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
                 0;
         final int timingNumberOfPercentiles = parameters().getInteger(
                 UseMultiChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseSubChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
-        final TimingStatistics.Settings settings = new TimingStatistics.Settings();
-        settings.setUniformPercentileLevels(timingNumberOfPercentiles);
-        selectedChain.setTimingSettings(timingNumberOfCalls, settings);
-        timing.setSettings(timingNumberOfCalls, settings);
+        final TimingStatistics.Settings timingConfiguration = new TimingStatistics.Settings();
+        timingConfiguration.setUniformPercentileLevels(timingNumberOfPercentiles);
+        selectedChain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
+        timing.setSettings(timingNumberOfCalls, timingConfiguration);
         try {
+            selectedChain.setParameters(parameters());
+            // - if a chain has direct parameters, sets also them in addition to copying into selectedChainSettings
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.readInputPortsFromExecutor(this);
             t3 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;

@@ -84,24 +84,24 @@ public final class UseMultiChain extends FileOperation {
     public static final String IGNORE_PARAMETERS_PARAMETER_NAME = "_mch___ignoreInputParameter";
     public static final String IGNORE_PARAMETERS_PARAMETER_CAPTION = "Ignore parameters below";
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
-            "If set, the behavior is fully determined by the input settings port and internal settings "
-                    + "of the sub-chain. All parameters below are fully ignored, even "
-                    + "if they are not specified in the section \""
-                    + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
-                    + "of the input settings JSON.\n"
-                    + "We recommend to set this flag always in multi-chain configuration, "
-                    + "if you are allowing and planning to replace some sub-chains in future.";
+            "If set, the behavior is fully determined by the input settings port and internal settings " +
+                    "of the sub-chain. All parameters below are not included into the settings JSON " +
+                    "even if they are not specified in the section \"" +
+                    SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
+                    "of the input settings JSON.\n" +
+                    "However: if there are parameters in the selected chain that are specified in the chain blocks " +
+                    "and not in the JSON, they are copied from the corresponding parameters below in any case.";
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
 
     static final String RECURSIVE_LOADING_BLOCKED_MESSAGE = "[recursive loading blocked]";
 
-    private static final InstalledPlatformsForTechnology MULTICHAIN_PLATFORMS =
+    private static final InstalledPlatformsForTechnology MULTI_CHAIN_PLATFORMS =
             InstalledPlatformsForTechnology.of(MULTICHAIN_TECHNOLOGY);
-    private static final DefaultExecutorLoader<MultiChain> MULTICHAIN_LOADER =
+    private static final DefaultExecutorLoader<MultiChain> MULTI_CHAIN_LOADER =
             new DefaultExecutorLoader<>("multi-chains loader");
 
     static {
-        globalLoaders().register(MULTICHAIN_LOADER);
+        globalLoaders().register(MULTI_CHAIN_LOADER);
     }
 
     private boolean fileExistenceRequired = true;
@@ -125,7 +125,7 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public static DefaultExecutorLoader<MultiChain> multiChainLoader() {
-        return MULTICHAIN_LOADER;
+        return MULTI_CHAIN_LOADER;
     }
 
     public boolean isFileExistenceRequired() {
@@ -318,7 +318,7 @@ public final class UseMultiChain extends FileOperation {
         if (strictMode) {
             multiChain.checkImplementationCompatibility();
         }
-        MULTICHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
+        MULTI_CHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
         return multiChain;
     }
 
@@ -361,7 +361,7 @@ public final class UseMultiChain extends FileOperation {
     public static void useAllInstalledInSharedContext() throws IOException {
         final UseMultiChain useMultiChain = UseMultiChain.getInstance();
         useMultiChain.setSessionId(GLOBAL_SHARED_SESSION_ID);
-        for (String folder : MULTICHAIN_PLATFORMS.installedSpecificationFolders()) {
+        for (String folder : MULTI_CHAIN_PLATFORMS.installedSpecificationFolders()) {
             final long t1 = System.nanoTime();
             final int n = useMultiChain.usePath(Paths.get(folder));
             final long t2 = System.nanoTime();

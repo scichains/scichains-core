@@ -79,14 +79,14 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
                 0;
         final int timingNumberOfPercentiles = parameters().getInteger(
                 UseSubChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseSubChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
-        final TimingStatistics.Settings settings = new TimingStatistics.Settings();
-        settings.setUniformPercentileLevels(timingNumberOfPercentiles);
-        chain.setTimingSettings(timingNumberOfCalls, settings);
-        timing.setSettings(timingNumberOfCalls, settings);
+        final TimingStatistics.Settings timingConfiguration = new TimingStatistics.Settings();
+        timingConfiguration.setUniformPercentileLevels(timingNumberOfPercentiles);
+        chain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
+        timing.setSettings(timingNumberOfCalls, timingConfiguration);
         try {
-            // Instead of overriding updateProperties, we should directly load
-            // all information from properties() here: we have no containers
-            // (like class fields) for storing properties between the calls
+            // Instead of overriding onChangeParameter, we should directly load
+            // all information from parameters() here: we have no containers
+            // (like class fields) for storing parameters between the calls
             // (the created chain cannot be a container: it is freed every time)
             chain.setParameters(parameters());
             t3 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;

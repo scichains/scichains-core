@@ -98,7 +98,7 @@ public class UseSettings extends FileOperation {
                     "Parameters below have less priority, they are used only if there are no " +
                     "parameters with same names in the input settings JSON or its section \"" +
                     SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
-                    "and if the following flag is not set.\n" +
+                    "and if the flag \"Ignore parameters below\" is not set.\n" +
                     "Normal state of this flag — set to true. Usually every sub-chain B1, B2, ... of your chain B " +
                     "is customized by some sub-settings of main JSON settings, specifying behaviour of the chain B." +
                     "However, sometimes you need just to pass all settings to next sub-chaining level " +
@@ -108,9 +108,10 @@ public class UseSettings extends FileOperation {
     public static final String IGNORE_PARAMETERS_PARAMETER_CAPTION = "Ignore parameters below";
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
             "If set, the behavior is completely determined by the input settings port and internal settings " +
-                    "of the sub-chain. All parameters below are ignored.\n" +
-                    "We recommend to set this flag always in multi-chain configuration, " +
-                    "if you allow and plan replacing some sub-chains in future.";
+                    "of the sub-chain. All parameters below are not included into the settings JSON " +
+                    "even if there is no input settings.\n" +
+                    "However: if there are parameters in the chain that are specified in the chain blocks " +
+                    "and not in the JSON, they are copied from the corresponding parameters below in any case.";
     public static final boolean IGNORE_PARAMETERS_PARAMETER_DEFAULT = false;
     // - Note: when we add IGNORE_PARAMETERS_PARAMETER_DESCRIPTION, we never add PORTS for sub-settings,
     // only (usually advanced) parameters - see UseSettings.addInputControlsAndPorts
