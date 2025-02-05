@@ -607,7 +607,7 @@ public class UseSettings extends FileOperation {
                     IGNORE_PARAMETERS_PARAMETER_CAPTION,
                     IGNORE_PARAMETERS_PARAMETER_DESCRIPTION,
                     IGNORE_PARAMETERS_PARAMETER_DEFAULT,
-                    false);
+                    true);
         }
         final SettingsSpecification specification = settingsCombiner.specification();
         final Map<String, SettingsSpecification.ControlConfExtension> controlExtensions =

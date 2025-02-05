@@ -1105,7 +1105,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 setDefaultJsonValue(json.get("default"));
             } catch (IllegalArgumentException e) {
                 throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                        + ": invalid control \"" + name + "\"", e);
+                        + ": invalid control \"" + name + "\" (" + e.getMessage() + ")", e);
             }
         }
 

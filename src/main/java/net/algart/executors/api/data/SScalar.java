@@ -480,6 +480,10 @@ public final class SScalar extends Data {
         return value.length() > len ? value.substring(0, 128) + "..." : value;
     }
 
+    public static SScalar empty() {
+        return new SScalar();
+    }
+
     public static SScalar of(Object value) {
         return new SScalar().setTo(value);
     }

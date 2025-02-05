@@ -47,7 +47,7 @@
     {
       "name": "doAction",
       "caption": "Do action",
-      "description": "If cleared, this function does nothing and just returns original unchanged matrix. Can be convenient if you want to  disable cropping sometimes.",
+      "description": "If cleared, this function does nothing and just returns original unchanged matrix. Can be convenient if you want to disable cropping sometimes.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true,

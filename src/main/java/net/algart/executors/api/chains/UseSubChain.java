@@ -560,7 +560,8 @@ public final class UseSubChain extends FileOperation {
                 .setCaption(DO_ACTION_CAPTION)
                 .setDescription(DO_ACTION_DESCRIPTION)
                 .setValueType(ParameterValueType.BOOLEAN)
-                .setDefaultJsonValue(JsonValue.TRUE));
+                .setDefaultJsonValue(JsonValue.TRUE)
+                .setAdvanced(false));
         result.addControl(createLogTimingControl(LOG_TIMING_NAME));
         result.addControl(createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
         result.addControl(createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));

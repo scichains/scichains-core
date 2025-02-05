@@ -1,1 +1,2 @@
-This folder is for storing resources
+This folder is for storing resources that can be used from executors,
+for example, via "${resource}/..." syntax inside "file" arguments.

@@ -380,7 +380,8 @@ public final class UseMultiChain extends FileOperation {
                     .setCaption(DO_ACTION_CAPTION)
                     .setDescription(DO_ACTION_DESCRIPTION)
                     .setValueType(ParameterValueType.BOOLEAN)
-                    .setDefaultJsonValue(JsonValue.TRUE));
+                    .setDefaultJsonValue(JsonValue.TRUE)
+                    .setAdvanced(false));
         }
         result.addControl(UseSubChain.createLogTimingControl(LOG_TIMING_NAME));
         result.addControl(UseSubChain.createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
@@ -406,7 +407,7 @@ public final class UseMultiChain extends FileOperation {
                 .setDescription(IGNORE_PARAMETERS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
                 .setValueType(ParameterValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.FALSE)
-                .setAdvanced(false));
+                .setAdvanced(true));
     }
 
     private UseSubChain createChainFactory() {

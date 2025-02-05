@@ -284,10 +284,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 SettingsCombiner.getSubSettingsByName(multiSettings, selectedChainName) :
                 parentSubSettings;
         // - Normally, settings for chain variant are stored inside multi-settings;
-        // but, if there is no multi-settings, then we allow to store it directly in the parent.
+        // but, if there are no multi-settings, then we allow to store it directly in the parent.
         // If both sections are present, we choose non-empty from them;
         // if both are non-empty, we choose more standard way: multiSettings.
-        // It is convenient to allow to set directly settings of a concrete variant,
+        // It is convenient to allow setting directly settings of a concrete variant
         // if we don't want to allow choosing from variants.
 
         // 1st overriding: by section @sss, sss is the name of selected chain

@@ -94,8 +94,10 @@ public class DefaultExecutorLoader<W> extends ExecutorLoader {
                 return result;
             }
             result = getWorker(sessionId, executorId);
-            Objects.requireNonNull(result, "Cannot find registered worker with id \"" +
-                    executorId + "\" for session \"" + sessionId + "\"");
+            if (result == null) {
+                throw new IllegalStateException("Cannot find registered worker with id \"" +
+                        executorId + "\" for session \"" + sessionId + "\"");
+            }
             return result;
         }
     }

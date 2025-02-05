@@ -1,4 +1,4 @@
-/*
+    /*
  * The MIT License (MIT)
  *
  * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
@@ -41,6 +41,7 @@ public final class PrintScalar extends ScalarFilter {
     private static final int MAX_RESULT_LENGTH = 50000;
 
     private String pattern = SCALAR_PATTERN;
+    private boolean doAction = true;
     private LogLevel logLevel = LogLevel.INFO;
     private String file = FileOperation.DEFAULT_EMPTY_FILE;
 
@@ -63,6 +64,15 @@ public final class PrintScalar extends ScalarFilter {
 
     public PrintScalar setPattern(String pattern) {
         this.pattern = nonNull(pattern);
+        return this;
+    }
+
+    public boolean isDoAction() {
+        return doAction;
+    }
+
+    public PrintScalar setDoAction(boolean doAction) {
+        this.doAction = doAction;
         return this;
     }
 
@@ -89,8 +99,12 @@ public final class PrintScalar extends ScalarFilter {
         getScalar(S).exchange(getInputScalar(S, true));
         getNumbers(X).exchange(getInputNumbers(X, true));
         getMat(M).exchange(getInputMat(M, true));
-        final String result = print(source::getValue, isOutputNecessary(defaultOutputPortName()));
-        return SScalar.of(result);
+        if (doAction) {
+            final String result = print(source::getValue, isOutputNecessary(defaultOutputPortName()));
+            return SScalar.of(result);
+        } else {
+            return SScalar.empty();
+        }
     }
 
     public String print(Supplier<String> source, boolean resultRequired) {

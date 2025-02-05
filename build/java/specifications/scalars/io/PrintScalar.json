@@ -60,6 +60,13 @@
       "default": "$$$"
     },
     {
+      "name": "doAction",
+      "caption": "Do action",
+      "description": "If cleared, this function does nothing besides copying \"s\", \"x\", \"m\" ports. Can be convenient if you want to enable/disable printing cropping sometimes.",
+      "value_type": "boolean",
+      "edition_type": "value"
+    },
+    {
       "name": "logLevel",
       "caption": "Logging level",
       "value_type": "String",
