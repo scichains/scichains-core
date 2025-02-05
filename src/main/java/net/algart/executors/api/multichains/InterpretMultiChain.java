@@ -32,9 +32,9 @@ import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
-import net.algart.executors.api.settings.UseSettings;
 import net.algart.json.Jsons;
 
 import java.lang.System.Logger.Level;

@@ -36,6 +36,13 @@ import java.util.*;
 public class Parameters implements Map<String, Object> {
     private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<>());
 
+    public Parameters() {
+    }
+
+    public Parameters(Map<String, Object> m) {
+        map.putAll(m);
+    }
+
     public boolean getBoolean(String name) throws NoValidParameterException {
         final Object o = getAndCheckNull(name, "boolean");
         final String s = o.toString();

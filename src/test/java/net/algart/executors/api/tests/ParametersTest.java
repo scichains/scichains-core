@@ -91,6 +91,10 @@ public class ParametersTest {
             show(p, name);
         }
         show(p, "absent");
+        Parameters other = new Parameters(p);
+        if (!other.equals(p)) {
+            throw new AssertionError();
+        }
 
         System.out.println();
         System.out.println();
