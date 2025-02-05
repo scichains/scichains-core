@@ -26,13 +26,14 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.system.ControlEditionType;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.*;
 import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.chains.MainChainSettingsInformation;
 import net.algart.executors.api.chains.UseSubChain;
@@ -58,7 +59,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
     // for executing anything; but it is used as a context ID for multi-chain settings combiner.
     private final MultiChainSpecification specification;
-    private final String chainSessionId;
+    private final UseSubChain chainFactory;
     private final List<ChainSpecification> chainSpecifications;
     private final List<ChainSpecification> blockedChainSpecifications;
     private final Set<String> blockedChainSpecificationNames;
@@ -80,10 +81,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             throws IOException {
         renewContextId();
         this.specification = Objects.requireNonNull(specification, "Null specification");
-        Objects.requireNonNull(chainFactory, "Null chainFactory");
+        this.chainFactory = Objects.requireNonNull(chainFactory, "Null chainFactory");
         Objects.requireNonNull(settingsFactory, "Null settingsFactory");
         this.specification.checkCompleteness();
-        this.chainSessionId = chainFactory.getSessionId();
         this.chainSpecifications = specification.readChainVariants();
         this.blockedChainSpecifications = new ArrayList<>();
         this.blockedChainSpecificationNames = new LinkedHashSet<>();
@@ -341,6 +341,22 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
+    public Executor toExecutor(InstantiationMode instantiationMode) {
+        final ExecutorFactory executorFactory = chainFactory.executorFactory();
+        ExecutionBlock result;
+        try {
+            result = executorFactory.newExecutor(id(), instantiationMode);
+            // - we suppose that someone has a registered executor, which execute this chain
+        } catch (ClassNotFoundException | ExecutorNotFoundException e) {
+            throw new IllegalStateException("Multi-chain with ID " + id() + " was not successfully registered", e);
+        }
+        if (!(result instanceof Executor)) {
+            throw new IllegalStateException("Multi-chain with ID " + id() + " is executed by some non-standard way: "
+                    + "its executor is not an instance of Executor class");
+        }
+        return (Executor) result;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("multi-chain \""
@@ -455,7 +471,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Map<String, Chain> result = new LinkedHashMap<>();
         for (ChainSpecification specification : this.chainSpecifications) {
             final String executorId = specification.chainId();
-            final Chain chain = registeredChain(chainSessionId, executorId);
+            final Chain chain = registeredChain(chainFactory.getSessionId(), executorId);
             result.put(executorId, chain);
         }
         return result;

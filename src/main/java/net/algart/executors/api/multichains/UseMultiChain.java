@@ -26,6 +26,7 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.ChainLoadingException;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
@@ -35,6 +36,7 @@ import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.json.Jsons;
@@ -110,6 +112,14 @@ public final class UseMultiChain extends FileOperation {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
+    public static UseMultiChain getSessionInstance(String sessionId) {
+        return setSession(new UseMultiChain(), sessionId);
+    }
+
+    public static UseMultiChain getSharedInstance() {
+        return setShared(new UseMultiChain());
+    }
+
     public static UseMultiChain getInstance() {
         return new UseMultiChain();
     }
@@ -143,6 +153,29 @@ public final class UseMultiChain extends FileOperation {
     public UseMultiChain setStrictMode(boolean strictMode) {
         this.strictMode = strictMode;
         return this;
+    }
+
+    public static Executor newExecutor(
+            String sessionId,
+            MultiChainSpecification specification,
+            InstantiationMode instantiationMode)
+            throws IOException {
+        return getSessionInstance(sessionId).toExecutor(specification, instantiationMode);
+    }
+
+    public static Executor newExecutor(String sessionId, Path multiChainFile, InstantiationMode instantiationMode)
+            throws IOException {
+        return newExecutor(sessionId, MultiChainSpecification.read(multiChainFile), instantiationMode);
+    }
+
+    public Executor toExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
+            throws IOException {
+        //noinspection resource
+        return use(specification).toExecutor(instantiationMode);
+    }
+
+    public Executor toExecutor(Path multiChainFile, InstantiationMode instantiationMode) throws IOException {
+        return toExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
     }
 
     @Override
@@ -268,11 +301,11 @@ public final class UseMultiChain extends FileOperation {
         }
     }
 
-    public void use(MultiChainSpecification multiChainSpecification) throws IOException {
+    public MultiChain use(MultiChainSpecification multiChainSpecification) throws IOException {
         // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
         final UseSubChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
-        use(multiChainSpecification, chainFactory, settingsFactory);
+        return use(multiChainSpecification, chainFactory, settingsFactory);
     }
 
     public MultiChain use(
@@ -306,7 +339,7 @@ public final class UseMultiChain extends FileOperation {
         UseSubChain.addSettingsPorts(result);
         final SettingsCombiner multiChainSettingsCombiner = multiChain.multiChainSettingsCombiner();
         addSystemParameters(result, multiChain);
-        UseSettings.addExecuteMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsCombiner());
+        UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsCombiner());
         // - also adds ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary;
         // note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsCombiner
         result.setSettings(multiChainSettingsCombiner.specification());

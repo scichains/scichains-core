@@ -753,6 +753,17 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         this.sessionId = sessionId;
     }
 
+    public static <T extends ExecutionBlock> T setSession(T executor, String sessionId) {
+        Objects.requireNonNull(executor, "Null executor");
+        Objects.requireNonNull(sessionId, "Null sessionId");
+        executor.setSessionId(sessionId);
+        return executor;
+    }
+
+    public static <T extends ExecutionBlock> T setShared(T executor) {
+        return setSession(executor, GLOBAL_SHARED_SESSION_ID);
+    }
+
     public final String getExecutorId() {
         return executorSpecification == null ? null : executorSpecification.getId();
     }

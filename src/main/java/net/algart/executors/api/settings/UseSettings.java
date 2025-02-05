@@ -49,7 +49,7 @@ public class UseSettings extends FileOperation {
     public static final String OUTPUT_SPLIT_SPECIFICATION = "split-specification";
     public static final String OUTPUT_GET_NAMES_SPECIFICATION = "get-names-specification";
 
-    public static final String SETTINGS_NAME_OUTPUT_NAME = "_cs___settings_name";
+    public static final String SETTINGS_NAME_OUTPUT_NAME = "_ss___settings_name";
     public static final String SETTINGS_NAME_OUTPUT_CAPTION = "settings_name";
     public static final String SETTINGS_ID_OUTPUT_NAME = "_ss___settings_id";
     public static final String SETTINGS_ID_OUTPUT_CAPTION = "Settings\u00A0ID";
@@ -428,16 +428,16 @@ public class UseSettings extends FileOperation {
         useSettings.useAllInstalled();
     }
 
-    // Used for adding controls and ports to ExecuteSubChain executor
-    public static void addExecuteSubChainControlsAndPorts(
+    // Used for adding controls and ports to InterpretSubChain executor
+    public static void addSubChainControlsAndPorts(
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, true, false);
         addSystemOutputPorts(result);
     }
 
-    // Used for adding controls and ports to ExecuteMultiChain executor
-    public static void addExecuteMultiChainControlsAndPorts(
+    // Used for adding controls and ports to InterpretMultiChain executor
+    public static void addMultiChainControlsAndPorts(
             ExecutorSpecification result,
             SettingsCombiner settingsCombiner) {
         addInputControlsAndPorts(result, settingsCombiner, false, false, true);
@@ -459,7 +459,7 @@ public class UseSettings extends FileOperation {
      *     <li>if this function uses a directory, then only "main-settings-combiner" JSONs will be loaded;</li>
      *     <li>at least 1 actual executor must exist in the list of all executors, used by this function (but it
      *     can be changed by overriding {@link #isExistingSettingsRequired()});</li>
-     *     <li>list of more than 1 paths is not supported;</li>
+     *     <li>a list of more than one path is not supported;</li>
      *     <li>executors will contain "owner" section and the "role" will be set to "main":
      *     it helps execution system to detect, which
      *     from execution blocks is the "main" settings for the current chain &mdash; its owner ID will

@@ -26,6 +26,7 @@ package net.algart.executors.api.chains;
 
 import jakarta.json.JsonValue;
 import net.algart.arrays.Arrays;
+import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
@@ -116,6 +117,12 @@ public final class UseSubChain extends FileOperation {
     private boolean multithreading = false;
     private boolean executeAll = false;
 
+    private volatile ExecutorFactory executorFactory = null;
+    // - Note: this factory is not shared with sub-chains called from blocks of this chain.
+    // This could be implemented in executeLoadingTimeBlocksWithoutInputs, but there is no serious point
+    // in doing so: it is a minor optimization, and it can lead to potential problems with freeing resources
+    // (cache inside the executor factory).
+
     private ExecutorSpecification chainExecutorSpecification = null;
 
     final AtomicInteger loadedChainsCount = new AtomicInteger(0);
@@ -125,18 +132,12 @@ public final class UseSubChain extends FileOperation {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
-    public static UseSubChain getInstance() {
-        return new UseSubChain();
-    }
-
     public static UseSubChain getSessionInstance(String sessionId) {
-        final UseSubChain result = new UseSubChain();
-        result.setSessionId(sessionId);
-        return result;
+        return setSession(new UseSubChain(), sessionId);
     }
 
-    public static UseSubChain getShared() {
-        return getSessionInstance(GLOBAL_SHARED_SESSION_ID);
+    public static UseSubChain getSharedInstance() {
+        return setShared(new UseSubChain());
     }
 
     public static DefaultExecutorLoader<Chain> subChainLoader() {
@@ -207,6 +208,27 @@ public final class UseSubChain extends FileOperation {
         return chainExecutorSpecification;
     }
 
+    public static Executor newExecutor(
+            String sessionId,
+            ChainSpecification chainSpecification,
+            InstantiationMode instantiationMode) {
+        return getSessionInstance(sessionId).toExecutor(chainSpecification, instantiationMode);
+    }
+
+    public static Executor newExecutor(String sessionId, Path chainFile, InstantiationMode instantiationMode)
+            throws IOException {
+        return newExecutor(sessionId, ChainSpecification.read(chainFile), instantiationMode);
+    }
+
+    public Executor toExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
+        //noinspection resource
+        return use(chainSpecification).toExecutor(instantiationMode);
+    }
+
+    public Executor toExecutor(Path chainFile, InstantiationMode instantiationMode) throws IOException {
+        return toExecutor(ChainSpecification.read(chainFile), instantiationMode);
+    }
+
     @Override
     public void process() {
         if (!this.getFile().trim().isEmpty()) {
@@ -223,6 +245,18 @@ public final class UseSubChain extends FileOperation {
             }
             useContent(subChainJsonContent);
         }
+    }
+
+    public ExecutorFactory executorFactory() {
+        final String sessionId = getSessionId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot register new chain: session ID was not set");
+        }
+        var executorFactory = this.executorFactory;
+        if (executorFactory == null) {
+            this.executorFactory = executorFactory = globalLoaders().newFactory(sessionId);
+        }
+        return executorFactory;
     }
 
     public void useSeveralPaths(List<Path> chainSpecificationPaths) throws IOException {
@@ -315,26 +349,8 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public static Executor newExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
-        return getShared().toExecutor(chainSpecification, instantiationMode);
-    }
-
-    public static Executor newExecutor(Path containingJsonFile, InstantiationMode instantiationMode)
-            throws IOException {
-        return newExecutor(ChainSpecification.read(containingJsonFile), instantiationMode);
-    }
-
-    public Executor toExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
-        //noinspection resource
-        return use(chainSpecification).toExecutor(instantiationMode);
-    }
-
-    public Executor toExecutor(Path containingJsonFile, InstantiationMode instantiationMode) throws IOException {
-        return toExecutor(ChainSpecification.read(containingJsonFile), instantiationMode);
-    }
-
     public static void useAllInstalledInSharedContext() throws IOException {
-        final UseSubChain useSubChain = UseSubChain.getShared();
+        final UseSubChain useSubChain = UseSubChain.getSharedInstance();
         for (ExtensionSpecification.Platform platform : SUB_CHAIN_PLATFORMS.installedPlatforms()) {
             if (platform.hasSpecifications()) {
                 useInstalledFolder(useSubChain, platform.specificationsFolder(), platform,
@@ -496,11 +512,7 @@ public final class UseSubChain extends FileOperation {
 
     private Chain register(ChainSpecification chainSpecification) {
         Objects.requireNonNull(chainSpecification, "Null chainSpecification");
-        final String sessionId = getSessionId();
-        if (sessionId == null) {
-            throw new IllegalStateException("Cannot register new chain: session ID was not set");
-        }
-        final ExecutorFactory executorFactory = globalLoaders().newFactory(sessionId);
+        final ExecutorFactory executorFactory = executorFactory();
         Chain chain = Chain.of(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {
             // - If the chain was loaded not from file, but from the executor text parameter,
@@ -514,7 +526,7 @@ public final class UseSubChain extends FileOperation {
             chain.setExecuteAll(executeAll);
         }
         SUB_CHAIN_LOADER.registerWorker(
-                sessionId,
+                executorFactory.sessionId(),
                 buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(chain),
                 chain);
         loadedChainsCount.incrementAndGet();
@@ -565,6 +577,34 @@ public final class UseSubChain extends FileOperation {
         return chainExecutorSpecification = result;
     }
 
+    private void executeLoadingTimeBlocksWithoutInputs(
+            Chain chain,
+            boolean executeIsolatedLoadingTimeFunctions) {
+        for (ChainBlock block : chain.getAllBlocks().values()) {
+            if (block.isExecutedAtLoadingTime()) {
+                final boolean executorIsCreatedNow = block.executor == null;
+                block.reinitialize(true);
+                if (block.numberOfConnectedInputPorts() == 0) {
+                    // Note: we do not execute loading-time SUBCHAINS,
+                    // only isolated blocks without input ports.
+                    // It is enough for most needs.
+                    final ExecutionBlock executor = block.getExecutor();
+                    if (executeIsolatedLoadingTimeFunctions || executor instanceof UseSettings) {
+                        // Note: UseSettings and UseChainSettings are executed always
+                        try {
+                            executor.reset();
+                            executor.execute(ExecutionMode.SILENT);
+                        } catch (ChainLoadingException e) {
+                            throw e;
+                        } catch (RuntimeException | AssertionError | IOError e) {
+                            throw new ChainLoadingException(e.getMessage(), e);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private static void useInstalledFolder(
             UseSubChain useSubChain,
             Path folder,
@@ -586,33 +626,6 @@ public final class UseSubChain extends FileOperation {
         return info == null ? "" : ", " + info.chainSettingsCombiner();
     }
 
-    private static void executeLoadingTimeBlocksWithoutInputs(
-            Chain chain,
-            boolean executeIsolatedLoadingTimeFunctions) {
-        for (ChainBlock block : chain.getAllBlocks().values()) {
-            if (block.isExecutedAtLoadingTime()) {
-                block.reinitialize(true);
-                if (block.numberOfConnectedInputPorts() == 0) {
-                    // Note: we do not execute loading-time SUBCHAINS,
-                    // only isolated blocks without input ports.
-                    // It is enough for most needs.
-                    final var executor = block.getExecutor();
-                    if (executeIsolatedLoadingTimeFunctions || executor instanceof UseSettings) {
-                        // Note: UseSettings and UseChainSettings are executed always
-                        try {
-                            executor.reset();
-                            executor.execute(ExecutionMode.SILENT);
-                        } catch (ChainLoadingException e) {
-                            throw e;
-                        } catch (RuntimeException | AssertionError | IOError e) {
-                            throw new ChainLoadingException(e.getMessage(), e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
         final ChainBlock useChainSettingsBlock = findUseChainSettings(chain);
         if (useChainSettingsBlock == null) {
@@ -622,7 +635,7 @@ public final class UseSubChain extends FileOperation {
         final SettingsCombiner mainSettingsCombiner = useChainSettings.settingsCombiner();
         // - mainSettingsCombiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
         chain.setCustomChainInformation(new MainChainSettingsInformation(chain, mainSettingsCombiner));
-        UseSettings.addExecuteSubChainControlsAndPorts(result, mainSettingsCombiner);
+        UseSettings.addSubChainControlsAndPorts(result, mainSettingsCombiner);
         result.setSettings(mainSettingsCombiner.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettingsCombiner.id());
         addSettingsPorts(result);

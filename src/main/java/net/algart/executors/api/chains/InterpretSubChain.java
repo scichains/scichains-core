@@ -240,7 +240,7 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
             // - we check the port to be on the safe side; in correctly created chain, it must exist
             getScalar(CombineSettings.SETTINGS).setTo(settingsString);
         }
-        final Level level = logSettings ? Level.WARNING : Level.DEBUG;
+        final Level level = logSettings ? Level.INFO : Level.DEBUG;
         if (!parentSettings.isEmpty()) {
             LOG.log(level, () -> String.format(Locale.US,
                     "Customizing chain \"%s\" with help of %s \"%s\" (called from %s):\n%s%s",

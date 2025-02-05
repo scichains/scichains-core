@@ -26,6 +26,8 @@ package net.algart.executors.api.system.tests;
 
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.extensions.InstalledExtensions;
+import net.algart.executors.api.system.ExecutorFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -33,6 +35,7 @@ import java.nio.file.Paths;
 
 public class SimpleChainTest {
     public static void main(String[] args) throws IOException {
+        System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
         if (args.length < 2) {
             System.out.printf("Usage: %s chain.chain result_1.chain [result_2.chain]%n",
                     ChainSpecification.class.getName());
@@ -54,7 +57,7 @@ public class SimpleChainTest {
 
         long t1 = System.nanoTime();
         //noinspection resource
-        Chain chain = Chain.of(null, null, chainSpecification);
+        Chain chain = Chain.of(null, ExecutorFactory.newDefaultInstance(), chainSpecification);
         long t2 = System.nanoTime();
         System.out.printf("%nFull chain created in %.3f ms:%n", (t2 - t1) * 1e-6);
         System.out.println(chain.toString(true));

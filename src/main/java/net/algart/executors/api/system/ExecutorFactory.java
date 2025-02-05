@@ -43,6 +43,12 @@ import net.algart.executors.api.chains.Chain;
  * in JavaScript interpreter, etc.
  */
 public interface ExecutorFactory extends ExecutorSpecificationFactory {
+    /**
+     * Returns the session ID for which this factory creates executors.
+     *
+     * @return the session ID of this factory.
+     */
+    String sessionId();
 
     /**
      * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification,
@@ -63,6 +69,10 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      */
     ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode) throws
             ClassNotFoundException, ExecutorNotFoundException;
+
+    static ExecutorFactory newDefaultInstance() {
+        return newDefaultInstance(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+    }
 
     static ExecutorFactory newDefaultInstance(String sessionId) {
         return ExecutionBlock.globalLoaders().newFactory(sessionId);

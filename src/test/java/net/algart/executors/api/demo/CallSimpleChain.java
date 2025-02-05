@@ -63,7 +63,7 @@ public class CallSimpleChain {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (ExecutionBlock executor = UseSubChain.newExecutor(chainPath, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = UseSubChain.newExecutor("MySession", chainPath, InstantiationMode.REQUEST_ALL)) {
             printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);
