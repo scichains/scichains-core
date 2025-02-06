@@ -50,7 +50,7 @@ public final class SubChainToSettingsCombiner {
         final Path settingsSpecificationFile = Paths.get(args[1]);
         final String executorName = args[2];
 
-        final ExecutorFactory executorFactory = ExecutorFactory.newDefaultInstance(SESSION_ID);
+        final ExecutorFactory executorFactory = ExecutorFactory.newFactory(SESSION_ID);
         // - ExecutorFactory is necessary:
         // 1) to find input/output/data blocks;
         // 2) to find default values of parameters in data blocks.

@@ -70,11 +70,11 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
     ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode) throws
             ClassNotFoundException, ExecutorNotFoundException;
 
-    static ExecutorFactory newDefaultInstance() {
-        return newDefaultInstance(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+    static ExecutorFactory newSharedFactory() {
+        return newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
     }
 
-    static ExecutorFactory newDefaultInstance(String sessionId) {
+    static ExecutorFactory newFactory(String sessionId) {
         return ExecutionBlock.globalLoaders().newFactory(sessionId);
     }
 }

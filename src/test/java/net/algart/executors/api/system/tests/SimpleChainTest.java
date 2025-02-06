@@ -57,7 +57,7 @@ public class SimpleChainTest {
 
         long t1 = System.nanoTime();
         //noinspection resource
-        Chain chain = Chain.of(null, ExecutorFactory.newDefaultInstance(), chainSpecification);
+        Chain chain = Chain.of(null, ExecutorFactory.newSharedFactory(), chainSpecification);
         long t2 = System.nanoTime();
         System.out.printf("%nFull chain created in %.3f ms:%n", (t2 - t1) * 1e-6);
         System.out.println(chain.toString(true));
