@@ -25,12 +25,11 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.system.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
-import net.algart.executors.api.chains.UseSubChain;
 import net.algart.io.MatrixIO;
 
 import javax.imageio.ImageIO;
@@ -86,7 +85,7 @@ public class CallSimpleChain {
     }
 
     static void printSubChainExecutors() {
-        final DefaultExecutorLoader<Chain> loader = UseSubChain.subChainLoader();
+        final ExecutorLoader loader = UseSubChain.subChainLoader();
         System.out.printf("All registered sub-chain IDs: %s%n",
                 loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
         System.out.println("All registered sub-chains:");

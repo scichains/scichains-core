@@ -427,11 +427,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    // settingsControlConf.setGroupId(chain.id());
-                    // - some deprecated idea:
-                    // if the controls are grouped into some logical groups, it may be ID of the group
                     final var specification = UseSubChain.getMainChainSettingsSpecification(chain);
                     if (specification != null) {
+                        // - TODO!! remove this comment
                         // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setSettingsId(specification.getId());
                         settingsControlConf.setValueClassName(specification.className());
@@ -440,7 +438,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 }
                 if (controls.put(name, settingsControlConf) != null) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" has a name, identical "
-                            + "to one of multi-chain parameters; it is not allowed" +
+                            + "to one of multi-chain parameters; this is not allowed" +
                             multiChainSpecificationFileMessage);
                 }
             }
