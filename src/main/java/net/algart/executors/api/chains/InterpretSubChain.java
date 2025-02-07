@@ -185,17 +185,16 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final MainChainSettingsInformation settingsInformation = UseSubChain.getMainChainSettingsInformation(chain);
-        if (settingsInformation == null) {
+        final SettingsCombiner combiner = chain.getMainSettingsCombiner();
+        if (combiner == null) {
             return;
         }
-        final SettingsCombiner combiner = settingsInformation.chainSettingsCombiner();
-        final ChainBlock settingsBlock = chain.getBlock(settingsInformation.chainCombineSettingsBlockId());
+        final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
         // Note: the chain is a cleanCopy() of the original chain, so, we need
         // to find CombineSettings block again by its ID
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
-                    + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + chain);
+                    + chain.getMainSettingsBlockId() + "' not found in the chain " + chain);
         final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
         if (settingsSpecification != null) {
             // - In the current version, settingsSpecification will usually be null.

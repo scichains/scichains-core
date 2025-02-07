@@ -28,24 +28,25 @@ import net.algart.executors.api.settings.SettingsCombiner;
 
 import java.util.Objects;
 
+@Deprecated
 public final class MainChainSettingsInformation {
-    private final String chainCombineSettingsBlockId;
-    private final SettingsCombiner chainSettingsCombiner;
+    private final String mainCombineSettingsBlockId;
+    private final SettingsCombiner mainSettingsCombiner;
 
-    MainChainSettingsInformation(Chain chain, SettingsCombiner chainSettingsCombiner) {
+    MainChainSettingsInformation(Chain chain, SettingsCombiner mainSettingsCombiner) {
         Objects.requireNonNull(chain, "Null chain");
-        Objects.requireNonNull(chainSettingsCombiner, "Null chainSettingsCombiner");
-        this.chainCombineSettingsBlockId = findCombineSettings(chain, chainSettingsCombiner).getId();
-        assert this.chainCombineSettingsBlockId != null;
-        this.chainSettingsCombiner = chainSettingsCombiner;
+        Objects.requireNonNull(mainSettingsCombiner, "Null chainSettingsCombiner");
+        this.mainCombineSettingsBlockId = findCombineSettings(chain, mainSettingsCombiner).getId();
+        assert this.mainCombineSettingsBlockId != null;
+        this.mainSettingsCombiner = mainSettingsCombiner;
     }
 
     public String chainCombineSettingsBlockId() {
-        return chainCombineSettingsBlockId;
+        return mainCombineSettingsBlockId;
     }
 
     public SettingsCombiner chainSettingsCombiner() {
-        return chainSettingsCombiner;
+        return mainSettingsCombiner;
     }
 
     private static ChainBlock findCombineSettings(Chain chain, SettingsCombiner combiner) {

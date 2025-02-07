@@ -33,7 +33,6 @@ import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
-import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.api.settings.UseChainSettings;
@@ -364,16 +363,6 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public static MainChainSettingsInformation getMainChainSettingsInformation(Chain chain) {
-        final Object result = chain.getCustomChainInformation();
-        return result instanceof MainChainSettingsInformation ? (MainChainSettingsInformation) result : null;
-    }
-
-    public static SettingsSpecification getMainChainSettingsSpecification(Chain chain) {
-        final MainChainSettingsInformation information = getMainChainSettingsInformation(chain);
-        return information != null ? information.chainSettingsCombiner().specification() : null;
-    }
-
     public static ExecutorSpecification.ControlConf createLogTimingControl(String parameterName) {
         ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(parameterName);
@@ -619,8 +608,8 @@ public final class UseSubChain extends FileOperation {
         if (chain.isEmpty()) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        final MainChainSettingsInformation info = getMainChainSettingsInformation(chain.get());
-        return info == null ? "" : ", " + info.chainSettingsCombiner();
+        final SettingsCombiner mainSettingsCombiner = chain.get().getMainSettingsCombiner();
+        return mainSettingsCombiner == null ? "" : ", " + mainSettingsCombiner;
     }
 
     private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
@@ -632,17 +621,20 @@ public final class UseSubChain extends FileOperation {
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
         final SettingsCombiner mainSettingsCombiner = useChainSettings.settingsCombiner();
         // - mainSettingsCombiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setCustomChainInformation(new MainChainSettingsInformation(chain, mainSettingsCombiner));
+        chain.setMainSettingsCombiner(mainSettingsCombiner);
         UseSettings.addSubChainControlsAndPorts(result, mainSettingsCombiner);
         result.setSettings(mainSettingsCombiner.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettingsCombiner.id());
         addSettingsPorts(result);
     }
 
-    public static ChainBlock findUseChainSettings(Chain chain) {
+
+    private static ChainBlock findUseChainSettings(Chain chain) {
+        // The current version uses the simplest algorithm for searching main settings: the first UseChainSettings.
         for (ChainBlock block : chain.getAllBlocks().values()) {
             if (block.isExecutedAtLoadingTime()) {
                 if (block.getExecutor() instanceof UseChainSettings) {
+                    // - this means: this executor is the main settings combiner
                     return block;
                 }
             }

@@ -31,13 +31,10 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.*;
-import net.algart.executors.api.settings.CombineSettings;
-import net.algart.executors.api.chains.MainChainSettingsInformation;
-import net.algart.executors.api.chains.UseSubChain;
-import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -255,9 +252,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executorSettings, "Null executorSettings");
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final MainChainSettingsInformation settingsInformation =
-                UseSubChain.getMainChainSettingsInformation(selectedChain);
-        if (settingsInformation == null) {
+        SettingsCombiner mainSettingsCombiner = selectedChain.getMainSettingsCombiner();
+        if (mainSettingsCombiner == null) {
             // - should not occur while normal usage (selecting chain from chainMap() result)
             throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
         }
@@ -275,7 +271,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
         final String multiChainName = name();
         final String selectedChainName = selectedChain.name();
-        final Set<String> selectedSubChainActualKeys = settingsInformation.chainSettingsCombiner().settingsKeySet();
+        final Set<String> selectedSubChainActualKeys = mainSettingsCombiner.settingsKeySet();
 
         final JsonObject multiSettings = SettingsCombiner.getSubSettingsByName(parentSettings, multiChainName);
         final JsonObject parentSubSettings = SettingsCombiner.getSubSettingsByName(parentSettings, selectedChainName);
@@ -317,16 +313,15 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     public static void setSettings(String selectedChainSettingsString, Chain selectedChain) {
         Objects.requireNonNull(selectedChainSettingsString, "Null selectedChainSettingsString");
         Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final MainChainSettingsInformation settingsInformation =
-                UseSubChain.getMainChainSettingsInformation(selectedChain);
-        if (settingsInformation == null) {
+        final String mainSettingsBlockId = selectedChain.getMainSettingsBlockId();
+        if (mainSettingsBlockId == null) {
             // - should not occur while normal usage (selecting chain from chainMap() result)
             throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
         }
-        final ChainBlock settingsBlock = selectedChain.getBlock(settingsInformation.chainCombineSettingsBlockId());
+        final ChainBlock settingsBlock = selectedChain.getBlock(mainSettingsBlockId);
         if (settingsBlock == null)
-            throw new AssertionError("Dynamic executor '"
-                    + settingsInformation.chainCombineSettingsBlockId() + "' not found in the chain " + selectedChain);
+            throw new AssertionError("Main settings block  '"
+                    + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
         settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(selectedChainSettingsString));
     }
 
@@ -415,8 +410,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 try {
                     SettingsSpecification.checkParameterName(name, null);
                 } catch (JsonException e) {
-                    throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name: "
-                            + "it is not allowed as a parameter name in the settings" + multiChainSpecificationFileMessage, e);
+                    throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name, "
+                            + "not allowed as a parameter name in the settings" +
+                            multiChainSpecificationFileMessage, e);
                 }
                 final ExecutorSpecification.ControlConf settingsControlConf = new ExecutorSpecification.ControlConf()
                         .setValueType(ParameterValueType.SETTINGS)
@@ -427,9 +423,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    final var specification = UseSubChain.getMainChainSettingsSpecification(chain);
-                    if (specification != null) {
-                        // - TODO!! remove this comment
+                    final SettingsCombiner mainSettingsCombiner = chain.getMainSettingsCombiner();
+                    if (mainSettingsCombiner != null) {
+                        final SettingsSpecification specification = mainSettingsCombiner.specification();
+                        // - TODO!! remove this comment: don't create the control in this case
                         // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setSettingsId(specification.getId());
                         settingsControlConf.setValueClassName(specification.className());
@@ -477,11 +474,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private Chain registeredChain(String sessionId, String executorId) {
         final Chain chain = InterpretSubChain.registeredChain(sessionId, executorId);
-        if (UseSubChain.getMainChainSettingsInformation(chain) == null) {
+        if (chain.getMainSettingsCombiner() == null) {
             throw new IllegalStateException("Chain \"" + chain.name()
                     + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()
-                    + "\" (ID \"" + id() + "\") has no built-in settings; "
-                    + "it is not allowed inside multi-chains");
+                    + "\" (ID \"" + id() + "\") has no built-in main settings; "
+                    + "this is not allowed inside multi-chains");
         }
         return chain;
     }

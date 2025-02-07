@@ -29,8 +29,10 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.TimingStatistics;
 
@@ -75,6 +77,8 @@ public final class Chain implements AutoCloseable {
     // By default, disabled: measuring time while multithreading execution cannot be correct;
     // instead, we will measure the time of SubChain executor, which executes this chain.
     // But this flag can be set by debugging applications, like ExecutingChain class.
+    private volatile String mainSettingsBlockId = null;
+    private volatile SettingsCombiner mainSettingsCombiner = null;
     private volatile Object customChainInformation = null;
 
     private volatile List<ChainBlock> allInputs = null;
@@ -117,6 +121,8 @@ public final class Chain implements AutoCloseable {
         this.ignoreExceptions = chain.ignoreExceptions;
         this.timingByExecutorsEnabled = chain.timingByExecutorsEnabled;
 
+        this.mainSettingsCombiner = chain.mainSettingsCombiner;
+        this.mainSettingsBlockId = chain.mainSettingsBlockId;
         this.customChainInformation = chain.customChainInformation;
 
         this.allInputs = null;
@@ -240,6 +246,10 @@ public final class Chain implements AutoCloseable {
         return description;
     }
 
+    public String canonicalName() {
+        return ExecutorSpecification.className(category(), name());
+    }
+
     public Set<String> tags() {
         return Collections.unmodifiableSet(tags);
     }
@@ -321,6 +331,40 @@ public final class Chain implements AutoCloseable {
     public Chain setCustomChainInformation(Object customChainInformation) {
         this.customChainInformation = customChainInformation;
         return this;
+    }
+
+    public String getMainSettingsBlockId() {
+        return mainSettingsBlockId;
+    }
+
+    public SettingsCombiner getMainSettingsCombiner() {
+        return mainSettingsCombiner;
+    }
+
+    public void setMainSettingsCombiner(SettingsCombiner mainSettingsCombiner) {
+        Objects.requireNonNull(mainSettingsCombiner, "Null mainSettingsCombiner");
+        final String id = mainSettingsCombiner.id();
+        assert id != null;
+        ChainBlock mainSettingsBlock = null;
+        for (ChainBlock block : allBlocks.values()) {
+            final ChainSpecification.ChainBlockConf blockConfJson = block.getBlockConfJson();
+            if (blockConfJson == null) {
+                continue;
+            }
+            final String blockExecutorId = blockConfJson.getExecutorId();
+            assert blockExecutorId != null;
+            if (id.equals(blockExecutorId)) {
+                mainSettingsBlock = block;
+                break;
+            }
+        }
+        if (mainSettingsBlock == null) {
+            throw new IllegalStateException("Sub-chain " + canonicalName()
+                    + " does not contain the dynamic settings combiner '" + id
+                    + "', created by its UseChainSettings function");
+        }
+        this.mainSettingsBlockId = mainSettingsBlock.getId();
+        this.mainSettingsCombiner = mainSettingsCombiner;
     }
 
     public Map<String, ChainBlock> getAllBlocks() {
