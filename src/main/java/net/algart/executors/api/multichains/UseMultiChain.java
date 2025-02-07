@@ -164,17 +164,17 @@ public final class UseMultiChain extends FileOperation {
             MultiChainSpecification specification,
             InstantiationMode instantiationMode)
             throws IOException {
-        return getSharedInstance().toExecutor(specification, instantiationMode);
+        return getSharedInstance().newExecutor(specification, instantiationMode);
     }
 
-    public Executor toExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
+    public Executor newExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
             throws IOException {
         //noinspection resource
         return use(specification).toExecutor(instantiationMode);
     }
 
-    public Executor toExecutor(Path multiChainFile, InstantiationMode instantiationMode) throws IOException {
-        return toExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
+    public Executor newExecutor(Path multiChainFile, InstantiationMode instantiationMode) throws IOException {
+        return newExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
     }
 
     @Override
