@@ -27,6 +27,8 @@ package net.algart.executors.api.system;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
 
+import java.util.Objects;
+
 /**
  * Factory of {@link ExecutionBlock executors}.
  *
@@ -71,10 +73,20 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
             ClassNotFoundException, ExecutorNotFoundException;
 
     static ExecutorFactory newSharedFactory() {
-        return newFactory(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+        return newSharedFactory(ExecutionBlock.globalLoaders());
     }
 
     static ExecutorFactory newFactory(String sessionId) {
-        return ExecutionBlock.globalLoaders().newFactory(sessionId);
+        return newFactory(ExecutionBlock.globalLoaders(), sessionId);
+    }
+
+    static ExecutorFactory newSharedFactory(ExecutorLoaderSet loaders) {
+        return newFactory(loaders, ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+    }
+
+    static ExecutorFactory newFactory(ExecutorLoaderSet loaders, String sessionId) {
+        Objects.requireNonNull(loaders, "Null loader set");
+        Objects.requireNonNull(sessionId, "Null sessionId");
+        return loaders.newFactory(sessionId);
     }
 }
