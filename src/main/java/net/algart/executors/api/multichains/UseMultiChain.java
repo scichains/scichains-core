@@ -155,17 +155,16 @@ public final class UseMultiChain extends FileOperation {
         return this;
     }
 
-    public static Executor newExecutor(
-            String sessionId,
+    public static Executor newSharedExecutor(Path multiChainFile, InstantiationMode instantiationMode)
+            throws IOException {
+        return newSharedExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
+    }
+
+    public static Executor newSharedExecutor(
             MultiChainSpecification specification,
             InstantiationMode instantiationMode)
             throws IOException {
-        return getSessionInstance(sessionId).toExecutor(specification, instantiationMode);
-    }
-
-    public static Executor newExecutor(String sessionId, Path multiChainFile, InstantiationMode instantiationMode)
-            throws IOException {
-        return newExecutor(sessionId, MultiChainSpecification.read(multiChainFile), instantiationMode);
+        return getSharedInstance().toExecutor(specification, instantiationMode);
     }
 
     public Executor toExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)

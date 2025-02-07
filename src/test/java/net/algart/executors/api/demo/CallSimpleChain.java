@@ -43,7 +43,7 @@ public class CallSimpleChain {
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
             System.out.printf("Usage: " +
-                            "%s some_chain.json input_image output_image [A [B]]%n" +
+                            "%s some_chain.json input_image output_image [A B]%n" +
                             "some_chain.json should be some chain, which process single image and have" +
                             " 2 parameters named A and B;%n" +
                             "input_image should be some image file, for example, JPEG or BMP;%n" +
@@ -63,7 +63,7 @@ public class CallSimpleChain {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (var executor = UseSubChain.newExecutor("MySession", chainPath, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = UseSubChain.newSharedExecutor(chainPath, InstantiationMode.REQUEST_ALL)) {
             printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);

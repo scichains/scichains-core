@@ -208,16 +208,15 @@ public final class UseSubChain extends FileOperation {
         return chainExecutorSpecification;
     }
 
-    public static Executor newExecutor(
-            String sessionId,
+    public static Executor newSharedExecutor(
             ChainSpecification chainSpecification,
             InstantiationMode instantiationMode) {
-        return getSessionInstance(sessionId).toExecutor(chainSpecification, instantiationMode);
+        return getSharedInstance().toExecutor(chainSpecification, instantiationMode);
     }
 
-    public static Executor newExecutor(String sessionId, Path chainFile, InstantiationMode instantiationMode)
+    public static Executor newSharedExecutor(Path chainFile, InstantiationMode instantiationMode)
             throws IOException {
-        return newExecutor(sessionId, ChainSpecification.read(chainFile), instantiationMode);
+        return newSharedExecutor(ChainSpecification.read(chainFile), instantiationMode);
     }
 
     public Executor toExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
