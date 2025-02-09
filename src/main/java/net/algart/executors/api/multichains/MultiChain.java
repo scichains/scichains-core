@@ -228,7 +228,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return Collections.unmodifiableMap(chainMap);
     }
 
-    public String findSelectedChainId(JsonObject parentSettings, String defaultChainId) {
+    public String getSelectedChainId(JsonObject parentSettings, String defaultChainId) {
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(defaultChainId, "Null defaultChainId");
         String result = defaultChainId;
@@ -254,8 +254,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(selectedChain, "Null selectedChain");
         SettingsCombiner mainSettingsCombiner = selectedChain.getMainSettingsCombiner();
         if (mainSettingsCombiner == null) {
-            // - should not occur while normal usage (selecting chain from chainMap() result)
-            throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
+            return null;
         }
 
         // - no needs to customize
@@ -293,7 +292,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             result = Jsons.overrideEntries(result, onlyActual);
         }
 
-        // 2nd overriding: by section @MMM (when extractSubSettings), MMM is the name of multi-chain,
+        // 2nd overriding: by section @MMM (when extractSubSettings), MMM is the name of multi-chain
         if (multiSettings != null) {
             final JsonObject onlyActual = Jsons.filterJson(multiSettings, selectedSubChainActualKeys);
             // - only actual: maybe this sub-settings contains a lot of other information (for other variants)
@@ -311,18 +310,21 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public static void setSettings(String selectedChainSettingsString, Chain selectedChain) {
-        Objects.requireNonNull(selectedChainSettingsString, "Null selectedChainSettingsString");
+        if (selectedChainSettingsString == null) {
+            return;
+        }
         Objects.requireNonNull(selectedChain, "Null selectedChain");
         final String mainSettingsBlockId = selectedChain.getMainSettingsBlockId();
         if (mainSettingsBlockId == null) {
-            // - should not occur while normal usage (selecting chain from chainMap() result)
+            // - should not occur while normal usage (selectedChainSettings is not null)
             throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
         }
         final ChainBlock settingsBlock = selectedChain.getBlock(mainSettingsBlockId);
         if (settingsBlock == null)
             throw new AssertionError("Main settings block  '"
                     + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
-        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(selectedChainSettingsString));
+        settingsBlock.setActualInputData(
+                CombineSettings.SETTINGS, SScalar.of(selectedChainSettingsString));
     }
 
     public void freeResources() {
@@ -426,8 +428,6 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                     final SettingsCombiner mainSettingsCombiner = chain.getMainSettingsCombiner();
                     if (mainSettingsCombiner != null) {
                         final SettingsSpecification specification = mainSettingsCombiner.specification();
-                        // - TODO!! remove this comment: don't create the control in this case
-                        // - to be on the safe side (should not occur for a normal multi-chain)
                         settingsControlConf.setSettingsId(specification.getId());
                         settingsControlConf.setValueClassName(specification.className());
 //                        System.out.printf("Variant %s -> %s%n", specification.getName(), specification.className());
@@ -466,12 +466,13 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Map<String, Chain> result = new LinkedHashMap<>();
         for (ChainSpecification specification : this.chainSpecifications) {
             final String executorId = specification.chainId();
-            final Chain chain = registeredChain(chainFactory.getSessionId(), executorId);
+            final Chain chain = InterpretSubChain.registeredChain(chainFactory.getSessionId(), executorId);
             result.put(executorId, chain);
         }
         return result;
     }
 
+    /*
     private Chain registeredChain(String sessionId, String executorId) {
         final Chain chain = InterpretSubChain.registeredChain(sessionId, executorId);
         if (chain.getMainSettingsCombiner() == null) {
@@ -482,6 +483,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
         return chain;
     }
+    */
 
     private void renewContextId() {
         this.contextId = CURRENT_CONTEXT_ID.getAndIncrement();

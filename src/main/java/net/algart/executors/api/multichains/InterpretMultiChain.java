@@ -79,7 +79,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         multiChain.setExtractSubSettings(extractSubSettings);
         final SettingsCombiner multiChainCombiner = multiChain.multiChainSettingsCombiner();
         multiChainCombiner.setAbsolutePaths(absolutePaths);
-        final String selectedChainId = multiChain.findSelectedChainId(
+        final String selectedChainId = multiChain.getSelectedChainId(
                 inputSettings,
                 ignoreInputParameters ?
                         multiChain.defaultChainVariantId() :
@@ -98,7 +98,9 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
         final JsonObject selectedChainSettings = multiChain.findSelectedChainSettings(
                 executorSettings, inputSettings, selectedChain);
-        final String selectedChainSettingsString = Jsons.toPrettyString(selectedChainSettings);
+        final String selectedChainSettingsString = selectedChainSettings == null ?
+                null :
+                Jsons.toPrettyString(selectedChainSettings);
         selectedChain.reinitializeAll();
         selectedChain.setCaller(this);
         final Level timingLogLevel = ofLogLevel(parameters().getString(
