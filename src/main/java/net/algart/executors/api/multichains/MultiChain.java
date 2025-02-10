@@ -61,6 +61,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private final List<ChainSpecification> blockedChainSpecifications;
     private final Set<String> blockedChainSpecificationNames;
     private final List<ExecutorSpecification> loadedChainExecutorSpecifications;
+    private final boolean selectionById;
     private final String defaultChainVariantId;
     private final SettingsCombiner multiChainOnlyCommonSettingsCombiner;
     // - note: this combiner is not registered, it is used for building a multi-chain executor only in UseMultiChain
@@ -86,7 +87,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         this.blockedChainSpecificationNames = new LinkedHashSet<>();
         this.loadedChainExecutorSpecifications = new ArrayList<>();
         assert !this.chainSpecifications.isEmpty();
-        final Map<String, Chain> partialChainMap = new HashMap<>();
+        final Map<String, Chain> nonRecursiveChainMap = new HashMap<>();
         String firstChainId = null;
         for (ChainSpecification chainSpecification : this.chainSpecifications) {
             if (firstChainId == null) {
@@ -107,7 +108,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 assert implementationSpecification != null :
                         "chainExecutorSpecification cannot be null if use() returns some result";
                 this.loadedChainExecutorSpecifications.add(implementationSpecification);
-                partialChainMap.put(optionalChain.get().id(), optionalChain.get());
+                nonRecursiveChainMap.put(optionalChain.get().id(), optionalChain.get());
             } else {
                 blockedChainSpecifications.add(chainSpecification);
                 blockedChainSpecificationNames.add(chainSpecification.chainName());
@@ -115,9 +116,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             // - Note: if the process of loading chain was blocked due to recursion, it means that it is in
             // the process of registering and not available yet even via ExecutionBlock.getExecutorSpecification.
             // We will not be able to check it at loading stage by checkImplementationCompatibility()
-            // and will not be able to use help from partialChainMap,
+            // and will not be able to use help from nonRecursiveChainMap,
             // but it is not-too-serious problem: such a recursion is a very rare case.
         }
+        if (firstChainId == null) {
+            throw new AssertionError("Cannot find the first chain in non-empty collection");
+        }
+        this.selectionById = specification.isBehaviourPreferSelectionById()
+                || detectSelectionById(nonRecursiveChainMap.values());
         final String defaultChainVariantId = specification.getDefaultChainVariantId();
         this.defaultChainVariantId = defaultChainVariantId != null ? defaultChainVariantId : firstChainId;
         settingsFactory.setOwnerId(specification.getId());
@@ -127,13 +133,13 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // to make a reference to this MultiChain and to set the correct owner information
         // inside newly created settings combiner
         this.multiChainOnlyCommonSettingsCombiner = SettingsCombiner.of(
-                buildMultiChainSettingsSpecification(false, partialChainMap));
+                buildMultiChainSettingsSpecification(false, nonRecursiveChainMap));
         // - this (internally used) combiner does not contain advanced multi-line controls
         // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainSpecification()
         settingsFactory.setMultiChain(this);
         // - this reference will be necessary in CombineMultiChainSettings.correctSettings
         this.multiChainSettingsCombiner = settingsFactory.use(
-                buildMultiChainSettingsSpecification(true, partialChainMap));
+                buildMultiChainSettingsSpecification(true, nonRecursiveChainMap));
     }
 
     public static MultiChain of(
@@ -182,7 +188,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public long contextId() {
-        // Note: it will be another for result of clone!
+        // Note: it will be another for the result of clone!
         return contextId;
     }
 
@@ -245,7 +251,26 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // - overriding by the same parameter in the parent JSON, if exists
     }
 
-    public JsonObject findSelectedChainSettings(
+    public Chain findSelectedChain(String selectedChainId) {
+        Objects.requireNonNull(selectedChainId, "Null selectedChainId");
+        final Map<String, Chain> chains = chainMap();
+        Chain selectedChain = chains.get(selectedChainId);
+        if (selectedChain == null) {
+            for (ChainSpecification specification : chainSpecifications) {
+                if (specification.chainName().equals(selectedChainId)) {
+                    selectedChain = chains.get(specification.chainId());
+                }
+            }
+        }
+        if (selectedChain == null) {
+            throw new IllegalArgumentException("Cannot find the selected chain by its ID or name: \"" +
+                    selectedChainId + "\"" + "; " +
+                    "there is no chain variant with this ID/name among all elements of this multi-chain " + this);
+        }
+        return selectedChain;
+    }
+
+    public JsonObject selectedChainSettings(
             JsonObject executorSettings,
             JsonObject parentSettings,
             Chain selectedChain) {
@@ -388,7 +413,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         freeResources();
     }
 
-    // Note: this.specification must be already built
+    // Note: the result of this method is also used for building ports/controls of the multi-chain executor
+    // in the UseMultiChain.buildMultiChainSpecification method.
     private SettingsSpecification buildMultiChainSettingsSpecification(
             boolean addSubSettingsForSelectedChainVariants,
             Map<String, Chain> helpingChainMap) {
@@ -398,7 +424,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         result.setCombineName(specification.getSettingsName());
         result.setCategory(specification.getSettingsCategory());
         final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
-        final ExecutorSpecification.ControlConf currentChainIdControl = createCurrentChainIdControl();
+        final ExecutorSpecification.ControlConf currentChainIdControl = createSelectedChainIdControl();
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
         controls.putAll(specification.getControls());
         if (addSubSettingsForSelectedChainVariants) {
@@ -446,11 +472,18 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return result;
     }
 
-    private ExecutorSpecification.ControlConf createCurrentChainIdControl() {
+    private ExecutorSpecification.ControlConf createSelectedChainIdControl() {
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ChainSpecification specification : chainSpecifications) {
-            final String chainId = specification.chainId();
-            items.add(new ExecutorSpecification.ControlConf.EnumItem(chainId).setCaption(specification.chainName()));
+        String defaultValue = defaultChainVariantId;
+        for (ChainSpecification sp : chainSpecifications) {
+            final String itemValue = selectionById ? sp.chainId() : sp.chainName();
+            if (!selectionById && sp.chainId().equals(defaultChainVariantId)) {
+                // - note that defaultChainVariantId can be already specified as a chain name;
+                // then, this correction is not necessary and will not be performed
+                defaultValue = itemValue;
+            }
+            final String itemCaption = sp.chainName() + (selectionById ? " [" + sp.chainId() + "]" : "");
+            items.add(new ExecutorSpecification.ControlConf.EnumItem(itemValue).setCaption(itemCaption));
         }
         ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(SELECTED_CHAIN_ID_PARAMETER_NAME);
@@ -458,7 +491,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         result.setValueType(ParameterValueType.ENUM_STRING);
         result.setEditionType(ControlEditionType.ENUM);
         result.setItems(items);
-        result.setDefaultStringValue(defaultChainVariantId);
+        result.setDefaultStringValue(defaultValue);
         return result;
     }
 
@@ -488,4 +521,19 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private void renewContextId() {
         this.contextId = CURRENT_CONTEXT_ID.getAndIncrement();
     }
+
+    private static boolean detectSelectionById(Collection<Chain> chainVariants) {
+        final Set<String> uniqueNames = new HashSet<>();
+        for (Chain chain : chainVariants) {
+            if (!uniqueNames.add(chain.id()) || !uniqueNames.add(chain.name())) {
+                // - All IDs and names must be different!
+                // Note that a problem is very improbable here:
+                // identical names or identical IDs were already checked in the constructor
+                // (see readChainVariants() method).
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

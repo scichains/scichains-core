@@ -40,7 +40,6 @@ import net.algart.json.Jsons;
 import java.lang.System.Logger.Level;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public final class InterpretMultiChain extends Executor implements ReadOnlyExecutionInput {
@@ -79,24 +78,17 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         multiChain.setExtractSubSettings(extractSubSettings);
         final SettingsCombiner multiChainCombiner = multiChain.multiChainSettingsCombiner();
         multiChainCombiner.setAbsolutePaths(absolutePaths);
-        final String selectedChainId = multiChain.getSelectedChainId(
-                inputSettings,
-                ignoreInputParameters ?
-                        multiChain.defaultChainVariantId() :
-                        parameters().getString(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME));
+        final String defaultChainId = ignoreInputParameters ?
+                multiChain.defaultChainVariantId() :
+                parameters().getString(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);
+        final String selectedChainId = multiChain.getSelectedChainId(inputSettings, defaultChainId);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
                 multiChainCombiner.createSettings(this);
-        final Map<String, Chain> chains = multiChain.chainMap();
-        final Chain selectedChain = chains.get(selectedChainId);
-        if (selectedChain == null) {
-            throw new IllegalArgumentException("Invalid selected chain ID: " + selectedChainId
-                    + "; there is no chain variant with this ID among all elements of this multi-chain " +
-                    multiChain);
-        }
+        Chain selectedChain = multiChain.findSelectedChain(selectedChainId);
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
-        final JsonObject selectedChainSettings = multiChain.findSelectedChainSettings(
+        final JsonObject selectedChainSettings = multiChain.selectedChainSettings(
                 executorSettings, inputSettings, selectedChain);
         final String selectedChainSettingsString = selectedChainSettings == null ?
                 null :

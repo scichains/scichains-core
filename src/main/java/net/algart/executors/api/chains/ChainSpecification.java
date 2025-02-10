@@ -938,12 +938,10 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
 
     public static void checkIdDifference(Collection<ChainSpecification> chains) {
         Objects.requireNonNull(chains, "Null chain JSONs collection");
-        final Map<String, String> ids = new HashMap<>();
+        final Set<String> ids = new HashSet<>();
         for (ChainSpecification chain : chains) {
-            final String name = ids.put(chain.chainId(), chain.executor.getName());
-            if (name != null) {
-                throw new IllegalArgumentException("Two chains with names \"" + name + "\" and \""
-                        + chain.executor.getName() + "\" have identical ID " + chain.chainId()
+            if (!ids.add(chain.chainId())) {
+                throw new IllegalArgumentException("Two chain variants have identical ID " + chain.chainId()
                         + (chain.chainSpecificationFile == null ? "" :
                         ", the 2nd chain is loaded from the file " + chain.chainSpecificationFile));
             }

@@ -200,13 +200,11 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
             // - In the current version, settingsSpecification will usually be null.
             // We build every ChainBlock at the stage of loading sub-chain, BEFORE executing its loading-time
             // functions; at this stage, settings combiners are not registered yet, and we have no correct JSON.
-            if (settingsSpecification.getOptions() == null
-                    || settingsSpecification.getOptions().getRole() == null
-                    || !settingsSpecification.getOptions().getRole().isSettings()) {
+            if (!settingsSpecification.isRoleSettings()) {
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
                         "a correct role \"settings\" (its options are " +
                         settingsSpecification.getOptions() + ")");
-                // Note: this role MAY be not main, if we loaded this combiner not only with a correct
+                // Note: this role MAY be not a main role, if we loaded this combiner not only with a correct
                 // function UseChainSettings, but also h simple UseSettings
             }
         }

@@ -54,6 +54,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final String DEFAULT_MULTICHAIN_NAME = "multichain";
     public static final String MULTICHAIN_FILE_PATTERN = ".*\\.(json|mchain)$";
 
+    private static final boolean DEFAULT_PREFER_SELECTION_BY_ID = true;
+    // - true value provides better compatibility with old multi-chains before 10.02.2025
     private static final String DEFAULT_MULTICHAIN_SETTINGS_NAME = "Multi-settings";
     private static final String DEFAULT_MULTICHAIN_SETTINGS_PREFIX = "Multi-settings ";
 
@@ -62,12 +64,15 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Behavior extends AbstractConvertibleToJson {
             private boolean skippable = false;
+            private boolean preferSelectionById = DEFAULT_PREFER_SELECTION_BY_ID;
 
             public Behavior() {
             }
 
             public Behavior(JsonObject json, Path file) {
                 this.skippable = json.getBoolean("skippable", false);
+                this.preferSelectionById = json.getBoolean(
+                        "prefer_selection_by_id", DEFAULT_PREFER_SELECTION_BY_ID);
             }
 
             public boolean isSkippable() {
@@ -79,6 +84,15 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                 return this;
             }
 
+            public boolean isPreferSelectionById() {
+                return preferSelectionById;
+            }
+
+            public Behavior setPreferSelectionById(boolean preferSelectionById) {
+                this.preferSelectionById = preferSelectionById;
+                return this;
+            }
+
             @Override
             public void checkCompleteness() {
             }
@@ -87,12 +101,14 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             public String toString() {
                 return "Behavior{" +
                         "skippable=" + skippable +
+                        ", preferSelectionById=" + preferSelectionById +
                         '}';
             }
 
             @Override
             public void buildJson(JsonObjectBuilder builder) {
                 builder.add("skippable", skippable);
+                builder.add("prefer_selection_by_id", preferSelectionById);
             }
         }
 
@@ -283,10 +299,9 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         Objects.requireNonNull(chains, "Null chain JSONs collection");
         final Set<String> names = new HashSet<>();
         for (ChainSpecification chain : chains) {
-            final String name = chain.chainName();
-            if (!names.add(name)) {
+            if (!names.add(chain.chainName())) {
                 final Path file = chain.getChainSpecificationFile();
-                throw new IllegalArgumentException("Two chain variants have identical name \"" + name
+                throw new IllegalArgumentException("Two chain variants have identical name \"" + chain.chainName()
                         + "\", but it is prohibited inside the single multi-chain! "
                         + "(One of 2 chain variants has ID \"" + chain.chainId() + "\""
                         + (file == null ? "" : " and loaded from the file " + file + ".)"));
@@ -387,6 +402,16 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public MultiChainSpecification setOptions(Options options) {
         this.options = options;
         return this;
+    }
+
+    public boolean isBehaviourSkippable() {
+        return options != null && options.behavior != null && options.behavior.skippable;
+    }
+
+    public boolean isBehaviourPreferSelectionById() {
+        return options != null && options.behavior != null ?
+                options.behavior.preferSelectionById :
+                DEFAULT_PREFER_SELECTION_BY_ID;
     }
 
     public List<String> getChainVariantPaths() {

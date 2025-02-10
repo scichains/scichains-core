@@ -339,8 +339,9 @@ public final class UseMultiChain extends FileOperation {
         final SettingsCombiner multiChainSettingsCombiner = multiChain.multiChainSettingsCombiner();
         addSystemParameters(result, multiChain);
         UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsCombiner());
-        // - also adds ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary;
-        // note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsCombiner
+        // - Here we add to multi-chain executor the same ports/controls that we already added to its settings.
+        // Also, we add ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary.
+        // Note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsCombiner
         result.setSettings(multiChainSettingsCombiner.specification());
         // - important: we MUST store the full multi-chain settings combiner as settings,
         // not a reduced version from multiChainOnlyCommonSettingsCombiner()
@@ -372,8 +373,7 @@ public final class UseMultiChain extends FileOperation {
 
     private static void addSystemParameters(ExecutorSpecification result, MultiChain multiChain) {
         final String multiChainName = multiChain.name();
-        final MultiChainSpecification.Options options = multiChain.specification().getOptions();
-        if (options != null && options.getBehavior() != null && options.getBehavior().isSkippable()) {
+        if (multiChain.specification().isBehaviourSkippable()) {
             result.addControl(new ExecutorSpecification.ControlConf()
                     .setName(DO_ACTION_NAME)
                     .setCaption(DO_ACTION_CAPTION)
