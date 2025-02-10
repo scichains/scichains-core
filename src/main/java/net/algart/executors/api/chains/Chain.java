@@ -709,7 +709,7 @@ public final class Chain implements AutoCloseable {
     }
 
     public String toString(boolean detailed) {
-        final StringBuilder sb = new StringBuilder("Chain"
+        final StringBuilder sb = new StringBuilder("chain"
                 + (name == null ? "" : " \"" + name + "\"")
                 + (category == null ? "" : ", category \"" + category + "\""));
         if (detailed) {

@@ -80,7 +80,7 @@ public class CallSimpleChain {
                 throw new IllegalArgumentException("Chain " + chainPath + " did not create output image");
             }
             MatrixIO.writeBufferedImage(outputImagePath, result);
-            System.out.println("O'k: results saved in " + outputImagePath);
+            System.out.printf("%s%nDone: result saved in %s%n", executor, outputImagePath);
         }
     }
 

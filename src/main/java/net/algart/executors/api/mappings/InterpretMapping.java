@@ -62,6 +62,11 @@ public class InterpretMapping extends Executor implements ReadOnlyExecutionInput
     }
 
     @Override
+    public String toString() {
+        return "Executor of " + (mapping != null ? mapping : "some non-initialized mapping");
+    }
+
+    @Override
     protected boolean skipStandardAutomaticParameters() {
         return true;
     }

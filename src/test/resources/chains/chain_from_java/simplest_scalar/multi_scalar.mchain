@@ -40,5 +40,5 @@
     "scalar_sum.chain",
     "scalar_product.chain"
   ],
-  "default_variant_id": "49d62877-227c-48e5-9107-33f996356146"
+  "default_variant_id": "scalar_product"
 }

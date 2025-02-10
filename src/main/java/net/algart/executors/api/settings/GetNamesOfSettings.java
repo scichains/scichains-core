@@ -175,6 +175,12 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
         getScalar().setTo(resultType.result(names, resultJsonKey));
     }
 
+    @Override
+    public String toString() {
+        return "Get names of " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+    }
+
+
     private boolean isMatched(ExecutorSpecification.ControlConf controlConf) {
         return switch (controlConf.getValueType()) {
             case INT -> extractIntType;

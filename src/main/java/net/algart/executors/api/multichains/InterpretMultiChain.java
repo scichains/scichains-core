@@ -73,8 +73,7 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         final boolean ignoreInputParameters = parameters().getBoolean(
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_NAME,
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
-        @SuppressWarnings("resource")
-        final MultiChain multiChain = multiChain();
+        @SuppressWarnings("resource") final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
         final SettingsCombiner multiChainCombiner = multiChain.multiChainSettingsCombiner();
         multiChainCombiner.setAbsolutePaths(absolutePaths);
@@ -202,6 +201,11 @@ public final class InterpretMultiChain extends Executor implements ReadOnlyExecu
         @SuppressWarnings("resource")
         MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(sessionId, executorId);
         return multiChain.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Executor of " + (multiChain != null ? multiChain : "some non-initialized multi-chain");
     }
 
     @Override

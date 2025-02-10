@@ -267,6 +267,11 @@ public final class InterpretSubChain extends Executor implements ReadOnlyExecuti
         }
     }
 
+    @Override
+    public String toString() {
+        return "Executor of " + (chain != null ? chain : "some non-initialized chain");
+    }
+
     public static String quote(String s) {
         return s == null ? "N/A" : "\"" + s + "\"";
     }

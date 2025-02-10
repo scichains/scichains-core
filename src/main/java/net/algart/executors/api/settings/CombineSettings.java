@@ -83,6 +83,11 @@ public class CombineSettings extends AbstractInterpretSettings {
     }
 
     @Override
+    public String toString() {
+        return "Combine " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+    }
+
+    @Override
     protected boolean skipStandardAutomaticParameters() {
         return true;
     }

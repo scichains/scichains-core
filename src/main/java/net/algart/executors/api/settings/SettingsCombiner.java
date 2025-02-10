@@ -344,7 +344,7 @@ public final class SettingsCombiner implements Cloneable {
 
     @Override
     public String toString() {
-        return "settings combiner \"" + category() + "." + name() + "')";
+        return "settings \"" + category() + "." + name() + "')";
     }
 
     @Override

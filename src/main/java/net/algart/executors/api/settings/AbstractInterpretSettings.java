@@ -28,7 +28,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 
 public abstract class AbstractInterpretSettings extends Executor implements ReadOnlyExecutionInput {
-    private volatile SettingsCombiner settingsCombiner = null;
+    volatile SettingsCombiner settingsCombiner = null;
 
     public SettingsCombiner settingsCombiner() {
         final String sessionId = getSessionId();

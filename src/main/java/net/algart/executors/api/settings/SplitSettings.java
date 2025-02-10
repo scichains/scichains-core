@@ -58,6 +58,11 @@ public class SplitSettings extends AbstractInterpretSettings {
     }
 
     @Override
+    public String toString() {
+        return "Split " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+    }
+
+    @Override
     protected boolean skipStandardAutomaticParameters() {
         return true;
     }

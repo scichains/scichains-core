@@ -67,7 +67,7 @@ public class CallSimpleMultiChain {
                 executor.setStringParameter("b", parameterB);
             }
             executor.execute();
-            System.out.println("O'k: result is " + executor.getData());
+            System.out.printf("%s%nDone: result is %s%n", executor, executor.getData());
         }
     }
 }
