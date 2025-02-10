@@ -166,16 +166,16 @@ public final class ExecutorSpecificationVerifier {
                 System.out.printf("Duplicate Java class / instantiation method %s in %s%n", instantiationName, f);
             }
         }
-        final Map<String, DataType> inPorts = new LinkedHashMap<>();
-        final Map<String, DataType> outPorts = new LinkedHashMap<>();
+        final Map<String, DataType> inputPorts = new LinkedHashMap<>();
+        final Map<String, DataType> outputPorts = new LinkedHashMap<>();
         try {
-            readPorts(inPorts, json, "in_ports", f);
+            readPorts(inputPorts, json, "in_ports", f);
             if (json.containsKey("in_ports_hidden")) {
-                readPorts(inPorts, json, "in_ports_hidden", f);
+                readPorts(inputPorts, json, "in_ports_hidden", f);
             }
-            readPorts(outPorts, json, "out_ports", f);
+            readPorts(outputPorts, json, "out_ports", f);
             if (json.containsKey("out_ports_hidden")) {
-                readPorts(outPorts, json, "out_ports_hidden", f);
+                readPorts(outputPorts, json, "out_ports_hidden", f);
             }
         } catch (RuntimeException e) {
             throw new JsonException("Error in ports specification in " + f, e);
@@ -183,7 +183,7 @@ public final class ExecutorSpecificationVerifier {
         if (checkClasses) {
             assert executionBlock != null;
             for (Port port : executionBlock.allInputPorts()) {
-                final DataType dataType = inPorts.get(port.getName());
+                final DataType dataType = inputPorts.get(port.getName());
                 if (dataType == null) {
                     throw new JsonException("Built-in input " + port + " is not specified in " + f);
                 }
@@ -193,7 +193,7 @@ public final class ExecutorSpecificationVerifier {
                 }
             }
             for (Port port : executionBlock.allOutputPorts()) {
-                final DataType dataType = outPorts.get(port.getName());
+                final DataType dataType = outputPorts.get(port.getName());
                 if (dataType == null) {
                     throw new JsonException("Built-in output " + port + " is not specified in " + f);
                 }

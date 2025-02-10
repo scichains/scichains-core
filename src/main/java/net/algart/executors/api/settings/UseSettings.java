@@ -624,7 +624,7 @@ public class UseSettings extends FileOperation {
                 portConf.setCaption(controlConf.getCaption());
                 portConf.setHint(controlConf.getDescription());
                 portConf.setValueType(DataType.SCALAR);
-                result.addInPort(portConf);
+                result.addInputPort(portConf);
             }
             final SettingsSpecification.ControlConfExtension controlExtension = controlExtensions.get(name);
             if (controlExtension != null) {
@@ -654,14 +654,14 @@ public class UseSettings extends FileOperation {
             if (controlConf.getValueType().isSettings()) {
                 portConf.setAdvanced(true);
             }
-            result.addOutPort(portConf);
+            result.addOutputPort(portConf);
             if (controlConf.getValueType() == ParameterValueType.STRING && controlConf.getEditionType().isPath()) {
-                result.addOutPort(new ExecutorSpecification.PortConf()
+                result.addOutputPort(new ExecutorSpecification.PortConf()
                         .setName(name + SettingsCombiner.PATH_PARENT_FOLDER_SUFFIX)
                         .setHint(PATH_PARENT_FOLDER_HINT)
                         .setValueType(DataType.SCALAR)
                         .setAdvanced(true));
-                result.addOutPort(new ExecutorSpecification.PortConf()
+                result.addOutputPort(new ExecutorSpecification.PortConf()
                         .setName(name + SettingsCombiner.PATH_FILE_NAME_SUFFIX)
                         .setHint(PATH_FILE_NAME_HINT)
                         .setValueType(DataType.SCALAR)
@@ -673,7 +673,7 @@ public class UseSettings extends FileOperation {
     private static void addSystemOutputPorts(ExecutorSpecification result, boolean addSettingsIdPort) {
         result.addSystemExecutorIdPort();
         if (addSettingsIdPort) {
-            result.addOutPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(new ExecutorSpecification.PortConf()
                     .setName(SETTINGS_ID_OUTPUT_NAME)
                     .setCaption(SETTINGS_ID_OUTPUT_CAPTION)
                     .setHint(SETTINGS_ID_OUTPUT_HINT)
@@ -691,8 +691,8 @@ public class UseSettings extends FileOperation {
 
     private static void addSpecialOutputPorts(ExecutorSpecification result) {
         addSystemOutputPorts(result, false);
-        if (!result.getOutPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
-            result.addOutPort(new ExecutorSpecification.PortConf()
+        if (!result.getOutputPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
+            result.addOutputPort(new ExecutorSpecification.PortConf()
                     .setName(SETTINGS_NAME_OUTPUT_NAME)
                     .setCaption(SETTINGS_NAME_OUTPUT_CAPTION)
                     .setValueType(DataType.SCALAR)

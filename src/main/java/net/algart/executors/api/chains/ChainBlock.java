@@ -1000,14 +1000,14 @@ public final class ChainBlock {
         this.inputPorts.clear();
         this.outputPorts.clear();
         if (this.executorSpecification != null) {
-            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getInPorts().values()) {
+            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getInputPorts().values()) {
                 ChainInputPort inputPort = ChainInputPort.of(this, portConf);
                 Objects.requireNonNull(inputPort, "Null input port");
                 if (inputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                     throw new IllegalArgumentException("Duplicate input port name: " + inputPort.key);
                 }
             }
-            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getOutPorts().values()) {
+            for (ExecutorSpecification.PortConf portConf : this.executorSpecification.getOutputPorts().values()) {
                 ChainOutputPort outputPort = ChainOutputPort.of(this, portConf);
                 Objects.requireNonNull(outputPort, "Null output port");
                 if (outputPorts.putIfAbsent(outputPort.key, outputPort) != null) {

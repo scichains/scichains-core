@@ -1401,8 +1401,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private Options options = null;
     private String language = null;
     private JavaConf java = null;
-    private Map<String, PortConf> inPorts = new LinkedHashMap<>();
-    private Map<String, PortConf> outPorts = new LinkedHashMap<>();
+    private Map<String, PortConf> inputPorts = new LinkedHashMap<>();
+    private Map<String, PortConf> outputPorts = new LinkedHashMap<>();
     private Map<String, ControlConf> controls = new LinkedHashMap<>();
     private SettingsSpecification settings = null;
     private SourceInfo sourceInfo = null;
@@ -1457,13 +1457,13 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("in_ports")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
                     final PortConf port = new PortConf(jsonObject, file);
-                    putOrException(inPorts, port.name, port, file, "in_ports");
+                    putOrException(inputPorts, port.name, port, file, "in_ports");
                 }
             }
             if (json.containsKey("out_ports")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "out_ports", file)) {
                     final PortConf port = new PortConf(jsonObject, file);
-                    putOrException(outPorts, port.name, port, file, "out_ports");
+                    putOrException(outputPorts, port.name, port, file, "out_ports");
                 }
             }
             if (json.containsKey("controls")) {
@@ -1701,29 +1701,29 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public final PortConf getInPort(String name) {
-        return inPorts.get(name);
+    public final PortConf getInputPort(String name) {
+        return inputPorts.get(name);
     }
 
-    public final Map<String, PortConf> getInPorts() {
-        return Collections.unmodifiableMap(inPorts);
+    public final Map<String, PortConf> getInputPorts() {
+        return Collections.unmodifiableMap(inputPorts);
     }
 
-    public final ExecutorSpecification setInPorts(Map<String, PortConf> inPorts) {
-        this.inPorts = checkInPorts(inPorts);
+    public final ExecutorSpecification setInputPorts(Map<String, PortConf> inputPorts) {
+        this.inputPorts = checkInputPorts(inputPorts);
         return this;
     }
 
-    public final PortConf getOutPort(String name) {
-        return outPorts.get(name);
+    public final PortConf getOutputPort(String name) {
+        return outputPorts.get(name);
     }
 
-    public final Map<String, PortConf> getOutPorts() {
-        return Collections.unmodifiableMap(outPorts);
+    public final Map<String, PortConf> getOutputPorts() {
+        return Collections.unmodifiableMap(outputPorts);
     }
 
-    public final ExecutorSpecification setOutPorts(Map<String, PortConf> outPorts) {
-        this.outPorts = checkOutPorts(outPorts);
+    public final ExecutorSpecification setOutputPorts(Map<String, PortConf> outputPorts) {
+        this.outputPorts = checkOutputPorts(outputPorts);
         return this;
     }
 
@@ -1821,39 +1821,39 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.tags.addAll(tags);
     }
 
-    public final void addInPort(PortConf port) {
+    public final void addInputPort(PortConf port) {
         Objects.requireNonNull(port, "Null input port");
         port.checkCompleteness();
-        inPorts.put(port.name, port);
+        inputPorts.put(port.name, port);
     }
 
-    public final void addFirstInPort(PortConf port) {
+    public final void addFirstInputPort(PortConf port) {
         Objects.requireNonNull(port, "Null input port");
         port.checkCompleteness();
-        final Map<String, PortConf> inPorts = new LinkedHashMap<>();
-        inPorts.put(port.name, port);
-        inPorts.putAll(this.inPorts);
-        this.inPorts = inPorts;
+        final Map<String, PortConf> inputPorts = new LinkedHashMap<>();
+        inputPorts.put(port.name, port);
+        inputPorts.putAll(this.inputPorts);
+        this.inputPorts = inputPorts;
     }
 
-    public final void addOutPort(PortConf port) {
+    public final void addOutputPort(PortConf port) {
         Objects.requireNonNull(port, "Null output port");
         port.checkCompleteness();
-        outPorts.put(port.name, port);
+        outputPorts.put(port.name, port);
     }
 
-    public final void addFirstOutPort(PortConf port) {
+    public final void addFirstOutputPort(PortConf port) {
         Objects.requireNonNull(port, "Null output port");
         port.checkCompleteness();
-        final Map<String, PortConf> outPorts = new LinkedHashMap<>();
-        outPorts.put(port.name, port);
-        outPorts.putAll(this.outPorts);
-        this.outPorts = outPorts;
+        final Map<String, PortConf> outputPorts = new LinkedHashMap<>();
+        outputPorts.put(port.name, port);
+        outputPorts.putAll(this.outputPorts);
+        this.outputPorts = outputPorts;
     }
 
     public final void addSystemExecutorIdPort() {
-        if (!outPorts.containsKey(Executor.OUTPUT_EXECUTOR_ID_NAME)) {
-            addOutPort(new PortConf()
+        if (!outputPorts.containsKey(Executor.OUTPUT_EXECUTOR_ID_NAME)) {
+            addOutputPort(new PortConf()
                     .setName(Executor.OUTPUT_EXECUTOR_ID_NAME)
                     .setCaption(OUTPUT_EXECUTOR_ID_CAPTION)
                     .setHint(OUTPUT_EXECUTOR_ID_HINT)
@@ -1863,8 +1863,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     public final void addSystemPlatformIdPort() {
-        if (!outPorts.containsKey(Executor.OUTPUT_PLATFORM_ID_NAME)) {
-            addOutPort(new PortConf()
+        if (!outputPorts.containsKey(Executor.OUTPUT_PLATFORM_ID_NAME)) {
+            addOutputPort(new PortConf()
                     .setName(Executor.OUTPUT_PLATFORM_ID_NAME)
                     .setCaption(OUTPUT_PLATFORM_ID_CAPTION)
                     .setHint(OUTPUT_PLATFORM_ID_HINT)
@@ -1874,8 +1874,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     public final void addSystemResourceFolderPort() {
-        if (!outPorts.containsKey(Executor.OUTPUT_RESOURCE_FOLDER_NAME)) {
-            addOutPort(new PortConf()
+        if (!outputPorts.containsKey(Executor.OUTPUT_RESOURCE_FOLDER_NAME)) {
+            addOutputPort(new PortConf()
                     .setName(Executor.OUTPUT_RESOURCE_FOLDER_NAME)
                     .setCaption(OUTPUT_RESOURCE_FOLDER_CAPTION)
                     .setHint(OUTPUT_RESOURCE_FOLDER_ID_HINT)
@@ -1966,20 +1966,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         if (this.java == null) {
             this.setJava(new JavaConf().setJson(JavaConf.standardJson(className)));
         }
-        final Map<String, PortConf> inPorts = new LinkedHashMap<>(this.inPorts);
+        final Map<String, PortConf> inputPorts = new LinkedHashMap<>(this.inputPorts);
         for (Port port : executor.allInputPorts()) {
             final String name = port.getName();
-            final PortConf portConf = inPorts.getOrDefault(name, new PortConf());
-            inPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
+            final PortConf portConf = inputPorts.getOrDefault(name, new PortConf());
+            inputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
         }
-        this.setInPorts(inPorts);
-        final Map<String, PortConf> outPorts = new LinkedHashMap<>(this.outPorts);
+        this.setInputPorts(inputPorts);
+        final Map<String, PortConf> outputPorts = new LinkedHashMap<>(this.outputPorts);
         for (Port port : executor.allOutputPorts()) {
             final String name = port.getName();
-            final PortConf portConf = outPorts.getOrDefault(name, new PortConf());
-            outPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
+            final PortConf portConf = outputPorts.getOrDefault(name, new PortConf());
+            outputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
         }
-        this.setOutPorts(outPorts);
+        this.setOutputPorts(outputPorts);
         final Map<String, ControlConf> controls = new LinkedHashMap<>(this.controls);
         for (String name : executor.allParameters()) {
             final ControlConf controlConf = controls.getOrDefault(name, new ControlConf());
@@ -2036,7 +2036,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setTags(chain.tags());
         this.setId(chain.id());
         this.setLanguage(ChainSpecification.CHAIN_LANGUAGE);
-        final Map<String, PortConf> inPorts = new LinkedHashMap<>(this.inPorts);
+        final Map<String, PortConf> inputPorts = new LinkedHashMap<>(this.inputPorts);
         for (ChainBlock block : chain.getAllInputs()) {
             final ChainInputPort inputPort = block.getActualInputPort(Executor.DEFAULT_INPUT_PORT);
             if (inputPort == null) {
@@ -2052,11 +2052,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             portConf.setName(inputName);
             portConf.setValueType(inputPort.getDataType());
             setAdditionalFields(portConf, block);
-            inPorts.put(portConf.getName(), portConf);
+            inputPorts.put(portConf.getName(), portConf);
 
         }
-        this.setInPorts(inPorts);
-        final Map<String, PortConf> outPorts = new LinkedHashMap<>(this.outPorts);
+        this.setInputPorts(inputPorts);
+        final Map<String, PortConf> outputPorts = new LinkedHashMap<>(this.outputPorts);
         for (ChainBlock block : chain.getAllOutputs()) {
             final ChainOutputPort outputPort = block.getActualOutputPort(Executor.DEFAULT_OUTPUT_PORT);
             if (outputPort == null) {
@@ -2072,9 +2072,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             portConf.setName(outputName);
             portConf.setValueType(outputPort.getDataType());
             setAdditionalFields(portConf, block);
-            outPorts.put(portConf.getName(), portConf);
+            outputPorts.put(portConf.getName(), portConf);
         }
-        this.setOutPorts(outPorts);
+        this.setOutputPorts(outputPorts);
         final Map<String, ControlConf> controls = new LinkedHashMap<>(this.controls);
         for (ChainBlock block : chain.getAllData()) {
             // - data blocks (with options.behavior.data = true) are used as parameters of the sub-chain executor
@@ -2205,16 +2205,16 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
         buildLanguageJson(builder);
         if (mode.isPortsIncluded()) {
-            final JsonArrayBuilder inPortsBuilder = Json.createArrayBuilder();
-            for (PortConf port : inPorts.values()) {
-                inPortsBuilder.add(port.toJson());
+            final JsonArrayBuilder inputPortsBuilder = Json.createArrayBuilder();
+            for (PortConf port : inputPorts.values()) {
+                inputPortsBuilder.add(port.toJson());
             }
-            builder.add("in_ports", inPortsBuilder.build());
-            final JsonArrayBuilder outPortsBuilder = Json.createArrayBuilder();
-            for (PortConf port : outPorts.values()) {
-                outPortsBuilder.add(port.toJson());
+            builder.add("in_ports", inputPortsBuilder.build());
+            final JsonArrayBuilder outputPortsBuilder = Json.createArrayBuilder();
+            for (PortConf port : outputPorts.values()) {
+                outputPortsBuilder.add(port.toJson());
             }
-            builder.add("out_ports", outPortsBuilder.build());
+            builder.add("out_ports", outputPortsBuilder.build());
         }
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
         for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
@@ -2282,8 +2282,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 ",\n  options=" + options +
                 ",\n  language=" + language +
                 ",\n  javaConf=" + java +
-                ",\n  inPorts=" + inPorts +
-                ",\n  outPorts=" + outPorts +
+                ",\n  inputPorts=" + inputPorts +
+                ",\n  outputPorts=" + outputPorts +
                 ",\n  controls=" + controls +
                 ",\n  settings=" + settings +
                 ",\n  javaExecutor=" + javaExecutor +
@@ -2304,11 +2304,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static Map<String, PortConf> checkInPorts(Map<String, PortConf> ports) {
+    public static Map<String, PortConf> checkInputPorts(Map<String, PortConf> ports) {
         return checkPorts(ports, "input");
     }
 
-    public static Map<String, PortConf> checkOutPorts(Map<String, PortConf> ports) {
+    public static Map<String, PortConf> checkOutputPorts(Map<String, PortConf> ports) {
         return checkPorts(ports, "output");
     }
 

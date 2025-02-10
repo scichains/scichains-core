@@ -72,10 +72,10 @@ public class CreateExecutorSpecificationTest {
         final ExecutorSpecification.Options.Behavior behavior = new ExecutorSpecification.Options.Behavior();
         options.setBehavior(behavior);
         specification.setOptions(options);
-        final Map<String, ExecutorSpecification.PortConf> outPorts = new LinkedHashMap<>();
-        outPorts.put("output", new ExecutorSpecification.PortConf()
+        final Map<String, ExecutorSpecification.PortConf> outputPorts = new LinkedHashMap<>();
+        outputPorts.put("output", new ExecutorSpecification.PortConf()
                 .setName("output").setValueType(DataType.SCALAR));
-        specification.setOutPorts(outPorts);
+        specification.setOutputPorts(outputPorts);
         final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
         controls.put("width", new ExecutorSpecification.ControlConf()
                 .setName("width").setValueType(ParameterValueType.INT));

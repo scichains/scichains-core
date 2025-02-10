@@ -333,8 +333,8 @@ public final class UseMultiChain extends FileOperation {
         result.setName(multiChain.name());
         result.setDescription(multiChain.description());
         result.setLanguage(MULTICHAIN_LANGUAGE);
-        result.setInPorts(specification.getInPorts());
-        result.setOutPorts(specification.getOutPorts());
+        result.setInputPorts(specification.getInputPorts());
+        result.setOutputPorts(specification.getOutputPorts());
         UseSubChain.addSettingsPorts(result);
         final SettingsCombiner multiChainSettingsCombiner = multiChain.multiChainSettingsCombiner();
         addSystemParameters(result, multiChain);

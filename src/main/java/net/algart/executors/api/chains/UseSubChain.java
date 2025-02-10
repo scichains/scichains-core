@@ -420,7 +420,7 @@ public final class UseSubChain extends FileOperation {
             String parameterName) {
         String firstEnumValue = null;
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ExecutorSpecification.PortConf portConf : specification.getOutPorts().values()) {
+        for (ExecutorSpecification.PortConf portConf : specification.getOutputPorts().values()) {
             final String executorPortName = portConf.getName();
             if (firstEnumValue == null && !executorPortName.equals(CombineSettings.SETTINGS)) {
                 firstEnumValue = executorPortName;
@@ -433,7 +433,7 @@ public final class UseSubChain extends FileOperation {
         }
         if (firstEnumValue == null) {
             // - there is only SETTINGS port
-            firstEnumValue = specification.getOutPorts().values().iterator().next().getName();
+            firstEnumValue = specification.getOutputPorts().values().iterator().next().getName();
         }
         ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
         result.setName(parameterName);
@@ -446,10 +446,10 @@ public final class UseSubChain extends FileOperation {
     }
 
     public static void addSettingsPorts(ExecutorSpecification result) {
-        result.addFirstInPort(new ExecutorSpecification.PortConf()
+        result.addFirstInputPort(new ExecutorSpecification.PortConf()
                 .setName(CombineSettings.SETTINGS)
                 .setValueType(DataType.SCALAR));
-        result.addFirstOutPort(new ExecutorSpecification.PortConf()
+        result.addFirstOutputPort(new ExecutorSpecification.PortConf()
                 .setName(CombineSettings.SETTINGS)
                 .setHint("Actually used settings (JSON)")
                 .setAdvanced(true)

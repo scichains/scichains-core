@@ -81,8 +81,8 @@ class SpecialSpecificationsBuilder {
         result.setLanguage(PLATFORM_LANGUAGE);
         result.setJava(new ExecutorSpecification.JavaConf().setJson(
                 ExecutorSpecification.JavaConf.standardJson(CommonPlatformInformation.class.getName())));
-        result.setInPorts(pattern.getInPorts());
-        result.setOutPorts(pattern.getOutPorts());
+        result.setInputPorts(pattern.getInputPorts());
+        result.setOutputPorts(pattern.getOutputPorts());
         result.setControls(pattern.getControls());
         // - note: it is not absolutely safe, because ports will be shared in all created specifications;
         // but it is maximally quick

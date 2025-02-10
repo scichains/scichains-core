@@ -79,10 +79,10 @@ public enum InstantiationMode {
                 final ExecutorSpecification.ControlConf controlConf = e.getValue();
                 parameters.put(name, controlConf.getDefaultValue());
             }
-            for (var e : specification.getInPorts().entrySet()) {
+            for (var e : specification.getInputPorts().entrySet()) {
                 result.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
             }
-            for (var e : specification.getOutPorts().entrySet()) {
+            for (var e : specification.getOutputPorts().entrySet()) {
                 result.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
             }
         }
