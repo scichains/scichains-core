@@ -155,25 +155,26 @@ public final class UseMultiChain extends FileOperation {
         return this;
     }
 
-    public static Executor newSharedExecutor(Path multiChainFile, InstantiationMode instantiationMode)
+    public static MultiChainExecutor newSharedExecutor(Path multiChainFile, InstantiationMode instantiationMode)
             throws IOException {
         return newSharedExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
     }
 
-    public static Executor newSharedExecutor(
+    public static MultiChainExecutor newSharedExecutor(
             MultiChainSpecification specification,
             InstantiationMode instantiationMode)
             throws IOException {
         return getSharedInstance().newExecutor(specification, instantiationMode);
     }
 
-    public Executor newExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
+    public MultiChainExecutor newExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
             throws IOException {
         //noinspection resource
         return use(specification).toExecutor(instantiationMode);
     }
 
-    public Executor newExecutor(Path multiChainFile, InstantiationMode instantiationMode) throws IOException {
+    public MultiChainExecutor newExecutor(Path multiChainFile, InstantiationMode instantiationMode)
+            throws IOException {
         return newExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
     }
 

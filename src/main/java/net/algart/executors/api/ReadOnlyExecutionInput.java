@@ -35,7 +35,7 @@ public interface ReadOnlyExecutionInput {
     /**
      * If <code>true</code>, this executor promises, that it will not try to modify the data, loaded from input ports,
      * in any way: correcting content of arrays or matrices, saving {@link Data} back to input ports, etc.
-     * Also this executor promises that it will not store the reference to the data from input ports
+     * Also, this executor promises that it will not store the reference to the data from input ports
      * to output ports: all results, stored in the output ports, must be newly created data.
      *
      * <p>By default, this method returns <code>true</code>. So, you should implement this interface,

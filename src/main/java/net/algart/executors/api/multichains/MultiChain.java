@@ -373,7 +373,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
-    public Executor toExecutor(InstantiationMode instantiationMode) {
+    public MultiChainExecutor toExecutor(InstantiationMode instantiationMode) {
         final ExecutorFactory executorFactory = chainFactory.executorFactory();
         ExecutionBlock result;
         try {
@@ -382,11 +382,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         } catch (ClassNotFoundException | ExecutorNotFoundException e) {
             throw new IllegalStateException("Multi-chain with ID " + id() + " was not successfully registered", e);
         }
-        if (!(result instanceof Executor)) {
+        if (!(result instanceof MultiChainExecutor)) {
             throw new IllegalStateException("Multi-chain with ID " + id() + " is executed by some non-standard way: "
-                    + "its executor is not an instance of Executor class");
+                    + "its executor is not an instance of " + MultiChainExecutor.class);
         }
-        return (Executor) result;
+        return (MultiChainExecutor) result;
     }
 
     @Override
@@ -423,7 +423,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         freeResources();
     }
 
-    String selectedChainParameter() {
+    public String selectedChainParameter() {
         return specification.isBehaviourPreferSelectionById() ? SELECTED_CHAIN_ID : SELECTED_CHAIN_NAME;
         // - Important that we must use here the specification flag, not an effective selectionById field:
         // otherwise, the user will not be able to understand, which parameter he must use to select the variant

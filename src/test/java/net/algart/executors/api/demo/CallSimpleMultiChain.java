@@ -37,7 +37,7 @@ public class CallSimpleMultiChain {
     public static void main(String[] args) throws IOException {
         if (args.length < 4) {
             System.out.printf("Usage: " +
-                            "%s some_multi_chain.mchain input_image output_image sub_chain_ID [A B]%n" +
+                            "%s some_multi_chain.mchain input_image output_image sub_chain_variant [A B]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars X and Y " +
                             "and have 2 parameters named A and B;%n" +
                             "it should calculate some formula like AX+BY and return the result in the output.",
@@ -47,7 +47,7 @@ public class CallSimpleMultiChain {
         final Path multiChainPath = Paths.get(args[0]);
         final String x = args[1];
         final String y = args[2];
-        final String id = args[3];
+        final String variant = args[3];
         final String parameterA = args.length > 4 ? args[4] : null;
         final String parameterB = args.length > 5 ? args[5] : null;
 
@@ -59,7 +59,7 @@ public class CallSimpleMultiChain {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            executor.setStringParameter(MultiChain.SELECTED_CHAIN_NAME, id);
+            executor.selectChainVariant(variant);
             if (parameterA != null) {
                 executor.setStringParameter("a", parameterA);
             }
