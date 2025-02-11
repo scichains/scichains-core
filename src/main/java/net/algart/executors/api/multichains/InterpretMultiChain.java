@@ -42,7 +42,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Objects;
 
-public final class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyExecutionInput {
+public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
     private volatile MultiChain multiChain = null;
