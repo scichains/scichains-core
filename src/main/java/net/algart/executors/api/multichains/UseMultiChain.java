@@ -26,7 +26,6 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.ChainLoadingException;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
@@ -34,11 +33,11 @@ import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsCombiner;
 import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.executors.api.settings.UseSettings;
 import net.algart.json.Jsons;
 
 import java.io.FileNotFoundException;
