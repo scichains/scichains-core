@@ -113,7 +113,7 @@ public final class ChainBlock {
         this.chain = Objects.requireNonNull(chain, "Null containing chain");
         this.id = Objects.requireNonNull(id, "Null block id");
         this.executorId = Objects.requireNonNull(executorId, "Null block executorId");
-        final ExecutorFactory factory = chain.getExecutorFactory();
+        final ExecutorFactory factory = chain.executorFactory();
         this.executorSpecification = factory == null ? null : factory.getSpecification(executorId);
         // - Note: executorSpecification MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
@@ -512,7 +512,7 @@ public final class ChainBlock {
                 if (this.executor == null) {
                     final ExecutionBlock executor;
                     try {
-                        final ExecutorFactory executorFactory = chain.getExecutorFactory();
+                        final ExecutorFactory executorFactory = chain.executorFactory();
                         if (executorFactory == null) {
                             throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                     + ": executor factory is not set");

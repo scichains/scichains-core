@@ -222,7 +222,7 @@ public final class Chain implements AutoCloseable {
         return id;
     }
 
-    public ExecutorFactory getExecutorFactory() {
+    public ExecutorFactory executorFactory() {
         return executorFactory;
     }
 

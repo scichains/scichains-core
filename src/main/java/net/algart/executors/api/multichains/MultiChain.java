@@ -232,6 +232,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
+    public UseSubChain сhainFactory() {
+        return chainFactory;
+    }
+
     // Note: it is not-too-good idea to create it only inside the constructor.
     // Every chain can require a lot of resources, and different clones of multi-chain (see clone())
     // should have different chains.
