@@ -24,27 +24,56 @@
 
 package net.algart.executors.api.system.tests;
 
-import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class SimpleMultiChainTest {
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
-            System.out.printf("Usage: %s multi_chain.mchain result_copy.mchain%n",
-                    ChainSpecification.class.getName());
+        boolean rewrite = false;
+        int startArgIndex = 0;
+        if (args.length > startArgIndex && args[startArgIndex].equals("-rewrite")) {
+            rewrite = true;
+            startArgIndex++;
+        }
+        if (args.length < startArgIndex + 1) {
+            System.out.printf("Usage: %s [-rewrite] multi_chain.mchain | folder_with_multi_chains%n",
+                    SimpleMultiChainTest.class.getName());
             return;
         }
-        final Path multiChainFile = Paths.get(args[0]);
-        final Path resultFile = Paths.get(args[1]);
-        System.out.printf("Reading %s...%n", multiChainFile);
-        MultiChainSpecification specification = MultiChainSpecification.read(multiChainFile);
-        System.out.printf("Writing %s...%n", resultFile);
-        specification.write(resultFile);
-        System.out.printf("Full chain JSON:%n");
-        System.out.println(specification);
+        final Path multiChainFile = Paths.get(args[startArgIndex]);
+        List<Path> files;
+        if (Files.isDirectory(multiChainFile)) {
+            try (Stream<Path> list = Files.list(multiChainFile)) {
+                files = list.filter(MultiChainSpecification::isMultiChainSpecificationFile).toList();
+            }
+        } else {
+            files = List.of(multiChainFile);
+        }
+        for (Path file : files) {
+            System.out.printf("Reading %s...%n", file);
+            MultiChainSpecification specification = MultiChainSpecification.readIfValid(file);
+            if (specification == null) {
+                System.out.printf("Skipping %s (not a multi-chain)...%n", file);
+                continue;
+            }
+            if (rewrite) {
+                System.out.printf("Writing %s...%n", file);
+                specification.write(file);
+            }
+            if (files.size() == 1) {
+                System.out.println("Specification:");
+                System.out.println(specification);
+                System.out.println();
+                System.out.println("JSON:");
+                System.out.println(specification.jsonString());
+                System.out.println();
+            }
+        }
     }
 }

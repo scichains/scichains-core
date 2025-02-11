@@ -38,7 +38,7 @@ public class SimpleChainTest {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
         if (args.length < 2) {
             System.out.printf("Usage: %s chain.chain result_1.chain [result_2.chain]%n",
-                    ChainSpecification.class.getName());
+                    SimpleChainTest.class.getName());
             return;
         }
         final Path chainFile = Paths.get(args[0]);
@@ -48,7 +48,7 @@ public class SimpleChainTest {
         ChainSpecification specification = ChainSpecification.read(chainFile);
         System.out.printf("Writing %s...%n", resultFile1);
         specification.rewriteChainSection(resultFile1);
-        System.out.printf("Full chain JSON:%n");
+        System.out.printf("Specification:%n");
         System.out.println(specification);
         if (resultFile2 != null) {
             specification = ChainSpecification.read(resultFile1);
