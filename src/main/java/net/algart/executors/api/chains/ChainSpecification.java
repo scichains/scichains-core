@@ -1035,10 +1035,12 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
     }
 
     public String chainName() {
+        assert executor.name != null;
         return executor.name;
     }
 
     public String chainId() {
+        assert executor.id != null;
         return executor.id;
     }
 

@@ -2,7 +2,7 @@
   <configuration default="false" name="CallSimpleMultiChain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleMultiChain" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="src/test/resources/chains/chain_from_java/simplest_scalar/multi_scalar.mchain 100 200 scalar_product 100 1" />
+    <option name="PROGRAM_PARAMETERS" value="src/test/resources/chains/chain_from_java/simplest_scalar/multi_scalar.mchain 100 200 scalar_product 1 1" />
     <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>

@@ -33,7 +33,7 @@ import net.algart.executors.api.settings.SplitSettings;
 
 // Note: it is not an executor, it is an internal class for usage inside UseMultiChain and MultiChain
 public class UseMultiChainSettings extends UseSettings {
-    private MultiChain multiChain = null;
+    private volatile MultiChain multiChain = null;
 
     public MultiChain getMultiChain() {
         return multiChain;
@@ -45,10 +45,13 @@ public class UseMultiChainSettings extends UseSettings {
 
     @Override
     public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
+        if (multiChain == null) {
+            throw new IllegalStateException("MultiChain is not set: UseMultiChainSettings cannot be used");
+        }
         final ExecutorSpecification result = super.buildCombineSpecification(settingsCombiner);
         result.createOptionsIfAbsent().createControllingIfAbsent()
                 .setGrouping(true)
-                .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);
+                .setGroupSelector(multiChain.selectedChainParameter());
         return result;
     }
 

@@ -37,6 +37,11 @@ public class CombineMultiChainSettings extends CombineChainSettings {
     public CombineMultiChainSettings() {
     }
 
+    /**
+     * This implementation adds to the settings {@value MultiChain#SELECTED_CHAIN_NAME} field in the case,
+     * when the settings contain only {@value MultiChain#SELECTED_CHAIN_ID}.
+     * This is done only for better readability of the resulting JSON.
+     */
     @Override
     protected JsonObject correctSettings(JsonObject settings, SettingsCombiner combiner) {
         final Object customSettingsInformation = combiner.getCustomSettingsInformation();
@@ -44,17 +49,17 @@ public class CombineMultiChainSettings extends CombineChainSettings {
             throw new AssertionError("Invalid usage of " + this
                     + ": combiner does not contain parent MultiChain");
         }
-        final String chainId = settings.getString(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME, null);
+        final String chainId = settings.getString(MultiChain.SELECTED_CHAIN_ID, null);
         if (chainId == null) {
-            throw new AssertionError("Invalid usage of " + this + ": no "
-                    + MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME + " parameter");
+            // - selection by name is used, no sense to add anything
+            return settings;
         }
 //        System.out.println("!!!" + chainId + "; " + multiChain);
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        if (!settings.containsKey(MultiChain.SELECTED_CHAIN_PROPERTY_NAME)) {
+        if (!settings.containsKey(MultiChain.SELECTED_CHAIN_NAME)) {
             for (ChainSpecification specification : multiChain.chainSpecifications()) {
                 if (chainId.equals(specification.chainId())) {
-                    builder.add(MultiChain.SELECTED_CHAIN_PROPERTY_NAME, specification.chainName());
+                    builder.add(MultiChain.SELECTED_CHAIN_NAME, specification.chainName());
                     break;
                 }
             }

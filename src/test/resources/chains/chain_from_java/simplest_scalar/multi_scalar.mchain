@@ -40,5 +40,5 @@
     "scalar_sum.chain",
     "scalar_product.chain"
   ],
-  "default_variant_id": "scalar_product"
+  "default_variant_name": "scalar_sum"
 }

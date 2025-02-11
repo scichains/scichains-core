@@ -169,6 +169,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     private Options options = null;
     private List<String> chainVariantPaths = new ArrayList<>();
     private String defaultChainVariantId = null;
+    private String defaultChainVariantName = null;
     private Map<String, ExecutorSpecification.PortConf> inputPorts = new LinkedHashMap<>();
     private Map<String, ExecutorSpecification.PortConf> outputPorts = new LinkedHashMap<>();
     private Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
@@ -224,6 +225,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         this.chainVariantPaths = toFileNames(new ArrayList<>(),
                 Jsons.reqJsonArray(json, "chain_variant_paths", file), "chain_variant_paths");
         this.defaultChainVariantId = json.getString("default_variant_id", null);
+        this.defaultChainVariantName = json.getString("default_variant_name", null);
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
             final ExecutorSpecification.PortConf port = new ExecutorSpecification.PortConf(jsonObject, file);
             ExecutorSpecification.putOrException(inputPorts, port.getName(), port, file, "in_ports");
@@ -463,6 +465,15 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
+    public String getDefaultChainVariantName() {
+        return defaultChainVariantName;
+    }
+
+    public MultiChainSpecification setDefaultChainVariantName(String defaultChainVariantName) {
+        this.defaultChainVariantName = defaultChainVariantName;
+        return this;
+    }
+
     public Map<String, ExecutorSpecification.PortConf> getInputPorts() {
         return Collections.unmodifiableMap(inputPorts);
     }
@@ -578,6 +589,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                 ", options=" + options +
                 ", chainVariantPaths=" + chainVariantPaths +
                 ", defaultChainVariantId='" + defaultChainVariantId + '\'' +
+                ", defaultChainVariantName='" + defaultChainVariantName + '\'' +
                 ", inputPorts=" + inputPorts +
                 ", outputPorts=" + outputPorts +
                 ", controls=" + controls +
@@ -617,6 +629,9 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         builder.add("chain_variant_paths", chainVariantPathsBuilder.build());
         if (defaultChainVariantId != null) {
             builder.add("default_variant_id", defaultChainVariantId);
+        }
+        if (defaultChainVariantName != null) {
+            builder.add("default_variant_name", defaultChainVariantName);
         }
         final JsonArrayBuilder inputPortsBuilder = Json.createArrayBuilder();
         for (ExecutorSpecification.PortConf port : inputPorts.values()) {

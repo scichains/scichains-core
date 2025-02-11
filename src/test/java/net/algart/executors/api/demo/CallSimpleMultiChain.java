@@ -59,7 +59,7 @@ public class CallSimpleMultiChain {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            executor.setStringParameter(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME, id);
+            executor.setStringParameter(MultiChain.SELECTED_CHAIN_NAME, id);
             if (parameterA != null) {
                 executor.setStringParameter("a", parameterA);
             }

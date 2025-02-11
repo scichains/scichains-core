@@ -348,7 +348,7 @@ public final class UseMultiChain extends FileOperation {
         final ExecutorSpecification.Options options = result.createOptionsIfAbsent();
         options.createControllingIfAbsent()
                 .setGrouping(true)
-                .setGroupSelector(MultiChain.SELECTED_CHAIN_ID_PARAMETER_NAME);
+                .setGroupSelector(multiChain.selectedChainParameter());
         options.createServiceIfAbsent().setSettingsId(multiChainSettingsCombiner.id());
         final ExecutorSpecification.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
