@@ -33,7 +33,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class SimpleMultiChainTest {
+public class ReadWriteMultiChainTest {
     public static void main(String[] args) throws IOException {
         boolean rewrite = false;
         int startArgIndex = 0;
@@ -43,17 +43,17 @@ public class SimpleMultiChainTest {
         }
         if (args.length < startArgIndex + 1) {
             System.out.printf("Usage: %s [-rewrite] multi_chain.mchain | folder_with_multi_chains%n",
-                    SimpleMultiChainTest.class.getName());
+                    ReadWriteMultiChainTest.class.getName());
             return;
         }
-        final Path multiChainFile = Paths.get(args[startArgIndex]);
+        final Path path = Paths.get(args[startArgIndex]);
         List<Path> files;
-        if (Files.isDirectory(multiChainFile)) {
-            try (Stream<Path> list = Files.list(multiChainFile)) {
+        if (Files.isDirectory(path)) {
+            try (Stream<Path> list = Files.list(path)) {
                 files = list.filter(MultiChainSpecification::isMultiChainSpecificationFile).toList();
             }
         } else {
-            files = List.of(multiChainFile);
+            files = List.of(path);
         }
         for (Path file : files) {
             System.out.printf("Reading %s...%n", file);

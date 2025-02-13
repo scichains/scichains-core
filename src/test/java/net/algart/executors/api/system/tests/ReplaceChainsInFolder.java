@@ -54,7 +54,7 @@ public class ReplaceChainsInFolder {
         final String jsonString = specification.jsonString();
         final ChainSpecification reverse = ChainSpecification.of(Jsons.toJson(jsonString));
         if (!reverse.jsonString().equals(jsonString)) {
-            throw new AssertionError("Cannot reproduce JSON structre for " + f);
+            throw new AssertionError("Cannot reproduce JSON structure for " + f);
         }
         if (doChanges) {
             specification.rewriteChainSection(f);

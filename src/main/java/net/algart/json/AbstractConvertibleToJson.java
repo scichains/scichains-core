@@ -29,14 +29,14 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 
 public abstract class AbstractConvertibleToJson extends PropertyChecker {
-    public final JsonObject toJson() {
+    public JsonObject toJson() {
         checkCompleteness();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         buildJson(builder);
         return builder.build();
     }
 
-    public final String jsonString() {
+    public String jsonString() {
         return Jsons.toPrettyString(toJson());
     }
 

@@ -33,12 +33,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SimpleChainTest {
+public class ReadWriteChainTest {
     public static void main(String[] args) throws IOException {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
         if (args.length < 2) {
             System.out.printf("Usage: %s chain.chain result_1.chain [result_2.chain]%n",
-                    SimpleChainTest.class.getName());
+                    ReadWriteChainTest.class.getName());
             return;
         }
         final Path chainFile = Paths.get(args[0]);

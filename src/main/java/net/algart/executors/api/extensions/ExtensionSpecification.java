@@ -972,7 +972,9 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
     @Override
     public void buildJson(JsonObjectBuilder builder) {
         builder.add("app", APP_NAME);
-        builder.add("version", version);
+        if (!version.equals(CURRENT_VERSION)) {
+            builder.add("version", version);
+        }
         final JsonArrayBuilder platformsBuilder = Json.createArrayBuilder();
         for (Platform platform : platforms) {
             platformsBuilder.add(platform.toJson());
