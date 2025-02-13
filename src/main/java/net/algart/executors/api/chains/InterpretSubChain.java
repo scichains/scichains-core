@@ -164,7 +164,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         if (chain == null) {
             chain = registeredChain(getSessionId(), getExecutorId());
             this.chain = chain;
-            // - the order is important for multithreading: local chain is assigned first, this.chain is assigned to it
+            // - the order is important for multithreading
         }
         return chain;
     }
