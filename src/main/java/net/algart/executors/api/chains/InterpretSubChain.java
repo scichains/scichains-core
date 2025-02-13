@@ -44,7 +44,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 
-public class InterpretSubChain extends Executor implements ReadOnlyExecutionInput {
+public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
     private volatile Chain chain = null;

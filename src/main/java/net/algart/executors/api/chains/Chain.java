@@ -668,7 +668,7 @@ public final class Chain implements AutoCloseable {
         }
     }
 
-    public Executor toExecutor(InstantiationMode instantiationMode) {
+    public ChainExecutor toExecutor(InstantiationMode instantiationMode) {
         assert executorFactory != null;
         ExecutionBlock result;
         try {
@@ -677,11 +677,11 @@ public final class Chain implements AutoCloseable {
         } catch (ClassNotFoundException | ExecutorNotFoundException e) {
             throw new IllegalStateException("Chain with ID " + id + " was not successfully registered", e);
         }
-        if (!(result instanceof Executor)) {
+        if (!(result instanceof ChainExecutor)) {
             throw new IllegalStateException("Chain with ID " + id + " is executed by some non-standard way: "
-                    + "its executor is not an instance of Executor class");
+                    + "its executor is not an instance of " + ChainExecutor.class);
         }
-        return (Executor) result;
+        return (ChainExecutor) result;
     }
 
     public String timingInfo() {
