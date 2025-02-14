@@ -93,7 +93,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         return true;
     }
 
-    protected JsonObject correctSettings(JsonObject settings, Settings combiner) {
-        return settings;
+    protected JsonObject correctSettings(JsonObject settingsJson, Settings combiner) {
+        return settingsJson;
     }
 }

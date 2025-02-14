@@ -1289,8 +1289,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         public boolean isSubSettings() {
             return getValueType().isSettings() && !SettingsSpecification.SETTINGS.equals(name);
-            // - SETTINGS is a special parameter (probably in a settings combiner)
-            // for customizing all settings tree, this is not a SUB-settings
+            // - SETTINGS is a special parameter (probably inside CombineSettings)
+            // for customizing the whole settings tree, this is not a SUB-settings
         }
 
         @Override
