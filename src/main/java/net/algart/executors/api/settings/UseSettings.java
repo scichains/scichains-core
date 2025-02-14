@@ -53,7 +53,7 @@ public class UseSettings extends FileOperation {
     public static final String SETTINGS_NAME_OUTPUT_CAPTION = "settings_name";
     public static final String SETTINGS_ID_OUTPUT_NAME = "_ss___settings_id";
     public static final String SETTINGS_ID_OUTPUT_CAPTION = "Settings\u00A0ID";
-    public static final String SETTINGS_ID_OUTPUT_HINT = "ID of the corresponding settings combiner executor";
+    public static final String SETTINGS_ID_OUTPUT_HINT = "ID of the corresponding settings executor";
     public static final String ALL_SETTINGS_PARAMETER_NAME = SettingsSpecification.SETTINGS;
     public static final String ALL_SETTINGS_PARAMETER_CAPTION = "settings (all)";
     public static final String ALL_SETTINGS_PARAMETER_DESCRIPTION =
@@ -128,11 +128,11 @@ public class UseSettings extends FileOperation {
 
     private static final InstalledPlatformsForTechnology SETTINGS_PLATFORMS =
             InstalledPlatformsForTechnology.of(SETTINGS_TECHNOLOGY);
-    private static final DefaultExecutorLoader<Settings> SETTINGS_COMBINER_LOADER =
+    private static final DefaultExecutorLoader<Settings> SETTINGS_LOADER =
             new DefaultExecutorLoader<>("settings loader");
 
     static {
-        globalLoaders().register(SETTINGS_COMBINER_LOADER);
+        globalLoaders().register(SETTINGS_LOADER);
     }
 
     private boolean recursiveScanning = true;
@@ -159,7 +159,7 @@ public class UseSettings extends FileOperation {
     }
 
     public static DefaultExecutorLoader<Settings> settingsLoader() {
-        return SETTINGS_COMBINER_LOADER;
+        return SETTINGS_LOADER;
     }
 
     public final boolean isRecursiveScanning() {
@@ -186,9 +186,9 @@ public class UseSettings extends FileOperation {
         return this;
     }
 
-    public Settings settingsCombiner() {
+    public Settings settings() {
         if (settings == null) {
-            throw new IllegalStateException("Settings combiner was not registered yet");
+            throw new IllegalStateException("Settings were not registered yet");
         }
         return settings;
     }
@@ -208,8 +208,8 @@ public class UseSettings extends FileOperation {
             useContent(settingsCombinerJsonContent);
             return;
         }
-        throw new IllegalArgumentException("One of arguments \"Settings combiner JSON file/folder\" "
-                + "or \"Settings combiner JSON content\" must be non-empty");
+        throw new IllegalArgumentException("One of arguments \"Settings JSON file/folder\" "
+                + "or \"Settings JSON content\" must be non-empty");
     }
 
     public void useSeveralPaths(List<Path> settingsSpecificationPaths) throws IOException {
@@ -238,9 +238,9 @@ public class UseSettings extends FileOperation {
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(settingsSpecificationPath, "Null settings combiner path");
+        Objects.requireNonNull(settingsSpecificationPath, "Null settings specification path");
         mainSettings = false;
-        // - we need to reinitialize this field for improbable case of re-using this executor
+        // - we need to reinitialize this field for an improbable case of re-using this executor
         // (well be set again in use() method)
         final List<SettingsSpecification> settingsSpecifications;
         if (Files.isDirectory(settingsSpecificationPath)) {
@@ -260,7 +260,7 @@ public class UseSettings extends FileOperation {
         final boolean showContent = isMainChainSettings() && n == 1;
         for (int i = 0; i < n; i++) {
             final SettingsSpecification settingsSpecification = settingsSpecifications.get(i);
-            logDebug("Loading settings combiner " + (n > 1 ? (i + 1) + "/" + n + " " : "")
+            logDebug("Loading settings " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + settingsSpecification.getSettingsSpecificationFile().toAbsolutePath() + "...");
             if (platform != null) {
                 settingsSpecification.addTags(platform.getTags());
@@ -297,7 +297,7 @@ public class UseSettings extends FileOperation {
                 Jsons.toJson(settingsSpecificationContent),
                 false);
         // - we don't require strict accuracy for JSON, entered in a little text area
-        logDebug("Using settings combiner '"
+        logDebug("Using settings '"
                 + settingsSpecification.getName() + "' from the text argument...");
         use(settingsSpecification);
         if (isOutputNecessary(DEFAULT_OUTPUT_PORT)) {
@@ -331,14 +331,14 @@ public class UseSettings extends FileOperation {
         final Settings settings = Settings.of(settingsSpecification);
         settings.setCustomSettingsInformation(customSettingsInformation());
         final ExecutorSpecification combineSpecification = buildCombineSpecification(settings);
-        SETTINGS_COMBINER_LOADER.registerWorker(sessionId, combineSpecification, settings);
+        SETTINGS_LOADER.registerWorker(sessionId, combineSpecification, settings);
         final ExecutorSpecification splitSpecification = buildSplitSpecification(settings);
         if (splitSpecification != null) {
-            SETTINGS_COMBINER_LOADER.registerWorker(sessionId, splitSpecification, settings);
+            SETTINGS_LOADER.registerWorker(sessionId, splitSpecification, settings);
         }
         final ExecutorSpecification getNamesSpecification = buildGetNamesSpecification(settings);
         if (getNamesSpecification != null) {
-            SETTINGS_COMBINER_LOADER.registerWorker(sessionId, getNamesSpecification, settings);
+            SETTINGS_LOADER.registerWorker(sessionId, getNamesSpecification, settings);
         }
         return this.settings = settings;
     }
@@ -454,7 +454,7 @@ public class UseSettings extends FileOperation {
      * Returns <code>true</code> if this setting executor is <b>main</b> (i.e. a main settings set for some chain).
      * In this case:
      * <ol>
-     *     <li>if this function uses a directory, then only "main-settings-combiner" JSONs will be loaded;</li>
+     *     <li>if this function uses a directory, then only "main-settings" JSONs will be loaded;</li>
      *     <li>at least 1 actual executor must exist in the list of all executors, used by this function (but it
      *     can be changed by overriding {@link #isExistingSettingsRequired()});</li>
      *     <li>a list of more than one path is not supported;</li>
@@ -511,7 +511,7 @@ public class UseSettings extends FileOperation {
     }
 
     String installedSpecificationsCaption() {
-        return "installed settings combiner specifications";
+        return "installed settings specifications";
     }
 
     private void addOwner(ExecutorSpecification result, Settings settings) {
@@ -519,7 +519,7 @@ public class UseSettings extends FileOperation {
             final Object contextId = getContextId();
             final String ownerId = getOwnerId();
             if (contextId != null || ownerId != null) {
-                // So, we inform the execution system, which chain has actually created this settings combiner
+                // So, we inform the execution system, which chain has actually created these settings
                 // (by UseChainSettings static executor). It will help the execution system to detect, which
                 // from execution blocks is the "main" settings for the current chain: its owner ID will
                 // be equal to ID of this chain.
@@ -566,7 +566,7 @@ public class UseSettings extends FileOperation {
             final String settingsName = settings.name();
             /*
             // We decided not to add this information: the settings are usually created by external dashboard,
-            // direct using combiner is not a typical case
+            // direct using settings combiners is not a typical case
             if (!subChainMode) {
                 addBooleanControl(result,
                         ADD_SETTINGS_CLASS_PARAMETER_NAME,

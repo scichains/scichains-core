@@ -34,7 +34,7 @@
     {
       "caption": "Sub-settings name",
       "name": "subSettingsName",
-      "description": "New sub-settings JSON will be added to existing JSON as JSON section, named \"@\" + this name. For example, sub-settings name \"xxxParameters\" will produce JSON object named \"@xxxParameters\". (Note that usual parameters in the settings combiner cannot start with @ character.)",
+      "description": "New sub-settings JSON will be added to existing JSON as JSON section, named \"@\" + this name. For example, sub-settings name \"xxxParameters\" will produce JSON object named \"@xxxParameters\". (Note that usual parameters in the settings cannot start with @ character.)",
       "value_type": "String",
       "edition_type": "value",
       "default": "subsettings"

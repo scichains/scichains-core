@@ -44,7 +44,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class MultiChain implements Cloneable, AutoCloseable {
     public static final String SELECTED_CHAIN_ID = "___selectedChainId";
     public static final String SELECTED_CHAIN_NAME = "___selectedChainName";
-    // - unlike chain ID, it is not a parameter of combiner, but only additional information inside result JSON
+    // - note: SELECTED_CHAIN_NAME is also added to JSON even when we prefer ID
+    // (see preferSelectionById in MultiChainSpecification and CombineMultiChainSettings.correctSettings)
     public static final String SELECTED_CHAIN_ID_PARAMETER_CAPTION = "Selected chain";
 
     private static final boolean DEBUG_ALWAYS_SELECTION_BY_ID = false;
@@ -56,7 +57,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private volatile long contextId;
     // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
-    // for executing anything; but it is used as a context ID for multi-chain settings combiner.
+    // for executing anything; but it is used as a context ID for multi-chain settings.
     private final MultiChainSpecification specification;
     private final UseSubChain chainFactory;
     private final List<ChainSpecification> chainSpecifications;
@@ -69,7 +70,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private String defaultChainIdOrName;
     // - filled in createSelectedChainIdControl()
     private final Settings multiChainOnlyCommonSettings;
-    // - note: this combiner is not registered, it is used for building a multi-chain executor only in UseMultiChain
+    // - note: these settings are not registered, but used for building a multi-chain executor only in UseMultiChain
     private final Settings multiChainSettings;
 
     // Note: unlike Chain, currentDirectory is not actual here: loading without files is senseless here.
@@ -138,10 +139,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         settingsFactory.setContextName(specification.getName());
         // - this information, set by previous operators, will be used only in the following operators,
         // to make a reference to this MultiChain and to set the correct owner information
-        // inside newly created settings combiner
+        // inside newly created settings
         this.multiChainOnlyCommonSettings = Settings.of(
                 buildMultiChainSettingsSpecification(false, nonRecursiveChainMap));
-        // - this (internally used) combiner does not contain advanced multi-line controls
+        // - these (internally used) settings do not contain advanced multi-line controls
         // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainSpecification()
         assert this.defaultChainIdOrName != null :
                 "defaultChainIdOrName must be filled in createSelectedChainIdControl()";
@@ -290,7 +291,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executorSettings, "Null executorSettings");
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final Settings mainSettings = selectedChain.getMainSettingsCombiner();
+        final Settings mainSettings = selectedChain.getMainSettings();
         if (mainSettings == null) {
             return null;
         }
@@ -337,12 +338,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             result = Jsons.overrideEntries(result, onlyActual);
             // - Note: we use THE SAME actual keys, not multi-chain actual keys!
             // We need to return settings for selected CHAIN, that does not understand
-            // any multi-chain parameters, excepting ones that are identical with (and also actual for)
+            // any multi-chain parameters, excepting ones that are identical (and actual) with
             // CHAIN parameters. In particular, we must NEVER return here SELECTED_CHAIN_ID_PARAMETER_NAME:
             // it must not appear on the top level to avoid possible problems.
         }
 
-        // 3rd overriding: by parent (both are performed in multiChainCombiner.overrideSettings method)
+        // 3rd overriding: by parent (both are performed in multiSettings.overrideSettings method)
         return Settings.overrideEntriesExceptingGivenSettings(
                 result, parentSettings, multiChainName, selectedChainName);
     }
@@ -470,7 +471,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    final Settings mainSettings = chain.getMainSettingsCombiner();
+                    final Settings mainSettings = chain.getMainSettings();
                     if (mainSettings != null) {
                         final SettingsSpecification specification = mainSettings.specification();
                         settingsControlConf.setSettingsId(specification.getId());
@@ -540,7 +541,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     /*
     private Chain registeredChain(String sessionId, String executorId) {
         final Chain chain = InterpretSubChain.registeredChain(sessionId, executorId);
-        if (chain.getMainSettingsCombiner() == null) {
+        if (chain.getMainSettings() == null) {
             throw new IllegalStateException("Chain \"" + chain.name()
                     + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()
                     + "\" (ID \"" + id() + "\") has no built-in main settings; "

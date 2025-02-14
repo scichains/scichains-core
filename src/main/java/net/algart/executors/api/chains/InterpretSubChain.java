@@ -185,7 +185,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final Settings settings = chain.getMainSettingsCombiner();
+        final Settings settings = chain.getMainSettings();
         if (settings == null) {
             return;
         }
@@ -198,8 +198,8 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
         if (settingsSpecification != null) {
             // - In the current version, settingsSpecification will usually be null.
-            // We build every ChainBlock at the stage of loading sub-chain, BEFORE executing its loading-time
-            // functions; at this stage, settings combiners are not registered yet, and we have no correct JSON.
+            // We build every ChainBlock at the stage of loading a sub-chain, BEFORE executing its loading-time
+            // functions; at this stage, settings are not registered yet, and we have no correct JSON.
             if (!settingsSpecification.isRoleSettings()) {
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
                         "a correct role \"settings\" (its options are " +

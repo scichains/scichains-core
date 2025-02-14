@@ -339,11 +339,11 @@ public final class Chain implements AutoCloseable {
         return mainSettingsBlockId;
     }
 
-    public Settings getMainSettingsCombiner() {
+    public Settings getMainSettings() {
         return mainSettings;
     }
 
-    public void setMainSettingsCombiner(Settings mainSettings) {
+    public void setMainSettings(Settings mainSettings) {
         Objects.requireNonNull(mainSettings, "Null mainSettings");
         final String id = mainSettings.id();
         assert id != null;
@@ -362,7 +362,7 @@ public final class Chain implements AutoCloseable {
         }
         if (mainSettingsBlock == null) {
             throw new IllegalStateException("Sub-chain " + canonicalName()
-                    + " does not contain the dynamic settings combiner '" + id
+                    + " does not contain the dynamic settings '" + id
                     + "', created by its UseChainSettings function");
         }
         this.mainSettingsBlockId = mainSettingsBlock.getId();

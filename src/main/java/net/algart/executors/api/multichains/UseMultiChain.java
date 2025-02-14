@@ -343,8 +343,8 @@ public final class UseMultiChain extends FileOperation {
         // Also, we add ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary.
         // Note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettings
         result.setSettings(multiChainSettings.specification());
-        // - important: we MUST store the full multi-chain settings combiner as settings,
-        // not a reduced version from multiChainOnlyCommonSettingsCombiner()
+        // - important: we MUST store the full multi-chain settings as normal settings,
+        // not a reduced version from multiChainOnlyCommonSettings()
         final ExecutorSpecification.Options options = result.createOptionsIfAbsent();
         options.createControllingIfAbsent()
                 .setGrouping(true)

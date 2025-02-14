@@ -553,7 +553,7 @@ public final class UseSubChain extends FileOperation {
         result.addControl(createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
         result.addControl(createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
         result.addControl(createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
-        addChainSettingsCombiner(result, chain);
+        addChainSettings(result, chain);
         final ExecutorSpecification.ControlConf visibleResult = createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {
@@ -607,20 +607,20 @@ public final class UseSubChain extends FileOperation {
         if (chain.isEmpty()) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        final Settings mainSettings = chain.get().getMainSettingsCombiner();
+        final Settings mainSettings = chain.get().getMainSettings();
         return mainSettings == null ? "" : ", " + mainSettings;
     }
 
-    private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
+    private static void addChainSettings(ExecutorSpecification result, Chain chain) {
         final ChainBlock useChainSettingsBlock = findUseChainSettings(chain);
         if (useChainSettingsBlock == null) {
             UseSettings.addSubChainControlsAndPorts(result, null);
             return;
         }
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
-        final Settings mainSettings = useChainSettings.settingsCombiner();
+        final Settings mainSettings = useChainSettings.settings();
         // - mainSettings was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setMainSettingsCombiner(mainSettings);
+        chain.setMainSettings(mainSettings);
         UseSettings.addSubChainControlsAndPorts(result, mainSettings);
         result.setSettings(mainSettings.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettings.id());

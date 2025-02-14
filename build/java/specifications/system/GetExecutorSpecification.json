@@ -26,7 +26,7 @@
       "value_type": "scalar",
       "name": "settings_specification",
       "caption": "settings specification",
-      "hint": "If this executor has an associated settings specification JSON,\nas settings combiners, sub-chains or multi-chains,\nit is returned, otherwise this port stays empty"
+      "hint": "If this executor has an associated settings specification JSON,\nas settings, sub-chains or multi-chains,\nit is returned, otherwise this port stays empty"
     },
     {
       "value_type": "scalar",

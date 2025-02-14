@@ -38,25 +38,26 @@ public class CombineMultiChainSettings extends CombineChainSettings {
     }
 
     /**
-     * This implementation adds to the settings {@value MultiChain#SELECTED_CHAIN_NAME} field in the case,
-     * when the settings contain only {@value MultiChain#SELECTED_CHAIN_ID}.
+     * This implementation adds to the <code>settingsJson</code>
+     * {@value MultiChain#SELECTED_CHAIN_NAME} field in the case,
+     * when the <code>settingsJson</code> contain only {@value MultiChain#SELECTED_CHAIN_ID}.
      * This is done only for better readability of the resulting JSON.
      */
     @Override
-    protected JsonObject correctSettings(JsonObject settings, Settings combiner) {
+    protected JsonObject correctSettings(JsonObject settingsJson, Settings combiner) {
         final Object customSettingsInformation = combiner.getCustomSettingsInformation();
         if (!(customSettingsInformation instanceof MultiChain multiChain)) {
             throw new AssertionError("Invalid usage of " + this
-                    + ": combiner does not contain parent MultiChain");
+                    + ": settings does not contain parent MultiChain");
         }
-        final String chainId = settings.getString(MultiChain.SELECTED_CHAIN_ID, null);
+        final String chainId = settingsJson.getString(MultiChain.SELECTED_CHAIN_ID, null);
         if (chainId == null) {
             // - selection by name is used, no sense to add anything
-            return settings;
+            return settingsJson;
         }
 //        System.out.println("!!!" + chainId + "; " + multiChain);
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        if (!settings.containsKey(MultiChain.SELECTED_CHAIN_NAME)) {
+        if (!settingsJson.containsKey(MultiChain.SELECTED_CHAIN_NAME)) {
             for (ChainSpecification specification : multiChain.chainSpecifications()) {
                 if (chainId.equals(specification.chainId())) {
                     builder.add(MultiChain.SELECTED_CHAIN_NAME, specification.chainName());
@@ -64,7 +65,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
                 }
             }
         }
-        Jsons.addAllJson(builder, settings);
+        Jsons.addAllJson(builder, settingsJson);
         return builder.build();
     }
 }

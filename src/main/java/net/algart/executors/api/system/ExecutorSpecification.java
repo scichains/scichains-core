@@ -97,7 +97,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         public static final class Role extends AbstractConvertibleToJson {
             private String className = null;
             // - Some "class" of this role.
-            // For example, for settings combiners, by default, it is the settings className
+            // For example, for settings, by default, it is the settings className
             private String resultPort = null;
             // - Port, containing the main results of this executor.
             // Not important for usual executors, but can be useful for special roles like "settings",
@@ -281,7 +281,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
         public static final class Service extends AbstractConvertibleToJson {
             private String settingsId = null;
-            // - for example, for a chain executor, this is an ID of the main settings combiner
+            // - for example, for a chain executor, this is an ID of the main settings
 
             public Service() {
             }

@@ -306,7 +306,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                         + ", one of them is \"" + multiChainSpecification.getName() + "\"");
             }
             if (settingsId != null && !ids.add(settingsId)) {
-                throw new IllegalArgumentException("Two settings-combiner JSONs have identical IDs " + settingsId
+                throw new IllegalArgumentException("Two settings JSONs have identical IDs " + settingsId
                         + ", one of them is \"" + multiChainSpecification.getName() + "\"");
             }
         }

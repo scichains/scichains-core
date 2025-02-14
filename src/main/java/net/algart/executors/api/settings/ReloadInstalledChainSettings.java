@@ -48,6 +48,6 @@ public final class ReloadInstalledChainSettings extends UseChainSettings {
     }
 
     String installedSpecificationsCaption() {
-        return "installed chain main settings combiner specifications";
+        return "installed chain main settings specifications";
     }
 }

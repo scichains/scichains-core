@@ -30,7 +30,7 @@
     {
       "caption": "Sub-settings name",
       "name": "subSettingsName",
-      "description": "Name of extracted sub-settings JSON is \"@\" + this name. For example, if you want to retrieve sub-JSON with name \"@xxxParameters\", please use the name \"xxxParameters\". (Note that usual parameters in the settings combiner cannot start with @ character.) If there is no sub-section with such a name, this function creates an empty JSON.",
+      "description": "Name of extracted sub-settings JSON is \"@\" + this name. For example, if you want to retrieve sub-JSON with name \"@xxxParameters\", please use the name \"xxxParameters\". (Note that usual parameters in the settings cannot start with @ character.) If there is no sub-section with such a name, this function creates an empty JSON.",
       "value_type": "String",
       "edition_type": "value",
       "default": "subsettings"

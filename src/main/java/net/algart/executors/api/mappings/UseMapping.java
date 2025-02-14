@@ -150,7 +150,7 @@ public class UseMapping extends FileOperation {
         MappingSpecification.checkIdDifference(mappingSpecifications);
         for (int i = 0, n = mappingSpecifications.size(); i < n; i++) {
             final MappingSpecification mappingSpecification = mappingSpecifications.get(i);
-            logDebug("Loading settings combiner " + (n > 1 ? (i + 1) + "/" + n + " " : "")
+            logDebug("Loading settings " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + mappingSpecification.getMappingSpecificationFile().toAbsolutePath() + "...");
             use(mappingSpecification);
             if (report != null) {

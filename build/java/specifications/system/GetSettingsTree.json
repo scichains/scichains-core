@@ -70,7 +70,7 @@
     {
       "caption": "Executor ID",
       "name": "id",
-      "description": "Unique identifier of the executor. Note that it is not the ID of the settings associated with this executor, though they can be equal (for example, for settings combiner executors).",
+      "description": "Unique identifier of the executor. Note that it is not the ID of the settings associated with this executor, though they can be equal (for example, for settings executors).",
       "value_type": "String",
       "edition_type": "value",
       "default": ""
