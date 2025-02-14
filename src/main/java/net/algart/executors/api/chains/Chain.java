@@ -29,7 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorNotFoundException;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -78,7 +78,7 @@ public final class Chain implements AutoCloseable {
     // instead, we will measure the time of SubChain executor, which executes this chain.
     // But this flag can be set by debugging applications, like ExecutingChain class.
     private volatile String mainSettingsBlockId = null;
-    private volatile SettingsCombiner mainSettingsCombiner = null;
+    private volatile Settings mainSettings = null;
     private volatile Object customChainInformation = null;
 
     private volatile List<ChainBlock> allInputs = null;
@@ -122,7 +122,7 @@ public final class Chain implements AutoCloseable {
         this.ignoreExceptions = chain.ignoreExceptions;
         this.timingByExecutorsEnabled = chain.timingByExecutorsEnabled;
 
-        this.mainSettingsCombiner = chain.mainSettingsCombiner;
+        this.mainSettings = chain.mainSettings;
         this.mainSettingsBlockId = chain.mainSettingsBlockId;
         this.customChainInformation = chain.customChainInformation;
 
@@ -339,13 +339,13 @@ public final class Chain implements AutoCloseable {
         return mainSettingsBlockId;
     }
 
-    public SettingsCombiner getMainSettingsCombiner() {
-        return mainSettingsCombiner;
+    public Settings getMainSettingsCombiner() {
+        return mainSettings;
     }
 
-    public void setMainSettingsCombiner(SettingsCombiner mainSettingsCombiner) {
-        Objects.requireNonNull(mainSettingsCombiner, "Null mainSettingsCombiner");
-        final String id = mainSettingsCombiner.id();
+    public void setMainSettingsCombiner(Settings mainSettings) {
+        Objects.requireNonNull(mainSettings, "Null mainSettings");
+        final String id = mainSettings.id();
         assert id != null;
         ChainBlock mainSettingsBlock = null;
         for (ChainBlock block : allBlocks.values()) {
@@ -366,7 +366,7 @@ public final class Chain implements AutoCloseable {
                     + "', created by its UseChainSettings function");
         }
         this.mainSettingsBlockId = mainSettingsBlock.getId();
-        this.mainSettingsCombiner = mainSettingsCombiner;
+        this.mainSettings = mainSettings;
     }
 
     public Map<String, ChainBlock> getAllBlocks() {

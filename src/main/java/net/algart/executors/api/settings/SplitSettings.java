@@ -25,11 +25,12 @@
 package net.algart.executors.api.settings;
 
 import jakarta.json.JsonObject;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.json.Jsons;
 
 import java.util.Locale;
 
-public class SplitSettings extends AbstractInterpretSettings {
+public class SplitSettings extends SettingsExecutor implements ReadOnlyExecutionInput {
     public SplitSettings() {
         setDefaultInputScalar(CombineSettings.SETTINGS);
         setDefaultOutputScalar(CombineSettings.SETTINGS);
@@ -42,7 +43,7 @@ public class SplitSettings extends AbstractInterpretSettings {
         // - important to do this before other operations, for an improbable case
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
-        final SettingsCombiner combiner = settingsCombiner();
+        final Settings combiner = settings();
         final String s = getInputScalar(CombineSettings.SETTINGS, true)
                 .getValueOrDefault("").trim();
         JsonObject settings = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
@@ -59,7 +60,7 @@ public class SplitSettings extends AbstractInterpretSettings {
 
     @Override
     public String toString() {
-        return "Split " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+        return "Split " + (settings != null ? settings : "some non-initialized settings");
     }
 
     @Override

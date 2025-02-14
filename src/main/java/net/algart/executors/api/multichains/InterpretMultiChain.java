@@ -25,12 +25,11 @@
 package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonObject;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.executors.api.chains.UseSubChain;
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.modules.core.common.FunctionTiming;
@@ -66,7 +65,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 getInputScalar(SETTINGS, true).getValue(), true);
         final boolean absolutePaths = parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                SettingsCombiner.ABSOLUTE_PATHS_DEFAULT_VALUE);
+                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE);
         final boolean extractSubSettings = parameters().getBoolean(
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT);
@@ -75,7 +74,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
         @SuppressWarnings("resource") final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
-        final SettingsCombiner multiChainCombiner = multiChain.multiChainSettingsCombiner();
+        final Settings multiChainCombiner = multiChain.multiChainSettingsCombiner();
         multiChainCombiner.setAbsolutePaths(absolutePaths);
         final String defaultChainVariant = ignoreInputParameters ?
                 multiChain.defaultChainVariant() :

@@ -29,7 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
@@ -185,7 +185,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final SettingsCombiner combiner = chain.getMainSettingsCombiner();
+        final Settings combiner = chain.getMainSettingsCombiner();
         if (combiner == null) {
             return;
         }
@@ -215,7 +215,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         }
         final boolean absolutePaths = parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                SettingsCombiner.ABSOLUTE_PATHS_DEFAULT_VALUE);
+                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE);
         final boolean extractSubSettings = parameters().getBoolean(
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT);

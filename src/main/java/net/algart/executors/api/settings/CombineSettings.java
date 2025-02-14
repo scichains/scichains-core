@@ -25,12 +25,13 @@
 package net.algart.executors.api.settings;
 
 import jakarta.json.JsonObject;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
 import net.algart.json.Jsons;
 
 import java.util.Locale;
 
-public class CombineSettings extends AbstractInterpretSettings {
+public class CombineSettings extends SettingsExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
     public CombineSettings() {
@@ -45,11 +46,11 @@ public class CombineSettings extends AbstractInterpretSettings {
         // - important to do this before other operations, for an improbable case
         // when there is a user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
-        final SettingsCombiner combiner = settingsCombiner();
+        final Settings combiner = settings();
         final SScalar inputSettings = getInputScalar(SETTINGS, true);
         combiner.setAbsolutePaths(parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                SettingsCombiner.ABSOLUTE_PATHS_DEFAULT_VALUE));
+                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE));
 // We decided not to add this information: the settings are usually created by external dashboard,
 // direct using combiner is not a typical case
 //        combiner.setAddSettingsClass(properties().getBoolean(
@@ -84,7 +85,7 @@ public class CombineSettings extends AbstractInterpretSettings {
 
     @Override
     public String toString() {
-        return "Combine " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+        return "Combine " + (settings != null ? settings : "some non-initialized settings");
     }
 
     @Override
@@ -92,7 +93,7 @@ public class CombineSettings extends AbstractInterpretSettings {
         return true;
     }
 
-    protected JsonObject correctSettings(JsonObject settings, SettingsCombiner combiner) {
+    protected JsonObject correctSettings(JsonObject settings, Settings combiner) {
         return settings;
     }
 }

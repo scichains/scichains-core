@@ -27,10 +27,10 @@ package net.algart.executors.api.settings;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 
-public abstract class AbstractInterpretSettings extends Executor implements ReadOnlyExecutionInput {
-    volatile SettingsCombiner settingsCombiner = null;
+public abstract class SettingsExecutor extends Executor implements ReadOnlyExecutionInput {
+    volatile Settings settings = null;
 
-    public SettingsCombiner settingsCombiner() {
+    public Settings settings() {
         final String sessionId = getSessionId();
         final String executorId = getExecutorId();
         if (sessionId == null) {
@@ -39,21 +39,21 @@ public abstract class AbstractInterpretSettings extends Executor implements Read
         if (executorId == null) {
             throw new IllegalStateException("Cannot find settings combiner worker: executor ID is not set");
         }
-        SettingsCombiner settingsCombiner = this.settingsCombiner;
-        if (settingsCombiner == null) {
-            settingsCombiner = UseSettings.settingsCombinerLoader().registeredWorker(sessionId, executorId);
-            this.settingsCombiner = settingsCombiner.clone();
-            // - the order is important for multithreading: local settingsCombiner is assigned first,
-            // this.settingsCombiner is assigned to it;
-            // cloning is necessary because SettingsCombiner class can be little customized
+        Settings settings = this.settings;
+        if (settings == null) {
+            settings = UseSettings.settingsCombinerLoader().registeredWorker(sessionId, executorId);
+            this.settings = settings.clone();
+            // - the order is important for multithreading: local settings are assigned first,
+            // this.settings is assigned to it;
+            // cloning is necessary because Settings class can be little customized
         }
-        return settingsCombiner;
+        return settings;
     }
 
     void setSystemOutputs() {
-        final SettingsCombiner settingsCombiner = settingsCombiner();
+        final Settings settings = settings();
         if (hasOutputPort(UseSettings.SETTINGS_NAME_OUTPUT_NAME)) {
-            getScalar(UseSettings.SETTINGS_NAME_OUTPUT_NAME).setTo(settingsCombiner.name());
+            getScalar(UseSettings.SETTINGS_NAME_OUTPUT_NAME).setTo(settings.name());
         }
     }
 }

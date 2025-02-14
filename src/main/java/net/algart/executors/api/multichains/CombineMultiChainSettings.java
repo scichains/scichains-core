@@ -28,7 +28,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.json.Jsons;
 
@@ -43,7 +43,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
      * This is done only for better readability of the resulting JSON.
      */
     @Override
-    protected JsonObject correctSettings(JsonObject settings, SettingsCombiner combiner) {
+    protected JsonObject correctSettings(JsonObject settings, Settings combiner) {
         final Object customSettingsInformation = combiner.getCustomSettingsInformation();
         if (!(customSettingsInformation instanceof MultiChain multiChain)) {
             throw new AssertionError("Invalid usage of " + this

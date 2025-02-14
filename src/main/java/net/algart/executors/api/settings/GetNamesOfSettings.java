@@ -27,13 +27,14 @@ package net.algart.executors.api.settings;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.Jsons;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GetNamesOfSettings extends AbstractInterpretSettings {
+public class GetNamesOfSettings extends SettingsExecutor implements ReadOnlyExecutionInput {
     public enum ResultType {
         RAW_LINES() {
             @Override
@@ -168,7 +169,7 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
         setSystemOutputs();
         // - important to do this before other operations, for an improbable case
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
-        final SettingsCombiner combiner = settingsCombiner();
+        final Settings combiner = settings();
         final List<String> names = combiner.specification().getControls().values().stream()
                 .filter(this::isMatched).map(ExecutorSpecification.ControlConf::getName)
                 .collect(Collectors.toList());
@@ -177,7 +178,7 @@ public class GetNamesOfSettings extends AbstractInterpretSettings {
 
     @Override
     public String toString() {
-        return "Get names of " + (settingsCombiner != null ? settingsCombiner : "some non-initialized settings");
+        return "Get names of " + (settings != null ? settings : "some non-initialized settings");
     }
 
 

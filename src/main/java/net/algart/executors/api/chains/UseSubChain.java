@@ -27,12 +27,11 @@ package net.algart.executors.api.chains;
 import jakarta.json.JsonValue;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.api.settings.UseChainSettings;
@@ -608,8 +607,8 @@ public final class UseSubChain extends FileOperation {
         if (chain.isEmpty()) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        final SettingsCombiner mainSettingsCombiner = chain.get().getMainSettingsCombiner();
-        return mainSettingsCombiner == null ? "" : ", " + mainSettingsCombiner;
+        final Settings mainSettings = chain.get().getMainSettingsCombiner();
+        return mainSettings == null ? "" : ", " + mainSettings;
     }
 
     private static void addChainSettingsCombiner(ExecutorSpecification result, Chain chain) {
@@ -619,12 +618,12 @@ public final class UseSubChain extends FileOperation {
             return;
         }
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
-        final SettingsCombiner mainSettingsCombiner = useChainSettings.settingsCombiner();
-        // - mainSettingsCombiner was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setMainSettingsCombiner(mainSettingsCombiner);
-        UseSettings.addSubChainControlsAndPorts(result, mainSettingsCombiner);
-        result.setSettings(mainSettingsCombiner.specification());
-        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettingsCombiner.id());
+        final Settings mainSettings = useChainSettings.settingsCombiner();
+        // - mainSettings was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
+        chain.setMainSettingsCombiner(mainSettings);
+        UseSettings.addSubChainControlsAndPorts(result, mainSettings);
+        result.setSettings(mainSettings.specification());
+        result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettings.id());
         addSettingsPorts(result);
     }
 

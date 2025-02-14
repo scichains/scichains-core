@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.multichains;
 
-import net.algart.executors.api.settings.SettingsCombiner;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.settings.CombineSettings;
@@ -44,11 +44,11 @@ public class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
-    public ExecutorSpecification buildCombineSpecification(SettingsCombiner settingsCombiner) {
+    public ExecutorSpecification buildCombineSpecification(Settings settings) {
         if (multiChain == null) {
             throw new IllegalStateException("MultiChain is not set: UseMultiChainSettings cannot be used");
         }
-        final ExecutorSpecification result = super.buildCombineSpecification(settingsCombiner);
+        final ExecutorSpecification result = super.buildCombineSpecification(settings);
         result.createOptionsIfAbsent().createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(multiChain.selectedChainParameter());
