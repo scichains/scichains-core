@@ -47,7 +47,7 @@ public class SplitSettings extends SettingsExecutor implements ReadOnlyExecution
         final String s = getInputScalar(CombineSettings.SETTINGS, true)
                 .getValueOrDefault("").trim();
         JsonObject inputSettings = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
-        settings.splitSettings(this, inputSettings);
+        settings.splitSettingsToOutputPorts(this, inputSettings);
         inputSettings = Jsons.overrideEntries(settings.createSettings(this), inputSettings);
         // - provide default values for keys, absent in the source JSON
         getScalar(CombineSettings.SETTINGS).setTo(Jsons.toPrettyString(inputSettings));

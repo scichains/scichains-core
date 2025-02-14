@@ -221,7 +221,18 @@ public final class Settings implements Cloneable {
         return createSettings(executor, true);
     }
 
-    public void splitSettings(Executor executor, JsonObject settings) {
+    public void parseSettingsToParameters(Parameters parameters, JsonObject settings) {
+        Objects.requireNonNull(parameters, "Null parameters");
+        Objects.requireNonNull(settings, "Null settings");
+        for (ExecutorSpecification.ControlConf controlConf : specification.getControls().values()) {
+            JsonValue jsonValue = settings.get(controlConf.getName());
+            if (jsonValue != null) {
+                setJsonValue(controlConf, parameters, jsonValue);
+            }
+        }
+    }
+
+    public void splitSettingsToOutputPorts(Executor executor, JsonObject settings) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(settings, "Null settings");
         for (ExecutorSpecification.ControlConf controlConf : specification.getControls().values()) {
@@ -377,7 +388,7 @@ public final class Settings implements Cloneable {
         final ParameterValueType valueType = controlConf.getValueType();
         JsonValue jsonValue = null;
         if (executor != null) {
-            final Parameters properties = executor.parameters();
+            final Parameters parameters = executor.parameters();
             if (valueType.isSettings() && executor.hasInputPort(name)) {
                 final SScalar scalar = executor.getInputScalar(name, true);
                 if (scalar.isInitialized()) {
@@ -386,8 +397,8 @@ public final class Settings implements Cloneable {
                     return jsonValue;
                 }
             }
-            if (properties.containsKey(name)) {
-                jsonValue = valueType.toJsonValue(properties, name);
+            if (parameters.containsKey(name)) {
+                jsonValue = valueType.toJsonValue(parameters, name);
             }
         }
         if (jsonValue == null) {
@@ -397,6 +408,24 @@ public final class Settings implements Cloneable {
             jsonValue = valueType.emptyJsonValue();
         }
         return jsonValue;
+    }
+
+    private static void setJsonValue(
+            ExecutorSpecification.ControlConf controlConf,
+            Parameters parameters,
+            JsonValue jsonValue) {
+        final String name = controlConf.getName();
+        final ParameterValueType valueType = controlConf.getValueType();
+        if (parameters.containsKey(name)) {
+            Object parameterValue = valueType.toParameter(jsonValue);
+            if (parameterValue == null) {
+                // - if the parameter is a correctly written value, try STRING value
+                parameterValue = ParameterValueType.STRING.toParameter(jsonValue);
+            }
+            if (parameterValue != null) {
+                parameters.put(name, parameterValue);
+            }
+        }
     }
 
     private JsonValue replaceToAbsolutePath(

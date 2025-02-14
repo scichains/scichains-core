@@ -29,6 +29,7 @@ import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
@@ -106,7 +107,9 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         selectedChain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
         timing.setSettings(timingNumberOfCalls, timingConfiguration);
         try {
-            selectedChain.setParameters(parameters());
+            Parameters parametersCopy = new Parameters(parameters());
+            multiChainSettings.parseSettingsToParameters(parametersCopy, inputSettings);
+            selectedChain.setParameters(parametersCopy);
             // - if a chain has direct parameters, sets also them in addition to copying into selectedChainSettings
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.readInputPortsFromExecutor(this);

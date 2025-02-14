@@ -71,9 +71,9 @@ public final class UseMultiChain extends FileOperation {
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION =
             "If set, the parameters of this multi-chain are determined by the section \""
                     + SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" "
-                    + "of the input settings JSON. If cleared, the parameters of this multi-chain "
-                    + "are extracted directly from the top level of the input settings JSON. "
-                    + "Parameters below have less priority, then the content of input settings.";
+                    + "of the input settings JSON (when it exists). If cleared, the parameters of this multi-chain "
+                    + "are always extracted directly from the top level of the input settings JSON. "
+                    + "Parameters below have less priority than the contents of input settings.";
     public static final boolean EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT = true;
     public static final String LOG_SETTINGS_PARAMETER_NAME = "_mch___logSettings";
     public static final String LOG_SETTINGS_PARAMETER_CAPTION = "Log settings";

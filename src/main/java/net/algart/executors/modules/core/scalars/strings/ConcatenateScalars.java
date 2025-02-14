@@ -27,12 +27,14 @@ package net.algart.executors.modules.core.scalars.strings;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.scalars.SeveralScalarsOperation;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public final class ConcatenateScalars extends SeveralScalarsOperation {
     public static final String PROPERTY_PREFIX = "defaultS";
 
     private String separator = ", ";
+    private String pattern = "";
 
     public ConcatenateScalars() {
     }
@@ -46,6 +48,15 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
         return this;
     }
 
+    public String getPattern() {
+        return pattern;
+    }
+
+    public ConcatenateScalars setPattern(String pattern) {
+        this.pattern = nonNull(pattern);
+        return this;
+    }
+
     @Override
     public void onChangeParameter(String name) {
         if (name == null || !name.startsWith(PROPERTY_PREFIX)) {
@@ -56,11 +67,16 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
 
     @Override
     public SScalar process(List<SScalar> sources) {
-        final String separator = this.separator
-                .replace("\\n", "\n")
-                .replace("\\r", "\r");
+        final boolean usePattern = !this.pattern.isEmpty();
+        final String separator = usePattern ? "" :
+                this.separator
+                        .replace("\\n", "\n")
+                        .replace("\\r", "\r");
         final StringBuilder sb = new StringBuilder();
-        for (int i = 0, n = sources.size(); i < n; i++) {
+        final int n = sources.size();
+        final Object[] arguments = new Object[n + 1];
+        arguments[0] = "";
+        for (int i = 0; i < n; i++) {
             String s;
             final SScalar scalar = sources.get(i);
             if (scalar != null && scalar.isInitialized()) {
@@ -73,13 +89,23 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
                     // (there is no ability to enter null parameter)
                 }
             }
-            if (s != null) {
+            arguments[i + 1] = s == null ? "" : s;
+            if (!usePattern && s != null) {
                 if (!sb.isEmpty()) {
                     sb.append(separator);
                 }
                 sb.append(s);
             }
         }
-        return SScalar.of(sb);
+        String result;
+        if (usePattern) {
+            final String pattern = this.pattern
+                    .replace("\\n", "\n")
+                    .replace("\\r", "\r");
+            result = MessageFormat.format(pattern, arguments);
+        } else {
+            result = sb.toString();
+        }
+        return SScalar.of(result);
     }
 }

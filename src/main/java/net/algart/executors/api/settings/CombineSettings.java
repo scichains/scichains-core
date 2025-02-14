@@ -65,7 +65,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         final JsonObject parentSettings = Jsons.toJson(allSettings, true);
         final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
         final JsonObject resultSettings = correctSettings(overriddenSettings, settings);
-        settings.splitSettings(this, resultSettings);
+        settings.splitSettingsToOutputPorts(this, resultSettings);
         final String settingsString = Jsons.toPrettyString(resultSettings);
         getScalar(SETTINGS).setTo(settingsString);
         long t2 = debugTime();

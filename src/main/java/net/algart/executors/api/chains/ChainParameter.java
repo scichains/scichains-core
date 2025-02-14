@@ -89,7 +89,7 @@ public final class ChainParameter {
             }
             final Object parameterValue = valueType.toParameter(parameterJsonValue);
             if (parameterValue != null) {
-                // - if the parameter has a correctly written value, it is returned
+                // - if the parameter is a correctly written value, it is returned
                 this.value = parameterValue;
                 return;
             }

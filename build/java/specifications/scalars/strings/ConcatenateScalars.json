@@ -2,8 +2,8 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "scalars.strings",
-  "name": "Concatenate scalars",
-  "description": "Returns concatenation of several scalars, like in s1+\", \"+s2+... Java operator.",
+  "name": "Concatenate/format scalars",
+  "description": "Returns concatenation of several scalars, as in the s1+\", \"+s2+... Java operator, or a formatted string, as in MessageFormat.format(pattern, ...) method.",
   "tags": [
     "scalars"
   ],
@@ -173,10 +173,17 @@
   "controls": [
     {
       "name": "separator",
-      "description": "Separator between concatenated strings. Note that substrings \\n and \\r are interpreted as corresponding special characters (line separators).",
+      "description": "Separator between concatenated strings. Note that substrings \\n and \\r inside this string are interpreted as corresponding special characters (line separators).",
       "value_type": "String",
       "edition_type": "value",
       "default": ", "
+    },
+    {
+      "name": "pattern",
+      "description": "Pattern for string formatting as in Java MessageFormat.format(String pattern, Object... arguments) method: {1} is replaced with s1, {2} with s2, etc. ({0} value is not used). This mode is used when this parameter is a non-empty string; in this case the previous parameter \"separator\" is ignored. Note that substrings \\n and \\r inside this string are interpreted as corresponding special characters (line separators).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
     },
     {
       "caption": "s1 (default value)",
