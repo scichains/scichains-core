@@ -60,7 +60,7 @@
       "id": "bac0c56a-a3ca-471c-9352-7e6303148c3b",
       "name": "Base-core-examples-settings",
       "category": "core",
-      "description": "Core examples, settings combiners",
+      "description": "Core examples, settings",
       "tags": [
         "$core",
         "$public",

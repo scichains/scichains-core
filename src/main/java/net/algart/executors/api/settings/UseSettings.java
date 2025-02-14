@@ -158,7 +158,7 @@ public class UseSettings extends FileOperation {
         return new UseSettings();
     }
 
-    public static DefaultExecutorLoader<Settings> settingsCombinerLoader() {
+    public static DefaultExecutorLoader<Settings> settingsLoader() {
         return SETTINGS_COMBINER_LOADER;
     }
 

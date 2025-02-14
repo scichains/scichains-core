@@ -188,11 +188,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return defaultChainIdOrName;
     }
 
-    public Settings multiChainOnlyCommonSettingsCombiner() {
+    public Settings multiChainOnlyCommonSettings() {
         return multiChainOnlyCommonSettings;
     }
 
-    public Settings multiChainSettingsCombiner() {
+    public Settings multiChainSettings() {
         return multiChainSettings;
     }
 

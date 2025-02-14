@@ -34,14 +34,14 @@ public abstract class SettingsExecutor extends Executor implements ReadOnlyExecu
         final String sessionId = getSessionId();
         final String executorId = getExecutorId();
         if (sessionId == null) {
-            throw new IllegalStateException("Cannot find settings combiner worker: session ID is not set");
+            throw new IllegalStateException("Cannot find settings: session ID is not set");
         }
         if (executorId == null) {
-            throw new IllegalStateException("Cannot find settings combiner worker: executor ID is not set");
+            throw new IllegalStateException("Cannot find settings: executor ID is not set");
         }
         Settings settings = this.settings;
         if (settings == null) {
-            settings = UseSettings.settingsCombinerLoader().registeredWorker(sessionId, executorId);
+            settings = UseSettings.settingsLoader().registeredWorker(sessionId, executorId);
             this.settings = settings.clone();
             // - the order is important for multithreading: local settings are assigned first,
             // this.settings is assigned to it;

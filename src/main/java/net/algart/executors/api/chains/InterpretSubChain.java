@@ -185,8 +185,8 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final Settings combiner = chain.getMainSettingsCombiner();
-        if (combiner == null) {
+        final Settings settings = chain.getMainSettingsCombiner();
+        if (settings == null) {
             return;
         }
         final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
@@ -204,8 +204,8 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
                         "a correct role \"settings\" (its options are " +
                         settingsSpecification.getOptions() + ")");
-                // Note: this role MAY be not a main role, if we loaded this combiner not only with a correct
-                // function UseChainSettings, but also h simple UseSettings
+                // Note: this role MAY be not a main role, if we loaded these settings not only with a correct
+                // function UseChainSettings, but also with a simple UseSettings
             }
         }
         final var settingsExecutor = settingsBlock.getExecutor();
@@ -225,12 +225,12 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         final boolean logSettings = parameters().getBoolean(
                 UseSettings.LOG_SETTINGS_PARAMETER_NAME,
                 false);
-        combiner.setAbsolutePaths(absolutePaths);
-        combiner.setExtractSubSettings(extractSubSettings);
+        settings.setAbsolutePaths(absolutePaths);
+        settings.setExtractSubSettings(extractSubSettings);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
-                combiner.createSettings(this);
-        final JsonObject overriddenSettings = combiner.overrideSettings(executorSettings, parentSettings);
+                settings.createSettings(this);
+        final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(CombineSettings.SETTINGS)) {
@@ -239,7 +239,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         }
         if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
-            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(combiner.id());
+            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(settings.id());
         }
         final Level level = logSettings ? Level.INFO : Level.DEBUG;
         if (!parentSettings.isEmpty()) {
@@ -247,7 +247,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     "Customizing chain \"%s\" with help of %s \"%s\" (called from %s):\n%s%s",
                     chain.name(),
                     extractSubSettings ? "extracted sub-settings" : "json-settings",
-                    combiner.name(),
+                    settings.name(),
                     quote(getContextName()),
                     settingsString,
                     LOGGABLE_TRACE ?
@@ -258,10 +258,10 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                             ""));
         } else {
             LOG.log(level, () -> String.format(Locale.US,
-                    "Customizing chain \"%s\" directly from parameters (combiner \"%s\", "
+                    "Customizing chain \"%s\" directly from parameters (settings \"%s\", "
                             + "called from %s):\n%s",
                     chain.name(),
-                    combiner.name(),
+                    settings.name(),
                     quote(getContextName()),
                     settingsString));
         }

@@ -74,15 +74,15 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
         @SuppressWarnings("resource") final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
-        final Settings multiChainCombiner = multiChain.multiChainSettingsCombiner();
-        multiChainCombiner.setAbsolutePaths(absolutePaths);
+        final Settings multiChainSettings = multiChain.multiChainSettings();
+        multiChainSettings.setAbsolutePaths(absolutePaths);
         final String defaultChainVariant = ignoreInputParameters ?
                 multiChain.defaultChainVariant() :
                 parameters().getString(multiChain.selectedChainParameter());
         final String selectedChainVariant = multiChain.getSelectedChainVariant(inputSettings, defaultChainVariant);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
-                multiChainCombiner.createSettings(this);
+                multiChainSettings.createSettings(this);
         Chain selectedChain = multiChain.findSelectedChain(selectedChainVariant);
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));

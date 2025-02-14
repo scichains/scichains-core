@@ -336,9 +336,9 @@ public final class UseMultiChain extends FileOperation {
         result.setInputPorts(specification.getInputPorts());
         result.setOutputPorts(specification.getOutputPorts());
         UseSubChain.addSettingsPorts(result);
-        final Settings multiChainSettings = multiChain.multiChainSettingsCombiner();
+        final Settings multiChainSettings = multiChain.multiChainSettings();
         addSystemParameters(result, multiChain);
-        UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsCombiner());
+        UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettings());
         // - Here we add to multi-chain executor the same ports/controls that we already added to its settings.
         // Also, we add ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary.
         // Note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettings
