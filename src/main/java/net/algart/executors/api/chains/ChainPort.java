@@ -33,7 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class ChainPort<REVERSE extends ChainPort<?>> {
+public sealed abstract class ChainPort<REVERSE extends ChainPort<?>> permits ChainInputPort, ChainOutputPort {
     final Chain chain;
     final ChainBlock block;
     final String name;
