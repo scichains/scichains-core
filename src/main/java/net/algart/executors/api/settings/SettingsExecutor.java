@@ -28,6 +28,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 
 public abstract class SettingsExecutor extends Executor implements ReadOnlyExecutionInput {
+    public static final String SETTINGS = SettingsSpecification.SETTINGS;
     volatile Settings settings = null;
 
     public Settings settings() {

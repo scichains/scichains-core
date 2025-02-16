@@ -668,7 +668,11 @@ public final class Chain implements AutoCloseable {
         }
     }
 
-    public ChainExecutor toExecutor(InstantiationMode instantiationMode) {
+    public ChainExecutor newExecutor(InstantiationMode instantiationMode) {
+        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
+        // Note: here we could create an instance InterpretMultiChain directly,
+        // but then we must also create the specification via buildMultiChainSpecification method;
+        // this would not as a flexible solution as the following usage of the factory.
         assert executorFactory != null;
         ExecutionBlock result;
         try {

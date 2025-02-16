@@ -25,8 +25,9 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.multichains.MultiChain;
+import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.settings.CombineSettingsExecutor;
 import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
@@ -34,22 +35,45 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CallSimpleMultiChain {
+    private static void customizeViaParameters(MultiChainExecutor executor, String variant, String a, String b) {
+        executor.selectChainVariant(variant);
+        executor.setStringParameter("a", a);
+        executor.setStringParameter("b", b);
+    }
+
+    private static void customizeViaJson(MultiChainExecutor executor, String variant, String a, String b) {
+        CombineSettingsExecutor combiner = executor.newCombine();
+        combiner.setStringParameter(executor.multiChain().selectedChainParameter(), variant);
+        //TODO!! - make direct method
+        combiner.setStringParameter("a", a);
+        combiner.setStringParameter("b", b);
+        final String settings = combiner.combine();
+        executor.putStringScalar("settings", settings);
+        //TODO!! = make direct method
+    }
+
     public static void main(String[] args) throws IOException {
-        if (args.length < 4) {
+        boolean json = false;
+        int startArgIndex = 0;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-json")) {
+            json = true;
+            startArgIndex++;
+        }
+        if (args.length < startArgIndex+ 4) {
             System.out.printf("Usage: " +
-                            "%s some_multi_chain.mchain input_image output_image sub_chain_variant [A B]%n" +
+                            "%s [-json] some_multi_chain.mchain input_image output_image sub_chain_variant [A B]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars X and Y " +
                             "and have 2 parameters named A and B;%n" +
                             "it should calculate some formula like AX+BY and return the result in the output.",
                     CallSimpleMultiChain.class.getName());
             return;
         }
-        final Path multiChainPath = Paths.get(args[0]);
-        final String x = args[1];
-        final String y = args[2];
-        final String variant = args[3];
-        final String parameterA = args.length > 4 ? args[4] : null;
-        final String parameterB = args.length > 5 ? args[5] : null;
+        final Path multiChainPath = Paths.get(args[startArgIndex]);
+        final String x = args[startArgIndex + 1];
+        final String y = args[startArgIndex + 2];
+        final String variant = args[startArgIndex + 3];
+        final String parameterA = args.length > startArgIndex + 4 ? args[startArgIndex + 4] : null;
+        final String parameterB = args.length > startArgIndex + 5 ? args[startArgIndex + 5] : null;
 
         ExecutionBlock.initializeExecutionSystem();
 
@@ -59,12 +83,10 @@ public class CallSimpleMultiChain {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            executor.selectChainVariant(variant);
-            if (parameterA != null) {
-                executor.setStringParameter("a", parameterA);
-            }
-            if (parameterB != null) {
-                executor.setStringParameter("b", parameterB);
+            if (json) {
+                customizeViaJson(executor, variant, x, y);
+            } else {
+                customizeViaParameters(executor, variant, parameterA, parameterB);
             }
             executor.execute();
             System.out.printf("%s%nDone: result is %s%n", executor, executor.getData());

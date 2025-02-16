@@ -31,9 +31,7 @@ import net.algart.json.Jsons;
 
 import java.util.Locale;
 
-public class CombineSettings extends SettingsExecutor implements ReadOnlyExecutionInput {
-    public static final String SETTINGS = SettingsSpecification.SETTINGS;
-
+public class CombineSettings extends CombineSettingsExecutor implements ReadOnlyExecutionInput {
     public CombineSettings() {
         addInputScalar(SETTINGS);
         setDefaultOutputScalar(SETTINGS);

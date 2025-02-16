@@ -32,8 +32,8 @@ import java.util.Locale;
 
 public class SplitSettings extends SettingsExecutor implements ReadOnlyExecutionInput {
     public SplitSettings() {
-        setDefaultInputScalar(CombineSettings.SETTINGS);
-        setDefaultOutputScalar(CombineSettings.SETTINGS);
+        setDefaultInputScalar(SETTINGS);
+        setDefaultOutputScalar(SETTINGS);
         disableOnChangeParametersAutomatic();
     }
 
@@ -44,13 +44,12 @@ public class SplitSettings extends SettingsExecutor implements ReadOnlyExecution
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
         final Settings settings = settings();
-        final String s = getInputScalar(CombineSettings.SETTINGS, true)
-                .getValueOrDefault("").trim();
+        final String s = getInputScalar(SETTINGS, true).getValueOrDefault("").trim();
         JsonObject inputSettings = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
         settings.splitSettingsToOutputPorts(this, inputSettings);
         inputSettings = Jsons.overrideEntries(settings.createSettings(this), inputSettings);
         // - provide default values for keys, absent in the source JSON
-        getScalar(CombineSettings.SETTINGS).setTo(Jsons.toPrettyString(inputSettings));
+        getScalar(SETTINGS).setTo(Jsons.toPrettyString(inputSettings));
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Splitting settings \"%s\": %.3f ms",

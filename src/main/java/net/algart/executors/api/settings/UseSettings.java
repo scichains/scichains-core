@@ -31,7 +31,9 @@ import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.DefaultExecutorLoader;
+import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
@@ -147,6 +149,8 @@ public class UseSettings extends FileOperation {
     private ExecutorSpecification splitExecutorSpecification = null;
     private ExecutorSpecification getNamesExecutorSpecification = null;
 
+    private volatile ExecutorFactory executorFactory = null;
+
     public UseSettings() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_COMBINE_SPECIFICATION);
@@ -154,8 +158,12 @@ public class UseSettings extends FileOperation {
         addOutputScalar(OUTPUT_GET_NAMES_SPECIFICATION);
     }
 
-    public static UseSettings getInstance() {
-        return new UseSettings();
+    public static UseSettings getInstance(String sessionId) {
+        return setSession(new UseSettings(), sessionId);
+    }
+
+    public static UseSettings getSharedInstance() {
+        return setShared(new UseSettings());
     }
 
     public static DefaultExecutorLoader<Settings> settingsLoader() {
@@ -193,6 +201,27 @@ public class UseSettings extends FileOperation {
         return settings;
     }
 
+    public static SettingsExecutor newSharedCombine(Path file, InstantiationMode instantiationMode)
+            throws IOException {
+        return newSharedCombine(SettingsSpecification.read(file), instantiationMode);
+    }
+
+    public static SettingsExecutor newSharedCombine(
+            SettingsSpecification specification,
+            InstantiationMode instantiationMode) {
+        return getSharedInstance().newCombine(specification, instantiationMode);
+    }
+
+    public SettingsExecutor newCombine(Path chainFile, InstantiationMode instantiationMode) throws IOException {
+        return newCombine(SettingsSpecification.read(chainFile), instantiationMode);
+    }
+
+    public SettingsExecutor newCombine(SettingsSpecification specification, InstantiationMode instantiationMode) {
+        //noinspection resource
+        return use(specification).newCombine(executorFactory(), instantiationMode);
+    }
+
+
     @Override
     public void process() {
         if (!this.getFile().trim().isEmpty()) {
@@ -210,6 +239,23 @@ public class UseSettings extends FileOperation {
         }
         throw new IllegalArgumentException("One of arguments \"Settings JSON file/folder\" "
                 + "or \"Settings JSON content\" must be non-empty");
+    }
+
+    public UseSettings setExecutorFactory(ExecutorFactory executorFactory) {
+        this.executorFactory = executorFactory;
+        return this;
+    }
+
+    public ExecutorFactory executorFactory() {
+        final String sessionId = getSessionId();
+        if (sessionId == null) {
+            throw new IllegalStateException("Cannot register new chain: session ID was not set");
+        }
+        var executorFactory = this.executorFactory;
+        if (executorFactory == null) {
+            this.executorFactory = executorFactory = globalLoaders().newFactory(sessionId);
+        }
+        return executorFactory;
     }
 
     public void useSeveralPaths(List<Path> settingsSpecificationPaths) throws IOException {
@@ -423,9 +469,7 @@ public class UseSettings extends FileOperation {
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
-        final UseSettings useSettings = getInstance();
-        useSettings.setSessionId(GLOBAL_SHARED_SESSION_ID);
-        useSettings.useAllInstalled();
+        getSharedInstance().useAllInstalled();
     }
 
     // Used for adding controls and ports to InterpretSubChain executor

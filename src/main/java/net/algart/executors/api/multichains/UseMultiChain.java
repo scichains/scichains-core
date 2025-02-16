@@ -111,16 +111,12 @@ public final class UseMultiChain extends FileOperation {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
-    public static UseMultiChain getSessionInstance(String sessionId) {
+    public static UseMultiChain getInstance(String sessionId) {
         return setSession(new UseMultiChain(), sessionId);
     }
 
     public static UseMultiChain getSharedInstance() {
         return setShared(new UseMultiChain());
-    }
-
-    public static UseMultiChain getInstance() {
-        return new UseMultiChain();
     }
 
     public static DefaultExecutorLoader<MultiChain> multiChainLoader() {
@@ -154,9 +150,9 @@ public final class UseMultiChain extends FileOperation {
         return this;
     }
 
-    public static MultiChainExecutor newSharedExecutor(Path multiChainFile, InstantiationMode instantiationMode)
+    public static MultiChainExecutor newSharedExecutor(Path file, InstantiationMode instantiationMode)
             throws IOException {
-        return newSharedExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
+        return newSharedExecutor(MultiChainSpecification.read(file), instantiationMode);
     }
 
     public static MultiChainExecutor newSharedExecutor(
@@ -166,15 +162,15 @@ public final class UseMultiChain extends FileOperation {
         return getSharedInstance().newExecutor(specification, instantiationMode);
     }
 
+    public MultiChainExecutor newExecutor(Path file, InstantiationMode instantiationMode)
+            throws IOException {
+        return newExecutor(MultiChainSpecification.read(file), instantiationMode);
+    }
+
     public MultiChainExecutor newExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
             throws IOException {
         //noinspection resource
-        return use(specification).toExecutor(instantiationMode);
-    }
-
-    public MultiChainExecutor newExecutor(Path multiChainFile, InstantiationMode instantiationMode)
-            throws IOException {
-        return newExecutor(MultiChainSpecification.read(multiChainFile), instantiationMode);
+        return use(specification).newExecutor(instantiationMode);
     }
 
     @Override
@@ -359,8 +355,7 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
-        final UseMultiChain useMultiChain = UseMultiChain.getInstance();
-        useMultiChain.setSessionId(GLOBAL_SHARED_SESSION_ID);
+        final UseMultiChain useMultiChain = UseMultiChain.getSharedInstance();
         for (String folder : MULTI_CHAIN_PLATFORMS.installedSpecificationFolders()) {
             final long t1 = System.nanoTime();
             final int n = useMultiChain.usePath(Paths.get(folder));

@@ -30,9 +30,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.CombineSettings;
-import net.algart.executors.api.settings.Settings;
-import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.*;
 import net.algart.json.Jsons;
 
@@ -237,8 +235,15 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public UseSubChain сhainFactory() {
+        assert chainFactory != null;
         return chainFactory;
     }
+
+    public ExecutorFactory executorFactory() {
+        assert chainFactory != null;
+        return chainFactory.executorFactory();
+    }
+
 
     // Note: it is not-too-good idea to create it only inside the constructor.
     // Every chain can require a lot of resources, and different clones of multi-chain (see clone())
@@ -367,7 +372,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             throw new AssertionError("Main settings block  '"
                     + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
         settingsBlock.setActualInputData(
-                CombineSettings.SETTINGS, SScalar.of(selectedChainSettingsString));
+                SettingsExecutor.SETTINGS, SScalar.of(selectedChainSettingsString));
     }
 
     public void freeResources() {
@@ -381,7 +386,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
-    public MultiChainExecutor toExecutor(InstantiationMode instantiationMode) {
+    public MultiChainExecutor newExecutor(InstantiationMode instantiationMode) {
+        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
+        // Note: here we could create an instance InterpretMultiChain directly,
+        // but then we must also create the specification via buildMultiChainSpecification method;
+        // this would not as a flexible solution as the following usage of the factory.
         final ExecutorFactory executorFactory = chainFactory.executorFactory();
         ExecutionBlock result;
         try {
@@ -397,7 +406,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return (MultiChainExecutor) result;
     }
 
-    @Override
+    public CombineSettingsExecutor newCombine() {
+        return multiChainSettings.newCombine(executorFactory(), InstantiationMode.NORMAL);
+    }
+
+        @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("multi-chain \""
                 + ExecutorSpecification.className(category(), name())

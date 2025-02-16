@@ -31,12 +31,9 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.executors.api.settings.UseChainSettings;
-import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.CombineSettings;
 import net.algart.json.Jsons;
 
 import java.io.FileNotFoundException;
@@ -130,7 +127,7 @@ public final class UseSubChain extends FileOperation {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
-    public static UseSubChain getSessionInstance(String sessionId) {
+    public static UseSubChain getInstance(String sessionId) {
         return setSession(new UseSubChain(), sessionId);
     }
 
@@ -206,24 +203,24 @@ public final class UseSubChain extends FileOperation {
         return chainExecutorSpecification;
     }
 
-    public static ChainExecutor newSharedExecutor(
-            ChainSpecification chainSpecification,
-            InstantiationMode instantiationMode) {
-        return getSharedInstance().newExecutor(chainSpecification, instantiationMode);
-    }
-
-    public static ChainExecutor newSharedExecutor(Path chainFile, InstantiationMode instantiationMode)
+    public static ChainExecutor newSharedExecutor(Path file, InstantiationMode instantiationMode)
             throws IOException {
-        return newSharedExecutor(ChainSpecification.read(chainFile), instantiationMode);
+        return newSharedExecutor(ChainSpecification.read(file), instantiationMode);
     }
 
-    public ChainExecutor newExecutor(ChainSpecification chainSpecification, InstantiationMode instantiationMode) {
+    public static ChainExecutor newSharedExecutor(
+            ChainSpecification specification,
+            InstantiationMode instantiationMode) {
+        return getSharedInstance().newExecutor(specification, instantiationMode);
+    }
+
+    public ChainExecutor newExecutor(Path file, InstantiationMode instantiationMode) throws IOException {
+        return newExecutor(ChainSpecification.read(file), instantiationMode);
+    }
+
+    public ChainExecutor newExecutor(ChainSpecification specification, InstantiationMode instantiationMode) {
         //noinspection resource
-        return use(chainSpecification).toExecutor(instantiationMode);
-    }
-
-    public ChainExecutor newExecutor(Path chainFile, InstantiationMode instantiationMode) throws IOException {
-        return newExecutor(ChainSpecification.read(chainFile), instantiationMode);
+        return use(specification).newExecutor(instantiationMode);
     }
 
     @Override
@@ -421,7 +418,7 @@ public final class UseSubChain extends FileOperation {
         final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
         for (ExecutorSpecification.PortConf portConf : specification.getOutputPorts().values()) {
             final String executorPortName = portConf.getName();
-            if (firstEnumValue == null && !executorPortName.equals(CombineSettings.SETTINGS)) {
+            if (firstEnumValue == null && !executorPortName.equals(SettingsExecutor.SETTINGS)) {
                 firstEnumValue = executorPortName;
             }
             items.add(new ExecutorSpecification.ControlConf.EnumItem(executorPortName));
@@ -446,10 +443,10 @@ public final class UseSubChain extends FileOperation {
 
     public static void addSettingsPorts(ExecutorSpecification result) {
         result.addFirstInputPort(new ExecutorSpecification.PortConf()
-                .setName(CombineSettings.SETTINGS)
+                .setName(SettingsExecutor.SETTINGS)
                 .setValueType(DataType.SCALAR));
         result.addFirstOutputPort(new ExecutorSpecification.PortConf()
-                .setName(CombineSettings.SETTINGS)
+                .setName(SettingsExecutor.SETTINGS)
                 .setHint("Actually used settings (JSON)")
                 .setAdvanced(true)
                 .setValueType(DataType.SCALAR));

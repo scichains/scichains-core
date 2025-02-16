@@ -22,31 +22,22 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.multichains;
+package net.algart.executors.api.settings;
 
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.settings.CombineSettingsExecutor;
-import net.algart.executors.api.settings.SettingsExecutor;
-import net.algart.executors.api.system.ExecutorFactory;
+import jakarta.json.JsonObject;
+import net.algart.json.Jsons;
 
-import java.util.Objects;
-
-public abstract class MultiChainExecutor extends Executor {
-    public abstract MultiChain multiChain();
-
-    public ExecutorFactory executorFactory() {
-        //noinspection resource
-        return multiChain().executorFactory();
+public abstract class CombineSettingsExecutor extends SettingsExecutor  {
+    public String combine() {
+        execute();
+        final String s = getScalar(SETTINGS).getValue();
+        if (s == null) {
+            throw new IllegalStateException("CombineSettingsExecutor does not return any settings");
+        }
+        return s;
     }
 
-    public CombineSettingsExecutor newCombine() {
-        //noinspection resource
-        return multiChain().newCombine();
-    }
-
-    public void selectChainVariant(String variant) {
-        Objects.requireNonNull(variant, "Null variant");
-        //noinspection resource
-        setStringParameter(multiChain().selectedChainParameter(), variant);
+    public JsonObject combineJson() {
+        return Jsons.toJson(combine());
     }
 }

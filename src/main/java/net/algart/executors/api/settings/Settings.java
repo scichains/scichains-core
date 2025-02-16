@@ -25,11 +25,15 @@
 package net.algart.executors.api.settings;
 
 import jakarta.json.*;
+import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorNotFoundException;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.json.Jsons;
 
@@ -351,6 +355,24 @@ public class Settings implements Cloneable {
 
     public static String portName(ExecutorSpecification.ControlConf controlConf) {
         return controlConf.getName();
+    }
+
+    // Unlike Chain or MultiChain, Settings has no "own" executor factory
+    public CombineSettingsExecutor newCombine(ExecutorFactory executorFactory, InstantiationMode instantiationMode) {
+        Objects.requireNonNull(executorFactory, "Null executorFactory)");
+        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
+        ExecutionBlock result;
+        try {
+            result = executorFactory.newExecutor(id(), instantiationMode);
+            // - we suppose that someone has a registered executor, which execute this chain
+        } catch (ClassNotFoundException | ExecutorNotFoundException e) {
+            throw new IllegalStateException("Chain with ID " + id() + " was not successfully registered", e);
+        }
+        if (!(result instanceof CombineSettingsExecutor)) {
+            throw new IllegalStateException("Chain with ID " + id() + " is executed by some non-standard way: "
+                    + "its executor is not an instance of " + CombineSettingsExecutor.class);
+        }
+        return (CombineSettingsExecutor) result;
     }
 
     @Override

@@ -29,13 +29,10 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.settings.Settings;
-import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
-import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.CombineSettings;
 import net.algart.json.Jsons;
 
 import java.lang.System.Logger.Level;
@@ -232,10 +229,10 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                 settings.createSettings(this);
         final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
-        settingsBlock.setActualInputData(CombineSettings.SETTINGS, SScalar.of(settingsString));
-        if (hasOutputPort(CombineSettings.SETTINGS)) {
+        settingsBlock.setActualInputData(SettingsExecutor.SETTINGS, SScalar.of(settingsString));
+        if (hasOutputPort(SettingsExecutor.SETTINGS)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
-            getScalar(CombineSettings.SETTINGS).setTo(settingsString);
+            getScalar(SettingsExecutor.SETTINGS).setTo(settingsString);
         }
         if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
