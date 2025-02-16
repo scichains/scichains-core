@@ -121,8 +121,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private boolean allOutputsNecessary = false;
     private ExecutionBlock caller = null;
     private ExecutionBlock rootCaller = this;
-    private String sessionId = null;
-    private ExecutorSpecification executorSpecification = null;
+    private volatile String sessionId = null;
+    private volatile ExecutorSpecification executorSpecification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -750,6 +750,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     public final void setSessionId(String sessionId) {
+        if (this.sessionId != null) {
+            throw new IllegalStateException("sessionId can be assigned only once");
+        }
         this.sessionId = sessionId;
     }
 
@@ -779,6 +782,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     public final void setExecutorSpecification(ExecutorSpecification executorSpecification) {
+        if (this.executorSpecification != null) {
+            throw new IllegalStateException("executorSpecification can be assigned only once");
+        }
         this.executorSpecification = executorSpecification;
     }
 
