@@ -416,15 +416,13 @@ public final class Settings implements Cloneable {
             JsonValue jsonValue) {
         final String name = controlConf.getName();
         final ParameterValueType valueType = controlConf.getValueType();
-        if (parameters.containsKey(name)) {
-            Object parameterValue = valueType.toParameter(jsonValue);
-            if (parameterValue == null) {
-                // - if the parameter is a correctly written value, try STRING value
-                parameterValue = ParameterValueType.STRING.toParameter(jsonValue);
-            }
-            if (parameterValue != null) {
-                parameters.put(name, parameterValue);
-            }
+        Object parameterValue = valueType.toParameter(jsonValue);
+        if (parameterValue == null) {
+            // - if the parameter is a correctly written value, try STRING value
+            parameterValue = ParameterValueType.STRING.toParameter(jsonValue);
+        }
+        if (parameterValue != null) {
+            parameters.put(name, parameterValue);
         }
     }
 
