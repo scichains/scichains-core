@@ -45,11 +45,18 @@ public class CombineMultiChainSettings extends CombineChainSettings {
      */
     @Override
     protected JsonObject correctSettings(JsonObject settingsJson, Settings combiner) {
+        /*
         final Object customSettingsInformation = combiner.getCustomSettingsInformation();
         if (!(customSettingsInformation instanceof MultiChain multiChain)) {
             throw new AssertionError("Invalid usage of " + this
                     + ": settings does not contain parent MultiChain");
         }
+         */
+        if (!(combiner instanceof MultiChainSettings multiChainSettings)) {
+            throw new IllegalArgumentException("Invalid usage of " + this
+                    + ": settings object is not MultiChainSettings");
+        }
+        final MultiChain multiChain = multiChainSettings.multiChain;
         final String chainId = settingsJson.getString(MultiChain.SELECTED_CHAIN_ID, null);
         if (chainId == null) {
             // - selection by name is used, no sense to add anything

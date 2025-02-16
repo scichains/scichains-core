@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * Note: this class does not contain settings itself, the settings are stored in JSON,
  * this class only allows manipulating them.
  */
-public final class Settings implements Cloneable {
+public class Settings implements Cloneable {
     public static final boolean ABSOLUTE_PATHS_DEFAULT_VALUE = true;
     public static final String PATH_PARENT_FOLDER_SUFFIX = "_parent";
     public static final String PATH_FILE_NAME_SUFFIX = "_name";
@@ -60,7 +60,7 @@ public final class Settings implements Cloneable {
 
     private volatile Object customSettingsInformation = null;
 
-    private Settings(SettingsSpecification specification) {
+    protected Settings(SettingsSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.specification.checkCompleteness();
     }

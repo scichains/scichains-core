@@ -24,15 +24,11 @@
 
 package net.algart.executors.api.multichains;
 
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.settings.CombineSettings;
-import net.algart.executors.api.settings.GetNamesOfSettings;
-import net.algart.executors.api.settings.SplitSettings;
 
 // Note: it is not an executor, it is an internal class for usage inside UseMultiChain and MultiChain
-public class UseMultiChainSettings extends UseSettings {
+public final class UseMultiChainSettings extends UseSettings {
     private volatile MultiChain multiChain = null;
 
     public MultiChain getMultiChain() {
@@ -61,6 +57,14 @@ public class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
+    protected Settings newSettings(SettingsSpecification settingsSpecification) {
+        if (multiChain == null) {
+            throw new IllegalStateException("multiChain is not set: newSettings cannot be used");
+        }
+        return new MultiChainSettings(settingsSpecification, multiChain);
+    }
+
+    @Override
     protected CombineSettings newCombineSettings() {
         return new CombineMultiChainSettings();
     }
@@ -76,10 +80,4 @@ public class UseMultiChainSettings extends UseSettings {
         throw new UnsupportedOperationException("This method should not be called: " + getClass()
                 + " must be used only for creating multi-chain settings, which has no get_names_id");
     }
-
-    @Override
-    protected Object customSettingsInformation() {
-        return multiChain;
-    }
-
 }

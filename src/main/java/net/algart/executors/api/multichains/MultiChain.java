@@ -71,7 +71,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     // - filled in createSelectedChainIdControl()
     private final Settings multiChainOnlyCommonSettings;
     // - note: these settings are not registered, but used for building a multi-chain executor only in UseMultiChain
-    private final Settings multiChainSettings;
+    private final MultiChainSettings multiChainSettings;
 
     // Note: unlike Chain, currentDirectory is not actual here: loading without files is senseless here.
     private volatile Map<String, Chain> chainMap = null;
@@ -148,8 +148,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 "defaultChainIdOrName must be filled in createSelectedChainIdControl()";
         settingsFactory.setMultiChain(this);
         // - this reference will be necessary in CombineMultiChainSettings.correctSettings
-        this.multiChainSettings = settingsFactory.use(
+        final Settings multiChainSettings = settingsFactory.use(
                 buildMultiChainSettingsSpecification(true, nonRecursiveChainMap));
+        if (!(multiChainSettings instanceof MultiChainSettings)) {
+            throw new AssertionError("UseMultiChainSettings.use must create a MultiChainSettings");
+        }
+        this.multiChainSettings = (MultiChainSettings) multiChainSettings;
     }
 
     public static MultiChain of(
