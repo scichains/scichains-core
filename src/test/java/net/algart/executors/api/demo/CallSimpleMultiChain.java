@@ -84,7 +84,7 @@ public class CallSimpleMultiChain {
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (json) {
-                customizeViaJson(executor, variant, x, y);
+                customizeViaJson(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }

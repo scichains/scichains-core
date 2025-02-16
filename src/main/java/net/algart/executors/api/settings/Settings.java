@@ -420,7 +420,7 @@ public class Settings implements Cloneable {
                 }
             }
             if (parameters.containsKey(name)) {
-                jsonValue = valueType.toJsonValue(parameters, name);
+                jsonValue = valueType.toJsonValueOrNull(parameters, name);
             }
         }
         if (jsonValue == null) {

@@ -228,7 +228,7 @@ public final class Mapping implements Cloneable {
         final ParameterValueType valueType = controlConfTemplate.getValueType();
         JsonValue jsonValue = null;
         if (parameters.containsKey(name)) {
-            jsonValue = valueType.toJsonValue(parameters, name);
+            jsonValue = valueType.toJsonValueOrNull(parameters, name);
         }
         if (jsonValue == null) {
             jsonValue = controlConfTemplate.getDefaultJsonValue();
