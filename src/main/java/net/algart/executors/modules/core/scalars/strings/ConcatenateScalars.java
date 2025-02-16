@@ -89,7 +89,7 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
                     // (there is no ability to enter null parameter)
                 }
             }
-            arguments[i + 1] = s == null ? "" : s;
+            arguments[i + 1] = parseDoubleIfPossible(s);
             if (!usePattern && s != null) {
                 if (!sb.isEmpty()) {
                     sb.append(separator);
@@ -108,4 +108,17 @@ public final class ConcatenateScalars extends SeveralScalarsOperation {
         }
         return SScalar.of(result);
     }
+
+    private static Object parseDoubleIfPossible(String s) {
+        try {
+            return s == null ? "" : Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return s;
+        }
+    }
+
+//    public static void main(String[] args) {
+//        System.out.println(MessageFormat.format("{1,number}",
+//                null, parseDoubleIfPossible("32.31231")));
+//    }
 }

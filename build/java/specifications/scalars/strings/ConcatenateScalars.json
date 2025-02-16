@@ -173,14 +173,14 @@
   "controls": [
     {
       "name": "separator",
-      "description": "Separator between concatenated strings. Note that substrings \\n and \\r inside this string are interpreted as corresponding special characters (line separators).",
+      "description": "Separator between concatenated strings.\nSubstrings \\n and \\r inside this parameter are interpreted as corresponding special characters (line separators).",
       "value_type": "String",
       "edition_type": "value",
       "default": ", "
     },
     {
       "name": "pattern",
-      "description": "Pattern for string formatting as in Java MessageFormat.format(String pattern, Object... arguments) method: {1} is replaced with s1, {2} with s2, etc. ({0} value is not used). This mode is used when this parameter is a non-empty string; in this case the previous parameter \"separator\" is ignored. Note that substrings \\n and \\r inside this string are interpreted as corresponding special characters (line separators).",
+      "description": "Pattern for formatting strings, as in the Java MessageFormat.format(String pattern, Object... arguments) method: {1} is replaced by s1, {2} by s2, etc. (The value {0} is ignored.) This mode is used when this parameter is a non-empty string; in this case, the previous \"separator\" parameter is ignored.\nNote: if one of the input strings s1, s2, ... can be interpreted as a double number (Double.parseDouble(s) call), this number is passed as the corresponding argument of MessageFormat.format method; if it is impossible, a String argument is passed.\nSubstrings \\n and \\r inside this string are interpreted as corresponding special characters (line separators).\nA possible example:\n\"{1,number,#.##} percent ready in task {2}\"\n(s1 must be a number).",
       "value_type": "String",
       "edition_type": "value",
       "default": ""
