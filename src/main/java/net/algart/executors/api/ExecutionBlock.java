@@ -122,7 +122,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     private ExecutionBlock caller = null;
     private ExecutionBlock rootCaller = this;
     private volatile String sessionId = null;
-    private volatile ExecutorSpecification executorSpecification = null;
+    private volatile ExecutorSpecification specification = null;
     private String ownerId = null;
     private Object contextId = null;
     private String contextName = null;
@@ -243,7 +243,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
 
     public final void requestOutput(String... portNames) {
         for (String portName : portNames) {
-            getRequiredOutputPort(portName).setConnected(true);
+            final Port outputPort = getOutputPort(portName);
+            if (outputPort != null) {
+                outputPort.setConnected(true);
+            }
         }
     }
 
@@ -768,7 +771,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     public final String getExecutorId() {
-        return executorSpecification == null ? null : executorSpecification.getId();
+        return specification == null ? null : specification.getId();
     }
 
     /**
@@ -777,19 +780,19 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      *
      * @return the specification of this executor.
      */
-    public final ExecutorSpecification getExecutorSpecification() {
-        return executorSpecification;
+    public final ExecutorSpecification getSpecification() {
+        return specification;
     }
 
-    public final void setExecutorSpecification(ExecutorSpecification executorSpecification) {
-        if (this.executorSpecification != null) {
-            throw new IllegalStateException("executorSpecification can be assigned only once");
+    public final void setSpecification(ExecutorSpecification specification) {
+        if (this.specification != null) {
+            throw new IllegalStateException("Executor specification can be assigned only once");
         }
-        this.executorSpecification = executorSpecification;
+        this.specification = specification;
     }
 
     public final String getPlatformId() {
-        return executorSpecification == null ? null : executorSpecification.getPlatformId();
+        return specification == null ? null : specification.getPlatformId();
     }
 
     public final String getOwnerId() {

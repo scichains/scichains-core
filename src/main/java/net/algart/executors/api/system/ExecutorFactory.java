@@ -59,18 +59,45 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      * according the <code>instantiationMode</code> argument.</p>
      *
      * <p>If {@link #getSpecification(String)} method returns <code>null</code>, this method
-     * throws {@link ExecutorNotFoundException}; this method never returns <code>null</code>.</p>
+     * throws {@link ExecutorExpectedException}; this method never returns <code>null</code>.</p>
      *
      * @param executorId        unique ID of the executor.
      * @param instantiationMode how to initialize a newly created instance?
      * @return newly created executor.
      * @throws ClassNotFoundException    if Java class, required for creating the executor,
      *                                   is not available in the current <code>classpath</code> environment.
-     * @throws ExecutorNotFoundException if there is no requested executor.
+     * @throws ExecutorExpectedException if there is no requested executor.
      * @throws NullPointerException      if <code>executorId==null</code> or <code>instantiationMode==null</code>.
      */
-    ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode) throws
-            ClassNotFoundException, ExecutorNotFoundException;
+    ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode)
+            throws ClassNotFoundException, ExecutorExpectedException;
+
+    default <T extends ExecutionBlock> T newExecutor(Class<T> expectedClass, String executorId) {
+        return newExecutor(expectedClass, executorId, InstantiationMode.NORMAL);
+    }
+
+    default <T extends ExecutionBlock> T newExecutor(
+            Class<T> expectedClass,
+            String executorId,
+            InstantiationMode instantiationMode) {
+        Objects.requireNonNull(expectedClass, "Null expectedClass");
+        Objects.requireNonNull(executorId, "Null executorId");
+        Objects.requireNonNull(instantiationMode, "Null instantiationMode");
+        ExecutionBlock result;
+        try {
+            result = newExecutor(executorId, instantiationMode);
+        } catch (ClassNotFoundException e) {
+            throw new ExecutorExpectedException("Executor with ID \"" + executorId +
+                    "\" probably was not successfully registered - Java class not found: " + e.getMessage(), e);
+        }
+        if (!expectedClass.isInstance(result)) {
+            throw new ExecutorExpectedException("Executor with ID \"" + executorId +
+                    "\" has unexpected " +
+                    (result == null ? "null value" : "type " + result.getClass().getName()) +
+                    ": it is not an instance of " + expectedClass);
+        }
+        return expectedClass.cast(result);
+    }
 
     static ExecutorFactory newSharedFactory() {
         return newSharedFactory(ExecutionBlock.globalLoaders());

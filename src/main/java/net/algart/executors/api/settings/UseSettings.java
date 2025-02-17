@@ -201,6 +201,10 @@ public class UseSettings extends FileOperation {
         return settings;
     }
 
+    public static SettingsExecutor newSharedCombine(Path file) throws IOException {
+        return newSharedCombine(file, InstantiationMode.NORMAL);
+    }
+
     public static SettingsExecutor newSharedCombine(Path file, InstantiationMode instantiationMode)
             throws IOException {
         return newSharedCombine(SettingsSpecification.read(file), instantiationMode);

@@ -78,7 +78,7 @@ public class CallSimpleMultiChain {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", multiChainPath.toAbsolutePath());
-        try (var executor = UseMultiChain.newSharedExecutor(multiChainPath, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = UseMultiChain.newSharedExecutor(multiChainPath)) {
             CallSimpleChain.printSubChainExecutors();
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);

@@ -26,11 +26,16 @@ package net.algart.executors.api.system;
 
 import java.io.Serial;
 
-public class ExecutorNotFoundException extends Exception {
+public class ExecutorExpectedException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -1744005260204190825L;
 
-    public ExecutorNotFoundException(String message) {
+    public ExecutorExpectedException(String message) {
         super(message);
     }
+
+    public ExecutorExpectedException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

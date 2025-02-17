@@ -31,7 +31,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.system.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorExpectedException;
 import net.algart.executors.api.system.InstantiationMode;
 
 import javax.script.ScriptEngine;
@@ -92,7 +92,7 @@ public final class CommonJavaScriptOld extends Executor {
             final ExecutionBlock executionBlock;
             try {
                 executionBlock = executorFactory.newExecutor(callableExecutorId, InstantiationMode.NORMAL);
-            } catch (ClassNotFoundException | ExecutorNotFoundException e) {
+            } catch (ClassNotFoundException | ExecutorExpectedException e) {
                 throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
                         + (e instanceof ClassNotFoundException ?
                         " - Java class not found: " + e.getMessage() :

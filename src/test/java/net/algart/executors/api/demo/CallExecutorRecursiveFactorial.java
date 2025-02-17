@@ -26,7 +26,6 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorNotFoundException;
 import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
@@ -36,7 +35,7 @@ public class CallExecutorRecursiveFactorial {
     public static final String RECURSIVE_FACTORIAL_ID = "8585f3b5-decf-45e5-be50-e91b7a1a693c";
     // - ID of the sub-chain recursive_factorial.chain in the "build" folder
 
-    public static void main(String[] args) throws IOException, ExecutorNotFoundException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         if (args.length < 1) {
             System.out.printf("Usage: %s number_to_calculate_factorial%n",
                     CallExecutorRecursiveFactorial.class.getName());

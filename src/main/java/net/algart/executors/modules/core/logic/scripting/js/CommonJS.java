@@ -30,10 +30,7 @@ import net.algart.bridges.graalvm.GraalSourceContainer;
 import net.algart.bridges.graalvm.api.GraalAPI;
 import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.bridges.standard.JavaScriptContextContainer;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.system.ExecutorNotFoundException;
-import net.algart.executors.api.system.InstantiationMode;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;
@@ -88,24 +85,9 @@ public final class CommonJS extends Executor {
         }
 
         public Executor get(String callableExecutorId) {
-            final net.algart.executors.api.system.ExecutorFactory executorFactory = factory();
-            final ExecutionBlock executionBlock;
-            try {
-                executionBlock = executorFactory.newExecutor(callableExecutorId, InstantiationMode.NORMAL);
-            } catch (ClassNotFoundException | ExecutorNotFoundException e) {
-                throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
-                        + (e instanceof ClassNotFoundException ?
-                        " - Java class not found: " + e.getMessage() :
-                        " - non-registered ID"),
-                        e);
-            }
-            if (!(executionBlock instanceof Executor)) {
-                throw new IllegalStateException("Unsupported executor class "
-                        + executionBlock.getClass().getName() + ": it must be subclass of "
-                        + Executor.class.getName() + " in " + this);
-            }
-            executionBlock.setAllOutputsNecessary(callableExecutorOutputsNecessaryAlways);
-            return (Executor) executionBlock;
+            final Executor result = factory().newExecutor(Executor.class, callableExecutorId);
+            result.setAllOutputsNecessary(callableExecutorOutputsNecessaryAlways);
+            return result;
         }
 
         public net.algart.executors.api.system.ExecutorFactory factory() {

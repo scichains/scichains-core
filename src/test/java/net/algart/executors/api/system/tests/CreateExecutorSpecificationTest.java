@@ -117,7 +117,7 @@ public class CreateExecutorSpecificationTest {
                 System.out.println("Full specification:");
                 System.out.println(specification.jsonString());
                 System.out.println("Minimal specification for creation:");
-                System.out.println(executor.getExecutorSpecification().jsonString());
+                System.out.println(executor.getSpecification().jsonString());
                 System.out.println("Parameters:");
                 System.out.println(executor.parameters());
                 System.out.println("Executor:");

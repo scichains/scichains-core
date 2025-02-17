@@ -387,23 +387,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public MultiChainExecutor newExecutor(InstantiationMode instantiationMode) {
-        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
-        final ExecutorFactory executorFactory = chainFactory.executorFactory();
-        ExecutionBlock result;
-        try {
-            result = executorFactory.newExecutor(id(), instantiationMode);
-            // - we suppose that someone has a registered executor, which execute this chain
-        } catch (ClassNotFoundException | ExecutorNotFoundException e) {
-            throw new IllegalStateException("Multi-chain with ID " + id() + " was not successfully registered", e);
-        }
-        if (!(result instanceof MultiChainExecutor)) {
-            throw new IllegalStateException("Multi-chain with ID " + id() + " is executed by some non-standard way: "
-                    + "its executor is not an instance of " + MultiChainExecutor.class);
-        }
-        return (MultiChainExecutor) result;
+        return chainFactory.executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
     }
 
     public CombineSettings newCombine() {

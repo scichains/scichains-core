@@ -49,7 +49,7 @@ public enum InstantiationMode {
     /**
      * Minimal initialization, sufficient for most needs.
      * The new executor is configured by {@link ExecutionBlock#setSessionId(String)}
-     * and {@link ExecutionBlock#setExecutorSpecification(ExecutorSpecification)} methods.
+     * and {@link ExecutionBlock#setSpecification(ExecutorSpecification)} methods.
      * So, the {@link ExecutionBlock#getExecutorId() executor ID},
      * {@link ExecutionBlock#getPlatformId() platform ID} and other specification details will be available
      * to the executor implementation.
@@ -58,7 +58,7 @@ public enum InstantiationMode {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             result.setSessionId(sessionId);
-            result.setExecutorSpecification(specification);
+            result.setSpecification(specification);
         }
     },
     /**
@@ -69,7 +69,7 @@ public enum InstantiationMode {
      * <p>Note that this mode can theoretically lead to another behavior from {@link #MINIMAL}
      * in some clients if they depend on the ports' existence or on default parameter values.
      */
-    NORMAL {
+    NORMAL_NO_REQUEST {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             MINIMAL.customizeExecutor(result, sessionId, specification);
@@ -92,8 +92,23 @@ public enum InstantiationMode {
             }
         }
     },
+
     /**
-     * The same as {@link #NORMAL}, but in addition this node calls
+     * The same as {@link #NORMAL_NO_REQUEST}, but in addition this mode calls
+     * {@link ExecutionBlock#requestDefaultOutput() executor.requestDefaultOutput()}.
+     * Usually this is a good balanced choice, when the executor has only one resulting port.
+     * If it has several output ports, we recommend using the {@link #REQUEST_ALL} option or
+     * directly selecting the required ports with help of {@link ExecutionBlock#requestOutput(String...)} method.
+     */
+    NORMAL {
+        @Override
+        void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
+            NORMAL_NO_REQUEST.customizeExecutor(result, sessionId, specification);
+            result.requestDefaultOutput();
+        }
+    },
+    /**
+     * The same as {@link #NORMAL}, but in addition this mode calls
      * {@link ExecutionBlock#setAllOutputsNecessary(boolean) executor.setAllOutputsNecessary(true)}.
      * Usually this is desired behavior, excepting some complex cases when the executor has
      * several resulting ports, and we need to calculate only part from them for saving executing time.
@@ -101,7 +116,7 @@ public enum InstantiationMode {
     REQUEST_ALL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
-            NORMAL.customizeExecutor(result, sessionId, specification);
+            NORMAL_NO_REQUEST.customizeExecutor(result, sessionId, specification);
             result.setAllOutputsNecessary(true);
         }
     };

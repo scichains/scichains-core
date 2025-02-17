@@ -73,7 +73,7 @@ public class ExecutorSpecificationTest {
                 System.out.println(specification);
 
                 System.out.printf("%nExecutor specification:%n");
-                System.out.println(executionBlock.getExecutorSpecification());
+                System.out.println(executionBlock.getSpecification());
             }
             ExecutionBlock block1 = null;
             ExecutionBlock block2 = null;
@@ -104,8 +104,8 @@ public class ExecutorSpecificationTest {
                 System.out.printf("Creating execution block from specification: %.3f mcs%n", (t4 - t3) * 1e-3 / n);
                 System.out.printf("Creating execution block from minimal string:  %.3f mcs%n", (t5 - t4) * 1e-3 / n);
             }
-            System.out.printf("Full execution block:%n%s%n%n", block1.getExecutorSpecification().jsonString());
-            System.out.printf("Minimal execution block:%n%s%n%n", block2.getExecutorSpecification().jsonString());
+            System.out.printf("Full execution block:%n%s%n%n", block1.getSpecification().jsonString());
+            System.out.printf("Minimal execution block:%n%s%n%n", block2.getSpecification().jsonString());
         } catch (ClassNotFoundException e) {
             System.out.printf("Cannot load required class: %s%n", e);
         }

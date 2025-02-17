@@ -31,7 +31,7 @@ import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorNotFoundException;
+import net.algart.executors.api.system.ExecutorExpectedException;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
@@ -365,7 +365,7 @@ public class Settings implements Cloneable {
         try {
             result = executorFactory.newExecutor(id(), instantiationMode);
             // - we suppose that someone has a registered executor, which execute this chain
-        } catch (ClassNotFoundException | ExecutorNotFoundException e) {
+        } catch (ClassNotFoundException | ExecutorExpectedException e) {
             throw new IllegalStateException("Chain with ID " + id() + " was not successfully registered", e);
         }
         if (!(result instanceof CombineSettings)) {
