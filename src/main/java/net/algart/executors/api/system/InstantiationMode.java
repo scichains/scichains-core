@@ -77,7 +77,12 @@ public enum InstantiationMode {
             for (var e : specification.getControls().entrySet()) {
                 final String name = e.getKey();
                 final ExecutorSpecification.ControlConf controlConf = e.getValue();
-                parameters.put(name, controlConf.getDefaultValue());
+                final Object defaultValue = controlConf.getDefaultValue();
+                if (defaultValue != null) {
+                    // - we MUST NOT add parameters with non-existing default values:
+                    // null is not an allowed value for most parameter types
+                    parameters.put(name, defaultValue);
+                }
             }
             for (var e : specification.getInputPorts().entrySet()) {
                 result.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));

@@ -26,8 +26,7 @@
     {
       "name": "a",
       "value_type": "double",
-      "edition_type": "value",
-      "default": 1.0
+      "edition_type": "value"
     },
     {
       "name": "b",

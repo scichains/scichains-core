@@ -72,7 +72,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return Jsons.toJsonIntValue(parameters.getInteger(name));
         }
 
@@ -116,7 +116,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return Jsons.toJsonLongValue(parameters.getLong(name));
         }
 
@@ -154,7 +154,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return DOUBLE.toJsonValue(parameters, name);
         }
 
@@ -198,7 +198,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return Jsons.toJsonDoubleValue(parameters.getDouble(name));
         }
 
@@ -240,7 +240,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return Jsons.toJsonBooleanValue(parameters.getBoolean(name));
         }
 
@@ -279,7 +279,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return Jsons.toJsonStringValue(parameters.getString(name));
         }
 
@@ -309,7 +309,7 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
             return STRING.toJsonValue(parameters, name);
         }
 
@@ -347,8 +347,9 @@ public enum ParameterValueType {
         }
 
         @Override
-        JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJson(parameters.getString(name), true);
+        public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
+            return Jsons.toJson(parameters.getString(name, null), true);
+            // - unlike strings, null is an allowed SETTINGS parameter, meaning "empty JSON"
         }
 
     };
@@ -429,8 +430,6 @@ public enum ParameterValueType {
      */
     public abstract JsonValue emptyJsonValue();
 
-    abstract JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException;
-
     /**
      * Creates JSON value for the parameter with given name.
      * Note: for {@link #ENUM_STRING}, this method returns a usual string value, that can be incorrect
@@ -438,12 +437,11 @@ public enum ParameterValueType {
      *
      * @param parameters set of parameters.
      * @param name       name of the parameter.
-     * @return value of the given parameter in the specified parameters set or
-     * <code>null</code> if this parameter is <code>null</code>.
+     * @return value of the given parameter in the specified parameters set.
+     * @throws NoValidParameterException if this argument does not exist or contains non-allowed value
+     * (note: <code>null</code> is not allowed for all types except {@link #SETTINGS}).
      */
-    public JsonValue toJsonValueOrNull(Parameters parameters, String name) {
-        return parameters.get(name) == null ? null : toJsonValue(parameters, name);
-    }
+    public abstract JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException;
 
     /**
      * Creates JSON value for the given scalar string or {@link #emptyJsonValue()},
@@ -453,6 +451,7 @@ public enum ParameterValueType {
      *
      * @param scalar scalar string.
      * @return JSON value of the scalar.
+     * @throws NullPointerException if the argument is <code>null</code>.
      */
     public abstract JsonValue toJsonValue(String scalar);
 

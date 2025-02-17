@@ -221,7 +221,6 @@ public class UseSettings extends FileOperation {
         return use(specification).newCombine(executorFactory(), instantiationMode);
     }
 
-
     @Override
     public void process() {
         if (!this.getFile().trim().isEmpty()) {
