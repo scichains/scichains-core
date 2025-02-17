@@ -47,7 +47,7 @@ public class CallSimpleMultiChain {
         combiner.putStringScalar(variant, "{\"delta\": 0.003}");
         // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
         final var settings = combiner.combine();
-        System.out.printf("****%nSettings JSON: %s%n****%n", settings);
+        System.out.printf("%nSettings JSON: %s%n%n", settings);
         executor.putSettings(settings);
     }
 
