@@ -27,8 +27,6 @@ package net.algart.executors.api.demo;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
-import net.algart.executors.api.settings.CombineSettings;
-import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -46,8 +44,11 @@ public class CallSimpleMultiChain {
         combiner.selectChainVariant(variant);
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
-        final var settings = combiner.combineJson();
-        executor.putSettingsJson(settings);
+        combiner.putStringScalar(variant, "{\"delta\": 0.003}");
+        // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
+        final var settings = combiner.combine();
+        System.out.printf("****%nSettings JSON: %s%n****%n", settings);
+        executor.putSettings(settings);
     }
 
     public static void main(String[] args) throws IOException {
