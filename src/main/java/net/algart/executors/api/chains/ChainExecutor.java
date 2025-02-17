@@ -24,8 +24,12 @@
 
 package net.algart.executors.api.chains;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.settings.CombineChainSettings;
+import net.algart.executors.api.settings.SettingsExecutor;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.json.Jsons;
 
 import java.util.Objects;
 
@@ -44,6 +48,20 @@ public abstract class ChainExecutor extends Executor {
     public ExecutorFactory executorFactory() {
         //noinspection resource
         return chain().executorFactory();
+    }
+
+    public CombineChainSettings newCombine() {
+        //noinspection resource
+        return chain().newCombine();
+    }
+
+    public ChainExecutor putSettingsJson(JsonObject settings) {
+        return putSettings(settings == null ? null : Jsons.toPrettyString(settings));
+    }
+
+    public ChainExecutor putSettings(String settings) {
+        putStringScalar(SettingsExecutor.SETTINGS, settings);
+        return this;
     }
 
     @Override

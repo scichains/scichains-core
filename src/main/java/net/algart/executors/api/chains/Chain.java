@@ -29,6 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -338,7 +339,7 @@ public final class Chain implements AutoCloseable {
         return mainSettings;
     }
 
-    public void setMainSettings(Settings mainSettings) {
+    void setMainSettings(Settings mainSettings) {
         Objects.requireNonNull(mainSettings, "Null mainSettings");
         final String id = mainSettings.id();
         assert id != null;
@@ -661,6 +662,13 @@ public final class Chain implements AutoCloseable {
         synchronized (chainLock) {
             allBlocks.values().forEach(ChainBlock::freeResources);
         }
+    }
+
+    public CombineChainSettings newCombine() {
+        if (mainSettings == null) {
+            throw new IllegalStateException("The chain has no main settings: " + this);
+        }
+        return executorFactory.newExecutor(CombineChainSettings.class, mainSettings.id());
     }
 
     public ChainExecutor newExecutor(InstantiationMode instantiationMode) {

@@ -25,26 +25,19 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.multichains.MultiChainExecutor;
-import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.chains.ChainExecutor;
+import net.algart.executors.api.chains.UseSubChain;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CallSimpleMultiChain {
-    private static void customizeViaParameters(MultiChainExecutor executor, String variant, String a, String b) {
-        executor.selectChainVariant(variant);
-        executor.setStringParameter("a", a);
-        executor.setStringParameter("b", b);
-    }
-
-    private static void customizeViaJson(MultiChainExecutor executor, String variant, String a, String b) {
+public class CallSimpleChainWithSettings {
+    private static void customizeViaJson(ChainExecutor executor,String a, String b) {
         final var combiner = executor.newCombine();
-        combiner.selectChainVariant(variant);
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
-        combiner.putStringScalar(variant, "{\"delta\": 0.003}");
+        combiner.setDoubleParameter("delta", 0.003);
         // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
         final var settings = combiner.combine();
         System.out.printf("%nSettings JSON: %s%n%n", settings);
@@ -52,41 +45,29 @@ public class CallSimpleMultiChain {
     }
 
     public static void main(String[] args) throws IOException {
-        boolean json = false;
-        int startArgIndex = 0;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-json")) {
-            json = true;
-            startArgIndex++;
-        }
-        if (args.length < startArgIndex+ 4) {
+        if (args.length < 3) {
             System.out.printf("Usage: " +
-                            "%s [-json] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
-                            "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
-                            "and have 2 parameters named a and b;%n" +
-                            "it should calculate some formula like ax+by and return the result in the output.",
-                    CallSimpleMultiChain.class.getName());
+                            "%s some_chain.chain x y [a b]%n" +
+                            "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
+                            "and have 2 parameters named a and b.",
+                    CallSimpleChainWithSettings.class.getName());
             return;
         }
-        final Path multiChainPath = Paths.get(args[startArgIndex]);
-        final String x = args[startArgIndex + 1];
-        final String y = args[startArgIndex + 2];
-        final String variant = args[startArgIndex + 3];
-        final String parameterA = args.length > startArgIndex + 4 ? args[startArgIndex + 4] : null;
-        final String parameterB = args.length > startArgIndex + 5 ? args[startArgIndex + 5] : null;
+        final Path chainPath = Paths.get(args[0]);
+        final String x = args[1];
+        final String y = args[2];
+        final String parameterA = args.length > 3 ? args[3] : null;
+        final String parameterB = args.length > 4 ? args[4] : null;
 
         ExecutionBlock.initializeExecutionSystem();
 
-        System.out.printf("Loading %s...%n", multiChainPath.toAbsolutePath());
-        try (var executor = UseMultiChain.newSharedExecutor(multiChainPath)) {
+        System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
+        try (var executor = UseSubChain.newSharedExecutor(chainPath)) {
             CallSimpleChain.printSubChainExecutors();
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            if (json) {
-                customizeViaJson(executor, variant, parameterA, parameterB);
-            } else {
-                customizeViaParameters(executor, variant, parameterA, parameterB);
-            }
+            customizeViaJson(executor, parameterA, parameterB);
             executor.execute();
             System.out.printf("%s%nDone: result is %s%n", executor, executor.getData());
         }

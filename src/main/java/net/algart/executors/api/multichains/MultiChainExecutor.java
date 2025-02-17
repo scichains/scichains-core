@@ -52,6 +52,11 @@ public abstract class MultiChainExecutor extends Executor {
         return multiChain().executorFactory();
     }
 
+    public CombineMultiChainSettings newCombine() {
+        //noinspection resource
+        return multiChain().newCombine();
+    }
+
     public MultiChainExecutor putSettingsJson(JsonObject settings) {
         return putSettings(settings == null ? null : Jsons.toPrettyString(settings));
     }
@@ -59,11 +64,6 @@ public abstract class MultiChainExecutor extends Executor {
     public MultiChainExecutor putSettings(String settings) {
         putStringScalar(SettingsExecutor.SETTINGS, settings);
         return this;
-    }
-
-    public CombineMultiChainSettings newCombine() {
-        //noinspection resource
-        return multiChain().newCombine();
     }
 
     public void selectChainVariant(String variant) {

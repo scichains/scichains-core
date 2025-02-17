@@ -56,7 +56,7 @@ public class CallSimpleChain {
         final Path outputImagePath = Paths.get(args[2]);
         final String parameterA = args.length > 3 ? args[3] : null;
         final String parameterB = args.length > 4 ? args[4] : null;
-        System.out.println("Reading " + inputImagePath.toAbsolutePath() + "...");
+        System.out.printf("Reading %s...%n",inputImagePath.toAbsolutePath());
         final SMat inputMat = SMat.of(ImageIO.read(inputImagePath.toFile()));
 
         ExecutionBlock.initializeExecutionSystem();
