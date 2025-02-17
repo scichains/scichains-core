@@ -39,12 +39,10 @@ import java.lang.System.Logger.Level;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Objects;
 
 public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
-    private volatile Chain chain = null;
     private final FunctionTiming timing = FunctionTiming.newDisabledInstance();
 
     public InterpretSubChain() {
@@ -132,17 +130,6 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     @Override
-    public void close() {
-        Chain chain = this.chain;
-        if (chain != null) {
-            this.chain = null;
-            // - for a case of recursive calls
-            chain.freeResources();
-        }
-        super.close();
-    }
-
-    @Override
     public String visibleOutputPortName() {
         String result = parameters().getString(UseSubChain.VISIBLE_RESULT_PARAMETER_NAME, null);
         if (result == null) {
@@ -154,26 +141,6 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
             }
         }
         return result;
-    }
-
-    public Chain chain() {
-        Chain chain = this.chain;
-        if (chain == null) {
-            chain = registeredChain(getSessionId(), getExecutorId());
-            this.chain = chain;
-            // - the order is important for multithreading
-        }
-        return chain;
-    }
-
-    public static Chain registeredChain(String sessionId, String executorId) {
-        Objects.requireNonNull(sessionId, "Cannot find sub-chain worker: session ID is not set");
-        Objects.requireNonNull(executorId, "Cannot find sub-chain worker: executor ID is not set");
-        Chain chain = UseSubChain.subChainLoader().registeredWorker(sessionId, executorId);
-        chain = chain.cleanCopy();
-        // - every instance of this executor has its own space for data, like activates for usual procedures
-        // (necessary for recursion)
-        return chain;
     }
 
     @Override
@@ -262,11 +229,6 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     quote(getContextName()),
                     settingsString));
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Executor of " + (chain != null ? chain : "some non-initialized chain");
     }
 
     public static String quote(String s) {

@@ -27,11 +27,49 @@ package net.algart.executors.api.chains;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.system.ExecutorFactory;
 
-public abstract class ChainExecutor extends Executor {
-    public abstract Chain chain();
+import java.util.Objects;
 
+public abstract class ChainExecutor extends Executor {
+    private volatile Chain chain = null;
+
+    public Chain chain() {
+        Chain chain = this.chain;
+        if (chain == null) {
+            chain = registeredChain(getSessionId(), getExecutorId());
+            this.chain = chain;
+            // - the order is important for multithreading
+        }
+        return chain;
+    }
     public ExecutorFactory executorFactory() {
         //noinspection resource
         return chain().executorFactory();
     }
+
+    @Override
+    public void close() {
+        Chain chain = this.chain;
+        if (chain != null) {
+            this.chain = null;
+            // - for a case of recursive calls
+            chain.freeResources();
+        }
+        super.close();
+    }
+
+    @Override
+    public String toString() {
+        return "Executor of " + (chain != null ? chain : "some non-initialized chain");
+    }
+
+    public static Chain registeredChain(String sessionId, String executorId) {
+        Objects.requireNonNull(sessionId, "Cannot find sub-chain worker: session ID is not set");
+        Objects.requireNonNull(executorId, "Cannot find sub-chain worker: executor ID is not set");
+        Chain chain = UseSubChain.subChainLoader().registeredWorker(sessionId, executorId);
+        chain = chain.cleanCopy();
+        // - every instance of this executor has its own space for data, like activates for usual procedures
+        // (necessary for recursion)
+        return chain;
+    }
+
 }
