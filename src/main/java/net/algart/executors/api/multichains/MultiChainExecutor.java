@@ -24,21 +24,44 @@
 
 package net.algart.executors.api.multichains;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.settings.CombineSettings;
+import net.algart.executors.api.settings.SettingsExecutor;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.json.Jsons;
 
 import java.util.Objects;
 
 public abstract class MultiChainExecutor extends Executor {
-    public abstract MultiChain multiChain();
+    private volatile MultiChain multiChain = null;
+
+    public MultiChain multiChain() {
+        MultiChain multiChain = this.multiChain;
+        if (multiChain == null) {
+            multiChain = registeredMultiChain(getSessionId(), getExecutorId());
+            this.multiChain = multiChain;
+            // - the order is important for multithreading: local multiChain is assigned first,
+            // this.multiChain is assigned to it
+        }
+        return multiChain;
+    }
+
 
     public ExecutorFactory executorFactory() {
         //noinspection resource
         return multiChain().executorFactory();
     }
 
-    public CombineSettings newCombine() {
+    public MultiChainExecutor putSettingsJson(JsonObject settings) {
+        return putSettings(settings == null ? null : Jsons.toPrettyString(settings));
+    }
+
+    public MultiChainExecutor putSettings(String settings) {
+        putStringScalar(SettingsExecutor.SETTINGS, settings);
+        return this;
+    }
+
+    public CombineMultiChainSettings newCombine() {
         //noinspection resource
         return multiChain().newCombine();
     }
@@ -48,4 +71,29 @@ public abstract class MultiChainExecutor extends Executor {
         //noinspection resource
         setStringParameter(multiChain().selectedChainParameter(), variant);
     }
+
+    @Override
+    public void close() {
+        MultiChain multiChain = this.multiChain;
+        if (multiChain != null) {
+            this.multiChain = null;
+            // - for a case of recursive calls
+            multiChain.freeResources();
+        }
+        super.close();
+    }
+
+    @Override
+    public String toString() {
+        return "Executor of " + (multiChain != null ? multiChain : "some non-initialized multi-chain");
+    }
+
+    public static MultiChain registeredMultiChain(String sessionId, String executorId) {
+        Objects.requireNonNull(sessionId, "Cannot find multi-chain worker: session ID is not set");
+        Objects.requireNonNull(executorId, "Cannot find multi-chain worker: executor ID is not set");
+        @SuppressWarnings("resource")
+        MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(sessionId, executorId);
+        return multiChain.clone();
+    }
+
 }

@@ -148,7 +148,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         final Settings multiChainSettings = settingsFactory.use(
                 buildMultiChainSettingsSpecification(true, nonRecursiveChainMap));
         if (!(multiChainSettings instanceof MultiChainSettings)) {
-            throw new AssertionError("UseMultiChainSettings.use must create a MultiChainSettings");
+            throw new AssertionError("UseMultiChainSettings.use() must create a MultiChainSettings");
         }
         this.multiChainSettings = (MultiChainSettings) multiChainSettings;
     }
@@ -392,8 +392,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
     }
 
-    public CombineSettings newCombine() {
-        return executorFactory().newExecutor(CombineSettings.class, multiChainSettings.id());
+    public CombineMultiChainSettings newCombine() {
+        return executorFactory().newExecutor(CombineMultiChainSettings.class, multiChainSettings.id());
     }
 
         @Override

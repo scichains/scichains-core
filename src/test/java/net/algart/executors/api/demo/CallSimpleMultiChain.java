@@ -42,14 +42,12 @@ public class CallSimpleMultiChain {
     }
 
     private static void customizeViaJson(MultiChainExecutor executor, String variant, String a, String b) {
-        CombineSettings combiner = executor.newCombine();
-        combiner.setStringParameter(executor.multiChain().selectedChainParameter(), variant);
-        //TODO!! - make direct method
+        final var combiner = executor.newCombine();
+        combiner.selectChainVariant(variant);
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
-        final String settings = combiner.combine();
-        executor.putStringScalar("settings", settings);
-        //TODO!! = make direct method
+        final var settings = combiner.combineJson();
+        executor.putSettingsJson(settings);
     }
 
     public static void main(String[] args) throws IOException {

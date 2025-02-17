@@ -40,12 +40,10 @@ import net.algart.json.Jsons;
 import java.lang.System.Logger.Level;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Objects;
 
 public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
-    private volatile MultiChain multiChain = null;
     private final FunctionTiming timing = FunctionTiming.newDisabledInstance();
 
     public InterpretMultiChain() {
@@ -170,44 +168,9 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
     }
 
     @Override
-    public void close() {
-        MultiChain multiChain = this.multiChain;
-        if (multiChain != null) {
-            this.multiChain = null;
-            // - for a case of recursive calls
-            multiChain.freeResources();
-        }
-        super.close();
-    }
-
-    @Override
     public String visibleOutputPortName() {
         return parameters().getString(UseMultiChain.VISIBLE_RESULT_PARAMETER_NAME, defaultOutputPortName());
         // - default value is necessary for saved chains, that do not contain this property
-    }
-
-    public MultiChain multiChain() {
-        MultiChain multiChain = this.multiChain;
-        if (multiChain == null) {
-            multiChain = registeredMultiChain(getSessionId(), getExecutorId());
-            this.multiChain = multiChain;
-            // - the order is important for multithreading: local multiChain is assigned first,
-            // this.multiChain is assigned to it
-        }
-        return multiChain;
-    }
-
-    public static MultiChain registeredMultiChain(String sessionId, String executorId) {
-        Objects.requireNonNull(sessionId, "Cannot find multi-chain worker: session ID is not set");
-        Objects.requireNonNull(executorId, "Cannot find multi-chain worker: executor ID is not set");
-        @SuppressWarnings("resource")
-        MultiChain multiChain = UseMultiChain.multiChainLoader().registeredWorker(sessionId, executorId);
-        return multiChain.clone();
-    }
-
-    @Override
-    public String toString() {
-        return "Executor of " + (multiChain != null ? multiChain : "some non-initialized multi-chain");
     }
 
     @Override

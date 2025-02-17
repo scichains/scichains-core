@@ -32,10 +32,28 @@ import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.json.Jsons;
 
+import java.util.Objects;
+
 // Must be public with public constructor without arguments to be created by external systems.
 public class CombineMultiChainSettings extends CombineChainSettings {
     public CombineMultiChainSettings() {
     }
+
+    public MultiChain multiChain() {
+        Settings settings = settings();
+        if (!(settings instanceof MultiChainSettings multiChainSettings)) {
+            throw new IllegalStateException("Invalid usage of " + this
+                    + ": settings object is not MultiChainSettings");
+        }
+        return multiChainSettings.multiChain;
+    }
+
+    public void selectChainVariant(String variant) {
+        Objects.requireNonNull(variant, "Null variant");
+        //noinspection resource
+        setStringParameter(multiChain().selectedChainParameter(), variant);
+    }
+
 
     /**
      * This implementation adds to the <code>settingsJson</code>
