@@ -203,6 +203,10 @@ public final class UseSubChain extends FileOperation {
         return chainExecutorSpecification;
     }
 
+    public static ChainExecutor newSharedExecutor(Path file) throws IOException {
+        return newSharedExecutor(file, InstantiationMode.NORMAL);
+    }
+
     public static ChainExecutor newSharedExecutor(Path file, InstantiationMode instantiationMode)
             throws IOException {
         return newSharedExecutor(ChainSpecification.read(file), instantiationMode);

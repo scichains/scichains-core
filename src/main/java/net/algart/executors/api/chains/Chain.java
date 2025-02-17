@@ -31,7 +31,6 @@ import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorExpectedException;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.TimingStatistics;
@@ -93,7 +92,7 @@ public final class Chain implements AutoCloseable {
     volatile boolean needToRepeat = false;
     private volatile Executor caller = null;
 
-    private Chain(Executor executionContext, String id, ExecutorFactory executorFactory) {
+    public Chain(Executor executionContext, String id, ExecutorFactory executorFactory) {
         this.contextId = CURRENT_CONTEXT_ID.getAndIncrement();
         this.executionContext = executionContext;
         this.id = Objects.requireNonNull(id, "Null chain ID");
@@ -137,10 +136,6 @@ public final class Chain implements AutoCloseable {
         chain.allBlocks.values().forEach(chainBlock -> this.addBlock(chainBlock.cleanCopy(this)));
         // - also fills this.allPorts
         chain.allLinks.forEach(this::addLink);
-    }
-
-    public static Chain newInstance(Executor executionContext, String id, ExecutorFactory executorFactory) {
-        return new Chain(executionContext, id, executorFactory);
     }
 
     /**
@@ -669,23 +664,10 @@ public final class Chain implements AutoCloseable {
     }
 
     public ChainExecutor newExecutor(InstantiationMode instantiationMode) {
-        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
-        assert executorFactory != null;
-        ExecutionBlock result;
-        try {
-            result = executorFactory.newExecutor(id, instantiationMode);
-            // - we suppose that someone has a registered executor, which execute this chain
-        } catch (ClassNotFoundException | ExecutorExpectedException e) {
-            throw new IllegalStateException("Chain with ID " + id + " was not successfully registered", e);
-        }
-        if (!(result instanceof ChainExecutor)) {
-            throw new IllegalStateException("Chain with ID " + id + " is executed by some non-standard way: "
-                    + "its executor is not an instance of " + ChainExecutor.class);
-        }
-        return (ChainExecutor) result;
+        return executorFactory.newExecutor(ChainExecutor.class, id(), instantiationMode);
     }
 
     public String timingInfo() {

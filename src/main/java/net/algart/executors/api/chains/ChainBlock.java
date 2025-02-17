@@ -523,7 +523,7 @@ public final class ChainBlock {
                                         + ")")
                                 + (e instanceof ClassNotFoundException ?
                                 " - Java class not found: " + e.getMessage() :
-                                " - non-registered ID"),
+                                " - non-registered ID \"" + executorId + "\""),
                                 e);
                     }
                     // - calling constructor; maybe, some ports are created here

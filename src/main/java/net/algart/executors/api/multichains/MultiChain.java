@@ -26,7 +26,6 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
-import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
@@ -390,11 +389,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
-        return chainFactory.executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
+        return executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
     }
 
     public CombineSettings newCombine() {
-        return multiChainSettings.newCombine(executorFactory(), InstantiationMode.NORMAL);
+        return executorFactory().newExecutor(CombineSettings.class, multiChainSettings.id());
     }
 
         @Override

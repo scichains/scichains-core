@@ -221,8 +221,7 @@ public class UseSettings extends FileOperation {
     }
 
     public SettingsExecutor newCombine(SettingsSpecification specification, InstantiationMode instantiationMode) {
-        //noinspection resource
-        return use(specification).newCombine(executorFactory(), instantiationMode);
+        return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), instantiationMode);
     }
 
     @Override
