@@ -355,7 +355,7 @@ public class Settings implements Cloneable {
 
     @Override
     public String toString() {
-        return "settings \"" + category() + "." + name() + "')";
+        return "settings (\"" + category() + "." + name() + "\")";
     }
 
     @Override

@@ -60,10 +60,10 @@ public class CallSimpleMultiChain {
         }
         if (args.length < startArgIndex+ 4) {
             System.out.printf("Usage: " +
-                            "%s [-json] some_multi_chain.mchain input_image output_image sub_chain_variant [A B]%n" +
-                            "some_multi_chain.mchain should be a multi-chain, which process 2 scalars X and Y " +
-                            "and have 2 parameters named A and B;%n" +
-                            "it should calculate some formula like AX+BY and return the result in the output.",
+                            "%s [-json] some_multi_chain.mchain input_image output_image sub_chain_variant [a b]%n" +
+                            "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
+                            "and have 2 parameters named a and b;%n" +
+                            "it should calculate some formula like ax+by and return the result in the output.",
                     CallSimpleMultiChain.class.getName());
             return;
         }

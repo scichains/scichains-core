@@ -42,12 +42,12 @@ public class CallSimpleChain {
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
             System.out.printf("Usage: " +
-                            "%s some_chain.json input_image output_image [A B]%n" +
-                            "some_chain.json should be some chain, which process single image and have" +
-                            " 2 parameters named A and B;%n" +
+                            "%s some_chain.chain input_image output_image [a b]%n" +
+                            "some_chain.chain should be some chain, which process single image and have" +
+                            " 2 parameters named a and b;%n" +
                             "input_image should be some image file, for example, JPEG or BMP;%n" +
                             "output_image should be result image file;%n" +
-                            "A and B should be parameters of the chain.",
+                            "a and b should be parameters of the chain.",
                     CallSimpleChain.class.getName());
             return;
         }

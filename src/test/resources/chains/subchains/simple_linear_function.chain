@@ -1,6 +1,6 @@
 {
-    "app": "stare-project",
-    "version": "1.0.9",
+    "app": "SciChains",
+    "version": "1.1",
     "root": {
         "scale": 0.8000000000000009,
         "desktop": {
@@ -978,6 +978,24 @@
                 },
                 {
                     "@id": "UIPortModel",
+                    "uuid": "16cd47c6-0300-0000-35f2-3532e0d6ed17",
+                    "visible": false,
+                    "port_type": "INPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "doAction",
+                    "caption": "Do action"
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "16cd47c6-0400-0000-35f2-3532e0d6ed17",
+                    "visible": false,
+                    "port_type": "OUTPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "doAction",
+                    "caption": "Do action"
+                },
+                {
+                    "@id": "UIPortModel",
                     "uuid": "16cd47c6-0300-0000-2c84-29cddf80f9d1",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
@@ -1359,6 +1377,24 @@
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "separator",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "f914dbfb-0300-0000-0506-0e3daeeae551",
+                    "visible": false,
+                    "port_type": "INPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "pattern",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "f914dbfb-0400-0000-0506-0e3daeeae551",
+                    "visible": false,
+                    "port_type": "OUTPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "pattern",
                     "caption": ""
                 },
                 {
@@ -1845,9 +1881,9 @@
     "properties": {
     },
     "poke_and_look_project": "",
-    "stare_chain": {
-        "app": "stare-chain",
-        "version": "1.0",
+    "chain": {
+        "app": "chain",
+        "version": "1.1",
         "executor": {
             "category": "~examples.chain.simple_test.chains",
             "options": {
@@ -1857,15 +1893,8 @@
                     "multithreading": false
                 }
             },
-            "uuid": "c379f169-6c13-4c4a-afcb-4c55344fa07a"
+            "id": "c379f169-6c13-4c4a-afcb-4c55344fa07a"
         },
-        "properties": [
-            {
-                "name": "execution.strategy",
-                "type": "scalar",
-                "value": "output_broadcast"
-            }
-        ],
         "blocks": [
             {
                 "uuid": "deb7931e-7739-490a-856e-f1ce41441f0d",
@@ -1909,10 +1938,9 @@
                         "name": "value"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "value",
-                        "type": "double",
                         "value": 2.0
                     }
                 ],
@@ -1963,10 +1991,9 @@
                         "name": "value"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "value",
-                        "type": "double",
                         "value": -1.0
                     }
                 ],
@@ -2071,15 +2098,13 @@
                         "name": "fileExistenceRequired"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": "${resources}/demo/images/lenna.png"
                     },
                     {
                         "name": "fileExistenceRequired",
-                        "type": "boolean",
                         "value": true
                     }
                 ],
@@ -2153,20 +2178,17 @@
                         "name": "requireInput"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "elementType",
-                        "type": "scalar",
                         "value": "float"
                     },
                     {
                         "name": "rawCast",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "requireInput",
-                        "type": "boolean",
                         "value": true
                     }
                 ],
@@ -2384,7 +2406,7 @@
                         "name": "_sys___platform_id"
                     }
                 ],
-                "properties": [
+                "parameters": [
                 ],
                 "system": {
                     "caption": "Output/copy matrix"
@@ -2456,20 +2478,17 @@
                         "name": "requireInput"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "elementType",
-                        "type": "scalar",
                         "value": "float"
                     },
                     {
                         "name": "rawCast",
-                        "type": "boolean",
                         "value": false
                     },
                     {
                         "name": "requireInput",
-                        "type": "boolean",
                         "value": true
                     }
                 ],
@@ -2555,6 +2574,18 @@
                         "name": "pattern"
                     },
                     {
+                        "uuid": "16cd47c6-0300-0000-35f2-3532e0d6ed17",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "doAction"
+                    },
+                    {
+                        "uuid": "16cd47c6-0400-0000-35f2-3532e0d6ed17",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "doAction"
+                    },
+                    {
                         "uuid": "16cd47c6-0300-0000-2c84-29cddf80f9d1",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
@@ -2579,20 +2610,21 @@
                         "name": "file"
                     }
                 ],
-                "properties": [
+                "parameters": [
+                    {
+                        "name": "doAction",
+                        "value": true
+                    },
                     {
                         "name": "file",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "logLevel",
-                        "type": "scalar",
                         "value": "PRINTLN_TO_CONSOLE"
                     },
                     {
                         "name": "pattern",
-                        "type": "scalar",
                         "value": "\\n    a, b = $$$\\n"
                     }
                 ],
@@ -2603,7 +2635,7 @@
             {
                 "uuid": "f914dbfb-266f-48de-8288-3df4fa23e03c",
                 "executor_id": "ff94d525-7255-42ba-ba23-38d3a987f869",
-                "executor_name": "Concatenate scalars",
+                "executor_name": "Concatenate/format scalars",
                 "ports": [
                     {
                         "uuid": "f914dbfb-0100-0000-60f5-d7289e42146c",
@@ -2828,6 +2860,18 @@
                         "name": "separator"
                     },
                     {
+                        "uuid": "f914dbfb-0300-0000-0506-0e3daeeae551",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "pattern"
+                    },
+                    {
+                        "uuid": "f914dbfb-0400-0000-0506-0e3daeeae551",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "pattern"
+                    },
+                    {
                         "uuid": "f914dbfb-0300-0000-e34b-5cf51aaf4de0",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
@@ -2948,60 +2992,53 @@
                         "name": "defaultS10"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "defaultS1",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS10",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS2",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS3",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS4",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS5",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS6",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS7",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS8",
-                        "type": "scalar",
                         "value": ""
                     },
                     {
                         "name": "defaultS9",
-                        "type": "scalar",
+                        "value": ""
+                    },
+                    {
+                        "name": "pattern",
                         "value": ""
                     },
                     {
                         "name": "separator",
-                        "type": "scalar",
                         "value": ", "
                     }
                 ],
@@ -3129,35 +3166,29 @@
                         "name": "rawValues"
                     }
                 ],
-                "properties": [
+                "parameters": [
                     {
                         "name": "a_1",
-                        "type": "double",
                         "value": 2.0
                     },
                     {
                         "name": "a_2",
-                        "type": "double",
                         "value": 1.0
                     },
                     {
                         "name": "a_3",
-                        "type": "double",
                         "value": 1.0
                     },
                     {
                         "name": "a_4",
-                        "type": "double",
                         "value": 1.0
                     },
                     {
                         "name": "b",
-                        "type": "double",
                         "value": -1.0
                     },
                     {
                         "name": "rawValues",
-                        "type": "boolean",
                         "value": false
                     }
                 ],

@@ -201,26 +201,19 @@ public class UseSettings extends FileOperation {
         return settings;
     }
 
-    public static SettingsExecutor newSharedCombine(Path file) throws IOException {
-        return newSharedCombine(file, InstantiationMode.NORMAL);
+    public static CombineSettings newSharedCombine(Path file) throws IOException {
+        return newSharedCombine(SettingsSpecification.read(file));
     }
 
-    public static SettingsExecutor newSharedCombine(Path file, InstantiationMode instantiationMode)
-            throws IOException {
-        return newSharedCombine(SettingsSpecification.read(file), instantiationMode);
+    public static CombineSettings newSharedCombine(SettingsSpecification specification) {
+        return getSharedInstance().newCombine(specification, InstantiationMode.NORMAL);
     }
 
-    public static SettingsExecutor newSharedCombine(
-            SettingsSpecification specification,
-            InstantiationMode instantiationMode) {
-        return getSharedInstance().newCombine(specification, instantiationMode);
-    }
-
-    public SettingsExecutor newCombine(Path chainFile, InstantiationMode instantiationMode) throws IOException {
+    public CombineSettings newCombine(Path chainFile, InstantiationMode instantiationMode) throws IOException {
         return newCombine(SettingsSpecification.read(chainFile), instantiationMode);
     }
 
-    public SettingsExecutor newCombine(SettingsSpecification specification, InstantiationMode instantiationMode) {
+    public CombineSettings newCombine(SettingsSpecification specification, InstantiationMode instantiationMode) {
         return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), instantiationMode);
     }
 
