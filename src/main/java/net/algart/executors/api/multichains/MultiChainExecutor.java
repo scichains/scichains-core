@@ -25,8 +25,7 @@
 package net.algart.executors.api.multichains;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.settings.CombineSettingsExecutor;
-import net.algart.executors.api.settings.SettingsExecutor;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.system.ExecutorFactory;
 
 import java.util.Objects;
@@ -39,7 +38,7 @@ public abstract class MultiChainExecutor extends Executor {
         return multiChain().executorFactory();
     }
 
-    public CombineSettingsExecutor newCombine() {
+    public CombineSettings newCombine() {
         //noinspection resource
         return multiChain().newCombine();
     }

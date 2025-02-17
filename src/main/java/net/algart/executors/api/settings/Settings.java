@@ -358,7 +358,7 @@ public class Settings implements Cloneable {
     }
 
     // Unlike Chain or MultiChain, Settings has no "own" executor factory
-    public CombineSettingsExecutor newCombine(ExecutorFactory executorFactory, InstantiationMode instantiationMode) {
+    public CombineSettings newCombine(ExecutorFactory executorFactory, InstantiationMode instantiationMode) {
         Objects.requireNonNull(executorFactory, "Null executorFactory)");
         Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
         ExecutionBlock result;
@@ -368,11 +368,11 @@ public class Settings implements Cloneable {
         } catch (ClassNotFoundException | ExecutorNotFoundException e) {
             throw new IllegalStateException("Chain with ID " + id() + " was not successfully registered", e);
         }
-        if (!(result instanceof CombineSettingsExecutor)) {
+        if (!(result instanceof CombineSettings)) {
             throw new IllegalStateException("Chain with ID " + id() + " is executed by some non-standard way: "
-                    + "its executor is not an instance of " + CombineSettingsExecutor.class);
+                    + "its executor is not an instance of " + CombineSettings.class);
         }
-        return (CombineSettingsExecutor) result;
+        return (CombineSettings) result;
     }
 
     @Override

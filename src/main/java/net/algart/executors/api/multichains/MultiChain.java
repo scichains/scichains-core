@@ -406,7 +406,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return (MultiChainExecutor) result;
     }
 
-    public CombineSettingsExecutor newCombine() {
+    public CombineSettings newCombine() {
         return multiChainSettings.newCombine(executorFactory(), InstantiationMode.NORMAL);
     }
 

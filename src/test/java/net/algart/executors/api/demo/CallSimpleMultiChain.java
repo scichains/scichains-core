@@ -27,7 +27,7 @@ package net.algart.executors.api.demo;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
-import net.algart.executors.api.settings.CombineSettingsExecutor;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class CallSimpleMultiChain {
     }
 
     private static void customizeViaJson(MultiChainExecutor executor, String variant, String a, String b) {
-        CombineSettingsExecutor combiner = executor.newCombine();
+        CombineSettings combiner = executor.newCombine();
         combiner.setStringParameter(executor.multiChain().selectedChainParameter(), variant);
         //TODO!! - make direct method
         combiner.setStringParameter("a", a);
