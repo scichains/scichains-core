@@ -58,7 +58,7 @@ public class CallSimpleMultiChain {
             json = true;
             startArgIndex++;
         }
-        if (args.length < startArgIndex+ 4) {
+        if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
                             "%s [-json] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +

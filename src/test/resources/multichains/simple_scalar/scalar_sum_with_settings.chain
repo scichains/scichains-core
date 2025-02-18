@@ -1278,59 +1278,6 @@
                 }
             },
             {
-                "uuid": "a7dd0f6d-84a0-4aca-b527-ffe175b4e44f",
-                "executor_id": "9872f46c-d45b-44b9-af9b-0061b4d312b6",
-                "executor_name": "Input/create double scalar",
-                "ports": [
-                    {
-                        "uuid": "a7dd0f6d-0100-0000-8fd6-4c4759803353",
-                        "type": 1,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "input"
-                    },
-                    {
-                        "uuid": "a7dd0f6d-0200-0000-6416-fc948a169899",
-                        "type": 2,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "output"
-                    },
-                    {
-                        "uuid": "a7dd0f6d-0200-0000-cf95-37e5dfbcb01d",
-                        "type": 2,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "_sys___executor_id"
-                    },
-                    {
-                        "uuid": "a7dd0f6d-0200-0000-a0ae-37d4ecb650d4",
-                        "type": 2,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "_sys___platform_id"
-                    },
-                    {
-                        "uuid": "a7dd0f6d-0300-0000-6bfe-b4a7b514199d",
-                        "type": 3,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "value"
-                    },
-                    {
-                        "uuid": "a7dd0f6d-0400-0000-6bfe-b4a7b514199d",
-                        "type": 4,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "value"
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "value",
-                        "value": 10.0
-                    }
-                ],
-                "system": {
-                    "caption": "[y]",
-                    "name": "y"
-                }
-            },
-            {
                 "uuid": "3bf82b7b-91c2-4ef3-9246-af20858eecdf",
                 "executor_id": "9872f46c-d45b-44b9-af9b-0061b4d312b6",
                 "executor_name": "Input/create double scalar",
@@ -1381,6 +1328,59 @@
                 "system": {
                     "caption": "[x]",
                     "name": "x"
+                }
+            },
+            {
+                "uuid": "a7dd0f6d-84a0-4aca-b527-ffe175b4e44f",
+                "executor_id": "9872f46c-d45b-44b9-af9b-0061b4d312b6",
+                "executor_name": "Input/create double scalar",
+                "ports": [
+                    {
+                        "uuid": "a7dd0f6d-0100-0000-8fd6-4c4759803353",
+                        "type": 1,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "input"
+                    },
+                    {
+                        "uuid": "a7dd0f6d-0200-0000-6416-fc948a169899",
+                        "type": 2,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "output"
+                    },
+                    {
+                        "uuid": "a7dd0f6d-0200-0000-cf95-37e5dfbcb01d",
+                        "type": 2,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "_sys___executor_id"
+                    },
+                    {
+                        "uuid": "a7dd0f6d-0200-0000-a0ae-37d4ecb650d4",
+                        "type": 2,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "_sys___platform_id"
+                    },
+                    {
+                        "uuid": "a7dd0f6d-0300-0000-6bfe-b4a7b514199d",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "value"
+                    },
+                    {
+                        "uuid": "a7dd0f6d-0400-0000-6bfe-b4a7b514199d",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "value"
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "value",
+                        "value": 10.0
+                    }
+                ],
+                "system": {
+                    "caption": "[y]",
+                    "name": "y"
                 }
             },
             {

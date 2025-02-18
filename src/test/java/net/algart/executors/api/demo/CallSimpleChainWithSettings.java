@@ -33,31 +33,42 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CallSimpleChainWithSettings {
-    private static void customizeViaJson(ChainExecutor executor,String a, String b) {
+    private static void customizeViaParameters(ChainExecutor executor, String a, String b) {
+        executor.setStringParameter("a", a);
+        executor.setStringParameter("b", b);
+    }
+
+    private static void customizeViaJson(ChainExecutor executor, String a, String b) {
         final var combiner = executor.newCombine();
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
         combiner.setDoubleParameter("delta", 0.003);
-        // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
+        // - adding "delta" parameter for a case when the sub-chain "understands" it
         final var settings = combiner.combine();
         System.out.printf("%nSettings JSON: %s%n%n", settings);
         executor.putSettings(settings);
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 3) {
+        boolean json = false;
+        int startArgIndex = 0;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-json")) {
+            json = true;
+            startArgIndex++;
+        }
+        if (args.length < startArgIndex + 3) {
             System.out.printf("Usage: " +
-                            "%s some_chain.chain x y [a b]%n" +
+                            "%s [-json] some_chain.chain x y [a b]%n" +
                             "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b.",
                     CallSimpleChainWithSettings.class.getName());
             return;
         }
-        final Path chainPath = Paths.get(args[0]);
-        final String x = args[1];
-        final String y = args[2];
-        final String parameterA = args.length > 3 ? args[3] : null;
-        final String parameterB = args.length > 4 ? args[4] : null;
+        final Path chainPath = Paths.get(args[startArgIndex]);
+        final String x = args[startArgIndex + 1];
+        final String y = args[startArgIndex + 2];
+        final String parameterA = args.length > startArgIndex + 3 ? args[startArgIndex + 3] : null;
+        final String parameterB = args.length > startArgIndex + 4 ? args[startArgIndex + 4] : null;
 
         ExecutionBlock.initializeExecutionSystem();
 
@@ -67,7 +78,11 @@ public class CallSimpleChainWithSettings {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            customizeViaJson(executor, parameterA, parameterB);
+            if (json) {
+                customizeViaJson(executor, parameterA, parameterB);
+            } else {
+                customizeViaParameters(executor, parameterA, parameterB);
+            }
             executor.execute();
             System.out.printf("%s%nDone: result is %s%n", executor, executor.getData());
         }
