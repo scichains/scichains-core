@@ -1968,14 +1968,14 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.setJava(new JavaConf().setJson(JavaConf.standardJson(className)));
         }
         final Map<String, PortConf> inputPorts = new LinkedHashMap<>(this.inputPorts);
-        for (Port port : executor.allInputPorts()) {
+        for (Port port : executor.inputPorts()) {
             final String name = port.getName();
             final PortConf portConf = inputPorts.getOrDefault(name, new PortConf());
             inputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
         }
         this.setInputPorts(inputPorts);
         final Map<String, PortConf> outputPorts = new LinkedHashMap<>(this.outputPorts);
-        for (Port port : executor.allOutputPorts()) {
+        for (Port port : executor.outputPorts()) {
             final String name = port.getName();
             final PortConf portConf = outputPorts.getOrDefault(name, new PortConf());
             outputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));

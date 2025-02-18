@@ -363,11 +363,11 @@ public final class CallJSModule extends Executor {
         final Value outputs = createEmptyObjectFunction.execute();
         graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), params);
         graalAPI.loadSystemParameters(this, params);
-        graalAPI.readInputPorts(subSet(allInputPorts(), INPUTS_NAMES), inputs);
+        graalAPI.readInputPorts(subSet(inputPorts(), INPUTS_NAMES), inputs);
         t2 = debugTime();
         final Value result = mainFunction.execute(params, inputs, outputs);
         t3 = debugTime();
-        graalAPI.writeOutputPorts(subSet(allOutputPorts(), OUTPUTS_NAMES), outputs);
+        graalAPI.writeOutputPorts(subSet(outputPorts(), OUTPUTS_NAMES), outputs);
         graalAPI.writeOutputPort(getOutputPort(DEFAULT_OUTPUT_PORT), result, true);
         // - note: direct assignment "outputs.output = xxx" overrides simple returning result
         t4 = debugTime();

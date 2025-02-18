@@ -267,6 +267,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         Files.writeString(settingsSpecificationFile, Jsons.toPrettyString(toJson()), options);
     }
 
+    public static SettingsSpecification of(String settingsSpecification) {
+        return of(Jsons.toJson(settingsSpecification));
+    }
+
     public static SettingsSpecification of(JsonObject settingsSpecification) {
         return of(settingsSpecification, true);
     }
@@ -765,7 +769,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     private static int settingsType(JsonObject settingsSpecification) {
-        Objects.requireNonNull(settingsSpecification, "Null settingsSpecification");
+        Objects.requireNonNull(settingsSpecification, "Null settings specification");
         final String app = settingsSpecification.getString("app", null);
         return APP_NAME.equals(app) || APP_NAME_ALIAS.equals(app) ?
                 CODE_FOR_ORDINARY :

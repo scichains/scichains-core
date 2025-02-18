@@ -195,12 +195,20 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return hasOutputPort(defaultOutputPortName());
     }
 
-    public final Collection<Port> allInputPorts() {
+    public final Collection<Port> inputPorts() {
         return Collections.unmodifiableCollection(inputPorts.values());
     }
 
-    public final Collection<Port> allOutputPorts() {
+    public final Collection<Port> outputPorts() {
         return Collections.unmodifiableCollection(outputPorts.values());
+    }
+
+    public final Map<String, Port> inputPortsMap() {
+        return Collections.unmodifiableMap(inputPorts);
+    }
+
+    public final Map<String, Port> outputPortsMap() {
+        return Collections.unmodifiableMap(outputPorts);
     }
 
     @UsedForExternalCommunication
@@ -662,6 +670,12 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return parameters;
     }
 
+    public final void setParameters(Parameters parameters) {
+        Objects.requireNonNull(parameters, "Null parameters");
+        this.parameters.clear();
+        this.parameters.putAll(parameters);
+    }
+
     public final void setBooleanParameter(String name, boolean value) {
         parameters.setBoolean(name, value);
         onChangeParameter(name);
@@ -1033,13 +1047,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     public void freeAllInputPortData() {
-        for (Port port : allInputPorts()) {
+        for (Port port : inputPorts()) {
             port.removeData();
         }
     }
 
     public void freeAllOutputPortData() {
-        for (Port port : allOutputPorts()) {
+        for (Port port : outputPorts()) {
             port.removeData();
         }
     }

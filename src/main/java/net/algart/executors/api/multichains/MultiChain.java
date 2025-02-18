@@ -190,11 +190,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return defaultChainIdOrName;
     }
 
-    public Settings multiChainOnlyCommonSettings() {
+    Settings multiChainOnlyCommonSettings() {
         return multiChainOnlyCommonSettings;
     }
 
-    public Settings multiChainSettings() {
+    public Settings settings() {
         return multiChainSettings;
     }
 
@@ -299,7 +299,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executorSettings, "Null executorSettings");
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final Settings mainSettings = selectedChain.getMainSettings();
+        final Settings mainSettings = selectedChain.getSettings();
         if (mainSettings == null) {
             return null;
         }
@@ -385,15 +385,15 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
+    public CombineMultiChainSettings newCombine() {
+        return executorFactory().newExecutor(CombineMultiChainSettings.class, settings().id());
+    }
+
     public MultiChainExecutor newExecutor(InstantiationMode instantiationMode) {
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
         return executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
-    }
-
-    public CombineMultiChainSettings newCombine() {
-        return executorFactory().newExecutor(CombineMultiChainSettings.class, multiChainSettings.id());
     }
 
         @Override
@@ -474,7 +474,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    final Settings mainSettings = chain.getMainSettings();
+                    final Settings mainSettings = chain.getSettings();
                     if (mainSettings != null) {
                         final SettingsSpecification specification = mainSettings.specification();
                         settingsControlConf.setSettingsId(specification.getId());

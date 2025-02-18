@@ -72,7 +72,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         final String allSettings = !inputSettings.isInitialized() ?
                 parameters().getString(UseSettings.ALL_SETTINGS_PARAMETER_NAME, "").trim() :
                 inputSettings.getValue();
-        final JsonObject executorSettings = settings.createSettings(this);
+        final JsonObject executorSettings = settings.build(this);
         final JsonObject parentSettings = Jsons.toJson(allSettings, true);
         final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
         final JsonObject resultSettings = correctSettings(overriddenSettings, settings);

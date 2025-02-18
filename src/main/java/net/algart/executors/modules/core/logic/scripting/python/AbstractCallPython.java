@@ -335,14 +335,14 @@ public abstract class AbstractCallPython extends Executor {
              AtomicPyObject pythonOutputs = jepAPI.newAPIObject(performer, outputsClassName())) {
             jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParams);
             jepAPI.loadSystemParameters(this, pythonParams);
-            jepAPI.readInputPorts(performer, subSet(allInputPorts(), INPUTS_NAMES), pythonInputs);
+            jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);
             t2 = debugTime();
             result = performer.invokeFunction(mainFunctionName,
                     pythonParams.pyObject(),
                     pythonInputs.pyObject(),
                     pythonOutputs.pyObject());
             t3 = debugTime();
-            jepAPI.writeOutputPorts(performer, subSet(allOutputPorts(), OUTPUTS_NAMES), pythonOutputs);
+            jepAPI.writeOutputPorts(performer, subSet(outputPorts(), OUTPUTS_NAMES), pythonOutputs);
             jepAPI.writeOutputPort(performer, getOutputPort(DEFAULT_OUTPUT_PORT), result, true);
             // - note: direct assignment "outputs.output = xxx" overrides simple returning result
             t4 = debugTime();

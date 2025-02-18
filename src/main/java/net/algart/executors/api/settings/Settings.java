@@ -26,6 +26,7 @@ package net.algart.executors.api.settings;
 
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
@@ -208,17 +209,21 @@ public class Settings implements Cloneable {
         return specification.hasPathControl();
     }
 
-    public JsonObject createDefaultSettings(Executor executor) {
-        return createSettings(executor, false);
+    public JsonObject buildDefault() {
+        return buildExecutor(null, false);
     }
 
-    public JsonObject createSettings(Executor executor, JsonObject defaultSettings) {
-        final JsonObject result = createSettings(executor);
+    public JsonObject build(Executor executor, JsonObject defaultSettings) {
+        final JsonObject result = build(executor);
         return defaultSettings == null ? result : Jsons.overrideEntries(defaultSettings, result);
     }
 
-    public JsonObject createSettings(Executor executor) {
-        return createSettings(executor, true);
+    public JsonObject build(Executor executor) {
+        return buildExecutor(executor, true);
+    }
+
+    public JsonObject build(Parameters parameters) {
+        return buildParametersAndPorts(null, parameters, null);
     }
 
     public void parseSettingsToParameters(Parameters parameters, JsonObject settings) {
@@ -367,39 +372,52 @@ public class Settings implements Cloneable {
         }
     }
 
-    private JsonObject createSettings(Executor executor, boolean useExecutorParameters) {
-        Objects.requireNonNull(executor, "Null executor");
+    private JsonObject buildExecutor(Executor executor, boolean useExecutorParameters) {
+        final Parameters parameters = useExecutorParameters ? executor.parameters() : null;
+        final Map<String, Port> inputPortsMap = useExecutorParameters ? executor.inputPortsMap() : null;
+        return buildParametersAndPorts(executor, parameters, inputPortsMap);
+    }
+
+    private JsonObject buildParametersAndPorts(
+            Executor executor,
+            Parameters parameters,
+            Map<String, Port> inputPortsMap) {
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         if (addSettingsClass) {
             builder.add(SettingsSpecification.CLASS_KEY, specification.className());
         }
         for (ExecutorSpecification.ControlConf controlConf : specification.getControls().values()) {
-            JsonValue jsonValue = getJsonValue(controlConf, useExecutorParameters ? executor : null);
+            JsonValue jsonValue = getJsonValue(controlConf, parameters, inputPortsMap);
             assert jsonValue != null;
-            jsonValue = replaceToAbsolutePath(executor, controlConf, jsonValue);
+            if (executor != null) {
+                jsonValue = replaceToAbsolutePath(executor, controlConf, jsonValue);
+            }
             final String jsonKey = SettingsSpecification.controlKey(controlConf);
             builder.add(jsonKey, jsonValue);
         }
         return builder.build();
     }
 
-    private static JsonValue getJsonValue(ExecutorSpecification.ControlConf controlConf, Executor executor) {
+    private static JsonValue getJsonValue(
+            ExecutorSpecification.ControlConf controlConf,
+            Parameters parameters,
+            Map<String, Port> inputPortsMap) {
         final String name = controlConf.getName();
         final ParameterValueType valueType = controlConf.getValueType();
         JsonValue jsonValue = null;
-        if (executor != null) {
-            final Parameters parameters = executor.parameters();
-            if (valueType.isSettings() && executor.hasInputPort(name)) {
-                final SScalar scalar = executor.getInputScalar(name, true);
+        if (inputPortsMap != null && valueType.isSettings()) {
+            final Port inputPort = inputPortsMap.get(name);
+            if (inputPort != null) {
+                final SScalar scalar = inputPort.getData(SScalar.class, true);
                 if (scalar.isInitialized()) {
                     final String s = scalar.getValueOrDefault("").trim();
                     jsonValue = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
                     return jsonValue;
                 }
             }
-            if (parameters.containsKey(name)) {
-                jsonValue = valueType.toJsonValue(parameters, name);
-            }
+        }
+        if (parameters != null && parameters.containsKey(name)) {
+            jsonValue = valueType.toJsonValue(parameters, name);
         }
         if (jsonValue == null) {
             jsonValue = controlConf.getDefaultJsonValue();

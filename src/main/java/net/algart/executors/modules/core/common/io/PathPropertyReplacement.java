@@ -215,6 +215,7 @@ public class PathPropertyReplacement {
     }
 
     public static Path translatePropertiesAndCurrentDirectory(String s, Executor executor) {
+        Objects.requireNonNull(executor, "Null executor");
         s = translatePathProperties(s, executor);
         s = translateSystemProperties(s);
         s = translateTmpDir(s);

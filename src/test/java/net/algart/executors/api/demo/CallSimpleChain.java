@@ -110,11 +110,11 @@ public class CallSimpleChain {
             System.out.printf("    %s = %s%n", e.getKey(), e.getValue());
         }
         System.out.println("Initial input ports:");
-        for (var p : executor.allInputPorts()) {
+        for (var p : executor.inputPorts()) {
             System.out.printf("    %s%n", p);
         }
         System.out.println("Initial output ports:");
-        for (var p : executor.allOutputPorts()) {
+        for (var p : executor.outputPorts()) {
             System.out.printf("    %s%n", p);
         }
         System.out.println();

@@ -105,7 +105,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     public Value readInputPorts(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         final Value inputs = createEmptyObjectFunction.execute();
-        graalAPI.readInputPorts(executor.allInputPorts(), inputs);
+        graalAPI.readInputPorts(executor.inputPorts(), inputs);
         return inputs;
     }
 
@@ -115,7 +115,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     public void writeOutputPorts(Executor executor, Value outputs) {
         Objects.requireNonNull(executor, "Null executor");
-        graalAPI.writeOutputPorts(executor.allOutputPorts(), outputs);
+        graalAPI.writeOutputPorts(executor.outputPorts(), outputs);
     }
 
     public void writeOptionalOutputPort(Executor executor, String portName, Value value, boolean preserveExisting) {

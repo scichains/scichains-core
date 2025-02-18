@@ -331,40 +331,6 @@ public final class Chain implements AutoCloseable {
         return this;
     }
 
-    public String getMainSettingsBlockId() {
-        return mainSettingsBlockId;
-    }
-
-    public Settings getMainSettings() {
-        return mainSettings;
-    }
-
-    void setMainSettings(Settings mainSettings) {
-        Objects.requireNonNull(mainSettings, "Null mainSettings");
-        final String id = mainSettings.id();
-        assert id != null;
-        ChainBlock mainSettingsBlock = null;
-        for (ChainBlock block : allBlocks.values()) {
-            final ChainSpecification.ChainBlockConf blockConfJson = block.getBlockConfJson();
-            if (blockConfJson == null) {
-                continue;
-            }
-            final String blockExecutorId = blockConfJson.getExecutorId();
-            assert blockExecutorId != null;
-            if (id.equals(blockExecutorId)) {
-                mainSettingsBlock = block;
-                break;
-            }
-        }
-        if (mainSettingsBlock == null) {
-            throw new IllegalStateException("Sub-chain " + canonicalName()
-                    + " does not contain the dynamic settings '" + id
-                    + "', created by its UseChainSettings function");
-        }
-        this.mainSettingsBlockId = mainSettingsBlock.getId();
-        this.mainSettings = mainSettings;
-    }
-
     public Map<String, ChainBlock> getAllBlocks() {
         return Collections.unmodifiableMap(allBlocks);
     }
@@ -664,11 +630,50 @@ public final class Chain implements AutoCloseable {
         }
     }
 
-    public CombineChainSettings newCombine() {
+    public String getMainSettingsBlockId() {
+        return mainSettingsBlockId;
+    }
+
+    public Settings getSettings() {
+        return mainSettings;
+    }
+
+    public Settings settings() {
         if (mainSettings == null) {
             throw new IllegalStateException("The chain has no main settings: " + this);
         }
-        return executorFactory.newExecutor(CombineChainSettings.class, mainSettings.id());
+        return mainSettings;
+    }
+
+    void setSettings(Settings mainSettings) {
+        Objects.requireNonNull(mainSettings, "Null mainSettings");
+        final String id = mainSettings.id();
+        assert id != null;
+        ChainBlock mainSettingsBlock = null;
+        for (ChainBlock block : allBlocks.values()) {
+            final ChainSpecification.ChainBlockConf blockConfJson = block.getBlockConfJson();
+            if (blockConfJson == null) {
+                continue;
+            }
+            final String blockExecutorId = blockConfJson.getExecutorId();
+            assert blockExecutorId != null;
+            if (id.equals(blockExecutorId)) {
+                mainSettingsBlock = block;
+                break;
+            }
+        }
+        if (mainSettingsBlock == null) {
+            throw new IllegalStateException("Sub-chain " + canonicalName()
+                    + " does not contain the dynamic settings '" + id
+                    + "', created by its UseChainSettings function");
+        }
+        this.mainSettingsBlockId = mainSettingsBlock.getId();
+        this.mainSettings = mainSettings;
+    }
+
+    public CombineChainSettings newCombine() {
+        final Settings settings = settings();
+        return executorFactory.newExecutor(CombineChainSettings.class, settings.id());
     }
 
     public ChainExecutor newExecutor(InstantiationMode instantiationMode) {

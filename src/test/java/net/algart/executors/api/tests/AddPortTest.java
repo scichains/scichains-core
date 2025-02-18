@@ -45,13 +45,13 @@ public class AddPortTest {
         System.out.printf("Adding input: %s%n", a);
         a = executor.addPort(Port.newOutput("output", DataType.MAT));
         System.out.printf("Adding output: %s%n", a);
-        System.out.printf("Ports:%n   %s%n   %s%n", executor.allInputPorts(), executor.allOutputPorts());
+        System.out.printf("Ports:%n   %s%n   %s%n", executor.inputPorts(), executor.outputPorts());
         a = executor.addPort(Port.newInput("input", DataType.SCALAR));
         System.out.printf("Adding input: %s%n", a);
         a = executor.addPort(Port.newOutput("output", DataType.SCALAR));
         System.out.printf("Adding output: %s%n", a);
         a = executor.addPort(Port.newOutput("output2", DataType.MAT).setUuid(UUID.randomUUID()));
         System.out.printf("Adding output2: %s%n", a);
-        System.out.printf("Ports:%n   %s%n   %s%n", executor.allInputPorts(), executor.allOutputPorts());
+        System.out.printf("Ports:%n   %s%n   %s%n", executor.inputPorts(), executor.outputPorts());
     }
 }

@@ -213,7 +213,7 @@ public abstract class Executor extends ExecutionBlock {
             boolean onlyRequested) {
         Objects.requireNonNull(dataClass, "Null data class");
         final Map<String, T> result = new LinkedHashMap<>();
-        for (Port port : allOutputPorts()) {
+        for (Port port : outputPorts()) {
             assert port != null : "Null output port (impossible)";
             assert port.getName() != null : "Null output port name (impossible)";
             assert port.getDataType() != null : "Null output port data type (impossible) in port " + port.getName();
@@ -325,7 +325,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     public final boolean isCancellingExecutionRequested() {
-        for (Port port : allInputPorts()) {
+        for (Port port : inputPorts()) {
             if (port.isCancellingExecutionRequested()) {
                 return true;
             }
@@ -339,7 +339,7 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void requestCancellingFurtherExecution() {
         cancellingFurtherExecutionRequested = true;
-        for (Port port : allOutputPorts()) {
+        for (Port port : outputPorts()) {
             if (port.isConnected()) {
                 // - no sense to set a cancellation flag in output ports, that are not connected to anything
                 port.requestCancellingExecution();
@@ -349,7 +349,7 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void requestContinuingFurtherExecution() {
         cancellingFurtherExecutionRequested = false;
-        for (Port port : allOutputPorts()) {
+        for (Port port : outputPorts()) {
             port.requestContinuingExecution();
         }
     }
@@ -564,7 +564,7 @@ public abstract class Executor extends ExecutionBlock {
 
     public void postprocess() {
         if (multithreadingEnvironment) {
-            for (Port outputPort : allOutputPorts()) {
+            for (Port outputPort : outputPorts()) {
                 outputPort.getData().serializeMemory();
             }
         }

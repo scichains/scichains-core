@@ -26,6 +26,7 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.SettingsExecutor;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.json.Jsons;
@@ -50,6 +51,11 @@ public abstract class MultiChainExecutor extends Executor {
     public ExecutorFactory executorFactory() {
         //noinspection resource
         return multiChain().executorFactory();
+    }
+
+    public Settings settings() {
+        //noinspection resource
+        return multiChain().settings();
     }
 
     public CombineMultiChainSettings newCombine() {

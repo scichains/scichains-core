@@ -110,7 +110,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executor, "Null executor");
         final JepPerformer performer = performer();
         AtomicPyObject inputs = jepAPI.newAPIObject(performer, pythonConf.getInputsClass());
-        jepAPI.readInputPorts(performer, executor.allInputPorts(), inputs);
+        jepAPI.readInputPorts(performer, executor.inputPorts(), inputs);
         return inputs;
     }
 
@@ -120,7 +120,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public void writeOutputPorts(Executor executor, AtomicPyObject outputs) {
         Objects.requireNonNull(executor, "Null executor");
-        jepAPI.writeOutputPorts(performer(), executor.allOutputPorts(), outputs);
+        jepAPI.writeOutputPorts(performer(), executor.outputPorts(), outputs);
     }
 
     public void writeOptionalOutputPort(Executor executor, String portName, Object value, boolean preserveExisting) {

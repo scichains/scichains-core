@@ -24,9 +24,14 @@
 
 package net.algart.executors.api.demo;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.settings.Settings;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,7 +44,7 @@ public class CallSimpleMultiChain {
         executor.setStringParameter("b", b);
     }
 
-    private static void customizeViaJson(MultiChainExecutor executor, String variant, String a, String b) {
+    private static void customizeViaCombiner(MultiChainExecutor executor, String variant, String a, String b) {
         final var combiner = executor.newCombine();
         combiner.selectChainVariant(variant);
         combiner.setStringParameter("a", a);
@@ -49,6 +54,19 @@ public class CallSimpleMultiChain {
         final var settings = combiner.combine();
         System.out.printf("%nSettings JSON: %s%n%n", settings);
         executor.putSettings(settings);
+    }
+
+    private static void customizeViaSettings(MultiChainExecutor executor, String variant, String a, String b) {
+        final Settings settings = executor.settings();
+        final Parameters parameters = new Parameters();
+        parameters.setString(MultiChain.SELECTED_CHAIN_NAME, variant);
+        parameters.setString("a", a);
+        parameters.setString("b", b);
+        parameters.setString("variant", "{\"delta\": 0.003}");
+        // - adding "delta" parameter for a case when the sub-chain "understands" it
+        final JsonObject settingsJson = settings.build(parameters);
+        System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
+        executor.putSettingsJson(settingsJson);
     }
 
     public static void main(String[] args) throws IOException {
@@ -83,7 +101,7 @@ public class CallSimpleMultiChain {
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (json) {
-                customizeViaJson(executor, variant, parameterA, parameterB);
+                customizeViaSettings(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }

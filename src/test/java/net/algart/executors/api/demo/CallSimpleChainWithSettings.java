@@ -24,9 +24,13 @@
 
 package net.algart.executors.api.demo;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.ChainExecutor;
 import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.settings.Settings;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -38,15 +42,27 @@ public class CallSimpleChainWithSettings {
         executor.setStringParameter("b", b);
     }
 
-    private static void customizeViaJson(ChainExecutor executor, String a, String b) {
+    private static void customizeViaSettings(ChainExecutor executor, String a, String b) {
+        final Settings settings = executor.settings();
+        final Parameters parameters = new Parameters();
+        parameters.setString("a", a);
+        parameters.setString("b", b);
+        parameters.setDouble("delta", 0.003);
+        // - adding "delta" parameter for a case when the sub-chain "understands" it
+        final JsonObject settingsJson = settings.build(parameters);
+        System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
+        executor.putSettingsJson(settingsJson);
+    }
+
+    private static void customizeViaCombiner(ChainExecutor executor, String a, String b) {
         final var combiner = executor.newCombine();
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
         combiner.setDoubleParameter("delta", 0.003);
         // - adding "delta" parameter for a case when the sub-chain "understands" it
-        final var settings = combiner.combine();
-        System.out.printf("%nSettings JSON: %s%n%n", settings);
-        executor.putSettings(settings);
+        final var settingsScalar = combiner.combine();
+        System.out.printf("%nSettings JSON: %s%n%n", settingsScalar);
+        executor.putSettings(settingsScalar);
     }
 
     public static void main(String[] args) throws IOException {
@@ -79,7 +95,7 @@ public class CallSimpleChainWithSettings {
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (json) {
-                customizeViaJson(executor, parameterA, parameterB);
+                customizeViaSettings(executor, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, parameterA, parameterB);
             }

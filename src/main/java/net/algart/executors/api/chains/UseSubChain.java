@@ -608,7 +608,7 @@ public final class UseSubChain extends FileOperation {
         if (chain.isEmpty()) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        final Settings mainSettings = chain.get().getMainSettings();
+        final Settings mainSettings = chain.get().getSettings();
         return mainSettings == null ? "" : ", " + mainSettings;
     }
 
@@ -621,7 +621,7 @@ public final class UseSubChain extends FileOperation {
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
         final Settings mainSettings = useChainSettings.settings();
         // - mainSettings was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setMainSettings(mainSettings);
+        chain.setSettings(mainSettings);
         UseSettings.addSubChainControlsAndPorts(result, mainSettings);
         result.setSettings(mainSettings.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettings.id());

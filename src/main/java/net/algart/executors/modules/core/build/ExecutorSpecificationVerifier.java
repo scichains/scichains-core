@@ -182,7 +182,7 @@ public final class ExecutorSpecificationVerifier {
         }
         if (checkClasses) {
             assert executionBlock != null;
-            for (Port port : executionBlock.allInputPorts()) {
+            for (Port port : executionBlock.inputPorts()) {
                 final DataType dataType = inputPorts.get(port.getName());
                 if (dataType == null) {
                     throw new JsonException("Built-in input " + port + " is not specified in " + f);
@@ -192,7 +192,7 @@ public final class ExecutorSpecificationVerifier {
                             + f + " (" + dataType + ")");
                 }
             }
-            for (Port port : executionBlock.allOutputPorts()) {
+            for (Port port : executionBlock.outputPorts()) {
                 final DataType dataType = outputPorts.get(port.getName());
                 if (dataType == null) {
                     throw new JsonException("Built-in output " + port + " is not specified in " + f);

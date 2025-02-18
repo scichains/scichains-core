@@ -47,7 +47,7 @@ public class SplitSettings extends SettingsExecutor implements ReadOnlyExecution
         final String s = getInputScalar(SETTINGS, true).getValueOrDefault("").trim();
         JsonObject inputSettings = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
         settings.splitSettingsToOutputPorts(this, inputSettings);
-        inputSettings = Jsons.overrideEntries(settings.createSettings(this), inputSettings);
+        inputSettings = Jsons.overrideEntries(settings.build(this), inputSettings);
         // - provide default values for keys, absent in the source JSON
         getScalar(SETTINGS).setTo(Jsons.toPrettyString(inputSettings));
         long t2 = debugTime();

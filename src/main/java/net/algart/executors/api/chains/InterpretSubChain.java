@@ -133,7 +133,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     public String visibleOutputPortName() {
         String result = parameters().getString(UseSubChain.VISIBLE_RESULT_PARAMETER_NAME, null);
         if (result == null) {
-            final Collection<Port> outputPorts = allOutputPorts();
+            final Collection<Port> outputPorts = outputPorts();
             if (!outputPorts.isEmpty()) {
                 result = outputPorts.iterator().next().getName();
                 // - this situation is normal when there is only 1 output port,
@@ -149,7 +149,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final Settings settings = chain.getMainSettings();
+        final Settings settings = chain.getSettings();
         if (settings == null) {
             return;
         }
@@ -193,7 +193,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         settings.setExtractSubSettings(extractSubSettings);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
-                settings.createSettings(this);
+                settings.build(this);
         final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(SettingsExecutor.SETTINGS, SScalar.of(settingsString));
@@ -236,7 +236,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     public static void skipAction(Executor executor) {
-        for (Port input : executor.allInputPorts()) {
+        for (Port input : executor.inputPorts()) {
             final Port outputPort = executor.getOutputPort(input.getName());
             if (outputPort != null && outputPort.getDataType() == input.getDataType()) {
                 outputPort.getData().setTo(input.getData());
