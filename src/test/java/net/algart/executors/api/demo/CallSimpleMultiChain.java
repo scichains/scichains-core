@@ -44,6 +44,7 @@ public class CallSimpleMultiChain {
         executor.setStringParameter("b", b);
     }
 
+    // Little more convenient than customizeViaSettings: combiner has "selectChainVariant" method
     private static void customizeViaCombiner(MultiChainExecutor executor, String variant, String a, String b) {
         final var combiner = executor.newCombine();
         combiner.selectChainVariant(variant);
@@ -59,10 +60,10 @@ public class CallSimpleMultiChain {
     private static void customizeViaSettings(MultiChainExecutor executor, String variant, String a, String b) {
         final Settings settings = executor.settings();
         final Parameters parameters = new Parameters();
-        parameters.setString(MultiChain.SELECTED_CHAIN_NAME, variant);
+        parameters.setString(executor.multiChain().selectedChainParameter(), variant);
         parameters.setString("a", a);
         parameters.setString("b", b);
-        parameters.setString("variant", "{\"delta\": 0.003}");
+        parameters.setString(variant, "{\"delta\": 0.003}");
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final JsonObject settingsJson = settings.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
@@ -101,7 +102,7 @@ public class CallSimpleMultiChain {
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (json) {
-                customizeViaSettings(executor, variant, parameterA, parameterB);
+                customizeViaCombiner(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }
