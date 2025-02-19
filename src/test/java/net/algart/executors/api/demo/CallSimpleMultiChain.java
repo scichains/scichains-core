@@ -44,19 +44,6 @@ public class CallSimpleMultiChain {
         executor.setStringParameter("b", b);
     }
 
-    // Little more convenient than customizeViaSettings: combiner has "selectChainVariant" method
-    private static void customizeViaCombiner(MultiChainExecutor executor, String variant, String a, String b) {
-        final var combiner = executor.newCombine();
-        combiner.selectChainVariant(variant);
-        combiner.setStringParameter("a", a);
-        combiner.setStringParameter("b", b);
-        combiner.putStringScalar(variant, "{\"delta\": 0.003}");
-        // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
-        final var settings = combiner.combine();
-        System.out.printf("%nSettings JSON: %s%n%n", settings);
-        executor.putSettings(settings);
-    }
-
     private static void customizeViaSettings(MultiChainExecutor executor, String variant, String a, String b) {
         final Settings settings = executor.settings();
         final Parameters parameters = new Parameters();
@@ -70,16 +57,34 @@ public class CallSimpleMultiChain {
         executor.putSettingsJson(settingsJson);
     }
 
+    // Little more convenient than customizeViaSettings: combiner has "selectChainVariant" method
+    private static void customizeViaCombiner(MultiChainExecutor executor, String variant, String a, String b) {
+        final var combiner = executor.newCombine();
+        combiner.selectChainVariant(variant);
+        combiner.setStringParameter("a", a);
+        combiner.setStringParameter("b", b);
+        combiner.putStringScalar(variant, "{\"delta\": 0.003}");
+        // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
+        final var settings = combiner.combine();
+        System.out.printf("%nCombined JSON: %s%n%n", settings);
+        executor.putSettings(settings);
+    }
+
     public static void main(String[] args) throws IOException {
-        boolean json = false;
+        boolean settings = false;
         int startArgIndex = 0;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-json")) {
-            json = true;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-settings")) {
+            settings = true;
+            startArgIndex++;
+        }
+        boolean combine = false;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
+            combine = true;
             startArgIndex++;
         }
         if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
-                            "%s [-json] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
+                            "%s [-settings|-combine] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b;%n" +
                             "it should calculate some formula like ax+by and return the result in the output.",
@@ -101,8 +106,10 @@ public class CallSimpleMultiChain {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            if (json) {
+            if (combine) {
                 customizeViaCombiner(executor, variant, parameterA, parameterB);
+            } else if (settings) {
+                customizeViaSettings(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }

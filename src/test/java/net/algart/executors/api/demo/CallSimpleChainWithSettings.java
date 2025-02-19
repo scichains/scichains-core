@@ -61,15 +61,20 @@ public class CallSimpleChainWithSettings {
         combiner.setDoubleParameter("delta", 0.003);
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final var settingsScalar = combiner.combine();
-        System.out.printf("%nSettings JSON: %s%n%n", settingsScalar);
+        System.out.printf("%nCombined JSON: %s%n%n", settingsScalar);
         executor.putSettings(settingsScalar);
     }
 
     public static void main(String[] args) throws IOException {
-        boolean json = false;
+        boolean settings = false;
         int startArgIndex = 0;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-json")) {
-            json = true;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-settings")) {
+            settings = true;
+            startArgIndex++;
+        }
+        boolean combine = false;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
+            combine = true;
             startArgIndex++;
         }
         if (args.length < startArgIndex + 3) {
@@ -94,7 +99,9 @@ public class CallSimpleChainWithSettings {
             CallSimpleChain.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
-            if (json) {
+            if (combine) {
+                customizeViaCombiner(executor, parameterA, parameterB);
+            } else if (settings) {
                 customizeViaSettings(executor, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, parameterA, parameterB);

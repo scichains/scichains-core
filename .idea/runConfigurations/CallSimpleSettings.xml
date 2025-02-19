@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CallSimpleMultiChain" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleMultiChain" />
+  <configuration default="false" name="CallSimpleSettings" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleSettings" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="-settings src/test/resources/multichains/simple_scalar/multi_scalar.mchain 10 20 scalar_sum_with_settings 10 1" />
+    <option name="PROGRAM_PARAMETERS" value="src/test/resources/settings/simple_settings.ss 10 20 test" />
     <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>
