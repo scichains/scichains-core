@@ -621,7 +621,7 @@ public final class UseSubChain extends FileOperation {
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
         final Settings mainSettings = useChainSettings.settings();
         // - mainSettings was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
-        chain.setSettings(mainSettings);
+        chain.assignSettings(mainSettings);
         UseSettings.addSubChainControlsAndPorts(result, mainSettings);
         result.setSettings(mainSettings.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettings.id());

@@ -645,7 +645,7 @@ public final class Chain implements AutoCloseable {
         return mainSettings;
     }
 
-    void setSettings(Settings mainSettings) {
+    public void assignSettings(Settings mainSettings) {
         Objects.requireNonNull(mainSettings, "Null mainSettings");
         final String id = mainSettings.id();
         assert id != null;
