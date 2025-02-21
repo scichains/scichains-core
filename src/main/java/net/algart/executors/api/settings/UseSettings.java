@@ -60,13 +60,13 @@ public class UseSettings extends FileOperation {
     public static final String ALL_SETTINGS_PARAMETER_CAPTION = "settings (all)";
     public static final String ALL_SETTINGS_PARAMETER_DESCRIPTION =
             "If contains non-empty string and if the input \"settings\" port is NOT initialized, " +
-                    "it should be JSON, containing ALL settings for this combiner " +
-                    "(in other words, full settings set for the chain). " +
-                    "It will be used instead of input \"settings\" JSON. " +
-                    "In this case, as well as \"settings\" port is initialized by some JSON, " +
-                    "all parameters below will be overridden by this JSON.\n" +
-                    "Note: \"overriding\" does not mean \"replacing\": if JSON does not contain some settings, " +
-                    "this function will use settings from parameters below or from other input settings ports.";
+                    "it should be a JSON containing ALL settings for this function " +
+                    "(in other words, the full settings set for the chain). " +
+                    "If the input \"settings\" port is initialized, it plays the same role: ALL settings. " +
+                    "In both cases, all parameters below and all other input ports (with sub-settings sections) " +
+                    "are overridden by this JSON.\n" +
+                    "Note: \"overriding\" does not mean \"replacing\": if the JSON does not contain some settings, " +
+                    "this function will use the settings from the parameters below / other input settings ports.";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_NAME = "_cs___absolutePaths";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_CAPTION = "Auto-replace paths to absolute";
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_DESCRIPTION =

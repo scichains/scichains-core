@@ -118,6 +118,10 @@ public final class Mapping implements Cloneable {
         return specification.getName();
     }
 
+    public String className() {
+        return specification.className();
+    }
+
     public String description() {
         return specification.getDescription();
     }
