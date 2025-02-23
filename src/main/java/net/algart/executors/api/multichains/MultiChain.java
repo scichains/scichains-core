@@ -389,11 +389,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return executorFactory().newExecutor(CombineMultiChainSettings.class, settings().id());
     }
 
-    public MultiChainExecutor newExecutor(InstantiationMode instantiationMode) {
+    public MultiChainExecutor newExecutor(CreateMode createMode) {
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
-        return executorFactory().newExecutor(MultiChainExecutor.class, id(), instantiationMode);
+        return executorFactory().newExecutor(MultiChainExecutor.class, id(), createMode);
     }
 
         @Override

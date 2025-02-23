@@ -29,7 +29,7 @@ import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.system.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.InstantiationMode;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.io.MatrixIO;
 
 import javax.imageio.ImageIO;
@@ -62,7 +62,7 @@ public class CallSimpleChain {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (var executor = UseSubChain.newSharedExecutor(chainPath, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = UseSubChain.newSharedExecutor(chainPath, CreateMode.REQUEST_ALL)) {
             printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);

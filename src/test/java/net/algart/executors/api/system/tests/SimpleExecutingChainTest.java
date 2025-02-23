@@ -28,7 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.InstantiationMode;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.chains.UseSubChain;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.nio.file.Paths;
 
 public class SimpleExecutingChainTest {
     private static void executeChainAsExecutor(Path chainPath) throws IOException {
-        try (var executor = UseSubChain.newSharedExecutor(chainPath, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = UseSubChain.newSharedExecutor(chainPath, CreateMode.REQUEST_ALL)) {
             executor.execute();
             System.out.println("Executor finished: " + executor);
         }

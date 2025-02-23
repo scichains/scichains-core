@@ -52,12 +52,9 @@ public final class ExecutorLoaderSet {
         return newFactory(sessionId, ExecutorSpecificationSet.allBuiltIn());
     }
 
-    public ExecutionBlock newExecutor(
-            String sessionId,
-            ExecutorSpecification specification,
-            InstantiationMode instantiationMode)
+    public ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification, CreateMode createMode)
             throws ClassNotFoundException {
-        final ExecutionBlock executor = loadExecutor(sessionId, specification, instantiationMode);
+        final ExecutionBlock executor = loadExecutor(sessionId, specification, createMode);
         if (executor == null) {
             throw new IllegalArgumentException("Cannot load executor with ID " + specification.getId()
                     + ": unknown executor specification");
@@ -66,16 +63,13 @@ public final class ExecutorLoaderSet {
         return executor;
     }
 
-    public ExecutionBlock loadExecutor(
-            String sessionId,
-            ExecutorSpecification specification,
-            InstantiationMode instantiationMode)
+    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification, CreateMode createMode)
             throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
         final List<ExecutorLoader> loaders = list();
         for (int k = loaders.size() - 1; k >= 0; k--) {
             // Last registered loaders override previous
-            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification, instantiationMode);
+            final ExecutionBlock executor = loaders.get(k).loadExecutor(sessionId, specification, createMode);
             if (executor != null) {
                 return executor;
             }

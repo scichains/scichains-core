@@ -30,10 +30,10 @@ import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
 
 /**
- * Initialization mode for executor, created by {@link ExecutorFactory#newExecutor(String, InstantiationMode)}
+ * Initialization mode for executor, created by {@link ExecutorFactory#newExecutor(String, CreateMode)}
  * and similar methods.
  */
-public enum InstantiationMode {
+public enum CreateMode {
     /**
      * The executor is created by its constructor or an equivalent instantiation method.
      * No additional initialization is performed.
@@ -41,7 +41,7 @@ public enum InstantiationMode {
      * {@link UseSubChain#newExecutor}
      * requires information about its executor ID.
      */
-    CONSTRUCTOR_ONLY {
+    CREATE_ONLY {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
         }

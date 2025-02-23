@@ -26,7 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.InstantiationMode;
+import net.algart.executors.api.system.CreateMode;
 
 import java.io.IOException;
 
@@ -47,7 +47,7 @@ public class CallExecutorRecursiveFactorial {
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
         // it is a part of the platform folder for sub-chains
         final ExecutorFactory factory = ExecutorFactory.newFactory(MY_SESSION_ID);
-        try (var executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, InstantiationMode.REQUEST_ALL)) {
+        try (var executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, CreateMode.REQUEST_ALL)) {
             CallSimpleChain.printExecutorInterface(executor);
             executor.setIntParameter("n", value);
             executor.execute();

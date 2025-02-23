@@ -166,28 +166,28 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * specification} with help of the following call:
      * <pre>
      *      {@link #loaderSet() loaderSet()}.{@link ExecutorLoaderSet#newExecutor
-     *      newExecutor}({@link #sessionId() sessionId()}, specification, instantiationMode);
+     *      newExecutor}({@link #sessionId() sessionId()}, specification, createMode);
      * </pre>
      *
-     * @param executorId        unique ID of the executor.
-     * @param instantiationMode what should we do after successful instantiating the executor?
+     * @param executorId unique ID of the executor.
+     * @param createMode what should we do after successful instantiating the executor?
      * @return newly created executor.
      * @throws ClassNotFoundException    if Java class, required for creating the executor,
      *                                   is not available in the current <code>classpath</code> environment.
      * @throws ExecutorExpectedException if there is no requested executor.
-     * @throws NullPointerException      if <code>executorId==null</code> or <code>instantiationMode==null</code>.
+     * @throws NullPointerException      if <code>executorId==null</code> or <code>createMode==null</code>.
      */
     @Override
-    public ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode)
+    public ExecutionBlock newExecutor(String executorId, CreateMode createMode)
             throws ClassNotFoundException, ExecutorExpectedException {
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(instantiationMode, "Null instantiationMode");
+        Objects.requireNonNull(createMode, "Null createMode");
         synchronized (lock) {
             final ExecutorSpecification specification = getSpecification(executorId);
             if (specification == null) {
                 throw new ExecutorExpectedException("Cannot create executor: non-registered ID \"" + executorId + "\"");
             }
-            return loaderSet.newExecutor(sessionId, specification, instantiationMode);
+            return loaderSet.newExecutor(sessionId, specification, createMode);
         }
     }
 

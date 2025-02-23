@@ -56,36 +56,36 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
      * <p>Creates new instance of {@link ExecutionBlock} on the base of its specification,
      * returned by {@link #getSpecification(String)} method.
      * This method also performs some initialization of the newly created object
-     * according the <code>instantiationMode</code> argument.</p>
+     * according the <code>createMode</code> argument.</p>
      *
      * <p>If {@link #getSpecification(String)} method returns <code>null</code>, this method
      * throws {@link ExecutorExpectedException}; this method never returns <code>null</code>.</p>
      *
      * @param executorId        unique ID of the executor.
-     * @param instantiationMode how to initialize a newly created instance?
+     * @param createMode how to initialize a newly created instance?
      * @return newly created executor.
      * @throws ClassNotFoundException    if Java class, required for creating the executor,
      *                                   is not available in the current <code>classpath</code> environment.
      * @throws ExecutorExpectedException if there is no requested executor.
-     * @throws NullPointerException      if <code>executorId==null</code> or <code>instantiationMode==null</code>.
+     * @throws NullPointerException      if <code>executorId==null</code> or <code>createMode==null</code>.
      */
-    ExecutionBlock newExecutor(String executorId, InstantiationMode instantiationMode)
+    ExecutionBlock newExecutor(String executorId, CreateMode createMode)
             throws ClassNotFoundException, ExecutorExpectedException;
 
     default <T extends ExecutionBlock> T newExecutor(Class<T> expectedClass, String executorId) {
-        return newExecutor(expectedClass, executorId, InstantiationMode.NORMAL);
+        return newExecutor(expectedClass, executorId, CreateMode.NORMAL);
     }
 
     default <T extends ExecutionBlock> T newExecutor(
             Class<T> expectedClass,
             String executorId,
-            InstantiationMode instantiationMode) {
+            CreateMode createMode) {
         Objects.requireNonNull(expectedClass, "Null expectedClass");
         Objects.requireNonNull(executorId, "Null executorId");
-        Objects.requireNonNull(instantiationMode, "Null instantiationMode");
+        Objects.requireNonNull(createMode, "Null createMode");
         ExecutionBlock result;
         try {
-            result = newExecutor(executorId, instantiationMode);
+            result = newExecutor(executorId, createMode);
         } catch (ClassNotFoundException e) {
             throw new ExecutorExpectedException("Executor with ID \"" + executorId +
                     "\" probably was not successfully registered - Java class not found: " + e.getMessage(), e);
@@ -103,12 +103,12 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
         return newSharedFactory(ExecutionBlock.globalLoaders());
     }
 
-    static ExecutorFactory newFactory(String sessionId) {
-        return newFactory(ExecutionBlock.globalLoaders(), sessionId);
-    }
-
     static ExecutorFactory newSharedFactory(ExecutorLoaderSet loaders) {
         return newFactory(loaders, ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
+    }
+
+    static ExecutorFactory newFactory(String sessionId) {
+        return newFactory(ExecutionBlock.globalLoaders(), sessionId);
     }
 
     static ExecutorFactory newFactory(ExecutorLoaderSet loaders, String sessionId) {

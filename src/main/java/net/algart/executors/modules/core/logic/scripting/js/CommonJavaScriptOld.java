@@ -32,7 +32,7 @@ import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.system.ExecutorExpectedException;
-import net.algart.executors.api.system.InstantiationMode;
+import net.algart.executors.api.system.CreateMode;
 
 import javax.script.ScriptEngine;
 import java.util.Locale;
@@ -91,7 +91,7 @@ public final class CommonJavaScriptOld extends Executor {
             final net.algart.executors.api.system.ExecutorFactory executorFactory = executorFactory();
             final ExecutionBlock executionBlock;
             try {
-                executionBlock = executorFactory.newExecutor(callableExecutorId, InstantiationMode.NORMAL);
+                executionBlock = executorFactory.newExecutor(callableExecutorId, CreateMode.NORMAL);
             } catch (ClassNotFoundException | ExecutorExpectedException e) {
                 throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
                         + (e instanceof ClassNotFoundException ?

@@ -30,10 +30,10 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
@@ -206,15 +206,15 @@ public class UseSettings extends FileOperation {
     }
 
     public static CombineSettings newSharedCombine(SettingsSpecification specification) {
-        return getSharedInstance().newCombine(specification, InstantiationMode.NORMAL);
+        return getSharedInstance().newCombine(specification, CreateMode.NORMAL);
     }
 
-    public CombineSettings newCombine(Path chainFile, InstantiationMode instantiationMode) throws IOException {
-        return newCombine(SettingsSpecification.read(chainFile), instantiationMode);
+    public CombineSettings newCombine(Path chainFile, CreateMode createMode) throws IOException {
+        return newCombine(SettingsSpecification.read(chainFile), createMode);
     }
 
-    public CombineSettings newCombine(SettingsSpecification specification, InstantiationMode instantiationMode) {
-        return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), instantiationMode);
+    public CombineSettings newCombine(SettingsSpecification specification, CreateMode createMode) {
+        return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), createMode);
     }
 
     @Override

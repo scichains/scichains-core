@@ -513,7 +513,7 @@ public final class ChainBlock {
                     final ExecutionBlock executor;
                     try {
                         final ExecutorFactory factory = chain.executorFactory();
-                        executor = factory.newExecutor(executorId, InstantiationMode.NORMAL);
+                        executor = factory.newExecutor(executorId, CreateMode.NORMAL);
                     } catch (ClassNotFoundException | ExecutorExpectedException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
                                 + (this.blockConfJson == null ?

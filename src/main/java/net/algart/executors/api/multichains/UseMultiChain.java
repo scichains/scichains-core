@@ -34,9 +34,9 @@ import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.InstantiationMode;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
@@ -151,30 +151,28 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public static MultiChainExecutor newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(file, InstantiationMode.NORMAL);
+        return newSharedExecutor(file, CreateMode.NORMAL);
     }
 
-    public static MultiChainExecutor newSharedExecutor(Path file, InstantiationMode instantiationMode)
+    public static MultiChainExecutor newSharedExecutor(Path file, CreateMode createMode)
             throws IOException {
-        return newSharedExecutor(MultiChainSpecification.read(file), instantiationMode);
+        return newSharedExecutor(MultiChainSpecification.read(file), createMode);
     }
 
-    public static MultiChainExecutor newSharedExecutor(
-            MultiChainSpecification specification,
-            InstantiationMode instantiationMode)
+    public static MultiChainExecutor newSharedExecutor(MultiChainSpecification specification, CreateMode createMode)
             throws IOException {
-        return getSharedInstance().newExecutor(specification, instantiationMode);
+        return getSharedInstance().newExecutor(specification, createMode);
     }
 
-    public MultiChainExecutor newExecutor(Path file, InstantiationMode instantiationMode)
+    public MultiChainExecutor newExecutor(Path file, CreateMode createMode)
             throws IOException {
-        return newExecutor(MultiChainSpecification.read(file), instantiationMode);
+        return newExecutor(MultiChainSpecification.read(file), createMode);
     }
 
-    public MultiChainExecutor newExecutor(MultiChainSpecification specification, InstantiationMode instantiationMode)
+    public MultiChainExecutor newExecutor(MultiChainSpecification specification, CreateMode createMode)
             throws IOException {
         //noinspection resource
-        return use(specification).newExecutor(instantiationMode);
+        return use(specification).newExecutor(createMode);
     }
 
     @Override

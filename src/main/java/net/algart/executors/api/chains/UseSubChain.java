@@ -204,27 +204,25 @@ public final class UseSubChain extends FileOperation {
     }
 
     public static ChainExecutor newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(file, InstantiationMode.NORMAL);
+        return newSharedExecutor(file, CreateMode.NORMAL);
     }
 
-    public static ChainExecutor newSharedExecutor(Path file, InstantiationMode instantiationMode)
+    public static ChainExecutor newSharedExecutor(Path file, CreateMode createMode)
             throws IOException {
-        return newSharedExecutor(ChainSpecification.read(file), instantiationMode);
+        return newSharedExecutor(ChainSpecification.read(file), createMode);
     }
 
-    public static ChainExecutor newSharedExecutor(
-            ChainSpecification specification,
-            InstantiationMode instantiationMode) {
-        return getSharedInstance().newExecutor(specification, instantiationMode);
+    public static ChainExecutor newSharedExecutor(ChainSpecification specification, CreateMode createMode) {
+        return getSharedInstance().newExecutor(specification, createMode);
     }
 
-    public ChainExecutor newExecutor(Path file, InstantiationMode instantiationMode) throws IOException {
-        return newExecutor(ChainSpecification.read(file), instantiationMode);
+    public ChainExecutor newExecutor(Path file, CreateMode createMode) throws IOException {
+        return newExecutor(ChainSpecification.read(file), createMode);
     }
 
-    public ChainExecutor newExecutor(ChainSpecification specification, InstantiationMode instantiationMode) {
+    public ChainExecutor newExecutor(ChainSpecification specification, CreateMode createMode) {
         //noinspection resource
-        return use(specification).newExecutor(instantiationMode);
+        return use(specification).newExecutor(createMode);
     }
 
     @Override

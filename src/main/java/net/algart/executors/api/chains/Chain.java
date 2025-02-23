@@ -33,7 +33,7 @@ import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.executors.api.settings.Settings;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.InstantiationMode;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.modules.core.common.TimingStatistics;
 
 import java.nio.file.Path;
@@ -676,11 +676,11 @@ public final class Chain implements AutoCloseable {
         return executorFactory.newExecutor(CombineChainSettings.class, settings.id());
     }
 
-    public ChainExecutor newExecutor(InstantiationMode instantiationMode) {
+    public ChainExecutor newExecutor(CreateMode createMode) {
         // Note: here we could create an instance InterpretMultiChain directly,
         // but then we must also create the specification via buildMultiChainSpecification method;
         // this would not as a flexible solution as the following usage of the factory.
-        return executorFactory.newExecutor(ChainExecutor.class, id(), instantiationMode);
+        return executorFactory.newExecutor(ChainExecutor.class, id(), createMode);
     }
 
     public String timingInfo() {

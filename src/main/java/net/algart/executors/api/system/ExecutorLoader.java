@@ -82,28 +82,26 @@ public abstract class ExecutorLoader {
      * <p>If this method returns <code>null</code>, the system will ignore this loader and try another one.
      *
      * <p>Note: <code>sessionId</code> is typically used only to store it into the returned executor
-     * according {@link InstantiationMode}. Usually this does not affect creating a class instance.
+     * according {@link CreateMode}.
+     * Usually this does not affect creating a class instance.
      *
-     * @param sessionId         unique non-empty ID of current session while multi-session usage;
-     *                          may be <code>null</code> while simple usage.
-     * @param specification     specification of the executor.
-     * @param instantiationMode what should we do after successful instantiating the executor?
+     * @param sessionId     unique non-empty ID of current session while multi-session usage;
+     *                      may be <code>null</code> while simple usage.
+     * @param specification specification of the executor.
+     * @param createMode    what should we do after successful instantiating the executor?
      * @return newly created executor or <code>null</code> if this loader does not "understand" this specification.
-     * @throws NullPointerException   if <code>specification</code> or <code>instantiationMode</code> is
+     * @throws NullPointerException   if <code>specification</code> or <code>createMode</code> is
      *                                <code>null</code>.
      * @throws ClassNotFoundException if Java class, required for creating the executor,
      *                                is not available in the current <code>classpath</code> environment.
      */
-    public ExecutionBlock loadExecutor(
-            String sessionId,
-            ExecutorSpecification specification,
-            InstantiationMode instantiationMode)
+    public ExecutionBlock loadExecutor(String sessionId, ExecutorSpecification specification, CreateMode createMode)
             throws ClassNotFoundException {
         Objects.requireNonNull(specification, "Null specification");
-        Objects.requireNonNull(instantiationMode, "Null instantiationMode)");
+        Objects.requireNonNull(createMode, "Null createMode)");
         final ExecutionBlock executor = loadExecutor(sessionId, specification);
         if (executor != null) {
-            instantiationMode.customizeExecutor(executor, sessionId, specification);
+            createMode.customizeExecutor(executor, sessionId, specification);
         }
         return executor;
     }

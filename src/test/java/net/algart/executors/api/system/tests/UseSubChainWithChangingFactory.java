@@ -27,8 +27,8 @@ package net.algart.executors.api.system.tests;
 import net.algart.executors.api.chains.ChainExecutor;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.extensions.InstalledExtensions;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.InstantiationMode;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -42,10 +42,10 @@ public class UseSubChainWithChangingFactory {
 
         UseSubChain useSubChain1 = new UseSubChain();
         useSubChain1.setSessionId("Session_1");
-        ChainExecutor e1 = useSubChain1.newExecutor(Path.of(path1), InstantiationMode.NORMAL);
+        ChainExecutor e1 = useSubChain1.newExecutor(Path.of(path1), CreateMode.NORMAL);
         UseSubChain useSubChain2 = new UseSubChain();
         useSubChain2.setSessionId("Session_2");
-        ChainExecutor e2 = useSubChain2.newExecutor(Path.of(path2), InstantiationMode.NORMAL);
+        ChainExecutor e2 = useSubChain2.newExecutor(Path.of(path2), CreateMode.NORMAL);
         ExecutorSpecification s2 = e1.executorFactory().getSpecification(e2.getExecutorId());
         if (s2 != null) {
             throw new AssertionError("Must be null");
