@@ -149,8 +149,6 @@ public class UseSettings extends FileOperation {
     private ExecutorSpecification splitExecutorSpecification = null;
     private ExecutorSpecification getNamesExecutorSpecification = null;
 
-    private volatile ExecutorFactory executorFactory = null;
-
     public UseSettings() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_COMBINE_SPECIFICATION);
@@ -201,20 +199,22 @@ public class UseSettings extends FileOperation {
         return settingsBuilder;
     }
 
-    public static CombineSettings newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(SettingsSpecification.read(file));
+    public static CombineSettings newSharedExecutor(ExecutorFactory factory, Path file) throws IOException {
+        return newSharedExecutor(factory, SettingsSpecification.read(file));
     }
 
-    public static CombineSettings newSharedExecutor(SettingsSpecification specification) {
-        return getSharedInstance().newExecutor(specification, CreateMode.NORMAL);
+    public static CombineSettings newSharedExecutor(ExecutorFactory factory, SettingsSpecification specification) {
+        return getSharedInstance().newExecutor(factory, specification);
     }
 
-    public CombineSettings newExecutor(Path file, CreateMode createMode) throws IOException {
-        return newExecutor(SettingsSpecification.read(file), createMode);
+    public CombineSettings newExecutor(ExecutorFactory factory, Path file) throws IOException {
+        Objects.requireNonNull(factory, "Null executor factory");
+        return newExecutor(factory, SettingsSpecification.read(file));
     }
 
-    public CombineSettings newExecutor(SettingsSpecification specification, CreateMode createMode) {
-        return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), createMode);
+    public CombineSettings newExecutor(ExecutorFactory factory, SettingsSpecification specification) {
+        Objects.requireNonNull(factory, "Null executor factory");
+        return factory.newExecutor(CombineSettings.class, use(specification).id(), CreateMode.NORMAL);
     }
 
     @Override
@@ -234,23 +234,6 @@ public class UseSettings extends FileOperation {
         }
         throw new IllegalArgumentException("One of arguments \"Settings JSON file/folder\" "
                 + "or \"Settings JSON content\" must be non-empty");
-    }
-
-    public UseSettings setExecutorFactory(ExecutorFactory executorFactory) {
-        this.executorFactory = executorFactory;
-        return this;
-    }
-
-    public ExecutorFactory executorFactory() {
-        final String sessionId = getSessionId();
-        if (sessionId == null) {
-            throw new IllegalStateException("Cannot create executor factory: session ID was not set");
-        }
-        var executorFactory = this.executorFactory;
-        if (executorFactory == null) {
-            this.executorFactory = executorFactory = globalLoaders().newFactory(sessionId);
-        }
-        return executorFactory;
     }
 
     public void useSeveralPaths(List<Path> settingsSpecificationPaths) throws IOException {

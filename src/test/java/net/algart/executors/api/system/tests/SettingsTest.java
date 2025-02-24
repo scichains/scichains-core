@@ -30,6 +30,7 @@ import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -83,7 +84,8 @@ public class SettingsTest {
         System.out.printf("Parameters:%n%s%n", Jsons.toPrettyString(jsonParameters));
 
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
-        try (var executor = UseSettings.newSharedExecutor(SETTINGS_SPECIFICATION)) {
+        final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
+        try (var executor = UseSettings.newSharedExecutor(factory, SETTINGS_SPECIFICATION)) {
             executor.setCurrentDirectory(Paths.get(".").toAbsolutePath());
             // - leads to translating "path" parameter
             executor.setParameters(parameters);

@@ -56,8 +56,6 @@ public class UseMapping extends FileOperation {
     private String mappingJsonContent = "";
     private boolean advancedParameters = false;
 
-    private volatile ExecutorFactory executorFactory = null;
-
     public UseMapping() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
@@ -116,20 +114,24 @@ public class UseMapping extends FileOperation {
         return this;
     }
 
-    public static MappingExecutor newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(MappingSpecification.read(file));
+    public static MappingExecutor newSharedExecutor(ExecutorFactory factory, Path file) throws IOException {
+        return newSharedExecutor(factory, MappingSpecification.read(file));
     }
 
-    public static MappingExecutor newSharedExecutor(MappingSpecification specification) throws IOException {
-        return getSharedInstance().newExecutor(specification, CreateMode.NORMAL);
+    public static MappingExecutor newSharedExecutor(ExecutorFactory factory, MappingSpecification specification)
+            throws IOException {
+        return getSharedInstance().newExecutor(factory, specification);
     }
 
-    public MappingExecutor newExecutor(Path file, CreateMode createMode) throws IOException {
-        return newExecutor(MappingSpecification.read(file), createMode);
+    public MappingExecutor newExecutor(ExecutorFactory factory, Path file) throws IOException {
+        Objects.requireNonNull(factory, "Null executor factory");
+        return newExecutor(factory, MappingSpecification.read(file));
     }
 
-    public MappingExecutor newExecutor(MappingSpecification specification, CreateMode createMode) throws IOException {
-        return executorFactory().newExecutor(MappingExecutor.class, use(specification).id(), createMode);
+    public MappingExecutor newExecutor(ExecutorFactory factory, MappingSpecification specification)
+            throws IOException {
+        Objects.requireNonNull(factory, "Null executor factory");
+        return factory.newExecutor(MappingExecutor.class, use(specification).id(), CreateMode.NORMAL);
     }
 
     @Override
@@ -150,24 +152,6 @@ public class UseMapping extends FileOperation {
         throw new IllegalArgumentException("One of arguments \"Mapping JSON file/folder\" "
                 + "or \"Mapping JSON content\" must be non-empty");
     }
-
-    public UseMapping setExecutorFactory(ExecutorFactory executorFactory) {
-        this.executorFactory = executorFactory;
-        return this;
-    }
-
-    public ExecutorFactory executorFactory() {
-        final String sessionId = getSessionId();
-        if (sessionId == null) {
-            throw new IllegalStateException("Cannot create executor factory: session ID was not set");
-        }
-        var executorFactory = this.executorFactory;
-        if (executorFactory == null) {
-            this.executorFactory = executorFactory = globalLoaders().newFactory(sessionId);
-        }
-        return executorFactory;
-    }
-
 
     public void useSeveralPaths(List<Path> mappingSpecificationsPaths) throws IOException {
         Objects.requireNonNull(mappingSpecificationsPaths, "Null mapping paths");

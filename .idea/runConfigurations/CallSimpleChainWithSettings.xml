@@ -2,7 +2,7 @@
   <configuration default="false" name="CallSimpleChainWithSettings" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleChainWithSettings" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="-settings src/test/resources/multichains/simple_scalar/scalar_sum_with_settings.chain 10 10 10 4" />
+    <option name="PROGRAM_PARAMETERS" value="-builder src/test/resources/multichains/simple_scalar/scalar_sum_with_settings.chain 10 10 10 4" />
     <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>

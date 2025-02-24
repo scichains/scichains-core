@@ -43,7 +43,7 @@ public class CallSimpleMultiChain {
         executor.setStringParameter("b", b);
     }
 
-    private static void customizeViaSettings(MultiChainExecutor executor, String variant, String a, String b) {
+    private static void customizeViaBuilder(MultiChainExecutor executor, String variant, String a, String b) {
         final SettingsBuilder settingsBuilder = executor.settingsBuilder();
         final Parameters parameters = new Parameters();
         parameters.setString(executor.multiChain().selectedChainParameter(), variant);
@@ -70,10 +70,10 @@ public class CallSimpleMultiChain {
     }
 
     public static void main(String[] args) throws IOException {
-        boolean settings = false;
+        boolean builder = false;
         int startArgIndex = 0;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-settings")) {
-            settings = true;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-builder")) {
+            builder = true;
             startArgIndex++;
         }
         boolean combine = false;
@@ -83,7 +83,7 @@ public class CallSimpleMultiChain {
         }
         if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
-                            "%s [-settings|-combine] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
+                            "%s [-builder|-combine] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b;%n" +
                             "it should calculate some formula like ax+by and return the result in the output.",
@@ -107,8 +107,8 @@ public class CallSimpleMultiChain {
             executor.putStringScalar("y", y);
             if (combine) {
                 customizeViaCombiner(executor, variant, parameterA, parameterB);
-            } else if (settings) {
-                customizeViaSettings(executor, variant, parameterA, parameterB);
+            } else if (builder) {
+                customizeViaBuilder(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }

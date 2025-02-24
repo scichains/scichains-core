@@ -26,6 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.mappings.UseMapping;
+import net.algart.executors.api.system.ExecutorFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -42,13 +43,13 @@ public class CallSimpleMapping {
         final Path mappingPath = Paths.get(args[0]);
 
         ExecutionBlock.initializeExecutionSystem();
-
         System.out.printf("Loading %s...%n", mappingPath.toAbsolutePath());
-        try (var executor = UseMapping.newSharedExecutor(mappingPath)) {
+        final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
+        try (var executor = UseMapping.newSharedExecutor(factory, mappingPath)) {
             for (int i = 1; i + 1 < args.length; i += 2) {
-            final String name = args[i];
-            final String value = args[i + 1];
-            executor.setStringParameter(name, value);
+                final String name = args[i];
+                final String value = args[i + 1];
+                executor.setStringParameter(name, value);
             }
             final String result = executor.build();
             System.out.printf("%s%nDone: result is%n%s%n", executor, result);

@@ -42,7 +42,7 @@ public class CallSimpleChainWithSettings {
         executor.setStringParameter("b", b);
     }
 
-    private static void customizeViaSettings(ChainExecutor executor, String a, String b) {
+    private static void customizeViaBuilder(ChainExecutor executor, String a, String b) {
         final SettingsBuilder settingsBuilder = executor.settingsBuilder();
         final Parameters parameters = new Parameters();
         parameters.setString("a", a);
@@ -66,10 +66,10 @@ public class CallSimpleChainWithSettings {
     }
 
     public static void main(String[] args) throws IOException {
-        boolean settings = false;
+        boolean builder = false;
         int startArgIndex = 0;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-settings")) {
-            settings = true;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-builder")) {
+            builder = true;
             startArgIndex++;
         }
         boolean combine = false;
@@ -79,7 +79,7 @@ public class CallSimpleChainWithSettings {
         }
         if (args.length < startArgIndex + 3) {
             System.out.printf("Usage: " +
-                            "%s [-json] some_chain.chain x y [a b]%n" +
+                            "%s [-builder|-combine] some_chain.chain x y [a b]%n" +
                             "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b.",
                     CallSimpleChainWithSettings.class.getName());
@@ -101,8 +101,8 @@ public class CallSimpleChainWithSettings {
             executor.putStringScalar("y", y);
             if (combine) {
                 customizeViaCombiner(executor, parameterA, parameterB);
-            } else if (settings) {
-                customizeViaSettings(executor, parameterA, parameterB);
+            } else if (builder) {
+                customizeViaBuilder(executor, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, parameterA, parameterB);
             }

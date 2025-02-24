@@ -26,6 +26,7 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.system.ExecutorFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -47,9 +48,9 @@ public class CallSimpleSettings {
         final String parameterStr = args[3];
 
         ExecutionBlock.initializeExecutionSystem();
-
         System.out.printf("Loading %s...%n", settingsPath.toAbsolutePath());
-        try (var executor = UseSettings.newSharedExecutor(settingsPath)) {
+        final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
+        try (var executor = UseSettings.newSharedExecutor(factory, settingsPath)) {
             executor.setStringParameter("a", parameterA);
             executor.setStringParameter("b", parameterB);
             executor.setStringParameter("str", parameterStr);
