@@ -108,17 +108,17 @@ public class JSCallerSpecification extends ExecutorSpecification {
         this.js = jsJson == null ? null : new JSConf(jsJson, file);
     }
 
-    public static JSCallerSpecification read(Path executorSpecificationFile) throws IOException {
-        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
-        final JsonObject json = Jsons.readJson(executorSpecificationFile);
-        return new JSCallerSpecification(json, executorSpecificationFile);
+    public static JSCallerSpecification read(Path specificationFile) throws IOException {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        final JsonObject json = Jsons.readJson(specificationFile);
+        return new JSCallerSpecification(json, specificationFile);
     }
 
-    public static JSCallerSpecification readIfValid(Path executorSpecificationFile) {
-        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
+    public static JSCallerSpecification readIfValid(Path specificationFile) {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
         final JsonObject json;
         try {
-            json = Jsons.readJson(executorSpecificationFile);
+            json = Jsons.readJson(specificationFile);
         } catch (IOException e) {
             // - usually called while scanning folder with .json-files, so, exception should not occur here
             throw new IOError(e);
@@ -126,7 +126,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
         if (!isExecutorSpecification(json)) {
             return null;
         }
-        return new JSCallerSpecification(json, executorSpecificationFile);
+        return new JSCallerSpecification(json, specificationFile);
     }
 
     public static List<JSCallerSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
@@ -141,19 +141,19 @@ public class JSCallerSpecification extends ExecutorSpecification {
                 result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 
-    public static JSCallerSpecification of(JsonObject executorSpecification) {
+    public static JSCallerSpecification of(JsonObject specificationJson) {
+        return new JSCallerSpecification(specificationJson, null);
+    }
+
+    public static JSCallerSpecification of(String specificationString) {
+        Objects.requireNonNull(specificationString, "Null specificationString");
+        final JsonObject executorSpecification = Jsons.toJson(specificationString);
         return new JSCallerSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification of(String executorSpecificationString) {
-        Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
-        final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
-        return new JSCallerSpecification(executorSpecification, null);
-    }
-
-    public static JSCallerSpecification ofIfValid(String executorSpecificationString) {
-        Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
-        final JsonObject json = Jsons.toJson(executorSpecificationString);
+    public static JSCallerSpecification ofIfValid(String specificationString) {
+        Objects.requireNonNull(specificationString, "Null specificationString");
+        final JsonObject json = Jsons.toJson(specificationString);
         if (!isExecutorSpecification(json)) {
             return null;
         }

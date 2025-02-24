@@ -263,7 +263,7 @@ public final class UseMultiChain extends FileOperation {
             } catch (RuntimeException e) {
                 // - but not IOException
                 throw new ChainLoadingException("Cannot load multi-chain "
-                        + multiChainSpecification.getMultiChainSpecificationFile(), e);
+                        + multiChainSpecification.getSpecificationFile(), e);
             }
             long t2 = infoTime();
             final List<ChainSpecification> chainSpecifications = multiChain.chainSpecifications();
@@ -278,7 +278,7 @@ public final class UseMultiChain extends FileOperation {
                                     "%d chain variants:%n%s",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
                             multiChainSpecification.getName(),
-                            multiChainSpecification.getMultiChainSpecificationFile().toAbsolutePath(),
+                            multiChainSpecification.getSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6,
                             chainSpecifications.size(),
                             chainSpecifications.stream().map(
@@ -286,12 +286,12 @@ public final class UseMultiChain extends FileOperation {
                                                     m.chainName(),
                                                     blockedChainModelNames.contains(m.chainName()) ?
                                                             " " + RECURSIVE_LOADING_BLOCKED_MESSAGE : "",
-                                                    m.getChainSpecificationFile()))
+                                                    m.getSpecificationFile()))
                                     .collect(Collectors.joining(String.format("%n")))));
         }
         if (report != null) {
             for (MultiChainSpecification multiChainSpecification : multiChainSpecifications) {
-                final Path file = multiChainSpecification.getMultiChainSpecificationFile();
+                final Path file = multiChainSpecification.getSpecificationFile();
                 final String message = file != null ? file.toString() : multiChainSpecification.canonicalName() + " (no file)";
                 report.append(message).append("\n");
             }

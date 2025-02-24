@@ -42,7 +42,7 @@ public class UseMapping extends FileOperation {
     public static final String MAPPING_LANGUAGE = "mapping";
     public static final String CATEGORY_PREFIX = "$";
 
-    private static final DefaultExecutorLoader<Mapping> MAPPING_LOADER =
+    private static final DefaultExecutorLoader<MappingBuilder> MAPPING_LOADER =
             new DefaultExecutorLoader<>("mappings loader");
 
     static {
@@ -62,7 +62,7 @@ public class UseMapping extends FileOperation {
         return new UseMapping();
     }
 
-    public static DefaultExecutorLoader<Mapping> mappingLoader() {
+    public static DefaultExecutorLoader<MappingBuilder> mappingLoader() {
         return MAPPING_LOADER;
     }
 
@@ -151,10 +151,10 @@ public class UseMapping extends FileOperation {
         for (int i = 0, n = mappingSpecifications.size(); i < n; i++) {
             final MappingSpecification mappingSpecification = mappingSpecifications.get(i);
             logDebug("Loading settings " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + mappingSpecification.getMappingSpecificationFile().toAbsolutePath() + "...");
+                    + "from " + mappingSpecification.getSpecificationFile().toAbsolutePath() + "...");
             use(mappingSpecification);
             if (report != null) {
-                report.append(mappingSpecification.getMappingSpecificationFile()).append("\n");
+                report.append(mappingSpecification.getSpecificationFile()).append("\n");
             }
         }
     }
@@ -175,43 +175,43 @@ public class UseMapping extends FileOperation {
         final String sessionId = getSessionId();
         final SScalar.MultiLineOrJsonSplitter keys = keys(mappingSpecification);
         final SScalar.MultiLineOrJsonSplitter items = enumItems(mappingSpecification);
-        final Mapping mapping = Mapping.of(
+        final MappingBuilder mappingBuilder = MappingBuilder.of(
                 mappingSpecification,
                 keys.lines(),
                 keys.comments(),
                 items == null ? null : items.lines(),
                 items == null ? null : items.comments());
-        final ExecutorSpecification specification = buildMappingSpecification(mapping);
-        MAPPING_LOADER.registerWorker(sessionId, specification, mapping);
+        final ExecutorSpecification specification = buildMappingSpecification(mappingBuilder);
+        MAPPING_LOADER.registerWorker(sessionId, specification, mappingBuilder);
     }
 
-    public ExecutorSpecification buildMappingSpecification(Mapping mapping) {
-        Objects.requireNonNull(mapping, "Null mapping");
+    public ExecutorSpecification buildMappingSpecification(MappingBuilder mappingBuilder) {
+        Objects.requireNonNull(mappingBuilder, "Null mapping");
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretMapping());
         // - adds JavaConf, (maybe) parameters and some ports
-        result.setSourceInfo(mapping.mappingSpecificationFile(), null);
+        result.setSourceInfo(mappingBuilder.specificationFile(), null);
         result.setLanguage(MAPPING_LANGUAGE);
-        result.setId(mapping.id());
-        result.setCategory(CATEGORY_PREFIX + mapping.category());
-        result.setName(mapping.name());
-        result.setDescription(mapping.description());
+        result.setId(mappingBuilder.id());
+        result.setCategory(CATEGORY_PREFIX + mappingBuilder.category());
+        result.setName(mappingBuilder.name());
+        result.setDescription(mappingBuilder.description());
         result.createOptionsIfAbsent().createRoleIfAbsent()
-                .setClassName(mapping.className())
+                .setClassName(mappingBuilder.className())
                 .setSettings(true)
-                .setResultPort(InterpretMapping.OUTPUT_MAPPING);
-        addInputControls(result, mapping);
+                .setResultPort(InterpretMapping.MAPPING);
+        addInputControls(result, mappingBuilder);
         return result;
     }
 
-    private void addInputControls(ExecutorSpecification result, Mapping mapping) {
-        final List<String> enumItems = mapping.enumItems();
-        final List<String> enumItemCaptions = mapping.enumItemCaptions();
-        for (int i = 0, n = mapping.numberOfKeys(); i < n; i++) {
-            String key = mapping.key(i);
-            ExecutorSpecification.ControlConf controlConf = mapping.specification().buildControlConf(
+    private void addInputControls(ExecutorSpecification result, MappingBuilder mappingBuilder) {
+        final List<String> enumItems = mappingBuilder.enumItems();
+        final List<String> enumItemCaptions = mappingBuilder.enumItemCaptions();
+        for (int i = 0, n = mappingBuilder.numberOfKeys(); i < n; i++) {
+            String key = mappingBuilder.key(i);
+            ExecutorSpecification.ControlConf controlConf = mappingBuilder.specification().buildControlConf(
                     key, enumItems, enumItemCaptions, advancedParameters);
-            controlConf.setCaption(mapping.keyCaption(i));
+            controlConf.setCaption(mappingBuilder.keyCaption(i));
             controlConf.setHint("\"" + controlConf.getName() + "\" key in the result JSON");
             result.addControl(controlConf);
         }
@@ -226,7 +226,7 @@ public class UseMapping extends FileOperation {
             file = requireFile(specification, customKeysOrEnumItemsFile(this.mappingKeysFile),
                     "keys", "Keys file");
         }
-        return SScalar.splitJsonOrTrimmedLinesWithComments(Mapping.readNames(file));
+        return SScalar.splitJsonOrTrimmedLinesWithComments(MappingBuilder.readNames(file));
     }
 
     private SScalar.MultiLineOrJsonSplitter enumItems(MappingSpecification specification) throws IOException {
@@ -242,7 +242,7 @@ public class UseMapping extends FileOperation {
             file = requireFile(specification, customKeysOrEnumItemsFile(this.mappingEnumItemsFile),
                     "enum items", "Enum items file");
         }
-        return SScalar.splitJsonOrTrimmedLinesWithComments(Mapping.readNames(file));
+        return SScalar.splitJsonOrTrimmedLinesWithComments(MappingBuilder.readNames(file));
     }
 
     private Path customKeysOrEnumItemsFile(String file) {
@@ -258,9 +258,9 @@ public class UseMapping extends FileOperation {
             String whatParameter) {
         if (file == null || !Files.exists(file)) {
             throw new IllegalStateException("Mapping specification \"" + specification.getName() + "\""
-                    + (specification.getMappingSpecificationFile() == null ?
+                    + (specification.getSpecificationFile() == null ?
                     "" :
-                    ", loaded from " + specification.getMappingSpecificationFile() + ",")
+                    ", loaded from " + specification.getSpecificationFile() + ",")
                     + " has no " + whatFile + " file; in this case the parameter \"" + whatParameter
                     + "\" must contain a correct existing file" + (file == null ? "" : " " + file.toAbsolutePath()));
         }

@@ -25,20 +25,17 @@
 package net.algart.executors.api.mappings;
 
 import jakarta.json.JsonObject;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.json.Jsons;
 
 import java.util.Locale;
 
-public class InterpretMapping extends Executor implements ReadOnlyExecutionInput {
-    public static final String OUTPUT_MAPPING = MappingSpecification.MAPPING;
+public class InterpretMapping extends MappingExecutor implements ReadOnlyExecutionInput {
+    public static final String MAPPING = MappingSpecification.MAPPING;
     public static final String OUTPUT_KEYS = "keys";
 
-    private volatile Mapping mapping = null;
-
     public InterpretMapping() {
-        setDefaultOutputScalar(OUTPUT_MAPPING);
+        setDefaultOutputScalar(MAPPING);
         addOutputScalar(OUTPUT_KEYS);
         disableOnChangeParametersAutomatic();
     }
@@ -46,15 +43,15 @@ public class InterpretMapping extends Executor implements ReadOnlyExecutionInput
     @Override
     public void process() {
         long t1 = debugTime();
-        final Mapping mapping = mapping();
-        final JsonObject mappingJson = mapping.createMapping(this);
+        final MappingBuilder mappingBuilder = mappingBuilder();
+        final JsonObject mappingJson = mappingBuilder.build(this);
         final String mappingString = Jsons.toPrettyString(mappingJson);
-        getScalar(OUTPUT_MAPPING).setTo(mappingString);
+        getScalar(MAPPING).setTo(mappingString);
         getScalar(OUTPUT_KEYS).setTo(String.join("\n", mappingJson.keySet()));
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
-                "Making mapping \"%s\": %.3f ms%s",
-                mapping.name(),
+                "Building mapping \"%s\": %.3f ms%s",
+                mappingBuilder.name(),
                 (t2 - t1) * 1e-6,
                 LOGGABLE_TRACE ?
                         "\n" + mappingString
@@ -63,31 +60,11 @@ public class InterpretMapping extends Executor implements ReadOnlyExecutionInput
 
     @Override
     public String toString() {
-        return "Executor of " + (mapping != null ? mapping : "some non-initialized mapping");
+        return "Executor of " + (mappingBuilder != null ? mappingBuilder : "some non-initialized mapping");
     }
 
     @Override
     protected boolean skipStandardAutomaticParameters() {
         return true;
-    }
-
-    private Mapping mapping() {
-        final String sessionId = getSessionId();
-        final String executorId = getExecutorId();
-        if (sessionId == null) {
-            throw new IllegalStateException("Cannot find mapping worker: session ID is not set");
-        }
-        if (executorId == null) {
-            throw new IllegalStateException("Cannot find mapping worker: executor ID is not set");
-        }
-        Mapping mapping = this.mapping;
-        if (mapping == null) {
-            mapping = UseMapping.mappingLoader().registeredWorker(sessionId, executorId);
-            this.mapping = mapping.clone();
-            // - the order is important for multithreading: local mapping is assigned first,
-            // this.mapping is assigned to it;
-            // cloning is not necessary in the current version, but added for possible future extensions
-        }
-        return mapping;
     }
 }

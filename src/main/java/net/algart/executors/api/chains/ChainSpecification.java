@@ -809,7 +809,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private Path chainSpecificationFile = null;
+    private Path specificationFile = null;
     private String version = CURRENT_VERSION;
     private Executor executor;
     private List<ChainBlockConf> blocks = new ArrayList<>();
@@ -831,7 +831,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                     + CHAIN_SECTION + "\" section with chain configuration"
                     + (json == null ? "" : ": it does not contain \"app\":\"" + CHAIN_APP_NAME + "\" element"));
         }
-        this.chainSpecificationFile = file;
+        this.specificationFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
         this.executor = new Executor(Jsons.reqJsonObject(json, "executor", file), file);
         for (JsonObject jsonObject : reqJsonObjectsWithAlias(
@@ -908,16 +908,16 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         Files.writeString(containingJsonFile, Jsons.toPrettyString(json), options);
     }
 
-    public static boolean isChainSpecificationFile(Path file) {
-        Objects.requireNonNull(file, "Null file");
-        return COMPILED_CHAIN_FILE_PATTERN.matcher(file.getFileName().toString().toLowerCase()).matches();
+    public static boolean isChainSpecificationFile(Path specificationFile) {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        return COMPILED_CHAIN_FILE_PATTERN.matcher(specificationFile.getFileName().toString().toLowerCase()).matches();
     }
 
-    public static boolean isChainSpecification(JsonObject chainSpecification) {
-        if (chainSpecification == null) {
+    public static boolean isChainSpecification(JsonObject specificationJson) {
+        if (specificationJson == null) {
             return false;
         }
-        final String appName = chainSpecification.getString("app", null);
+        final String appName = specificationJson.getString("app", null);
         return CHAIN_APP_NAME.equals(appName) || CHAIN_APP_NAME_ALIAS.equals(appName);
     }
 
@@ -946,23 +946,18 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         for (ChainSpecification chain : chains) {
             if (!ids.add(chain.chainId())) {
                 throw new IllegalArgumentException("Two chain variants have identical ID " + chain.chainId()
-                        + (chain.chainSpecificationFile == null ? "" :
-                        ", the 2nd chain is loaded from the file " + chain.chainSpecificationFile));
+                        + (chain.specificationFile == null ? "" :
+                        ", the 2nd chain is loaded from the file " + chain.specificationFile));
             }
         }
     }
 
-    public boolean hasChainSpecificationFile() {
-        return chainSpecificationFile != null;
+    public boolean hasSpecificationFile() {
+        return specificationFile != null;
     }
 
-    public Path getChainSpecificationFile() {
-        return chainSpecificationFile;
-    }
-
-    public ChainSpecification setChainSpecificationFile(Path chainSpecificationFile) {
-        this.chainSpecificationFile = chainSpecificationFile;
-        return this;
+    public Path getSpecificationFile() {
+        return specificationFile;
     }
 
     public String getVersion() {

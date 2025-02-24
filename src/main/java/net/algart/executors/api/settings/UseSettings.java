@@ -302,7 +302,7 @@ public class UseSettings extends FileOperation {
         for (int i = 0; i < n; i++) {
             final SettingsSpecification settingsSpecification = settingsSpecifications.get(i);
             logDebug("Loading settings " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + settingsSpecification.getSettingsSpecificationFile().toAbsolutePath() + "...");
+                    + "from " + settingsSpecification.getSpecificationFile().toAbsolutePath() + "...");
             if (platform != null) {
                 settingsSpecification.addTags(platform.getTags());
                 settingsSpecification.setPlatformId(platform.getId());
@@ -315,7 +315,7 @@ public class UseSettings extends FileOperation {
         }
         if (!showContent && report != null) {
             for (SettingsSpecification settingsSpecification : settingsSpecifications) {
-                report.append(settingsSpecification.getSettingsSpecificationFile()).append("\n");
+                report.append(settingsSpecification.getSpecificationFile()).append("\n");
             }
         }
         if (n == 1) {
@@ -577,7 +577,7 @@ public class UseSettings extends FileOperation {
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         // - adds JavaConf, (maybe) parameters and some ports
-        result.setSourceInfo(settingsBuilder.settingsSpecificationFile(), null);
+        result.setSourceInfo(settingsBuilder.specificationFile(), null);
         if (settingsBuilder.hasPlatformId()) {
             result.setPlatformId(settingsBuilder.platformId());
         }

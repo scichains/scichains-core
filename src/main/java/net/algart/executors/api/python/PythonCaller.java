@@ -47,7 +47,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.pythonConf = specification.getPython();
         if (pythonConf == null) {
-            final var file = specification.getExecutorSpecificationFile();
+            final var file = specification.getSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }

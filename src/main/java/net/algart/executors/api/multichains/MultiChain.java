@@ -105,8 +105,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 throw e;
             } catch (RuntimeException e) {
                 throw new ChainRunningException("Cannot initialize sub-chain "
-                        + chainSpecification.getChainSpecificationFile() + ", variant of multi-chain "
-                        + specification.getMultiChainSpecificationFile(), e);
+                        + chainSpecification.getSpecificationFile() + ", variant of multi-chain "
+                        + specification.getSpecificationFile(), e);
             }
             if (optionalChain.isPresent()) {
                 final ExecutorSpecification implementationSpecification = chainFactory.chainExecutorSpecification();
@@ -204,7 +204,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public Path multiChainSpecificationFile() {
-        return specification.getMultiChainSpecificationFile();
+        return specification.getSpecificationFile();
     }
 
     public String id() {
@@ -451,10 +451,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         controls.put(currentChainIdControl.getName(), currentChainIdControl);
         controls.putAll(specification.getControls());
         if (addSubSettingsForSelectedChainVariants) {
-            final String multiChainSpecificationFileMessage =
-                    specification.getMultiChainSpecificationFile() == null ? "" :
+            final String specificationFileMessage =
+                    specification.getSpecificationFile() == null ? "" :
                             " (problem occurred in multi-chain, loaded from the file " +
-                                    specification.getMultiChainSpecificationFile() + ")";
+                                    specification.getSpecificationFile() + ")";
             for (ChainSpecification chainSpecification : chainSpecifications) {
                 final ChainSpecification.Executor executor = chainSpecification.getExecutor();
                 final String name = executor.getName();
@@ -463,7 +463,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 } catch (JsonException e) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" is invalid name, "
                             + "not allowed as a parameter name in the settings" +
-                            multiChainSpecificationFileMessage, e);
+                            specificationFileMessage, e);
                 }
                 final ExecutorSpecification.ControlConf settingsControlConf = new ExecutorSpecification.ControlConf()
                         .setValueType(ParameterValueType.SETTINGS)
@@ -485,7 +485,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 if (controls.put(name, settingsControlConf) != null) {
                     throw new IllegalArgumentException("Chain variant name \"" + name + "\" has a name, identical "
                             + "to one of multi-chain parameters; this is not allowed" +
-                            multiChainSpecificationFileMessage);
+                            specificationFileMessage);
                 }
             }
         }

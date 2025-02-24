@@ -473,7 +473,7 @@ public final class UseSubChain extends FileOperation {
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot load sub-chain " + chainSpecification.getChainSpecificationFile(), e);
+                throw new ChainRunningException("Cannot load sub-chain " + chainSpecification.getSpecificationFile(), e);
             }
             long t2 = infoTime();
             final int index = i;
@@ -484,12 +484,12 @@ public final class UseSubChain extends FileOperation {
                             chainSpecification.getExecutor().getName(),
                             additionalChainInformation(chain.orElse(null)),
                             chain.isPresent() ? "" : "not ",
-                            chainSpecification.getChainSpecificationFile().toAbsolutePath(),
+                            chainSpecification.getSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6));
         }
         if (report != null) {
             for (ChainSpecification specification : chainSpecifications) {
-                final Path file = specification.getChainSpecificationFile();
+                final Path file = specification.getSpecificationFile();
                 final String message = file != null ? file.toString() : specification.canonicalName() + " (no file)";
                 report.append(message).append("\n");
             }

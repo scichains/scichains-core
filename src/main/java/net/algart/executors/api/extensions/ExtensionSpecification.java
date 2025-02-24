@@ -809,12 +809,12 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private final Path extensionSpecificationFile;
+    private final Path specificationFile;
     private String version = CURRENT_VERSION;
     private List<Platform> platforms = new ArrayList<>();
 
     public ExtensionSpecification() {
-        this.extensionSpecificationFile = null;
+        this.specificationFile = null;
     }
 
     private ExtensionSpecification(JsonObject json, Path file) {
@@ -823,31 +823,31 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             throw new JsonException("JSON" + (file == null ? "" : " " + file)
                     + " is not an executor configuration: no \"app\":\"" + APP_NAME + "\" element");
         }
-        this.extensionSpecificationFile = file;
+        this.specificationFile = file;
         this.version = json.getString("version", CURRENT_VERSION);
         for (JsonObject platformJson : Jsons.reqJsonObjects(json, "platforms")) {
             this.platforms.add(new Platform(platformJson, file));
         }
     }
 
-    public static ExtensionSpecification of(JsonObject extensionSpecification) {
-        return new ExtensionSpecification(extensionSpecification, null);
+    public static ExtensionSpecification of(JsonObject specificationJson) {
+        return new ExtensionSpecification(specificationJson, null);
     }
 
-    public static ExtensionSpecification read(Path extensionSpecificationFile) throws IOException {
-        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
-        final JsonObject json = Jsons.readJson(extensionSpecificationFile);
-        return new ExtensionSpecification(json, extensionSpecificationFile);
+    public static ExtensionSpecification read(Path specificationFile) throws IOException {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        final JsonObject json = Jsons.readJson(specificationFile);
+        return new ExtensionSpecification(json, specificationFile);
     }
 
-    public static ExtensionSpecification readIfValid(Path extensionSpecificationFile) throws IOException {
-        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
-        final JsonObject json = Jsons.readJson(extensionSpecificationFile);
+    public static ExtensionSpecification readIfValid(Path specificationFile) throws IOException {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        final JsonObject json = Jsons.readJson(specificationFile);
         Objects.requireNonNull(json, "Null extension JSON");
         if (!APP_NAME.equals(json.getString("app", null))) {
             return null;
         }
-        return new ExtensionSpecification(json, extensionSpecificationFile);
+        return new ExtensionSpecification(json, specificationFile);
     }
 
     public static ExtensionSpecification readFromFolder(Path extensionFolder) throws IOException {
@@ -856,17 +856,17 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
             throw new FileNotFoundException("Extension folder \"" + extensionFolder
                     + "\" is not an existing directory");
         }
-        final Path extensionSpecificationFile = defaultExtensionSpecificationFile(extensionFolder);
-        if (!Files.exists(extensionSpecificationFile)) {
-            throw new FileNotFoundException("Extension specification file \"" + extensionSpecificationFile
+        final Path specificationFile = defaultExtensionSpecificationFile(extensionFolder);
+        if (!Files.exists(specificationFile)) {
+            throw new FileNotFoundException("Extension specification file \"" + specificationFile
                     + "\" does not exist in " + extensionFolder);
         }
-        return read(extensionSpecificationFile);
+        return read(specificationFile);
     }
 
-    public void write(Path extensionSpecificationFile, OpenOption... options) throws IOException {
-        Objects.requireNonNull(extensionSpecificationFile, "Null extensionSpecificationFile");
-        Files.writeString(extensionSpecificationFile, jsonString(), options);
+    public void write(Path specificationFile, OpenOption... options) throws IOException {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        Files.writeString(specificationFile, jsonString(), options);
     }
 
     public static Path defaultExtensionSpecificationFile(Path extensionFolder) {
@@ -874,9 +874,9 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         return extensionFolder.resolve(DEFAULT_EXTENSION_FILE_NAME).toAbsolutePath();
     }
 
-    public static boolean isExtensionSpecification(JsonObject extensionSpecification) {
-        Objects.requireNonNull(extensionSpecification, "Null extensionSpecification");
-        return APP_NAME.equals(extensionSpecification.getString("app", null));
+    public static boolean isExtensionSpecification(JsonObject specificationJson) {
+        Objects.requireNonNull(specificationJson, "Null specificationJson");
+        return APP_NAME.equals(specificationJson.getString("app", null));
     }
 
     public static boolean isExtensionFolder(Path extensionFolder) {
@@ -933,8 +933,8 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         return result;
     }
 
-    public Path getExtensionSpecificationFile() {
-        return extensionSpecificationFile;
+    public Path getSpecificationFile() {
+        return specificationFile;
     }
 
     public String getVersion() {
@@ -963,7 +963,7 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
     @Override
     public String toString() {
         return "ExtensionSpecification{" +
-                "extensionSpecificationFile=" + extensionSpecificationFile +
+                "specificationFile=" + specificationFile +
                 ", version='" + version + '\'' +
                 ", platforms=" + platforms +
                 '}';

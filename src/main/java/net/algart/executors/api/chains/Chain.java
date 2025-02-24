@@ -184,7 +184,7 @@ public final class Chain implements AutoCloseable {
         result.tags = new LinkedHashSet<>(chainSpecification.getTags());
         result.platformId = chainSpecification.getPlatformId();
         result.platformCategory = chainSpecification.getPlatformCategory();
-        result.chainSpecificationPath = chainSpecification.getChainSpecificationFile();
+        result.chainSpecificationPath = chainSpecification.getSpecificationFile();
         // result.chainSpecification = chainSpecification;
         // - it is not safe, because ChainSpecification is mutable and can be modifying outside;
         // not used in the current version
@@ -198,8 +198,8 @@ public final class Chain implements AutoCloseable {
         for (ChainSpecification.ChainLinkConf linkConf : chainSpecification.getLinks()) {
             result.addLink(ChainLink.of(linkConf));
         }
-        if (chainSpecification.hasChainSpecificationFile()) {
-            result.setCurrentDirectory(chainSpecification.getChainSpecificationFile().getParent());
+        if (chainSpecification.hasSpecificationFile()) {
+            result.setCurrentDirectory(chainSpecification.getSpecificationFile().getParent());
         }
         result.setAllDefaultInputNames();
         result.setAllDefaultOutputNames();

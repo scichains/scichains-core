@@ -165,17 +165,17 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         this.python = pythonJson == null ? null : new PythonConf(pythonJson, file);
     }
 
-    public static PythonCallerSpecification read(Path executorSpecificationFile) throws IOException {
-        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
-        final JsonObject json = Jsons.readJson(executorSpecificationFile);
-        return new PythonCallerSpecification(json, executorSpecificationFile);
+    public static PythonCallerSpecification read(Path specificationFile) throws IOException {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
+        final JsonObject json = Jsons.readJson(specificationFile);
+        return new PythonCallerSpecification(json, specificationFile);
     }
 
-    public static PythonCallerSpecification readIfValid(Path executorSpecificationFile) {
-        Objects.requireNonNull(executorSpecificationFile, "Null executorSpecificationFile");
+    public static PythonCallerSpecification readIfValid(Path specificationFile) {
+        Objects.requireNonNull(specificationFile, "Null specificationFile");
         final JsonObject json;
         try {
-            json = Jsons.readJson(executorSpecificationFile);
+            json = Jsons.readJson(specificationFile);
         } catch (IOException e) {
             // - usually called while scanning folder with .json-files, so, exception should not occur here
             throw new IOError(e);
@@ -183,7 +183,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         if (!isExecutorSpecification(json)) {
             return null;
         }
-        return new PythonCallerSpecification(json, executorSpecificationFile);
+        return new PythonCallerSpecification(json, specificationFile);
     }
 
     public static List<PythonCallerSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
@@ -198,19 +198,19 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                 result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 
-    public static PythonCallerSpecification of(JsonObject executorSpecification) {
+    public static PythonCallerSpecification of(JsonObject specificationJson) {
+        return new PythonCallerSpecification(specificationJson, null);
+    }
+
+    public static PythonCallerSpecification of(String specificationString) {
+        Objects.requireNonNull(specificationString, "Null specificationString");
+        final JsonObject executorSpecification = Jsons.toJson(specificationString);
         return new PythonCallerSpecification(executorSpecification, null);
     }
 
-    public static PythonCallerSpecification of(String executorSpecificationString) {
-        Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
-        final JsonObject executorSpecification = Jsons.toJson(executorSpecificationString);
-        return new PythonCallerSpecification(executorSpecification, null);
-    }
-
-    public static PythonCallerSpecification ofIfValid(String executorSpecificationString) {
-        Objects.requireNonNull(executorSpecificationString, "Null executorSpecificationString");
-        final JsonObject json = Jsons.toJson(executorSpecificationString);
+    public static PythonCallerSpecification ofIfValid(String specificationString) {
+        Objects.requireNonNull(specificationString, "Null specificationString");
+        final JsonObject json = Jsons.toJson(specificationString);
         if (!isExecutorSpecification(json)) {
             return null;
         }

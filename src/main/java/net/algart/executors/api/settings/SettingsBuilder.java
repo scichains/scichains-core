@@ -112,8 +112,8 @@ public class SettingsBuilder implements Cloneable {
         return specification;
     }
 
-    public Path settingsSpecificationFile() {
-        return specification.getSettingsSpecificationFile();
+    public Path specificationFile() {
+        return specification.getSpecificationFile();
     }
 
     /**

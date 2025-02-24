@@ -37,14 +37,14 @@ import java.nio.file.Path;
 import java.util.*;
 
 // Note: the current version does not need cloning, but we implement clone() for possible future extensions.
-public final class Mapping implements Cloneable {
+public final class MappingBuilder implements Cloneable {
     private final MappingSpecification specification;
     private final List<String> keys;
     private final List<String> keyCaptions;
     private final List<String> enumItems;
     private final List<String> enumItemCaptions;
 
-    private Mapping(
+    private MappingBuilder(
             MappingSpecification specification,
             List<String> keys,
             List<String> keyCaptions,
@@ -88,22 +88,21 @@ public final class Mapping implements Cloneable {
         }
     }
 
-    public static Mapping of(
+    public static MappingBuilder of(
             MappingSpecification specification,
             List<String> keys,
             List<String> keyCaptions,
             List<String> enumItems,
             List<String> enumItemCaptions) {
-        return new Mapping(specification, keys, keyCaptions, enumItems, enumItemCaptions);
+        return new MappingBuilder(specification, keys, keyCaptions, enumItems, enumItemCaptions);
     }
 
     public MappingSpecification specification() {
         return specification;
     }
 
-
-    public Path mappingSpecificationFile() {
-        return specification.getMappingSpecificationFile();
+    public Path specificationFile() {
+        return specification.getSpecificationFile();
     }
 
     public String id() {
@@ -154,7 +153,7 @@ public final class Mapping implements Cloneable {
         return enumItemCaptions == null ? null : Collections.unmodifiableList(enumItemCaptions);
     }
 
-    public JsonObject createMapping(Executor executor) {
+    public JsonObject build(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         final Parameters parameters = executor.parameters();
         final JsonObjectBuilder builder = Json.createObjectBuilder();
@@ -173,9 +172,9 @@ public final class Mapping implements Cloneable {
     }
 
     @Override
-    public Mapping clone() {
+    public MappingBuilder clone() {
         try {
-            return (Mapping) super.clone();
+            return (MappingBuilder) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }

@@ -134,7 +134,7 @@ public class ExecutorSpecificationSetTest {
             for (ExecutorSpecification specification : executorSpecificationSet.all()) {
                 final String jsonString = specification.jsonString();
                 final Path resultFile = Paths.get(
-                        specification.getExecutorSpecificationFile() + "__specification.json");
+                        specification.getSpecificationFile() + "__specification.json");
                 java.nio.file.Files.writeString(resultFile, jsonString);
             }
         }
