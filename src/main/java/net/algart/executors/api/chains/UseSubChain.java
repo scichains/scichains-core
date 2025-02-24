@@ -303,7 +303,7 @@ public final class UseSubChain extends FileOperation {
         LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
                 () -> String.format(Locale.US, "Sub-chain \"%s\"%s %screated from text parameter in %.3f ms",
                         chain.isEmpty() ? RECURSIVE_LOADING_BLOCKED_MESSAGE : chain.get().name(),
-                        additionalChainInformation(chain),
+                        additionalChainInformation(chain.orElse(null)),
                         chain.isPresent() ? "" : "not ",
                         (t2 - t1) * 1e-6));
         if (isOutputNecessary(DEFAULT_OUTPUT_PORT)) {
@@ -482,7 +482,7 @@ public final class UseSubChain extends FileOperation {
                     () -> String.format(Locale.US, "Sub-chain %s\"%s\"%s %sloaded from %s in %.3f ms",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
                             chainSpecification.getExecutor().getName(),
-                            additionalChainInformation(chain),
+                            additionalChainInformation(chain.orElse(null)),
                             chain.isPresent() ? "" : "not ",
                             chainSpecification.getChainSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6));
@@ -602,12 +602,11 @@ public final class UseSubChain extends FileOperation {
                 n, name, folder, (t2 - t1) * 1e-6));
     }
 
-    private static String additionalChainInformation(Optional<Chain> chain) {
-        if (chain.isEmpty()) {
+    private static String additionalChainInformation(Chain chain) {
+        if (chain == null) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        final SettingsBuilder mainSettingsBuilder = chain.get().getSettingsBuilder();
-        return mainSettingsBuilder == null ? "" : ", " + mainSettingsBuilder;
+        return !chain.hasSettings()? "" : ", " + chain.getSettingsBuilder();
     }
 
     private static void addChainSettings(ExecutorSpecification result, Chain chain) {

@@ -634,6 +634,10 @@ public final class Chain implements AutoCloseable {
         return mainSettingsBlockId;
     }
 
+    public boolean hasSettings() {
+        return mainSettingsBuilder != null;
+    }
+
     public SettingsBuilder getSettingsBuilder() {
         return mainSettingsBuilder;
     }
