@@ -1,0 +1,15 @@
+{
+  "app": "mapping",
+  "name": "Some colors",
+  "id": "65b229c7-c294-43eb-b847-fec9ed0e31d5",
+  "control_template": {
+    "value_type": "int",
+    "edition_type": "value",
+    "default": 1
+  },
+  "keys": [
+    "RED",
+    "GREEN",
+    "BLUE // this is blue color"
+  ]
+}
