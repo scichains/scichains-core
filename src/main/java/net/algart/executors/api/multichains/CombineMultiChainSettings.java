@@ -28,7 +28,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.json.Jsons;
 
@@ -40,12 +40,12 @@ public class CombineMultiChainSettings extends CombineChainSettings {
     }
 
     public MultiChain multiChain() {
-        Settings settings = settings();
-        if (!(settings instanceof MultiChainSettings multiChainSettings)) {
+        final SettingsBuilder settingsBuilder = settingsBuilder();
+        if (!(settingsBuilder instanceof MultiChainSettingsBuilder multiChainSettingsBuilder)) {
             throw new IllegalStateException("Invalid usage of " + this
-                    + ": settings object is not MultiChainSettings");
+                    + ": settings object is not MultiChainSettingsBuilder");
         }
-        return multiChainSettings.multiChain;
+        return multiChainSettingsBuilder.multiChain;
     }
 
     public void selectChainVariant(String variant) {
@@ -62,12 +62,12 @@ public class CombineMultiChainSettings extends CombineChainSettings {
      * This is done only for better readability of the resulting JSON.
      */
     @Override
-    protected JsonObject correctSettings(JsonObject settingsJson, Settings combiner) {
-        if (!(combiner instanceof MultiChainSettings multiChainSettings)) {
+    protected JsonObject correctSettings(JsonObject settingsJson, SettingsBuilder settingsBuilder) {
+        if (!(settingsBuilder instanceof MultiChainSettingsBuilder multiChainSettingsBuilder)) {
             throw new IllegalArgumentException("Invalid usage of " + this
-                    + ": settings object is not MultiChainSettings");
+                    + ": settings object is not MultiChainSettingsBuilder");
         }
-        final MultiChain multiChain = multiChainSettings.multiChain;
+        final MultiChain multiChain = multiChainSettingsBuilder.multiChain;
         final String chainId = settingsJson.getString(MultiChain.SELECTED_CHAIN_ID, null);
         if (chainId == null) {
             // - selection by name is used, no sense to add anything

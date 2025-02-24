@@ -24,15 +24,15 @@
 
 package net.algart.executors.api.multichains;
 
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 
 import java.util.Objects;
 
-class MultiChainSettings extends Settings {
+class MultiChainSettingsBuilder extends SettingsBuilder {
     final MultiChain multiChain;
 
-    MultiChainSettings(SettingsSpecification specification, MultiChain multiChain) {
+    MultiChainSettingsBuilder(SettingsSpecification specification, MultiChain multiChain) {
         super(specification);
         this.multiChain = Objects.requireNonNull(multiChain, "Null multiChain");
     }

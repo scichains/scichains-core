@@ -43,23 +43,23 @@ public class SplitSettings extends SettingsExecutor implements ReadOnlyExecution
         // - important to do this before other operations, for an improbable case
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
-        final Settings settings = settings();
+        final SettingsBuilder settingsBuilder = settingsBuilder();
         final String s = getInputScalar(SETTINGS, true).getValueOrDefault("").trim();
         JsonObject inputSettings = s.isEmpty() ? Jsons.newEmptyJson() : Jsons.toJson(s);
-        settings.splitSettingsToOutputPorts(this, inputSettings);
-        inputSettings = Jsons.overrideEntries(settings.build(this), inputSettings);
+        settingsBuilder.splitSettingsToOutputPorts(this, inputSettings);
+        inputSettings = Jsons.overrideEntries(settingsBuilder.build(this), inputSettings);
         // - provide default values for keys, absent in the source JSON
         getScalar(SETTINGS).setTo(Jsons.toPrettyString(inputSettings));
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Splitting settings \"%s\": %.3f ms",
-                settings.splitName(),
+                settingsBuilder.splitName(),
                 (t2 - t1) * 1e-6));
     }
 
     @Override
     public String toString() {
-        return "Split " + (settings != null ? settings : "some non-initialized settings");
+        return "Split " + (settingsBuilder != null ? settingsBuilder : "some non-initialized settings");
     }
 
     @Override

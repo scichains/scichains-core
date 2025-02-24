@@ -27,7 +27,7 @@ package net.algart.executors.api.chains;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.settings.CombineChainSettings;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsExecutor;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.json.Jsons;
@@ -51,9 +51,9 @@ public abstract class ChainExecutor extends Executor {
         return chain().executorFactory();
     }
 
-    public Settings settings() {
+    public SettingsBuilder settingsBuilder() {
         //noinspection resource
-        return chain().settings();
+        return chain().settingsBuilder();
     }
 
     public CombineChainSettings newCombine() {

@@ -66,9 +66,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     private final String firstChainName;
     private String defaultChainIdOrName;
     // - filled in createSelectedChainIdControl()
-    private final Settings multiChainOnlyCommonSettings;
+    private final SettingsBuilder multiChainOnlyCommonSettingsBuilder;
     // - note: these settings are not registered, but used for building a multi-chain executor only in UseMultiChain
-    private final MultiChainSettings multiChainSettings;
+    private final MultiChainSettingsBuilder multiChainSettingsBuilder;
 
     // Note: unlike Chain, currentDirectory is not actual here: loading without files is senseless here.
     private volatile Map<String, Chain> chainMap = null;
@@ -137,7 +137,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // - this information, set by previous operators, will be used only in the following operators,
         // to make a reference to this MultiChain and to set the correct owner information
         // inside newly created settings
-        this.multiChainOnlyCommonSettings = Settings.of(
+        this.multiChainOnlyCommonSettingsBuilder = SettingsBuilder.of(
                 buildMultiChainSettingsSpecification(false, nonRecursiveChainMap));
         // - these (internally used) settings do not contain advanced multi-line controls
         // for settings of the chain variants; it is used in UseMultiChain.buildMultiChainSpecification()
@@ -145,12 +145,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 "defaultChainIdOrName must be filled in createSelectedChainIdControl()";
         settingsFactory.setMultiChain(this);
         // - this reference will be necessary in CombineMultiChainSettings.correctSettings
-        final Settings multiChainSettings = settingsFactory.use(
+        final SettingsBuilder multiChainSettingsBuilder = settingsFactory.use(
                 buildMultiChainSettingsSpecification(true, nonRecursiveChainMap));
-        if (!(multiChainSettings instanceof MultiChainSettings)) {
-            throw new AssertionError("UseMultiChainSettings.use() must create a MultiChainSettings");
+        if (!(multiChainSettingsBuilder instanceof MultiChainSettingsBuilder)) {
+            throw new AssertionError("UseMultiChainSettings.use() must create MultiChainSettingsBuilder");
         }
-        this.multiChainSettings = (MultiChainSettings) multiChainSettings;
+        this.multiChainSettingsBuilder = (MultiChainSettingsBuilder) multiChainSettingsBuilder;
     }
 
     public static MultiChain of(
@@ -190,12 +190,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return defaultChainIdOrName;
     }
 
-    Settings multiChainOnlyCommonSettings() {
-        return multiChainOnlyCommonSettings;
+    SettingsBuilder multiChainOnlyCommonSettingsBuilder() {
+        return multiChainOnlyCommonSettingsBuilder;
     }
 
-    public Settings settings() {
-        return multiChainSettings;
+    public SettingsBuilder settingsBuilder() {
+        return multiChainSettingsBuilder;
     }
 
     public long contextId() {
@@ -264,7 +264,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             return result;
         }
         if (extractSubSettings) {
-            final JsonObject multiChainSubSettings = Settings.getSubSettingsByName(parentSettings, name());
+            final JsonObject multiChainSubSettings = SettingsBuilder.getSubSettingsByName(parentSettings, name());
             if (multiChainSubSettings != null) {
                 result = multiChainSubSettings.getString(selectedChainParameter(), result);
             }
@@ -299,8 +299,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executorSettings, "Null executorSettings");
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final Settings mainSettings = selectedChain.getSettings();
-        if (mainSettings == null) {
+        final SettingsBuilder mainSettingsBuilder = selectedChain.getSettingsBuilder();
+        if (mainSettingsBuilder == null) {
             return null;
         }
 
@@ -317,13 +317,13 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
         final String multiChainName = name();
         final String selectedChainName = selectedChain.name();
-        final Set<String> selectedSubChainActualKeys = mainSettings.settingsKeySet();
+        final Set<String> selectedSubChainActualKeys = mainSettingsBuilder.settingsKeySet();
 
-        final JsonObject multiSettings = Settings.getSubSettingsByName(parentSettings, multiChainName);
-        final JsonObject parentSubSettings = Settings.getSubSettingsByName(parentSettings, selectedChainName);
+        final JsonObject multiSettings = SettingsBuilder.getSubSettingsByName(parentSettings, multiChainName);
+        final JsonObject parentSubSettings = SettingsBuilder.getSubSettingsByName(parentSettings, selectedChainName);
         final JsonObject selectedSubSettings = multiSettings != null
                 && (parentSubSettings == null || !multiSettings.isEmpty()) ?
-                Settings.getSubSettingsByName(multiSettings, selectedChainName) :
+                SettingsBuilder.getSubSettingsByName(multiSettings, selectedChainName) :
                 parentSubSettings;
         // - Normally, settings for chain variant are stored inside multi-settings;
         // but, if there are no multi-settings, then we allow to store it directly in the parent.
@@ -348,11 +348,11 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             // We need to return settings for selected CHAIN, that does not understand
             // any multi-chain parameters, excepting ones that are identical (and actual) with
             // CHAIN parameters. In particular, we must NEVER return here SELECTED_CHAIN_ID_PARAMETER_NAME:
-            // it must not appear on the top level to avoid possible problems.
+            // it must not appear at the top level to avoid possible problems.
         }
 
         // 3rd overriding: by parent (both are performed in multiSettings.overrideSettings method)
-        return Settings.overrideEntriesExceptingGivenSettings(
+        return SettingsBuilder.overrideEntriesExceptingGivenSettings(
                 result, parentSettings, multiChainName, selectedChainName);
     }
 
@@ -386,7 +386,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public CombineMultiChainSettings newCombine() {
-        return executorFactory().newExecutor(CombineMultiChainSettings.class, settings().id());
+        return executorFactory().newExecutor(CombineMultiChainSettings.class, settingsBuilder().id());
     }
 
     public MultiChainExecutor newExecutor(CreateMode createMode) {
@@ -474,9 +474,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
                 if (chain != null) {
-                    final Settings mainSettings = chain.getSettings();
-                    if (mainSettings != null) {
-                        final SettingsSpecification specification = mainSettings.specification();
+                    final SettingsBuilder mainSettingsBuilder = chain.getSettingsBuilder();
+                    if (mainSettingsBuilder != null) {
+                        final SettingsSpecification specification = mainSettingsBuilder.specification();
                         settingsControlConf.setSettingsId(specification.getId());
                         settingsControlConf.setValueClassName(specification.className());
 //                        System.out.printf("Variant %s -> %s%n", specification.getName(), specification.className());

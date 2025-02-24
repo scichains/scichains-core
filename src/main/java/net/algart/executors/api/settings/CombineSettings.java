@@ -57,26 +57,26 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         // - important to do this before other operations, for an improbable case
         // when there is a user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         long t1 = debugTime();
-        final Settings settings = settings();
+        final SettingsBuilder settingsBuilder = settingsBuilder();
         final SScalar inputSettings = getInputScalar(SETTINGS, true);
-        settings.setAbsolutePaths(parameters().getBoolean(
+        settingsBuilder.setAbsolutePaths(parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE));
+                SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE));
 // We decided not to add this information: the settings are usually created by external dashboard,
 // direct using settings is not a typical case
 //        settings.setAddSettingsClass(properties().getBoolean(
 //                UseSettings.ADD_SETTINGS_CLASS_PARAMETER_NAME, true));
         final boolean extractSubSettings = parameters().getBoolean(
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME, false);
-        settings.setExtractSubSettings(extractSubSettings);
+        settingsBuilder.setExtractSubSettings(extractSubSettings);
         final String allSettings = !inputSettings.isInitialized() ?
                 parameters().getString(UseSettings.ALL_SETTINGS_PARAMETER_NAME, "").trim() :
                 inputSettings.getValue();
-        final JsonObject executorSettings = settings.build(this);
+        final JsonObject executorSettings = settingsBuilder.build(this);
         final JsonObject parentSettings = Jsons.toJson(allSettings, true);
-        final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
-        final JsonObject resultSettings = correctSettings(overriddenSettings, settings);
-        settings.splitSettingsToOutputPorts(this, resultSettings);
+        final JsonObject overriddenSettings = settingsBuilder.overrideSettings(executorSettings, parentSettings);
+        final JsonObject resultSettings = correctSettings(overriddenSettings, settingsBuilder);
+        settingsBuilder.splitSettingsToOutputPorts(this, resultSettings);
         final String settingsString = Jsons.toPrettyString(resultSettings);
         getScalar(SETTINGS).setTo(settingsString);
         long t2 = debugTime();
@@ -85,7 +85,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
                 !inputSettings.isInitialized() ? "" :
                         " and overriding" + (extractSubSettings ? " extracted " : ""),
                 this instanceof CombineChainSettings ? "sub-chain " : "",
-                settings.name(),
+                settingsBuilder.name(),
                 (t2 - t1) * 1e-6,
                 LOGGABLE_TRACE ?
                         "\n" + settingsString + (!inputSettings.isInitialized() ? ""
@@ -96,7 +96,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
 
     @Override
     public String toString() {
-        return "Combine " + (settings != null ? settings : "some non-initialized settings");
+        return "Combine " + (settingsBuilder != null ? settingsBuilder : "some non-initialized settings");
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         return true;
     }
 
-    protected JsonObject correctSettings(JsonObject settingsJson, Settings combiner) {
+    protected JsonObject correctSettings(JsonObject settingsJson, SettingsBuilder settingsBuilder) {
         return settingsJson;
     }
 }

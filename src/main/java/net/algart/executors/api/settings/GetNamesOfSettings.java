@@ -169,7 +169,7 @@ public class GetNamesOfSettings extends SettingsExecutor implements ReadOnlyExec
         setSystemOutputs();
         // - important to do this before other operations, for an improbable case
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
-        final Settings combiner = settings();
+        final SettingsBuilder combiner = settingsBuilder();
         final List<String> names = combiner.specification().getControls().values().stream()
                 .filter(this::isMatched).map(ExecutorSpecification.ControlConf::getName)
                 .collect(Collectors.toList());
@@ -178,7 +178,7 @@ public class GetNamesOfSettings extends SettingsExecutor implements ReadOnlyExec
 
     @Override
     public String toString() {
-        return "Get names of " + (settings != null ? settings : "some non-initialized settings");
+        return "Get names of " + (settingsBuilder != null ? settingsBuilder : "some non-initialized settings");
     }
 
 

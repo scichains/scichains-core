@@ -31,7 +31,7 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.system.CreateMode;
@@ -334,20 +334,20 @@ public final class UseMultiChain extends FileOperation {
         result.setInputPorts(specification.getInputPorts());
         result.setOutputPorts(specification.getOutputPorts());
         UseSubChain.addSettingsPorts(result);
-        final Settings multiChainSettings = multiChain.settings();
+        final SettingsBuilder multiChainSettingsBuilder = multiChain.settingsBuilder();
         addSystemParameters(result, multiChain);
-        UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettings());
+        UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsBuilder());
         // - Here we add to multi-chain executor the same ports/controls that we already added to its settings.
         // Also, we add ABSOLUTE_PATHS_NAME_PARAMETER_NAME if necessary.
-        // Note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettings
-        result.setSettings(multiChainSettings.specification());
+        // Note: here we should SKIP sub-settings for chain variants, added by usual multiChainSettingsBuilder
+        result.setSettings(multiChainSettingsBuilder.specification());
         // - important: we MUST store the full multi-chain settings as normal settings,
         // not a reduced version from multiChainOnlyCommonSettings()
         final ExecutorSpecification.Options options = result.createOptionsIfAbsent();
         options.createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(multiChain.selectedChainParameter());
-        options.createServiceIfAbsent().setSettingsId(multiChainSettings.id());
+        options.createServiceIfAbsent().setSettingsId(multiChainSettingsBuilder.id());
         final ExecutorSpecification.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {

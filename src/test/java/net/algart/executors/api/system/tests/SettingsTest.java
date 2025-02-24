@@ -27,7 +27,7 @@ package net.algart.executors.api.system.tests;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.json.Jsons;
@@ -69,9 +69,9 @@ public class SettingsTest {
             """);
 
     public static void main(String[] args) throws IOException {
-        final Settings settings = Settings.of(SETTINGS_SPECIFICATION);
-        settings.setAddSettingsClass(true);
-        final JsonObject jsonDefault = settings.buildDefault();
+        final SettingsBuilder settingsBuilder = SettingsBuilder.of(SETTINGS_SPECIFICATION);
+        settingsBuilder.setAddSettingsClass(true);
+        final JsonObject jsonDefault = settingsBuilder.buildDefault();
         System.out.printf("Defaults:%n%s%n", Jsons.toPrettyString(jsonDefault));
 
         Parameters parameters = new Parameters();
@@ -79,7 +79,7 @@ public class SettingsTest {
         parameters.setDouble("b", 3.0);
         parameters.setString("details", "{\"delta\":0.001}");
         parameters.setString("path", "my_file.dat");
-        final JsonObject jsonParameters = settings.build(parameters);
+        final JsonObject jsonParameters = settingsBuilder.build(parameters);
         System.out.printf("Parameters:%n%s%n", Jsons.toPrettyString(jsonParameters));
 
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");

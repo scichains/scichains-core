@@ -29,9 +29,9 @@ import net.algart.executors.api.ReadOnlyExecutionInput;
 
 public abstract class SettingsExecutor extends Executor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
-    volatile Settings settings = null;
+    volatile SettingsBuilder settingsBuilder = null;
 
-    public Settings settings() {
+    public SettingsBuilder settingsBuilder() {
         final String sessionId = getSessionId();
         final String executorId = getExecutorId();
         if (sessionId == null) {
@@ -40,21 +40,21 @@ public abstract class SettingsExecutor extends Executor implements ReadOnlyExecu
         if (executorId == null) {
             throw new IllegalStateException("Cannot find settings: executor ID is not set");
         }
-        Settings settings = this.settings;
-        if (settings == null) {
-            settings = UseSettings.settingsLoader().registeredWorker(sessionId, executorId);
-            this.settings = settings.clone();
+        SettingsBuilder settingsBuilder = this.settingsBuilder;
+        if (settingsBuilder == null) {
+            settingsBuilder = UseSettings.settingsLoader().registeredWorker(sessionId, executorId);
+            this.settingsBuilder = settingsBuilder.clone();
             // - the order is important for multithreading: local settings are assigned first,
             // this.settings is assigned to it;
             // cloning is necessary because Settings class can be little customized
         }
-        return settings;
+        return settingsBuilder;
     }
 
     void setSystemOutputs() {
-        final Settings settings = settings();
+        final SettingsBuilder settingsBuilder = settingsBuilder();
         if (hasOutputPort(UseSettings.SETTINGS_NAME_OUTPUT_NAME)) {
-            getScalar(UseSettings.SETTINGS_NAME_OUTPUT_NAME).setTo(settings.name());
+            getScalar(UseSettings.SETTINGS_NAME_OUTPUT_NAME).setTo(settingsBuilder.name());
         }
     }
 }

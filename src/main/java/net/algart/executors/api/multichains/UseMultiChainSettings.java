@@ -40,11 +40,11 @@ public final class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
-    public ExecutorSpecification buildCombineSpecification(Settings settings) {
+    public ExecutorSpecification buildCombineSpecification(SettingsBuilder settingsBuilder) {
         if (multiChain == null) {
             throw new IllegalStateException("MultiChain is not set: UseMultiChainSettings cannot be used");
         }
-        final ExecutorSpecification result = super.buildCombineSpecification(settings);
+        final ExecutorSpecification result = super.buildCombineSpecification(settingsBuilder);
         result.createOptionsIfAbsent().createControllingIfAbsent()
                 .setGrouping(true)
                 .setGroupSelector(multiChain.selectedChainParameter());
@@ -57,11 +57,11 @@ public final class UseMultiChainSettings extends UseSettings {
     }
 
     @Override
-    protected Settings newSettings(SettingsSpecification settingsSpecification) {
+    protected SettingsBuilder newSettings(SettingsSpecification settingsSpecification) {
         if (multiChain == null) {
             throw new IllegalStateException("multiChain is not set: newSettings cannot be used");
         }
-        return new MultiChainSettings(settingsSpecification, multiChain);
+        return new MultiChainSettingsBuilder(settingsSpecification, multiChain);
     }
 
     @Override

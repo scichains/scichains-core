@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * Note: this class does not contain settings itself, the settings are stored in JSON,
  * this class only allows manipulating them.
  */
-public class Settings implements Cloneable {
+public class SettingsBuilder implements Cloneable {
     public static final boolean ABSOLUTE_PATHS_DEFAULT_VALUE = true;
     public static final String PATH_PARENT_FOLDER_SUFFIX = "_parent";
     public static final String PATH_FILE_NAME_SUFFIX = "_name";
@@ -61,20 +61,20 @@ public class Settings implements Cloneable {
 
     private volatile Object customSettingsInformation = null;
 
-    protected Settings(SettingsSpecification specification) {
+    protected SettingsBuilder(SettingsSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.specification.checkCompleteness();
     }
 
-    public static Settings of(SettingsSpecification specification) {
-        return new Settings(specification);
+    public static SettingsBuilder of(SettingsSpecification specification) {
+        return new SettingsBuilder(specification);
     }
 
     public boolean isAbsolutePaths() {
         return absolutePaths;
     }
 
-    public Settings setAbsolutePaths(boolean absolutePaths) {
+    public SettingsBuilder setAbsolutePaths(boolean absolutePaths) {
         this.absolutePaths = absolutePaths;
         return this;
     }
@@ -85,7 +85,7 @@ public class Settings implements Cloneable {
 
     // We decided not to add this information by UseSettings.ADD_SETTINGS_CLASS_PARAMETER_NAME:
     // the settings are usually created by external dashboard, direct using combiner is not a typical case
-    public Settings setAddSettingsClass(boolean addSettingsClass) {
+    public SettingsBuilder setAddSettingsClass(boolean addSettingsClass) {
         this.addSettingsClass = addSettingsClass;
         return this;
     }
@@ -94,7 +94,7 @@ public class Settings implements Cloneable {
         return extractSubSettings;
     }
 
-    public Settings setExtractSubSettings(boolean extractSubSettings) {
+    public SettingsBuilder setExtractSubSettings(boolean extractSubSettings) {
         this.extractSubSettings = extractSubSettings;
         return this;
     }
@@ -103,7 +103,7 @@ public class Settings implements Cloneable {
         return customSettingsInformation;
     }
 
-    public Settings setCustomSettingsInformation(Object customSettingsInformation) {
+    public SettingsBuilder setCustomSettingsInformation(Object customSettingsInformation) {
         this.customSettingsInformation = customSettingsInformation;
         return this;
     }
@@ -364,9 +364,9 @@ public class Settings implements Cloneable {
     }
 
     @Override
-    public Settings clone() {
+    public SettingsBuilder clone() {
         try {
-            return (Settings) super.clone();
+            return (SettingsBuilder) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }

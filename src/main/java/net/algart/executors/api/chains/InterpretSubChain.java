@@ -149,8 +149,8 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
     }
 
     private void setChainSettings(Chain chain, JsonObject parentSettings) {
-        final Settings settings = chain.getSettings();
-        if (settings == null) {
+        final SettingsBuilder settingsBuilder = chain.getSettingsBuilder();
+        if (settingsBuilder == null) {
             return;
         }
         final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
@@ -179,7 +179,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         }
         final boolean absolutePaths = parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE);
+                SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE);
         final boolean extractSubSettings = parameters().getBoolean(
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT);
@@ -189,12 +189,12 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         final boolean logSettings = parameters().getBoolean(
                 UseSettings.LOG_SETTINGS_PARAMETER_NAME,
                 false);
-        settings.setAbsolutePaths(absolutePaths);
-        settings.setExtractSubSettings(extractSubSettings);
+        settingsBuilder.setAbsolutePaths(absolutePaths);
+        settingsBuilder.setExtractSubSettings(extractSubSettings);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
-                settings.build(this);
-        final JsonObject overriddenSettings = settings.overrideSettings(executorSettings, parentSettings);
+                settingsBuilder.build(this);
+        final JsonObject overriddenSettings = settingsBuilder.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(SettingsExecutor.SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(SettingsExecutor.SETTINGS)) {
@@ -203,7 +203,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         }
         if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
-            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(settings.id());
+            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(settingsBuilder.id());
         }
         final Level level = logSettings ? Level.INFO : Level.DEBUG;
         if (!parentSettings.isEmpty()) {
@@ -211,7 +211,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     "Customizing chain \"%s\" with help of %s \"%s\" (called from %s):\n%s%s",
                     chain.name(),
                     extractSubSettings ? "extracted sub-settings" : "json-settings",
-                    settings.name(),
+                    settingsBuilder.name(),
                     quote(getContextName()),
                     settingsString,
                     LOGGABLE_TRACE ?
@@ -225,7 +225,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     "Customizing chain \"%s\" directly from parameters (settings \"%s\", "
                             + "called from %s):\n%s",
                     chain.name(),
-                    settings.name(),
+                    settingsBuilder.name(),
                     quote(getContextName()),
                     settingsString));
         }

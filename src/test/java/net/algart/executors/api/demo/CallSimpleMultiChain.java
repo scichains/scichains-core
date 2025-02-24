@@ -26,11 +26,10 @@ package net.algart.executors.api.demo;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -45,14 +44,14 @@ public class CallSimpleMultiChain {
     }
 
     private static void customizeViaSettings(MultiChainExecutor executor, String variant, String a, String b) {
-        final Settings settings = executor.settings();
+        final SettingsBuilder settingsBuilder = executor.settingsBuilder();
         final Parameters parameters = new Parameters();
         parameters.setString(executor.multiChain().selectedChainParameter(), variant);
         parameters.setString("a", a);
         parameters.setString("b", b);
         parameters.setString(variant, "{\"delta\": 0.003}");
         // - adding "delta" parameter for a case when the sub-chain "understands" it
-        final JsonObject settingsJson = settings.build(parameters);
+        final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
         executor.putSettingsJson(settingsJson);
     }

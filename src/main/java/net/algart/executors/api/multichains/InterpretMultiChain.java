@@ -30,7 +30,7 @@ import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.InterpretSubChain;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.settings.Settings;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.modules.core.common.FunctionTiming;
@@ -64,7 +64,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 getInputScalar(SETTINGS, true).getValue(), true);
         final boolean absolutePaths = parameters().getBoolean(
                 UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                Settings.ABSOLUTE_PATHS_DEFAULT_VALUE);
+                SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE);
         final boolean extractSubSettings = parameters().getBoolean(
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT);
@@ -73,15 +73,15 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
         @SuppressWarnings("resource") final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
-        final Settings multiChainSettings = multiChain.settings();
-        multiChainSettings.setAbsolutePaths(absolutePaths);
+        final SettingsBuilder multiChainSettingsBuilder = multiChain.settingsBuilder();
+        multiChainSettingsBuilder.setAbsolutePaths(absolutePaths);
         final String defaultChainVariant = ignoreInputParameters ?
                 multiChain.defaultChainVariant() :
                 parameters().getString(multiChain.selectedChainParameter());
         final String selectedChainVariant = multiChain.getSelectedChainVariant(inputSettings, defaultChainVariant);
         final JsonObject executorSettings = ignoreInputParameters ?
                 Jsons.newEmptyJson() :
-                multiChainSettings.build(this);
+                multiChainSettingsBuilder.build(this);
         Chain selectedChain = multiChain.findSelectedChain(selectedChainVariant);
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
@@ -106,7 +106,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         timing.setSettings(timingNumberOfCalls, timingConfiguration);
         try {
             Parameters parametersCopy = new Parameters(parameters());
-            multiChainSettings.parseSettingsToParameters(parametersCopy, inputSettings);
+            multiChainSettingsBuilder.parseSettingsToParameters(parametersCopy, inputSettings);
             selectedChain.setParameters(parametersCopy);
             // - if a chain has direct parameters, sets also them in addition to copying into selectedChainSettings
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
