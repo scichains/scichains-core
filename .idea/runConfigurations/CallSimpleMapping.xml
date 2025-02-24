@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CallSimpleSettings" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleSettings" />
+  <configuration default="false" name="CallSimpleMapping" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleMapping" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="-builder src/test/resources/settings/simple_settings.ss 10 20 test" />
+    <option name="PROGRAM_PARAMETERS" value="-builder src/test/resources/mappings/simple_mapping.map BLUE 110 RED 111" />
     <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>

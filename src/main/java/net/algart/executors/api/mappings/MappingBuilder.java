@@ -88,6 +88,15 @@ public final class MappingBuilder implements Cloneable {
         }
     }
 
+    public static MappingBuilder read(Path specificationFile) throws IOException {
+        final MappingSpecification specification = MappingSpecification.read(specificationFile);
+        //noinspection resource
+        return new UseMapping().mappingBuilder(specification, false);
+        // - note: this can lead to exception when specification requires the keys or enum items file;
+        // "false" argument removes extra advice to set the corresponding object properties
+    }
+
+
     public static MappingBuilder of(
             MappingSpecification specification,
             List<String> keys,
@@ -155,7 +164,11 @@ public final class MappingBuilder implements Cloneable {
 
     public JsonObject build(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
-        final Parameters parameters = executor.parameters();
+        return build(executor.parameters());
+    }
+
+    public JsonObject build(Parameters parameters) {
+        Objects.requireNonNull(parameters, "Null parameters");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         final MappingSpecification.ControlConfTemplate controlTemplate = specification.getControlTemplate();
         for (String key : keys) {

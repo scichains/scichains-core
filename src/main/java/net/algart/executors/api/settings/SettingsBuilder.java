@@ -34,6 +34,7 @@ import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.json.Jsons;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -64,6 +65,10 @@ public class SettingsBuilder implements Cloneable {
     protected SettingsBuilder(SettingsSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.specification.checkCompleteness();
+    }
+
+    public static SettingsBuilder read(Path specificationFile) throws IOException {
+        return of(SettingsSpecification.read(specificationFile));
     }
 
     public static SettingsBuilder of(SettingsSpecification specification) {

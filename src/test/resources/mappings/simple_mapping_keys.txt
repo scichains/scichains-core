@@ -1,0 +1,5 @@
+RED   // means "red"
+GREEN // means "green"
+BLUE  // means "blue"
+0     // special cluster 0
+1..30 // special clusters $$$

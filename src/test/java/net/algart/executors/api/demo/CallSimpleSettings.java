@@ -24,9 +24,13 @@
 
 package net.algart.executors.api.demo;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,29 +38,45 @@ import java.nio.file.Paths;
 
 public class CallSimpleSettings {
     public static void main(String[] args) throws IOException {
-        if (args.length < 4) {
+        boolean builder = false;
+        int startArgIndex = 0;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-builder")) {
+            builder = true;
+            startArgIndex++;
+        }
+        if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
-                            "%s some_settings.ss [a b str]%n" +
+                            "%s [-builder] some_settings.ss [a b str]%n" +
                             "some_settings.ss should be some settings specification, which has" +
                             " 3 parameters named a, b and str.",
                     CallSimpleSettings.class.getName());
             return;
         }
-        final Path settingsPath = Paths.get(args[0]);
-        final String parameterA = args[1];
-        final String parameterB = args[2];
-        final String parameterStr = args[3];
+        final Path settingsPath = Paths.get(args[startArgIndex]);
+        final String parameterA = args[startArgIndex + 1];
+        final String parameterB = args[startArgIndex + 2];
+        final String parameterStr = args[startArgIndex + 3];
 
-        ExecutionBlock.initializeExecutionSystem();
         System.out.printf("Loading %s...%n", settingsPath.toAbsolutePath());
-        final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
-        try (var executor = UseSettings.newSharedExecutor(factory, settingsPath)) {
-            executor.setStringParameter("a", parameterA);
-            executor.setStringParameter("b", parameterB);
-            executor.setStringParameter("str", parameterStr);
-            final String result = executor.combine();
-            System.out.printf("%s%nDone: result is%n%s%n", executor, result);
-            CallSimpleChain.printExecutorInterface(executor);
+        if (builder) {
+            final SettingsBuilder settingsBuilder = SettingsBuilder.read(settingsPath);
+            final Parameters parameters = new Parameters();
+            parameters.setString("a", parameterA);
+            parameters.setString("b", parameterB);
+            parameters.setString("str", parameterStr);
+            final JsonObject resultJson = settingsBuilder.build(parameters);
+            System.out.printf("Done: result JSON is%n%s%n", Jsons.toPrettyString(resultJson));
+        } else {
+            ExecutionBlock.initializeExecutionSystem();
+            final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
+            try (var executor = UseSettings.newSharedExecutor(factory, settingsPath)) {
+                executor.setStringParameter("a", parameterA);
+                executor.setStringParameter("b", parameterB);
+                executor.setStringParameter("str", parameterStr);
+                final String result = executor.combine();
+                System.out.printf("%s%nDone: result is%n%s%n", executor, result);
+                CallSimpleChain.printExecutorInterface(executor);
+            }
         }
     }
 }

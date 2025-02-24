@@ -7,9 +7,5 @@
     "edition_type": "value",
     "default": 1
   },
-  "keys": [
-    "RED",
-    "GREEN",
-    "BLUE // this is blue color"
-  ]
+  "keys_file": "simple_mapping_keys.txt"
 }
