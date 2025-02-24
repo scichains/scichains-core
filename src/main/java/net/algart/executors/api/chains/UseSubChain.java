@@ -207,8 +207,7 @@ public final class UseSubChain extends FileOperation {
         return newSharedExecutor(file, CreateMode.NORMAL);
     }
 
-    public static ChainExecutor newSharedExecutor(Path file, CreateMode createMode)
-            throws IOException {
+    public static ChainExecutor newSharedExecutor(Path file, CreateMode createMode) throws IOException {
         return newSharedExecutor(ChainSpecification.read(file), createMode);
     }
 
@@ -246,7 +245,7 @@ public final class UseSubChain extends FileOperation {
     public ExecutorFactory executorFactory() {
         final String sessionId = getSessionId();
         if (sessionId == null) {
-            throw new IllegalStateException("Cannot register new chain: session ID was not set");
+            throw new IllegalStateException("Cannot create executor factory: session ID was not set");
         }
         var executorFactory = this.executorFactory;
         if (executorFactory == null) {
@@ -498,6 +497,9 @@ public final class UseSubChain extends FileOperation {
 
     private Chain register(ChainSpecification chainSpecification) {
         Objects.requireNonNull(chainSpecification, "Null chainSpecification");
+        if (getSessionId() == null) {
+            throw new IllegalStateException("Cannot register new chain: session ID was not set");
+        }
         final ExecutorFactory executorFactory = executorFactory();
         Chain chain = Chain.of(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {

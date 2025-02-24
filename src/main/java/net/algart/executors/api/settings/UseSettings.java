@@ -201,19 +201,19 @@ public class UseSettings extends FileOperation {
         return settingsBuilder;
     }
 
-    public static CombineSettings newSharedCombine(Path file) throws IOException {
-        return newSharedCombine(SettingsSpecification.read(file));
+    public static CombineSettings newSharedExecutor(Path file) throws IOException {
+        return newSharedExecutor(SettingsSpecification.read(file));
     }
 
-    public static CombineSettings newSharedCombine(SettingsSpecification specification) {
-        return getSharedInstance().newCombine(specification, CreateMode.NORMAL);
+    public static CombineSettings newSharedExecutor(SettingsSpecification specification) {
+        return getSharedInstance().newExecutor(specification, CreateMode.NORMAL);
     }
 
-    public CombineSettings newCombine(Path chainFile, CreateMode createMode) throws IOException {
-        return newCombine(SettingsSpecification.read(chainFile), createMode);
+    public CombineSettings newExecutor(Path file, CreateMode createMode) throws IOException {
+        return newExecutor(SettingsSpecification.read(file), createMode);
     }
 
-    public CombineSettings newCombine(SettingsSpecification specification, CreateMode createMode) {
+    public CombineSettings newExecutor(SettingsSpecification specification, CreateMode createMode) {
         return executorFactory().newExecutor(CombineSettings.class, use(specification).id(), createMode);
     }
 
@@ -244,7 +244,7 @@ public class UseSettings extends FileOperation {
     public ExecutorFactory executorFactory() {
         final String sessionId = getSessionId();
         if (sessionId == null) {
-            throw new IllegalStateException("Cannot register new chain: session ID was not set");
+            throw new IllegalStateException("Cannot create executor factory: session ID was not set");
         }
         var executorFactory = this.executorFactory;
         if (executorFactory == null) {

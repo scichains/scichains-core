@@ -42,7 +42,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
         execute();
         final String s = getScalar(SETTINGS).getValue();
         if (s == null) {
-            throw new IllegalStateException("CombineSettingsExecutor does not return any settings");
+            throw new IllegalStateException("CombineSettings does not return any settings");
         }
         return s;
     }

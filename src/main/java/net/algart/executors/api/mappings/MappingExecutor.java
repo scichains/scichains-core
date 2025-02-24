@@ -24,10 +24,57 @@
 
 package net.algart.executors.api.mappings;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.json.Jsons;
 
-public abstract class MappingExecutor extends Executor {
-    volatile MappingBuilder mappingBuilder = null;
+import java.util.Locale;
+
+public class MappingExecutor extends Executor implements ReadOnlyExecutionInput {
+    public static final String MAPPING = MappingSpecification.MAPPING;
+    public static final String OUTPUT_KEYS = "keys";
+
+    private volatile MappingBuilder mappingBuilder = null;
+
+    public MappingExecutor() {
+        setDefaultOutputScalar(MAPPING);
+        addOutputScalar(OUTPUT_KEYS);
+        disableOnChangeParametersAutomatic();
+    }
+
+
+    public String build() {
+        execute();
+        final String s = getScalar(MAPPING).getValue();
+        if (s == null) {
+            throw new IllegalStateException("MappingExecutor does not return any mapping");
+        }
+        return s;
+    }
+
+    public JsonObject buildJson() {
+        return Jsons.toJson(build());
+    }
+
+
+    @Override
+    public void process() {
+        long t1 = debugTime();
+        final MappingBuilder mappingBuilder = mappingBuilder();
+        final JsonObject mappingJson = mappingBuilder.build(this);
+        final String mappingString = Jsons.toPrettyString(mappingJson);
+        getScalar(MAPPING).setTo(mappingString);
+        getScalar(OUTPUT_KEYS).setTo(String.join("\n", mappingJson.keySet()));
+        long t2 = debugTime();
+        logDebug(() -> String.format(Locale.US,
+                "Building mapping \"%s\": %.3f ms%s",
+                mappingBuilder.name(),
+                (t2 - t1) * 1e-6,
+                LOGGABLE_TRACE ?
+                        "\n" + mappingString
+                        : ""));
+    }
 
     public MappingBuilder mappingBuilder() {
         final String sessionId = getSessionId();
@@ -49,4 +96,13 @@ public abstract class MappingExecutor extends Executor {
         return mappingBuilder;
     }
 
+    @Override
+    public String toString() {
+        return "Executor of " + (mappingBuilder != null ? mappingBuilder : "some non-initialized mapping");
+    }
+
+    @Override
+    protected boolean skipStandardAutomaticParameters() {
+        return true;
+    }
 }

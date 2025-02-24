@@ -154,8 +154,7 @@ public final class UseMultiChain extends FileOperation {
         return newSharedExecutor(file, CreateMode.NORMAL);
     }
 
-    public static MultiChainExecutor newSharedExecutor(Path file, CreateMode createMode)
-            throws IOException {
+    public static MultiChainExecutor newSharedExecutor(Path file, CreateMode createMode) throws IOException {
         return newSharedExecutor(MultiChainSpecification.read(file), createMode);
     }
 
@@ -164,8 +163,7 @@ public final class UseMultiChain extends FileOperation {
         return getSharedInstance().newExecutor(specification, createMode);
     }
 
-    public MultiChainExecutor newExecutor(Path file, CreateMode createMode)
-            throws IOException {
+    public MultiChainExecutor newExecutor(Path file, CreateMode createMode) throws IOException {
         return newExecutor(MultiChainSpecification.read(file), createMode);
     }
 

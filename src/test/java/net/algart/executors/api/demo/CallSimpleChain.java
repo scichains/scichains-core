@@ -105,15 +105,15 @@ public class CallSimpleChain {
         // - will be null, because we call this executor not from a chain
         System.out.printf("    context path = %s%n", executor.getContextPath());
         // - will be null, because we call this executor not from a chain
-        System.out.println("Initial parameters");
+        System.out.println("All parameters");
         for (var e : executor.parameters().entrySet()) {
             System.out.printf("    %s = %s%n", e.getKey(), e.getValue());
         }
-        System.out.println("Initial input ports:");
+        System.out.println("All input ports:");
         for (var p : executor.inputPorts()) {
             System.out.printf("    %s%n", p);
         }
-        System.out.println("Initial output ports:");
+        System.out.println("All output ports:");
         for (var p : executor.outputPorts()) {
             System.out.printf("    %s%n", p);
         }

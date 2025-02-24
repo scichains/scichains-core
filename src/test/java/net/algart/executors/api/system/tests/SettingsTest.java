@@ -83,7 +83,7 @@ public class SettingsTest {
         System.out.printf("Parameters:%n%s%n", Jsons.toPrettyString(jsonParameters));
 
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
-        try (var executor = UseSettings.newSharedCombine(SETTINGS_SPECIFICATION)) {
+        try (var executor = UseSettings.newSharedExecutor(SETTINGS_SPECIFICATION)) {
             executor.setCurrentDirectory(Paths.get(".").toAbsolutePath());
             // - leads to translating "path" parameter
             executor.setParameters(parameters);
