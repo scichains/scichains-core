@@ -86,6 +86,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         Chain selectedChain = multiChain.findSelectedChain(selectedChainVariant);
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
+        final JsonObject multiChainSettings = multiChain.multiChainSettings(inputSettings);
         final JsonObject selectedChainSettings = multiChain.selectedChainSettings(
                 executorSettings, inputSettings, selectedChain);
         final String selectedChainSettingsString = selectedChainSettings == null ?
@@ -107,7 +108,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         timing.setSettings(timingNumberOfCalls, timingConfiguration);
         try {
             Parameters parametersCopy = new Parameters(parameters());
-            multiChainSettingsBuilder.parseSettingsToParameters(parametersCopy, inputSettings);
+            multiChainSettingsBuilder.parseSettingsToParameters(parametersCopy, multiChainSettings);
             selectedChain.setParameters(parametersCopy);
             // - if a chain has direct parameters, sets also them in addition to copying into selectedChainSettings
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;

@@ -256,6 +256,21 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return Collections.unmodifiableMap(chainMap);
     }
 
+    public JsonObject multiChainSettings(JsonObject parentSettings) {
+        Objects.requireNonNull(parentSettings, "Null parentSettings");
+        if (parentSettings.isEmpty()) {
+            return parentSettings;
+            // - any empty JSON
+        }
+        if (extractSubSettings) {
+            final JsonObject multiChainSubSettings = SettingsBuilder.getSubSettingsByName(parentSettings, name());
+            if (multiChainSubSettings != null) {
+                return multiChainSubSettings;
+            }
+        }
+        return parentSettings;
+    }
+
     public String getSelectedChainVariant(JsonObject parentSettings, String defaultChainVariant) {
         Objects.requireNonNull(parentSettings, "Null parentSettings");
         Objects.requireNonNull(defaultChainVariant, "Null defaultChainVariant");
