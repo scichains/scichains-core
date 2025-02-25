@@ -233,7 +233,14 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
 
     public static void skipAction(Executor executor) {
         for (Port input : executor.inputPorts()) {
-            final Port outputPort = executor.getOutputPort(input.getName());
+            final String inputName = input.getName();
+            if (inputName == null) {
+                continue;
+            }
+            Port outputPort = executor.getOutputPort(inputName);
+            if (outputPort == null && inputName.equals(executor.defaultInputPortName())) {
+                outputPort = executor.getOutputPort(executor.defaultOutputPortName());
+            }
             if (outputPort != null && outputPort.getDataType() == input.getDataType()) {
                 outputPort.getData().setTo(input.getData());
                 // Not exchange! This class implements ReadOnlyExecutionInput!
