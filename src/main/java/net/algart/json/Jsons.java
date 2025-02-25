@@ -34,6 +34,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.*;
@@ -51,6 +52,10 @@ public class Jsons {
 
     public static JsonObject readJson(Path path) throws IOException {
         Objects.requireNonNull(path, "Null path");
+        if (!Files.exists(path)) {
+            throw new NoSuchFileException("JSON file does not exist: " + path);
+            // - little better message than in Files.newBufferedReader
+        }
         try {
             try (final JsonReader reader = Json.createReader(Files.newBufferedReader(path, StandardCharsets.UTF_8))) {
                 return reader.readObject();
