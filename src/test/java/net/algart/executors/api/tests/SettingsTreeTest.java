@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system.tests;
+package net.algart.executors.api.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.extensions.InstalledExtensions;

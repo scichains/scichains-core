@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system.tests;
+package net.algart.executors.api.tests;
 
 import java.util.UUID;
 

@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ExecutingChain" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.system.tests.ExecutingChain" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.tests.ExecutingChain" />
     <module name="scichains-core" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.executors.api.system.tests.*" />
+        <option name="PATTERN" value="net.algart.executors.api.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

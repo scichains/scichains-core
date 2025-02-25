@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.system.tests;
+package net.algart.executors.api.tests;
 
-import net.algart.executors.api.mappings.MappingSpecification;
+import net.algart.executors.api.multichains.MultiChainSpecification;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +33,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ReadWriteMappingTest {
+public class ReadWriteMultiChainTest {
     public static void main(String[] args) throws IOException {
         boolean rewrite = false;
         int startArgIndex = 0;
@@ -42,24 +42,24 @@ public class ReadWriteMappingTest {
             startArgIndex++;
         }
         if (args.length < startArgIndex + 1) {
-            System.out.printf("Usage: %s [-rewrite] mapping.map | folder_with_mappings%n",
-                    ReadWriteMappingTest.class.getName());
+            System.out.printf("Usage: %s [-rewrite] multi_chain.mchain | folder_with_multi_chains%n",
+                    ReadWriteMultiChainTest.class.getName());
             return;
         }
         final Path path = Paths.get(args[startArgIndex]);
         List<Path> files;
         if (Files.isDirectory(path)) {
             try (Stream<Path> list = Files.list(path)) {
-                files = list.filter(MappingSpecification::isMappingSpecificationFile).toList();
+                files = list.filter(MultiChainSpecification::isMultiChainSpecificationFile).toList();
             }
         } else {
             files = List.of(path);
         }
         for (Path file : files) {
             System.out.printf("Reading %s...%n", file);
-            MappingSpecification specification = MappingSpecification.readIfValid(file);
+            MultiChainSpecification specification = MultiChainSpecification.readIfValid(file);
             if (specification == null) {
-                System.out.printf("Skipping %s (not a mapping)...%n", file);
+                System.out.printf("Skipping %s (not a multi-chain)...%n", file);
                 continue;
             }
             if (rewrite) {
