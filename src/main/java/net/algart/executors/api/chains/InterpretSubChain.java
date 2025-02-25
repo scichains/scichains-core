@@ -212,7 +212,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     chain.name(),
                     extractSubSettings ? "extracted sub-settings" : "json-settings",
                     settingsBuilder.name(),
-                    quote(getContextName()),
+                    quoteContextName(this),
                     settingsString,
                     LOGGABLE_TRACE ?
                             "\nOriginal settings (from parameters):\n"
@@ -226,13 +226,9 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                             + "called from %s):\n%s",
                     chain.name(),
                     settingsBuilder.name(),
-                    quote(getContextName()),
+                    quoteContextName(this),
                     settingsString));
         }
-    }
-
-    public static String quote(String s) {
-        return s == null ? "N/A" : "\"" + s + "\"";
     }
 
     public static void skipAction(Executor executor) {
@@ -243,5 +239,10 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                 // Not exchange! This class implements ReadOnlyExecutionInput!
             }
         }
+    }
+
+    private static String quoteContextName(Executor e) {
+        final String contextName = e.getContextName();
+        return contextName == null ? "unnamed context #" + e.getContextId() : "\"" + contextName + "\"";
     }
 }

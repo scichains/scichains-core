@@ -533,9 +533,15 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private Map<String, Chain> createChainMap() {
         Map<String, Chain> result = new LinkedHashMap<>();
-        for (ChainSpecification specification : this.chainSpecifications) {
-            final String executorId = specification.chainId();
+        for (ChainSpecification chainSpecification : this.chainSpecifications) {
+            final String executorId = chainSpecification.chainId();
             final Chain chain = InterpretSubChain.registeredChain(chainFactory.getSessionId(), executorId);
+            if (specification.isBehaviourSettingsRequired() && !chain.hasSettings()) {
+                throw new IllegalStateException("Chain \"" + chain.name()
+                        + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()
+                        + "\" (ID \"" + id() + "\") has no built-in main settings; "
+                        + "this is not allowed in this multi-chains (settings are required)");
+            }
             result.put(executorId, chain);
         }
         return result;

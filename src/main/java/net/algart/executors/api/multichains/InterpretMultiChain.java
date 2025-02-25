@@ -25,6 +25,7 @@
 package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonObject;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.InterpretSubChain;
@@ -155,7 +156,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 multiChain.name(),
                 selectedChain.name(),
                 extractSubSettings ? "extracted sub-settings" : "json-settings",
-                InterpretSubChain.quote(getContextName()),
+                quoteContextName(this),
                 selectedChainSettingsString));
         if (hasOutputPort(SETTINGS)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
@@ -176,5 +177,10 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
     @Override
     protected boolean skipStandardAutomaticParameters() {
         return true;
+    }
+
+    private static String quoteContextName(Executor e) {
+        final String contextName = e.getContextName();
+        return contextName == null ? "unnamed context #" + e.getContextId() : "\"" + contextName + "\"";
     }
 }

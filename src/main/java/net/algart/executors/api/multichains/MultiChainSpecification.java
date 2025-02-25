@@ -63,6 +63,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final class Options extends AbstractConvertibleToJson {
         public static final class Behavior extends AbstractConvertibleToJson {
             private boolean skippable = false;
+            private boolean settingsRequired = false;
             private boolean preferSelectionById = DEFAULT_PREFER_SELECTION_BY_ID;
 
             public Behavior() {
@@ -70,6 +71,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
             public Behavior(JsonObject json, Path file) {
                 this.skippable = json.getBoolean("skippable", false);
+                this.settingsRequired = json.getBoolean("settings_required", false);
                 this.preferSelectionById = json.getBoolean(
                         "prefer_selection_by_id", DEFAULT_PREFER_SELECTION_BY_ID);
             }
@@ -80,6 +82,15 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
             public Behavior setSkippable(boolean skippable) {
                 this.skippable = skippable;
+                return this;
+            }
+
+            public boolean isSettingsRequired() {
+                return settingsRequired;
+            }
+
+            public Behavior setSettingsRequired(boolean settingsRequired) {
+                this.settingsRequired = settingsRequired;
                 return this;
             }
 
@@ -100,6 +111,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             public String toString() {
                 return "Behavior{" +
                         "skippable=" + skippable +
+                        ", settingsRequired=" + settingsRequired +
                         ", preferSelectionById=" + preferSelectionById +
                         '}';
             }
@@ -107,6 +119,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             @Override
             public void buildJson(JsonObjectBuilder builder) {
                 builder.add("skippable", skippable);
+                builder.add("settings_required", settingsRequired);
                 builder.add("prefer_selection_by_id", preferSelectionById);
             }
         }
@@ -442,6 +455,10 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
     public boolean isBehaviourSkippable() {
         return options != null && options.behavior != null && options.behavior.skippable;
+    }
+
+    public boolean isBehaviourSettingsRequired() {
+        return options != null && options.behavior != null && options.behavior.settingsRequired;
     }
 
     public boolean isBehaviourPreferSelectionById() {

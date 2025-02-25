@@ -670,10 +670,13 @@ public class UseSettings extends FileOperation {
                     .setName(name)
                     .setCaption(controlConf.getCaption())
                     .setHint(controlConf.getDescription())
-                    .setValueType(DataType.SCALAR);
-            if (controlConf.getValueType().isSettings()) {
-                portConf.setAdvanced(true);
-            }
+                    .setValueType(DataType.SCALAR)
+                    .setAdvanced(controlConf.isAdvanced());
+            // if (controlConf.getValueType().isSettings()) {
+            //    portConf.setAdvanced(true);
+            // }
+            // - bad idea:
+            // if we see the sub-settings, this is an advice to like their to the corresponding subtasks
             result.addOutputPort(portConf);
             if (controlConf.getValueType() == ParameterValueType.STRING && controlConf.getEditionType().isPath()) {
                 result.addOutputPort(new ExecutorSpecification.PortConf()
