@@ -472,11 +472,12 @@ public final class UseSubChain extends FileOperation {
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot load sub-chain " + chainSpecification.getSpecificationFile(), e);
+                throw new ChainRunningException("Cannot load the chain " + chainSpecification.getSpecificationFile(), e);
             }
             long t2 = infoTime();
             final int index = i;
-            // Note: recursive usage of sub-chains is rare situation, but NOT an error, so we use only INFO level here.
+            // Note: recursive usage of sub-chains is a rare situation,
+            // but NOT an error, so we use only INFO level here.
             LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
                     () -> String.format(Locale.US, "Sub-chain %s\"%s\"%s %sloaded from %s in %.3f ms",
                             n > 1 ? (index + 1) + "/" + n + " " : "",

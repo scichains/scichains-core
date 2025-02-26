@@ -104,7 +104,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot initialize sub-chain "
+                throw new ChainRunningException("Cannot initialize the sub-chain "
                         + chainSpecification.getSpecificationFile() + ", variant of multi-chain "
                         + specification.getSpecificationFile(), e);
             }
