@@ -69,29 +69,26 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         final boolean extractSubSettings = parameters().getBoolean(
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                 UseMultiChain.EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT);
-        final boolean ignoreInputParameters = parameters().getBoolean(
+        final boolean ignoreParameters = parameters().getBoolean(
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_NAME,
                 UseMultiChain.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
         @SuppressWarnings("resource") final MultiChain multiChain = multiChain();
         multiChain.setExtractSubSettings(extractSubSettings);
         final SettingsBuilder multiChainSettingsBuilder = multiChain.settingsBuilder();
         multiChainSettingsBuilder.setAbsolutePaths(absolutePaths);
-        final String defaultChainVariant = ignoreInputParameters ?
+        final String defaultChainVariant = ignoreParameters ?
                 multiChain.defaultChainVariant() :
                 parameters().getString(multiChain.selectedChainParameter());
         final String selectedChainVariant = multiChain.getSelectedChainVariant(inputSettings, defaultChainVariant);
-        final JsonObject executorSettings = ignoreInputParameters ?
+        final JsonObject executorSettings = ignoreParameters ?
                 Jsons.newEmptyJson() :
                 multiChainSettingsBuilder.build(this);
         Chain selectedChain = multiChain.findSelectedChain(selectedChainVariant);
         status().setExecutorSimpleClassName(multiChain.name() + ":"
                 + (selectedChain.name() == null ? "" : selectedChain.name()));
         final JsonObject multiChainSettings = multiChain.multiChainSettings(inputSettings);
-        final JsonObject selectedChainSettings = multiChain.selectedChainSettings(
-                executorSettings, inputSettings, selectedChain);
-        final String selectedChainSettingsString = selectedChainSettings == null ?
-                null :
-                Jsons.toPrettyString(selectedChainSettings);
+        final JsonObject selectedChainSettings =
+                multiChain.selectedChainSettings(executorSettings, inputSettings, selectedChain);
         selectedChain.reinitializeAll();
         selectedChain.setCaller(this);
         final Level timingLogLevel = ofLogLevel(parameters().getString(
@@ -106,6 +103,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         timingConfiguration.setUniformPercentileLevels(timingNumberOfPercentiles);
         selectedChain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
         timing.setSettings(timingNumberOfCalls, timingConfiguration);
+        final String selectedChainSettingsString;
         try {
             Parameters parametersCopy = new Parameters(parameters());
             multiChainSettingsBuilder.parseSettingsToParameters(parametersCopy, multiChainSettings);
@@ -114,7 +112,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.readInputPortsFromExecutor(this);
             t3 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
-            MultiChain.setSettings(selectedChainSettingsString, selectedChain);
+            selectedChainSettingsString = MultiChain.setSettings(selectedChain, selectedChainSettings);
             t4 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.executeNecessary(this);
             t5 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
@@ -158,15 +156,9 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 selectedChain.name(),
                 extractSubSettings ? "extracted sub-settings" : "json-settings",
                 quoteContextName(this),
-                selectedChainSettingsString));
-        if (hasOutputPort(SETTINGS)) {
-            // - we check the port to be on the safe side; in a correctly created chain, it must exist
-            getScalar(SETTINGS).setTo(selectedChainSettingsString);
-        }
-        if (hasOutputPort(UseSettings.SETTINGS_ID_OUTPUT_NAME)) {
-            // - we check the port to be on the safe side; in a correctly created chain, it must exist
-            getScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME).setTo(multiChain.settingsId());
-        }
+                selectedChainSettings == null ? "    [this sub-chain has no settings]" : selectedChainSettingsString));
+        setOutputScalar(SETTINGS, selectedChainSettingsString);
+        setOutputScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME, multiChain.settingsId());
     }
 
     @Override

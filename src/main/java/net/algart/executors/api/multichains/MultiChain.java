@@ -371,24 +371,6 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 result, parentSettings, multiChainName, selectedChainName);
     }
 
-    public static void setSettings(String selectedChainSettingsString, Chain selectedChain) {
-        if (selectedChainSettingsString == null) {
-            return;
-        }
-        Objects.requireNonNull(selectedChain, "Null selectedChain");
-        final String mainSettingsBlockId = selectedChain.getMainSettingsBlockId();
-        if (mainSettingsBlockId == null) {
-            // - should not occur while normal usage (selectedChainSettings is not null)
-            throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
-        }
-        final ChainBlock settingsBlock = selectedChain.getBlock(mainSettingsBlockId);
-        if (settingsBlock == null)
-            throw new AssertionError("Main settings block  '"
-                    + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
-        settingsBlock.setActualInputData(
-                SettingsExecutor.SETTINGS, SScalar.of(selectedChainSettingsString));
-    }
-
     public void freeResources() {
         Map<String, Chain> chainMap = this.chainMap;
         if (chainMap != null) {
@@ -449,6 +431,25 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return specification.isBehaviourPreferSelectionById() ? SELECTED_CHAIN_ID : SELECTED_CHAIN_NAME;
         // - Important that we must use here the specification flag, not an effective selectionById field:
         // otherwise, the user will not be able to understand, which parameter he must use to select the variant
+    }
+
+    static String setSettings(Chain selectedChain, JsonObject selectedChainSettings) {
+        if (selectedChainSettings == null) {
+            return null;
+        }
+        Objects.requireNonNull(selectedChain, "Null selectedChain");
+        final String mainSettingsBlockId = selectedChain.getMainSettingsBlockId();
+        if (mainSettingsBlockId == null) {
+            // - should not occur while normal usage (selectedChainSettings is not null)
+            throw new IllegalArgumentException("Selected chain has no built-in settings: " + selectedChain);
+        }
+        final ChainBlock settingsBlock = selectedChain.getBlock(mainSettingsBlockId);
+        if (settingsBlock == null)
+            throw new AssertionError("Main settings block  '"
+                    + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
+        final String prettyString = Jsons.toPrettyString(selectedChainSettings);
+        settingsBlock.setActualInputData(SettingsExecutor.SETTINGS, SScalar.of(prettyString));
+        return prettyString;
     }
 
     // Note: the result of this method is also used for building ports/controls of the multi-chain executor
