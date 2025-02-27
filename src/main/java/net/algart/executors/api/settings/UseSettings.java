@@ -556,7 +556,7 @@ public class UseSettings extends FileOperation {
         }
     }
 
-    private static ExecutorSpecification buildCommon(Executor executor, SettingsBuilder settingsBuilder) {
+    private static ExecutorSpecification buildCommon(SettingsExecutor executor, SettingsBuilder settingsBuilder) {
         ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(executor);
         // - adds JavaConf, (maybe) parameters and some ports
