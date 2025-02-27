@@ -29,6 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
+import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.AbstractConvertibleToJson;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -1037,6 +1039,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // - note: by default, it is true if editionType.isResources() is true
         private boolean advanced = false;
         private List<EnumItem> items = null;
+        private String itemsFile = null;
+        private List<String> itemsFileNames = null;
+        private List<String> itemsFileCaptions = null;
         private List<String> suppressWarnings = null;
         private JsonValue defaultJsonValue = null;
 
@@ -1088,6 +1093,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     this.items.add(new EnumItem((JsonObject) jsonValue, file));
                 }
             }
+            //this.itemsFile = json.getString("items_file", null);
+            //TODO!!
+
             final JsonArray suppressWarningsJson = json.getJsonArray("suppress_warnings");
             if (suppressWarningsJson != null) {
                 this.suppressWarnings = new ArrayList<>();
@@ -1221,6 +1229,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
+        public boolean hasItems() {
+            return items != null && !items.isEmpty();
+        }
+
         public List<EnumItem> getItems() {
             return items == null ? null : Collections.unmodifiableList(items);
         }
@@ -1228,6 +1240,29 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         public ControlConf setItems(List<EnumItem> items) {
             this.items = items == null ? null : new ArrayList<>(items);
             return this;
+        }
+
+        public String getItemsFile() {
+            return itemsFile;
+        }
+
+        public ControlConf setItemsFile(String itemsFile) {
+            this.itemsFile = itemsFile;
+            return this;
+        }
+
+        public Path itemsFile(ExecutorSpecification specification) {
+            return itemsFile == null ?
+                    null :
+                    specification.resolve(Paths.get(itemsFile), "enum items");
+        }
+
+        public List<String> itemsFileNames() {
+            return itemsFileNames;
+        }
+
+        public List<String> itemsFileCaptions() {
+            return itemsFileCaptions;
         }
 
         public List<String> getSuppressWarnings() {
@@ -1316,6 +1351,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     ", resources=" + resources +
                     ", advanced=" + advanced +
                     ", items=" + items +
+                    ", itemsFile='" + itemsFile + '\'' +
                     ", suppressWarnings=" + suppressWarnings +
                     ", defaultJsonValue=" + defaultJsonValue +
                     '}';
@@ -1376,6 +1412,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 }
                 builder.add("items", arrayBuilder.build());
             }
+            if (itemsFile != null) {
+                builder.add("items_file", itemsFile);
+            }
             if (suppressWarnings != null) {
                 final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                 for (String value : suppressWarnings) {
@@ -1385,6 +1424,28 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
             if (defaultJsonValue != null) {
                 builder.add("default", defaultJsonValue);
+            }
+        }
+
+        public void load(ExecutorSpecification specification) {
+            final Path file = itemsFile(specification);
+            if (file == null) {
+                return;
+            }
+            final String s;
+            try {
+                s = Files.readString(file);
+            } catch (IOException e) {
+                throw new JsonException("Cannot load items file " + file.toAbsolutePath(), e);
+            }
+            final SScalar.MultiLineOrJsonSplitter items = SScalar.splitJsonOrTrimmedLinesWithComments(s);
+            if (items.numberOfLines() == 0) {
+                throw new JsonException("No enum items in the file " + file.toAbsolutePath());
+            }
+            this.itemsFileNames = items.lines();
+            this.itemsFileCaptions = items.comments();
+            if (!hasItems()) {
+                setItemsFromLists(itemsFileNames, itemsFileCaptions);
             }
         }
     }
@@ -1470,6 +1531,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
                     final ControlConf control = new ControlConf(jsonObject, file);
+                    // control.load(this);
+                    //TODO!! load when possible
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }
@@ -2431,5 +2494,17 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
         }
         return ports;
+    }
+
+    private Path resolve(Path path, String whatFile) {
+        if (path.isAbsolute()) {
+            return path;
+        }
+        if (this.specificationFile == null) {
+            throw new IllegalStateException("Name of " + whatFile +
+                    " file is relative and cannot be resolved, because the executor" +
+                    " specification was not loaded from file; you must use absolute paths in this case");
+        }
+        return specificationFile.getParent().resolve(path);
     }
 }

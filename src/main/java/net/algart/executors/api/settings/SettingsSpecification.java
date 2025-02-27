@@ -72,38 +72,38 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     private static final int CODE_FOR_INVALID = 0;
 
     public static final class ControlConfExtension extends AbstractConvertibleToJson {
-        private String enumItemsFile = null;
-        private List<String> enumItemNames = null;
-        private List<String> enumItemCaptions = null;
+        private String itemsFile = null;
+        private List<String> itemNames = null;
+        private List<String> itemCaptions = null;
 
         public ControlConfExtension() {
         }
 
         public ControlConfExtension(JsonObject json, Path file) {
-            this.enumItemsFile = json.getString("enum_items_file", null);
+            this.itemsFile = json.getString("items_file", null);
         }
 
-        public String getEnumItemsFile() {
-            return enumItemsFile;
+        public String getItemsFile() {
+            return itemsFile;
         }
 
-        public ControlConfExtension setEnumItemsFile(String enumItemsFile) {
-            this.enumItemsFile = enumItemsFile;
+        public ControlConfExtension setItemsFile(String itemsFile) {
+            this.itemsFile = itemsFile;
             return this;
         }
 
-        public Path enumItemsFile(SettingsSpecification specification) {
-            return enumItemsFile == null ?
+        public Path itemsFile(SettingsSpecification specification) {
+            return itemsFile == null ?
                     null :
-                    specification.resolve(Paths.get(enumItemsFile), "enum items");
+                    specification.resolve(Paths.get(itemsFile), "enum items");
         }
 
-        public List<String> enumItemNames() {
-            return enumItemNames;
+        public List<String> itemNames() {
+            return itemNames;
         }
 
-        public List<String> enumItemCaptions() {
-            return enumItemCaptions;
+        public List<String> itemCaptions() {
+            return itemCaptions;
         }
 
         @Override
@@ -111,7 +111,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         }
 
         public void load(SettingsSpecification specification) {
-            final Path file = enumItemsFile(specification);
+            final Path file = itemsFile(specification);
             if (file == null) {
                 return;
             }
@@ -125,27 +125,27 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             if (items.numberOfLines() == 0) {
                 throw new JsonException("No enum items in the file " + file.toAbsolutePath());
             }
-            this.enumItemNames = items.lines();
-            this.enumItemCaptions = items.comments();
+            this.itemNames = items.lines();
+            this.itemCaptions = items.comments();
         }
 
         public void completeControlConf(ExecutorSpecification.ControlConf controlConf) {
-            if (controlConf.getItems() == null && this.enumItemNames != null) {
-                controlConf.setItemsFromLists(enumItemNames, enumItemCaptions);
+            if (controlConf.getItems() == null && this.itemNames != null) {
+                controlConf.setItemsFromLists(itemNames, itemCaptions);
             }
         }
 
         @Override
         public String toString() {
             return "ControlConfExtension{" +
-                    "enumItemsFile='" + enumItemsFile + '\'' +
+                    "itemsFile='" + itemsFile + '\'' +
                     '}';
         }
 
         @Override
         public void buildJson(JsonObjectBuilder builder) {
-            if (enumItemsFile != null) {
-                builder.add("enum_items_file", enumItemsFile);
+            if (itemsFile != null) {
+                builder.add("items_file", itemsFile);
             }
         }
     }
