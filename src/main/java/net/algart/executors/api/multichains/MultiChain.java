@@ -233,9 +233,9 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return specification.getSettingsId();
     }
 
-    public void checkImplementationCompatibility() {
+    public void checkImplementationCompatibility(boolean enforceAllChecks) {
         for (ExecutorSpecification implementationSpecification : loadedChainExecutorSpecifications) {
-            specification.checkImplementationCompatibility(implementationSpecification);
+            specification.checkImplementationCompatibility(implementationSpecification, enforceAllChecks);
         }
     }
 

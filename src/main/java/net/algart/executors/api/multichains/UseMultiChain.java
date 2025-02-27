@@ -312,9 +312,7 @@ public final class UseMultiChain extends FileOperation {
             throws IOException {
         final MultiChain multiChain = MultiChain.of(multiChainSpecification, chainFactory, settingsFactory);
         // - Actually use all sub-chains and built-in multi-chain settings combiner
-        if (strictMode || multiChainSpecification.isBehaviourStrict()) {
-            multiChain.checkImplementationCompatibility();
-        }
+        multiChain.checkImplementationCompatibility(strictMode);
         MULTI_CHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
         return multiChain;
     }

@@ -42,11 +42,10 @@
     {
       "caption": "Strict mode",
       "name": "strictMode",
-      "description": "If set, this function checks that all chain variants, implementing a multi-chain, are compatible with the interface specified in multi-chain JSON file, for example, have all declared input/output ports with the same type. We recommended to set it always.",
+      "description": "If this flag is set, OR if the \"strict_ports\"/\"strict_parameters\" property in options/behavior section of the multi-chain specification is set, this function checks that all chain variants implementing the multi-chain are compatible with the interface specified in the multi-chain JSON file, for example, have all declared input/output ports with the same type. By default, this flag is cleared, but we recommend to set either this flag or the \"strict_ports\"/\"strict_parameters\" properties. When this flag is set, it is equivalent to setting ALL the properties \"strict_ports\"/\"strict_parameters\".",
       "value_type": "boolean",
       "edition_type": "value",
-      "advanced": true,
-      "default": true
+      "default": false
     },
     {
       "caption": "Use also sub-chain(s)",

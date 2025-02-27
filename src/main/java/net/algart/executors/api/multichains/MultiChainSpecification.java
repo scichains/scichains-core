@@ -64,7 +64,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         public static final class Behavior extends AbstractConvertibleToJson {
             private boolean skippable = false;
             private boolean settingsRequired = false;
-            private boolean strict = false;
+            private boolean strictPorts = false;
+            private boolean strictParameters = false;
             private boolean preferSelectionById = DEFAULT_PREFER_SELECTION_BY_ID;
 
             public Behavior() {
@@ -73,7 +74,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             public Behavior(JsonObject json, Path file) {
                 this.skippable = json.getBoolean("skippable", false);
                 this.settingsRequired = json.getBoolean("settings_required", false);
-                this.strict = json.getBoolean("strict", false);
+                this.strictPorts = json.getBoolean("strict_ports", false);
+                this.strictParameters = json.getBoolean("strict_parameters", false);
                 this.preferSelectionById = json.getBoolean(
                         "prefer_selection_by_id", DEFAULT_PREFER_SELECTION_BY_ID);
             }
@@ -96,12 +98,21 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                 return this;
             }
 
-            public boolean isStrict() {
-                return strict;
+            public boolean isStrictPorts() {
+                return strictPorts;
             }
 
-            public Behavior setStrict(boolean strict) {
-                this.strict = strict;
+            public Behavior setStrictPorts(boolean strictPorts) {
+                this.strictPorts = strictPorts;
+                return this;
+            }
+
+            public boolean isStrictParameters() {
+                return strictParameters;
+            }
+
+            public Behavior setStrictParameters(boolean strictParameters) {
+                this.strictParameters = strictParameters;
                 return this;
             }
 
@@ -123,7 +134,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                 return "Behavior{" +
                         "skippable=" + skippable +
                         ", settingsRequired=" + settingsRequired +
-                        ", strict=" + strict +
+                        ", strictPorts=" + strictPorts +
+                        ", strictParameters=" + strictParameters +
                         ", preferSelectionById=" + preferSelectionById +
                         '}';
             }
@@ -132,7 +144,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             public void buildJson(JsonObjectBuilder builder) {
                 builder.add("skippable", skippable);
                 builder.add("settings_required", settingsRequired);
-                builder.add("strict", strict);
+                builder.add("strict_ports", strictPorts);
+                builder.add("strict_parameters", strictParameters);
                 builder.add("prefer_selection_by_id", preferSelectionById);
             }
         }
@@ -474,8 +487,12 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         return options != null && options.behavior != null && options.behavior.settingsRequired;
     }
 
-    public boolean isBehaviourStrict() {
-        return options != null && options.behavior != null && options.behavior.strict;
+    public boolean isBehaviourStrictPorts() {
+        return options != null && options.behavior != null && options.behavior.strictPorts;
+    }
+
+    public boolean isBehaviourStrictParameters() {
+        return options != null && options.behavior != null && options.behavior.strictParameters;
     }
 
     public boolean isBehaviourPreferSelectionById() {
@@ -569,31 +586,40 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         return result;
     }
 
-    public void checkImplementationCompatibility(ExecutorSpecification implementationSpecification) {
-        Objects.requireNonNull(implementationSpecification, "Null implementationSpecification");
-        for (ExecutorSpecification.PortConf port : inputPorts.values()) {
-            final ExecutorSpecification.PortConf implementationPort =
-                    implementationSpecification.getInputPort(port.getName());
-            if (implementationPort == null) {
-                continue;
-                // - if an implementation has no corresponding input port, it is not a problem:
-                // it means that this implementation does not use this information
+    public void checkImplementationCompatibility(ExecutorSpecification specification, boolean enforceAllChecks) {
+        Objects.requireNonNull(specification, "Null specification");
+        if (enforceAllChecks || isBehaviourStrictPorts()) {
+            for (ExecutorSpecification.PortConf port : inputPorts.values()) {
+                final ExecutorSpecification.PortConf implementationPort = specification.getInputPort(port.getName());
+                if (implementationPort == null) {
+                    continue;
+                    // - if an implementation has no corresponding input port, it is not a problem:
+                    // it means that this implementation does not use this information
+                }
+                if (!port.isCompatible(implementationPort)) {
+                    throw new IncompatibleChainException(checkImplementationMessageStart(specification)
+                            + " has incompatible input port \"" + port.getName() + "\"");
+                }
             }
-            if (!port.isCompatible(implementationPort)) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
-                        + " has incompatible input port \"" + port.getName() + "\"");
+            for (ExecutorSpecification.PortConf port : outputPorts.values()) {
+                final ExecutorSpecification.PortConf implementationPort = specification.getOutputPort(port.getName());
+                if (implementationPort == null) {
+                    throw new IncompatibleChainException(checkImplementationMessageStart(specification)
+                            + " has no output port \"" + port.getName() + "\"");
+                }
+                if (!port.isCompatible(implementationPort)) {
+                    throw new IncompatibleChainException(checkImplementationMessageStart(specification)
+                            + " has incompatible output port \"" + port.getName() + "\"");
+                }
             }
         }
-        for (ExecutorSpecification.PortConf port : outputPorts.values()) {
-            final ExecutorSpecification.PortConf implementationPort =
-                    implementationSpecification.getOutputPort(port.getName());
-            if (implementationPort == null) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
-                        + " has no output port \"" + port.getName() + "\"");
-            }
-            if (!port.isCompatible(implementationPort)) {
-                throw new IncompatibleChainException(checkImplementationMessageStart(implementationSpecification)
-                        + " has incompatible output port \"" + port.getName() + "\"");
+        if (enforceAllChecks || isBehaviourStrictParameters()) {
+            for (ExecutorSpecification.ControlConf control : controls.values()) {
+                ExecutorSpecification.ControlConf implementationControl = specification.getControl(control.getName());
+                if (implementationControl == null) {
+                    throw new IncompatibleChainException(checkImplementationMessageStart(specification)
+                            + " has no parameter \"" + control.getName() + "\"");
+                }
             }
         }
     }
