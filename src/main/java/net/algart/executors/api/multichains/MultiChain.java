@@ -101,6 +101,12 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             final Optional<Chain> optionalChain;
             try {
                 optionalChain = chainFactory.useIfNonRecursive(chainSpecification);
+                // - Note that this chain is not important: it is used  for information needs
+                // (blockedChainSpecifications can be shown in the logs), and, in addition,
+                // loadedChainExecutorSpecifications are used in checkImplementationCompatibility()
+                // in the "strict" mode;
+                // in the latter case, this is very improbable that the multi-chain
+                // will always be loaded with blocking the variants.
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
@@ -228,8 +234,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     }
 
     public void checkImplementationCompatibility() {
-        for (ExecutorSpecification implementation : loadedChainExecutorSpecifications) {
-            specification.checkImplementationCompatibility(implementation);
+        for (ExecutorSpecification implementationSpecification : loadedChainExecutorSpecifications) {
+            specification.checkImplementationCompatibility(implementationSpecification);
         }
     }
 

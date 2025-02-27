@@ -667,9 +667,9 @@ public final class Chain implements AutoCloseable {
             }
         }
         if (mainSettingsBlock == null) {
-            throw new IllegalStateException("Sub-chain " + canonicalName()
-                    + " does not contain the dynamic settings '" + id
-                    + "', created by its UseChainSettings function");
+            throw new IllegalStateException("Sub-chain \"" + canonicalName() +
+                    "\" does not contain the settings combiner \"" + mainSettingsBuilder.className() +
+                    "\" ('" + id + "'), created by its UseChainSettings function");
         }
         this.mainSettingsBlockId = mainSettingsBlock.getId();
         this.mainSettingsBuilder = mainSettingsBuilder;

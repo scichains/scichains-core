@@ -105,7 +105,7 @@ public final class UseMultiChain extends FileOperation {
 
     private boolean fileExistenceRequired = true;
     private boolean alsoSubChains = false;
-    private boolean strictMode = true;
+    private boolean strictMode = false;
 
     public UseMultiChain() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
@@ -271,14 +271,16 @@ public final class UseMultiChain extends FileOperation {
             // Note: recursive usage of multi-chain is a sub-chain is possible, but seems to be an error,
             // so, we use WARNING level here.
             final int index = i;
-            LOG.log(blockedChainModelNames.isEmpty() ? Level.DEBUG : Level.WARNING,
-                    () -> String.format(Locale.US, "Multi-chain %s\"%s\" loaded from %s in %.3f ms; " +
-                                    "%d chain variants:%n%s",
+            final boolean hasBlocked = !blockedChainModelNames.isEmpty();
+            LOG.log(hasBlocked ? Level.WARNING : Level.DEBUG,
+                    () -> String.format(Locale.US, "Multi-chain %s\"%s\" loaded from %s in %.3f ms;%n" +
+                                    "%d chain variants%s:%n%s",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
                             multiChainSpecification.getName(),
                             multiChainSpecification.getSpecificationFile().toAbsolutePath(),
                             (t2 - t1) * 1e-6,
                             chainSpecifications.size(),
+                            (hasBlocked ? " (some of them were NOT loaded now due to recursive loading)" : ""),
                             chainSpecifications.stream().map(
                                             m -> String.format("  \"%s\"%s from %s",
                                                     m.chainName(),
@@ -310,7 +312,7 @@ public final class UseMultiChain extends FileOperation {
             throws IOException {
         final MultiChain multiChain = MultiChain.of(multiChainSpecification, chainFactory, settingsFactory);
         // - Actually use all sub-chains and built-in multi-chain settings combiner
-        if (strictMode) {
+        if (strictMode || multiChainSpecification.isBehaviourStrict()) {
             multiChain.checkImplementationCompatibility();
         }
         MULTI_CHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
