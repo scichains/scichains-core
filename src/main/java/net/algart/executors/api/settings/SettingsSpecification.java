@@ -45,6 +45,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class SettingsSpecification extends AbstractConvertibleToJson {
+    public static final boolean USE_CONTROL_EXTENSIONS = false;
+
+    /**
+     * Settings specification file extensions:<br>
+     * .json<br>
+     * .ss ("settings specification")<br>
+     * .mss ("main settings specification")
+     */
     public static final String SETTINGS_FILE_PATTERN = ".*\\.(json|ss|mss)$";
 
     public static final String APP_NAME = "settings";
@@ -218,8 +226,10 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             final String name = control.getName();
             checkParameterName(name, file);
             controls.put(name, control);
-            final ControlConfExtension controlExtension = new ControlConfExtension(jsonObject, file);
-            controlExtensions.put(name, controlExtension);
+            if (USE_CONTROL_EXTENSIONS) {
+                final ControlConfExtension controlExtension = new ControlConfExtension(jsonObject, file);
+                controlExtensions.put(name, controlExtension);
+            }
         }
     }
 

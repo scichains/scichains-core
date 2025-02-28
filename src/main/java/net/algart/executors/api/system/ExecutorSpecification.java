@@ -75,6 +75,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
+    /**
+     * Executor specification file extension: .json
+     */
     public static final String EXECUTOR_FILE_PATTERN = ".*\\.json$";
     public static final String APP_NAME = "executor";
     public static final String CURRENT_VERSION = "1.0";
@@ -1040,8 +1043,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private boolean advanced = false;
         private List<EnumItem> items = null;
         private String itemsFile = null;
-        private List<String> itemsFileNames = null;
-        private List<String> itemsFileCaptions = null;
+        private List<String> itemNamesInFile = null;
+        private List<String> itemCaptionsInFile = null;
         private List<String> suppressWarnings = null;
         private JsonValue defaultJsonValue = null;
 
@@ -1093,9 +1096,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     this.items.add(new EnumItem((JsonObject) jsonValue, file));
                 }
             }
-            //this.itemsFile = json.getString("items_file", null);
-            //TODO!!
-
+            this.itemsFile = json.getString("items_file", null);
             final JsonArray suppressWarningsJson = json.getJsonArray("suppress_warnings");
             if (suppressWarningsJson != null) {
                 this.suppressWarnings = new ArrayList<>();
@@ -1251,18 +1252,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public Path itemsFile(ExecutorSpecification specification) {
+        public Path itemsFile(Path siblingSpecificationFile) {
             return itemsFile == null ?
                     null :
-                    specification.resolve(Paths.get(itemsFile), "enum items");
+                    resolveAgainstParent(siblingSpecificationFile, Paths.get(itemsFile));
         }
 
-        public List<String> itemsFileNames() {
-            return itemsFileNames;
+        public List<String> itemNamesInFile() {
+            return itemNamesInFile;
+            // - unmodifiable
         }
 
-        public List<String> itemsFileCaptions() {
-            return itemsFileCaptions;
+        public List<String> itemCaptionsInFile() {
+            return itemCaptionsInFile;
+            // - unmodifiable
         }
 
         public List<String> getSuppressWarnings() {
@@ -1303,7 +1306,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public ControlConf setItemsFromLists(List<String> itemValues, List<String> itemCaptions) {
+        public void setItemsFromLists(List<String> itemValues, List<String> itemCaptions) {
             Objects.requireNonNull(itemValues, "Null itemValues");
             final int itemCaptionsSize = itemCaptions == null ? 0 : itemCaptions.size();
             this.items = new ArrayList<>();
@@ -1319,7 +1322,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 // - usually enumItemNames cannot be empty; it is checked in the constructor of MappingBuilder class
                 setDefaultJsonValue(items.get(0).value);
             }
-            return this;
         }
 
         public boolean isSubSettings() {
@@ -1427,26 +1429,48 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
         }
 
-        public void load(ExecutorSpecification specification) {
-            final Path file = itemsFile(specification);
-            if (file == null) {
-                return;
+        /**
+         * Loads all additional data stored in external files, like {@link #getItemsFile()}.
+         * <p>If the necessary data is already specified in JSON, for example,
+         * if the enum items are already loaded and serialized in JSON, this method does nothing.
+         * In the other case, and if we really have some external files ({@link #getItemsFile()}),
+         * this method requires the argument <code>siblingSpecificationFile</code>,
+         * usually the specification file of the executor or some other object like {@link SettingsSpecification}:
+         * relative paths to external files will be resolved against its parent folder.
+         *
+         * @param siblingSpecificationFile some file (usually a specification file) for resolving
+         *                                 relative external files against its parent folder.
+         * @throws NullPointerException if <code>siblingSpecificationFile==null</code> <b>and</b>
+         *                              if it is really necessary for resolving (the data are not specified in JSON,
+         *                              but we have external files).
+         */
+        public void loadExternalData(Path siblingSpecificationFile) {
+            if (items == null) {
+                final Path file = itemsFile(siblingSpecificationFile);
+                if (file != null) {
+                    try {
+                        loadItems(file);
+                    } catch (IOException e) {
+                        throw new JsonException("Cannot load items file " + file.toAbsolutePath(), e);
+                    }
+                    assert items != null : "items were not correctly loaded";
+                }
             }
-            final String s;
-            try {
-                s = Files.readString(file);
-            } catch (IOException e) {
-                throw new JsonException("Cannot load items file " + file.toAbsolutePath(), e);
-            }
+        }
+
+        public void loadItems(Path itemsFile) throws IOException {
+            Objects.requireNonNull(itemsFile, "Null items file");
+            final String s = Files.readString(itemsFile);
             final SScalar.MultiLineOrJsonSplitter items = SScalar.splitJsonOrTrimmedLinesWithComments(s);
             if (items.numberOfLines() == 0) {
-                throw new JsonException("No enum items in the file " + file.toAbsolutePath());
+                throw new JsonException("No enum items in the file " + itemsFile.toAbsolutePath());
             }
-            this.itemsFileNames = items.lines();
-            this.itemsFileCaptions = items.comments();
-            if (!hasItems()) {
-                setItemsFromLists(itemsFileNames, itemsFileCaptions);
-            }
+            this.itemNamesInFile = items.lines();
+            this.itemCaptionsInFile = items.comments();
+            assert this.itemNamesInFile != null;
+            assert this.itemCaptionsInFile != null;
+            // - unmodifiable
+            setItemsFromLists(itemNamesInFile, itemCaptionsInFile);
         }
     }
 
@@ -1531,6 +1555,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
                     final ControlConf control = new ControlConf(jsonObject, file);
+                    if (file != null) {
+                        // - if there is no file (for example, deserialization from JSON),
+                        // we usually cannot load external data: we cannot resolve relative paths;
+                        // so, the
+                        control.loadExternalData(file);
+                    }
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }
@@ -2494,15 +2524,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return ports;
     }
 
-    private Path resolve(Path path, String whatFile) {
+    private static Path resolveAgainstParent(Path siblingSpecificationFile, Path path) {
+        Objects.requireNonNull(siblingSpecificationFile, "Null sibling specification file");
         if (path.isAbsolute()) {
             return path;
         }
-        if (this.specificationFile == null) {
-            throw new IllegalStateException("Name of " + whatFile +
-                    " file is relative and cannot be resolved, because the executor" +
-                    " specification was not loaded from file; you must use absolute paths in this case");
-        }
-        return specificationFile.getParent().resolve(path);
+        final Path parent = siblingSpecificationFile.getParent();
+        return parent == null ? path : parent.resolve(path);
     }
 }

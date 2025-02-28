@@ -646,12 +646,16 @@ public class UseSettings extends FileOperation {
                 portConf.setValueType(DataType.SCALAR);
                 result.addInputPort(portConf);
             }
-            final SettingsSpecification.ControlConfExtension controlExtension = controlExtensions.get(name);
-            if (controlExtension != null) {
-                controlExtension.load(specification);
-                controlExtension.completeControlConf(controlConf);
+            if (SettingsSpecification.USE_CONTROL_EXTENSIONS) {
+                final SettingsSpecification.ControlConfExtension controlExtension = controlExtensions.get(name);
+                if (controlExtension != null) {
+                    controlExtension.load(specification);
+                    controlExtension.completeControlConf(controlConf);
+                }
+            } else {
+                controlConf.loadExternalData(specification.getSpecificationFile());
             }
-            // Here we could set controlConf.setValueClass, when it does not exist, according the current
+            // Here we could set controlConf.setValueClassName(), when it does not exist, according the current
             // settings category:
             //      ExecutorSpecification.defaultClassName(specification.getCategory(), name)
             // But this is a bad idea!

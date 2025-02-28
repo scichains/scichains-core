@@ -27,6 +27,13 @@
       "default": "string"
     },
     {
+      "name": "StringEnumParameter",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items_file": "ExampleLowLevelParameters.enum.txt",
+      "default": "A"
+    },
+    {
       "name": "intParameter",
       "value_type": "int",
       "edition_type": "value",

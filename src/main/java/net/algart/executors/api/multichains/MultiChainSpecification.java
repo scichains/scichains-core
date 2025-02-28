@@ -51,6 +51,11 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     public static final String DEFAULT_MULTICHAIN_CATEGORY_PREFIX =
             DEFAULT_MULTICHAIN_CATEGORY + ExecutorSpecification.CATEGORY_SEPARATOR;
     public static final String DEFAULT_MULTICHAIN_NAME = "multichain";
+    /**
+     * Multi-chain file extensions:<br>
+     * .json<br>
+     * .mchain ("multi-chain")
+     */
     public static final String MULTICHAIN_FILE_PATTERN = ".*\\.(json|mchain)$";
 
     private static final boolean DEFAULT_PREFER_SELECTION_BY_ID = false;

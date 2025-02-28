@@ -49,6 +49,12 @@ import static net.algart.executors.api.system.ExecutorSpecification.quote;
 public final class ChainSpecification extends AbstractConvertibleToJson {
     public static final String CHAIN_TECHNOLOGY = "chain";
     public static final String CHAIN_LANGUAGE = "chain";
+
+    /**
+     * Chain file extensions:<br>
+     * .json<br>
+     * .chain
+     */
     public static final String CHAIN_FILE_PATTERN = ".*\\.(json|chain)$";
 
     public static final String CHAIN_SECTION = "chain";

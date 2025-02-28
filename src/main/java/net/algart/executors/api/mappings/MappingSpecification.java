@@ -44,7 +44,13 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public final class MappingSpecification extends AbstractConvertibleToJson {
-    public static final String MAPPING_FILE_PATTERN = ".*\\.(json|map)$";
+    /**
+     * Mapping specification file extensions:<br>
+     * .json<br>
+     * .map ("mapping")<br>
+     * .mapping
+     */
+    public static final String MAPPING_FILE_PATTERN = ".*\\.(json|map|mapping)$";
     public static final String APP_NAME = "mapping";
     public static final String CURRENT_VERSION = "1.0";
 
