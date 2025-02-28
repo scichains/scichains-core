@@ -1110,6 +1110,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     this.suppressWarnings.add(jsonString.getString());
                 }
             }
+            loadExternalData(file);
             try {
                 setDefaultJsonValue(json.get("default"));
             } catch (IllegalArgumentException e) {
@@ -1445,6 +1446,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
          * in this case, all external data should be loaded while first reading the specification from the file
          * and then included in the JSON when serializing.
          *
+         * <p>This method is automatically called from the constructor
+         * {@link #ControlConf(JsonObject, Path)}.</p>
+         *
          * @param siblingSpecificationFile some file (usually a specification file) for resolving
          *                                 relative external files against its parent folder;
          *                                 can be <code>null</code>, then the method does nothing.
@@ -1563,7 +1567,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
                     final ControlConf control = new ControlConf(jsonObject, file);
-                    control.loadExternalData(file);
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }

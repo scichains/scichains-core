@@ -143,7 +143,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             final ExecutorSpecification.ControlConf control = new ExecutorSpecification.ControlConf(jsonObject, file);
             final String name = control.getName();
             checkParameterName(name, file);
-            control.loadExternalData(file);
             controls.put(name, control);
         }
     }
