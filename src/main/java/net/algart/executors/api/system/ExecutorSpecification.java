@@ -1430,21 +1430,29 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
 
         /**
-         * Loads all additional data stored in external files, like {@link #getItemsFile()}.
+         * Loads all additional data stored in external files, like {@link #getItemsFile()},
+         * if the argument is not <code>null</code>.
+         *
          * <p>If the necessary data is already specified in JSON, for example,
          * if the enum items are already loaded and serialized in JSON, this method does nothing.
          * In the other case, and if we really have some external files ({@link #getItemsFile()}),
-         * this method requires the argument <code>siblingSpecificationFile</code>,
+         * this method uses the argument <code>siblingSpecificationFile</code>,
          * usually the specification file of the executor or some other object like {@link SettingsSpecification}:
          * relative paths to external files will be resolved against its parent folder.
          *
+         * <p>If <code>siblingSpecificationFile==null</code>, this method does nothing.
+         * This is a typical situation, for example, while deserialization from JSON;
+         * in this case, all external data should be loaded while first reading the specification from the file
+         * and then included in the JSON when serializing.
+         *
          * @param siblingSpecificationFile some file (usually a specification file) for resolving
-         *                                 relative external files against its parent folder.
-         * @throws NullPointerException if <code>siblingSpecificationFile==null</code> <b>and</b>
-         *                              if it is really necessary for resolving (the data are not specified in JSON,
-         *                              but we have external files).
+         *                                 relative external files against its parent folder;
+         *                                 can be <code>null</code>, then the method does nothing.
          */
         public void loadExternalData(Path siblingSpecificationFile) {
+            if (siblingSpecificationFile == null) {
+                return;
+            }
             if (items == null) {
                 final Path file = itemsFile(siblingSpecificationFile);
                 if (file != null) {
@@ -1555,12 +1563,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
                     final ControlConf control = new ControlConf(jsonObject, file);
-                    if (file != null) {
-                        // - if there is no file (for example, deserialization from JSON),
-                        // we usually cannot load external data: we cannot resolve relative paths;
-                        // so, the
-                        control.loadExternalData(file);
-                    }
+                    control.loadExternalData(file);
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }

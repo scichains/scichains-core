@@ -279,6 +279,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         }
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
             final ExecutorSpecification.ControlConf control = new ExecutorSpecification.ControlConf(jsonObject, file);
+            control.loadExternalData(file);
             ExecutorSpecification.putOrException(controls, control.getName(), control, file, "controls");
         }
     }

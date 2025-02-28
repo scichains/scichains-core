@@ -45,8 +45,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class SettingsSpecification extends AbstractConvertibleToJson {
-    public static final boolean USE_CONTROL_EXTENSIONS = false;
-
     /**
      * Settings specification file extensions:<br>
      * .json<br>
@@ -79,85 +77,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     private static final int CODE_FOR_ORDINARY = 1;
     private static final int CODE_FOR_INVALID = 0;
 
-    public static final class ControlConfExtension extends AbstractConvertibleToJson {
-        private String itemsFile = null;
-        private List<String> itemNames = null;
-        private List<String> itemCaptions = null;
-
-        public ControlConfExtension() {
-        }
-
-        public ControlConfExtension(JsonObject json, Path file) {
-            this.itemsFile = json.getString("items_file", null);
-        }
-
-        public String getItemsFile() {
-            return itemsFile;
-        }
-
-        public ControlConfExtension setItemsFile(String itemsFile) {
-            this.itemsFile = itemsFile;
-            return this;
-        }
-
-        public Path itemsFile(SettingsSpecification specification) {
-            return itemsFile == null ?
-                    null :
-                    specification.resolve(Paths.get(itemsFile), "enum items");
-        }
-
-        public List<String> itemNames() {
-            return itemNames;
-        }
-
-        public List<String> itemCaptions() {
-            return itemCaptions;
-        }
-
-        @Override
-        public void checkCompleteness() {
-        }
-
-        public void load(SettingsSpecification specification) {
-            final Path file = itemsFile(specification);
-            if (file == null) {
-                return;
-            }
-            final String s;
-            try {
-                s = Files.readString(file);
-            } catch (IOException e) {
-                throw new JsonException("Cannot load items file " + file.toAbsolutePath(), e);
-            }
-            final SScalar.MultiLineOrJsonSplitter items = SScalar.splitJsonOrTrimmedLinesWithComments(s);
-            if (items.numberOfLines() == 0) {
-                throw new JsonException("No enum items in the file " + file.toAbsolutePath());
-            }
-            this.itemNames = items.lines();
-            this.itemCaptions = items.comments();
-        }
-
-        public void completeControlConf(ExecutorSpecification.ControlConf controlConf) {
-            if (controlConf.getItems() == null && this.itemNames != null) {
-                controlConf.setItemsFromLists(itemNames, itemCaptions);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "ControlConfExtension{" +
-                    "itemsFile='" + itemsFile + '\'' +
-                    '}';
-        }
-
-        @Override
-        public void buildJson(JsonObjectBuilder builder) {
-            if (itemsFile != null) {
-                builder.add("items_file", itemsFile);
-            }
-        }
-    }
-
     private Path specificationFile = null;
     private boolean main = false;
     private String version = CURRENT_VERSION;
@@ -177,7 +96,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     private String splitId = null;
     private String getNamesId = null;
     private Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
-    private Map<String, ControlConfExtension> controlExtensions = new LinkedHashMap<>();
 
     // The following properties are not loaded from JSON-file, but are set later,
     // while loading all specifications for some platform
@@ -225,11 +143,8 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             final ExecutorSpecification.ControlConf control = new ExecutorSpecification.ControlConf(jsonObject, file);
             final String name = control.getName();
             checkParameterName(name, file);
+            control.loadExternalData(file);
             controls.put(name, control);
-            if (USE_CONTROL_EXTENSIONS) {
-                final ControlConfExtension controlExtension = new ControlConfExtension(jsonObject, file);
-                controlExtensions.put(name, controlExtension);
-            }
         }
     }
 
@@ -546,15 +461,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         return controls.get(name);
     }
 
-    public Map<String, ControlConfExtension> getControlExtensions() {
-        return controlExtensions;
-    }
-
-    public SettingsSpecification setControlExtensions(Map<String, ControlConfExtension> controlExtensions) {
-        this.controlExtensions = Objects.requireNonNull(controlExtensions, "Null controlExtensions");
-        return this;
-    }
-
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
     }
@@ -765,7 +671,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
                 ", splitId='" + splitId + '\'' +
                 ", getNamesId='" + getNamesId + '\'' +
                 ", controls=" + controls +
-                ", controlExtensions=" + controlExtensions +
                 '}';
     }
 
@@ -823,10 +728,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             control.checkCompleteness();
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
             control.buildJson(controlBuilder);
-            final ControlConfExtension controlExtension = controlExtensions.get(entry.getKey());
-            if (controlExtension != null) {
-                controlExtension.buildJson(controlBuilder);
-            }
             controlsBuilder.add(controlBuilder.build());
         }
         builder.add("controls", controlsBuilder.build());
