@@ -28,7 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
-import net.algart.executors.api.chains.InterpretSubChain;
+import net.algart.executors.api.chains.ChainExecutor;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
@@ -58,7 +58,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         long t1 = System.nanoTime(), t2, t3, t4, t5, t6;
         final boolean doAction = parameters().getBoolean(UseMultiChain.DO_ACTION_NAME, true);
         if (!doAction) {
-            InterpretSubChain.skipAction(this);
+            ChainExecutor.copyInputToOutput(this);
             return;
         }
         final JsonObject inputSettings = Jsons.toJson(

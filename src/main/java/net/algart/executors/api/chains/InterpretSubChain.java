@@ -56,7 +56,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         long t1 = System.nanoTime(), t2, t3, t4, t5, t6, t7, t8;
         final boolean doAction = parameters().getBoolean(UseSubChain.DO_ACTION_NAME, true);
         if (!doAction) {
-            skipAction(this);
+            copyInputToOutput(this);
             return;
         }
         final Chain chain = chain();
@@ -228,23 +228,6 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
                     settingsBuilder.name(),
                     quoteContextName(this),
                     settingsString));
-        }
-    }
-
-    public static void skipAction(Executor executor) {
-        for (Port input : executor.inputPorts()) {
-            final String inputName = input.getName();
-            if (inputName == null) {
-                continue;
-            }
-            Port outputPort = executor.getOutputPort(inputName);
-            if (outputPort == null && inputName.equals(executor.defaultInputPortName())) {
-                outputPort = executor.getOutputPort(executor.defaultOutputPortName());
-            }
-            if (outputPort != null && outputPort.getDataType() == input.getDataType()) {
-                outputPort.getData().setTo(input.getData());
-                // Not exchange! This class implements ReadOnlyExecutionInput!
-            }
         }
     }
 

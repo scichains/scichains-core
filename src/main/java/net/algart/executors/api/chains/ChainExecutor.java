@@ -26,6 +26,7 @@ package net.algart.executors.api.chains;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.Port;
 import net.algart.executors.api.settings.CombineChainSettings;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsExecutor;
@@ -96,4 +97,31 @@ public abstract class ChainExecutor extends Executor {
         return chain;
     }
 
+    /**
+     * Copies all data from the input ports to the corresponding output ports of the executor
+     * for all ports where the data type is the same for the input and for the output.
+     * The input port A and the output port B are "corresponding" if they have the same name
+     * or if A is {@link Executor#defaultInputPortName()} and B is {@link Executor#defaultOutputPortName()}.
+     *
+     * <p>This method is used to "skip" the operations when the user clears the chain parameter
+     * "Do actions".</p>
+     *
+     * @param executor some executor.
+     */
+    public static void copyInputToOutput(Executor executor) {
+        for (Port input : executor.inputPorts()) {
+            final String inputName = input.getName();
+            if (inputName == null) {
+                continue;
+            }
+            Port outputPort = executor.getOutputPort(inputName);
+            if (outputPort == null && inputName.equals(executor.defaultInputPortName())) {
+                outputPort = executor.getOutputPort(executor.defaultOutputPortName());
+            }
+            if (outputPort != null && outputPort.getDataType() == input.getDataType()) {
+                outputPort.getData().setTo(input.getData());
+                // Not exchange! This class implements ReadOnlyExecutionInput!
+            }
+        }
+    }
 }

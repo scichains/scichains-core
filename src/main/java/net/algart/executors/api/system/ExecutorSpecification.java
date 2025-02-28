@@ -1531,8 +1531,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
                     final ControlConf control = new ControlConf(jsonObject, file);
-                    // control.load(this);
-                    //TODO!! load when possible
                     putOrException(controls, control.name, control, file, "controls");
                 }
             }
