@@ -4,8 +4,8 @@
     "root": {
         "scale": 0.8000000000000009,
         "desktop": {
-            "scroll_h": 0.5268579713106926,
-            "scroll_v": 0.5340227307821004
+            "scroll_h": 0.5285298766139762,
+            "scroll_v": 0.5531338994786539
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -232,7 +232,7 @@
             "layout_x": 10000,
             "layout_y": 10840,
             "layout_width": 380,
-            "layout_height": 220,
+            "layout_height": 300,
             "caption": "Get settings specification tree of the installed executor",
             "comment": "",
             "worker_type": "686710bb-f11a-40e8-afbb-e5e6adfa3791",
