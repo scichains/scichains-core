@@ -29,12 +29,14 @@ import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.system.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SettingsTreeTest {
     public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
-    public static final String DEMO_CHAIN_SETTINGS_ID = "1f042f65-c5e5-4650-ae51-060a2df6a540";
-    // - the ID of build/settings/specifications/algart_executors_examples/demo_chain_settings.chain
+    public static final String DEMO_CHAIN_SETTINGS_ID = "0526290c-5160-4509-82d7-9687e594ab53";
+    // - the ID of build/settings/specifications/algart_executors_examples/combined_settings.ss
 
     public static void main(String[] args) throws IOException {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
@@ -53,11 +55,11 @@ public class SettingsTreeTest {
             long t2 = System.nanoTime();
             treeQuick = SettingsTree.of(factory, specification);
             long t3 = System.nanoTime();
-            sQuick = treeQuick.jsonString();
+            sQuick = treeQuick.jsonString(ExecutorSpecification.JsonMode.MEDIUM);
             long t4 = System.nanoTime();
             treeSmart = SettingsTree.of(smartSearch, specification);
             long t5 = System.nanoTime();
-            sSmart = treeSmart.jsonString();
+            sSmart = treeSmart.jsonString(ExecutorSpecification.JsonMode.MEDIUM);
             long t6 = System.nanoTime();
 
             System.out.printf("Test #%d: get specification %.3f ms, " +
@@ -73,5 +75,11 @@ public class SettingsTreeTest {
         System.out.println();
         System.out.printf("**** %s ****%n", treeSmart);
         System.out.println(sSmart);
+        System.out.printf("**** Smart trees: ****%n%s%n%n", listToString(treeSmart.treePaths()));
+        System.out.printf("**** Smart controls: ****%n%s%n", listToString(treeSmart.controlPaths()));
+    }
+
+    private static String listToString(List<?> paths) {
+        return paths.stream().map(Object::toString).collect(Collectors.joining("\n"));
     }
 }

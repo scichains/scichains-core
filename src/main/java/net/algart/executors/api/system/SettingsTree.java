@@ -27,10 +27,12 @@ package net.algart.executors.api.system;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonValue;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.Jsons;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Specification tree of executors, playing a role of settings:
@@ -182,8 +184,12 @@ public final class SettingsTree {
         return new Path(names);
     }
 
-    public SettingsTree parent() {
-        return parent;
+    public ExecutorSpecificationFactory factory() {
+        return factory;
+    }
+
+    public ExecutorSpecification specification() {
+        return specification;
     }
 
     /**
@@ -195,15 +201,20 @@ public final class SettingsTree {
         return path;
     }
 
-    public ExecutorSpecificationFactory factory() {
-        return factory;
+    public SettingsTree parent() {
+        return parent;
     }
 
-    public ExecutorSpecification specification() {
-        return specification;
+    public Path childPath(String name) {
+        return path.child(name);
     }
 
-    public Map<String, SettingsTree> subTrees() {
+    public SettingsTree child(String name) {
+        Objects.requireNonNull(name, "Null name");
+        return subTrees.get(name);
+    }
+
+    public Map<String, SettingsTree> children() {
         return Collections.unmodifiableMap(subTrees);
     }
 
@@ -269,7 +280,7 @@ public final class SettingsTree {
     public String toString() {
         return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
                 "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")" +
-                ": " + subTrees.size() + " children";
+                ": " + (subTrees.size() - 1) + " children";
     }
 
     private boolean buildTree(List<String> parentPath, Set<String> stackForDetectingRecursion) {
@@ -332,45 +343,26 @@ public final class SettingsTree {
         return complete;
     }
 
-    /*
+    //TODO!! use it
     void buildSettingsJson(
             JsonObjectBuilder builder,
-            Function<Path, JsonObject> controlJsonBuilder) {
+            Function<Path, JsonValue> controlJsonBuilder) {
         Objects.requireNonNull(builder, "Null builder");
         for (Map.Entry<String, ControlSpecification> entry : specification.controls.entrySet()) {
             final String name = entry.getKey();
-            final SettingsTree subTree = subTrees.get(name);
+            final SettingsTree subTree = child(name);
             if (subTree != null) {
                 JsonObjectBuilder subTreeBuilder = Json.createObjectBuilder();
                 buildSettingsJson(subTreeBuilder, controlJsonBuilder);
                 builder.add(name, subTreeBuilder.build());
             } else {
-
-            }
-            final ControlSpecification control = entry.getValue();
-            control.checkCompleteness();
-
-            if (controlJsonBuilder != null) {
-                if (ExecutorSpecification.SETTINGS.equals(name)) {
-                    // - no sense to include this parameter while building tree:
-                    // this should be filled by resulting JSON tree
-                    continue;
+                JsonValue value = controlJsonBuilder.apply(childPath(name));
+                if (value != null) {
+                    builder.add(name, value);
                 }
-
-                if (control.isSubSettings()) {
-                    final JsonObject subSettingsJson = controlJsonBuilder.apply(name);
-                    if (subSettingsJson != null) {
-                        builder.add(SettingsSpecification.settingsKey(name), subSettingsJson);
-                        continue;
-                    }
-                }
-            }
-            if (control.hasDefaultJsonValue()) {
-                builder.add(name, control.getDefaultJsonValue());
             }
         }
     }
-     */
 
     private JsonObject childJsonTree(String name, ExecutorSpecification.JsonMode mode) {
         return subTrees.containsKey(name) ? subTrees.get(name).specificationJson(mode) : null;
