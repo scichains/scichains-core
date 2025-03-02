@@ -26,6 +26,7 @@ package net.algart.executors.api.chains;
 
 import jakarta.json.JsonValue;
 import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 import java.util.Objects;
@@ -61,7 +62,7 @@ public final class ChainParameter {
 
     public ParameterValueType probableType(ChainBlock block, ParameterValueType defaultType) {
         Objects.requireNonNull(block, "Null block");
-        final ExecutorSpecification.ControlConf control = controlConf(block);
+        final ControlSpecification control = controlConf(block);
         return control != null ? control.getValueType() : defaultType;
     }
 
@@ -78,7 +79,7 @@ public final class ChainParameter {
     }
 
     private void loadValue(ChainBlock block, JsonValue parameterJsonValue) {
-        ExecutorSpecification.ControlConf control = controlConf(block);
+        ControlSpecification control = controlConf(block);
         if (control != null) {
             // can be null, for example, for system properties (obsolete concept)
             final ParameterValueType valueType = control.getValueType();
@@ -104,7 +105,7 @@ public final class ChainParameter {
         // - but if it is null, we keep the default value
     }
 
-    private ExecutorSpecification.ControlConf controlConf(ChainBlock block) {
+    private ControlSpecification controlConf(ChainBlock block) {
         ExecutorSpecification specification = block.getExecutorSpecification();
         return specification != null ? specification.getControl(this.name) : null;
     }

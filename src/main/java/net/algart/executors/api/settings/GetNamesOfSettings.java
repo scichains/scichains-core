@@ -28,7 +28,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.ReadOnlyExecutionInput;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.json.Jsons;
 
 import java.util.List;
@@ -171,7 +171,7 @@ public class GetNamesOfSettings extends SettingsExecutor implements ReadOnlyExec
         // when there is user's port with the same name UseSettings.EXECUTOR_JSON_OUTPUT_NAME
         final SettingsBuilder combiner = settingsBuilder();
         final List<String> names = combiner.specification().getControls().values().stream()
-                .filter(this::isMatched).map(ExecutorSpecification.ControlConf::getName)
+                .filter(this::isMatched).map(ControlSpecification::getName)
                 .collect(Collectors.toList());
         getScalar().setTo(resultType.result(names, resultJsonKey));
     }
@@ -182,8 +182,8 @@ public class GetNamesOfSettings extends SettingsExecutor implements ReadOnlyExec
     }
 
 
-    private boolean isMatched(ExecutorSpecification.ControlConf controlConf) {
-        return switch (controlConf.getValueType()) {
+    private boolean isMatched(ControlSpecification controlSpecification) {
+        return switch (controlSpecification.getValueType()) {
             case INT -> extractIntType;
             case LONG -> extractLongType;
             case FLOAT -> extractFloatType;

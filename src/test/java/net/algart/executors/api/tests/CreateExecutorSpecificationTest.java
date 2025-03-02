@@ -29,7 +29,9 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ControlEditionType;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.PortSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -72,26 +74,26 @@ public class CreateExecutorSpecificationTest {
         final ExecutorSpecification.Options.Behavior behavior = new ExecutorSpecification.Options.Behavior();
         options.setBehavior(behavior);
         specification.setOptions(options);
-        final Map<String, ExecutorSpecification.PortConf> outputPorts = new LinkedHashMap<>();
-        outputPorts.put("output", new ExecutorSpecification.PortConf()
+        final Map<String, PortSpecification> outputPorts = new LinkedHashMap<>();
+        outputPorts.put("output", new PortSpecification()
                 .setName("output").setValueType(DataType.SCALAR));
         specification.setOutputPorts(outputPorts);
-        final Map<String, ExecutorSpecification.ControlConf> controls = new LinkedHashMap<>();
-        controls.put("width", new ExecutorSpecification.ControlConf()
+        final Map<String, ControlSpecification> controls = new LinkedHashMap<>();
+        controls.put("width", new ControlSpecification()
                 .setName("width").setValueType(ParameterValueType.INT));
-        List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        items.add(new ExecutorSpecification.ControlConf.EnumItem().setValue("MODE_1").setCaption("mode 2"));
-        items.add(new ExecutorSpecification.ControlConf.EnumItem().setValue("MODE_2").setCaption("mode 2"));
-        controls.put("mode", new ExecutorSpecification.ControlConf()
+        List<ControlSpecification.EnumItem> items = new ArrayList<>();
+        items.add(new ControlSpecification.EnumItem().setValue("MODE_1").setCaption("mode 2"));
+        items.add(new ControlSpecification.EnumItem().setValue("MODE_2").setCaption("mode 2"));
+        controls.put("mode", new ControlSpecification()
                 .setName("mode").setValueType(ParameterValueType.STRING)
                 .setCaption("Mode").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultStringValue("MODE_1"));
         items = new ArrayList<>();
-        items.add(new ExecutorSpecification.ControlConf.EnumItem()
+        items.add(new ControlSpecification.EnumItem()
                 .setValue(Jsons.toJsonIntValue(1)).setCaption("m_1"));
-        items.add(new ExecutorSpecification.ControlConf.EnumItem()
+        items.add(new ControlSpecification.EnumItem()
                 .setValue(Jsons.toJsonIntValue(2)).setCaption("m_2"));
-        controls.put("modeInt", new ExecutorSpecification.ControlConf()
+        controls.put("modeInt", new ControlSpecification()
                 .setName("modeInt").setValueType(ParameterValueType.INT)
                 .setCaption("Mode (int)").setEditionType(ControlEditionType.ENUM)
                 .setItems(items).setDefaultJsonValue(Jsons.toJsonIntValue(2)));

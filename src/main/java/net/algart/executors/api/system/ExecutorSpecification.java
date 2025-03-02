@@ -29,7 +29,6 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
-import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.AbstractConvertibleToJson;
@@ -39,11 +38,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * <p>Detailed specification of an executor: ports, parameters, some key features of its behavior.</p>
@@ -842,650 +839,6 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static final class PortConf extends AbstractConvertibleToJson {
-        private String name;
-        private DataType valueType;
-        private String caption = null;
-        private String hint = null;
-        private boolean advanced = false;
-
-        public PortConf() {
-        }
-
-        public PortConf(JsonObject json, Path file) {
-            this.name = Jsons.reqString(json, "name", file);
-            this.valueType = DataType.ofTypeNameOrNull(Jsons.reqString(json, "value_type", file));
-            Jsons.requireNonNull(valueType, json, "value_type", file);
-            this.caption = json.getString("caption", null);
-            this.hint = json.getString("hint", null);
-            this.advanced = json.getBoolean("advanced", false);
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public PortConf setName(String name) {
-            this.name = Objects.requireNonNull(name, "Null name");
-            return this;
-        }
-
-        public DataType getValueType() {
-            return valueType;
-        }
-
-        public PortConf setValueType(DataType valueType) {
-            this.valueType = Objects.requireNonNull(valueType, "Null valueType");
-            return this;
-        }
-
-        public String getCaption() {
-            return caption;
-        }
-
-        public PortConf setCaption(String caption) {
-            this.caption = caption;
-            return this;
-        }
-
-        public String getHint() {
-            return hint;
-        }
-
-        public PortConf setHint(String hint) {
-            this.hint = hint;
-            return this;
-        }
-
-        public boolean isAdvanced() {
-            return advanced;
-        }
-
-        public PortConf setAdvanced(boolean advanced) {
-            this.advanced = advanced;
-            return this;
-        }
-
-        public boolean isCompatible(PortConf other) {
-            Objects.requireNonNull(other, "Null other");
-            return other.valueType == valueType;
-        }
-
-        @Override
-        public void checkCompleteness() {
-            checkNull(name, "name");
-            checkNull(valueType, "valueType");
-        }
-
-        @Override
-        public String toString() {
-            return "Port{" +
-                    "name='" + name + '\'' +
-                    ", valueType=" + valueType +
-                    ", caption=" + caption +
-                    ", hint=" + hint +
-                    ", advanced=" + advanced +
-                    '}';
-        }
-
-        @Override
-        public void buildJson(JsonObjectBuilder builder) {
-            builder.add("name", name);
-            builder.add("value_type", valueType.typeName());
-            if (caption != null) {
-                builder.add("caption", caption);
-            }
-            if (hint != null) {
-                builder.add("hint", hint);
-            }
-            if (advanced) {
-                builder.add("advanced", advanced);
-            }
-        }
-    }
-
-    public static final class ControlConf extends AbstractConvertibleToJson implements Cloneable {
-        public static final String SUPPESS_WARNING_NO_SETTER = "no_setter";
-
-        public static final class EnumItem extends AbstractConvertibleToJson implements Cloneable {
-            private JsonValue value;
-            private String caption = null;
-
-            public EnumItem() {
-            }
-
-            public EnumItem(JsonValue value) {
-                setValue(value);
-            }
-
-            public EnumItem(String value) {
-                setValue(value);
-            }
-
-            public EnumItem(JsonObject json, Path file) {
-                this.value = Jsons.reqJsonValue(json, "value", file);
-                this.caption = json.getString("caption", null);
-            }
-
-            public JsonValue getValue() {
-                return value;
-            }
-
-            public EnumItem setValue(JsonValue value) {
-                this.value = Objects.requireNonNull(value, "Null value");
-                return this;
-            }
-
-            public EnumItem setValue(String value) {
-                Objects.requireNonNull(value, "Null value");
-                this.value = Jsons.toJsonStringValue(value);
-                return this;
-            }
-
-            public String getCaption() {
-                return caption;
-            }
-
-            public EnumItem setCaption(String caption) {
-                this.caption = caption;
-                return this;
-            }
-
-            @Override
-            public void checkCompleteness() {
-                checkNull(value, "value");
-            }
-
-            @Override
-            public String toString() {
-                return "EnumItem{" +
-                        "value='" + value + '\'' +
-                        ", caption='" + caption + '\'' +
-                        '}';
-            }
-
-            @Override
-            public EnumItem clone() {
-                try {
-                    return (EnumItem) super.clone();
-                } catch (CloneNotSupportedException e) {
-                    throw new AssertionError(e);
-                }
-            }
-
-            @Override
-            public void buildJson(JsonObjectBuilder builder) {
-                builder.add("value", value);
-                if (caption != null) {
-                    builder.add("caption", caption);
-                }
-            }
-        }
-
-        private String name;
-        private String description = null;
-        private String caption = null;
-        private String hint = null;
-        private ParameterValueType valueType;
-        private volatile String valueClassName = null;
-        // - can be the name of some class of similar values; for example,
-        // for value-type "settings" it may be the SettingsSpecification.settingsClass()
-        private ControlEditionType editionType = ControlEditionType.VALUE;
-        private volatile String settingsId = null;
-        // - settings ID (for value-type "settings");
-        // it is the only field that is sometimes modifying in a ready specification
-        // (by SmartSearchSettings class)
-        private boolean multiline = false;
-        private Integer editionRows = null;
-        // - recommended number of lines in "multiline" mode
-        private boolean resources = false;
-        // - note: by default, it is true if editionType.isResources() is true
-        private boolean advanced = false;
-        private List<EnumItem> items = null;
-        private String itemsFile = null;
-        private List<String> itemNamesInFile = null;
-        private List<String> itemCaptionsInFile = null;
-        private List<String> suppressWarnings = null;
-        private JsonValue defaultJsonValue = null;
-
-        public ControlConf() {
-        }
-
-        public ControlConf(JsonObject json, Path file) {
-            this.name = Jsons.reqString(json, "name", file);
-            this.description = json.getString("description", null);
-            this.caption = json.getString("caption", null);
-            this.hint = json.getString("hint", null);
-            String valueType = Jsons.reqString(json, "value_type", file);
-            this.valueType = ParameterValueType.ofOrNull(valueType);
-            Jsons.requireNonNull(this.valueType, json, "value_type",
-                    "unknown (\"" + valueType + "\")", file);
-            this.valueClassName = json.getString("value_class_name", null);
-            String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
-            this.editionType = ControlEditionType.ofOrNull(editionType);
-            Jsons.requireNonNull(this.editionType, json, "edition_type",
-                    "unknown (\"" + editionType + "\")", file);
-            this.settingsId = json.getString("settings_id", null);
-            this.multiline = json.getBoolean("multiline", false);
-            final JsonNumber editionRows = json.getJsonNumber("edition_rows");
-            this.editionRows = editionRows == null ? null : editionRows.intValue();
-            if (this.editionRows != null && this.editionRows <= 0) {
-                throw new IllegalArgumentException("Zero or negative number of rows = " + this.editionRows);
-            }
-            this.resources = json.getBoolean("resources", this.editionType.isResources());
-            this.advanced = json.getBoolean("advanced", false);
-            if (this.editionType == ControlEditionType.ENUM) {
-                if (this.valueType == ParameterValueType.STRING) {
-                    // for other value types, "enum" edition type does not affect
-                    // the way of setting the value: Executor still has a setter
-                    // like setXxx(int value)
-                    this.valueType = ParameterValueType.ENUM_STRING;
-                }
-                // Note: we allow to skip "items" in this case, because
-                // some external libraries can add items from other sources.
-            }
-            final JsonArray itemsJson = json.getJsonArray("items");
-            if (itemsJson != null) {
-                this.items = new ArrayList<>();
-                for (JsonValue jsonValue : itemsJson) {
-                    if (!(jsonValue instanceof JsonObject)) {
-                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                                + ": in control \"" + name + "\", \"items\" array contains non-object element "
-                                + jsonValue);
-                    }
-                    this.items.add(new EnumItem((JsonObject) jsonValue, file));
-                }
-            }
-            this.itemsFile = json.getString("items_file", null);
-            final JsonArray suppressWarningsJson = json.getJsonArray("suppress_warnings");
-            if (suppressWarningsJson != null) {
-                this.suppressWarnings = new ArrayList<>();
-                for (JsonValue jsonValue : suppressWarningsJson) {
-                    if (!(jsonValue instanceof JsonString jsonString)) {
-                        throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                                + ": in control \"" + name +
-                                "\", \"suppress_warnings\" array contains non-string element "
-                                + jsonValue);
-                    }
-                    this.suppressWarnings.add(jsonString.getString());
-                }
-            }
-            loadExternalData(file);
-            try {
-                setDefaultJsonValue(json.get("default"));
-            } catch (IllegalArgumentException e) {
-                throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                        + ": invalid control \"" + name + "\" (" + e.getMessage() + ")", e);
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public ControlConf setName(String name) {
-            this.name = Objects.requireNonNull(name, "Null name");
-            return this;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public ControlConf setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public String getCaption() {
-            return caption;
-        }
-
-        public ControlConf setCaption(String caption) {
-            this.caption = caption;
-            return this;
-        }
-
-        public String getHint() {
-            return hint;
-        }
-
-        public ControlConf setHint(String hint) {
-            this.hint = hint;
-            return this;
-        }
-
-        public ParameterValueType getValueType() {
-            assert valueType != null : "valueType cannot be null";
-            return valueType;
-        }
-
-        public ControlConf setValueType(ParameterValueType valueType) {
-            this.valueType = Objects.requireNonNull(valueType, "Null valueType");
-            return this;
-        }
-
-        public String getValueClassName() {
-            return valueClassName;
-        }
-
-        public ControlConf setValueClassName(String valueClassName) {
-            this.valueClassName = valueClassName;
-            return this;
-        }
-
-        public ControlEditionType getEditionType() {
-            return editionType;
-        }
-
-        public ControlConf setEditionType(ControlEditionType editionType) {
-            this.editionType = Objects.requireNonNull(editionType, "Null editionType");
-            return this;
-        }
-
-        public String getSettingsId() {
-            return settingsId;
-        }
-
-        public ControlConf setSettingsId(String settingsId) {
-            this.settingsId = settingsId;
-            return this;
-        }
-
-        public boolean isMultiline() {
-            return multiline;
-        }
-
-        public ControlConf setMultiline(boolean multiline) {
-            this.multiline = multiline;
-            return this;
-        }
-
-        public Integer getEditionRows() {
-            return editionRows;
-        }
-
-        public ControlConf setEditionRows(Integer editionRows) {
-            if (editionRows != null && editionRows <= 0) {
-                throw new IllegalArgumentException("Zero or negative number of rows = " + editionRows);
-            }
-            this.editionRows = editionRows;
-            return this;
-        }
-
-        public boolean isResources() {
-            return resources;
-        }
-
-        public ControlConf setResources(boolean resources) {
-            this.resources = resources;
-            return this;
-        }
-
-        public boolean isAdvanced() {
-            return advanced;
-        }
-
-        public ControlConf setAdvanced(boolean advanced) {
-            this.advanced = advanced;
-            return this;
-        }
-
-        public boolean hasItems() {
-            return items != null && !items.isEmpty();
-        }
-
-        public List<EnumItem> getItems() {
-            return items == null ? null : Collections.unmodifiableList(items);
-        }
-
-        public ControlConf setItems(List<EnumItem> items) {
-            this.items = items == null ? null : new ArrayList<>(items);
-            return this;
-        }
-
-        public String getItemsFile() {
-            return itemsFile;
-        }
-
-        public ControlConf setItemsFile(String itemsFile) {
-            this.itemsFile = itemsFile;
-            return this;
-        }
-
-        public Path itemsFile(Path siblingSpecificationFile) {
-            return itemsFile == null ?
-                    null :
-                    resolveAgainstParent(siblingSpecificationFile, Paths.get(itemsFile));
-        }
-
-        public List<String> itemNamesInFile() {
-            return itemNamesInFile;
-            // - unmodifiable
-        }
-
-        public List<String> itemCaptionsInFile() {
-            return itemCaptionsInFile;
-            // - unmodifiable
-        }
-
-        public List<String> getSuppressWarnings() {
-            return suppressWarnings == null ? null : Collections.unmodifiableList(suppressWarnings);
-        }
-
-        public ControlConf setSuppressWarnings(List<String> suppressWarnings) {
-            this.suppressWarnings = suppressWarnings == null ? null : new ArrayList<>(suppressWarnings);
-            return this;
-        }
-
-        public JsonValue getDefaultJsonValue() {
-            return defaultJsonValue;
-        }
-
-        public Object getDefaultValue() {
-            return getValueType().toParameter(this.defaultJsonValue);
-        }
-
-        public ControlConf setDefaultJsonValue(JsonValue defaultJsonValue) {
-            assert valueType != null;
-            if (defaultJsonValue != null) {
-                if (valueType.toParameter(defaultJsonValue) == null) {
-                    throw new IllegalArgumentException("Incorrect default JSON value \"" + defaultJsonValue
-                            + "\": it is not " + valueType);
-                }
-            }
-            this.defaultJsonValue = defaultJsonValue;
-            return this;
-        }
-
-        public ControlConf setDefaultStringValue(String defaultStringValue) {
-            if (defaultStringValue == null) {
-                this.defaultJsonValue = null;
-            } else {
-                this.defaultJsonValue = Jsons.toJsonStringValue(defaultStringValue);
-            }
-            return this;
-        }
-
-        public void setItemsFromLists(List<String> itemValues, List<String> itemCaptions) {
-            Objects.requireNonNull(itemValues, "Null itemValues");
-            final int itemCaptionsSize = itemCaptions == null ? 0 : itemCaptions.size();
-            this.items = new ArrayList<>();
-            for (int i = 0, n = itemValues.size(); i < n; i++) {
-                String enumItem = itemValues.get(i);
-                EnumItem item = new EnumItem(enumItem);
-                if (i < itemCaptionsSize) {
-                    item.setCaption(itemCaptions.get(i));
-                }
-                this.items.add(item);
-            }
-            if (defaultJsonValue == null && !this.items.isEmpty()) {
-                // - usually enumItemNames cannot be empty; it is checked in the constructor of MappingBuilder class
-                setDefaultJsonValue(items.get(0).value);
-            }
-        }
-
-        public boolean isSubSettings() {
-            return getValueType().isSettings() && !SettingsSpecification.SETTINGS.equals(name);
-            // - SETTINGS is a special parameter (probably inside CombineSettings)
-            // for customizing the whole settings tree, this is not a SUB-settings
-        }
-
-        @Override
-        public void checkCompleteness() {
-            checkNull(name, "name");
-            checkNull(valueType, "valueType");
-            assert editionType != null;
-        }
-
-        @Override
-        public String toString() {
-            return "ControlConf{" +
-                    "name='" + name + '\'' +
-                    ", description='" + description + '\'' +
-                    ", caption='" + caption + '\'' +
-                    ", hint='" + hint + '\'' +
-                    ", valueType=" + valueType +
-                    ", valueClassName='" + valueClassName + '\'' +
-                    ", editionType=" + editionType +
-                    ", settingsID='" + settingsId + '\'' +
-                    ", multiline=" + multiline +
-                    ", editionRows=" + editionRows +
-                    ", resources=" + resources +
-                    ", advanced=" + advanced +
-                    ", items=" + items +
-                    ", itemsFile='" + itemsFile + '\'' +
-                    ", suppressWarnings=" + suppressWarnings +
-                    ", defaultJsonValue=" + defaultJsonValue +
-                    '}';
-        }
-
-        @Override
-        public ControlConf clone() {
-            try {
-                final ControlConf result = (ControlConf) super.clone();
-                if (this.items != null) {
-                    result.items = this.items.stream().map(EnumItem::clone).collect(Collectors.toList());
-                }
-                if (this.suppressWarnings != null) {
-                    result.suppressWarnings = new ArrayList<>(this.suppressWarnings);
-                }
-                return result;
-            } catch (CloneNotSupportedException e) {
-                throw new AssertionError(e);
-            }
-        }
-
-        @Override
-        public void buildJson(JsonObjectBuilder builder) {
-            builder.add("name", name);
-            if (description != null) {
-                builder.add("description", description);
-            }
-            if (caption != null) {
-                builder.add("caption", caption);
-            }
-            if (hint != null) {
-                builder.add("hint", hint);
-            }
-            builder.add("value_type", valueType.typeName());
-            if (valueClassName != null) {
-                builder.add("value_class_name", valueClassName);
-            }
-            builder.add("edition_type", editionType.editionTypeName());
-            if (settingsId != null) {
-                builder.add("settings_id", settingsId);
-            }
-            if (multiline) {
-                builder.add("multiline", multiline);
-            }
-            if (editionRows != null) {
-                builder.add("edition_rows", editionRows);
-            }
-            if (resources) {
-                builder.add("resources", resources);
-            }
-            if (advanced) {
-                builder.add("advanced", advanced);
-            }
-            if (items != null) {
-                final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-                for (EnumItem value : items) {
-                    arrayBuilder.add(value.toJson());
-                }
-                builder.add("items", arrayBuilder.build());
-            }
-            if (itemsFile != null) {
-                builder.add("items_file", itemsFile);
-            }
-            if (suppressWarnings != null) {
-                final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-                for (String value : suppressWarnings) {
-                    arrayBuilder.add(value);
-                }
-                builder.add("suppress_warnings", arrayBuilder.build());
-            }
-            if (defaultJsonValue != null) {
-                builder.add("default", defaultJsonValue);
-            }
-        }
-
-        /**
-         * Loads all additional data stored in external files, like {@link #getItemsFile()},
-         * if the argument is not <code>null</code>.
-         *
-         * <p>If the necessary data is already specified in JSON, for example,
-         * if the enum items are already loaded and serialized in JSON, this method does nothing.
-         * In the other case, and if we really have some external files ({@link #getItemsFile()}),
-         * this method uses the argument <code>siblingSpecificationFile</code>,
-         * usually the specification file of the executor or some other object like {@link SettingsSpecification}:
-         * relative paths to external files will be resolved against its parent folder.
-         *
-         * <p>If <code>siblingSpecificationFile==null</code>, this method does nothing.
-         * This is a typical situation, for example, while deserialization from JSON;
-         * in this case, all external data should be loaded while first reading the specification from the file
-         * and then included in the JSON when serializing.
-         *
-         * <p>This method is automatically called from the constructor
-         * {@link #ControlConf(JsonObject, Path)}.</p>
-         *
-         * @param siblingSpecificationFile some file (usually a specification file) for resolving
-         *                                 relative external files against its parent folder;
-         *                                 can be <code>null</code>, then the method does nothing.
-         */
-        public void loadExternalData(Path siblingSpecificationFile) {
-            if (siblingSpecificationFile == null) {
-                return;
-            }
-            if (items == null) {
-                final Path file = itemsFile(siblingSpecificationFile);
-                if (file != null) {
-                    try {
-                        loadItems(file);
-                    } catch (IOException e) {
-                        throw new JsonException("Cannot load items file " + file.toAbsolutePath(), e);
-                    }
-                    assert items != null : "items were not correctly loaded";
-                }
-            }
-        }
-
-        public void loadItems(Path itemsFile) throws IOException {
-            Objects.requireNonNull(itemsFile, "Null items file");
-            final String s = Files.readString(itemsFile);
-            final SScalar.MultiLineOrJsonSplitter items = SScalar.splitJsonOrTrimmedLinesWithComments(s);
-            if (items.numberOfLines() == 0) {
-                throw new JsonException("No enum items in the file " + itemsFile.toAbsolutePath());
-            }
-            this.itemNamesInFile = items.lines();
-            this.itemCaptionsInFile = items.comments();
-            assert this.itemNamesInFile != null;
-            assert this.itemCaptionsInFile != null;
-            // - unmodifiable
-            setItemsFromLists(itemNamesInFile, itemCaptionsInFile);
-        }
-    }
-
     private Path specificationFile = null;
     private String version = CURRENT_VERSION;
     private String platformId = null;
@@ -1499,9 +852,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private Options options = null;
     private String language = null;
     private JavaConf java = null;
-    private Map<String, PortConf> inputPorts = new LinkedHashMap<>();
-    private Map<String, PortConf> outputPorts = new LinkedHashMap<>();
-    private Map<String, ControlConf> controls = new LinkedHashMap<>();
+    private Map<String, PortSpecification> inputPorts = new LinkedHashMap<>();
+    private Map<String, PortSpecification> outputPorts = new LinkedHashMap<>();
+    private Map<String, ControlSpecification> controls = new LinkedHashMap<>();
     private SettingsSpecification settings = null;
     private SourceInfo sourceInfo = null;
     // - note: "sourceInfo" field is not usually loaded from FILE, it should be defined by external means
@@ -1554,20 +907,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.java = javaJson == null ? null : new JavaConf(javaJson, file);
             if (json.containsKey("in_ports")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
-                    final PortConf port = new PortConf(jsonObject, file);
-                    putOrException(inputPorts, port.name, port, file, "in_ports");
+                    final PortSpecification port = new PortSpecification(jsonObject, file);
+                    putOrException(inputPorts, port.getName(), port, file, "in_ports");
                 }
             }
             if (json.containsKey("out_ports")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "out_ports", file)) {
-                    final PortConf port = new PortConf(jsonObject, file);
-                    putOrException(outputPorts, port.name, port, file, "out_ports");
+                    final PortSpecification port = new PortSpecification(jsonObject, file);
+                    putOrException(outputPorts, port.getName(), port, file, "out_ports");
                 }
             }
             if (json.containsKey("controls")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "controls", file)) {
-                    final ControlConf control = new ControlConf(jsonObject, file);
-                    putOrException(controls, control.name, control, file, "controls");
+                    final ControlSpecification control = new ControlSpecification(jsonObject, file);
+                    putOrException(controls, control.getName(), control, file, "controls");
                 }
             }
             final JsonObject settingsJson = json.getJsonObject(SETTINGS);
@@ -1799,45 +1152,45 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public final PortConf getInputPort(String name) {
+    public final PortSpecification getInputPort(String name) {
         return inputPorts.get(name);
     }
 
-    public final Map<String, PortConf> getInputPorts() {
+    public final Map<String, PortSpecification> getInputPorts() {
         return Collections.unmodifiableMap(inputPorts);
     }
 
-    public final ExecutorSpecification setInputPorts(Map<String, PortConf> inputPorts) {
+    public final ExecutorSpecification setInputPorts(Map<String, PortSpecification> inputPorts) {
         this.inputPorts = checkInputPorts(inputPorts);
         return this;
     }
 
-    public final PortConf getOutputPort(String name) {
+    public final PortSpecification getOutputPort(String name) {
         return outputPorts.get(name);
     }
 
-    public final Map<String, PortConf> getOutputPorts() {
+    public final Map<String, PortSpecification> getOutputPorts() {
         return Collections.unmodifiableMap(outputPorts);
     }
 
-    public final ExecutorSpecification setOutputPorts(Map<String, PortConf> outputPorts) {
+    public final ExecutorSpecification setOutputPorts(Map<String, PortSpecification> outputPorts) {
         this.outputPorts = checkOutputPorts(outputPorts);
         return this;
     }
 
-    public final ControlConf getControl(String name) {
+    public final ControlSpecification getControl(String name) {
         synchronized (controlsLock) {
             return controls.get(name);
         }
     }
 
-    public final Map<String, ControlConf> getControls() {
+    public final Map<String, ControlSpecification> getControls() {
         synchronized (controlsLock) {
             return Collections.unmodifiableMap(controls);
         }
     }
 
-    public final ExecutorSpecification setControls(Map<String, ControlConf> controls) {
+    public final ExecutorSpecification setControls(Map<String, ControlSpecification> controls) {
         synchronized (controlsLock) {
             this.controls = checkControls(controls);
         }
@@ -1847,7 +1200,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     public void updateControlSettingsId(String name, String settingsId) {
         Objects.requireNonNull(name, "Null control name");
         synchronized (controlsLock) {
-            ExecutorSpecification.ControlConf control = controls.get(name);
+            final ControlSpecification control = controls.get(name);
             if (control == null) {
                 throw new IllegalArgumentException("No control with name " + name);
             }
@@ -1919,39 +1272,39 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.tags.addAll(tags);
     }
 
-    public final void addInputPort(PortConf port) {
+    public final void addInputPort(PortSpecification port) {
         Objects.requireNonNull(port, "Null input port");
         port.checkCompleteness();
-        inputPorts.put(port.name, port);
+        inputPorts.put(port.getName(), port);
     }
 
-    public final void addFirstInputPort(PortConf port) {
+    public final void addFirstInputPort(PortSpecification port) {
         Objects.requireNonNull(port, "Null input port");
         port.checkCompleteness();
-        final Map<String, PortConf> inputPorts = new LinkedHashMap<>();
-        inputPorts.put(port.name, port);
+        final Map<String, PortSpecification> inputPorts = new LinkedHashMap<>();
+        inputPorts.put(port.getName(), port);
         inputPorts.putAll(this.inputPorts);
         this.inputPorts = inputPorts;
     }
 
-    public final void addOutputPort(PortConf port) {
+    public final void addOutputPort(PortSpecification port) {
         Objects.requireNonNull(port, "Null output port");
         port.checkCompleteness();
-        outputPorts.put(port.name, port);
+        outputPorts.put(port.getName(), port);
     }
 
-    public final void addFirstOutputPort(PortConf port) {
+    public final void addFirstOutputPort(PortSpecification port) {
         Objects.requireNonNull(port, "Null output port");
         port.checkCompleteness();
-        final Map<String, PortConf> outputPorts = new LinkedHashMap<>();
-        outputPorts.put(port.name, port);
+        final Map<String, PortSpecification> outputPorts = new LinkedHashMap<>();
+        outputPorts.put(port.getName(), port);
         outputPorts.putAll(this.outputPorts);
         this.outputPorts = outputPorts;
     }
 
     public final void addSystemExecutorIdPort() {
         if (!outputPorts.containsKey(Executor.OUTPUT_EXECUTOR_ID_NAME)) {
-            addOutputPort(new PortConf()
+            addOutputPort(new PortSpecification()
                     .setName(Executor.OUTPUT_EXECUTOR_ID_NAME)
                     .setCaption(OUTPUT_EXECUTOR_ID_CAPTION)
                     .setHint(OUTPUT_EXECUTOR_ID_HINT)
@@ -1962,7 +1315,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public final void addSystemPlatformIdPort() {
         if (!outputPorts.containsKey(Executor.OUTPUT_PLATFORM_ID_NAME)) {
-            addOutputPort(new PortConf()
+            addOutputPort(new PortSpecification()
                     .setName(Executor.OUTPUT_PLATFORM_ID_NAME)
                     .setCaption(OUTPUT_PLATFORM_ID_CAPTION)
                     .setHint(OUTPUT_PLATFORM_ID_HINT)
@@ -1973,7 +1326,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public final void addSystemResourceFolderPort() {
         if (!outputPorts.containsKey(Executor.OUTPUT_RESOURCE_FOLDER_NAME)) {
-            addOutputPort(new PortConf()
+            addOutputPort(new PortSpecification()
                     .setName(Executor.OUTPUT_RESOURCE_FOLDER_NAME)
                     .setCaption(OUTPUT_RESOURCE_FOLDER_CAPTION)
                     .setHint(OUTPUT_RESOURCE_FOLDER_ID_HINT)
@@ -1982,17 +1335,17 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public final void addControl(ControlConf control) {
+    public final void addControl(ControlSpecification control) {
         Objects.requireNonNull(control, "Null control");
         control.checkCompleteness();
-        controls.put(control.name, control);
+        controls.put(control.getName(), control);
     }
 
-    public final void addFirstControl(ControlConf control) {
+    public final void addFirstControl(ControlSpecification control) {
         Objects.requireNonNull(control, "Null control");
         control.checkCompleteness();
-        final Map<String, ControlConf> controls = new LinkedHashMap<>();
-        controls.put(control.name, control);
+        final Map<String, ControlSpecification> controls = new LinkedHashMap<>();
+        controls.put(control.getName(), control);
         controls.putAll(this.controls);
         this.controls = controls;
     }
@@ -2064,52 +1417,52 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         if (this.java == null) {
             this.setJava(new JavaConf().setJson(JavaConf.standardJson(className)));
         }
-        final Map<String, PortConf> inputPorts = new LinkedHashMap<>(this.inputPorts);
+        final Map<String, PortSpecification> inputPorts = new LinkedHashMap<>(this.inputPorts);
         for (Port port : executor.inputPorts()) {
             final String name = port.getName();
-            final PortConf portConf = inputPorts.getOrDefault(name, new PortConf());
-            inputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
+            final PortSpecification portSpecification = inputPorts.getOrDefault(name, new PortSpecification());
+            inputPorts.put(name, portSpecification.setName(name).setValueType(port.getDataType()));
         }
         this.setInputPorts(inputPorts);
-        final Map<String, PortConf> outputPorts = new LinkedHashMap<>(this.outputPorts);
+        final Map<String, PortSpecification> outputPorts = new LinkedHashMap<>(this.outputPorts);
         for (Port port : executor.outputPorts()) {
             final String name = port.getName();
-            final PortConf portConf = outputPorts.getOrDefault(name, new PortConf());
-            outputPorts.put(name, portConf.setName(name).setValueType(port.getDataType()));
+            final PortSpecification portSpecification = outputPorts.getOrDefault(name, new PortSpecification());
+            outputPorts.put(name, portSpecification.setName(name).setValueType(port.getDataType()));
         }
         this.setOutputPorts(outputPorts);
-        final Map<String, ControlConf> controls = new LinkedHashMap<>(this.controls);
+        final Map<String, ControlSpecification> controls = new LinkedHashMap<>(this.controls);
         for (String name : executor.allParameters()) {
-            final ControlConf controlConf = controls.getOrDefault(name, new ControlConf());
+            final ControlSpecification controlSpecification = controls.getOrDefault(name, new ControlSpecification());
             final ParameterValueType parameterValueType = executor.parameterControlValueType(name);
-            controlConf.setName(name).setValueType(parameterValueType);
+            controlSpecification.setName(name).setValueType(parameterValueType);
             if (parameterValueType == ParameterValueType.ENUM_STRING) {
-                controlConf.setEditionType(ControlEditionType.ENUM);
+                controlSpecification.setEditionType(ControlEditionType.ENUM);
                 final Class<?> enumClass = executor.parameterJavaType(name);
                 if (enumClass == null || !Enum.class.isAssignableFrom(enumClass)) {
                     throw new AssertionError("Invalid propertyJavaType method result: not enum ("
                             + enumClass + ")");
                 }
-                if (controlConf.items == null) {
+                if (controlSpecification.getItems() == null) {
                     String firstEnumName = null;
-                    final List<ControlConf.EnumItem> items = new ArrayList<>();
+                    final List<ControlSpecification.EnumItem> items = new ArrayList<>();
                     for (Enum<?> enumConstant : enumClass.asSubclass(Enum.class).getEnumConstants()) {
                         final String enumName = enumConstant.name();
                         if (firstEnumName == null) {
                             firstEnumName = enumName;
                         }
-                        items.add(new ControlConf.EnumItem().setValue(enumName));
+                        items.add(new ControlSpecification.EnumItem().setValue(enumName));
                     }
                     if (firstEnumName == null) {
                         throw new AssertionError("No constants in enum class: impossible in Java");
                     }
-                    controlConf.setItems(items);
-                    controlConf.setDefaultStringValue(firstEnumName);
+                    controlSpecification.setItems(items);
+                    controlSpecification.setDefaultStringValue(firstEnumName);
                 }
             } else {
-                controlConf.setEditionType(ControlEditionType.VALUE);
+                controlSpecification.setEditionType(ControlEditionType.VALUE);
             }
-            controls.put(name, controlConf);
+            controls.put(name, controlSpecification);
         }
         this.setControls(controls);
     }
@@ -2134,7 +1487,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setTags(chain.tags());
         this.setId(chain.id());
         this.setLanguage(ChainSpecification.CHAIN_LANGUAGE);
-        final Map<String, PortConf> inputPorts = new LinkedHashMap<>(this.inputPorts);
+        final Map<String, PortSpecification> inputPorts = new LinkedHashMap<>(this.inputPorts);
         for (ChainBlock block : chain.getAllInputs()) {
             final ChainInputPort inputPort = block.getActualInputPort(Executor.DEFAULT_INPUT_PORT);
             if (inputPort == null) {
@@ -2146,15 +1499,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 throw new IllegalArgumentException("Chain contains standard input block "
                         + "with non-initialized input name: " + block);
             }
-            final PortConf portConf = new PortConf();
-            portConf.setName(inputName);
-            portConf.setValueType(inputPort.getDataType());
-            setAdditionalFields(portConf, block);
-            inputPorts.put(portConf.getName(), portConf);
+            final PortSpecification portSpecification = new PortSpecification();
+            portSpecification.setName(inputName);
+            portSpecification.setValueType(inputPort.getDataType());
+            setAdditionalFields(portSpecification, block);
+            inputPorts.put(portSpecification.getName(), portSpecification);
 
         }
         this.setInputPorts(inputPorts);
-        final Map<String, PortConf> outputPorts = new LinkedHashMap<>(this.outputPorts);
+        final Map<String, PortSpecification> outputPorts = new LinkedHashMap<>(this.outputPorts);
         for (ChainBlock block : chain.getAllOutputs()) {
             final ChainOutputPort outputPort = block.getActualOutputPort(Executor.DEFAULT_OUTPUT_PORT);
             if (outputPort == null) {
@@ -2166,14 +1519,14 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 throw new IllegalArgumentException("Chain contains standard output block "
                         + "with non-initialized output name: " + block);
             }
-            final PortConf portConf = new PortConf();
-            portConf.setName(outputName);
-            portConf.setValueType(outputPort.getDataType());
-            setAdditionalFields(portConf, block);
-            outputPorts.put(portConf.getName(), portConf);
+            final PortSpecification portSpecification = new PortSpecification();
+            portSpecification.setName(outputName);
+            portSpecification.setValueType(outputPort.getDataType());
+            setAdditionalFields(portSpecification, block);
+            outputPorts.put(portSpecification.getName(), portSpecification);
         }
         this.setOutputPorts(outputPorts);
-        final Map<String, ControlConf> controls = new LinkedHashMap<>(this.controls);
+        final Map<String, ControlSpecification> controls = new LinkedHashMap<>(this.controls);
         for (ChainBlock block : chain.getAllData()) {
             // - data blocks (with options.behavior.data = true) are used as parameters of the sub-chain executor
             final String parameterName = block.getStandardParameterName();
@@ -2188,16 +1541,16 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (inputPort.getDataType() == DataType.SCALAR) {
                 // - other types of data block, like numbers, cannot be used for specifying chain parameters
                 // (though can be used as internal chain constants)
-                final ControlConf controlConf = controls.getOrDefault(parameterName, new ControlConf());
-                controlConf.setName(parameterName);
+                final ControlSpecification controlSpecification = controls.getOrDefault(parameterName, new ControlSpecification());
+                controlSpecification.setName(parameterName);
                 final ExecutorSpecification specification = block.getExecutorSpecification();
                 ParameterValueType valueType = specification != null ? specification.dataType() : null;
                 ControlEditionType editionType = specification != null ? specification.editionType() : null;
                 if (valueType == null) {
                     valueType = ParameterValueType.STRING;
                 }
-                controlConf.setValueType(valueType);
-                controlConf.setEditionType(editionType != null ? editionType : ControlEditionType.VALUE);
+                controlSpecification.setValueType(valueType);
+                controlSpecification.setEditionType(editionType != null ? editionType : ControlEditionType.VALUE);
                 String defaultStringValue = null;
                 final ChainOutputPort outputPort = block.getActualOutputPort(Executor.DEFAULT_OUTPUT_PORT);
                 if (outputPort != null && outputPort.getDataType() == DataType.SCALAR) {
@@ -2214,10 +1567,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     defaultStringValue = executor.getScalar(Executor.DEFAULT_OUTPUT_PORT).getValue();
                 }
                 if (defaultStringValue != null) {
-                    controlConf.setDefaultJsonValue(valueType.toJsonValue(defaultStringValue));
+                    controlSpecification.setDefaultJsonValue(valueType.toJsonValue(defaultStringValue));
                 }
-                setAdditionalFields(controlConf, block);
-                controls.put(controlConf.getName(), controlConf);
+                setAdditionalFields(controlSpecification, block);
+                controls.put(controlSpecification.getName(), controlSpecification);
             }
         }
         this.setControls(controls);
@@ -2305,20 +1658,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         buildLanguageJson(builder);
         if (mode.isPortsIncluded()) {
             final JsonArrayBuilder inputPortsBuilder = Json.createArrayBuilder();
-            for (PortConf port : inputPorts.values()) {
+            for (PortSpecification port : inputPorts.values()) {
                 inputPortsBuilder.add(port.toJson());
             }
             builder.add("in_ports", inputPortsBuilder.build());
             final JsonArrayBuilder outputPortsBuilder = Json.createArrayBuilder();
-            for (PortConf port : outputPorts.values()) {
+            for (PortSpecification port : outputPorts.values()) {
                 outputPortsBuilder.add(port.toJson());
             }
             builder.add("out_ports", outputPortsBuilder.build());
         }
         final JsonArrayBuilder controlsBuilder = Json.createArrayBuilder();
-        for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
+        for (Map.Entry<String, ControlSpecification> entry : controls.entrySet()) {
             final String name = entry.getKey();
-            final ControlConf control = entry.getValue();
+            final ControlSpecification control = entry.getValue();
             control.checkCompleteness();
             final JsonObjectBuilder controlBuilder = Json.createObjectBuilder();
             control.buildJson(controlBuilder);
@@ -2345,9 +1698,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             JsonObjectBuilder builder,
             Function<String, JsonObject> subSettingsJsonBuilder) {
         Objects.requireNonNull(builder, "Null builder");
-        for (Map.Entry<String, ControlConf> entry : controls.entrySet()) {
+        for (Map.Entry<String, ControlSpecification> entry : controls.entrySet()) {
             final String name = entry.getKey();
-            final ControlConf control = entry.getValue();
+            final ControlSpecification control = entry.getValue();
             control.checkCompleteness();
             if (subSettingsJsonBuilder != null) {
                 if (SETTINGS.equals(name)) {
@@ -2363,8 +1716,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     }
                 }
             }
-            if (control.defaultJsonValue != null) {
-                builder.add(name, control.defaultJsonValue);
+            if (control.hasDefaultJsonValue()) {
+                builder.add(name, control.getDefaultJsonValue());
             }
         }
     }
@@ -2405,27 +1758,28 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static Map<String, PortConf> checkInputPorts(Map<String, PortConf> ports) {
+    public static Map<String, PortSpecification> checkInputPorts(Map<String, PortSpecification> ports) {
         return checkPorts(ports, "input");
     }
 
-    public static Map<String, PortConf> checkOutputPorts(Map<String, PortConf> ports) {
+    public static Map<String, PortSpecification> checkOutputPorts(Map<String, PortSpecification> ports) {
         return checkPorts(ports, "output");
     }
 
-    public static Map<String, ControlConf> checkControls(Map<String, ControlConf> controls) {
+    public static Map<String, ControlSpecification> checkControls(Map<String, ControlSpecification> controls) {
         Objects.requireNonNull(controls, "Null controls");
         controls = new LinkedHashMap<>(controls);
-        for (Map.Entry<String, ControlConf> control : controls.entrySet()) {
+        for (Map.Entry<String, ControlSpecification> control : controls.entrySet()) {
             if (control.getKey() == null) {
                 throw new IllegalArgumentException("Illegal control: null key");
             }
-            if (control.getValue() == null) {
+            final ControlSpecification specification = control.getValue();
+            if (specification == null) {
                 throw new IllegalArgumentException("Illegal control[" + quote(control.getKey()) + "]: null");
             }
-            if (!control.getKey().equals(control.getValue().name)) {
+            if (!control.getKey().equals(specification.getName())) {
                 throw new IllegalArgumentException("Illegal control[" + quote(control.getKey())
-                        + "]: its name is " + quote(control.getValue().name)
+                        + "]: its name is " + quote(specification.getName())
                         + " (must be equal to key " + quote(control.getKey()) + ")");
             }
         }
@@ -2479,21 +1833,21 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private static void setAdditionalFields(ControlConf controlConf, ChainBlock block) {
+    private static void setAdditionalFields(ControlSpecification controlSpecification, ChainBlock block) {
         final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
         if (blockConf != null) {
             final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
-            controlConf.setCaption(makeCaption(block, systemConf.getCaption()));
-            controlConf.setDescription(systemConf.getDescription());
+            controlSpecification.setCaption(makeCaption(block, systemConf.getCaption()));
+            controlSpecification.setDescription(systemConf.getDescription());
         }
     }
 
-    private static void setAdditionalFields(PortConf portConf, ChainBlock block) {
+    private static void setAdditionalFields(PortSpecification portSpecification, ChainBlock block) {
         final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
         if (blockConf != null) {
             final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
-            portConf.setCaption(makeCaption(block, systemConf.getCaption()));
-            portConf.setHint(systemConf.getDescription());
+            portSpecification.setCaption(makeCaption(block, systemConf.getCaption()));
+            portSpecification.setHint(systemConf.getDescription());
         }
     }
 
@@ -2511,31 +1865,23 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    private static Map<String, PortConf> checkPorts(Map<String, PortConf> ports, String title) {
+    private static Map<String, PortSpecification> checkPorts(Map<String, PortSpecification> ports, String title) {
         Objects.requireNonNull(ports, "Null " + title + " ports");
         ports = new LinkedHashMap<>(ports);
-        for (Map.Entry<String, PortConf> port : ports.entrySet()) {
+        for (Map.Entry<String, PortSpecification> port : ports.entrySet()) {
             if (port.getKey() == null) {
                 throw new IllegalArgumentException("Illegal " + title + " port: null key");
             }
-            if (port.getValue() == null) {
+            final PortSpecification specification = port.getValue();
+            if (specification == null) {
                 throw new IllegalArgumentException("Illegal " + title + " port[" + quote(port.getKey()) + "]: null");
             }
-            if (!port.getKey().equals(port.getValue().name)) {
+            if (!port.getKey().equals(specification.getName())) {
                 throw new IllegalArgumentException("Illegal " + title + " port[" + quote(port.getKey())
-                        + "]: its name is " + quote(port.getValue().name)
+                        + "]: its name is " + quote(specification.getName())
                         + " (must be equal to key " + quote(port.getKey()) + ")");
             }
         }
         return ports;
-    }
-
-    private static Path resolveAgainstParent(Path siblingSpecificationFile, Path path) {
-        Objects.requireNonNull(siblingSpecificationFile, "Null sibling specification file");
-        if (path.isAbsolute()) {
-            return path;
-        }
-        final Path parent = siblingSpecificationFile.getParent();
-        return parent == null ? path : parent.resolve(path);
     }
 }

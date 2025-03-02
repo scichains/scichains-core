@@ -29,6 +29,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ControlEditionType;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.io.MatrixIO;
 import net.algart.json.AbstractConvertibleToJson;
@@ -461,12 +462,12 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         return enumItemsFile == null ? null : resolve(Paths.get(enumItemsFile), "enum items");
     }
 
-    public ExecutorSpecification.ControlConf buildControlConf(
+    public ControlSpecification buildControlConf(
             String name,
             List<String> enumItemValues,
             List<String> enumItemCaptions,
             boolean advancedParameters) {
-        final ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf()
+        final ControlSpecification result = new ControlSpecification()
                 .setName(name)
                 .setValueType(controlTemplate.valueType)
                 .setEditionType(editionTypeOrDefault())

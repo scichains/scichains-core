@@ -95,7 +95,7 @@ public final class SettingsTree {
 
     /**
      * Returns <code>true</code> if all children are successfully found by
-     * {@link ExecutorSpecification.ControlConf#getSettingsId() settings ID} and
+     * {@link ControlSpecification#getSettingsId() settings ID} and
      * all subtrees are also complete.
      *
      * @return whether this tree is complete.
@@ -150,7 +150,7 @@ public final class SettingsTree {
         try {
             for (var entry : specification.getControls().entrySet()) {
                 final String name = entry.getKey();
-                final ExecutorSpecification.ControlConf control = entry.getValue();
+                final ControlSpecification control = entry.getValue();
                 if (control.isSubSettings()) {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null && smartSearch != null) {

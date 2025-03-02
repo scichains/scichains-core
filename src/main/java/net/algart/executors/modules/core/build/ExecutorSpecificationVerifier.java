@@ -35,6 +35,7 @@ import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.mappings.MappingSpecification;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.Jsons;
 
@@ -233,6 +234,9 @@ public final class ExecutorSpecificationVerifier {
             if (editionType.equals("enum")) {
                 final JsonArray items = control.getJsonArray("items");
                 if (items == null) {
+                    if (control.containsKey("items_file")) {
+                        continue;
+                    }
                     throw new JsonException("Enum control has no \"items\" in " + f + " (" + control + ")");
                 }
                 for (JsonValue value : items) {
@@ -249,7 +253,7 @@ public final class ExecutorSpecificationVerifier {
                             throw new JsonException("One of suppress_warnings is not string in " + f +
                                     " (" + value + ")");
                         }
-                        if (ExecutorSpecification.ControlConf.SUPPESS_WARNING_NO_SETTER.equals(
+                        if (ControlSpecification.SUPPESS_WARNING_NO_SETTER.equals(
                                 jsonString.getString())) {
                             suppressNoSetter = true;
                         }

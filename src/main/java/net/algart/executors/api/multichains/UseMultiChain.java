@@ -34,6 +34,7 @@ import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -346,7 +347,7 @@ public final class UseMultiChain extends FileOperation {
                 .setGrouping(true)
                 .setGroupSelector(multiChain.selectedChainParameter());
         options.createServiceIfAbsent().setSettingsId(multiChainSettingsBuilder.id());
-        final ExecutorSpecification.ControlConf visibleResult = UseSubChain.createVisibleResultControl(
+        final ControlSpecification visibleResult = UseSubChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {
             result.addControl(visibleResult);
@@ -369,7 +370,7 @@ public final class UseMultiChain extends FileOperation {
     private static void addSystemParameters(ExecutorSpecification result, MultiChain multiChain) {
         final String multiChainName = multiChain.name();
         if (multiChain.specification().isBehaviourSkippable()) {
-            result.addControl(new ExecutorSpecification.ControlConf()
+            result.addControl(new ControlSpecification()
                     .setName(DO_ACTION_NAME)
                     .setCaption(DO_ACTION_CAPTION)
                     .setDescription(DO_ACTION_DESCRIPTION)
@@ -381,21 +382,21 @@ public final class UseMultiChain extends FileOperation {
         result.addControl(UseSubChain.createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
         result.addControl(UseSubChain.createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
         result.addControl(UseSubChain.createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
-        result.addControl(new ExecutorSpecification.ControlConf()
+        result.addControl(new ControlSpecification()
                 .setName(EXTRACT_SUB_SETTINGS_PARAMETER_NAME)
                 .setCaption(EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", multiChainName))
                 .setDescription(EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
                 .setValueType(ParameterValueType.BOOLEAN)
                 .setDefaultJsonValue(Jsons.toJsonBooleanValue(EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT))
                 .setAdvanced(true));
-        result.addControl(new ExecutorSpecification.ControlConf()
+        result.addControl(new ControlSpecification()
                 .setName(LOG_SETTINGS_PARAMETER_NAME)
                 .setCaption(LOG_SETTINGS_PARAMETER_CAPTION)
                 .setDescription(LOG_SETTINGS_PARAMETER_DESCRIPTION)
                 .setValueType(ParameterValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.FALSE)
                 .setAdvanced(true));
-        result.addControl(new ExecutorSpecification.ControlConf()
+        result.addControl(new ControlSpecification()
                 .setName(IGNORE_PARAMETERS_PARAMETER_NAME)
                 .setCaption(IGNORE_PARAMETERS_PARAMETER_CAPTION)
                 .setDescription(IGNORE_PARAMETERS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))

@@ -29,7 +29,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.PortSpecification;
 
 public final class ChainInputPort extends ChainPort<ChainOutputPort> {
     private static final boolean OPTIMIZE_COPYING_DATA = true;
@@ -59,13 +59,13 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                 portConf.getDataType());
     }
 
-    public static ChainInputPort of(ChainBlock block, ExecutorSpecification.PortConf portConf) {
+    public static ChainInputPort of(ChainBlock block, PortSpecification portSpecification) {
         return of(
                 block,
                 null,
-                portConf.getName(),
+                portSpecification.getName(),
                 ChainPortType.INPUT_PORT,
-                portConf.getValueType());
+                portSpecification.getValueType());
     }
 
     public Boolean necessary() {

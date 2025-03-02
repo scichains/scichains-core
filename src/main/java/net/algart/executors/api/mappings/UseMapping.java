@@ -25,10 +25,7 @@
 package net.algart.executors.api.mappings;
 
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.system.CreateMode;
-import net.algart.executors.api.system.DefaultExecutorLoader;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
@@ -244,11 +241,11 @@ public class UseMapping extends FileOperation {
         final List<String> enumItemCaptions = mappingBuilder.enumItemCaptions();
         for (int i = 0, n = mappingBuilder.numberOfKeys(); i < n; i++) {
             String key = mappingBuilder.key(i);
-            ExecutorSpecification.ControlConf controlConf = mappingBuilder.specification().buildControlConf(
+            ControlSpecification controlSpecification = mappingBuilder.specification().buildControlConf(
                     key, enumItems, enumItemCaptions, advancedParameters);
-            controlConf.setCaption(mappingBuilder.keyCaption(i));
-            controlConf.setHint("\"" + controlConf.getName() + "\" key in the result JSON");
-            result.addControl(controlConf);
+            controlSpecification.setCaption(mappingBuilder.keyCaption(i));
+            controlSpecification.setHint("\"" + controlSpecification.getName() + "\" key in the result JSON");
+            result.addControl(controlSpecification);
         }
     }
 

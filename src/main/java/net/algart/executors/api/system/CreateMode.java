@@ -76,8 +76,8 @@ public enum CreateMode {
             final Parameters parameters = result.parameters();
             for (var e : specification.getControls().entrySet()) {
                 final String name = e.getKey();
-                final ExecutorSpecification.ControlConf controlConf = e.getValue();
-                final Object defaultValue = controlConf.getDefaultValue();
+                final ControlSpecification controlSpecification = e.getValue();
+                final Object defaultValue = controlSpecification.getDefaultValue();
                 if (defaultValue != null) {
                     // - we MUST NOT add parameters with non-existing default values:
                     // null is not an allowed value for most parameter types

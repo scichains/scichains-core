@@ -96,11 +96,11 @@ public class SmartSearchSettings {
         this.allSettings = makeAllSettings();
         boolean complete = true;
         for (ExecutorSpecification specification : allSettings.values()) {
-            final Map<String, ExecutorSpecification.ControlConf> controls = specification.getControls();
+            final Map<String, ControlSpecification> controls = specification.getControls();
             // - note: getControls() is synchronized
             for (var entry : controls.entrySet()) {
                 final String name = entry.getKey();
-                final ExecutorSpecification.ControlConf control = entry.getValue();
+                final ControlSpecification control = entry.getValue();
                 if (control.isSubSettings()) {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null) {

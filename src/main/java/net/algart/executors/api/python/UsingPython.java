@@ -32,6 +32,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.PortSpecification;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -138,7 +139,7 @@ public class UsingPython {
     private static void addSpecialOutputPorts(ExecutorSpecification result) {
         if (!result.getOutputPorts().containsKey(SUPPLIED_PYTHON_ROOTS_OUTPUT_NAME)) {
             // - to be on the safe side (maybe, the user defined the output port with the same name)
-            result.addOutputPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(new PortSpecification()
                     .setName(SUPPLIED_PYTHON_ROOTS_OUTPUT_NAME)
                     .setCaption(SUPPLIED_PYTHON_ROOTS_OUTPUT_CAPTION)
                     .setHint(SUPPLIED_PYTHON_ROOTS_OUTPUT_HINT)
@@ -147,7 +148,7 @@ public class UsingPython {
         }
         if (!result.getOutputPorts().containsKey(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME)) {
             // - to be on the safe side (maybe, the user defined the output port with the same name)
-            result.addOutputPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(new PortSpecification()
                     .setName(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_NAME)
                     .setCaption(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_CAPTION)
                     .setHint(SUPPLIED_PYTHON_SPECIFICATIONS_OUTPUT_HINT)

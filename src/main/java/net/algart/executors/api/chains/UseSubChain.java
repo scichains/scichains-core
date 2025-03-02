@@ -360,8 +360,8 @@ public final class UseSubChain extends FileOperation {
         }
     }
 
-    public static ExecutorSpecification.ControlConf createLogTimingControl(String parameterName) {
-        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
+    public static ControlSpecification createLogTimingControl(String parameterName) {
+        ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(LOG_TIMING_CAPTION);
         result.setDescription(LOG_TIMING_DESCRIPTION);
@@ -371,8 +371,8 @@ public final class UseSubChain extends FileOperation {
         return result;
     }
 
-    public static ExecutorSpecification.ControlConf createTimingLogLevelControl(String parameterName) {
-        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
+    public static ControlSpecification createTimingLogLevelControl(String parameterName) {
+        ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(TIMING_LOG_LEVEL_CAPTION);
         result.setDescription(TIMING_LOG_LEVEL_DESCRIPTION);
@@ -380,16 +380,16 @@ public final class UseSubChain extends FileOperation {
         result.setDefaultStringValue(TIMING_LOG_LEVEL_DEFAULT);
         result.setEditionType(ControlEditionType.ENUM);
         result.setItems(List.of(
-                new ExecutorSpecification.ControlConf.EnumItem(System.Logger.Level.WARNING.getName()),
-                new ExecutorSpecification.ControlConf.EnumItem(System.Logger.Level.INFO.getName()),
-                new ExecutorSpecification.ControlConf.EnumItem(System.Logger.Level.DEBUG.getName()),
-                new ExecutorSpecification.ControlConf.EnumItem(System.Logger.Level.TRACE.getName())));
+                new ControlSpecification.EnumItem(System.Logger.Level.WARNING.getName()),
+                new ControlSpecification.EnumItem(System.Logger.Level.INFO.getName()),
+                new ControlSpecification.EnumItem(System.Logger.Level.DEBUG.getName()),
+                new ControlSpecification.EnumItem(System.Logger.Level.TRACE.getName())));
         result.setAdvanced(true);
         return result;
     }
 
-    public static ExecutorSpecification.ControlConf createTimingNumberOfCallsControl(String parameterName) {
-        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
+    public static ControlSpecification createTimingNumberOfCallsControl(String parameterName) {
+        ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(TIMING_NUMBER_OF_CALLS_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_CALLS_DESCRIPTION);
@@ -400,8 +400,8 @@ public final class UseSubChain extends FileOperation {
         return result;
     }
 
-    public static ExecutorSpecification.ControlConf createTimingNumberOfPercentilesControl(String parameterName) {
-        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
+    public static ControlSpecification createTimingNumberOfPercentilesControl(String parameterName) {
+        ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(TIMING_NUMBER_OF_PERCENTILES_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_PERCENTILES_DESCRIPTION);
@@ -412,17 +412,17 @@ public final class UseSubChain extends FileOperation {
         return result;
     }
 
-    public static ExecutorSpecification.ControlConf createVisibleResultControl(
+    public static ControlSpecification createVisibleResultControl(
             ExecutorSpecification specification,
             String parameterName) {
         String firstEnumValue = null;
-        final List<ExecutorSpecification.ControlConf.EnumItem> items = new ArrayList<>();
-        for (ExecutorSpecification.PortConf portConf : specification.getOutputPorts().values()) {
-            final String executorPortName = portConf.getName();
+        final List<ControlSpecification.EnumItem> items = new ArrayList<>();
+        for (PortSpecification portSpecification : specification.getOutputPorts().values()) {
+            final String executorPortName = portSpecification.getName();
             if (firstEnumValue == null && !executorPortName.equals(SettingsExecutor.SETTINGS)) {
                 firstEnumValue = executorPortName;
             }
-            items.add(new ExecutorSpecification.ControlConf.EnumItem(executorPortName));
+            items.add(new ControlSpecification.EnumItem(executorPortName));
         }
         if (items.size() < 2) {
             // - no sense to add visible result control
@@ -432,7 +432,7 @@ public final class UseSubChain extends FileOperation {
             // - there is only SETTINGS port
             firstEnumValue = specification.getOutputPorts().values().iterator().next().getName();
         }
-        ExecutorSpecification.ControlConf result = new ExecutorSpecification.ControlConf();
+        ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(VISIBLE_RESULT_PARAMETER_CAPTION);
         result.setValueType(ParameterValueType.ENUM_STRING);
@@ -443,10 +443,10 @@ public final class UseSubChain extends FileOperation {
     }
 
     public static void addSettingsPorts(ExecutorSpecification result) {
-        result.addFirstInputPort(new ExecutorSpecification.PortConf()
+        result.addFirstInputPort(new PortSpecification()
                 .setName(SettingsExecutor.SETTINGS)
                 .setValueType(DataType.SCALAR));
-        result.addFirstOutputPort(new ExecutorSpecification.PortConf()
+        result.addFirstOutputPort(new PortSpecification()
                 .setName(SettingsExecutor.SETTINGS)
                 .setHint("Actually used settings (JSON)")
                 .setAdvanced(true)
@@ -544,7 +544,7 @@ public final class UseSubChain extends FileOperation {
             result.updateCategoryPrefix(chain.platformCategory());
         }
         executeLoadingTimeBlocksWithoutInputs(chain, executeIsolatedLoadingTimeFunctions);
-        result.addControl(new ExecutorSpecification.ControlConf()
+        result.addControl(new ControlSpecification()
                 .setName(DO_ACTION_NAME)
                 .setCaption(DO_ACTION_CAPTION)
                 .setDescription(DO_ACTION_DESCRIPTION)
@@ -556,7 +556,7 @@ public final class UseSubChain extends FileOperation {
         result.addControl(createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
         result.addControl(createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
         addChainSettings(result, chain);
-        final ExecutorSpecification.ControlConf visibleResult = createVisibleResultControl(
+        final ControlSpecification visibleResult = createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {
             result.addControl(visibleResult);

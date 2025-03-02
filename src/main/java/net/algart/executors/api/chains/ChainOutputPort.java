@@ -28,7 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.PortSpecification;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,13 +61,13 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                 portConf.getDataType());
     }
 
-    public static ChainOutputPort of(ChainBlock block, ExecutorSpecification.PortConf portConf) {
+    public static ChainOutputPort of(ChainBlock block, PortSpecification portSpecification) {
         return of(
                 block,
                 null,
-                portConf.getName(),
+                portSpecification.getName(),
                 ChainPortType.OUTPUT_PORT,
-                portConf.getValueType());
+                portSpecification.getValueType());
     }
 
     public void copyFromExecutorPort() {

@@ -25,15 +25,11 @@
 package net.algart.executors.api.settings;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.system.CreateMode;
-import net.algart.executors.api.system.DefaultExecutorLoader;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
@@ -427,14 +423,14 @@ public class UseSettings extends FileOperation {
             return getNamesExecutorSpecification = null;
         }
         ExecutorSpecification result = buildCommon(newGetNamesOfSettings(), settingsBuilder);
-        final Map<String, ExecutorSpecification.ControlConf> executorControls =
+        final Map<String, ControlSpecification> executorControls =
                 new LinkedHashMap<>(result.getControls());
         executorControls.get("resultType").setCaption("Result type");
         executorControls.get("resultJsonKey").setCaption("Key in result JSON").setDefaultStringValue("names");
-        for (ExecutorSpecification.ControlConf controlConf : executorControls.values()) {
-            if (controlConf.getValueType() == ParameterValueType.BOOLEAN
-                    && controlConf.getName().startsWith("extract")) {
-                controlConf.setDefaultJsonValue(JsonValue.TRUE);
+        for (ControlSpecification controlSpecification : executorControls.values()) {
+            if (controlSpecification.getValueType() == ParameterValueType.BOOLEAN
+                    && controlSpecification.getName().startsWith("extract")) {
+                controlSpecification.setDefaultJsonValue(JsonValue.TRUE);
             }
         }
         result.setControls(executorControls);
@@ -579,7 +575,7 @@ public class UseSettings extends FileOperation {
             boolean subChainMode,
             boolean noSystemFlags) {
         if (mainForChain) {
-            result.addControl(new ExecutorSpecification.ControlConf()
+            result.addControl(new ControlSpecification()
                     .setName(ALL_SETTINGS_PARAMETER_NAME)
                     .setCaption(ALL_SETTINGS_PARAMETER_CAPTION)
                     .setDescription(ALL_SETTINGS_PARAMETER_DESCRIPTION)
@@ -633,16 +629,16 @@ public class UseSettings extends FileOperation {
                     true);
         }
         final SettingsSpecification specification = settingsBuilder.specification();
-        for (Map.Entry<String, ExecutorSpecification.ControlConf> entry : specification.getControls().entrySet()) {
+        for (Map.Entry<String, ControlSpecification> entry : specification.getControls().entrySet()) {
             final String name = entry.getKey();
-            ExecutorSpecification.ControlConf controlConf = entry.getValue().clone();
-            if (controlConf.getValueType().isSettings() && !subChainMode) {
-                final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf();
-                portConf.setName(name);
-                portConf.setCaption(controlConf.getCaption());
-                portConf.setHint(controlConf.getDescription());
-                portConf.setValueType(DataType.SCALAR);
-                result.addInputPort(portConf);
+            ControlSpecification controlSpecification = entry.getValue().clone();
+            if (controlSpecification.getValueType().isSettings() && !subChainMode) {
+                final PortSpecification portSpecification = new PortSpecification();
+                portSpecification.setName(name);
+                portSpecification.setCaption(controlSpecification.getCaption());
+                portSpecification.setHint(controlSpecification.getDescription());
+                portSpecification.setValueType(DataType.SCALAR);
+                result.addInputPort(portSpecification);
             }
             // Here we could also set controlConf.setValueClassName(), when it does not exist, according the current
             // settings category:
@@ -651,33 +647,33 @@ public class UseSettings extends FileOperation {
             // Then we will not be able to find it from a chain (settings) with another category,
             // but this is sometimes necessary.
             // It is better to keep non-specified value class: this is a signal that we need more smart search.
-            result.addControl(controlConf);
+            result.addControl(controlSpecification);
         }
     }
 
     private static void addOutputPorts(ExecutorSpecification result, SettingsBuilder settingsBuilder) {
-        final Map<String, ExecutorSpecification.ControlConf> controls = settingsBuilder.specification().getControls();
-        for (ExecutorSpecification.ControlConf controlConf : controls.values()) {
-            final String name = SettingsBuilder.portName(controlConf);
-            final ExecutorSpecification.PortConf portConf = new ExecutorSpecification.PortConf()
+        final Map<String, ControlSpecification> controls = settingsBuilder.specification().getControls();
+        for (ControlSpecification controlSpecification : controls.values()) {
+            final String name = SettingsBuilder.portName(controlSpecification);
+            final PortSpecification portSpecification = new PortSpecification()
                     .setName(name)
-                    .setCaption(controlConf.getCaption())
-                    .setHint(controlConf.getDescription())
+                    .setCaption(controlSpecification.getCaption())
+                    .setHint(controlSpecification.getDescription())
                     .setValueType(DataType.SCALAR)
-                    .setAdvanced(controlConf.isAdvanced());
+                    .setAdvanced(controlSpecification.isAdvanced());
             // if (controlConf.getValueType().isSettings()) {
             //    portConf.setAdvanced(true);
             // }
             // - bad idea:
             // if we see the sub-settings, this is an advice to like their to the corresponding subtasks
-            result.addOutputPort(portConf);
-            if (controlConf.getValueType() == ParameterValueType.STRING && controlConf.getEditionType().isPath()) {
-                result.addOutputPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(portSpecification);
+            if (controlSpecification.getValueType() == ParameterValueType.STRING && controlSpecification.getEditionType().isPath()) {
+                result.addOutputPort(new PortSpecification()
                         .setName(name + SettingsBuilder.PATH_PARENT_FOLDER_SUFFIX)
                         .setHint(PATH_PARENT_FOLDER_HINT)
                         .setValueType(DataType.SCALAR)
                         .setAdvanced(true));
-                result.addOutputPort(new ExecutorSpecification.PortConf()
+                result.addOutputPort(new PortSpecification()
                         .setName(name + SettingsBuilder.PATH_FILE_NAME_SUFFIX)
                         .setHint(PATH_FILE_NAME_HINT)
                         .setValueType(DataType.SCALAR)
@@ -689,7 +685,7 @@ public class UseSettings extends FileOperation {
     private static void addSystemOutputPorts(ExecutorSpecification result, boolean addSettingsIdPort) {
         result.addSystemExecutorIdPort();
         if (addSettingsIdPort) {
-            result.addOutputPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(new PortSpecification()
                     .setName(SETTINGS_ID_OUTPUT_NAME)
                     .setCaption(SETTINGS_ID_OUTPUT_CAPTION)
                     .setHint(SETTINGS_ID_OUTPUT_HINT)
@@ -708,7 +704,7 @@ public class UseSettings extends FileOperation {
     private static void addSpecialOutputPorts(ExecutorSpecification result) {
         addSystemOutputPorts(result, false);
         if (!result.getOutputPorts().containsKey(SETTINGS_NAME_OUTPUT_NAME)) {
-            result.addOutputPort(new ExecutorSpecification.PortConf()
+            result.addOutputPort(new PortSpecification()
                     .setName(SETTINGS_NAME_OUTPUT_NAME)
                     .setCaption(SETTINGS_NAME_OUTPUT_CAPTION)
                     .setValueType(DataType.SCALAR)
@@ -723,7 +719,7 @@ public class UseSettings extends FileOperation {
             String description,
             boolean defaultValue,
             boolean advanced) {
-        result.addControl(new ExecutorSpecification.ControlConf()
+        result.addControl(new ControlSpecification()
                 .setName(name)
                 .setCaption(caption)
                 .setDescription(description)
