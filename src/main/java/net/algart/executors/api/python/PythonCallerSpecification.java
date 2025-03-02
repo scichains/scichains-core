@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PythonCallerSpecification extends ExecutorSpecification {
-    public static final class PythonConf extends AbstractConvertibleToJson {
+    public static final class Python extends AbstractConvertibleToJson {
         public static final String DEFAULT_FUNCTION = "execute";
 
         private String module;
@@ -50,10 +50,10 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         private String className = null;
         private String function = DEFAULT_FUNCTION;
 
-        public PythonConf() {
+        public Python() {
         }
 
-        private PythonConf(JsonObject json, Path file) {
+        private Python(JsonObject json, Path file) {
             this.module = Jsons.reqString(json, "module", file);
             this.paramsClass = json.getString("params_class", paramsClass);
             this.inputsClass = json.getString("inputs_class", inputsClass);
@@ -66,7 +66,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return module;
         }
 
-        public PythonConf setModule(String module) {
+        public Python setModule(String module) {
             this.module = nonEmpty(module);
             return this;
         }
@@ -75,7 +75,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return paramsClass;
         }
 
-        public PythonConf setParamsClass(String paramsClass) {
+        public Python setParamsClass(String paramsClass) {
             this.paramsClass = nonEmpty(paramsClass);
             return this;
         }
@@ -84,7 +84,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return inputsClass;
         }
 
-        public PythonConf setInputsClass(String inputsClass) {
+        public Python setInputsClass(String inputsClass) {
             this.inputsClass = nonEmpty(inputsClass);
             return this;
         }
@@ -93,7 +93,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return outputsClass;
         }
 
-        public PythonConf setOutputsClass(String outputsClass) {
+        public Python setOutputsClass(String outputsClass) {
             this.outputsClass = nonEmpty(outputsClass);
             return this;
         }
@@ -102,7 +102,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return className;
         }
 
-        public PythonConf setClassName(String className) {
+        public Python setClassName(String className) {
             this.className = className;
             return this;
         }
@@ -111,7 +111,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return function;
         }
 
-        public PythonConf setFunction(String function) {
+        public Python setFunction(String function) {
             this.function = nonEmpty(function);
             return this;
         }
@@ -127,7 +127,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
 
         @Override
         public String toString() {
-            return "PythonConf{" +
+            return "Python{" +
                     "module='" + module + '\'' +
                     ", paramsClass='" + paramsClass + '\'' +
                     ", inputsClass='" + inputsClass + '\'' +
@@ -150,7 +150,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         }
     }
 
-    private PythonConf python = null;
+    private Python python = null;
 
     public PythonCallerSpecification() {
     }
@@ -162,7 +162,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             throw new JsonException("Invalid executor configuration JSON" + (file == null ? "" : " " + file)
                     + ": \"python\" section required when \"language\" is \"python\"");
         }
-        this.python = pythonJson == null ? null : new PythonConf(pythonJson, file);
+        this.python = pythonJson == null ? null : new Python(pythonJson, file);
     }
 
     public static PythonCallerSpecification read(Path specificationFile) throws IOException {
@@ -221,11 +221,11 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         return "python".equals(getLanguage());
     }
 
-    public PythonConf getPython() {
+    public Python getPython() {
         return python;
     }
 
-    public PythonCallerSpecification setPython(PythonConf python) {
+    public PythonCallerSpecification setPython(Python python) {
         this.python = python;
         return this;
     }

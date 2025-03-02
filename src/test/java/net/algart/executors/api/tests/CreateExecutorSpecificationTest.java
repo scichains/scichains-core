@@ -35,6 +35,7 @@ import net.algart.executors.api.system.PortSpecification;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -67,9 +68,9 @@ public class CreateExecutorSpecificationTest {
         specification.setName("some executor");
         specification.setId("144f8656-91c7-45a8-9e32-c19b179b9d34");
         specification.setLanguage("java");
-        final ExecutorSpecification.JavaConf javaConf = new ExecutorSpecification.JavaConf();
-        javaConf.setJson("{\"class\":\"" + TestExecutor.class.getName() + "\"}");
-        specification.setJava(javaConf);
+        final ExecutorSpecification.Java java = new ExecutorSpecification.Java();
+        java.setJson("{\"class\":\"" + TestExecutor.class.getName() + "\"}");
+        specification.setJava(java);
         final ExecutorSpecification.Options options = new ExecutorSpecification.Options();
         final ExecutorSpecification.Options.Behavior behavior = new ExecutorSpecification.Options.Behavior();
         options.setBehavior(behavior);
@@ -100,7 +101,7 @@ public class CreateExecutorSpecificationTest {
         specification.setControls(controls);
 
         final String jsonString = specification.jsonString();
-        java.nio.file.Files.writeString(resultFile, jsonString);
+        Files.writeString(resultFile, jsonString);
         System.out.printf("Minimal configuration:%n");
         System.out.println(specification.minimalSpecification());
         System.out.printf("%nFull specification:%n");

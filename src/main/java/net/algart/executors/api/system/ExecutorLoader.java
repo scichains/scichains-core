@@ -309,18 +309,18 @@ public abstract class ExecutorLoader {
     private static Executable getNewInstance(ExecutorSpecification specification) throws ClassNotFoundException {
         // Note: we do not require specification.isJavaExecutor()
         // This allows to minimize requirements to a minimal JSON specification
-        ExecutorSpecification.JavaConf javaConf = specification.getJava();
-        if (javaConf == null) {
+        ExecutorSpecification.Java java = specification.getJava();
+        if (java == null) {
             return null;
         }
-        final String className = javaConf.getClassName();
+        final String className = java.getClassName();
         if (className == null) {
             return null;
         }
         final Class<?> executorClass = Class.forName(className);
-        // - We cannot use javaConf.executorClass(): that method catches ClassNotFoundException,
+        // - We cannot use java.executorClass(): that method catches ClassNotFoundException,
         // but we must not do this here
-        final String newInstanceMethodName = javaConf.getNewInstanceMethod();
+        final String newInstanceMethodName = java.getNewInstanceMethod();
         try {
             if (newInstanceMethodName != null) {
                 return executorClass.getMethod(newInstanceMethodName);

@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public final class PythonCaller implements Cloneable, AutoCloseable {
     private final PythonCallerSpecification specification;
-    private final PythonCallerSpecification.PythonConf pythonConf;
+    private final PythonCallerSpecification.Python python;
     private final JepPerformerContainer container;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject instance = null;
@@ -45,8 +45,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     private PythonCaller(PythonCallerSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
-        this.pythonConf = specification.getPython();
-        if (pythonConf == null) {
+        this.python = specification.getPython();
+        if (python == null) {
             final var file = specification.getSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
@@ -86,22 +86,22 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public void initialize() {
         @SuppressWarnings("resource") final JepPerformer performer = performer();
-        if (pythonConf.isClassMethod()) {
-            final String className = pythonConf.getClassName();
-            performer.perform(JepPerformer.importCode(pythonConf.getModule(), className));
+        if (python.isClassMethod()) {
+            final String className = python.getClassName();
+            performer.perform(JepPerformer.importCode(python.getModule(), className));
             synchronized (lock) {
                 if (instance == null) {
                     instance = performer.newObject(className);
                 }
             }
         } else {
-            performer.perform(JepPerformer.importCode(pythonConf.getModule(), pythonConf.getFunction()));
+            performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
         }
     }
 
     public AtomicPyObject loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
-        AtomicPyObject params = jepAPI.newAPIObject(performer(), pythonConf.getParamsClass());
+        AtomicPyObject params = jepAPI.newAPIObject(performer(), python.getParamsClass());
         jepAPI.loadParameters(executor, params);
         return params;
     }
@@ -109,13 +109,13 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     public AtomicPyObject readInputPorts(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         final JepPerformer performer = performer();
-        AtomicPyObject inputs = jepAPI.newAPIObject(performer, pythonConf.getInputsClass());
+        AtomicPyObject inputs = jepAPI.newAPIObject(performer, python.getInputsClass());
         jepAPI.readInputPorts(performer, executor.inputPorts(), inputs);
         return inputs;
     }
 
     public AtomicPyObject createOutputs() {
-        return jepAPI.newAPIObject(performer(), pythonConf.getOutputsClass());
+        return jepAPI.newAPIObject(performer(), python.getOutputsClass());
     }
 
     public void writeOutputPorts(Executor executor, AtomicPyObject outputs) {
@@ -134,12 +134,12 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public Object callPython(AtomicPyObject params, AtomicPyObject inputs, AtomicPyObject outputs) {
-        if (pythonConf.isClassMethod()) {
+        if (python.isClassMethod()) {
             @SuppressWarnings("resource") final AtomicPyObject instance = pythonInstance();
             if (instance == null) {
                 throw new IllegalStateException("initialize() was not called correcly");
             }
-            try (final AtomicPyCallable method = instance.getCallable(pythonConf.getFunction())) {
+            try (final AtomicPyCallable method = instance.getCallable(python.getFunction())) {
                 return method.call(
                         params.pyObject(),
                         inputs.pyObject(),
@@ -147,7 +147,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             }
         } else {
             @SuppressWarnings("resource") final JepPerformer performer = performer();
-            return performer.invokeFunction(pythonConf.getFunction(),
+            return performer.invokeFunction(python.getFunction(),
                     params.pyObject(),
                     inputs.pyObject(),
                     outputs.pyObject());

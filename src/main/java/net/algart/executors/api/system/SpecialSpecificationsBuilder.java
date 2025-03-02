@@ -55,9 +55,9 @@ class SpecialSpecificationsBuilder {
     private ExecutorSpecification findCommonPlatformInformationPattern() {
         for (ExecutorSpecification specification : specifications.all()) {
             if (specification.isJavaExecutor()) {
-                final ExecutorSpecification.JavaConf javaConf = specification.getJava();
-                if (javaConf != null) {
-                    final String className = javaConf.getClassName();
+                final ExecutorSpecification.Java java = specification.getJava();
+                if (java != null) {
+                    final String className = java.getClassName();
                     if (Objects.equals(className, CommonPlatformInformation.class.getName())) {
                         return specification;
                     }
@@ -79,8 +79,8 @@ class SpecialSpecificationsBuilder {
         result.setCategory(pattern.getCategory());
         result.setDescription(replacePlatformName(pattern.getDescription(), platform));
         result.setLanguage(PLATFORM_LANGUAGE);
-        result.setJava(new ExecutorSpecification.JavaConf().setJson(
-                ExecutorSpecification.JavaConf.standardJson(CommonPlatformInformation.class.getName())));
+        result.setJava(new ExecutorSpecification.Java().setJson(
+                ExecutorSpecification.Java.standardJson(CommonPlatformInformation.class.getName())));
         result.setInputPorts(pattern.getInputPorts());
         result.setOutputPorts(pattern.getOutputPorts());
         result.setControls(pattern.getControls());

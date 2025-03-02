@@ -37,7 +37,7 @@ import java.util.Objects;
 
 public final class JSCaller implements Cloneable, AutoCloseable {
     private final JSCallerSpecification specification;
-    private final JSCallerSpecification.JSConf jsConf;
+    private final JSCallerSpecification.JS js;
     private final GraalPerformerContainer.Local performerContainer;
     private final GraalAPI graalAPI = GraalAPI.getInstance()
             .setConvertInputScalarToNumber(false)
@@ -50,8 +50,8 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private JSCaller(JSCallerSpecification specification, Path workingDirectory) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
-        this.jsConf = specification.getJS();
-        if (jsConf == null) {
+        this.js = specification.getJS();
+        if (js == null) {
             final Path file = specification.getSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a JS executor configuration: no \"JS\" section");
@@ -86,7 +86,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     }
 
     public void initialize() {
-        importCode.setModuleJS(GraalPerformer.importAndReturnJSFunction(jsConf.getModule(), jsConf.getFunction()),
+        importCode.setModuleJS(GraalPerformer.importAndReturnJSFunction(js.getModule(), js.getFunction()),
                 "importing");
         // - name "importing" is not important: we will not use share this performer (Graal context)
         // Note: no sense to check importCode.changed(), because it cannot change until reloading all chain.

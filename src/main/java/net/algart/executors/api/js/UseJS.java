@@ -153,7 +153,7 @@ public class UseJS extends FileOperation {
         Objects.requireNonNull(jsCallerSpecification, "Null jsCallerSpecification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         jsCallerSpecification.setTo(new InterpretJS());
-        // - adds JavaConf, (maybe) parameters and some ports
+        // - adds the Java object, (maybe) parameters and some ports
         jsCallerSpecification.addSystemExecutorIdPort();
         if (jsCallerSpecification.hasPlatformId()) {
             jsCallerSpecification.addSystemPlatformIdPort();

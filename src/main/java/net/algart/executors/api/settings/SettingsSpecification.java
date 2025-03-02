@@ -218,7 +218,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public static String controlKey(ControlSpecification controlSpecification) {
-        Objects.requireNonNull(controlSpecification, "Null controlConf");
+        Objects.requireNonNull(controlSpecification, "Null controlSpecification");
         final String name = controlSpecification.getName();
         return controlSpecification.getValueType().isSettings() ? settingsKey(name) : name;
     }
@@ -615,7 +615,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
 
     public boolean hasPathControl() {
         return controls.values().stream().anyMatch(
-                controlConf -> controlConf.getEditionType().isPath());
+                controlSpecification -> controlSpecification.getEditionType().isPath());
     }
 
     public void setTo(ExecutorSpecification specification) {

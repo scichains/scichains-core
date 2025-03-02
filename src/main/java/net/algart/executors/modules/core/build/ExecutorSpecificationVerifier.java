@@ -122,10 +122,10 @@ public final class ExecutorSpecificationVerifier {
         final String instantiationName;
         final ExecutionBlock executionBlock;
         if (checkClasses) {
-            final JsonObject javaSection = json.getJsonObject(ExecutorSpecification.JavaConf.JAVA_CONF_NAME);
-            final String className = javaSection.getString(ExecutorSpecification.JavaConf.CLASS_PROPERTY_NAME);
+            final JsonObject javaSection = json.getJsonObject(ExecutorSpecification.Java.JAVA_CONF_NAME);
+            final String className = javaSection.getString(ExecutorSpecification.Java.CLASS_PROPERTY_NAME);
             final String newInstanceMethodName = javaSection.getString(
-                    ExecutorSpecification.JavaConf.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
+                    ExecutorSpecification.Java.NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
             instantiationName = newInstanceMethodName != null ?
                     className + "." + newInstanceMethodName + "()" :
                     className;

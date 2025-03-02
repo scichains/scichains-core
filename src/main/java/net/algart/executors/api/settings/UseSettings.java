@@ -640,8 +640,8 @@ public class UseSettings extends FileOperation {
                 portSpecification.setValueType(DataType.SCALAR);
                 result.addInputPort(portSpecification);
             }
-            // Here we could also set controlConf.setValueClassName(), when it does not exist, according the current
-            // settings category:
+            // Here we could also set controlSpecification.setValueClassName(),
+            // when it does not exist, according the current settings category:
             //      ExecutorSpecification.defaultClassName(specification.getCategory(), name)
             // But this is a bad idea!
             // Then we will not be able to find it from a chain (settings) with another category,
@@ -661,8 +661,8 @@ public class UseSettings extends FileOperation {
                     .setHint(controlSpecification.getDescription())
                     .setValueType(DataType.SCALAR)
                     .setAdvanced(controlSpecification.isAdvanced());
-            // if (controlConf.getValueType().isSettings()) {
-            //    portConf.setAdvanced(true);
+            // if (controlSpecification.getValueType().isSettings()) {
+            //    portSpecification.setAdvanced(true);
             // }
             // - bad idea:
             // if we see the sub-settings, this is an advice to like their to the corresponding subtasks

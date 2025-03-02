@@ -749,7 +749,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static final class JavaConf {
+    public static final class Java {
         // Does not extend AbstractConvertibleToJson, because must declare
         // toJson method instead of overriding buildJson
         public static final String JAVA_LANGUAGE = "java";
@@ -764,10 +764,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         private String newInstanceMethod = null;
         private Class<?> executorClass = null;
 
-        public JavaConf() {
+        public Java() {
         }
 
-        public JavaConf(JsonObject json, Path file) {
+        public Java(JsonObject json, Path file) {
             this.file = file;
             setJson(json);
         }
@@ -776,7 +776,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return json;
         }
 
-        public JavaConf setJson(JsonObject json) {
+        public Java setJson(JsonObject json) {
             this.json = Objects.requireNonNull(json, "Null json");
             this.className = Jsons.reqString(json, CLASS_PROPERTY_NAME, file);
             this.newInstanceMethod = json.getString(NEW_INSTANCE_METHOD_PROPERTY_NAME, null);
@@ -851,7 +851,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private String id;
     private Options options = null;
     private String language = null;
-    private JavaConf java = null;
+    private Java java = null;
     private Map<String, PortSpecification> inputPorts = new LinkedHashMap<>();
     private Map<String, PortSpecification> outputPorts = new LinkedHashMap<>();
     private Map<String, ControlSpecification> controls = new LinkedHashMap<>();
@@ -899,12 +899,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 this.options = new Options(optionsJson, file);
             }
             this.setLanguage(json.getString("language", null));
-            final JsonObject javaJson = json.getJsonObject(JavaConf.JAVA_CONF_NAME);
+            final JsonObject javaJson = json.getJsonObject(Java.JAVA_CONF_NAME);
             if (javaExecutor && javaJson == null) {
                 throw new JsonException("Invalid executor configuration JSON" + (file == null ? "" : " " + file)
-                        + ": \"" + JavaConf.JAVA_CONF_NAME + "\" section required when \"language\" is \"java\"");
+                        + ": \"" + Java.JAVA_CONF_NAME + "\" section required when \"language\" is \"java\"");
             }
-            this.java = javaJson == null ? null : new JavaConf(javaJson, file);
+            this.java = javaJson == null ? null : new Java(javaJson, file);
             if (json.containsKey("in_ports")) {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "in_ports", file)) {
                     final PortSpecification port = new PortSpecification(jsonObject, file);
@@ -1115,14 +1115,14 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     public final ExecutorSpecification setLanguage(String language) {
         this.language = language;
-        this.javaExecutor = JavaConf.JAVA_LANGUAGE.equals(language);
+        this.javaExecutor = Java.JAVA_LANGUAGE.equals(language);
         this.chainExecutor = ChainSpecification.CHAIN_LANGUAGE.equals(language);
         return this;
     }
 
     /**
      * Returns <code>true</code> if the current {@link #getLanguage() language} is
-     * {@value JavaConf#JAVA_LANGUAGE}.
+     * {@value Java#JAVA_LANGUAGE}.
      *
      * @return whether this executor is Java-based.
      */
@@ -1143,11 +1143,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
      *
      * @return configuration of Java executor.
      */
-    public final JavaConf getJava() {
+    public final Java getJava() {
         return java;
     }
 
-    public final ExecutorSpecification setJava(JavaConf java) {
+    public final ExecutorSpecification setJava(Java java) {
         this.java = java;
         return this;
     }
@@ -1384,7 +1384,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             builder.add("name", name);
             builder.add("id", id);
             if (java != null) {
-                builder.add(JavaConf.JAVA_CONF_NAME, java.toJson());
+                builder.add(Java.JAVA_CONF_NAME, java.toJson());
             }
             if (platformId != null) {
                 builder.add("platform_id", platformId);
@@ -1415,7 +1415,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             this.setName(executor.getClass().getSimpleName());
         }
         if (this.java == null) {
-            this.setJava(new JavaConf().setJson(JavaConf.standardJson(className)));
+            this.setJava(new Java().setJson(Java.standardJson(className)));
         }
         final Map<String, PortSpecification> inputPorts = new LinkedHashMap<>(this.inputPorts);
         for (Port port : executor.inputPorts()) {
@@ -1588,7 +1588,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         checkNull(name, "name");
         checkNull(id, "id");
         if (javaExecutor) {
-            checkNull(java, JavaConf.JAVA_CONF_NAME);
+            checkNull(java, Java.JAVA_CONF_NAME);
         }
     }
 
@@ -1735,7 +1735,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 ",\n  id='" + id + '\'' +
                 ",\n  options=" + options +
                 ",\n  language=" + language +
-                ",\n  javaConf=" + java +
+                ",\n  java=" + java +
                 ",\n  inputPorts=" + inputPorts +
                 ",\n  outputPorts=" + outputPorts +
                 ",\n  controls=" + controls +
@@ -1829,34 +1829,34 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
 
     protected void buildLanguageJson(JsonObjectBuilder builder) {
         if (java != null) {
-            builder.add(JavaConf.JAVA_CONF_NAME, java.toJson());
+            builder.add(Java.JAVA_CONF_NAME, java.toJson());
         }
     }
 
-    private static void setAdditionalFields(ControlSpecification controlSpecification, ChainBlock block) {
-        final ChainSpecification.Block blockConf = block.getBlock();
-        if (blockConf != null) {
-            final ChainSpecification.Block.System system = blockConf.getSystem();
-            controlSpecification.setCaption(makeCaption(block, system.getCaption()));
+    private static void setAdditionalFields(ControlSpecification controlSpecification, ChainBlock chainBlock) {
+        final ChainSpecification.Block block = chainBlock.getBlock();
+        if (block != null) {
+            final ChainSpecification.Block.System system = block.getSystem();
+            controlSpecification.setCaption(makeCaption(chainBlock, system.getCaption()));
             controlSpecification.setDescription(system.getDescription());
         }
     }
 
-    private static void setAdditionalFields(PortSpecification portSpecification, ChainBlock block) {
-        final ChainSpecification.Block blockConf = block.getBlock();
-        if (blockConf != null) {
-            final ChainSpecification.Block.System system = blockConf.getSystem();
-            portSpecification.setCaption(makeCaption(block, system.getCaption()));
+    private static void setAdditionalFields(PortSpecification portSpecification, ChainBlock chainBlock) {
+        final ChainSpecification.Block block = chainBlock.getBlock();
+        if (block != null) {
+            final ChainSpecification.Block.System system = block.getSystem();
+            portSpecification.setCaption(makeCaption(chainBlock, system.getCaption()));
             portSpecification.setHint(system.getDescription());
         }
     }
 
-    private static String makeCaption(ChainBlock block, String customCaption) {
-        final String standardCaption = block.getStandardInputOutputPortCaption();
+    private static String makeCaption(ChainBlock chainBlock, String customCaption) {
+        final String standardCaption = chainBlock.getStandardInputOutputPortCaption();
         if (standardCaption != null && !standardCaption.equals(customCaption)) {
-            assert block.getSystemName() != null : "getStandardInputOutputPortCaption() returns non-null "
+            assert chainBlock.getSystemName() != null : "getStandardInputOutputPortCaption() returns non-null "
                     + standardCaption + " for null system name";
-            // Note: we don't set specific caption if the corresponding block
+            // Note: we don't set specific caption if the corresponding chain block
             // has no system name or has standard caption like "[labels]",
             // formed on the base of system name;
             return customCaption;

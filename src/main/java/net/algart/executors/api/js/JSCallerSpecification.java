@@ -40,17 +40,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class JSCallerSpecification extends ExecutorSpecification {
-    public static final class JSConf extends AbstractConvertibleToJson {
+    public static final class JS extends AbstractConvertibleToJson {
 
         public static final String DEFAULT_FUNCTION = "execute";
 
         private String module;
         private String function = DEFAULT_FUNCTION;
 
-        public JSConf() {
+        public JS() {
         }
 
-        private JSConf(JsonObject json, Path file) {
+        private JS(JsonObject json, Path file) {
             this.module = Jsons.reqString(json, "module", file);
             this.function = json.getString("function", function);
         }
@@ -59,7 +59,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
             return module;
         }
 
-        public JSConf setModule(String module) {
+        public JS setModule(String module) {
             this.module = nonEmpty(module);
             return this;
         }
@@ -68,7 +68,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
             return function;
         }
 
-        public JSConf setFunction(String function) {
+        public JS setFunction(String function) {
             this.function = nonEmpty(function);
             return this;
         }
@@ -80,7 +80,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
 
         @Override
         public String toString() {
-            return "JSConf{" +
+            return "JS{" +
                     "module='" + module + '\'' +
                     ", function='" + function + '\'' +
                     '}';
@@ -93,7 +93,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
         }
     }
 
-    private JSConf js = null;
+    private JS js = null;
 
     public JSCallerSpecification() {
     }
@@ -105,7 +105,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
             throw new JsonException("Invalid executor configuration JSON" + (file == null ? "" : " " + file)
                     + ": \"js\" section required when \"language\" is \"js\"");
         }
-        this.js = jsJson == null ? null : new JSConf(jsJson, file);
+        this.js = jsJson == null ? null : new JS(jsJson, file);
     }
 
     public static JSCallerSpecification read(Path specificationFile) throws IOException {
@@ -164,11 +164,11 @@ public class JSCallerSpecification extends ExecutorSpecification {
         return GraalSourceContainer.JAVASCRIPT_LANGUAGE.equals(getLanguage());
     }
 
-    public JSConf getJS() {
+    public JS getJS() {
         return js;
     }
 
-    public JSCallerSpecification setJS(JSConf js) {
+    public JSCallerSpecification setJS(JS js) {
         this.js = js;
         return this;
     }
