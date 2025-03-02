@@ -31,6 +31,7 @@ import net.algart.executors.api.system.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_DEFAULT_SETTINGS = "default_settings";
@@ -40,7 +41,9 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     public static final String OUTPUT_DESCRIPTION = "description";
     public static final String OUTPUT_ID = "id";
     public static final String OUTPUT_COMPLETE = "complete";
-    public static final String OUTPUT_NUMBER_OF_SUBTREES = "number_of_subtrees";
+    public static final String OUTPUT_NUMBER_OF_TREES = "number_of_trees";
+    public static final String OUTPUT_SUBTREE_PATHS = "tree_paths";
+    public static final String OUTPUT_CONTROL_PATHS = "control_paths";
 
     private static final List<String> ALL_OUTPUT_PORTS = List.of(
             DEFAULT_OUTPUT_PORT,
@@ -51,7 +54,9 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
             OUTPUT_DESCRIPTION,
             OUTPUT_ID,
             OUTPUT_COMPLETE,
-            OUTPUT_NUMBER_OF_SUBTREES);
+            OUTPUT_NUMBER_OF_TREES,
+            OUTPUT_SUBTREE_PATHS,
+            OUTPUT_CONTROL_PATHS);
 
     private String id = "n/a";
     private boolean buildTree = true;
@@ -116,7 +121,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     public void process() {
         ALL_OUTPUT_PORTS.forEach(s -> getScalar(s).remove());
         getScalar(OUTPUT_COMPLETE).setTo(false);
-        getScalar(OUTPUT_NUMBER_OF_SUBTREES).setTo(0);
+        getScalar(OUTPUT_NUMBER_OF_TREES).setTo(0);
         String id = getInputScalar(GetExecutorSpecification.INPUT_EXECUTOR_ID, true).getValue();
         if (id == null) {
             id = this.id;
@@ -135,7 +140,9 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         getScalar(OUTPUT_DESCRIPTION).setTo(specification.getDescription());
         getScalar(OUTPUT_ID).setTo(specification.getId());
         getScalar(OUTPUT_COMPLETE).setTo(tree.isComplete());
-        getScalar(OUTPUT_NUMBER_OF_SUBTREES).setTo(tree.numberOfSubTrees());
+        getScalar(OUTPUT_NUMBER_OF_TREES).setTo(tree.numberOfTrees());
+        setOutputScalarIfNecessary(OUTPUT_SUBTREE_PATHS, () -> listToString(tree.treePaths()));
+        setOutputScalarIfNecessary(OUTPUT_CONTROL_PATHS, () -> listToString(tree.controlPaths()));
     }
 
     public SettingsTree buildSettingsTree(String executorId) {
@@ -180,5 +187,9 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
                 (t5 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6, (t5 - t4) * 1e-6));
         return tree;
+    }
+
+    private static String listToString(List<?> paths) {
+        return paths.stream().map(Object::toString).collect(Collectors.joining("\n"));
     }
 }

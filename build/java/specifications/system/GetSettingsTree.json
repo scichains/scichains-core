@@ -62,8 +62,18 @@
     },
     {
       "value_type": "scalar",
-      "name": "number_of_subtrees",
-      "hint": "Will contain the number of sub-settings found in this executor and its descendants. Zero values mean that this executor has no child sub-settings."
+      "name": "number_of_trees",
+      "hint": "Will contain the number of sub-settings found in this executor and its descendants plus 1 (this settings).\nThe value 1 means that this executor has no child sub-settings."
+    },
+    {
+      "value_type": "scalar",
+      "name": "tree_paths",
+      "hint": "Paths to all found settings trees (including this one)."
+    },
+    {
+      "value_type": "scalar",
+      "name": "control_paths",
+      "hint": "Paths to all found controls."
     }
   ],
   "controls": [

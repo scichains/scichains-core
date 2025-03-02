@@ -854,7 +854,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     private Java java = null;
     private Map<String, PortSpecification> inputPorts = new LinkedHashMap<>();
     private Map<String, PortSpecification> outputPorts = new LinkedHashMap<>();
-    private Map<String, ControlSpecification> controls = new LinkedHashMap<>();
+    Map<String, ControlSpecification> controls = new LinkedHashMap<>();
     private SettingsSpecification settings = null;
     private SourceInfo sourceInfo = null;
     // - note: "sourceInfo" field is not usually loaded from FILE, it should be defined by external means
