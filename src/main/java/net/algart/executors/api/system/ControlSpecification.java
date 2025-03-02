@@ -441,7 +441,7 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
 
     @Override
     public String toString() {
-        return "ControlConf{" +
+        return "ControlSpecification{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", caption='" + caption + '\'' +

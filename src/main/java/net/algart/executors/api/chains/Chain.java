@@ -192,11 +192,11 @@ public final class Chain implements AutoCloseable {
         result.setExecuteAll(execution.isAll());
         result.setMultithreading(execution.isMultithreading());
         result.setIgnoreExceptions(execution.isIgnoreExceptions());
-        for (ChainSpecification.ChainBlockConf blockConf : chainSpecification.getBlocks()) {
-            result.addBlock(ChainBlock.of(result, blockConf));
+        for (ChainSpecification.Block block : chainSpecification.getBlocks()) {
+            result.addBlock(ChainBlock.of(result, block));
         }
-        for (ChainSpecification.ChainLinkConf linkConf : chainSpecification.getLinks()) {
-            result.addLink(ChainLink.of(linkConf));
+        for (ChainSpecification.Link link : chainSpecification.getLinks()) {
+            result.addLink(ChainLink.of(link));
         }
         if (chainSpecification.hasSpecificationFile()) {
             result.setCurrentDirectory(chainSpecification.getSpecificationFile().getParent());
@@ -655,11 +655,11 @@ public final class Chain implements AutoCloseable {
         assert id != null;
         ChainBlock mainSettingsBlock = null;
         for (ChainBlock block : allBlocks.values()) {
-            final ChainSpecification.ChainBlockConf blockConfJson = block.getBlockConfJson();
-            if (blockConfJson == null) {
+            final ChainSpecification.Block blockJson = block.getBlock();
+            if (blockJson == null) {
                 continue;
             }
-            final String blockExecutorId = blockConfJson.getExecutorId();
+            final String blockExecutorId = blockJson.getExecutorId();
             assert blockExecutorId != null;
             if (id.equals(blockExecutorId)) {
                 mainSettingsBlock = block;

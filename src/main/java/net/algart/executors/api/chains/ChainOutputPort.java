@@ -52,13 +52,13 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
         return new ChainOutputPort(block, id, name, portType, dataType);
     }
 
-    public static ChainOutputPort of(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
+    public static ChainOutputPort of(ChainBlock block, ChainSpecification.Block.Port port) {
         return of(
                 block,
-                portConf.getUuid(),
-                portConf.getName(),
-                portConf.getPortType(),
-                portConf.getDataType());
+                port.getUuid(),
+                port.getName(),
+                port.getPortType(),
+                port.getDataType());
     }
 
     public static ChainOutputPort of(ChainBlock block, PortSpecification portSpecification) {

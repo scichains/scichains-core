@@ -1834,20 +1834,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     }
 
     private static void setAdditionalFields(ControlSpecification controlSpecification, ChainBlock block) {
-        final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
+        final ChainSpecification.Block blockConf = block.getBlock();
         if (blockConf != null) {
-            final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
-            controlSpecification.setCaption(makeCaption(block, systemConf.getCaption()));
-            controlSpecification.setDescription(systemConf.getDescription());
+            final ChainSpecification.Block.System system = blockConf.getSystem();
+            controlSpecification.setCaption(makeCaption(block, system.getCaption()));
+            controlSpecification.setDescription(system.getDescription());
         }
     }
 
     private static void setAdditionalFields(PortSpecification portSpecification, ChainBlock block) {
-        final ChainSpecification.ChainBlockConf blockConf = block.getBlockConfJson();
+        final ChainSpecification.Block blockConf = block.getBlock();
         if (blockConf != null) {
-            final ChainSpecification.ChainBlockConf.SystemConf systemConf = blockConf.getSystem();
-            portSpecification.setCaption(makeCaption(block, systemConf.getCaption()));
-            portSpecification.setHint(systemConf.getDescription());
+            final ChainSpecification.Block.System system = blockConf.getSystem();
+            portSpecification.setCaption(makeCaption(block, system.getCaption()));
+            portSpecification.setHint(system.getDescription());
         }
     }
 

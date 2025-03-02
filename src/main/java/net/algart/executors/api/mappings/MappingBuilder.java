@@ -170,7 +170,7 @@ public final class MappingBuilder implements Cloneable {
     public JsonObject build(Parameters parameters) {
         Objects.requireNonNull(parameters, "Null parameters");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        final MappingSpecification.ControlConfTemplate controlTemplate = specification.getControlTemplate();
+        final MappingSpecification.ControlTemplate controlTemplate = specification.getControlTemplate();
         for (String key : keys) {
             JsonValue jsonValue = getJsonValue(key, controlTemplate, parameters);
             assert jsonValue != null;
@@ -239,15 +239,15 @@ public final class MappingBuilder implements Cloneable {
 
     private static JsonValue getJsonValue(
             String name,
-            MappingSpecification.ControlConfTemplate controlConfTemplate,
+            MappingSpecification.ControlTemplate controlTemplate,
             Parameters parameters) {
-        final ParameterValueType valueType = controlConfTemplate.getValueType();
+        final ParameterValueType valueType = controlTemplate.getValueType();
         JsonValue jsonValue = null;
         if (parameters.containsKey(name)) {
             jsonValue = valueType.toJsonValue(parameters, name);
         }
         if (jsonValue == null) {
-            jsonValue = controlConfTemplate.getDefaultJsonValue();
+            jsonValue = controlTemplate.getDefaultJsonValue();
         }
         if (jsonValue == null) {
             jsonValue = valueType.emptyJsonValue();

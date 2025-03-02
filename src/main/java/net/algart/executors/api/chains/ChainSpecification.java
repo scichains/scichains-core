@@ -297,17 +297,17 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static final class ChainBlockConf extends AbstractConvertibleToJson {
-        public static final class PortConf extends AbstractConvertibleToJson {
+    public static final class Block extends AbstractConvertibleToJson {
+        public static final class Port extends AbstractConvertibleToJson {
             private String uuid;
             private String name;
             private ChainPortType portType;
             private DataType dataType;
 
-            public PortConf() {
+            public Port() {
             }
 
-            private PortConf(JsonObject json, Path file) {
+            private Port(JsonObject json, Path file) {
                 this.uuid = Jsons.reqString(json, "uuid", file);
                 this.name = Jsons.reqStringWithAlias(json, "name", "port_name", file);
                 this.portType = ChainPortType.ofOrNull(
@@ -329,7 +329,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return uuid;
             }
 
-            public PortConf setUuid(String uuid) {
+            public Port setUuid(String uuid) {
                 this.uuid = Objects.requireNonNull(uuid, "Null uuid");
                 return this;
             }
@@ -338,7 +338,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return name;
             }
 
-            public PortConf setName(String name) {
+            public Port setName(String name) {
                 this.name = Objects.requireNonNull(name, "Null name");
                 return this;
             }
@@ -347,7 +347,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return portType;
             }
 
-            public PortConf setPortType(ChainPortType portType) {
+            public Port setPortType(ChainPortType portType) {
                 this.portType = Objects.requireNonNull(portType, "Null portType");
                 return this;
             }
@@ -356,7 +356,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return dataType;
             }
 
-            public PortConf setDataType(DataType dataType) {
+            public Port setDataType(DataType dataType) {
                 this.dataType = Objects.requireNonNull(dataType, "Null dataType");
                 return this;
             }
@@ -388,14 +388,14 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             }
         }
 
-        public static final class ParameterConf extends AbstractConvertibleToJson {
+        public static final class Parameter extends AbstractConvertibleToJson {
             private String name;
             private JsonValue value = null;
 
-            public ParameterConf() {
+            public Parameter() {
             }
 
-            private ParameterConf(JsonObject json, Path file) {
+            private Parameter(JsonObject json, Path file) {
                 this.name = Jsons.reqString(json, "name", file);
                 this.value = json.get("value");
             }
@@ -404,7 +404,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return name;
             }
 
-            public ParameterConf setName(String name) {
+            public Parameter setName(String name) {
                 this.name = Objects.requireNonNull(name, "Null name");
                 return this;
             }
@@ -413,7 +413,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return value;
             }
 
-            public ParameterConf setValue(JsonValue value) {
+            public Parameter setValue(JsonValue value) {
                 this.value = value;
                 return this;
             }
@@ -440,16 +440,16 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             }
         }
 
-        public static final class SystemConf extends AbstractConvertibleToJson {
+        public static final class System extends AbstractConvertibleToJson {
             private String name = null;
             private String caption = null;
             private String description = null;
             private boolean enabled = true;
 
-            public SystemConf() {
+            public System() {
             }
 
-            private SystemConf(JsonObject json, Path file) {
+            private System(JsonObject json, Path file) {
                 this.name = json.getString("name", null);
                 this.caption = json.getString("caption", null);
                 this.description = json.getString("description", null);
@@ -460,7 +460,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return name;
             }
 
-            public SystemConf setName(String name) {
+            public System setName(String name) {
                 this.name = name;
                 return this;
             }
@@ -469,7 +469,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return caption;
             }
 
-            public SystemConf setCaption(String caption) {
+            public System setCaption(String caption) {
                 this.caption = caption;
                 return this;
             }
@@ -478,7 +478,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return description;
             }
 
-            public SystemConf setDescription(String description) {
+            public System setDescription(String description) {
                 this.description = description;
                 return this;
             }
@@ -487,7 +487,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 return enabled;
             }
 
-            public SystemConf setEnabled(boolean enabled) {
+            public System setEnabled(boolean enabled) {
                 this.enabled = enabled;
                 return this;
             }
@@ -506,7 +506,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
 
             @Override
             public String toString() {
-                return "SystemConf{" +
+                return "System{" +
                         "name='" + name + '\'' +
                         ", caption='" + caption + '\'' +
                         ", description='" + description + '\'' +
@@ -540,14 +540,14 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         private String executorName = null;
         private String executorCategory = null;
         private ExecutionStage executionStage = ExecutionStage.RUN_TIME;
-        private Map<String, ChainBlockConf.PortConf> uuidToPortMap = new LinkedHashMap<>();
-        private Map<String, ParameterConf> nameToParameterMap = new LinkedHashMap<>();
-        private SystemConf system = new SystemConf();
+        private Map<String, Port> uuidToPortMap = new LinkedHashMap<>();
+        private Map<String, Parameter> nameToParameterMap = new LinkedHashMap<>();
+        private System system = new System();
 
-        public ChainBlockConf() {
+        public Block() {
         }
 
-        private ChainBlockConf(JsonObject json, Path file) {
+        private Block(JsonObject json, Path file) {
             this.uuid = Jsons.reqString(json, "uuid", file);
             this.executorId = Jsons.reqStringWithAlias(json, "model_uuid", "executor_id", file);
             this.executorName = json.getString("executor_name", null);
@@ -566,26 +566,26 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 for (String name : OLD_PORT_ARRAYS) {
                     if (json.containsKey(name)) {
                         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, name, file)) {
-                            final ChainBlockConf.PortConf port = new ChainBlockConf.PortConf(jsonObject, file);
+                            final Port port = new Port(jsonObject, file);
                             uuidToPortMap.put(port.uuid, port);
                         }
                     }
                 }
             } else {
                 for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "ports", file)) {
-                    final ChainBlockConf.PortConf port = new ChainBlockConf.PortConf(jsonObject, file);
+                    final Port port = new Port(jsonObject, file);
                     uuidToPortMap.put(port.uuid, port);
                 }
             }
             List<JsonObject> jsonParameters = reqJsonObjectsWithAlias(
                     json, "parameters", "properties", "primitives", file);
             for (JsonObject jsonObject : jsonParameters) {
-                final ParameterConf parameterConf = new ParameterConf(jsonObject, file);
-                nameToParameterMap.put(parameterConf.name, parameterConf);
+                final Parameter parameter = new Parameter(jsonObject, file);
+                nameToParameterMap.put(parameter.name, parameter);
             }
             final JsonObject systemJson = json.getJsonObject("system");
             if (systemJson != null) {
-                system = new SystemConf(systemJson, file);
+                system = new System(systemJson, file);
             }
         }
 
@@ -593,7 +593,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return uuid;
         }
 
-        public ChainBlockConf setUuid(String uuid) {
+        public Block setUuid(String uuid) {
             this.uuid = Objects.requireNonNull(uuid, "Null UUID");
             return this;
         }
@@ -602,7 +602,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return executorId;
         }
 
-        public ChainBlockConf setExecutorId(String executorId) {
+        public Block setExecutorId(String executorId) {
             this.executorId = Objects.requireNonNull(executorId, "Null executor UUID");
             return this;
         }
@@ -611,7 +611,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return executorName;
         }
 
-        public ChainBlockConf setExecutorName(String executorName) {
+        public Block setExecutorName(String executorName) {
             this.executorName = executorName;
             return this;
         }
@@ -620,7 +620,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return executorCategory;
         }
 
-        public ChainBlockConf setExecutorCategory(String executorCategory) {
+        public Block setExecutorCategory(String executorCategory) {
             this.executorCategory = executorCategory;
             return this;
         }
@@ -629,35 +629,35 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return executionStage;
         }
 
-        public ChainBlockConf setExecutionStage(ExecutionStage executionStage) {
+        public Block setExecutionStage(ExecutionStage executionStage) {
             this.executionStage = Objects.requireNonNull(executionStage, "Null execution stage");
             return this;
         }
 
-        public Map<String, ChainBlockConf.PortConf> getUuidToPortMap() {
+        public Map<String, Port> getUuidToPortMap() {
             return Collections.unmodifiableMap(uuidToPortMap);
         }
 
-        public ChainBlockConf setUuidToPortMap(Map<String, ChainBlockConf.PortConf> uuidToPortMap) {
+        public Block setUuidToPortMap(Map<String, Port> uuidToPortMap) {
             this.uuidToPortMap = checkPorts(uuidToPortMap);
             return this;
         }
 
-        public Map<String, ParameterConf> getNameToParameterMap() {
+        public Map<String, Parameter> getNameToParameterMap() {
             return Collections.unmodifiableMap(nameToParameterMap);
         }
 
-        public ChainBlockConf setNameToParameterMap(Map<String, ParameterConf> nameToParameterMap) {
+        public Block setNameToParameterMap(Map<String, Parameter> nameToParameterMap) {
             this.nameToParameterMap = checkParameters(nameToParameterMap);
             return this;
         }
 
-        public SystemConf getSystem() {
+        public System getSystem() {
             assert system != null;
             return system;
         }
 
-        public ChainBlockConf setSystem(SystemConf system) {
+        public Block setSystem(System system) {
             this.system = Objects.requireNonNull(system, "Null system");
             return this;
         }
@@ -670,7 +670,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
 
         @Override
         public String toString() {
-            return "ChainBlockConf{" +
+            return "Block{" +
                     "uuid='" + uuid + '\'' +
                     ", executorId='" + executorId + '\'' +
                     ", executorName='" + executorName + '\'' +
@@ -696,22 +696,22 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 builder.add("execution_stage", executionStage.stageName());
             }
             final JsonArrayBuilder portsBuilder = Json.createArrayBuilder();
-            for (ChainBlockConf.PortConf port : uuidToPortMap.values()) {
+            for (Port port : uuidToPortMap.values()) {
                 portsBuilder.add(port.toJson());
             }
             builder.add("ports", portsBuilder.build());
             final JsonArrayBuilder parametersBuilder = Json.createArrayBuilder();
-            for (ParameterConf parameterConf : nameToParameterMap.values()) {
-                parametersBuilder.add(parameterConf.toJson());
+            for (Parameter parameter : nameToParameterMap.values()) {
+                parametersBuilder.add(parameter.toJson());
             }
             builder.add("parameters", parametersBuilder.build());
             builder.add("system", system.toJson());
         }
 
-        private static Map<String, ChainBlockConf.PortConf> checkPorts(Map<String, ChainBlockConf.PortConf> ports) {
+        private static Map<String, Port> checkPorts(Map<String, Port> ports) {
             Objects.requireNonNull(ports, "Null ports");
             ports = new LinkedHashMap<>(ports);
-            for (Map.Entry<String, ChainBlockConf.PortConf> port : ports.entrySet()) {
+            for (Map.Entry<String, Port> port : ports.entrySet()) {
                 if (port.getKey() == null) {
                     throw new IllegalArgumentException("Illegal port: null key");
                 }
@@ -727,10 +727,10 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return ports;
         }
 
-        private static Map<String, ParameterConf> checkParameters(Map<String, ParameterConf> parameters) {
+        private static Map<String, Parameter> checkParameters(Map<String, Parameter> parameters) {
             Objects.requireNonNull(parameters, "Null parameters");
             parameters = new LinkedHashMap<>(parameters);
-            for (Map.Entry<String, ParameterConf> parameter : parameters.entrySet()) {
+            for (Map.Entry<String, Parameter> parameter : parameters.entrySet()) {
                 if (parameter.getKey() == null) {
                     throw new IllegalArgumentException("Illegal parameter: null key");
                 }
@@ -748,15 +748,15 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         }
     }
 
-    public static final class ChainLinkConf extends AbstractConvertibleToJson {
+    public static final class Link extends AbstractConvertibleToJson {
         private String uuid;
         private String srcPortUuid;
         private String destPortUuid;
 
-        public ChainLinkConf() {
+        public Link() {
         }
 
-        private ChainLinkConf(JsonObject json, Path file) {
+        private Link(JsonObject json, Path file) {
             this.uuid = json.getString("uuid", null);
             this.srcPortUuid = json.getString("src_port_uuid", null);
             this.destPortUuid = json.getString("dest_port_uuid", null);
@@ -771,7 +771,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return uuid;
         }
 
-        public ChainLinkConf setUuid(String uuid) {
+        public Link setUuid(String uuid) {
             this.uuid = Objects.requireNonNull(uuid, "Null uuid");
             return this;
         }
@@ -780,7 +780,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return srcPortUuid;
         }
 
-        public ChainLinkConf setSrcPortUuid(String srcPortUuid) {
+        public Link setSrcPortUuid(String srcPortUuid) {
             this.srcPortUuid = Objects.requireNonNull(srcPortUuid, "Null srcPortUuid");
             return this;
         }
@@ -789,7 +789,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return destPortUuid;
         }
 
-        public ChainLinkConf setDestPortUuid(String destPortUuid) {
+        public Link setDestPortUuid(String destPortUuid) {
             this.destPortUuid = Objects.requireNonNull(destPortUuid, "Null destPortUuid");
             return this;
         }
@@ -803,7 +803,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
 
         @Override
         public String toString() {
-            return "ChainLink{" +
+            return "Link{" +
                     "uuid='" + uuid + '\'' +
                     ", srcPortUuid='" + srcPortUuid + '\'' +
                     ", destPortUuid='" + destPortUuid + '\'' +
@@ -821,8 +821,8 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
     private Path specificationFile = null;
     private String version = CURRENT_VERSION;
     private Executor executor;
-    private List<ChainBlockConf> blocks = new ArrayList<>();
-    private List<ChainLinkConf> links = new ArrayList<>();
+    private List<Block> blocks = new ArrayList<>();
+    private List<Link> links = new ArrayList<>();
 
     // The following properties are not loaded from JSON file, but are set later,
     // while loading all JSON specifications for some platform
@@ -845,10 +845,10 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         this.executor = new Executor(Jsons.reqJsonObject(json, "executor", file), file);
         for (JsonObject jsonObject : reqJsonObjectsWithAlias(
                 json, "blocks", "data_processes", null, file)) {
-            this.blocks.add(new ChainBlockConf(jsonObject, file));
+            this.blocks.add(new Block(jsonObject, file));
         }
         for (JsonObject jsonObject : Jsons.reqJsonObjects(json, "links", file)) {
-            final ChainLinkConf link = new ChainLinkConf(jsonObject, file);
+            final Link link = new Link(jsonObject, file);
             if (link.isValid()) {
                 this.links.add(link);
             }
@@ -987,20 +987,20 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public List<ChainBlockConf> getBlocks() {
+    public List<Block> getBlocks() {
         return Collections.unmodifiableList(blocks);
     }
 
-    public ChainSpecification setBlocks(List<ChainBlockConf> blocks) {
+    public ChainSpecification setBlocks(List<Block> blocks) {
         this.blocks = ExecutorSpecification.checkNonNullObjects(blocks);
         return this;
     }
 
-    public List<ChainLinkConf> getLinks() {
+    public List<Link> getLinks() {
         return links;
     }
 
-    public ChainSpecification setLinks(List<ChainLinkConf> links) {
+    public ChainSpecification setLinks(List<Link> links) {
         this.links = links;
         return this;
     }
@@ -1065,11 +1065,11 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         final StringBuilder sb = new StringBuilder("ChainSpecification{\n  version=" + version +
                 ",\n  executor=" + executor +
                 ",\n  blocks=[\n");
-        for (ChainBlockConf block : blocks) {
+        for (Block block : blocks) {
             sb.append("    ").append(block).append('\n');
         }
         sb.append("  ],\n  links=[\n");
-        for (ChainLinkConf link : links) {
+        for (Link link : links) {
             sb.append("    ").append(link).append('\n');
         }
         sb.append("  ]\n}\n");
@@ -1084,12 +1084,12 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         }
         builder.add("executor", executor.toJson());
         final JsonArrayBuilder blocksBuilder = Json.createArrayBuilder();
-        for (ChainBlockConf block : blocks) {
+        for (Block block : blocks) {
             blocksBuilder.add(block.toJson());
         }
         builder.add("blocks", blocksBuilder.build());
         final JsonArrayBuilder linksBuilder = Json.createArrayBuilder();
-        for (ChainLinkConf link : links) {
+        for (Link link : links) {
             linksBuilder.add(link.toJson());
         }
         builder.add("links", linksBuilder.build());

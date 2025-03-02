@@ -110,7 +110,7 @@ public final class PortSpecification extends AbstractConvertibleToJson {
 
     @Override
     public String toString() {
-        return "Port{" +
+        return "PortSpecification{" +
                 "name='" + name + '\'' +
                 ", valueType=" + valueType +
                 ", caption=" + caption +

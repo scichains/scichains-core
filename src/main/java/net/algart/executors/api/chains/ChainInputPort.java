@@ -50,13 +50,13 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
         return new ChainInputPort(block, id, name, portType, dataType);
     }
 
-    public static ChainInputPort of(ChainBlock block, ChainSpecification.ChainBlockConf.PortConf portConf) {
+    public static ChainInputPort of(ChainBlock block, ChainSpecification.Block.Port port) {
         return of(
                 block,
-                portConf.getUuid(),
-                portConf.getName(),
-                portConf.getPortType(),
-                portConf.getDataType());
+                port.getUuid(),
+                port.getName(),
+                port.getPortType(),
+                port.getDataType());
     }
 
     public static ChainInputPort of(ChainBlock block, PortSpecification portSpecification) {
@@ -100,7 +100,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     if (!(data instanceof SScalar)) {
                         throw new IllegalArgumentException("Invalid port: virtual data port contains "
                                 + "non-scalar data " + data + " (" + this + ")");
-                        // - should not occur: it was already checked in ChainSpecification.ChainBlockConf.PortConf constructor
+                        // - should not occur: it was already checked in ChainSpecification.Block.Port constructor
                     }
                     // exchanging/moving data between all ports blocks must be synchronized globally
                     if (!data.isInitialized()) {

@@ -45,10 +45,10 @@ public final class ChainParameter {
 
     public static ChainParameter of(
             ChainBlock block,
-            ChainSpecification.ChainBlockConf.ParameterConf parameterConf) {
-        final ChainParameter result = newInstance(parameterConf.getName());
+            ChainSpecification.Block.Parameter parameter) {
+        final ChainParameter result = newInstance(parameter.getName());
         assert result.value == null : "newInstance must set null value";
-        result.loadValue(block, parameterConf.getValue());
+        result.loadValue(block, parameter.getValue());
         return result;
     }
 
@@ -62,7 +62,7 @@ public final class ChainParameter {
 
     public ParameterValueType probableType(ChainBlock block, ParameterValueType defaultType) {
         Objects.requireNonNull(block, "Null block");
-        final ControlSpecification control = controlConf(block);
+        final ControlSpecification control = controlSpecification(block);
         return control != null ? control.getValueType() : defaultType;
     }
 
@@ -79,7 +79,7 @@ public final class ChainParameter {
     }
 
     private void loadValue(ChainBlock block, JsonValue parameterJsonValue) {
-        ControlSpecification control = controlConf(block);
+        ControlSpecification control = controlSpecification(block);
         if (control != null) {
             // can be null, for example, for system properties (obsolete concept)
             final ParameterValueType valueType = control.getValueType();
@@ -105,7 +105,7 @@ public final class ChainParameter {
         // - but if it is null, we keep the default value
     }
 
-    private ControlSpecification controlConf(ChainBlock block) {
+    private ControlSpecification controlSpecification(ChainBlock block) {
         ExecutorSpecification specification = block.getExecutorSpecification();
         return specification != null ? specification.getControl(this.name) : null;
     }

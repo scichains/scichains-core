@@ -71,7 +71,7 @@ public final class ChainBlock {
     // (but if there is no executorSpecification, they are still loaded as strings);
     // 4) for diagnostic messages.
 
-    ChainSpecification.ChainBlockConf blockConfJson = null;
+    ChainSpecification.Block blockJson = null;
     // - Correctly filled while typical usage, but not necessary for this technology.
     // It is used mostly for diagnostic messages and can be useful for external clients,
     // and also for making more user-friendly executor JSON in ExecutorSpecification.setTo(Chain) method
@@ -139,7 +139,7 @@ public final class ChainBlock {
         this.executorId = block.executorId;
         this.executorSpecification = block.executorSpecification;
 
-        this.blockConfJson = block.blockConfJson;
+        this.blockJson = block.blockJson;
         this.executionStage = block.executionStage;
         this.enabled = block.enabled;
         this.systemName = block.systemName;
@@ -187,14 +187,14 @@ public final class ChainBlock {
         return systemName == null ? null : DEFAULT_CHAIN_PORT_CAPTION_PATTERN.replace("$$$", systemName);
     }
 
-    public static ChainBlock of(Chain chain, ChainSpecification.ChainBlockConf blockConf) {
-        Objects.requireNonNull(blockConf, "Null blockConf");
-        final String executorId = blockConf.getExecutorId();
-        final ChainBlock result = newInstance(chain, blockConf.getUuid(), executorId);
-        result.blockConfJson = blockConf;
-        result.setExecutionStage(blockConf.getExecutionStage());
-        result.setEnabled(blockConf.getSystem().isEnabled());
-        result.setSystemName(blockConf.getSystem().name());
+    public static ChainBlock of(Chain chain, ChainSpecification.Block block) {
+        Objects.requireNonNull(block, "Null block");
+        final String executorId = block.getExecutorId();
+        final ChainBlock result = newInstance(chain, block.getUuid(), executorId);
+        result.blockJson = block;
+        result.setExecutionStage(block.getExecutionStage());
+        result.setEnabled(block.getSystem().isEnabled());
+        result.setSystemName(block.getSystem().name());
         final boolean enabledRunTime = result.isExecutedAtRunTime();
         result.setStandardInput(enabledRunTime && result.executorSpecification != null
                 && result.executorSpecification.isInput());
@@ -202,8 +202,8 @@ public final class ChainBlock {
                 && result.executorSpecification.isOutput());
         result.setStandardData(enabledRunTime && result.executorSpecification != null
                 && result.executorSpecification.isData());
-        result.loadParameters(blockConf);
-        result.loadPorts(blockConf);
+        result.loadParameters(block);
+        result.loadPorts(block);
         result.setEnabledByLegacyWayIfNecessary();
         result.setSystemNameByLegacyWayIfNecessary();
         if (result.executorSpecification == null) {
@@ -243,8 +243,8 @@ public final class ChainBlock {
         return executorSpecification;
     }
 
-    public ChainSpecification.ChainBlockConf getBlockConfJson() {
-        return blockConfJson;
+    public ChainSpecification.Block getBlock() {
+        return blockJson;
     }
 
     public Map<String, ChainParameter> getParameters() {
@@ -516,10 +516,10 @@ public final class ChainBlock {
                         executor = factory.newExecutor(executorId, CreateMode.NORMAL);
                     } catch (ClassNotFoundException | ExecutorExpectedException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
-                                + (this.blockConfJson == null ?
+                                + (this.blockJson == null ?
                                 "" :
-                                " (name=" + ExecutorSpecification.quote(blockConfJson.getExecutorName())
-                                        + ", category=" + ExecutorSpecification.quote(blockConfJson.getExecutorCategory())
+                                " (name=" + ExecutorSpecification.quote(blockJson.getExecutorName())
+                                        + ", category=" + ExecutorSpecification.quote(blockJson.getExecutorCategory())
                                         + ")")
                                 + (e instanceof ClassNotFoundException ?
                                 " - Java class not found: " + e.getMessage() :
@@ -535,7 +535,7 @@ public final class ChainBlock {
 //                                + Executor.class.getName() + " in " + this);
 //                    }
 
-                    initializePortsSpecifiedInChainConf(executor);
+                    initializePortsSpecifiedInChain(executor);
                     executor.setOwnerId(chain.id());
                     executor.setContextId(chain.contextId());
                     executor.setContextName(chain.name());
@@ -757,7 +757,7 @@ public final class ChainBlock {
     }
 
     public String timingInfo() {
-        final String blockName = blockConfJson != null ? blockConfJson.getSystem().name() : null;
+        final String blockName = blockJson != null ? blockJson.getSystem().name() : null;
         return String.format("block%s%s%s%s%s%s ID '%s', executor ID '%s'%s, %s [%X]: %s",
                 !isEnabled() ? " [DISABLED]" : "",
                 executionStage != ExecutionStage.RUN_TIME ? " [" + executionStage + "]" : "",
@@ -864,10 +864,10 @@ public final class ChainBlock {
 
     private String friendlyName(boolean useCaption) {
         final String executorName = executorSpecification != null ? executorSpecification.getName() :
-                blockConfJson != null ? blockConfJson.getExecutorName() : null;
+                blockJson != null ? blockJson.getExecutorName() : null;
         String caption = null;
-        if (useCaption && blockConfJson != null) {
-            caption = blockConfJson.getSystem().getCaption();
+        if (useCaption && blockJson != null) {
+            caption = blockJson.getSystem().getCaption();
             if (Objects.equals(caption, executorName)) {
                 caption = null;
             }
@@ -883,8 +883,8 @@ public final class ChainBlock {
 
     private String friendlyCaption(boolean quoted) {
         final String executorName = executorSpecification != null ? executorSpecification.getName() :
-                blockConfJson != null ? blockConfJson.getExecutorName() : null;
-        String caption = blockConfJson == null ? null : blockConfJson.getSystem().getCaption();
+                blockJson != null ? blockJson.getExecutorName() : null;
+        String caption = blockJson == null ? null : blockJson.getSystem().getCaption();
         if (caption == null) {
             caption = executorName;
         }
@@ -965,10 +965,10 @@ public final class ChainBlock {
         return chain.isMultithreading() ? inputs.parallelStream() : inputs.stream();
     }
 
-    private void loadParameters(ChainSpecification.ChainBlockConf blockConf) {
+    private void loadParameters(ChainSpecification.Block block) {
         this.parameters.clear();
-        for (ChainSpecification.ChainBlockConf.ParameterConf parameterConf : blockConf.getNameToParameterMap().values()) {
-            addParameter(ChainParameter.of(this, parameterConf));
+        for (ChainSpecification.Block.Parameter parameter : block.getNameToParameterMap().values()) {
+            addParameter(ChainParameter.of(this, parameter));
         }
     }
 
@@ -992,7 +992,7 @@ public final class ChainBlock {
         }
     }
 
-    private void loadPorts(ChainSpecification.ChainBlockConf blockConf) {
+    private void loadPorts(ChainSpecification.Block block) {
         this.inputPorts.clear();
         this.outputPorts.clear();
         if (this.executorSpecification != null) {
@@ -1015,22 +1015,22 @@ public final class ChainBlock {
         // It can be important to provide a correct set of ports (even if chain's JSON doesn't specify all ports).
         final Map<ChainPortKey, ChainInputPort> chainInputPorts = new LinkedHashMap<>();
         final Map<ChainPortKey, ChainOutputPort> chainOutputPorts = new LinkedHashMap<>();
-        for (ChainSpecification.ChainBlockConf.PortConf portConf : blockConf.getUuidToPortMap().values()) {
-            switch (portConf.getPortType().actualPortType()) {
+        for (ChainSpecification.Block.Port port : block.getUuidToPortMap().values()) {
+            switch (port.getPortType().actualPortType()) {
                 // We must add here both actual and virtual ports;
                 // we distinguish them by ChainPort.key (i.e., by name + type)
                 case INPUT -> {
-                    final ChainInputPort inputPort = ChainInputPort.of(this, portConf);
+                    final ChainInputPort inputPort = ChainInputPort.of(this, port);
                     if (chainInputPorts.putIfAbsent(inputPort.key, inputPort) != null) {
                         throw new IllegalArgumentException("Duplicate input port name \"" + inputPort.key
-                                + "\" in " + blockConf);
+                                + "\" in " + block);
                     }
                 }
                 case OUTPUT -> {
-                    final ChainOutputPort outputPort = ChainOutputPort.of(this, portConf);
+                    final ChainOutputPort outputPort = ChainOutputPort.of(this, port);
                     if (chainOutputPorts.putIfAbsent(outputPort.key, outputPort) != null) {
                         throw new IllegalArgumentException("Duplicate output port name \"" + outputPort.key
-                                + "\" in " + blockConf);
+                                + "\" in " + block);
                     }
                 }
             }
@@ -1041,7 +1041,7 @@ public final class ChainBlock {
         this.outputPorts.putAll(chainOutputPorts);
     }
 
-    private void initializePortsSpecifiedInChainConf(ExecutionBlock executor) {
+    private void initializePortsSpecifiedInChain(ExecutionBlock executor) {
         for (ChainInputPort chainInputPort : inputPorts.values()) {
             if (chainInputPort.portType.isActual()) {
                 // - Virtual ports do not correspond to any Executor's PORTS, they correspond to its PARAMETERS.

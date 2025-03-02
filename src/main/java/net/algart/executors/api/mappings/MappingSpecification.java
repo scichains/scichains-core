@@ -62,15 +62,15 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
 
     private static final Pattern COMPILED_MAPPING_FILE_PATTERN = Pattern.compile(MAPPING_FILE_PATTERN);
 
-    public static final class ControlConfTemplate extends AbstractConvertibleToJson {
+    public static final class ControlTemplate extends AbstractConvertibleToJson {
         private ParameterValueType valueType = ParameterValueType.STRING;
         private ControlEditionType editionType = null;
         private JsonValue defaultJsonValue = null;
 
-        public ControlConfTemplate() {
+        public ControlTemplate() {
         }
 
-        public ControlConfTemplate(JsonObject json, Path file) {
+        public ControlTemplate(JsonObject json, Path file) {
             final String valueType = json.getString("value_type", ParameterValueType.STRING.typeName());
             this.valueType = ParameterValueType.ofOrNull(valueType);
             Jsons.requireNonNull(this.valueType, json, "value_type",
@@ -93,7 +93,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
             return valueType;
         }
 
-        public ControlConfTemplate setValueType(ParameterValueType valueType) {
+        public ControlTemplate setValueType(ParameterValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "Null valueType");
             return this;
         }
@@ -102,7 +102,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
             return defaultJsonValue;
         }
 
-        public ControlConfTemplate setDefaultJsonValue(JsonValue defaultJsonValue) {
+        public ControlTemplate setDefaultJsonValue(JsonValue defaultJsonValue) {
             assert valueType != null;
             if (defaultJsonValue != null) {
                 if (valueType.toParameter(defaultJsonValue) == null) {
@@ -118,7 +118,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
             return editionType;
         }
 
-        public ControlConfTemplate setEditionType(ControlEditionType editionType) {
+        public ControlTemplate setEditionType(ControlEditionType editionType) {
             this.editionType = editionType;
             return this;
         }
@@ -129,7 +129,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
 
         @Override
         public String toString() {
-            return "ControlConfTemplate{" +
+            return "ControlTemplate{" +
                     "valueType=" + valueType +
                     ", editionType=" + editionType +
                     ", defaultJsonValue=" + defaultJsonValue +
@@ -159,7 +159,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     private String className = null;
     private String description = null;
     private String id;
-    private ControlConfTemplate controlTemplate;
+    private ControlTemplate controlTemplate;
     private String keysFile = null;
     private String enumItemsFile = null;
     private List<String> keys = null;
@@ -195,8 +195,8 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         this.id = Jsons.reqString(json, "id", file);
         final JsonObject controlTemplateJson = json.getJsonObject("control_template");
         this.controlTemplate = controlTemplateJson == null ?
-                new ControlConfTemplate() :
-                new ControlConfTemplate(Jsons.reqJsonObject(json, "control_template"), file);
+                new ControlTemplate() :
+                new ControlTemplate(Jsons.reqJsonObject(json, "control_template"), file);
         this.keysFile = json.getString("keys_file", null);
         this.enumItemsFile = json.getString("enum_items_file", null);
         this.keys = toNames(new ArrayList<>(),
@@ -345,11 +345,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public ControlConfTemplate getControlTemplate() {
+    public ControlTemplate getControlTemplate() {
         return controlTemplate;
     }
 
-    public MappingSpecification setControlTemplate(ControlConfTemplate controlTemplate) {
+    public MappingSpecification setControlTemplate(ControlTemplate controlTemplate) {
         this.controlTemplate = Objects.requireNonNull(controlTemplate, "Null controlTemplate");
         return this;
     }
@@ -462,7 +462,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         return enumItemsFile == null ? null : resolve(Paths.get(enumItemsFile), "enum items");
     }
 
-    public ControlSpecification buildControlConf(
+    public ControlSpecification buildControlSpecification(
             String name,
             List<String> enumItemValues,
             List<String> enumItemCaptions,
