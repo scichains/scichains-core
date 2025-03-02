@@ -1036,7 +1036,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // it is the only field that is sometimes modifying in a ready specification
         // (by SmartSearchSettings class)
         private boolean multiline = false;
-        private Integer lines = null;
+        private Integer editionRows = null;
         // - recommended number of lines in "multiline" mode
         private boolean resources = false;
         // - note: by default, it is true if editionType.isResources() is true
@@ -1067,10 +1067,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     "unknown (\"" + editionType + "\")", file);
             this.settingsId = json.getString("settings_id", null);
             this.multiline = json.getBoolean("multiline", false);
-            final JsonNumber lines = json.getJsonNumber("lines");
-            this.lines = lines == null ? null : lines.intValue();
-            if (this.lines != null && this.lines <= 0) {
-                throw new IllegalArgumentException("Zero or negative lines = " + this.lines);
+            final JsonNumber editionRows = json.getJsonNumber("edition_rows");
+            this.editionRows = editionRows == null ? null : editionRows.intValue();
+            if (this.editionRows != null && this.editionRows <= 0) {
+                throw new IllegalArgumentException("Zero or negative number of rows = " + this.editionRows);
             }
             this.resources = json.getBoolean("resources", this.editionType.isResources());
             this.advanced = json.getBoolean("advanced", false);
@@ -1201,15 +1201,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public Integer getLines() {
-            return lines;
+        public Integer getEditionRows() {
+            return editionRows;
         }
 
-        public ControlConf setLines(Integer lines) {
-            if (lines != null && lines <= 0) {
-                throw new IllegalArgumentException("Zero or negative lines = " + lines);
+        public ControlConf setEditionRows(Integer editionRows) {
+            if (editionRows != null && editionRows <= 0) {
+                throw new IllegalArgumentException("Zero or negative number of rows = " + editionRows);
             }
-            this.lines = lines;
+            this.editionRows = editionRows;
             return this;
         }
 
@@ -1350,7 +1350,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     ", editionType=" + editionType +
                     ", settingsID='" + settingsId + '\'' +
                     ", multiline=" + multiline +
-                    ", lines=" + lines +
+                    ", editionRows=" + editionRows +
                     ", resources=" + resources +
                     ", advanced=" + advanced +
                     ", items=" + items +
@@ -1399,8 +1399,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             if (multiline) {
                 builder.add("multiline", multiline);
             }
-            if (lines != null) {
-                builder.add("lines", lines);
+            if (editionRows != null) {
+                builder.add("edition_rows", editionRows);
             }
             if (resources) {
                 builder.add("resources", resources);

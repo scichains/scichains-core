@@ -134,7 +134,7 @@
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
-      "lines": 10,
+      "edition_rows": 12,
       "default": ""
     },
     {
