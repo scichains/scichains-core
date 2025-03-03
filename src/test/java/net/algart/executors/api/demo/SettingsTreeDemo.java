@@ -24,18 +24,18 @@
 
 package net.algart.executors.api.demo;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.executors.api.system.SettingsTree;
-import net.algart.executors.api.system.SmartSearchSettings;
+import net.algart.executors.api.system.*;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,6 +43,19 @@ import java.nio.file.Paths;
 
 public class SettingsTreeDemo {
     public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
+
+    private static JsonObject buildCustomSettings(SettingsTree tree) {
+        return tree.settingsJson(path -> {
+            final ControlSpecification control = path.reqControl();
+            if (control.getValueType() == ParameterValueType.STRING) {
+                return Jsons.toJsonStringValue(path.toString());
+            } else {
+                return Jsons.toJsonDoubleValue(111); // or: control.getValueType().toJsonValue("111");
+            }
+            // - some example: JSON containing the string representation of the path or "111";
+            // in the real application, for example, we could extract here some value from some visual editor
+        });
+    }
 
     @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException {
@@ -83,13 +96,21 @@ public class SettingsTreeDemo {
         }
 
         System.out.println();
-        System.out.printf("**** %s **** %n%s%n%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
+        System.out.printf("**** %s **** %n%s%n%n",
+                tree,
+                tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
+
         System.out.printf("**** Default values: **** %n%s%n%n", tree.defaultSettingsJsonString());
+
+        final JsonObject customSettings = buildCustomSettings(tree);
+        System.out.printf("**** Some custom values: **** %n%s%n%n", Jsons.toPrettyString(customSettings));
+
         System.out.println("**** Trees: ****");
         for (SettingsTree.Path path : tree.treePaths()) {
             System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.root());
         }
         System.out.println();
+
         System.out.println("**** Controls: ****");
         for (SettingsTree.Path path : tree.controlPaths()) {
             System.out.printf("%s:%n    %s%n", path, path.reqControl().toJson());

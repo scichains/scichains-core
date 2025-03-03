@@ -17,15 +17,22 @@
     },
     {
       "name": "delta",
-      "value_type": "double",
+      "value_type": "String",
+      "_rem": "String is a possible value for passing a number, if it is indeed a number",
       "edition_type": "value",
-      "default": 0.0
+      "default": "0.0"
     },
     {
       "name": "print_pattern",
       "value_type": "String",
       "edition_type": "value",
       "default": "Result: $$$"
+    },
+    {
+      "name": "some_unused",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "text"
     }
   ]
 }

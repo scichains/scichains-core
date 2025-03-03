@@ -2,10 +2,10 @@
     "app": "SciChains",
     "version": "1.1",
     "root": {
-        "scale": 0.8000000000000015,
+        "scale": 1.0000000000000018,
         "desktop": {
-            "scroll_h": 0.6428266511879591,
-            "scroll_v": 0.5305292969522045
+            "scroll_h": 0.63557615667251,
+            "scroll_v": 0.5392726421644606
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -645,6 +645,15 @@
                 },
                 {
                     "@id": "UIPortModel",
+                    "uuid": "c9029c08-0200-0000-0e34-1783a3403350",
+                    "visible": true,
+                    "port_type": "OUTPUT",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
                     "uuid": "c9029c08-0200-0000-cf95-37e5dfbcb01d",
                     "visible": false,
                     "port_type": "OUTPUT",
@@ -749,6 +758,24 @@
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "print_pattern",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "c9029c08-0300-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "INPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "c9029c08-0400-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "OUTPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
                     "caption": ""
                 }
             ],
@@ -2089,6 +2116,12 @@
                         "name": "print_pattern"
                     },
                     {
+                        "uuid": "c9029c08-0200-0000-0e34-1783a3403350",
+                        "type": 2,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
                         "uuid": "c9029c08-0200-0000-cf95-37e5dfbcb01d",
                         "type": 2,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
@@ -2159,6 +2192,18 @@
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                         "name": "print_pattern"
+                    },
+                    {
+                        "uuid": "c9029c08-0300-0000-0e34-1783a3403350",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
+                        "uuid": "c9029c08-0400-0000-0e34-1783a3403350",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
                     }
                 ],
                 "parameters": [
@@ -2172,7 +2217,7 @@
                     },
                     {
                         "name": "delta",
-                        "value": 0.01
+                        "value": "0.010000"
                     },
                     {
                         "name": "print_pattern",
@@ -2181,6 +2226,10 @@
                     {
                         "name": "settings",
                         "value": "{}"
+                    },
+                    {
+                        "name": "some_unused",
+                        "value": "text"
                     }
                 ],
                 "system": {
@@ -2260,7 +2309,7 @@
                     },
                     {
                         "name": "settings",
-                        "value": "{\n    \"@multi_scalar\": {\n        \"___selectedChainName\": \"scalar_sum_with_settings\",\n        \"a\": 3.0,\n        \"b\": 2.0,\n        \"@scalar_sum_with_settings\": {\n            \"a\": 1.0,\n            \"b\": 1.0,\n            \"delta\": 0.03,\n            \"print_pattern\": \"Result: $$$\"\n        }\n    }\n}"
+                        "value": "{\n    \"@multi_scalar\": {\n        \"___selectedChainName\": \"scalar_sum_with_settings\",\n        \"a\": 3.0,\n        \"b\": 3.0,\n        \"@scalar_sum_with_settings\": {\n            \"a\": 2.0,\n            \"b\": 2.0,\n            \"delta\": \"0.07\",\n            \"print_pattern\": \"Result: $$$\",\n            \"some_unused\": \"text\"\n        }\n    }\n}"
                     }
                 ],
                 "system": {
