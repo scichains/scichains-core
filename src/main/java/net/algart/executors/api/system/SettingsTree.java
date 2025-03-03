@@ -80,30 +80,50 @@ public final class SettingsTree {
         }
 
         public ControlSpecification getControl() {
+            return getControl(false);
+        }
+
+        public ControlSpecification getControl(boolean requireExistence) {
             if (names.length == 0) {
-                throw new IllegalStateException("The root path \"" + this + "\" has no corresponding control");
+                if (requireExistence) {
+                    throw new IllegalStateException("The root path \"" + this + "\" has no corresponding control");
+                } else {
+                    return null;
+                }
             }
-            final SettingsTree tree = getSubTree(names.length - 1);
+            final SettingsTree tree = getSubTree(names.length - 1, requireExistence);
             ControlSpecification control = tree.specification.getControl(names[names.length - 1]);
             if (control == null) {
-                throw new IllegalStateException("Path \"" + this +
-                        "\" does not exist: no control \"" + names[names.length - 1] + "\"");
+                if (requireExistence) {
+                    throw new IllegalStateException("Path \"" + this +
+                            "\" does not exist: no control \"" + names[names.length - 1] + "\"");
+                } else {
+                    return null;
+                }
             }
             return control;
         }
 
         public SettingsTree getSubTree() {
-            return getSubTree(names.length);
+            return getSubTree(names.length, false);
         }
 
-        private SettingsTree getSubTree(int n) {
+        public SettingsTree getRoot() {
+            return SettingsTree.this;
+        }
+
+        private SettingsTree getSubTree(int n, boolean requireExistence) {
             SettingsTree tree = SettingsTree.this;
             for (int i = 0; i < n; i++) {
                 String name = names[i];
                 tree = tree.subTrees.get(name);
                 if (tree == null) {
-                    throw new IllegalStateException("Path \"" + this +
-                            "\" does not exist: no sub-tree \"" + name + "\"");
+                    if (requireExistence) {
+                        throw new IllegalStateException("Path \"" + this +
+                                "\" does not exist: no sub-tree \"" + name + "\"");
+                    } else {
+                        return null;
+                    }
                 }
             }
             return tree;
