@@ -24,6 +24,8 @@
 
 package net.algart.executors.api.system;
 
+import net.algart.executors.api.ExecutionBlock;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -48,19 +50,24 @@ public class SmartSearchSettings {
         this.allSettingsIds = Objects.requireNonNull(allSettingsIds, "Null allSettingsIds");
     }
 
-    public static SmartSearchSettings of(
+    public static SmartSearchSettings newInstance(
             ExecutorSpecificationFactory factory,
             Supplier<? extends Collection<String>> allExecutorsIdsToCheck) {
         return new SmartSearchSettings(factory, allExecutorsIdsToCheck);
     }
 
-    public static SmartSearchSettings of(
-            ExecutorSpecificationFactory factory,
-            ExecutorLoaderSet executorLoaderSet,
-            String sessionId) {
-        Objects.requireNonNull(factory, "Null factory");
+    public static SmartSearchSettings newInstance(ExecutorLoaderSet executorLoaderSet, String sessionId) {
         Objects.requireNonNull(executorLoaderSet, "Null executor loader set");
-        return of(factory, () -> probableSettingsIds(executorLoaderSet, sessionId));
+        ExecutorSpecificationFactory factory = executorLoaderSet.newFactory(sessionId);
+        return newInstance(factory, () -> probableSettingsIds(executorLoaderSet, sessionId));
+    }
+
+    public static SmartSearchSettings newInstance(String sessionId) {
+        return newInstance(ExecutionBlock.globalLoaders(), sessionId);
+    }
+
+    public static SmartSearchSettings newSharedInstance() {
+        return newInstance(ExecutionBlock.GLOBAL_SHARED_SESSION_ID);
     }
 
     public ExecutorSpecificationFactory factory() {

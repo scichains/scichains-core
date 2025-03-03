@@ -64,7 +64,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
     private ExecutorSpecification.JsonMode jsonMode = ExecutorSpecification.JsonMode.MEDIUM;
     private System.Logger.Level logLevel = System.Logger.Level.DEBUG;
 
-    private volatile ExecutorFactory factory = null;
+    private volatile ExecutorSpecificationFactory factory = null;
     private volatile SmartSearchSettings smartSearchSettings = null;
 
     public GetSettingsTree() {
@@ -151,8 +151,8 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         if (factory == null || smartSearchSettings == null) {
             final ExecutorLoaderSet globalLoaders = globalLoaders();
             final String sessionId = getSessionId();
-            factory = globalLoaders.newFactory(sessionId);
-            smartSearchSettings = SmartSearchSettings.of(factory, globalLoaders, sessionId);
+            smartSearchSettings = SmartSearchSettings.newInstance(globalLoaders, sessionId);
+            factory = smartSearchSettings.factory();
         }
         smartSearchSettings.setLogLevel(logLevel);
         // - must be called always, not only once: the user may change this level

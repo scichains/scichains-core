@@ -1,0 +1,96 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017-2025 Daniel Alievsky, AlgART Laboratory (http://algart.net)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package net.algart.executors.api.demo;
+
+import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.multichains.MultiChainSpecification;
+import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.system.ExecutorFactory;
+import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.executors.api.system.SettingsTree;
+import net.algart.executors.api.system.SmartSearchSettings;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SettingsTreeDemo {
+    public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
+
+    @SuppressWarnings("resource")
+    public static void main(String[] args) throws IOException {
+        boolean smart = false;
+        int startArgIndex = 0;
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-smart")) {
+            smart = true;
+            startArgIndex++;
+        }
+        if (args.length < startArgIndex + 1) {
+            System.out.printf("Usage: " +
+                            "%s some.chain/some.mchain/some.ss",
+                    SettingsTreeDemo.class.getName());
+            return;
+        }
+        ExecutionBlock.initializeExecutionSystem();
+        final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
+        final Path path = Paths.get(args[startArgIndex]);
+        final Executor executor;
+        if (SettingsSpecification.isSettingsSpecificationFile(path)) {
+            executor = UseSettings.newSharedExecutor(factory, path);
+        } else if (ChainSpecification.isChainSpecificationFile(path)) {
+            executor = UseSubChain.newSharedExecutor(path).newCombine();
+            // - exception if there are no settings
+        } else if (MultiChainSpecification.isMultiChainSpecificationFile(path)) {
+            executor = UseMultiChain.newSharedExecutor(path).newCombine();
+        } else {
+            throw new IllegalArgumentException("This file is not settings, chain or multi-chain: " + path);
+        }
+
+        final ExecutorSpecification specification = executor.getSpecification();
+
+        SettingsTree tree;
+        if (smart) {
+            tree = SettingsTree.of(SmartSearchSettings.newInstance(MY_SESSION_ID), specification);
+        } else {
+            tree = SettingsTree.of(factory, specification);
+        }
+
+        System.out.println();
+        System.out.printf("**** %s **** %n%s%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.MEDIUM));
+        System.out.printf("**** Trees: ****%n%s%n%n", listToString(tree.treePaths()));
+        System.out.printf("**** Controls: ****%n%s%n", listToString(tree.controlPaths()));
+    }
+
+    private static String listToString(List<?> paths) {
+        return paths.stream().map(Object::toString).collect(Collectors.joining("\n"));
+    }
+}

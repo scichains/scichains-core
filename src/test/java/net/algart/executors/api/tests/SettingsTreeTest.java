@@ -48,8 +48,8 @@ public class SettingsTreeTest {
         SettingsTree treeQuick = null, treeSmart = null;
         String sQuick = null, sSmart = null;
         for (int test = 1; test <= 16; test++) {
-            final ExecutorSpecificationFactory factory = global.newFactory(MY_SESSION_ID);
-            final SmartSearchSettings smartSearch = SmartSearchSettings.of(factory, global, MY_SESSION_ID);
+            final SmartSearchSettings smartSearch = SmartSearchSettings.newInstance(global, MY_SESSION_ID);
+            final ExecutorSpecificationFactory factory = smartSearch.factory();
             long t1 = System.nanoTime();
             final ExecutorSpecification specification = factory.getSpecification(DEMO_CHAIN_SETTINGS_ID);
             long t2 = System.nanoTime();
