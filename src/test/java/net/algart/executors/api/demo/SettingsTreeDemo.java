@@ -30,6 +30,7 @@ import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.settings.CombineSettings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.system.ExecutorFactory;
@@ -62,17 +63,17 @@ public class SettingsTreeDemo {
         }
         ExecutionBlock.initializeExecutionSystem();
         final ExecutorFactory factory = ExecutorFactory.newSharedFactory();
-        final Path path = Paths.get(args[startArgIndex]);
-        final Executor executor;
-        if (SettingsSpecification.isSettingsSpecificationFile(path)) {
-            executor = UseSettings.newSharedExecutor(factory, path);
-        } else if (ChainSpecification.isChainSpecificationFile(path)) {
-            executor = UseSubChain.newSharedExecutor(path).newCombine();
+        final Path executorPath = Paths.get(args[startArgIndex]);
+        final CombineSettings executor;
+        if (SettingsSpecification.isSettingsSpecificationFile(executorPath)) {
+            executor = UseSettings.newSharedExecutor(factory, executorPath);
+        } else if (ChainSpecification.isChainSpecificationFile(executorPath)) {
+            executor = UseSubChain.newSharedExecutor(executorPath).newCombine();
             // - exception if there are no settings
-        } else if (MultiChainSpecification.isMultiChainSpecificationFile(path)) {
-            executor = UseMultiChain.newSharedExecutor(path).newCombine();
+        } else if (MultiChainSpecification.isMultiChainSpecificationFile(executorPath)) {
+            executor = UseMultiChain.newSharedExecutor(executorPath).newCombine();
         } else {
-            throw new IllegalArgumentException("This file is not settings, chain or multi-chain: " + path);
+            throw new IllegalArgumentException("This file is not settings, chain or multi-chain: " + executorPath);
         }
 
         final ExecutorSpecification specification = executor.getSpecification();
@@ -85,12 +86,16 @@ public class SettingsTreeDemo {
         }
 
         System.out.println();
-        System.out.printf("**** %s **** %n%s%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.MEDIUM));
-        System.out.printf("**** Trees: ****%n%s%n%n", listToString(tree.treePaths()));
-        System.out.printf("**** Controls: ****%n%s%n", listToString(tree.controlPaths()));
-    }
-
-    private static String listToString(List<?> paths) {
-        return paths.stream().map(Object::toString).collect(Collectors.joining("\n"));
+        System.out.printf("**** %s **** %n%s%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
+        System.out.println();
+        System.out.println("**** Trees: ****");
+        for (SettingsTree.Path path : tree.treePaths()) {
+            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.getSubTree(), path.getRoot());
+        }
+        System.out.println();
+        System.out.println("**** Controls: ****");
+        for (SettingsTree.Path path : tree.controlPaths()) {
+            System.out.printf("%s:%n    %s%n", path, path.getControl().toJson());
+        }
     }
 }

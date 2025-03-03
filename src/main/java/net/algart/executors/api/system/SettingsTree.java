@@ -42,16 +42,12 @@ public final class SettingsTree {
     public final class Path {
         private final String[] names;
 
-        private Path(String[] names) {
-            this.names = Objects.requireNonNull(names, "Null names");
-            checkNames();
+        private Path() {
+            this.names = new String[0];
         }
 
-        private Path(Collection<String> parents, String controlName) {
-            Objects.requireNonNull(parents, "Null parents");
-            Objects.requireNonNull(controlName, "Null control name");
-            this.names = parents.toArray(new String[Math.addExact(parents.size(), 1)]);
-            this.names[this.names.length - 1] = controlName;
+        private Path(String[] names) {
+            this.names = Objects.requireNonNull(names, "Null names");
             checkNames();
         }
 
@@ -92,14 +88,13 @@ public final class SettingsTree {
                 }
             }
             final SettingsTree tree = getSubTree(names.length - 1, requireExistence);
+            if (tree == null) {
+                return null;
+            }
             ControlSpecification control = tree.specification.getControl(names[names.length - 1]);
-            if (control == null) {
-                if (requireExistence) {
-                    throw new IllegalStateException("Path \"" + this +
-                            "\" does not exist: no control \"" + names[names.length - 1] + "\"");
-                } else {
-                    return null;
-                }
+            if (control == null && requireExistence) {
+                throw new IllegalStateException("Path \"" + this +
+                        "\" does not exist: no control \"" + names[names.length - 1] + "\"");
             }
             return control;
         }
@@ -172,15 +167,15 @@ public final class SettingsTree {
             ExecutorSpecificationFactory factory,
             ExecutorSpecification specification,
             SettingsTree parent,
-            List<String> currentPath,
+            Path currentPath,
             Set<String> stackForDetectingRecursion) {
         this.smartSearch = smartSearch;
         this.factory = Objects.requireNonNull(factory, "Null specification factory");
         assert smartSearch == null || smartSearch.factory() == factory;
         this.specification = Objects.requireNonNull(specification, "Null settings specification");
         this.parent = parent;
-        this.path = new Path(currentPath);
-        this.complete = buildTree(currentPath, stackForDetectingRecursion);
+        this.path = currentPath == null ? new Path() : currentPath;
+        this.complete = buildTree(stackForDetectingRecursion);
     }
 
     private SettingsTree(
@@ -188,7 +183,7 @@ public final class SettingsTree {
             ExecutorSpecificationFactory factory,
             ExecutorSpecification specification,
             SettingsTree parent) {
-        this(smartSearch, factory, specification, parent, new ArrayList<>(), new HashSet<>());
+        this(smartSearch, factory, specification, parent, null, new HashSet<>());
     }
 
     public static SettingsTree of(SmartSearchSettings smartSearch, ExecutorSpecification specification) {
@@ -300,19 +295,20 @@ public final class SettingsTree {
     public String toString() {
         return "settings tree" + (smartSearch != null ? " (smart)" : "") + " for executor " +
                 "\"" + specification.canonicalName() + "\" (" + specification.getId() + ")" +
-                ": " + (subTrees.size() - 1) + " children";
+                ": " + subTrees.size() + " children";
     }
 
-    private boolean buildTree(List<String> parentPath, Set<String> stackForDetectingRecursion) {
+    private boolean buildTree(Set<String> stackForDetectingRecursion) {
         Map<String, SettingsTree> children = new LinkedHashMap<>();
         boolean complete = true;
         stackForDetectingRecursion.add(specification.getId());
-        treePaths.add(new Path(parentPath));
+        treePaths.add(this.path);
         try {
             for (var entry : specification.getControls().entrySet()) {
                 final String name = entry.getKey();
                 final ControlSpecification control = entry.getValue();
-                controlPaths.add(new Path(parentPath, control.getName()));
+                final Path childPath = path.child(control.getName());
+                controlPaths.add(childPath);
                 if (control.isSubSettings()) {
                     String settingsId = control.getSettingsId();
                     if (settingsId == null && smartSearch != null) {
@@ -336,8 +332,6 @@ public final class SettingsTree {
                                     "\" (\"" + specification.getName() +
                                     "\" in category \"" + specification.getCategory() + "\")");
                         }
-                        final List<String> childPath = new ArrayList<>(parentPath);
-                        childPath.add(control.getName());
                         final SettingsTree child = new SettingsTree(
                                 smartSearch,
                                 factory,
