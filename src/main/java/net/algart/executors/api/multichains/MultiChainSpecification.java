@@ -262,7 +262,8 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         this.description = json.getString("description", null);
         this.settingsDescription = json.getString("settings_description", null);
         this.id = Jsons.reqString(json, "id", file);
-        this.settingsId = modifyIdForSettings(id);
+        final String settingsId = json.getString("settings_id", null);
+        this.settingsId = settingsId != null ? settingsId : modifyIdForSettings(id);
         final JsonObject optionsJson = json.getJsonObject("options");
         if (optionsJson != null) {
             this.options = new Options(optionsJson, file);
@@ -464,6 +465,11 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
 
     public MultiChainSpecification setId(String id) {
         this.id = Objects.requireNonNull(id, "Null id");
+        return this;
+    }
+
+    public MultiChainSpecification setIdAndSettingsId(String id) {
+        this.id = Objects.requireNonNull(id, "Null id");
         this.settingsId = modifyIdForSettings(this.id);
         return this;
     }
@@ -473,7 +479,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public MultiChainSpecification setSettingsId(String settingsId) {
-        this.settingsId = settingsId;
+        this.settingsId = Objects.requireNonNull(settingsId, "Null settingsId");
         return this;
     }
 
@@ -694,6 +700,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             builder.add("settings_description", settingsDescription);
         }
         builder.add("id", id);
+        builder.add("settings_id", settingsId);
         if (options != null) {
             builder.add("options", options.toJson());
         }

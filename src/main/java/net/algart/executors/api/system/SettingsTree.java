@@ -61,6 +61,10 @@ public final class SettingsTree {
             return List.of(names);
         }
 
+        public boolean isEmpty() {
+            return names.length == 0;
+        }
+
         public Path parent() {
             if (names.length == 0) {
                 return null;
@@ -76,23 +80,21 @@ public final class SettingsTree {
         }
 
         public ControlSpecification getControl() {
-            return getControl(false);
-        }
-
-        public ControlSpecification getControl(boolean requireExistence) {
             if (names.length == 0) {
-                if (requireExistence) {
-                    throw new IllegalStateException("The root path \"" + this + "\" has no corresponding control");
-                } else {
-                    return null;
-                }
-            }
-            final SettingsTree tree = getSubTree(names.length - 1, requireExistence);
-            if (tree == null) {
                 return null;
             }
+            final SettingsTree tree = getSubTree(names.length - 1, false);
+            return tree == null ? null : tree.specification.getControl(names[names.length - 1]);
+        }
+
+        public ControlSpecification reqControl() {
+            if (names.length == 0) {
+                throw new IllegalStateException("The root path \"" + this + "\" has no corresponding control");
+            }
+            final SettingsTree tree = getSubTree(names.length - 1, true);
+            assert tree != null;
             ControlSpecification control = tree.specification.getControl(names[names.length - 1]);
-            if (control == null && requireExistence) {
+            if (control == null) {
                 throw new IllegalStateException("Path \"" + this +
                         "\" does not exist: no control \"" + names[names.length - 1] + "\"");
             }
@@ -101,6 +103,10 @@ public final class SettingsTree {
 
         public SettingsTree getSubTree() {
             return getSubTree(names.length, false);
+        }
+
+        public SettingsTree reqSubTree() {
+            return getSubTree(names.length, true);
         }
 
         public SettingsTree getRoot() {
@@ -272,11 +278,15 @@ public final class SettingsTree {
         return builder.build();
     }
 
-    public JsonObject defaultSettingsJson() {
-        specification.checkCompleteness();
+    public JsonObject settingsJson(Function<Path, JsonValue> controlToJson) {
+        Objects.requireNonNull(controlToJson, "Null controlToJson");
         final JsonObjectBuilder builder = Json.createObjectBuilder();
-        specification.buildDefaultSettingsJson(builder, this::childDefaultSettingsJsonTree);
+        buildSettingsJson(builder, controlToJson);
         return builder.build();
+    }
+
+    public JsonObject defaultSettingsJson() {
+        return settingsJson(path -> path.reqControl().getDefaultJsonValue());
     }
 
     public String jsonString() {
@@ -357,24 +367,30 @@ public final class SettingsTree {
         return complete;
     }
 
-    //TODO!! use it
-    void buildSettingsJson(
-            JsonObjectBuilder builder,
-            Function<Path, JsonValue> controlJsonBuilder) {
+    private void buildSettingsJson(JsonObjectBuilder builder, Function<Path, JsonValue> controlToJson) {
         Objects.requireNonNull(builder, "Null builder");
         for (Map.Entry<String, ControlSpecification> entry : specification.controls.entrySet()) {
             final String name = entry.getKey();
-            final SettingsTree subTree = child(name);
-            if (subTree != null) {
-                JsonObjectBuilder subTreeBuilder = Json.createObjectBuilder();
-                buildSettingsJson(subTreeBuilder, controlJsonBuilder);
-                builder.add(name, subTreeBuilder.build());
-            } else {
-                JsonValue value = controlJsonBuilder.apply(childPath(name));
-                if (value != null) {
-                    builder.add(name, value);
+            final ControlSpecification control = entry.getValue();
+            if (ExecutorSpecification.SETTINGS.equals(name)) {
+                // - no sense to include this parameter while building tree:
+                // this should be filled by resulting JSON tree
+                continue;
+            }
+            if (control.isSubSettings()) {
+                final SettingsTree child = child(name);
+                if (child != null) {
+                    JsonObjectBuilder subTreeBuilder = Json.createObjectBuilder();
+                    child.buildSettingsJson(subTreeBuilder, controlToJson);
+                    builder.add(control.key(), subTreeBuilder.build());
+                    continue;
                 }
             }
+            JsonValue value = controlToJson.apply(childPath(name));
+            if (value != null) {
+                builder.add(control.key(), value);
+            }
+
         }
     }
 

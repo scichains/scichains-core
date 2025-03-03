@@ -27,6 +27,7 @@ package net.algart.executors.api.settings;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.json.Jsons;
 
 public final class GetSubSettings extends Executor implements ReadOnlyExecutionInput {
@@ -73,7 +74,7 @@ public final class GetSubSettings extends Executor implements ReadOnlyExecutionI
     public void process() {
         final JsonObject settings = AddSubSettings.scalarToJson(getInputScalar(SETTINGS, true));
         final String subSettingsKey = useSubSettingsPrefix ?
-                SettingsSpecification.settingsKey(subSettingsName) :
+                ControlSpecification.settingsKey(subSettingsName) :
                 subSettingsName;
         JsonObject subSettings = settings.getJsonObject(subSettingsKey);
         if (subSettings == null) {

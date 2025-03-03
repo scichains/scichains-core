@@ -432,6 +432,15 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         // for customizing the whole settings tree, this is not a SUB-settings
     }
 
+    public String key() {
+        return getValueType().isSettings() ? settingsKey(name) : name;
+    }
+
+    public static String settingsKey(String subSettingsName) {
+        Objects.requireNonNull(subSettingsName, "Null sub-settings name");
+        return SettingsSpecification.SUBSETTINGS_PREFIX + subSettingsName;
+    }
+
     @Override
     public void checkCompleteness() {
         checkNull(name, "name");

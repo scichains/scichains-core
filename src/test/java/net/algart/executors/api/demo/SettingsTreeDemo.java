@@ -86,8 +86,8 @@ public class SettingsTreeDemo {
         }
 
         System.out.println();
-        System.out.printf("**** %s **** %n%s%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
-        System.out.println();
+        System.out.printf("**** %s **** %n%s%n%n", tree, tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
+        System.out.printf("**** Default values: **** %n%s%n%n", tree.defaultSettingsJsonString());
         System.out.println("**** Trees: ****");
         for (SettingsTree.Path path : tree.treePaths()) {
             System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.getSubTree(), path.getRoot());

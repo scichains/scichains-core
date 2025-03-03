@@ -217,17 +217,6 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
         return key.startsWith(SUBSETTINGS_PREFIX);
     }
 
-    public static String controlKey(ControlSpecification controlSpecification) {
-        Objects.requireNonNull(controlSpecification, "Null controlSpecification");
-        final String name = controlSpecification.getName();
-        return controlSpecification.getValueType().isSettings() ? settingsKey(name) : name;
-    }
-
-    public static String settingsKey(String subSettingsName) {
-        Objects.requireNonNull(subSettingsName, "Null sub-settings name");
-        return SUBSETTINGS_PREFIX + subSettingsName;
-    }
-
     public static void checkIdDifference(Collection<SettingsSpecification> settingsSpecifications) {
         Objects.requireNonNull(settingsSpecifications, "Null settings specifications collection");
         final Set<String> ids = new HashSet<>();
@@ -498,7 +487,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
     }
 
     public Set<String> controlKeySet() {
-        return controls.values().stream().map(SettingsSpecification::controlKey).collect(Collectors.toSet());
+        return controls.values().stream().map(ControlSpecification::key).collect(Collectors.toSet());
     }
 
     public String parentFolderName() {

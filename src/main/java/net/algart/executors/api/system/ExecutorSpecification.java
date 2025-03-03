@@ -1711,7 +1711,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 if (control.isSubSettings()) {
                     final JsonObject subSettingsJson = subSettingsJsonBuilder.apply(name);
                     if (subSettingsJson != null) {
-                        builder.add(SettingsSpecification.settingsKey(name), subSettingsJson);
+                        builder.add(ControlSpecification.settingsKey(name), subSettingsJson);
                         continue;
                     }
                 }

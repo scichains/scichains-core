@@ -249,7 +249,7 @@ public class SettingsBuilder implements Cloneable {
             final String name = portName(control);
             if (executor.hasOutputPort(name)) {
                 final ParameterValueType valueType = control.getValueType();
-                final String jsonKey = SettingsSpecification.controlKey(control);
+                final String jsonKey = control.key();
                 JsonValue jsonValue = settings.get(jsonKey);
                 if (jsonValue == null) {
                     jsonValue = control.getDefaultJsonValue();
@@ -322,7 +322,7 @@ public class SettingsBuilder implements Cloneable {
 
     public static JsonObject getSubSettingsByName(JsonObject parentSettings, String subSettingsName) {
         Objects.requireNonNull(subSettingsName, "Null sub-settings name");
-        return getSubSettingsByKey(parentSettings, SettingsSpecification.settingsKey(subSettingsName));
+        return getSubSettingsByKey(parentSettings, ControlSpecification.settingsKey(subSettingsName));
     }
 
     public static JsonObject getSubSettingsByKey(JsonObject parentSettings, String subSettingsKey) {
@@ -349,7 +349,7 @@ public class SettingsBuilder implements Cloneable {
         Objects.requireNonNull(sourceJson, "Null sourceJson");
         Objects.requireNonNull(overridingJson, "Null overridingJson");
         final Set<String> ignoredKeys = Arrays.stream(ignoredSettingsNames).map(
-                SettingsSpecification::settingsKey).collect(Collectors.toSet());
+                ControlSpecification::settingsKey).collect(Collectors.toSet());
         final JsonObjectBuilder builder = Jsons.createObjectBuilder(sourceJson);
         for (Map.Entry<String, JsonValue> entry : overridingJson.entrySet()) {
             if (!ignoredKeys.contains(entry.getKey())) {
@@ -397,7 +397,7 @@ public class SettingsBuilder implements Cloneable {
             if (executor != null) {
                 jsonValue = replaceToAbsolutePath(executor, control, jsonValue);
             }
-            final String jsonKey = SettingsSpecification.controlKey(control);
+            final String jsonKey = control.key();
             builder.add(jsonKey, jsonValue);
         }
         return builder.build();

@@ -1,6 +1,7 @@
 {
   "app": "multi-chain",
   "id": "671c3559-e363-4c27-8626-76db860a9a58",
+  "settings_id": "a85193aa-a9d7-4d48-a7cc-6009d5fb3cba",
   "options": {
     "behavior": {
       "skippable": true

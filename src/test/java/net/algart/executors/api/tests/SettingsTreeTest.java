@@ -75,6 +75,7 @@ public class SettingsTreeTest {
         System.out.println();
         System.out.printf("**** %s ****%n", treeSmart);
         System.out.println(sSmart);
+        System.out.printf("**** Smart default values: **** %n%s%n%n", treeSmart.defaultSettingsJsonString());
         System.out.printf("**** Smart trees: ****%n%s%n%n", listToString(treeSmart.treePaths()));
         System.out.printf("**** Smart controls: ****%n%s%n", listToString(treeSmart.controlPaths()));
     }

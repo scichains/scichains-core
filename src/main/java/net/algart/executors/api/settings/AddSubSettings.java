@@ -28,6 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.system.ControlSpecification;
 import net.algart.json.Jsons;
 
 public final class AddSubSettings extends Executor implements ReadOnlyExecutionInput {
@@ -76,7 +77,7 @@ public final class AddSubSettings extends Executor implements ReadOnlyExecutionI
         final JsonObject settings = scalarToJson(getInputScalar(SETTINGS, true));
         final JsonObject addedSubSettings = scalarToJson(getInputScalar(SUB_SETTINGS, true));
         final String subSettingsKey = useSubSettingsPrefix ?
-                SettingsSpecification.settingsKey(subSettingsName) :
+                ControlSpecification.settingsKey(subSettingsName) :
                 subSettingsName;
         final JsonObject existingSubSettings = settings.getJsonObject(subSettingsKey);
         final JsonObject newSubSettings = replaceExistingSettingsMode.replace(existingSubSettings, addedSubSettings);
