@@ -104,7 +104,7 @@ public class SmartSearchSettings {
         boolean complete = true;
         for (ExecutorSpecification specification : allSettings.values()) {
             final Map<String, ControlSpecification> controls = specification.getControls();
-            // - note: getControls() is synchronized
+            // - note: getControls() is synchronized, it is important!
             for (var entry : controls.entrySet()) {
                 final String name = entry.getKey();
                 final ControlSpecification control = entry.getValue();

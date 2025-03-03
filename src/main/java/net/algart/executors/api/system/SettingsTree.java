@@ -314,7 +314,7 @@ public final class SettingsTree {
         stackForDetectingRecursion.add(specification.getId());
         treePaths.add(this.path);
         try {
-            for (var entry : specification.getControls().entrySet()) {
+            for (Map.Entry<String, ControlSpecification> entry : specification.controls.entrySet()) {
                 final String name = entry.getKey();
                 final ControlSpecification control = entry.getValue();
                 final Path childPath = path.child(control.getName());

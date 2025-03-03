@@ -29,6 +29,8 @@ import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
 
+import java.util.Map;
+
 /**
  * Initialization mode for executor, created by {@link ExecutorFactory#newExecutor(String, CreateMode)}
  * and similar methods.
@@ -74,7 +76,7 @@ public enum CreateMode {
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             MINIMAL.customizeExecutor(result, sessionId, specification);
             final Parameters parameters = result.parameters();
-            for (var e : specification.getControls().entrySet()) {
+            for (Map.Entry<String, ControlSpecification> e : specification.controls.entrySet()) {
                 final String name = e.getKey();
                 final ControlSpecification controlSpecification = e.getValue();
                 final Object defaultValue = controlSpecification.getDefaultValue();
@@ -84,10 +86,10 @@ public enum CreateMode {
                     parameters.put(name, defaultValue);
                 }
             }
-            for (var e : specification.getInputPorts().entrySet()) {
+            for (Map.Entry<String, PortSpecification> e : specification.getInputPorts().entrySet()) {
                 result.addPort(Port.newInput(e.getKey(), e.getValue().getValueType()));
             }
-            for (var e : specification.getOutputPorts().entrySet()) {
+            for (Map.Entry<String, PortSpecification> e : specification.getOutputPorts().entrySet()) {
                 result.addPort(Port.newOutput(e.getKey(), e.getValue().getValueType()));
             }
         }
