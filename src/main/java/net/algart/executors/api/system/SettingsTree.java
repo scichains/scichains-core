@@ -61,6 +61,10 @@ public final class SettingsTree {
             return List.of(names);
         }
 
+        public String name(int index) {
+            return names[index];
+        }
+
         public boolean isEmpty() {
             return names.length == 0;
         }
@@ -79,11 +83,23 @@ public final class SettingsTree {
             return new Path(childNames);
         }
 
+        public SettingsTree root() {
+            return SettingsTree.this;
+        }
+
+        public SettingsTree getTree() {
+            return getTree(names.length, false);
+        }
+
+        public SettingsTree reqTree() {
+            return getTree(names.length, true);
+        }
+
         public ControlSpecification getControl() {
             if (names.length == 0) {
                 return null;
             }
-            final SettingsTree tree = getSubTree(names.length - 1, false);
+            final SettingsTree tree = getTree(names.length - 1, false);
             return tree == null ? null : tree.specification.getControl(names[names.length - 1]);
         }
 
@@ -91,7 +107,7 @@ public final class SettingsTree {
             if (names.length == 0) {
                 throw new IllegalStateException("The root path \"" + this + "\" has no corresponding control");
             }
-            final SettingsTree tree = getSubTree(names.length - 1, true);
+            final SettingsTree tree = getTree(names.length - 1, true);
             assert tree != null;
             ControlSpecification control = tree.specification.getControl(names[names.length - 1]);
             if (control == null) {
@@ -101,19 +117,7 @@ public final class SettingsTree {
             return control;
         }
 
-        public SettingsTree getSubTree() {
-            return getSubTree(names.length, false);
-        }
-
-        public SettingsTree reqSubTree() {
-            return getSubTree(names.length, true);
-        }
-
-        public SettingsTree getRoot() {
-            return SettingsTree.this;
-        }
-
-        private SettingsTree getSubTree(int n, boolean requireExistence) {
+        private SettingsTree getTree(int n, boolean requireExistence) {
             SettingsTree tree = SettingsTree.this;
             for (int i = 0; i < n; i++) {
                 String name = names[i];
@@ -199,6 +203,10 @@ public final class SettingsTree {
 
     public static SettingsTree of(ExecutorSpecificationFactory factory, ExecutorSpecification specification) {
         return new SettingsTree(null, factory, specification, null);
+    }
+
+    public Path newPath(String... names) {
+        return new Path(names);
     }
 
     public Path newPath(Collection<String> names) {

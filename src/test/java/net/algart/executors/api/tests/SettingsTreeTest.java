@@ -76,8 +76,26 @@ public class SettingsTreeTest {
         System.out.printf("**** %s ****%n", treeSmart);
         System.out.println(sSmart);
         System.out.printf("**** Smart default values: **** %n%s%n%n", treeSmart.defaultSettingsJsonString());
-        System.out.printf("**** Smart trees: ****%n%s%n%n", listToString(treeSmart.treePaths()));
-        System.out.printf("**** Smart controls: ****%n%s%n", listToString(treeSmart.controlPaths()));
+        System.out.println("**** Trees: ****");
+        for (SettingsTree.Path path : treeSmart.treePaths()) {
+            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.root());
+        }
+        System.out.println();
+        System.out.println("**** Controls: ****");
+        for (SettingsTree.Path path : treeSmart.controlPaths()) {
+            System.out.printf("%s:%n    %s%n", path, path.reqControl().toJson());
+        }
+
+        SettingsTree.Path tree1Path = treeSmart.newPath("Simple_settings_1");
+        SettingsTree.Path strPath = treeSmart.newPath(tree1Path.name(0), "str");
+
+        SettingsTree tree1 = tree1Path.reqTree();
+        System.out.printf("%n%s: %s%n", tree1Path, tree1);
+        ControlSpecification tree1ControlStr = strPath.reqControl();
+        System.out.printf("%n%s: %s%n", strPath, tree1ControlStr);
+        ControlSpecification controlStr = tree1.newPath("str").reqControl();
+        System.out.printf("%nControl \"str\" from the sub-tree: %s%n", controlStr);
+        System.out.printf("%nReference equality to the previous control: %s%n", controlStr == tree1ControlStr);
     }
 
     private static String listToString(List<?> paths) {

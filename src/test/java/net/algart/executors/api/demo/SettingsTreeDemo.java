@@ -25,7 +25,6 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.multichains.MultiChainSpecification;
@@ -41,8 +40,6 @@ import net.algart.executors.api.system.SmartSearchSettings;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SettingsTreeDemo {
     public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
@@ -90,12 +87,12 @@ public class SettingsTreeDemo {
         System.out.printf("**** Default values: **** %n%s%n%n", tree.defaultSettingsJsonString());
         System.out.println("**** Trees: ****");
         for (SettingsTree.Path path : tree.treePaths()) {
-            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.getSubTree(), path.getRoot());
+            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.root());
         }
         System.out.println();
         System.out.println("**** Controls: ****");
         for (SettingsTree.Path path : tree.controlPaths()) {
-            System.out.printf("%s:%n    %s%n", path, path.getControl().toJson());
+            System.out.printf("%s:%n    %s%n", path, path.reqControl().toJson());
         }
     }
 }
