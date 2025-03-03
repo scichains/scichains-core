@@ -62,7 +62,7 @@ public class CallSimpleChainForImage {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (var executor = UseSubChain.newSharedExecutor(chainPath, CreateMode.REQUEST_ALL)) {
+        try (var executor = UseSubChain.newSharedExecutor(chainPath, CreateMode.REQUEST_DEFAULT)) {
             printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);
@@ -74,6 +74,12 @@ public class CallSimpleChainForImage {
                 // - if null, default value should be used
                 executor.setStringParameter("b", parameterB);
             }
+
+            // executor.addOutputMat(executor.defaultOutputPortName());
+            // - previous line is necessary if the creation mode is MINIMAL
+            // executor.requestDefaultOutput();
+            // - previous line is necessary if the creation mode is MINIMAL or NO_REQUEST
+
             executor.execute();
             final BufferedImage result = executor.getMat().toBufferedImage();
             if (result == null) {
