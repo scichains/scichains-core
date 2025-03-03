@@ -2,8 +2,14 @@
   <configuration default="false" name="CallSimpleChain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.demo.CallSimpleChain" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="src/test/resources/chains/use_simple_linear_function.chain build/java/resources/demo/images/car.bmp /tmp/result.png " />
-    <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
+    <option name="PROGRAM_PARAMETERS" value="src/test/resources/multichains/simple_scalar/scalar_sum.chain" />
+    <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="net.algart.executors.api.demo.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

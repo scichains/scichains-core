@@ -210,7 +210,8 @@ public class UseSettings extends FileOperation {
 
     public CombineSettings newExecutor(ExecutorFactory factory, SettingsSpecification specification) {
         Objects.requireNonNull(factory, "Null executor factory");
-        return factory.newExecutor(CombineSettings.class, use(specification).id(), CreateMode.NORMAL);
+        return factory.newExecutor(CombineSettings.class, use(specification).id(), CreateMode.REQUEST_DEFAULT);
+        // - for settings, we can be sure that the default output port is enough for normal using this executor
     }
 
     @Override

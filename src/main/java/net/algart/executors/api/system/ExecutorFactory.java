@@ -73,7 +73,9 @@ public interface ExecutorFactory extends ExecutorSpecificationFactory {
             throws ClassNotFoundException, ExecutorExpectedException;
 
     default <T extends ExecutionBlock> T newExecutor(Class<T> expectedClass, String executorId) {
-        return newExecutor(expectedClass, executorId, CreateMode.NORMAL);
+        return newExecutor(expectedClass, executorId, CreateMode.REQUEST_DEFAULT);
+        // - this function is universal, so we cannot provide a solution that may be inefficient (REQUEST_ALL);
+        // on the other hand, requesting at least one port is almost always necessary
     }
 
     default <T extends ExecutionBlock> T newExecutor(

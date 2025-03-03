@@ -42,10 +42,10 @@ public class UseSubChainWithChangingFactory {
 
         UseSubChain useSubChain1 = new UseSubChain();
         useSubChain1.setSessionId("Session_1");
-        ChainExecutor e1 = useSubChain1.newExecutor(Path.of(path1), CreateMode.NORMAL);
+        ChainExecutor e1 = useSubChain1.newExecutor(Path.of(path1), CreateMode.REQUEST_DEFAULT);
         UseSubChain useSubChain2 = new UseSubChain();
         useSubChain2.setSessionId("Session_2");
-        ChainExecutor e2 = useSubChain2.newExecutor(Path.of(path2), CreateMode.NORMAL);
+        ChainExecutor e2 = useSubChain2.newExecutor(Path.of(path2), CreateMode.REQUEST_DEFAULT);
         ExecutorSpecification s2 = e1.executorFactory().getSpecification(e2.getExecutorId());
         if (s2 != null) {
             throw new AssertionError("Must be null");

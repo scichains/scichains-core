@@ -95,8 +95,8 @@ public class CallSimpleChainWithSettings {
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
         try (var executor = UseSubChain.newSharedExecutor(chainPath)) {
-            CallSimpleChain.printSubChainExecutors();
-            CallSimpleChain.printExecutorInterface(executor);
+            CallSimpleChainForImage.printSubChainExecutors();
+            CallSimpleChainForImage.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (combine) {

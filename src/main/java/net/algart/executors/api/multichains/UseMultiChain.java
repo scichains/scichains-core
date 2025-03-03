@@ -152,7 +152,7 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public static MultiChainExecutor newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(file, CreateMode.NORMAL);
+        return newSharedExecutor(file, CreateMode.REQUEST_ALL);
     }
 
     public static MultiChainExecutor newSharedExecutor(Path file, CreateMode createMode) throws IOException {

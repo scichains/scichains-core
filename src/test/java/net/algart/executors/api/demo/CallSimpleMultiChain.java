@@ -101,8 +101,8 @@ public class CallSimpleMultiChain {
 
         System.out.printf("Loading %s...%n", multiChainPath.toAbsolutePath());
         try (var executor = UseMultiChain.newSharedExecutor(multiChainPath)) {
-            CallSimpleChain.printSubChainExecutors();
-            CallSimpleChain.printExecutorInterface(executor);
+            CallSimpleChainForImage.printSubChainExecutors();
+            CallSimpleChainForImage.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);
             if (combine) {

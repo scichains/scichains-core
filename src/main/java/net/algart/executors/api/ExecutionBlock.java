@@ -1179,7 +1179,9 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public static ExecutionBlock newExecutor(String sessionId, ExecutorSpecification specification)
             throws ClassNotFoundException {
-        return GLOBAL_LOADERS.newExecutor(sessionId, specification, CreateMode.NORMAL);
+        return GLOBAL_LOADERS.newExecutor(sessionId, specification, CreateMode.REQUEST_DEFAULT);
+        // - this function is universal, so we cannot provide a solution that may be inefficient (REQUEST_ALL);
+        // on the other hand, requesting at least one port is almost always necessary
     }
 
     /**

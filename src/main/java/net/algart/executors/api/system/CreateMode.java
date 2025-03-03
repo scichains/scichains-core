@@ -69,7 +69,7 @@ public enum CreateMode {
      * <p>Note that this mode can theoretically lead to another behavior from {@link #MINIMAL}
      * in some clients if they depend on the ports' existence or on default parameter values.
      */
-    NORMAL_NO_REQUEST {
+    NO_REQUEST {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
             MINIMAL.customizeExecutor(result, sessionId, specification);
@@ -94,29 +94,29 @@ public enum CreateMode {
     },
 
     /**
-     * The same as {@link #NORMAL_NO_REQUEST}, but in addition this mode calls
+     * The same as {@link #NO_REQUEST}, but in addition this mode calls
      * {@link ExecutionBlock#requestDefaultOutput() executor.requestDefaultOutput()}.
      * Usually this is a good balanced choice, when the executor has only one resulting port.
      * If it has several output ports, we recommend using the {@link #REQUEST_ALL} option or
      * directly selecting the required ports with help of {@link ExecutionBlock#requestOutput(String...)} method.
      */
-    NORMAL {
+    REQUEST_DEFAULT {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
-            NORMAL_NO_REQUEST.customizeExecutor(result, sessionId, specification);
+            NO_REQUEST.customizeExecutor(result, sessionId, specification);
             result.requestDefaultOutput();
         }
     },
     /**
-     * The same as {@link #NORMAL}, but in addition this mode calls
+     * The same as {@link #REQUEST_DEFAULT}, but in addition this mode calls
      * {@link ExecutionBlock#setAllOutputsNecessary(boolean) executor.setAllOutputsNecessary(true)}.
-     * Usually this is desired behavior, excepting some complex cases when the executor has
+     * Usually this is the desired behavior, excepting some complex cases when the executor has
      * several resulting ports, and we need to calculate only part from them for saving executing time.
      */
     REQUEST_ALL {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
-            NORMAL_NO_REQUEST.customizeExecutor(result, sessionId, specification);
+            NO_REQUEST.customizeExecutor(result, sessionId, specification);
             result.setAllOutputsNecessary(true);
         }
     };

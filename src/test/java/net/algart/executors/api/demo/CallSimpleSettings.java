@@ -75,7 +75,7 @@ public class CallSimpleSettings {
                 executor.setStringParameter("str", parameterStr);
                 final String result = executor.combine();
                 System.out.printf("%s%nDone: result is%n%s%n", executor, result);
-                CallSimpleChain.printExecutorInterface(executor);
+                CallSimpleChainForImage.printExecutorInterface(executor);
             }
         }
     }

@@ -204,7 +204,7 @@ public final class UseSubChain extends FileOperation {
     }
 
     public static ChainExecutor newSharedExecutor(Path file) throws IOException {
-        return newSharedExecutor(file, CreateMode.NORMAL);
+        return newSharedExecutor(file, CreateMode.REQUEST_ALL);
     }
 
     public static ChainExecutor newSharedExecutor(Path file, CreateMode createMode) throws IOException {

@@ -128,7 +128,8 @@ public class UseMapping extends FileOperation {
     public MappingExecutor newExecutor(ExecutorFactory factory, MappingSpecification specification)
             throws IOException {
         Objects.requireNonNull(factory, "Null executor factory");
-        return factory.newExecutor(MappingExecutor.class, use(specification).id(), CreateMode.NORMAL);
+        return factory.newExecutor(MappingExecutor.class, use(specification).id(), CreateMode.REQUEST_DEFAULT);
+        // - for mapping, we can be sure that the default output port is enough for normal using this executor
     }
 
     @Override

@@ -91,7 +91,7 @@ public final class CommonJavaScriptOld extends Executor {
             final net.algart.executors.api.system.ExecutorFactory executorFactory = executorFactory();
             final ExecutionBlock executionBlock;
             try {
-                executionBlock = executorFactory.newExecutor(callableExecutorId, CreateMode.NORMAL);
+                executionBlock = executorFactory.newExecutor(callableExecutorId, CreateMode.REQUEST_ALL);
             } catch (ClassNotFoundException | ExecutorExpectedException e) {
                 throw new IllegalStateException("Cannot initialize block with executor ID " + callableExecutorId
                         + (e instanceof ClassNotFoundException ?

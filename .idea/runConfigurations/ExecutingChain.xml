@@ -5,7 +5,7 @@
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.executors.api.tests.*" />
+        <option name="PATTERN" value="net.algart.executors.api.demo.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

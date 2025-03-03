@@ -74,7 +74,7 @@ public class CallSimpleMapping {
                 }
                 final String result = executor.build();
                 System.out.printf("%s%nDone: result is%n%s%n", executor, result);
-                CallSimpleChain.printExecutorInterface(executor);
+                CallSimpleChainForImage.printExecutorInterface(executor);
             }
         }
     }
