@@ -1697,6 +1697,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
     void buildDefaultSettingsJson(
             JsonObjectBuilder builder,
             Function<String, JsonObject> subSettingsJsonBuilder) {
+        // - subSettingsJsonBuilder is not used now: see SettingsTree.buildSettingsJson()
         Objects.requireNonNull(builder, "Null builder");
         for (Map.Entry<String, ControlSpecification> entry : controls.entrySet()) {
             final String name = entry.getKey();
@@ -1718,6 +1719,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             }
             if (control.hasDefaultJsonValue()) {
                 builder.add(name, control.getDefaultJsonValue());
+                // - note: without subSettingsJsonBuilder, we use simple keys even for sub-settings
             }
         }
     }

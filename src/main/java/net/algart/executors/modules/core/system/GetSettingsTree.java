@@ -175,6 +175,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
             treeJson = specification.jsonString(jsonMode);
             t4 = debugTime();
             defaultSettingsJson = specification.defaultSettingsJsonString();
+            // - note: even sub-settings will have simple keys without "@" in this branch
         }
         long t5 = debugTime();
         getScalar().setTo(treeJson);
