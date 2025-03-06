@@ -28,50 +28,80 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.data.Data;
+import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.ExecutorFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CallSimpleChain {
-    private static void executeChainAsExecutor(Path chainPath) throws IOException {
+    double x;
+    double y;
+    Double a;
+    Double b;
+
+    private void executeChainAsExecutor(Path chainPath)
+            throws IOException {
         try (var executor = UseSubChain.newSharedExecutor(chainPath)) {
+            executor.putDoubleScalar("x", x);
+            executor.putDoubleScalar("y", y);
+            executor.setParameter("a", a);
+            executor.setParameter("b", b);
+            // setParameters works well also with null values
             executor.execute();
             System.out.println("Executor finished: " + executor);
         }
     }
 
-    private static void executeChainDirectly(Path chainPath) throws IOException {
+    private void executeChainDirectly(Path chainPath)
+            throws IOException {
         ChainSpecification chainSpecification = ChainSpecification.read(chainPath);
         final ExecutorFactory executorFactory = ExecutorFactory.newFactory("MySession");
         try (Chain chain = Chain.of(null, executorFactory, chainSpecification)) {
             chain.reinitializeAll();
+            final Parameters parameters = new Parameters();
+            parameters.put("a", a);
+            parameters.put("b", b);
+            chain.setParameters(parameters);
+            final Map<String, Data> inputs = new HashMap<>();
+            inputs.put("x", SScalar.of(x));
+            inputs.put("y", SScalar.of(y));
+            chain.setInputData(inputs);
             chain.execute();
             System.out.println("Chain finished: " + chain);
         }
     }
 
     public static void main(String[] args) throws IOException {
+        final CallSimpleChain demo = new CallSimpleChain();
         boolean lowLevel = false;
         int startArgIndex = 0;
         if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-lowLevel")) {
             lowLevel = true;
             startArgIndex++;
         }
-        if (args.length < startArgIndex + 1) {
+        if (args.length < startArgIndex + 3) {
             System.out.printf("Usage: %s [-lowLevel] some_chain.chain%n" +
-                            "The chain should not require any input data: " +
-                            "this test does not set inputs and does not analyse outputs.",
+                            "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
+                            "and have 2 parameters named a and b. However, this is not necessary.",
                     CallSimpleChain.class.getName());
             return;
         }
+        demo.x = Double.parseDouble(args[startArgIndex + 1]);
+        demo.y = Double.parseDouble(args[startArgIndex + 2]);
+        demo.a = args.length > startArgIndex + 3 ? Double.valueOf(args[startArgIndex + 3]) : null;
+        demo.b = args.length > startArgIndex + 4 ? Double.valueOf(args[startArgIndex + 4]) : null;
         final Path chainPath = Paths.get(args[startArgIndex]);
         ExecutionBlock.initializeExecutionSystem();
         if (lowLevel) {
-            executeChainDirectly(chainPath);
+            demo.executeChainDirectly(chainPath);
         } else {
-            executeChainAsExecutor(chainPath);
+            demo.executeChainAsExecutor(chainPath);
         }
 
     }

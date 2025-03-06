@@ -81,7 +81,7 @@ public class CallSimpleChainWithSettings {
             System.out.printf("Usage: " +
                             "%s [-builder|-combine] some_chain.chain x y [a b]%n" +
                             "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
-                            "and have 2 parameters named a and b.",
+                            "and have 2 parameters named a and b. However, this is not necessary.",
                     CallSimpleChainWithSettings.class.getName());
             return;
         }

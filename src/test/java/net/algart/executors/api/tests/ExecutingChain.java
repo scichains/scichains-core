@@ -108,6 +108,7 @@ public class ExecutingChain {
             checkStability = true;
             startArgIndex++;
         }
+        System.out.printf("Extensions root: %s%n", InstalledExtensions.EXTENSIONS_ROOT);
         if (args.length < startArgIndex + 1) {
             System.out.printf("Usage: "
                             + "%s [-mono] ]-clean] [-all] [-multithreading] [-ignoreExceptions] [-gc] "

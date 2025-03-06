@@ -701,6 +701,10 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         onChangeParameter(name);
     }
 
+    public final void setParameter(String name, Object value) {
+        parameters.put(name, value);
+        onChangeParameter(name);
+    }
 
     @UsedForExternalCommunication
     public final boolean isVisibleResultNecessary() {
