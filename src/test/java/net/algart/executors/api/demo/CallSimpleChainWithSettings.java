@@ -44,10 +44,10 @@ public class CallSimpleChainWithSettings {
 
     private static void customizeViaBuilder(ChainExecutor executor, String a, String b) {
         final SettingsBuilder settingsBuilder = executor.settingsBuilder();
-        final Parameters parameters = new Parameters();
-        parameters.setString("a", a);
-        parameters.setString("b", b);
-        parameters.setDouble("delta", 0.003);
+        final Parameters parameters = new Parameters()
+            .setString("a", a)
+            .setString("b", b)
+            .setDouble("delta", 0.003);
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));

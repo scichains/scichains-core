@@ -45,11 +45,11 @@ public class CallSimpleMultiChain {
 
     private static void customizeViaBuilder(MultiChainExecutor executor, String variant, String a, String b) {
         final SettingsBuilder settingsBuilder = executor.settingsBuilder();
-        final Parameters parameters = new Parameters();
-        parameters.setString(executor.multiChain().selectedChainParameter(), variant);
-        parameters.setString("a", a);
-        parameters.setString("b", b);
-        parameters.setString(variant, "{\"delta\": 0.003}");
+        final Parameters parameters = new Parameters()
+            .setString(executor.multiChain().selectedChainParameter(), variant)
+            .setString("a", a)
+            .setString("b", b)
+            .setString(variant, "{\"delta\": 0.003}");
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));

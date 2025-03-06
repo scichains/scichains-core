@@ -2,10 +2,10 @@
     "app": "SciChains",
     "version": "1.1",
     "root": {
-        "scale": 1.0000000000000016,
+        "scale": 0.8000000000000013,
         "desktop": {
-            "scroll_h": 0.6215685879922324,
-            "scroll_v": 0.54552832324061
+            "scroll_h": 0.6159997943090819,
+            "scroll_v": 0.5531820666087589
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -223,6 +223,15 @@
                 },
                 {
                     "@id": "UIPortModel",
+                    "uuid": "c9029c08-0200-0000-0e34-1783a3403350",
+                    "visible": true,
+                    "port_type": "OUTPUT",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
                     "uuid": "c9029c08-0200-0000-cf95-37e5dfbcb01d",
                     "visible": false,
                     "port_type": "OUTPUT",
@@ -327,6 +336,24 @@
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "print_pattern",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "c9029c08-0300-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "INPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "c9029c08-0400-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "OUTPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
                     "caption": ""
                 }
             ],
@@ -525,20 +552,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "33df55fa-0100-0000-17ce-4eca8c4360ad",
-                    "visible": true,
-                    "port_type": "INPUT",
-                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "y",
-                    "caption": ""
-                },
-                {
-                    "@id": "UIPortModel",
                     "uuid": "33df55fa-0100-0000-81ea-d1c6b997b71c",
                     "visible": true,
                     "port_type": "INPUT",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "x",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "33df55fa-0100-0000-17ce-4eca8c4360ad",
+                    "visible": true,
+                    "port_type": "INPUT",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "y",
                     "caption": ""
                 },
                 {
@@ -791,6 +818,24 @@
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "print_pattern",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "33df55fa-0300-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "INPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
+                    "caption": ""
+                },
+                {
+                    "@id": "UIPortModel",
+                    "uuid": "33df55fa-0400-0000-0e34-1783a3403350",
+                    "visible": false,
+                    "port_type": "OUTPUT_CONTROL",
+                    "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                    "name": "some_unused",
                     "caption": ""
                 },
                 {
@@ -1145,6 +1190,12 @@
                         "name": "print_pattern"
                     },
                     {
+                        "uuid": "c9029c08-0200-0000-0e34-1783a3403350",
+                        "type": 2,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
                         "uuid": "c9029c08-0200-0000-cf95-37e5dfbcb01d",
                         "type": 2,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
@@ -1215,6 +1266,18 @@
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                         "name": "print_pattern"
+                    },
+                    {
+                        "uuid": "c9029c08-0300-0000-0e34-1783a3403350",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
+                        "uuid": "c9029c08-0400-0000-0e34-1783a3403350",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
                     }
                 ],
                 "parameters": [
@@ -1228,7 +1291,7 @@
                     },
                     {
                         "name": "delta",
-                        "value": 0.01
+                        "value": "0.010000"
                     },
                     {
                         "name": "print_pattern",
@@ -1237,6 +1300,10 @@
                     {
                         "name": "settings",
                         "value": "{}"
+                    },
+                    {
+                        "name": "some_unused",
+                        "value": "text"
                     }
                 ],
                 "system": {
@@ -1255,16 +1322,16 @@
                         "name": "settings"
                     },
                     {
-                        "uuid": "33df55fa-0100-0000-17ce-4eca8c4360ad",
-                        "type": 1,
-                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "y"
-                    },
-                    {
                         "uuid": "33df55fa-0100-0000-81ea-d1c6b997b71c",
                         "type": 1,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                         "name": "x"
+                    },
+                    {
+                        "uuid": "33df55fa-0100-0000-17ce-4eca8c4360ad",
+                        "type": 1,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "y"
                     },
                     {
                         "uuid": "33df55fa-0200-0000-9ecb-4a9b75e2f864",
@@ -1435,6 +1502,18 @@
                         "name": "print_pattern"
                     },
                     {
+                        "uuid": "33df55fa-0300-0000-0e34-1783a3403350",
+                        "type": 3,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
+                        "uuid": "33df55fa-0400-0000-0e34-1783a3403350",
+                        "type": 4,
+                        "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
+                        "name": "some_unused"
+                    },
+                    {
                         "uuid": "33df55fa-0300-0000-a709-ddf9eba97266",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
@@ -1494,11 +1573,15 @@
                     },
                     {
                         "name": "delta",
-                        "value": 0.0
+                        "value": "0.000000"
                     },
                     {
                         "name": "print_pattern",
                         "value": "Result: $$$"
+                    },
+                    {
+                        "name": "some_unused",
+                        "value": "text"
                     }
                 ],
                 "system": {

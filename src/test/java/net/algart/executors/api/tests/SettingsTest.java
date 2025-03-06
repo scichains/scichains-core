@@ -75,11 +75,11 @@ public class SettingsTest {
         final JsonObject jsonDefault = settingsBuilder.buildDefault();
         System.out.printf("Defaults:%n%s%n", Jsons.toPrettyString(jsonDefault));
 
-        Parameters parameters = new Parameters();
-        parameters.setString("a", "2.0");
-        parameters.setDouble("b", 3.0);
-        parameters.setString("details", "{\"delta\":0.001}");
-        parameters.setString("path", "my_file.dat");
+        final Parameters parameters = new Parameters()
+                .setString("a", "2.0")
+                .setDouble("b", 3.0)
+                .setString("details", "{\"delta\":0.001}")
+                .setString("path", "my_file.dat");
         final JsonObject jsonParameters = settingsBuilder.build(parameters);
         System.out.printf("Parameters:%n%s%n", Jsons.toPrettyString(jsonParameters));
 

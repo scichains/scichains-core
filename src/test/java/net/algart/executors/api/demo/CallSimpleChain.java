@@ -26,11 +26,13 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
+import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.ExecutorFactory;
 
 import java.io.IOException;
@@ -40,14 +42,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CallSimpleChain {
+    private static final boolean CUSTOMIZING_USE = true;
+    boolean executeAll = false;
     double x;
     double y;
     Double a;
     Double b;
 
+    private ChainExecutor createExecutor(Path chainPath) throws IOException {
+        if (!executeAll) {
+            return UseSubChain.newSharedExecutor(chainPath);
+            // - this is maximally simple
+        } else if (CUSTOMIZING_USE) {
+            final ChainSpecification specification = ChainSpecification.read(chainPath);
+            final UseSubChain use = UseSubChain.getSharedInstance().setOverrideBehaviour(true).setExecuteAll(true);
+            // - Note: setOverrideBehaviour is necessary!
+            // This prevents the user from unintentionally changing behavior.
+            // Usually you should not use "executeAll" mode, it is intended for debugging needs.
+            return use.newExecutor(specification, CreateMode.REQUEST_ALL);
+            // - also not too difficult
+        } else {
+            final ChainSpecification specification = ChainSpecification.read(chainPath);
+            specification.getExecutor().getOptions().getExecution().setAll(true);
+            return UseSubChain.newSharedExecutor(specification, CreateMode.REQUEST_ALL);
+            // - you can do it like this too
+        }
+    }
+
     private void executeChainAsExecutor(Path chainPath)
             throws IOException {
-        try (var executor = UseSubChain.newSharedExecutor(chainPath)) {
+        try (ChainExecutor executor = createExecutor(chainPath)) {
             executor.putDoubleScalar("x", x);
             executor.putDoubleScalar("y", y);
             executor.setParameter("a", a);
@@ -63,11 +87,9 @@ public class CallSimpleChain {
         ChainSpecification chainSpecification = ChainSpecification.read(chainPath);
         final ExecutorFactory executorFactory = ExecutorFactory.newFactory("MySession");
         try (Chain chain = Chain.of(null, executorFactory, chainSpecification)) {
+            chain.setExecuteAll(executeAll);
             chain.reinitializeAll();
-            final Parameters parameters = new Parameters();
-            parameters.put("a", a);
-            parameters.put("b", b);
-            chain.setParameters(parameters);
+            chain.setParameters(new Parameters().set("a", a).set("b", b));
             final Map<String, Data> inputs = new HashMap<>();
             inputs.put("x", SScalar.of(x));
             inputs.put("y", SScalar.of(y));
@@ -85,10 +107,16 @@ public class CallSimpleChain {
             lowLevel = true;
             startArgIndex++;
         }
+        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-all")) {
+            demo.executeAll = true;
+            startArgIndex++;
+        }
         if (args.length < startArgIndex + 3) {
-            System.out.printf("Usage: %s [-lowLevel] some_chain.chain%n" +
+            System.out.printf("Usage: %s [-lowLevel] [-all] some_chain.chain%n" +
                             "some_chain.chain should be a chain with settings, which process 2 scalars x and y " +
-                            "and have 2 parameters named a and b. However, this is not necessary.",
+                            "and have 2 parameters named a and b. However, this is not necessary.%n" +
+                            "Note: in the low-level mode, the chain must not use any chains, settings " +
+                            "or other dynamic executors.",
                     CallSimpleChain.class.getName());
             return;
         }

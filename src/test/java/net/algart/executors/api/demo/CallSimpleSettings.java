@@ -60,10 +60,10 @@ public class CallSimpleSettings {
         System.out.printf("Loading %s...%n", settingsPath.toAbsolutePath());
         if (builder) {
             final SettingsBuilder settingsBuilder = SettingsBuilder.read(settingsPath);
-            final Parameters parameters = new Parameters();
-            parameters.setString("a", parameterA);
-            parameters.setString("b", parameterB);
-            parameters.setString("str", parameterStr);
+            final Parameters parameters = new Parameters()
+                    .setString("a", parameterA)
+                    .setString("b", parameterB)
+                    .setString("str", parameterStr);
             final JsonObject resultJson = settingsBuilder.build(parameters);
             System.out.printf("Done: result JSON is%n%s%n", Jsons.toPrettyString(resultJson));
         } else {

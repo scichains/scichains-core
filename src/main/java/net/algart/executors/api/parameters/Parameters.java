@@ -33,6 +33,7 @@ import net.algart.json.Jsons;
 
 import java.util.*;
 
+@SuppressWarnings("UnusedReturnValue")
 public class Parameters implements Map<String, Object> {
     private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<>());
 
@@ -66,12 +67,13 @@ public class Parameters implements Map<String, Object> {
     }
 
     @UsedForExternalCommunication
-    public void setBoolean(String name, boolean value) {
+    public Parameters setBoolean(String name, boolean value) {
         Objects.requireNonNull(name, "Null parameter name");
         put(name, value);
+        return this;
     }
 
-    public void setBoolean(String name, String value) {
+    public Parameters setBoolean(String name, String value) {
         Objects.requireNonNull(name, "Null parameter name");
         if (value == null) {
             throw new IllegalArgumentException("Cannot set boolean parameter \"" + name + "\" to null value");
@@ -83,6 +85,7 @@ public class Parameters implements Map<String, Object> {
             throw new NoValidParameterException("Cannot set boolean parameter \""
                     + name + "\" to non-boolean value \"" + value + "\"");
         }
+        return this;
     }
 
     public int getInteger(String name) throws NoValidParameterException {
@@ -116,12 +119,13 @@ public class Parameters implements Map<String, Object> {
     }
 
     @UsedForExternalCommunication
-    public void setInteger(String name, int value) {
+    public Parameters setInteger(String name, int value) {
         Objects.requireNonNull(name, "Null parameter name");
         put(name, value);
+        return this;
     }
 
-    public void setInteger(String name, String value) {
+    public Parameters setInteger(String name, String value) {
         Objects.requireNonNull(name, "Null parameter name");
         if (value == null) {
             throw new IllegalArgumentException("Cannot set int parameter \"" + name + "\" to null value");
@@ -133,6 +137,7 @@ public class Parameters implements Map<String, Object> {
             throw new NoValidParameterException("Cannot set int parameter \""
                     + name + "\" to non-integer value \"" + value + "\"");
         }
+        return this;
     }
 
     public long getLong(String name) throws NoValidParameterException {
@@ -166,12 +171,13 @@ public class Parameters implements Map<String, Object> {
     }
 
     @UsedForExternalCommunication
-    public void setLong(String name, long value) {
+    public Parameters setLong(String name, long value) {
         Objects.requireNonNull(name, "Null parameter name");
         put(name, value);
+        return this;
     }
 
-    public void setLong(String name, String value) {
+    public Parameters setLong(String name, String value) {
         Objects.requireNonNull(name, "Null parameter name");
         if (value == null) {
             throw new IllegalArgumentException("Cannot set long parameter \"" + name + "\" to null value");
@@ -183,6 +189,7 @@ public class Parameters implements Map<String, Object> {
             throw new IllegalArgumentException("Cannot set long parameter \""
                     + name + "\" to non-long value \"" + value + "\"");
         }
+        return this;
     }
 
     public double getDouble(String name) throws NoValidParameterException {
@@ -216,12 +223,13 @@ public class Parameters implements Map<String, Object> {
     }
 
     @UsedForExternalCommunication
-    public void setDouble(String name, double value) {
+    public Parameters setDouble(String name, double value) {
         Objects.requireNonNull(name, "Null parameter name");
         put(name, value);
+        return this;
     }
 
-    public void setDouble(String name, String value) {
+    public Parameters setDouble(String name, String value) {
         Objects.requireNonNull(name, "Null parameter name");
         if (value == null) {
             throw new IllegalArgumentException("Cannot set double parameter \"" + name + "\" to null value");
@@ -233,6 +241,7 @@ public class Parameters implements Map<String, Object> {
             throw new IllegalArgumentException("Cannot set double parameter \""
                     + name + "\" to non-double value \"" + value + "\"");
         }
+        return this;
     }
 
     public String getString(String name) throws NoValidParameterException {
@@ -249,9 +258,15 @@ public class Parameters implements Map<String, Object> {
     }
 
     @UsedForExternalCommunication
-    public void setString(String name, String value) {
+    public Parameters setString(String name, String value) {
         Objects.requireNonNull(name, "Null parameter name");
         put(name, value);
+        return this;
+    }
+
+    public Parameters set(String name, Object value) {
+        put(name, value);
+        return this;
     }
 
     @Override
