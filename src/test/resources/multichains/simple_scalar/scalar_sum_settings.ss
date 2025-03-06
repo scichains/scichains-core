@@ -20,6 +20,7 @@
       "value_type": "String",
       "_rem": "String is a possible value for passing a number, if it is indeed a number",
       "edition_type": "value",
+      "advanced": true,
       "default": "0.0"
     },
     {

@@ -661,7 +661,12 @@ public class UseSettings extends FileOperation {
                     .setCaption(controlSpecification.getCaption())
                     .setHint(controlSpecification.getDescription())
                     .setValueType(DataType.SCALAR)
-                    .setAdvanced(controlSpecification.isAdvanced());
+                    .setAdvanced(controlSpecification.isAdvanced()
+                            && !controlSpecification.getValueType().isSettings());
+            // - Note: we NEVER make settings ports "advanced"!
+            // This kind of ports may be very important for passing settings or sub-settings to other executors,
+            // and hiding some of such ports as "advanced" may confuse the user.
+
             // if (controlSpecification.getValueType().isSettings()) {
             //    portSpecification.setAdvanced(true);
             // }

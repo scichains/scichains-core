@@ -9,6 +9,7 @@
       "value_type": "settings",
       "edition_type": "value",
       "multiline": true,
+      "advanced": true,
       "default": {}
     }
   ]

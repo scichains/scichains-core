@@ -2,10 +2,10 @@
     "app": "SciChains",
     "version": "1.1",
     "root": {
-        "scale": 1.2500000000000029,
+        "scale": 0.800000000000002,
         "desktop": {
-            "scroll_h": 0.6576862801844798,
-            "scroll_v": 0.5240334813845162
+            "scroll_h": 0.6265611607985437,
+            "scroll_v": 0.5355951424269076
         },
         "grid_adjust": true,
         "grid_size": 20
