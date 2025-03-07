@@ -26,10 +26,12 @@ package net.algart.executors.api.demo;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.UseMultiChain;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
+import net.algart.executors.api.system.SettingsTree;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
@@ -69,21 +71,45 @@ public class CallSimpleMultiChain {
         executor.putSettings(settings);
     }
 
+    // Little more convenient than customizeViaSettings: combiner has "selectChainVariant" method
+    private static void customizeViaTree(MultiChainExecutor executor, String variant, String a, String b) {
+        final var combiner = executor.newCombine();
+        SettingsTree tree = SettingsTree.of(executor.executorFactory(), combiner.getSpecification());
+        System.out.printf("%nTree of default JSON values: %s%n", tree.defaultSettingsJsonString());
+        final JsonObject settings = tree.settingsJson(path -> {
+            if (path.lastName().equals("delta")) {
+                return Jsons.toJsonDoubleValue(0.004);
+                // - setting some "delta" sub-parameter for a case when the sub-chain has it
+            }
+            return switch (path.toString()) {
+                case "/" + MultiChain.SELECTED_CHAIN_NAME  -> Jsons.toJsonStringValue(variant);
+                case "/a" -> Jsons.toJsonStringValue(a);
+                case "/b" -> Jsons.toJsonStringValue(b);
+                default -> path.reqControl().getDefaultJsonValue();
+            };
+        });
+        System.out.printf("%nCombined tree JSON: %s%n%n", Jsons.toPrettyString(settings));
+        executor.putSettingsJson(settings);
+    }
+
     public static void main(String[] args) throws IOException {
         boolean builder = false;
         int startArgIndex = 0;
+        boolean combine = false;
+        boolean tree = false;
         if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-builder")) {
             builder = true;
             startArgIndex++;
-        }
-        boolean combine = false;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
+        } else if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
             combine = true;
+            startArgIndex++;
+        } else if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-tree")) {
+            tree = true;
             startArgIndex++;
         }
         if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
-                            "%s [-builder|-combine] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
+                            "%s [-builder|-combine|-tree] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b;%n" +
                             "it should calculate some formula like ax+by and return the result in the output.",
@@ -109,6 +135,8 @@ public class CallSimpleMultiChain {
                 customizeViaCombiner(executor, variant, parameterA, parameterB);
             } else if (builder) {
                 customizeViaBuilder(executor, variant, parameterA, parameterB);
+            } else if (tree) {
+                customizeViaTree(executor, variant, parameterA, parameterB);
             } else {
                 customizeViaParameters(executor, variant, parameterA, parameterB);
             }

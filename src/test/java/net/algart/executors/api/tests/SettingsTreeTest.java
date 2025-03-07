@@ -87,7 +87,9 @@ public class SettingsTreeTest {
         }
 
         SettingsTree.Path tree1Path = treeSmart.newPath("Simple_settings_1");
+        if (!tree1Path.lastName().equals("Simple_settings_1")) throw new AssertionError();
         SettingsTree.Path strPath = treeSmart.newPath("Simple_settings_1", "str");
+        if (!strPath.lastName().equals("str")) throw new AssertionError();
 
         SettingsTree tree1 = tree1Path.reqTree();
         System.out.printf("%n%s: %s%n", tree1Path, tree1);

@@ -62,11 +62,29 @@ public final class SettingsTree {
         }
 
         public String name(int index) {
+            if (index < 0) {
+                throw new IllegalArgumentException("Negative name index " + index);
+            }
+            if (index >= names.length) {
+                throw new IndexOutOfBoundsException("Name index " + index +
+                        " is out of range 0 <= i < " + names.length);
+            }
             return names[index];
+        }
+
+        public String lastName() {
+            if (names.length == 0) {
+                throw new IllegalStateException("Empty names array");
+            }
+            return names[names.length - 1];
         }
 
         public boolean isEmpty() {
             return names.length == 0;
+        }
+
+        public int length() {
+            return names.length;
         }
 
         public Path parent() {

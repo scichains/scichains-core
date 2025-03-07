@@ -67,13 +67,12 @@ public class CallSimpleChainWithSettings {
 
     public static void main(String[] args) throws IOException {
         boolean builder = false;
+        boolean combine = false;
         int startArgIndex = 0;
         if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-builder")) {
             builder = true;
             startArgIndex++;
-        }
-        boolean combine = false;
-        if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
+        } else  if (args.length > startArgIndex && args[startArgIndex].equalsIgnoreCase("-combine")) {
             combine = true;
             startArgIndex++;
         }
