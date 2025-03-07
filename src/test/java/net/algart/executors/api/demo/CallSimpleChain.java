@@ -57,8 +57,11 @@ public class CallSimpleChain {
             final ChainSpecification specification = ChainSpecification.read(chainPath);
             final UseSubChain use = UseSubChain.getSharedInstance().setOverrideBehaviour(true).setExecuteAll(true);
             // - Note: setOverrideBehaviour is necessary!
-            // This prevents the user from unintentionally changing behavior.
-            // Usually you should not use "executeAll" mode, it is intended for debugging needs.
+            // By default, the chain behavior depends on the specification:
+            // the flags in the Executor / Options/ Execution section.
+            // setOverrideBehaviour allows overriding these settings.
+            // Also, the necessity of this call prevents the user from unintentionally changing behavior:
+            // usually you should not use "executeAll" mode, it is intended for debugging needs.
             return use.newExecutor(specification, CreateMode.REQUEST_ALL);
             // - also not too difficult
         } else {
