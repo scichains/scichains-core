@@ -4,8 +4,8 @@
     "root": {
         "scale": 1.0000000000000016,
         "desktop": {
-            "scroll_h": 0.6049362665880311,
-            "scroll_v": 0.5629077004009375
+            "scroll_h": 0.6101779672286834,
+            "scroll_v": 0.5623931912426745
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -987,7 +987,7 @@
         {
             "@id": "UIBlockModel",
             "uuid": "393ad4df-a5c5-4f83-ab40-9df4999cbbe0",
-            "layout_x": 12260,
+            "layout_x": 12282,
             "layout_y": 10960,
             "layout_width": 300,
             "layout_height": 200,

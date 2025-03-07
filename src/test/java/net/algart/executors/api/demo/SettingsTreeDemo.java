@@ -26,8 +26,10 @@ package net.algart.executors.api.demo;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.chains.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.multichains.MultiChainExecutor;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.multichains.UseMultiChain;
 import net.algart.executors.api.parameters.ParameterValueType;
@@ -42,8 +44,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SettingsTreeDemo {
-    public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
-
     private static JsonObject buildCustomSettings(SettingsTree tree) {
         return tree.settingsJson(path -> {
             final ControlSpecification control = path.reqControl();
@@ -78,19 +78,21 @@ public class SettingsTreeDemo {
         if (SettingsSpecification.isSettingsSpecificationFile(executorPath)) {
             executor = UseSettings.newSharedExecutor(factory, executorPath);
         } else if (ChainSpecification.isChainSpecificationFile(executorPath)) {
-            executor = UseSubChain.newSharedExecutor(executorPath).newCombine();
+            final ChainExecutor chainExecutor = UseSubChain.newSharedExecutor(executorPath);
+            executor = chainExecutor.newCombine();
             // - exception if there are no settings
         } else if (MultiChainSpecification.isMultiChainSpecificationFile(executorPath)) {
-            executor = UseMultiChain.newSharedExecutor(executorPath).newCombine();
+            final MultiChainExecutor multiChainExecutor = UseMultiChain.newSharedExecutor(executorPath);
+            executor = multiChainExecutor.newCombine();
         } else {
             throw new IllegalArgumentException("This file is not settings, chain or multi-chain: " + executorPath);
         }
 
         final ExecutorSpecification specification = executor.getSpecification();
 
-        SettingsTree tree;
+        final SettingsTree tree;
         if (smart) {
-            tree = SettingsTree.of(SmartSearchSettings.newInstance(MY_SESSION_ID), specification);
+            tree = SettingsTree.of(SmartSearchSettings.newSharedInstance(), specification);
         } else {
             tree = SettingsTree.of(factory, specification);
         }
@@ -98,7 +100,7 @@ public class SettingsTreeDemo {
         System.out.println();
         System.out.printf("**** %s **** %n%s%n%n",
                 tree,
-                tree.jsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
+                tree.specificationJsonString(ExecutorSpecification.JsonMode.CONTROLS_ONLY));
 
         System.out.printf("**** Default values: **** %n%s%n%n", tree.defaultSettingsJsonString());
 

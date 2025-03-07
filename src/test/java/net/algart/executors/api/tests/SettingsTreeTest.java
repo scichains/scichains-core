@@ -55,11 +55,11 @@ public class SettingsTreeTest {
             long t2 = System.nanoTime();
             treeQuick = SettingsTree.of(factory, specification);
             long t3 = System.nanoTime();
-            sQuick = treeQuick.jsonString(ExecutorSpecification.JsonMode.MEDIUM);
+            sQuick = treeQuick.specificationJsonString(ExecutorSpecification.JsonMode.MEDIUM);
             long t4 = System.nanoTime();
             treeSmart = SettingsTree.of(smartSearch, specification);
             long t5 = System.nanoTime();
-            sSmart = treeSmart.jsonString(ExecutorSpecification.JsonMode.MEDIUM);
+            sSmart = treeSmart.specificationJsonString(ExecutorSpecification.JsonMode.MEDIUM);
             long t6 = System.nanoTime();
 
             System.out.printf("Test #%d: get specification %.3f ms, " +
@@ -87,7 +87,7 @@ public class SettingsTreeTest {
         }
 
         SettingsTree.Path tree1Path = treeSmart.newPath("Simple_settings_1");
-        SettingsTree.Path strPath = treeSmart.newPath(tree1Path.name(0), "str");
+        SettingsTree.Path strPath = treeSmart.newPath("Simple_settings_1", "str");
 
         SettingsTree tree1 = tree1Path.reqTree();
         System.out.printf("%n%s: %s%n", tree1Path, tree1);

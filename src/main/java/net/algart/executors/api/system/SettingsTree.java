@@ -297,11 +297,11 @@ public final class SettingsTree {
         return settingsJson(path -> path.reqControl().getDefaultJsonValue());
     }
 
-    public String jsonString() {
+    public String specificationJsonString() {
         return Jsons.toPrettyString(specificationJson());
     }
 
-    public String jsonString(ExecutorSpecification.JsonMode mode) {
+    public String specificationJsonString(ExecutorSpecification.JsonMode mode) {
         return Jsons.toPrettyString(specificationJson(mode));
     }
 

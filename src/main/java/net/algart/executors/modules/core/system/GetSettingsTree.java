@@ -168,7 +168,7 @@ public class GetSettingsTree extends Executor implements ReadOnlyExecutionInput 
         long t3 = debugTime(), t4;
         final String treeJson, defaultSettingsJson;
         if (buildTree) {
-            treeJson = tree.jsonString(jsonMode);
+            treeJson = tree.specificationJsonString(jsonMode);
             t4 = debugTime();
             defaultSettingsJson = tree.defaultSettingsJsonString();
         } else {
