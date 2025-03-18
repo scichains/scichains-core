@@ -87,6 +87,10 @@ public final class SettingsTree {
             return names.length;
         }
 
+        public Path root() {
+            return new Path();
+        }
+
         public Path parent() {
             if (names.length == 0) {
                 return null;
@@ -101,7 +105,20 @@ public final class SettingsTree {
             return new Path(childNames);
         }
 
-        public SettingsTree root() {
+        public boolean startsWith(Path other) {
+            Objects.requireNonNull(other, "Null other path");
+            if (other.names.length > names.length) {
+                return false;
+            }
+            for (int i = 0; i < other.names.length; i++) {
+                if (!other.names[i].equals(this.names[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public SettingsTree rootTree() {
             return SettingsTree.this;
         }
 
@@ -157,18 +174,24 @@ public final class SettingsTree {
             return "/" + String.join("/", names);
         }
 
+        /**
+         * Returns <code>true</code> if the specified object is an identical path inside e<b>the same</b> root tree.
+         * @param   o  the reference object with which to compare.
+         * @return  {@code true} if this object is the same path as the argument; {@code false} otherwise.
+         */
         @Override
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
             Path path = (Path) o;
-            return Objects.deepEquals(names, path.names);
+            return path.rootTree() == rootTree() && Objects.deepEquals(names, path.names);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(names);
+            return 31 * Arrays.hashCode(names) + SettingsTree.this.hashCode();
+            // - actually, SettingsTree.hashCode is identityHashCode
         }
 
         private void checkNames() {

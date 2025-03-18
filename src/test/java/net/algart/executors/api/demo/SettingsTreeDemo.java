@@ -109,7 +109,7 @@ public class SettingsTreeDemo {
 
         System.out.println("**** Trees: ****");
         for (SettingsTree.Path path : tree.treePaths()) {
-            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.root());
+            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.rootTree());
         }
         System.out.println();
 

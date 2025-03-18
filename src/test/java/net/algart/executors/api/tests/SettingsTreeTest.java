@@ -78,23 +78,39 @@ public class SettingsTreeTest {
         System.out.printf("**** Smart default values: **** %n%s%n%n", treeSmart.defaultSettingsJsonString());
         System.out.println("**** Trees: ****");
         for (SettingsTree.Path path : treeSmart.treePaths()) {
-            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.root());
+            System.out.printf("%s:%n    node: %s%n    root: %s%n", path, path.reqTree(), path.rootTree());
+            if (path.parent() != null && !path.startsWith(path.parent())) throw new AssertionError();
         }
         System.out.println();
         System.out.println("**** Controls: ****");
         for (SettingsTree.Path path : treeSmart.controlPaths()) {
             System.out.printf("%s:%n    %s%n", path, path.reqControl().toJson());
+            SettingsTree.Path parent = path.parent();
+            if (parent == null) throw new AssertionError();
+            if (!path.startsWith(parent)) throw new AssertionError();
+            if (!path.startsWith(path)) throw new AssertionError();
+            if (parent.startsWith(path)) throw new AssertionError();
         }
 
+        System.out.println();
+        System.out.println("**** Testing some paths ****");
         SettingsTree.Path tree1Path = treeSmart.newPath("Simple_settings_1");
         if (!tree1Path.lastName().equals("Simple_settings_1")) throw new AssertionError();
         SettingsTree.Path strPath = treeSmart.newPath("Simple_settings_1", "str");
         if (!strPath.lastName().equals("str")) throw new AssertionError();
+        SettingsTree.Path rootPath = strPath.root();
+        if (!rootPath.equals(treeSmart.newPath())) throw new AssertionError();
+        if (rootPath.equals(treeQuick.newPath())) throw new AssertionError("Different trees!");
+        if (!tree1Path.startsWith(rootPath)) throw new AssertionError();
+        if (tree1Path.startsWith(strPath)) throw new AssertionError();
+        if (!strPath.startsWith(tree1Path)) throw new AssertionError();
+        if (!strPath.startsWith(strPath)) throw new AssertionError();
 
         SettingsTree tree1 = tree1Path.reqTree();
-        System.out.printf("%n%s: %s%n", tree1Path, tree1);
+        System.out.printf("Path %s: %s%n", tree1Path, tree1);
         ControlSpecification tree1ControlStr = strPath.reqControl();
-        System.out.printf("%n%s: %s%n", strPath, tree1ControlStr);
+        System.out.printf("Path %s: %s%n", strPath, tree1ControlStr);
+        System.out.printf("Root path %s: %s%n", rootPath, rootPath.reqTree());
         ControlSpecification controlStr = tree1.newPath("str").reqControl();
         System.out.printf("%nControl \"str\" from the sub-tree: %s%n", controlStr);
         System.out.printf("%nReference equality to the previous control: %s%n", controlStr == tree1ControlStr);
