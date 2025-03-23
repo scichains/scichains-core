@@ -31,7 +31,9 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.*;
+import net.algart.executors.api.settings.SettingsBuilder;
+import net.algart.executors.api.settings.UseChainSettings;
+import net.algart.executors.api.settings.UseSettings;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
@@ -419,7 +421,7 @@ public final class UseSubChain extends FileOperation {
         final List<ControlSpecification.EnumItem> items = new ArrayList<>();
         for (PortSpecification portSpecification : specification.getOutputPorts().values()) {
             final String executorPortName = portSpecification.getName();
-            if (firstEnumValue == null && !executorPortName.equals(SettingsExecutor.SETTINGS)) {
+            if (firstEnumValue == null && !executorPortName.equals(SETTINGS)) {
                 firstEnumValue = executorPortName;
             }
             items.add(new ControlSpecification.EnumItem(executorPortName));
@@ -444,10 +446,10 @@ public final class UseSubChain extends FileOperation {
 
     public static void addSettingsPorts(ExecutorSpecification result) {
         result.addFirstInputPort(new PortSpecification()
-                .setName(SettingsExecutor.SETTINGS)
+                .setName(SETTINGS)
                 .setValueType(DataType.SCALAR));
         result.addFirstOutputPort(new PortSpecification()
-                .setName(SettingsExecutor.SETTINGS)
+                .setName(SETTINGS)
                 .setHint("Actually used settings (JSON)")
                 .setAdvanced(true)
                 .setValueType(DataType.SCALAR));

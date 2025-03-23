@@ -24,12 +24,9 @@
 
 package net.algart.executors.api.multichains;
 
-import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.settings.SettingsBuilder;
-import net.algart.executors.api.settings.SettingsExecutor;
 import net.algart.executors.api.system.ExecutorFactory;
-import net.algart.json.Jsons;
 
 import java.util.Objects;
 
@@ -61,15 +58,6 @@ public abstract class MultiChainExecutor extends Executor {
     public CombineMultiChainSettings newCombine() {
         //noinspection resource
         return multiChain().newCombine();
-    }
-
-    public MultiChainExecutor putSettingsJson(JsonObject settings) {
-        return putSettings(settings == null ? null : Jsons.toPrettyString(settings));
-    }
-
-    public MultiChainExecutor putSettings(String settings) {
-        putStringScalar(SettingsExecutor.SETTINGS, settings);
-        return this;
     }
 
     public void selectChainVariant(String variant) {

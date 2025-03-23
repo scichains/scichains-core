@@ -55,7 +55,7 @@ public class CallSimpleMultiChain {
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
-        executor.putSettingsJson(settingsJson);
+        executor.putSettings(settingsJson);
     }
 
     // Little more convenient than customizeViaSettings: combiner has "selectChainVariant" method
@@ -89,7 +89,7 @@ public class CallSimpleMultiChain {
             };
         });
         System.out.printf("%nCombined tree JSON: %s%n%n", Jsons.toPrettyString(settings));
-        executor.putSettingsJson(settings);
+        executor.putSettings(settings);
     }
 
     public static void main(String[] args) throws IOException {

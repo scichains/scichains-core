@@ -51,7 +51,7 @@ public class CallSimpleChainWithSettings {
         // - adding "delta" parameter for a case when the sub-chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
-        executor.putSettingsJson(settingsJson);
+        executor.putSettings(settingsJson);
     }
 
     private static void customizeViaCombiner(ChainExecutor executor, String a, String b) {

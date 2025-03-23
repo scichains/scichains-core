@@ -24,14 +24,17 @@
 
 package net.algart.executors.api;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.scalars.creation.CreateScalar;
 import net.algart.external.UsedForExternalCommunication;
+import net.algart.json.Jsons;
 
 import java.io.IOException;
 import java.lang.System.Logger;
@@ -50,6 +53,12 @@ public abstract class Executor extends ExecutionBlock {
 
     public static final String ENUM_VALUE_OF_NAME_CUSTOM_METHOD = "valueOfName";
     public static final String STANDARD_VISIBLE_RESULT_PARAMETER_NAME = "visibleResult";
+
+    /**
+     * Recommended name for the input port that contains a large number of settings,
+     * probably in JSON format.
+     */
+    public static final String SETTINGS = ExecutorSpecification.SETTINGS;
 
     public static final String OUTPUT_EXECUTOR_ID_NAME = "_sys___executor_id";
     public static final String OUTPUT_PLATFORM_ID_NAME = "_sys___platform_id";
@@ -206,6 +215,15 @@ public abstract class Executor extends ExecutionBlock {
 
     public final void setDefaultOutputScalar(String newDefaultOutputPortName) {
         setDefaultOutputPort(newDefaultOutputPortName, DataType.SCALAR);
+    }
+
+    public Executor putSettings(JsonObject settings) {
+        return putSettings(settings == null ? null : Jsons.toPrettyString(settings));
+    }
+
+    public Executor putSettings(String settings) {
+        putStringScalar(Executor.SETTINGS, settings);
+        return this;
     }
 
     public final <T extends Data> Map<String, T> allOutputContainers(

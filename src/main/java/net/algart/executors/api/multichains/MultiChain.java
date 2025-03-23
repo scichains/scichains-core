@@ -26,6 +26,7 @@ package net.algart.executors.api.multichains;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.ParameterValueType;
@@ -454,7 +455,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             throw new AssertionError("Main settings block  '"
                     + mainSettingsBlockId + "' is not found in the chain " + selectedChain);
         final String prettyString = Jsons.toPrettyString(selectedChainSettings);
-        settingsBlock.setActualInputData(SettingsExecutor.SETTINGS, SScalar.of(prettyString));
+        settingsBlock.setActualInputData(Executor.SETTINGS, SScalar.of(prettyString));
         return prettyString;
     }
 
