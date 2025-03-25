@@ -52,50 +52,6 @@ import java.util.stream.Stream;
  * in several ports.</p>
  */
 public class ExecutorSpecification extends AbstractConvertibleToJson {
-    public static <T> List<T> readAllJsonIfValid(
-            List<T> result,
-            Path containingJsonPath,
-            Function<Path, T> reader)
-            throws IOException {
-        return readAllIfValid(
-                result,
-                containingJsonPath,
-                true,
-                reader,
-                path -> path.getFileName().toString().toLowerCase().endsWith(".json"));
-    }
-
-    public static <S> List<S> readAllIfValid(
-            List<S> result,
-            Path containingJsonPath,
-            boolean recursive,
-            Function<Path, S> reader,
-            Predicate<Path> isAllowedPath)
-            throws IOException {
-        Objects.requireNonNull(containingJsonPath, "Null containingJsonPath");
-        Objects.requireNonNull(isAllowedPath, "Null isAllowedPath");
-        if (result == null) {
-            result = new ArrayList<>();
-        }
-        if (Files.isDirectory(containingJsonPath)) {
-            try (Stream<Path> files = Files.list(containingJsonPath)) {
-                for (Path file : files.sorted().toList()) {
-                    // Important: we guarantee that the result will always be listed
-                    // in the alphabetical order, not randomly
-                    if (recursive || Files.isRegularFile(file)) {
-                        readAllIfValid(result, file, recursive, reader, isAllowedPath);
-                    }
-                }
-            }
-        } else if (Files.isRegularFile(containingJsonPath) && isAllowedPath.test(containingJsonPath)) {
-            final S specification = reader.apply(containingJsonPath);
-            if (specification != null) {
-                result.add(specification);
-            }
-        }
-        return result;
-    }
-
     public enum JsonMode {
         FULL,
         MEDIUM,
@@ -1007,6 +963,51 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         Objects.requireNonNull(specificationFile, "Null specificationFile");
         Files.writeString(specificationFile, jsonString(), options);
     }
+
+    public static <T> List<T> readAllJsonIfValid(
+            List<T> result,
+            Path containingJsonPath,
+            Function<Path, T> reader)
+            throws IOException {
+        return readAllIfValid(
+                result,
+                containingJsonPath,
+                true,
+                reader,
+                path -> path.getFileName().toString().toLowerCase().endsWith(".json"));
+    }
+
+    public static <S> List<S> readAllIfValid(
+            List<S> result,
+            Path containingJsonPath,
+            boolean recursive,
+            Function<Path, S> reader,
+            Predicate<Path> isAllowedPath)
+            throws IOException {
+        Objects.requireNonNull(containingJsonPath, "Null containingJsonPath");
+        Objects.requireNonNull(isAllowedPath, "Null isAllowedPath");
+        if (result == null) {
+            result = new ArrayList<>();
+        }
+        if (Files.isDirectory(containingJsonPath)) {
+            try (Stream<Path> files = Files.list(containingJsonPath)) {
+                for (Path file : files.sorted().toList()) {
+                    // Important: we guarantee that the result will always be listed
+                    // in the alphabetical order, not randomly
+                    if (recursive || Files.isRegularFile(file)) {
+                        readAllIfValid(result, file, recursive, reader, isAllowedPath);
+                    }
+                }
+            }
+        } else if (Files.isRegularFile(containingJsonPath) && isAllowedPath.test(containingJsonPath)) {
+            final S specification = reader.apply(containingJsonPath);
+            if (specification != null) {
+                result.add(specification);
+            }
+        }
+        return result;
+    }
+
 
     public static ExecutorSpecification of(JsonObject specificationJson) {
         return new ExecutorSpecification(specificationJson, null);
