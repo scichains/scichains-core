@@ -35,7 +35,6 @@ import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -43,6 +42,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * <p>Detailed specification of an executor: ports, parameters, some key features of its behavior.</p>
@@ -78,8 +78,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             result = new ArrayList<>();
         }
         if (Files.isDirectory(containingJsonPath)) {
-            try (DirectoryStream<Path> files = Files.newDirectoryStream(containingJsonPath)) {
-                for (Path file : files) {
+            try (Stream<Path> files = Files.list(containingJsonPath)) {
+                for (Path file : files.sorted().toList()) {
+                    // Important: we guarantee that the result will always be listed
+                    // in the alphabetical order, not randomly
                     if (recursive || Files.isRegularFile(file)) {
                         readAllIfValid(result, file, recursive, reader, isAllowedPath);
                     }

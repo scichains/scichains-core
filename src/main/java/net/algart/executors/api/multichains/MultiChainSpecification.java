@@ -575,12 +575,23 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         return chainVariantPaths.stream().map(p -> resolve(p, "sub-chain path")).toList();
     }
 
+    /**
+     * Reads specifications for all chain variants.
+     * The order of chains corresponds to the order in the "chain_variant_paths" JSON array;
+     * if an element of this array describes a subfolder, the chains within that folder
+     * are sorted alphabetically by the chain name.
+     *
+     * @return specification list of all chain variants.
+     * @throws IOException in the case of any I/O errors.
+     */
     public List<ChainSpecification> readChainVariants() throws IOException {
         final List<ChainSpecification> result = new ArrayList<>();
         final List<Path> paths = resolveChainVariantPaths();
         for (Path path : paths) {
             if (Files.isDirectory(path)) {
-                ChainSpecification.readAllIfValid(result, path, false);
+                final List<ChainSpecification> folderChains = ChainSpecification.readAllIfValid(path, false);
+                folderChains.sort(Comparator.comparing(ChainSpecification::chainName));
+                result.addAll(folderChains);
             } else if (Files.exists(path)) {
                 result.add(ChainSpecification.read(path));
             } else {
@@ -593,7 +604,6 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
                     + "\" among the following paths: " + paths);
         }
         ChainSpecification.checkIdDifference(result);
-        result.sort(Comparator.comparing(ChainSpecification::chainName));
         checkNameDifference(result);
         return result;
     }
