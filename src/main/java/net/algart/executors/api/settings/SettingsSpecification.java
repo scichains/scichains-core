@@ -26,7 +26,6 @@ package net.algart.executors.api.settings;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.io.MatrixIO;
@@ -178,7 +177,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
             boolean recursive,
             boolean onlyMainSettings)
             throws IOException {
-        return ExtensionSpecification.readAllIfValid(
+        return ExecutorSpecification.readAllIfValid(
                 null,
                 containingJsonPath,
                 recursive,

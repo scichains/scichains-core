@@ -37,9 +37,7 @@
     }
   ],
   "chain_variant_paths": [
-    "scalar_sum.chain",
-    "scalar_product.chain",
-    "scalar_sum_with_settings.chain"
+    "."
   ],
   "default_variant_name": "scalar_sum"
 }

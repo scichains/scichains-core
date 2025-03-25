@@ -27,7 +27,6 @@ package net.algart.executors.api.chains;
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ExecutionStage;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.AbstractConvertibleToJson;
@@ -889,7 +888,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             Path containingJsonPath,
             boolean recursive)
             throws IOException {
-        return ExtensionSpecification.readAllIfValid(
+        return ExecutorSpecification.readAllIfValid(
                 result,
                 containingJsonPath,
                 recursive,

@@ -28,7 +28,6 @@ import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.ChainSpecification;
 import net.algart.executors.api.chains.IncompatibleChainException;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -308,7 +307,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public static List<MultiChainSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllIfValid(
+        return ExecutorSpecification.readAllIfValid(
                 null,
                 containingJsonPath,
                 true,

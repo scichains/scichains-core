@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public final class ExtensionSpecification extends AbstractConvertibleToJson {
@@ -889,48 +887,6 @@ public final class ExtensionSpecification extends AbstractConvertibleToJson {
         try (Stream<Path> walk = Files.walk(extensionRoot)) {
             return walk.sorted().filter(ExtensionSpecification::isExtensionFolder).toList();
         }
-    }
-
-    public static <T> List<T> readAllJsonIfValid(
-            List<T> result,
-            Path containingJsonPath,
-            Function<Path, T> reader)
-            throws IOException {
-        return readAllIfValid(
-                result,
-                containingJsonPath,
-                true,
-                reader,
-                path -> path.getFileName().toString().toLowerCase().endsWith(".json"));
-    }
-
-    public static <S> List<S> readAllIfValid(
-            List<S> result,
-            Path containingJsonPath,
-            boolean recursive,
-            Function<Path, S> reader,
-            Predicate<Path> isAllowedPath)
-            throws IOException {
-        Objects.requireNonNull(containingJsonPath, "Null containingJsonPath");
-        Objects.requireNonNull(isAllowedPath, "Null isAllowedPath");
-        if (result == null) {
-            result = new ArrayList<>();
-        }
-        if (Files.isDirectory(containingJsonPath)) {
-            try (DirectoryStream<Path> files = Files.newDirectoryStream(containingJsonPath)) {
-                for (Path file : files) {
-                    if (recursive || Files.isRegularFile(file)) {
-                        readAllIfValid(result, file, recursive, reader, isAllowedPath);
-                    }
-                }
-            }
-        } else if (Files.isRegularFile(containingJsonPath) && isAllowedPath.test(containingJsonPath)) {
-            final S specification = reader.apply(containingJsonPath);
-            if (specification != null) {
-                result.add(specification);
-            }
-        }
-        return result;
     }
 
     public Path getSpecificationFile() {

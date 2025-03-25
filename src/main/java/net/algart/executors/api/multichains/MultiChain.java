@@ -406,7 +406,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                 + ExecutorSpecification.className(category(), name())
                 + "\", containing " + chainSpecifications.size() + " chains:\n");
         for (int i = 0, n = chainSpecifications.size(); i < n; i++) {
-            ChainSpecification chainchainSpecification = chainSpecifications.get(i);
+            final ChainSpecification chainchainSpecification = chainSpecifications.get(i);
             if (i > 0) {
                 sb.append("\n");
             }

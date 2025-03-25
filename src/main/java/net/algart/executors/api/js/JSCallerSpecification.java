@@ -28,7 +28,6 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.graalvm.GraalSourceContainer;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -137,7 +136,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
             List<JSCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(
+        return ExecutorSpecification.readAllJsonIfValid(
                 result, containingJsonPath, JSCallerSpecification::readIfValid);
     }
 

@@ -28,7 +28,6 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.jep.api.JepAPI;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -194,7 +193,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             List<PythonCallerSpecification> result,
             Path containingJsonPath)
             throws IOException {
-        return ExtensionSpecification.readAllJsonIfValid(
+        return ExecutorSpecification.readAllJsonIfValid(
                 result, containingJsonPath, PythonCallerSpecification::readIfValid);
     }
 

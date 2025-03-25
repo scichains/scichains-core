@@ -26,7 +26,6 @@ package net.algart.executors.api.mappings;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.system.ControlEditionType;
 import net.algart.executors.api.system.ControlSpecification;
@@ -231,7 +230,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     }
 
     public static List<MappingSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
-        return ExtensionSpecification.readAllIfValid(
+        return ExecutorSpecification.readAllIfValid(
                 null,
                 containingJsonPath,
                 true,
