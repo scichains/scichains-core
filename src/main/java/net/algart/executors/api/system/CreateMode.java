@@ -43,7 +43,7 @@ public enum CreateMode {
      * {@link UseSubChain#newExecutor}
      * requires information about its executor ID.
      */
-    CREATE_ONLY {
+    NO_ACTIONS {
         @Override
         void customizeExecutor(ExecutionBlock result, String sessionId, ExecutorSpecification specification) {
         }
