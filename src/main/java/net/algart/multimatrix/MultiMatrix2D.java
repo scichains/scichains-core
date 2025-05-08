@@ -162,8 +162,8 @@ public interface MultiMatrix2D extends MultiMatrix {
         return MultiMatrix.of2D(channels);
     }
 
-    default MultiMatrix mapChannels2D(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {
-        return mapChannels(function).asMultiMatrix2D();
+    default MultiMatrix apply2D(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {
+        return apply(function).asMultiMatrix2D();
     }
 
     default MultiMatrix2D contrast() {

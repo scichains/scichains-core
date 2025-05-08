@@ -34,7 +34,6 @@ import net.algart.math.functions.LinearFunc;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 // All channels has the same dimensions and element type.
 public interface MultiMatrix extends Cloneable {
@@ -305,8 +304,8 @@ public interface MultiMatrix extends Cloneable {
         return MultiMatrix.of(channels);
     }
 
-    default MultiMatrix mapChannels(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {
-        return MultiMatrix.of(allChannels().stream().map(function::apply).collect(Collectors.toList()));
+    default MultiMatrix apply(Function<Matrix<? extends PArray>, Matrix<? extends PArray>> function) {
+        return MultiMatrix.of(Matrices.apply(function::apply, allChannels()));
     }
 
     default List<Matrix<? extends PArray>> allChannelsInRGBAOrder() {

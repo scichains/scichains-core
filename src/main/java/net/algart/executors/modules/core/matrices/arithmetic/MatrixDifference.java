@@ -180,7 +180,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
             final Pattern pattern = Patterns.newSphereIntegerPattern(
                     Point.origin(result.dimCount()),
                     Math.max(0.0, 0.5 * (dilationSize + 1) - 0.2));
-            result = result.mapChannels(m -> morphology.dilation(m, pattern));
+            result = result.apply(m -> morphology.dilation(m, pattern));
         }
         return result;
     }
@@ -222,7 +222,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
         } else {
             final LinearFunc sumFunc = LinearFunc.getInstance(0.0,
                     DoubleStream.generate(() -> 1.0).limit(matrix.numberOfChannels()).toArray());
-            final MultiMatrix squares = matrix.mapChannels(m -> Matrices.asFuncMatrix(SQR_FUNC, DoubleArray.class, m));
+            final MultiMatrix squares = matrix.apply(m -> Matrices.asFuncMatrix(SQR_FUNC, DoubleArray.class, m));
             Matrix<? extends PArray> sum = Matrices.asFuncMatrix(sumFunc, DoubleArray.class, squares.allChannels());
             return Matrices.clone(sqrtFromResult ?
                     Matrices.asFuncMatrix(SQRT_FUNC, DoubleArray.class, sum) :

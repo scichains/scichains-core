@@ -175,7 +175,7 @@ public final class FindValue extends MultiMatrixFilter {
             final Pattern pattern = Patterns.newSphereIntegerPattern(
                     Point.origin(binaryResult.dimCount()),
                     Math.max(0.0, 0.5 * (dilationSize + 1) - 0.2));
-            binaryResult = binaryResult.mapChannels(m -> morphology.dilation(m, pattern));
+            binaryResult = binaryResult.apply(m -> morphology.dilation(m, pattern));
         }
         return binaryResult;
     }
