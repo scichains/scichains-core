@@ -90,7 +90,7 @@
     {
       "name": "renderHTML",
       "caption": "Render HTML text",
-      "description": "If set, the drawn text should be a little HTML code with any possible design tags. In this case, the font style parameters above are ignored.",
+      "description": "If set, the drawn text should be a little HTML code with any possible design tags. In this case, the font parameters above are ignored (but the color is still actual).",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
