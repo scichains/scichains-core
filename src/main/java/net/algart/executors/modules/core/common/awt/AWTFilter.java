@@ -51,6 +51,15 @@ public abstract class AWTFilter extends Executor {
     @Override
     public final void process() {
         SMat input = getInputMat();
+        input = correctInput(input);
+        final BufferedImage source = input.toBufferedImage();
+        final BufferedImage target = process(source);
+        getMat().setTo(target);
+    }
+
+    public abstract BufferedImage process(BufferedImage source);
+
+    protected SMat correctInput(SMat input) {
         if (convertMonoToColor && input.getNumberOfChannels() == 1) {
             MultiMatrix2D source = input.toMultiMatrix2D().asOtherNumberOfChannels(3);
             if (source.bitsPerElement() == 1) {
@@ -58,10 +67,6 @@ public abstract class AWTFilter extends Executor {
             }
             input = SMat.of(source);
         }
-        final BufferedImage source = input.toBufferedImage();
-        final BufferedImage target = process(source);
-        getMat().setTo(target);
+        return input;
     }
-
-    public abstract BufferedImage process(BufferedImage source);
 }

@@ -1,0 +1,109 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.drawing",
+  "name": "Draw rectangle(s)",
+  "tags": [
+    "matrices"
+  ],
+  "id": "3c00c51e-5a35-41c7-a2cd-8041efa4c5bc",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.drawing.DrawRectangle"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "positions",
+      "hint": "Contains either array of pairs (x,y), describing position of the centers of the rectangles,\nor array of blocks of 4 numbers (x₁+x₂)/2, (y₁+y₂)/2, x₂−x₁+1, y₂−y₁+1, describing the centers and sizes of the rectangles."
+    },
+    {
+      "value_type": "numbers",
+      "name": "colors"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "percents",
+      "description": "If true, all numbers below, excepting the line thickness, are measured in percents of image sizes (right=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "left",
+      "description": "Specifies x₁ (in pixels or percents) for the rectangle x₁≤x<x₂, y₁≤y≤y₂; if x₁<0, it is replaced with dimX+x₂ (where dimX is image width).",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "top",
+      "description": "Specifies y₁ (in pixels or percents) for the rectangle x₁≤x<x₂, y₁≤y≤y₂; if y₁<0, it is replaced with dimY+x₂ (where dimX is image height).",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "right",
+      "description": "Specifies x₂ (in pixels or percents) for the rectangle x₁≤x≤x₂, y₁≤y≤y₂; if x₂<0, it is replaced with dimX+x₂ (where dimX is image width); ignored if width>0. In other words, positive values x₁ and x₂ are measured from the left image bound, negative — from the right bound.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "bottom",
+      "description": "Specifies y₂ (in pixels or percents) for the rectangle x₁≤x<x₂, y₁≤y≤y₂; if y₂<0, it is replaced with dimY+y₂ (where dimY is image height); ignored if height>0. In other words, positive values y₁ and y₂ are measured from the top image bound, negative — from the bottom bound.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "width",
+      "description": "If width>0, it overrides x₂ above and specifies result width x₂−x₁+1 (in pixels or percents) of the rectangle x₁≤x≤x₂, y₁≤y≤y₂; ignored if zero.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "height",
+      "description": "If height>0, it overrides y₂ above and specifies result height y₂−y₁+1 (in pixels or percents) of the rectangle x₁≤x≤x₂, y₁≤y≤y₂; ignored if zero.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "thickness",
+      "caption": "Line thickness",
+      "description": "Thickness of the rectangle line (in pixels); 0 means solid rectangle.",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Color",
+      "name": "color",
+      "description": "See supported color formats in \"Create constant matrix\" function.",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "caption": "Clear source",
+      "name": "clearSource",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

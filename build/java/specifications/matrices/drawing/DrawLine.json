@@ -1,0 +1,135 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.drawing",
+  "name": "Draw line(s)",
+  "tags": [
+    "matrices"
+  ],
+  "id": "bc7c0dcb-7379-45f8-91a0-a74f637462ad",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.drawing.DrawLine"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "positions",
+      "hint": "Contains blocks of 4 numbers x1,y1,x2,y2 or (if pairs of indexes are specified) blocks of 2 numbers x,y"
+    },
+    {
+      "value_type": "numbers",
+      "name": "pairs_of_indexes_of_points",
+      "caption": "pairs of indexes",
+      "hint": "If specified, \"positions\" should contain only coordinates of points; this array contains pairs of indexes in \"positions\" array"
+    },
+    {
+      "value_type": "numbers",
+      "name": "colors"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "percents",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "x1",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "y1",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "x2",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "y2",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "thickness",
+      "caption": "Line thickness",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Length increment",
+      "description": "If non-zero, the length of every drawn line is increased by this value (or reduced if negative)",
+      "name": "lengthIncrement",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "antialiasing",
+      "caption": "Antialiasing",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "color",
+      "caption": "Color",
+      "description": "Supported color formats are the same as in standard \"java.awt.Color.decode\" method. Alpha-channel is not supported.",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "caption": "Convert to color",
+      "description": "Convert monochrome (1-channel) input image to 3-channel color image, with automatic of conversion binary matrix (1 bit) to byte (8 bits); does not matter when the input image has more than 1 channel",
+      "name": "convertMonoToColor",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Indexing base for pairs of indexes (if specified)",
+      "name": "indexingBase",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "ZERO_BASED",
+          "caption": "0 (zero-based numbering)"
+        },
+        {
+          "value": "ONE_BASED",
+          "caption": "1 (one-based numbering)"
+        }
+      ],
+      "default": "ONE_BASED"
+    },
+    {
+      "caption": "Clear source",
+      "name": "clearSource",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

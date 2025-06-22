@@ -1,0 +1,77 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.drawing",
+  "name": "Draw text",
+  "tags": [
+    "matrices"
+  ],
+  "id": "3ad39e74-01ee-4126-8bdc-7d9934fd9c4d",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.drawing.DrawText"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "x",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "y",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "text",
+      "caption": "Text",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "Hello, world!"
+    },
+    {
+      "name": "color",
+      "caption": "Color",
+      "description": "Supported color formats are the same as in standard \"java.awt.Color.decode\" method. Alpha-channel is not supported.",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "name": "renderHTML",
+      "caption": "Render HTML text",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Convert to color",
+      "description": "Convert monochrome (1-channel) input image to 3-channel color image, with automatic of conversion binary matrix (1 bit) to byte (8 bits); does not matter when the input image has more than 1 channel",
+      "name": "convertMonoToColor",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Clear source",
+      "name": "clearSource",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}

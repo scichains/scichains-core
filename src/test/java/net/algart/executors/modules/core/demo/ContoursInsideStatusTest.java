@@ -24,6 +24,7 @@
 
 package net.algart.executors.modules.core.demo;
 
+import net.algart.arrays.Arrays;
 import net.algart.arrays.Matrices;
 import net.algart.arrays.SimpleMemoryModel;
 import net.algart.contexts.InterruptionException;
@@ -231,8 +232,8 @@ public final class ContoursInsideStatusTest extends Executor {
                 analyser, (Math.rint(x) + startX) * scaleInv, (Math.rint(y) + startY) * scaleInv));
         if (processAllPixels) {
             long t1 = debugTime();
-            final int sizeX = multiplySizesByScale ? (int) Math.round(this.sizeX * scale) : this.sizeX;
-            final int sizeY = multiplySizesByScale ? (int) Math.round(this.sizeY * scale) : this.sizeY;
+            final int sizeX = multiplySizesByScale ? Arrays.round32(this.sizeX * scale) : this.sizeX;
+            final int sizeY = multiplySizesByScale ? Arrays.round32(this.sizeY * scale) : this.sizeY;
             final float[] infoMap = new float[sizeX * sizeY];
             IntStream.range(0, sizeY).parallel().forEach(i -> {
                 final PointTester tester = new PointTester(contours);

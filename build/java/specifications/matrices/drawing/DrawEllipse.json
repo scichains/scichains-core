@@ -1,0 +1,120 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.drawing",
+  "name": "Draw ellipse(s)",
+  "tags": [
+    "matrices"
+  ],
+  "id": "5f15cd81-d3f5-4ce5-b30d-288114e64531",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.drawing.DrawEllipse"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    },
+    {
+      "value_type": "numbers",
+      "name": "positions"
+    },
+    {
+      "value_type": "numbers",
+      "name": "colors"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "percents",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "x (ellipse center)",
+      "name": "x",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "y (ellipse center)",
+      "name": "y",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "width",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "height",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 100
+    },
+    {
+      "name": "arcStartInDegree",
+      "caption": "Arc start (in degrees)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "arcExtentInDegree",
+      "caption": "Arc extent (in degrees)",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 360.0
+    },
+    {
+      "name": "thickness",
+      "caption": "Line thickness",
+      "description": "Thickness of the ellipse line (in pixels); 0 means solid ellipse.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "name": "antialiasing",
+      "caption": "Antialiasing",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "caption": "Color",
+      "name": "color",
+      "description": "Supported color formats are the same as in standard \"java.awt.Color.decode\" method. Alpha-channel is not supported.",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "caption": "Convert to color",
+      "description": "Convert monochrome (1-channel) input image to 3-channel color image, with automatic of conversion binary matrix (1 bit) to byte (8 bits); does not matter when the input image has more than 1 channel",
+      "name": "convertMonoToColor",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Clear source",
+      "name": "clearSource",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}
