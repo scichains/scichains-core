@@ -25,21 +25,31 @@
 package net.algart.executors.modules.core.matrices.drawing;
 
 import net.algart.arrays.Arrays;
+import net.algart.arrays.Matrix;
+import net.algart.arrays.PArray;
+import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.awt.AWTDrawer;
 import net.algart.executors.modules.core.common.awt.AWTFilter;
+import net.algart.io.awt.MatrixToImage;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public final class DrawImage extends AWTFilter {
+public final class DrawImage extends Executor {
     public static final String INPUT_IMAGE = "image";
     private boolean requireImage = false;
     private boolean percents = false;
     private double x = 0;
     private double y = 0;
+    private double opacity = 1.0;
+    private boolean convertMonoToColor = false;
     private boolean autoExpand = true;
+
+    public DrawImage() {
+        addInputMat(DEFAULT_INPUT_PORT);
+        addInputMat(INPUT_IMAGE);
+        addOutputMat(DEFAULT_OUTPUT_PORT);
+    }
 
     public boolean isRequireImage() {
         return requireImage;
@@ -77,6 +87,27 @@ public final class DrawImage extends AWTFilter {
         return this;
     }
 
+    public double getOpacity() {
+        return opacity;
+    }
+
+    public DrawImage setOpacity(double opacity) {
+        if (opacity < 0.0 || opacity > 1.0) {
+            throw new IllegalArgumentException("Opacity must be in range [0.0; 1.0]");
+        }
+        this.opacity = opacity;
+        return this;
+    }
+
+    public boolean isConvertMonoToColor() {
+        return convertMonoToColor;
+    }
+
+    public DrawImage setConvertMonoToColor(boolean convertMonoToColor) {
+        this.convertMonoToColor = convertMonoToColor;
+        return this;
+    }
+
     public boolean isAutoExpand() {
         return autoExpand;
     }
@@ -86,33 +117,52 @@ public final class DrawImage extends AWTFilter {
         return this;
     }
 
-    @Override
-    public BufferedImage process(BufferedImage source) {
-        final BufferedImage image = getInputMat(INPUT_IMAGE, !requireImage).toBufferedImage();
-        if (image != null) {
-            final Graphics2D g = source.createGraphics();
+    public void process() {
+        SMat input = getInputMat();
+        if (convertMonoToColor) {
+            input = AWTFilter.convertMonoToColor(input);
+        }
+        final Matrix<? extends PArray> m = getInputMat(INPUT_IMAGE, !requireImage)
+                .toInterleavedMatrix2D(false);
+        if (m == null) {
+            getMat().exchange(input);
+            // Note: using "exchange" means that we must not implement ReadOnlyExecutionInput
+            return;
+        }
+        Matrix<? extends PArray> source = input.toInterleavedMatrix2D(false);
+        assert source != null : "getInputMat() should not return non-initialized result";
+        final int x = Arrays.round32(percents ? this.x / 100.0 * (input.getDimX() - 1) : this.x);
+        final int y = Arrays.round32(percents ? this.y / 100.0 * (input.getDimY() - 1) : this.y);
+        source = expandToFit(source,0, x + m.dim(1), y + m.dim(2));
+        final MatrixToImage converter = new MatrixToImage.InterleavedBGRToInterleaved().setBytesRequired(true);
+        final BufferedImage baseImage = converter.toBufferedImage(source);
+        final BufferedImage overlayImage = converter.toBufferedImage(m);
+        final Graphics2D g = baseImage.createGraphics();
             try {
-                final int dimX = source.getWidth();
-                final int dimY = source.getHeight();
-                final int x = Arrays.round32(percents ? this.x / 100.0 * (dimX - 1) : this.x);
-                final int y = Arrays.round32(percents ? this.y / 100.0 * (dimY - 1) : this.y);
-                g.drawImage(image, x, y, null);
+                if (opacity != 1.0) {
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) opacity));
+                }
+                g.drawImage(overlayImage, x, y, null);
             } finally {
                 g.dispose();
             }
-        }
-        return source;
+        getMat().setTo(baseImage);
     }
 
-    @Override
-    protected SMat correctInput(SMat input) {
-        input = super.correctInput(input);
-        if (autoExpand) {
-            final SMat image = getInputMat(INPUT_IMAGE, !requireImage);
-            if (image != null) {
-                //TODO!!
+
+    private static Matrix<? extends PArray> expandToFit(Matrix<? extends PArray> source, long... minDimensions) {
+        long[] dimensions = source.dimensions();
+        boolean needToExpand = false;
+        for (int i = 0; i < minDimensions.length; i++) {
+            if (dimensions[i] < minDimensions[i]) {
+                dimensions[i] = minDimensions[i];
+                needToExpand = true;
+                break;
             }
         }
-        return input;
+        return needToExpand ? source.subMatr(
+                new long[dimensions.length], dimensions, Matrix.ContinuationMode.ZERO_CONSTANT) :
+                source;
+        // - for RGBA matrices ZERO_CONSTANT means transparent area
     }
 }

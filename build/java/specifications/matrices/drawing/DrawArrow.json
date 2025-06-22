@@ -25,6 +25,14 @@
   ],
   "controls": [
     {
+      "name": "percents",
+      "captions": "Percents of the image",
+      "description": "If true, x/y parameters below are measured in percents of image sizes (x=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
       "name": "x1",
       "value_type": "int",
       "edition_type": "value",

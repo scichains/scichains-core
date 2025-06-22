@@ -1,0 +1,86 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.drawing",
+  "name": "Draw image",
+  "tags": [
+    "matrices"
+  ],
+  "id": "065fe854-076f-481f-89b3-cfa8217eda5a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.drawing.DrawImage"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input",
+      "hing": "Base image"
+    },
+    {
+      "value_type": "mat",
+      "name": "image",
+      "hing": "Drawn image"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "caption": "Requires image",
+      "name": "requireImage",
+      "description": "If set, the \"image\" port must contain some initialized matrix; otherwise, this function will throw an exception. If this flag is cleared, an empty \"image\" port has no effect: the input image will be returned unchanged.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "percents",
+      "captions": "Percents of the image",
+      "description": "If true, x/y parameters below are measured in percents of image sizes (x=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "x",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "name": "y",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Opacity",
+      "name": "opacity",
+      "description": "If this value is less than 1.0, it controls how visible the drawn image is.\n1.0 means fully visible, 0.0 means completely transparent (invisible).\nTry values like 0.5 to make the image half-transparent.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "caption": "Auto expand",
+      "name": "autoExpand",
+      "description": "If the drawn image is partially outside the input image, for example because \"x\" or \"y\" argument are too large, the behavior depends on this parameter. If it is set, the input image is automatically expanded to fit the drawn image. If this flag is cleared, \"extra\" part of the drawn image are ignored (cropped).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Convert to color",
+      "description": "Convert monochrome (1-channel) input image to 3-channel color image, with automatic of conversion binary matrix (1 bit) to byte (8 bits); does not matter when the input image has more than 1 channel",
+      "name": "convertMonoToColor",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
+  ]
+}

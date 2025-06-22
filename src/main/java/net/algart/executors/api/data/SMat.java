@@ -552,11 +552,7 @@ public final class SMat extends Data {
         if (!isInitialized()) {
             return null;
         }
-        if (dimensions.length != 2) {
-            throw new IllegalStateException("Cannot convert " + dimensions.length + "D matrix to BufferedImage ("
-                    + this + "): only 2-dimensional matrices can be converted");
-        }
-        final Matrix<? extends PArray> interleaved = toInterleavedMatrix(false);
+        final Matrix<? extends PArray> interleaved = toInterleavedMatrix2D(false);
         if (interleaved == null) {
             // - already checked by isInitialized(): modification from a parallel thread?
             return null;
@@ -607,53 +603,15 @@ public final class SMat extends Data {
      * Return data as AlgART matrix with the same elements order. AlgART matrix will be (n+1)-dimensional
      * (n = {@link #getDimCount()}); <code>dim(0)</code> is the number of channels.
      *
-     * @return interleaved 3D AlgART matrix; for color matrices, the order will be the same
+     * @return interleaved (n+1)-dimensional AlgART matrix; for color matrices, the order will be the same
      * as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      */
     public Matrix<? extends PArray> toInterleavedMatrix(boolean autoConvertUnsupportedDepth) {
-        if (!isInitialized()) {
-            return null;
-        }
-        final long[] newDimensions = addFirstElement(numberOfChannels, getDimensions());
-        final long size = Arrays.longMul(newDimensions);
-        if (size == Long.MIN_VALUE) {
-            throw new TooLargeArrayException("Too large dimensions: dim[0] * dim[1] * ... > Long.MAX_VALUE");
-        }
-        if (depth == Depth.BIT) {
-            ByteBuffer byteBuffer = getByteBuffer();
-            //        final int byteCount = (int) ((bitArraySize + 7L) / 8);
-//        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
-//        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
-//        bb.rewind();
-//        LongBuffer lb = bb.asLongBuffer();
-//        final int wholeLongCount = byteCount / 8;
-//        lb.get(bits, 0, wholeLongCount);
-//        if (wholeLongCount < bits.length) {
-//            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
-//            bb.position(wholeLongCount * 8);
-//            eightBytes.put(bb);
-//            eightBytes.rewind();
-//            lb = eightBytes.asLongBuffer();
-//            lb.get(bits, wholeLongCount, 1);
-//        }
-//        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
-//        result.setBits(0, bits, 0, bitArraySize);
-//        return result;
-            return ((BitArray) BitArray.as(PackedBitArraysPer8.toLongArray(byteBuffer), size)).matrix(newDimensions);
-        } else {
-            ByteBuffer bb = getByteBuffer();
-            Class<?> elementType = depth.elementType(!autoConvertUnsupportedDepth);
-            if (autoConvertUnsupportedDepth && !depth.isAlgARTCompatible()) {
-                bb = toByteBufferF32(bb, depth);
-                elementType = float.class;
-            }
-            final UpdatablePArray array = (UpdatablePArray) BufferMemoryModel.asUpdatableArray(bb, elementType);
-//        System.out.println("Reading bytes: " + bb.order() + ": " + Arrays.toHexString(
-//            BufferMemoryModel.asUpdatableByteArray(bb), ",", 1000));
-//        System.out.println("Reading data: " + getDepth() +"," + array
-//            + ": " + Arrays.toString(array,",",1000));
-            return array.matrix(newDimensions);
-        }
+        return toInterleavedMatrix(autoConvertUnsupportedDepth, false);
+    }
+
+    public Matrix<? extends PArray> toInterleavedMatrix2D(boolean autoConvertUnsupportedDepth) {
+        return toInterleavedMatrix(autoConvertUnsupportedDepth, true);
     }
 
     public SMat autoContrast() {
@@ -855,6 +813,56 @@ public final class SMat extends Data {
                     + MAX_NUMBER_OF_CHANNELS + " range");
         }
         return numberOfChannels;
+    }
+
+    private Matrix<? extends PArray> toInterleavedMatrix(boolean autoConvertUnsupportedDepth, boolean require2D) {
+        if (!isInitialized()) {
+            return null;
+        }
+        if (require2D && dimensions.length != 2) {
+            throw new IllegalStateException("Cannot convert " + dimensions.length + "D matrix ("
+                    + this + "): only 2-dimensional matrices are allowed");
+        }
+        final long[] newDimensions = addFirstElement(numberOfChannels, getDimensions());
+        final long size = Arrays.longMul(newDimensions);
+        if (size == Long.MIN_VALUE) {
+            throw new TooLargeArrayException("Too large dimensions: dim[0] * dim[1] * ... > Long.MAX_VALUE");
+        }
+        if (depth == Depth.BIT) {
+            ByteBuffer byteBuffer = getByteBuffer();
+            //        final int byteCount = (int) ((bitArraySize + 7L) / 8);
+//        long[] bits = new long[(int) (((long) byteCount + 7) / 8)];
+//        ByteBuffer bb = byteBuffer.duplicate().order(byteBuffer.order());
+//        bb.rewind();
+//        LongBuffer lb = bb.asLongBuffer();
+//        final int wholeLongCount = byteCount / 8;
+//        lb.get(bits, 0, wholeLongCount);
+//        if (wholeLongCount < bits.length) {
+//            ByteBuffer eightBytes = ByteBuffer.allocate(8).order(bb.order());
+//            bb.position(wholeLongCount * 8);
+//            eightBytes.put(bb);
+//            eightBytes.rewind();
+//            lb = eightBytes.asLongBuffer();
+//            lb.get(bits, wholeLongCount, 1);
+//        }
+//        final UpdatableBitArray result = Arrays.SMM.newUnresizableBitArray(bitArraySize);
+//        result.setBits(0, bits, 0, bitArraySize);
+//        return result;
+            return ((BitArray) BitArray.as(PackedBitArraysPer8.toLongArray(byteBuffer), size)).matrix(newDimensions);
+        } else {
+            ByteBuffer bb = getByteBuffer();
+            Class<?> elementType = depth.elementType(!autoConvertUnsupportedDepth);
+            if (autoConvertUnsupportedDepth && !depth.isAlgARTCompatible()) {
+                bb = toByteBufferF32(bb, depth);
+                elementType = float.class;
+            }
+            final UpdatablePArray array = (UpdatablePArray) BufferMemoryModel.asUpdatableArray(bb, elementType);
+//        System.out.println("Reading bytes: " + bb.order() + ": " + Arrays.toHexString(
+//            BufferMemoryModel.asUpdatableByteArray(bb), ",", 1000));
+//        System.out.println("Reading data: " + getDepth() +"," + array
+//            + ": " + Arrays.toString(array,",",1000));
+            return array.matrix(newDimensions);
+        }
     }
 
     private static ByteBuffer toByteBufferF32(ByteBuffer source, Depth sourceDepth) {

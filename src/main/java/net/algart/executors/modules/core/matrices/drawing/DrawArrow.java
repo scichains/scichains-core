@@ -30,6 +30,7 @@ import net.algart.executors.modules.core.common.awt.AWTDrawer;
 import java.awt.*;
 
 public final class DrawArrow extends AWTDrawer {
+    private boolean percents = false;
     private double x1 = 0.0;
     private double y1 = 0.0;
     private double x2 = 0.0;
@@ -38,64 +39,84 @@ public final class DrawArrow extends AWTDrawer {
     private double arrowLength = 20;
     private double arrowWidth = 5;
 
+    public boolean isPercents() {
+        return percents;
+    }
+
+    public DrawArrow setPercents(boolean percents) {
+        this.percents = percents;
+        return this;
+    }
+
     public double getX1() {
         return x1;
     }
 
-    public void setX1(double x1) {
+    public DrawArrow setX1(double x1) {
         this.x1 = x1;
+        return this;
     }
 
     public double getY1() {
         return y1;
     }
 
-    public void setY1(double y1) {
+    public DrawArrow setY1(double y1) {
         this.y1 = y1;
+        return this;
     }
 
     public double getX2() {
         return x2;
     }
 
-    public void setX2(double x2) {
+    public DrawArrow setX2(double x2) {
         this.x2 = x2;
+        return this;
     }
 
     public double getY2() {
         return y2;
     }
 
-    public void setY2(double y2) {
+    public DrawArrow setY2(double y2) {
         this.y2 = y2;
+        return this;
     }
 
     public double getThickness() {
         return thickness;
     }
 
-    public void setThickness(double thickness) {
+    public DrawArrow setThickness(double thickness) {
         this.thickness = positive(thickness);
+        return this;
     }
 
     public double getArrowLength() {
         return arrowLength;
     }
 
-    public void setArrowLength(double arrowLength) {
+    public DrawArrow setArrowLength(double arrowLength) {
         this.arrowLength = positive(arrowLength);
+        return this;
     }
 
     public double getArrowWidth() {
         return arrowWidth;
     }
 
-    public void setArrowWidth(double arrowWidth) {
+    public DrawArrow setArrowWidth(double arrowWidth) {
         this.arrowWidth = positive(arrowWidth);
+        return this;
     }
 
     @Override
     public void process(Graphics2D g, int dimX, int dimY) {
+        final double x1 = percents ? this.x1 / 100.0 * (dimX - 1) : this.x1;
+        final double y1 = percents ? this.y1 / 100.0 * (dimY - 1) : this.y1;
+        final double x2 = percents ? this.x2 / 100.0 * (dimX - 1) : this.x2;
+        final double y2 = percents ? this.y2 / 100.0 * (dimY - 1) : this.y2;
         drawArrowLine(g,
                 Arrays.round32(x1), Arrays.round32(y1), Arrays.round32(x2), Arrays.round32(y2),
                 thickness, arrowLength, arrowWidth);

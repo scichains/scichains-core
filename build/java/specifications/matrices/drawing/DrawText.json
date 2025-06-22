@@ -25,6 +25,14 @@
   ],
   "controls": [
     {
+      "name": "percents",
+      "captions": "Percents of the image",
+      "description": "If true, x/y parameters below are measured in percents of image sizes (x=100 means right bound of image etc.)",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
       "name": "x",
       "value_type": "double",
       "edition_type": "value",
@@ -38,7 +46,7 @@
     },
     {
       "name": "text",
-      "caption": "Text",
+      "caption": "Text to draw",
       "value_type": "String",
       "edition_type": "value",
       "default": "Hello, world!"
@@ -52,8 +60,37 @@
       "default": "#FFFFFF"
     },
     {
+      "name": "fontName",
+      "caption": "Font name/family",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "SansSerif"
+    },
+    {
+      "name": "fontSize",
+      "caption": "Font size",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 16
+    },
+    {
+      "name": "italic",
+      "caption": "Italic style",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "bold",
+      "caption": "Bold style",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
       "name": "renderHTML",
       "caption": "Render HTML text",
+      "description": "If set, the drawn text should be a little HTML code with any possible design tags. In this case, the font style parameters above are ignored.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

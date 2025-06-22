@@ -35,6 +35,7 @@
   "controls": [
     {
       "name": "percents",
+      "captions": "Percents of the image",
       "description": "If true, all numbers below, excepting the line thickness, are measured in percents of image sizes (right=100 means right bound of image etc.)",
       "value_type": "boolean",
       "edition_type": "value",

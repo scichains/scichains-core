@@ -29,6 +29,7 @@ import net.algart.executors.api.data.SMat;
 import net.algart.multimatrix.MultiMatrix2D;
 
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public abstract class AWTFilter extends Executor {
     private boolean convertMonoToColor = false;
@@ -51,7 +52,9 @@ public abstract class AWTFilter extends Executor {
     @Override
     public final void process() {
         SMat input = getInputMat();
-        input = correctInput(input);
+        if (convertMonoToColor) {
+            input = convertMonoToColor(input);
+        }
         final BufferedImage source = input.toBufferedImage();
         final BufferedImage target = process(source);
         getMat().setTo(target);
@@ -59,8 +62,9 @@ public abstract class AWTFilter extends Executor {
 
     public abstract BufferedImage process(BufferedImage source);
 
-    protected SMat correctInput(SMat input) {
-        if (convertMonoToColor && input.getNumberOfChannels() == 1) {
+    public static SMat convertMonoToColor(SMat input) {
+        Objects.requireNonNull(input, "Null input");
+        if (input.getNumberOfChannels() == 1) {
             MultiMatrix2D source = input.toMultiMatrix2D().asOtherNumberOfChannels(3);
             if (source.bitsPerElement() == 1) {
                 source = source.asPrecision(byte.class);
