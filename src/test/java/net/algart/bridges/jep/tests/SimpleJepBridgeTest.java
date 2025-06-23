@@ -32,11 +32,14 @@ public class SimpleJepBridgeTest {
     static final JepPerformerContainer CONTAINER = JepPerformerContainer.getContainer();
 
     public static void main(String[] args) {
+        System.out.printf("Python information before initialization: %s%n",
+                JepGlobalConfig.INSTANCE.pythonHomeInformation());
         JepGlobalConfig.INSTANCE
                 .setIgnoreEnvironmentFlag(0)
 //                .setPythonHome("\\tmp")
                 .useForJep();
 
+        System.out.printf("Python information: %s%n", JepGlobalConfig.INSTANCE.pythonHomeInformation());
         final Interpreter context = CONTAINER.performer().context();
         context.exec("def test():\n    return 'Hello from JEP'\n");
         Object result = context.invoke("test");
