@@ -212,8 +212,8 @@ public class JepGlobalConfig extends PyConfig {
             setOptimizeFlag(getPrefixedInt("optimizeFlag", optimizeFlag));
             setDontWriteBytecodeFlag(getPrefixedInt("dontWriteBytecodeFlag", dontWriteBytecodeFlag));
             setHashRandomizationFlag(getPrefixedInt("hashRandomizationFlag", hashRandomizationFlag));
-            setPythonHome(getPrefixedString("pythonHome", pythonHome));
-            // - note: we preserve previous pythonHome if there is no system property
+            setPythonHome(getString("python.home", pythonHome));
+            // - note: we preserve the previous this.pythonHome if there is no system property
             return this;
         }
     }
@@ -241,14 +241,18 @@ public class JepGlobalConfig extends PyConfig {
         }
     }
 
-    private static String getPrefixedString(String propertyName, String defaultValue) {
+    private static String getString(String propertyName, String defaultValue) {
         try {
-            final String property = System.getProperty(JEP_CONFIG_PROPERTY_PREFIX + propertyName);
+            final String property = System.getProperty(propertyName);
             return property == null ? defaultValue : property;
         } catch (Exception e) {
             // for a case of SecurityException
             return defaultValue;
         }
+    }
+
+    private static String getPrefixedString(String propertyName, String defaultValue) {
+        return getString(JEP_CONFIG_PROPERTY_PREFIX + propertyName, defaultValue);
     }
 
     private static String getEnv(String envName) {

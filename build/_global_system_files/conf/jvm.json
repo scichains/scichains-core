@@ -29,7 +29,7 @@
     "-Xmx8G",
     "-Dnet.algart.executors.api.showInfo=true",
     "-D_net.algart.arrays.CPUCount=1",
-    "-Djep.config.pythonHome=$(running.home.directory)/python",
+    "-Dpython.home=$(running.home.directory)/python",
     "-D_polyglot.js.nashorn-compat=true",
     "-Dpolyglot.engine.WarnInterpreterOnly=false",
     "-D_net.algart.bridges.standard=nashorn",
