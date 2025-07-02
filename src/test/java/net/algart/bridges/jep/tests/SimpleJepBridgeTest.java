@@ -25,6 +25,7 @@
 package net.algart.bridges.jep.tests;
 
 import jep.Interpreter;
+import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.JepGlobalConfig;
 
@@ -40,7 +41,8 @@ public class SimpleJepBridgeTest {
                 .useForJep();
 
         System.out.printf("Python information: %s%n", JepGlobalConfig.INSTANCE.pythonHomeInformation());
-        final Interpreter context = CONTAINER.performer().context();
+        final JepPerformer performer = CONTAINER.performer();
+        final Interpreter context = performer.context();
         context.exec("def test():\n    return 'Hello from JEP'\n");
         Object result = context.invoke("test");
         System.out.printf("From Python function: %s%n", result);

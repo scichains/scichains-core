@@ -24,44 +24,41 @@
 
 package net.algart.bridges.jep.tests;
 
-import jep.Interpreter;
-import jep.MainInterpreter;
-import jep.PyConfig;
-import jep.SharedInterpreter;
+import jep.*;
 
-public class CustomPythonTest {
-    private static final String TEST_SCRIPT =
+public class NumpyPythonTest {
+    private static final String NUMPY_SCRIPT =
             """
-                    import sys
+                    import numpy
 
                     def test():
-                        result = str(sys.path)
-                        result = result + "\\nHello from Python: " + str(sys.version)
-                        return result
+                        return numpy.array([1, 2])
                     """;
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.printf("Usage: %s path_to_Python%n", CustomPythonTest.class.getName());
+            System.out.printf("Usage: %s path_to_Python%n", NumpyPythonTest.class.getName());
             return;
         }
 
         final String pythonHome = args[0];
         PyConfig pyConfig = new PyConfig();
-//        pyConfig.setIgnoreEnvironmentFlag(1);
         pyConfig.setPythonHome(pythonHome);
         MainInterpreter.setInitParams(pyConfig);
-
-//        pyConfig.setPythonHome(null);
-//        MainInterpreter.setInitParams(pyConfig);
-        // - Note: after this operator, the environment variable PYTHONHOME will be used, if it is not disabled
 
         try (Interpreter interpreter = new SharedInterpreter()) {
             System.out.println("Interpreter: " + interpreter);
             System.out.println();
-            interpreter.exec(TEST_SCRIPT);
+            interpreter.exec(NUMPY_SCRIPT);
             Object result = interpreter.invoke("test");
             System.out.printf("From Python:%n%s%n", result);
+            if (result instanceof NDArray<?> || result instanceof DirectNDArray<?>) {
+                System.out.printf("Numpy is normally installed: result = %s%n",
+                        result.getClass().getSimpleName());
+            } else {
+                System.out.printf("Numpy is not well-used together with JEP: result = %s%n",
+                        result.getClass().getSimpleName());
+            }
         }
 
 
