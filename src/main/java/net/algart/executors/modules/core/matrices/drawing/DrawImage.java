@@ -123,13 +123,13 @@ public final class DrawImage extends Executor {
             input = AWTFilter.convertMonoToColor(input);
         }
         final Matrix<? extends PArray> m = getInputMat(INPUT_IMAGE, !requireImage)
-                .toInterleavedMatrix2D(false);
+                .toInterleavedBGRMatrix2D(false);
         if (m == null) {
             getMat().exchange(input);
             // Note: using "exchange" means that we must not implement ReadOnlyExecutionInput
             return;
         }
-        Matrix<? extends PArray> source = input.toInterleavedMatrix2D(false);
+        Matrix<? extends PArray> source = input.toInterleavedBGRMatrix2D(false);
         assert source != null : "getInputMat() should not return non-initialized result";
         final int x = Arrays.round32(percents ? this.x / 100.0 * (input.getDimX() - 1) : this.x);
         final int y = Arrays.round32(percents ? this.y / 100.0 * (input.getDimY() - 1) : this.y);

@@ -129,7 +129,7 @@ public final class SMat extends Data {
 //                System.out.println("!!! use cached " + cachedMultiMatrix);
                 return result;
             }
-            final Matrix<? extends PArray> m = thisMat.toInterleavedMatrix(autoConvertUnsupportedDepth);
+            final Matrix<? extends PArray> m = thisMat.toInterleavedBGRMatrix(autoConvertUnsupportedDepth);
             assert m != null : "toInterleavedMatrix cannot be null for initialized SMat";
             if (m.dim(0) == 1) {
                 Matrix<? extends PArray> matrix = m.array().matrix(removeFirstElement(m.dimensions()));
@@ -552,7 +552,7 @@ public final class SMat extends Data {
         if (!isInitialized()) {
             return null;
         }
-        final Matrix<? extends PArray> interleaved = toInterleavedMatrix2D(false);
+        final Matrix<? extends PArray> interleaved = toInterleavedBGRMatrix2D(false);
         if (interleaved == null) {
             // - already checked by isInitialized(): modification from a parallel thread?
             return null;
@@ -606,12 +606,12 @@ public final class SMat extends Data {
      * @return interleaved (n+1)-dimensional AlgART matrix; for color matrices, the order will be the same
      * as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      */
-    public Matrix<? extends PArray> toInterleavedMatrix(boolean autoConvertUnsupportedDepth) {
-        return toInterleavedMatrix(autoConvertUnsupportedDepth, false);
+    public Matrix<? extends PArray> toInterleavedBGRMatrix(boolean autoConvertUnsupportedDepth) {
+        return toInterleavedBGRMatrix(autoConvertUnsupportedDepth, false);
     }
 
-    public Matrix<? extends PArray> toInterleavedMatrix2D(boolean autoConvertUnsupportedDepth) {
-        return toInterleavedMatrix(autoConvertUnsupportedDepth, true);
+    public Matrix<? extends PArray> toInterleavedBGRMatrix2D(boolean autoConvertUnsupportedDepth) {
+        return toInterleavedBGRMatrix(autoConvertUnsupportedDepth, true);
     }
 
     public SMat autoContrast() {
@@ -815,7 +815,7 @@ public final class SMat extends Data {
         return numberOfChannels;
     }
 
-    private Matrix<? extends PArray> toInterleavedMatrix(boolean autoConvertUnsupportedDepth, boolean require2D) {
+    private Matrix<? extends PArray> toInterleavedBGRMatrix(boolean autoConvertUnsupportedDepth, boolean require2D) {
         if (!isInitialized()) {
             return null;
         }

@@ -53,7 +53,7 @@
 
         <algart.version>1.4.25</algart.version>
         <graalvm.version>24.0.2</graalvm.version>
-        <jep.version>4.2.0</jep.version>
+        <jep.version>4.2.2</jep.version>
     </properties>
 
     <dependencies>
