@@ -50,17 +50,15 @@ public class NumpyPythonTest {
             System.out.println("Interpreter: " + interpreter);
             System.out.println();
             interpreter.exec(NUMPY_SCRIPT);
-            Object result = interpreter.invoke("test");
+            final Object result = interpreter.invoke("test");
             System.out.printf("From Python:%n%s%n", result);
             if (result instanceof NDArray<?> || result instanceof DirectNDArray<?>) {
                 System.out.printf("Numpy is normally installed: result = %s%n",
                         result.getClass().getSimpleName());
             } else {
-                System.out.printf("Numpy is not well-used together with JEP: result = %s%n",
-                        result.getClass().getSimpleName());
+                System.out.printf("Numpy is not well-configured together with JEP: result = %s%n",
+                        result == null ? null : result.getClass().getSimpleName());
             }
         }
-
-
     }
 }

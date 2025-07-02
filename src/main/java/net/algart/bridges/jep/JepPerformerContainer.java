@@ -117,7 +117,7 @@ public final class JepPerformerContainer implements AutoCloseable {
     }
 
     public JepPerformer performer() {
-        // Maybe, in future we will be reworked: https://github.com/ninia/jep/issues/411
+        // Maybe in the future this will be reworked: https://github.com/ninia/jep/issues/411
         JepPerformer performer;
         boolean created = false;
         synchronized (lock) {
