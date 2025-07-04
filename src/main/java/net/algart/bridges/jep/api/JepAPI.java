@@ -31,6 +31,7 @@ import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.additions.JepExtendedConfig;
+import net.algart.bridges.jep.additions.JepGlobalConfig;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
@@ -42,8 +43,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class JepAPI {
-    public static final boolean REQUIRE_NUMPY_INTEGRATION = true;
-    // TODO!! make a system property
+    public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+            JepGlobalConfig.JEP_CONFIG_PROPERTY_PREFIX + "numpy.integration.required", true);
     private static volatile boolean numpyIntegration = false;
 
     public static final String STANDARD_API_PACKAGE = "algart_api";
@@ -271,6 +272,10 @@ public class JepAPI {
                     "return a simple Java array). " +
                     "For correct behaviour, JEP must be installed AFTER installing numpy.");
         }
+    }
+
+    public static boolean isNumpyIntegration() {
+        return numpyIntegration;
     }
 
     private static JepExtendedConfig.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
