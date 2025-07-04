@@ -42,6 +42,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class JepAPI {
+    public static final boolean REQUIRE_NUMPY_INTEGRATION = true;
+    // TODO!! make a system property
+    private static volatile boolean numpyIntegration = false;
+
     public static final String STANDARD_API_PACKAGE = "algart_api";
     public static final String STANDARD_API_IN_OUT = STANDARD_API_PACKAGE + ".SInOut";
     public static final String STANDARD_API_PARAMETERS_CLASS_NAME = STANDARD_API_IN_OUT + ".SParameters";
@@ -256,13 +260,15 @@ public class JepAPI {
                     "\"; maybe, the Python module " + STANDARD_API_JEP_VERIFIER +
                     " was not installed correctly", e);
         }
-        if (!(array instanceof NDArray<?> || array instanceof DirectNDArray<?>)) {
+        numpyIntegration = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
+        if (REQUIRE_NUMPY_INTEGRATION && !numpyIntegration) {
             throw new JepException("A function, creating numpy.ndarray for integers, " +
                     "does not return correct Java type NDArray/DirectNDArray (it returns " +
                     (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
-                    "). Probably JEP package was incorrectly installed in Python; " +
-                    "in particular, it is possible if you installed JEP without numpy, " +
-                    "and only after this installed numpy (then such function will return simple Java array). " +
+                    "). Probably the JEP package was not installed correctly in Python; " +
+                    "in particular, this is possible if you installed JEP without numpy, " +
+                    "and only then installed numpy (in which case such a function will " +
+                    "return a simple Java array). " +
                     "For correct behaviour, JEP must be installed AFTER installing numpy.");
         }
     }

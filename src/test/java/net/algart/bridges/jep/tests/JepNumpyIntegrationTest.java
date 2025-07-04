@@ -26,38 +26,46 @@ package net.algart.bridges.jep.tests;
 
 import jep.*;
 
-public class NumpyPythonTest {
+public class JepNumpyIntegrationTest {
     private static final String NUMPY_SCRIPT =
             """
+                    import sys
                     import numpy
-
-                    def test():
+                    
+                    def info():
+                        return str(sys.version) + "\\n" + str(sys.prefix)
+        
+                    def array():
                         return numpy.array([1, 2])
                     """;
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.printf("Usage: %s path_to_Python%n", NumpyPythonTest.class.getName());
+            System.out.printf("Usage: %s path_to_Python%n", JepNumpyIntegrationTest.class.getName());
             return;
         }
 
         final String pythonHome = args[0];
         PyConfig pyConfig = new PyConfig();
         pyConfig.setPythonHome(pythonHome);
+        System.out.printf("Using Python home: %s%n", pythonHome);
         MainInterpreter.setInitParams(pyConfig);
 
         try (Interpreter interpreter = new SharedInterpreter()) {
             System.out.println("Interpreter: " + interpreter);
             System.out.println();
             interpreter.exec(NUMPY_SCRIPT);
-            final Object result = interpreter.invoke("test");
-            System.out.printf("From Python:%n%s%n", result);
-            if (result instanceof NDArray<?> || result instanceof DirectNDArray<?>) {
-                System.out.printf("Numpy is normally installed: result = %s%n",
-                        result.getClass().getSimpleName());
+            System.out.println("From Python:");
+            final Object info = interpreter.invoke("info");
+            System.out.printf("%ninfo() = %s%n", info);
+            final Object array = interpreter.invoke("array");
+            System.out.printf("%narray() = %s%n", array);
+            if (array instanceof NDArray<?> || array instanceof DirectNDArray<?>) {
+                System.out.printf("Numpy is normally installed: array = %s%n",
+                        array.getClass().getSimpleName());
             } else {
-                System.out.printf("Numpy is not well-configured together with JEP: result = %s%n",
-                        result == null ? null : result.getClass().getSimpleName());
+                System.out.printf("Numpy is not well-configured together with JEP: array = %s%n",
+                        array == null ? null : array.getClass().getSimpleName());
             }
         }
     }
