@@ -41,10 +41,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JepAPI {
     public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
              "net.algart.bridges.jep.numpyIntegrationRequired", true);
+
+    private static final AtomicBoolean NUMPY_INTEGRATION_CHECKED = new AtomicBoolean(false);
     private static volatile boolean numpyIntegration = false;
 
     public static final String STANDARD_API_PACKAGE = "algart_api";
@@ -262,19 +265,21 @@ public class JepAPI {
                     "\"; maybe, the Python module " + STANDARD_API_JEP_VERIFIER +
                     " was not installed correctly", e);
         }
-        numpyIntegration = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
-        if (!numpyIntegration) {
-            final String message = "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
-                    "the function that creates numpy.ndarray for integers " +
-                    "does not return the correct Java type NDArray/DirectNDArray " +
-                    "(it returns " +
-                    (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
-                    ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                    JepGlobalConfig.JEP_INSTALLATION_HINTS;
-            if (REQUIRE_NUMPY_INTEGRATION) {
-                throw new JepException(message);
-            } else {
-                LOG.log(System.Logger.Level.DEBUG, message);
+        if (!NUMPY_INTEGRATION_CHECKED.getAndSet(true)) {
+            numpyIntegration = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
+            if (!numpyIntegration) {
+                final String message = "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
+                        "the function that creates numpy.ndarray for integers " +
+                        "does not return the correct Java type NDArray/DirectNDArray " +
+                        "(it returns " +
+                        (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
+                        ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
+                        JepGlobalConfig.JEP_INSTALLATION_HINTS;
+                if (REQUIRE_NUMPY_INTEGRATION) {
+                    throw new JepException(message);
+                } else {
+                    LOG.log(System.Logger.Level.INFO, message);
+                }
             }
         }
     }
