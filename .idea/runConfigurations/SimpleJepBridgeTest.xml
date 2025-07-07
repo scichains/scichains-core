@@ -5,7 +5,7 @@
     </envs>
     <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.SimpleJepBridgeTest" />
     <module name="scichains-core" />
-    <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Dpython.home=C:\Users\Daniel\AppData\Local\Programs\Python\Python313 -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
+    <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="net.algart.bridges.jep.tests.*" />

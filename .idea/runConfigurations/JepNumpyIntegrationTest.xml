@@ -3,7 +3,6 @@
     <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.JepNumpyIntegrationTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="C:\Users\Daniel\AppData\Local\Programs\Python\Python313" />
-    <option name="VM_PARAMETERS" value="-Djep.config.numpy.integration.required=false" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="net.algart.bridges.jep.tests.*" />

@@ -64,6 +64,7 @@ public class JepAPI {
             "import " + STANDARD_API_IN_OUT + "\n",
             "import " + STANDARD_API_JEP_VERIFIER + "\n\n");
 
+    static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
 
     // In the current version, this class has not any settings, but maybe they will be added in future
     private JepAPI() {
@@ -262,14 +263,19 @@ public class JepAPI {
                     " was not installed correctly", e);
         }
         numpyIntegration = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
-        if (REQUIRE_NUMPY_INTEGRATION && !numpyIntegration) {
-            throw new JepException("Integration problem between Python packages \"jep\" and \"numpy\":\n" +
+        if (!numpyIntegration) {
+            final String message = "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
                     "the function that creates numpy.ndarray for integers " +
                     "does not return the correct Java type NDArray/DirectNDArray " +
                     "(it returns " +
                     (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
                     ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                    JepGlobalConfig.JEP_INSTALLATION_HINTS);
+                    JepGlobalConfig.JEP_INSTALLATION_HINTS;
+            if (REQUIRE_NUMPY_INTEGRATION) {
+                throw new JepException(message);
+            } else {
+                LOG.log(System.Logger.Level.INFO, message);
+            }
         }
     }
 
