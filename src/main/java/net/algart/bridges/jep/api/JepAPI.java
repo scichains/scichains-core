@@ -274,7 +274,7 @@ public class JepAPI {
             if (REQUIRE_NUMPY_INTEGRATION) {
                 throw new JepException(message);
             } else {
-                LOG.log(System.Logger.Level.INFO, message);
+                LOG.log(System.Logger.Level.DEBUG, message);
             }
         }
     }

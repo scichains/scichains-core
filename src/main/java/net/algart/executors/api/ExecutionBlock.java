@@ -26,6 +26,7 @@ package net.algart.executors.api;
 
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
+import net.algart.bridges.jep.additions.JepGlobalConfig;
 import net.algart.executors.api.data.*;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.*;
@@ -85,6 +86,8 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                     System.out.printf("Native library path:%n    %s%n", javaLibraryPath);
                 }
             }
+            final String pythonHome = JepGlobalConfig.INSTANCE.pythonHomeInformation().pythonHome();
+            System.out.printf("Python home: %s%n", pythonHome == null ? "n/a" : pythonHome);
             Runtime rt = Runtime.getRuntime();
             System.out.printf("AlgART version: %s%n", Arrays.SystemSettings.version());
             System.out.printf("Available processors: %d%n", rt.availableProcessors());
