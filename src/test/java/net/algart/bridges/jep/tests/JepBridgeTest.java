@@ -144,6 +144,7 @@ public class JepBridgeTest {
 
     public static void configure(JepPerformerContainer performerContainer) {
         final String jepApiClassName = "net.algart.bridges.jep.api.JepAPI";
+        // Use reflection to reduce dependence of other packages: may be useful while manually copying source code
         try {
             final Class<?> jepApiClass = Class.forName(jepApiClassName);
             final Method configureMethod = jepApiClass.getMethod("initialize", JepPerformerContainer.class);

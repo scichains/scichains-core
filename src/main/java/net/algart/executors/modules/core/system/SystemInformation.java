@@ -42,6 +42,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public final class SystemInformation extends Executor implements ReadOnlyExecutionInput {
@@ -124,7 +125,9 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(joiner);
 
         sb.append(String.format("%n%nSystem properties:%n"));
-        System.getProperties().forEach((key, value) -> sb.append(String.format("    %s: \"%s\"%n", key, value)));
+        new TreeMap<>(System.getProperties()).forEach(
+                (key, value) -> sb.append(String.format("    %s: \"%s\"%n", key, value)));
+        // - TreeMap sorts properties alphabetically
 
         final Collection<ExecutorSpecification> allExecutors = ExecutorSpecificationSet.allBuiltIn().all();
         sb.append(String.format("%n%nAll %d executor specifications:%n", allExecutors.size()));
