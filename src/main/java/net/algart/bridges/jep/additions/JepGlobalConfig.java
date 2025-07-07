@@ -31,6 +31,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class JepGlobalConfig extends PyConfig {
+    public static final String JEP_INSTALLATION_HINTS =
+            """
+                    To install "jep" with all required packages, please use the following command:
+                       py -m pip install --upgrade setuptools wheel numpy
+                       py -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep
+                    Note that "numpy" must be installed BEFORE "jep" \
+                    for correct integration between "jep" and "numpy".
+                    Before installing "jep", \
+                    please set the environment variable JAVA_HOME to a path containing the JDK.""";
     public record PythonHomeInformation(
             String pythonHome,
             boolean used,

@@ -36,6 +36,8 @@ public class SimpleJepBridgeTest {
         System.out.printf("Python information before initialization: %s%n",
                 JepGlobalConfig.INSTANCE.pythonHomeInformation());
         JepGlobalConfig.INSTANCE
+                .loadFromSystemProperties()
+                // - allows specifying python.path in the system properties
                 .setIgnoreEnvironmentFlag(0)
 //                .setPythonHome("\\tmp")
                 .useForJep();

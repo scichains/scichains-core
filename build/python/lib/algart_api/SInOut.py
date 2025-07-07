@@ -30,8 +30,8 @@ class SParameters:
         self._sys = SSysParameter()
 
 class SInputs:
-    pass;
+    pass
 
 class SOutputs:
-    pass;
+    pass
 

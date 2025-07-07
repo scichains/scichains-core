@@ -138,11 +138,11 @@ public class JepBridgeTest {
         final JepBridgeTest test = new JepBridgeTest();
         configure(test.localContainer);
         configure(test.sharedContainer);
-        // - WARNING! attempt to do this directly in the declaration will lead to error in maven test stage
+        // - WARNING! An attempt to do this directly in the declaration will lead to an error in the maven test stage
         test.performTesting();
     }
 
-    public static JepPerformerContainer configure(JepPerformerContainer performerContainer) {
+    public static void configure(JepPerformerContainer performerContainer) {
         final String jepApiClassName = "net.algart.bridges.jep.api.JepAPI";
         try {
             final Class<?> jepApiClass = Class.forName(jepApiClassName);
@@ -157,7 +157,6 @@ public class JepBridgeTest {
         } catch (ClassNotFoundException | NoSuchMethodException e) {
             System.out.println(jepApiClassName + " class is not available or incorrect: " + e);
         }
-        return performerContainer;
     }
 
     public static void main(String[] args) throws InterruptedException {

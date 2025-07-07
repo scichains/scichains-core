@@ -58,7 +58,7 @@ class JepCreationTools {
         try {
             return constructor.get();
         } catch (UnsatisfiedLinkError | JepException e) {
-            throw new JepException("Cannot load JEP (Java Embedded Python) due to " +
+            throw new JepException("Cannot load \"jep\" (Java Embedded Python) due to " +
                     e.getClass().getSimpleName() +
                     "; probably " + unsatisfiedLinkDiagnostics(), e);
         }
@@ -79,8 +79,7 @@ class JepCreationTools {
                         "");
         if (homeInformation.exists()) {
             return "Python is not correctly installed at " + messageHome +
-                    "or JEP module is not available; JEP should be installed by commands: " +
-                    "\"pip install numpy\" (MUST be installed before JEP) and then \"pip install jep\"";
+                    "or \"jep\" module is not properly installed.\n" + JepGlobalConfig.JEP_INSTALLATION_HINTS;
         } else {
             return "Python home " + messageHome + "is not an existing Python directory";
         }
@@ -91,8 +90,8 @@ class JepCreationTools {
             JepConfig config,
             JepInterpreterKind kind) {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
-        if (config instanceof final JepExtendedConfig extended) {
-            final List<String> startupCode = extended.getStartupCode();
+        if (config instanceof final JepExtendedConfig extendedConfig) {
+            final List<String> startupCode = extendedConfig.getStartupCode();
             for (String codeSnippet : startupCode) {
                 try {
                     JepSingleThreadInterpreter.LOG.log(System.Logger.Level.TRACE,
@@ -109,8 +108,8 @@ class JepCreationTools {
                             " is not installed (Python message: " + e.getMessage() + ")", e);
                 }
             }
-            if (extended.hasVerifier()) {
-                extended.getVerifier().verify(jepInterpreter, config);
+            if (extendedConfig.hasVerifier()) {
+                extendedConfig.getVerifier().verify(jepInterpreter, config);
             }
         }
     }

@@ -263,14 +263,13 @@ public class JepAPI {
         }
         numpyIntegration = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
         if (REQUIRE_NUMPY_INTEGRATION && !numpyIntegration) {
-            throw new JepException("A function, creating numpy.ndarray for integers, " +
-                    "does not return correct Java type NDArray/DirectNDArray (it returns " +
+            throw new JepException("Integration problem between Python packages \"jep\" and \"numpy\":\n" +
+                    "the function that creates numpy.ndarray for integers " +
+                    "does not return the correct Java type NDArray/DirectNDArray " +
+                    "(it returns " +
                     (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
-                    "). Probably the JEP package was not installed correctly in Python; " +
-                    "in particular, this is possible if you installed JEP without numpy, " +
-                    "and only then installed numpy (in which case such a function will " +
-                    "return a simple Java array). " +
-                    "For correct behaviour, JEP must be installed AFTER installing numpy.");
+                    ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
+                    JepGlobalConfig.JEP_INSTALLATION_HINTS);
         }
     }
 
