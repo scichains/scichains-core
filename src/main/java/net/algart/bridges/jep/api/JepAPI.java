@@ -44,7 +44,7 @@ import java.util.Objects;
 
 public class JepAPI {
     public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
-            JepGlobalConfig.JEP_CONFIG_PROPERTY_PREFIX + "numpy.integration.required", true);
+             "net.algart.bridges.jep.numpyIntegrationRequired", true);
     private static volatile boolean numpyIntegration = false;
 
     public static final String STANDARD_API_PACKAGE = "algart_api";

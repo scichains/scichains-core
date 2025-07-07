@@ -142,6 +142,7 @@ public class JepBridgeTest {
         test.performTesting();
     }
 
+    // This method calls JepAPI.initialize(): the executors system should be installed
     public static void configure(JepPerformerContainer performerContainer) {
         final String jepApiClassName = "net.algart.bridges.jep.api.JepAPI";
         // Use reflection to reduce dependence of other packages: may be useful while manually copying source code

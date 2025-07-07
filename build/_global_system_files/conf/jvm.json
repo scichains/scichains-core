@@ -30,7 +30,7 @@
     "-Dnet.algart.executors.api.showInfo=true",
     "-D_net.algart.arrays.CPUCount=1",
     "-Dpython.home=$(running.home.directory)/python",
-    "-D_jep.config.numpy.integration.required=false",
+    "-D_net.algart.bridges.jep.numpyIntegrationRequired=false",
     "-D_polyglot.js.nashorn-compat=true",
     "-Dpolyglot.engine.WarnInterpreterOnly=false",
     "-D_net.algart.bridges.standard=nashorn",
