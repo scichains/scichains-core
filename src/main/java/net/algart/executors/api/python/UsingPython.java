@@ -122,6 +122,8 @@ public class UsingPython {
 
     public static void initializePython() {
         JepGlobalConfig.INSTANCE.loadFromSystemProperties().useForJep();
+        final String pythonHome = JepGlobalConfig.INSTANCE.pythonHomeInformation().pythonHome();
+        Executor.LOG.log(System.Logger.Level.INFO, () -> "Python home: " + (pythonHome == null ? "n/a" : pythonHome));
     }
 
     private static void correctPythonExecutorSpecification(PythonCallerSpecification pythonCallerSpecification) {
