@@ -6,5 +6,5 @@ def execute(params, inputs, outputs):
     max = mat.max()
     mult = 1.0 / (max - min)
     result = (mat - min) * mult
-    print(result.dtype)
+    print("~~~~Python example contrast result: " + str(result.dtype))
     return result

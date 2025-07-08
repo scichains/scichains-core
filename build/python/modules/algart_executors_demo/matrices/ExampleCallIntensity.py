@@ -6,5 +6,5 @@ def execute(params, inputs, outputs):
     intensity.setRgbResult(params.rgbResult)
     mat = Jep2SMat.toSMat(inputs.input)
     result = intensity.process(mat);
-    print("~~~~Example result: " + str(result))
+    print("~~~~Python example intensity result: " + str(result))
     return Jep2SMat.toNDArray(result)
