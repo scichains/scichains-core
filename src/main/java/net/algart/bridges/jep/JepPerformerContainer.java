@@ -26,6 +26,7 @@ package net.algart.bridges.jep;
 
 import jep.Interpreter;
 import jep.JepConfig;
+import net.algart.bridges.jep.additions.ConfiguredInterpreter;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
 import net.algart.bridges.jep.additions.JepSingleThreadInterpreter;
 
@@ -33,7 +34,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
-    private Supplier<Interpreter> contextSupplier;
+    private Supplier<ConfiguredInterpreter> contextSupplier;
     private Supplier<JepConfig> configurationSupplier = null;
     private JepInterpreterKind kind = JepInterpreterKind.SHARED;
     private String name = kind.kindName();
@@ -101,18 +102,20 @@ public final class JepPerformerContainer implements AutoCloseable {
      * @param name                  name of created interpreter (used in toString and logging).
      * @return reference to this object.
      */
-    public JepPerformerContainer setContextSupplier(Supplier<Interpreter> customContextSupplier, String name) {
+    public JepPerformerContainer setContextSupplier(
+            Supplier<ConfiguredInterpreter> customContextSupplier,
+            String name) {
         Objects.requireNonNull(customContextSupplier, "Null customContextSupplier");
         this.contextSupplier = customContextSupplier;
         this.name = name;
         return this;
     }
 
-    public JepPerformerContainer setContextSupplier(Supplier<Interpreter> customInterpreterSupplier) {
+    public JepPerformerContainer setContextSupplier(Supplier<ConfiguredInterpreter> customInterpreterSupplier) {
         return setContextSupplier(customInterpreterSupplier, null);
     }
 
-    public Supplier<Interpreter> getContextSupplier() {
+    public Supplier<ConfiguredInterpreter> getContextSupplier() {
         return contextSupplier;
     }
 

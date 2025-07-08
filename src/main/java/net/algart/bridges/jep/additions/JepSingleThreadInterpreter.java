@@ -45,13 +45,15 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private final ExpensiveCleanableState state;
     private final Cleaner.Cleanable cleanable;
 
-    private JepSingleThreadInterpreter(Supplier<Interpreter> interpreterSupplier, String name) {
+    private JepSingleThreadInterpreter(Supplier<ConfiguredInterpreter> interpreterSupplier, String name) {
         Objects.requireNonNull(interpreterSupplier, "Null interpreterSupplier");
         this.state = new ExpensiveCleanableState(interpreterSupplier, name);
         this.cleanable = CLEANER.register(this, state);
     }
 
-    public static JepSingleThreadInterpreter newInstance(Supplier<Interpreter> interpreterSupplier, String name) {
+    public static JepSingleThreadInterpreter newInstance(
+            Supplier<ConfiguredInterpreter> interpreterSupplier,
+            String name) {
         return new JepSingleThreadInterpreter(interpreterSupplier, name);
     }
 
@@ -102,53 +104,53 @@ public class JepSingleThreadInterpreter implements Interpreter {
     @Override
     public Object invoke(String name, Object... args) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.jepInterpreter.invoke(name, args));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, args));
     }
 
     @Override
     public Object invoke(String name, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.jepInterpreter.invoke(name, kwargs));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, kwargs));
     }
 
     @Override
     public Object invoke(String name, Object[] args, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.jepInterpreter.invoke(name, args, kwargs));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, args, kwargs));
     }
 
     @Override
     public boolean eval(String str) throws JepException {
-        return executeInSingleThread(() -> state.jepInterpreter.eval(str));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.eval(str));
     }
 
     @Override
     public void exec(String str) throws JepException {
-        executeInSingleThread(() -> state.jepInterpreter.exec(str));
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter.exec(str));
     }
 
     @Override
     public void runScript(String script) throws JepException {
-        executeInSingleThread(() -> state.jepInterpreter.runScript(script));
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter.runScript(script));
     }
 
     @Override
     public Object getValue(String name) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.jepInterpreter.getValue(name));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.getValue(name));
     }
 
     @Override
     public <T> T getValue(String name, Class<T> clazz) throws JepException {
         Objects.requireNonNull(name, "Null name");
         Objects.requireNonNull(clazz, "Null class");
-        return executeInSingleThread(() -> state.jepInterpreter.getValue(name, clazz));
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.getValue(name, clazz));
     }
 
     @Override
     public void set(String name, Object v) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        executeInSingleThread(() -> state.jepInterpreter.set(name, v));
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter.set(name, v));
     }
 
     public boolean isClosed() {
@@ -206,11 +208,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private final String name;
         private static final AtomicInteger THREAD_COUNT = new AtomicInteger(1);
         private volatile ThreadPoolExecutor singleThreadPool = null;
-        private volatile Interpreter jepInterpreter = null;
+        private volatile ConfiguredInterpreter configuredInterpreter = null;
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
-        public ExpensiveCleanableState(Supplier<Interpreter> interpreterSupplier, String name) {
+        public ExpensiveCleanableState(Supplier<ConfiguredInterpreter> interpreterSupplier, String name) {
             if (name == null) {
                 name = "unknown";
             }
@@ -227,7 +229,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                         return t;
                     });
             try {
-                this.jepInterpreter = this.singleThreadPool.submit(interpreterSupplier::get).get();
+                this.configuredInterpreter = this.singleThreadPool.submit(interpreterSupplier::get).get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 this.singleThreadPool.shutdownNow();
@@ -252,7 +254,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                     LOG.log(System.Logger.Level.WARNING, () -> "CLEANING forgotten " + this);
                 }
                 try {
-                    singleThreadPool.submit(jepInterpreter::close).get();
+                    singleThreadPool.submit(configuredInterpreter::close).get();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     throw translateException(e);
@@ -263,7 +265,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 // - not just shutdown(): no sense to continue executing waiting tasks,
                 // because jepInterpreter is already closed and will not be able to process anything
                 singleThreadPool = null;
-                jepInterpreter = null;
+                configuredInterpreter = null;
             }
         }
 
@@ -273,7 +275,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         }
 
         public String toString() {
-            return toBriefString() + " in " + singleThreadPool + " (" + jepInterpreter + ")";
+            return toBriefString() + " in " + singleThreadPool + " (" + configuredInterpreter + ")";
         }
 
 

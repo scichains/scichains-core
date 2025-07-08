@@ -231,10 +231,10 @@ public class JepAPI {
 
     public static JepPerformerContainer initialize(JepPerformerContainer performerContainer) {
         Objects.requireNonNull(performerContainer, "Null performerContainer");
-        return performerContainer.setConfigurationSupplier(() -> initializeConfig(performerContainer));
+        return performerContainer.setConfigurationSupplier(() -> initializeConfiguration(performerContainer));
     }
 
-    public static JepExtendedConfiguration initializeConfig(JepPerformerContainer performerContainer) {
+    public static JepExtendedConfiguration initializeConfiguration(JepPerformerContainer performerContainer) {
         JepExtendedConfiguration configuration = new JepExtendedConfiguration();
         JepInterpreterKind jepInterpreterKind = performerContainer.getKind();
         configuration.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
@@ -268,6 +268,7 @@ public class JepAPI {
         }
         final boolean ok = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
         numpyIntegration = ok;
+        System.out.printf("!!! %s%n", numpyIntegration);
         if (!ok) {
             final Supplier<String> message = () ->
                     "Integration problem between Python packages \"jep\" and \"numpy\":\n" +

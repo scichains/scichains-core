@@ -24,40 +24,51 @@
 
 package net.algart.bridges.jep.additions;
 
+import jep.Interpreter;
 import jep.JepConfig;
 
-public enum JepInterpreterKind {
-    LOCAL("local") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSubInterpreter(configuration), configuration);
-        }
-    },
-    SHARED("shared") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSharedInterpreter(configuration), configuration);
-        }
-    };
+import java.util.Objects;
 
-    private final String kindName;
+public final class ConfiguredInterpreter {
+    final Interpreter interpreter;
+    private final JepConfig configuration;
 
-    JepInterpreterKind(String kindName) {
-        this.kindName = kindName;
+    public ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
+        this.interpreter = Objects.requireNonNull(interpreter, "Null interpreter");
+        this.configuration = configuration;
     }
 
-    public String kindName() {
-        return kindName;
+    public void close() {
+        interpreter.close();
     }
 
-    public ConfiguredInterpreter newInterpreter() {
-        return newInterpreter(null);
+    public Interpreter interpreter() {
+        return interpreter;
     }
 
-    public ConfiguredInterpreter newInterpreter(JepConfig configuration) {
-        return doNewInterpreter(configuration == null ? new JepExtendedConfiguration() : configuration);
+    public JepConfig configuration() {
+        return configuration;
     }
 
-    abstract ConfiguredInterpreter doNewInterpreter(JepConfig configuration);
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (ConfiguredInterpreter) obj;
+        return Objects.equals(this.interpreter, that.interpreter) &&
+                Objects.equals(this.configuration, that.configuration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(interpreter, configuration);
+    }
+
+    @Override
+    public String toString() {
+        return "ConfiguredInterpreter[" +
+                "interpreter=" + interpreter + ", " +
+                "configuration=" + configuration + ']';
+    }
 
 }

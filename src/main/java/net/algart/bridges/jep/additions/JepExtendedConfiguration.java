@@ -42,16 +42,18 @@ public class JepExtendedConfiguration extends JepConfig {
     @FunctionalInterface
     public interface Verifier {
         /**
-         * Executed once to check possible installation problems. Should throw an exception in a case of problems
+         * Executed once to check possible installation problems.
+         * Should throw an exception or log some message in case of a problem.
          *
          * @param jepInterpreter JEP interpreter; can be not used (if this code creates its own interpreter).
          * @param configuration  JEP configuration.
          */
-        void verify(Interpreter jepInterpreter, JepConfig configuration) throws JepException;
+        void verify(Interpreter jepInterpreter, JepExtendedConfiguration configuration) throws JepException;
     }
 
     private List<String> startupCode = Collections.emptyList();
     private Verifier verifier = null;
+    private Object verificationStatus = null;
 
     public List<String> getStartupCode() {
         return Collections.unmodifiableList(startupCode);
@@ -71,8 +73,24 @@ public class JepExtendedConfiguration extends JepConfig {
         return verifier;
     }
 
+    /**
+     * Sets some additional verifier that is called after the {@link #setStartupCode(List) start-up code}
+     * and throws exception in the case of any possible problems.
+     *
+     * @param verifier the new verifier.
+     * @return a reference to this object.
+     */
     public JepExtendedConfiguration setVerifier(Verifier verifier) {
         this.verifier = verifier;
+        return this;
+    }
+
+    public Object getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public JepExtendedConfiguration setVerificationStatus(Object verificationStatus) {
+        this.verificationStatus = verificationStatus;
         return this;
     }
 }

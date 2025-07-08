@@ -103,13 +103,13 @@ class JepCreationTools {
                         // - it seems to be another problem inside numpy
                         throw e;
                     }
-                    throw new JepException("cannot execute start-up Python code: \"" + codeSnippet.trim() +
+                    throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\"; probably necessary Python package" + importedPackage(codeSnippet) +
                             " is not installed (Python message: " + e.getMessage() + ")", e);
                 }
             }
             if (extendedConfiguration.hasVerifier()) {
-                extendedConfiguration.getVerifier().verify(jepInterpreter, configuration);
+                extendedConfiguration.getVerifier().verify(jepInterpreter, extendedConfiguration);
             }
         }
     }
