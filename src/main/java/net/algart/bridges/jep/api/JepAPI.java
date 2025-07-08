@@ -288,7 +288,7 @@ public class JepAPI {
         return new VerificationStatus(ok);
     }
 
-    public static boolean isVerified(JepConfig configuration) {
+    public static boolean isNumpyIntegrationVerified(JepConfig configuration) {
         return configuration instanceof JepExtendedConfiguration extendedConfiguration
                 && extendedConfiguration.getVerificationStatus() instanceof VerificationStatus;
     }
