@@ -98,8 +98,15 @@ public class JepBridgeTest {
             t1 = System.nanoTime();
             final JepPerformer performer = (shared ? sharedContainer : localContainer).performer();
             t2 = System.nanoTime();
-            System.out.printf(Locale.US, "Getting interpreter %s: %.3f mcs; number of active threads: %d%n",
-                    performer.context(), (t2 - t1) * 1e-3, Thread.activeCount());
+            System.out.printf(Locale.US, "Getting interpreter %s: %.3f mcs; " +
+                            "number of active threads: %d%n" +
+                            "    configuration: %s%n" +
+                            "    verification status: %s%n",
+                    performer.context(),
+                    (t2 - t1) * 1e-3,
+                    Thread.activeCount(),
+                    performer.configuration(),
+                    performer.verificationStatus());
             showMemory("Memory");
 
             t1 = System.nanoTime();
@@ -160,7 +167,6 @@ public class JepBridgeTest {
             System.out.println(jepApiClassName + " class is not available or incorrect: " + e);
         }
     }
-
     public static void main(String[] args) throws InterruptedException {
         int startArgIndex = 0;
         if (args.length > startArgIndex && args[startArgIndex].equals("-gc")) {
@@ -169,6 +175,7 @@ public class JepBridgeTest {
         }
         if (args.length > startArgIndex && args[startArgIndex].equals("-free")) {
             free = true;
+            startArgIndex++;
         }
         if (args.length < startArgIndex + 1) {
             System.out.println("Usage:");

@@ -25,6 +25,7 @@
 package net.algart.bridges.jep.additions;
 
 import jep.Interpreter;
+import jep.JepConfig;
 import jep.JepException;
 import jep.python.PyCallable;
 import jep.python.PyObject;
@@ -48,6 +49,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private JepSingleThreadInterpreter(Supplier<ConfiguredInterpreter> interpreterSupplier, String name) {
         Objects.requireNonNull(interpreterSupplier, "Null interpreterSupplier");
         this.state = new ExpensiveCleanableState(interpreterSupplier, name);
+        checkStateAlive();
         this.cleanable = CLEANER.register(this, state);
     }
 
@@ -66,6 +68,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public <T> T executeInSingleThread(Callable<T> task) {
         Objects.requireNonNull(task, "Null task");
         synchronized (state.lock) {
+            checkStateAlive();
             checkClosed();
             try {
                 return state.singleThreadPool.submit(task).get();
@@ -81,6 +84,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public void executeInSingleThread(Runnable task) {
         Objects.requireNonNull(task, "Null task");
         synchronized (state.lock) {
+            checkStateAlive();
             checkClosed();
             try {
                 state.singleThreadPool.submit(task).get();
@@ -104,53 +108,75 @@ public class JepSingleThreadInterpreter implements Interpreter {
     @Override
     public Object invoke(String name, Object... args) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, args));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, args));
     }
 
     @Override
     public Object invoke(String name, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, kwargs));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, kwargs));
     }
 
     @Override
     public Object invoke(String name, Object[] args, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.invoke(name, args, kwargs));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, args, kwargs));
     }
 
     @Override
     public boolean eval(String str) throws JepException {
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.eval(str));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().eval(str));
     }
 
     @Override
     public void exec(String str) throws JepException {
-        executeInSingleThread(() -> state.configuredInterpreter.interpreter.exec(str));
+        checkStateAlive();
+        //noinspection resource
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter().exec(str));
     }
 
     @Override
     public void runScript(String script) throws JepException {
-        executeInSingleThread(() -> state.configuredInterpreter.interpreter.runScript(script));
+        checkStateAlive();
+        //noinspection resource
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter().runScript(script));
     }
 
     @Override
     public Object getValue(String name) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.getValue(name));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().getValue(name));
     }
 
     @Override
     public <T> T getValue(String name, Class<T> clazz) throws JepException {
         Objects.requireNonNull(name, "Null name");
         Objects.requireNonNull(clazz, "Null class");
-        return executeInSingleThread(() -> state.configuredInterpreter.interpreter.getValue(name, clazz));
+        checkStateAlive();
+        //noinspection resource
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().getValue(name, clazz));
     }
 
     @Override
     public void set(String name, Object v) throws JepException {
         Objects.requireNonNull(name, "Null name");
-        executeInSingleThread(() -> state.configuredInterpreter.interpreter.set(name, v));
+        checkStateAlive();
+        //noinspection resource
+        executeInSingleThread(() -> state.configuredInterpreter.interpreter().set(name, v));
+    }
+
+    public JepConfig configuration() {
+        return checkStateAlive().configuration();
     }
 
     public boolean isClosed() {
@@ -166,6 +192,15 @@ public class JepSingleThreadInterpreter implements Interpreter {
     @Override
     public String toString() {
         return state.toBriefString();
+    }
+
+    private ConfiguredInterpreter checkStateAlive() {
+        final ConfiguredInterpreter result = state.configuredInterpreter;
+        if (result == null) {
+            throw new IllegalStateException("Abnormal situation: interpreter is closed");
+            // - should not occur while normal usage
+        }
+        return result;
     }
 
     private void checkClosed() {
@@ -230,6 +265,9 @@ public class JepSingleThreadInterpreter implements Interpreter {
                     });
             try {
                 this.configuredInterpreter = this.singleThreadPool.submit(interpreterSupplier::get).get();
+                if (configuredInterpreter == null) {
+                    throw new IllegalArgumentException("Illegal interpreterSupplier: created null interpreter");
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 this.singleThreadPool.shutdownNow();
@@ -240,8 +278,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
             }
             LOG.log(Logger.Level.DEBUG,
                     () -> "Created " + this + "; number of active threads is " + Thread.activeCount());
+            assert configuredInterpreter != null : "already checked above: configuredInterpreter == null";
+            assert singleThreadPool != null : "created via new operation above: singleThreadPool == null";
         }
 
+        // This method is called by JepSingleThreadInterpreter.CLEANER object
         @Override
         public void run() {
             synchronized (this.lock) {

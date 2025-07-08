@@ -2,7 +2,7 @@
   <configuration default="false" name="JepBridgeTest" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.JepBridgeTest" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="-gc 10" />
+    <option name="PROGRAM_PARAMETERS" value="-free 10" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Dnet.algart.bridges.jep.numpyIntegrationRequired=false -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>

@@ -29,39 +29,14 @@ import jep.JepConfig;
 
 import java.util.Objects;
 
-public final class ConfiguredInterpreter {
-    final Interpreter interpreter;
-    private final JepConfig configuration;
-
+public record ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
     public ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
         this.interpreter = Objects.requireNonNull(interpreter, "Null interpreter");
         this.configuration = configuration;
     }
 
-    public void close() {
+    void close() {
         interpreter.close();
-    }
-
-    public Interpreter interpreter() {
-        return interpreter;
-    }
-
-    public JepConfig configuration() {
-        return configuration;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ConfiguredInterpreter) obj;
-        return Objects.equals(this.interpreter, that.interpreter) &&
-                Objects.equals(this.configuration, that.configuration);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(interpreter, configuration);
     }
 
     @Override

@@ -24,10 +24,12 @@
 
 package net.algart.bridges.jep;
 
+import jep.JepConfig;
 import jep.python.PyCallable;
 import jep.python.PyObject;
 import net.algart.bridges.jep.additions.AtomicPyCallable;
 import net.algart.bridges.jep.additions.AtomicPyObject;
+import net.algart.bridges.jep.additions.JepExtendedConfiguration;
 import net.algart.bridges.jep.additions.JepSingleThreadInterpreter;
 
 import java.lang.System.Logger;
@@ -48,6 +50,21 @@ public final class JepPerformer implements AutoCloseable {
 
     public JepSingleThreadInterpreter context() {
         return context;
+    }
+
+    /**
+     * Returns JEP configuration used while creating this object.
+     * @return current JEP configuration; may be <code>null</code>.
+     */
+    public JepConfig configuration() {
+        return context.configuration();
+    }
+
+    public Object verificationStatus() {
+        JepConfig configuration = context.configuration();
+        return configuration instanceof JepExtendedConfiguration extendedConfiguration ?
+                extendedConfiguration.getVerificationStatus() :
+                null;
     }
 
     public void perform(String code) {

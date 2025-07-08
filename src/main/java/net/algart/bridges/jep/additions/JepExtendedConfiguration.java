@@ -45,10 +45,13 @@ public class JepExtendedConfiguration extends JepConfig {
          * Executed once to check possible installation problems.
          * Should throw an exception or log some message in case of a problem.
          *
+         * <p>The result of this method is stored in the configuration using
+         * {@link #setVerificationStatus(Object)} method.</p>
+         *
          * @param jepInterpreter JEP interpreter; can be not used (if this code creates its own interpreter).
          * @param configuration  JEP configuration.
          */
-        void verify(Interpreter jepInterpreter, JepExtendedConfiguration configuration) throws JepException;
+        Object verify(Interpreter jepInterpreter, JepExtendedConfiguration configuration) throws JepException;
     }
 
     private List<String> startupCode = Collections.emptyList();
@@ -92,5 +95,10 @@ public class JepExtendedConfiguration extends JepConfig {
     public JepExtendedConfiguration setVerificationStatus(Object verificationStatus) {
         this.verificationStatus = verificationStatus;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "JepExtendedConfiguration with verificationStatus=" + verificationStatus + " " + super.toString();
     }
 }

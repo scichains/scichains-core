@@ -109,7 +109,8 @@ class JepCreationTools {
                 }
             }
             if (extendedConfiguration.hasVerifier()) {
-                extendedConfiguration.getVerifier().verify(jepInterpreter, extendedConfiguration);
+                Object status = extendedConfiguration.getVerifier().verify(jepInterpreter, extendedConfiguration);
+                extendedConfiguration.setVerificationStatus(status);
             }
         }
     }

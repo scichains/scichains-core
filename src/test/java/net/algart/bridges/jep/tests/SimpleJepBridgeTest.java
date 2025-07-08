@@ -29,6 +29,7 @@ import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
 
+// Note: this test does not use JepAPI and does not automatically verify integration with numpy
 public class SimpleJepBridgeTest {
     static final JepPerformerContainer CONTAINER = JepPerformerContainer.getContainer();
 

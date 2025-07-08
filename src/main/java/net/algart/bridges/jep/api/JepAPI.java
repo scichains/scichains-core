@@ -49,7 +49,6 @@ public class JepAPI {
              "net.algart.bridges.jep.numpyIntegrationRequired", true);
 
     private static final AtomicBoolean NUMPY_INTEGRATION_PROBLEM_LOGGED = new AtomicBoolean(false);
-    private static volatile boolean numpyIntegration = false;
 
     public static final String STANDARD_API_PACKAGE = "algart_api";
     public static final String STANDARD_API_IN_OUT = STANDARD_API_PACKAGE + ".SInOut";
@@ -250,11 +249,12 @@ public class JepAPI {
                 STANDARD_STARTUP;
     }
 
-    public static void verifyLocal(Interpreter jepInterpreter, JepConfig configuration) {
+    public static VerificationStatus verifyLocal(Interpreter jepInterpreter, JepConfig configuration) {
         // does nothing in the current version
+        return null;
     }
 
-    public static void verifyShared(Interpreter jepInterpreter, JepConfig configuration) {
+    public static VerificationStatus verifyShared(Interpreter jepInterpreter, JepConfig configuration) {
         final Object array;
         try {
             try (PyCallable creator = jepInterpreter.getValue(STANDARD_API_JEP_VERIFIER_FUNCTION, PyCallable.class)) {
@@ -267,8 +267,6 @@ public class JepAPI {
                     " was not installed correctly", e);
         }
         final boolean ok = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
-        numpyIntegration = ok;
-        System.out.printf("!!! %s%n", numpyIntegration);
         if (!ok) {
             final Supplier<String> message = () ->
                     "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
@@ -281,15 +279,27 @@ public class JepAPI {
             if (REQUIRE_NUMPY_INTEGRATION) {
                 throw new JepException(message.get());
             } else {
-                if (!NUMPY_INTEGRATION_PROBLEM_LOGGED.getAndSet(true)) {
-                    LOG.log(System.Logger.Level.INFO, message);
-                }
+                System.Logger.Level level = NUMPY_INTEGRATION_PROBLEM_LOGGED.getAndSet(true) ?
+                        System.Logger.Level.DEBUG :
+                        System.Logger.Level.WARNING;
+                LOG.log(level, message);
             }
         }
+        return new VerificationStatus(ok);
     }
 
-    public static boolean isNumpyIntegration() {
-        return numpyIntegration;
+    public static boolean isVerified(JepConfig configuration) {
+        return configuration instanceof JepExtendedConfiguration extendedConfiguration
+                && extendedConfiguration.getVerificationStatus() instanceof VerificationStatus;
+    }
+
+    public static boolean isNumpyIntegration(JepConfig configuration) {
+        return configuration instanceof JepExtendedConfiguration extendedConfiguration
+                && extendedConfiguration.getVerificationStatus() instanceof VerificationStatus status
+                && status.numpyIntegration();
+    }
+
+    public record VerificationStatus(boolean numpyIntegration) {
     }
 
     private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
@@ -297,7 +307,6 @@ public class JepAPI {
                 JepAPI::verifyShared :
                 JepAPI::verifyLocal;
     }
-
 
     private static Object closePyObject(JepPerformer performer, Object value) {
         if (value instanceof final PyObject pyObject) {
