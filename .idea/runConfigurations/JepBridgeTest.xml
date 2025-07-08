@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="JepBridgeTest" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="PYTHONHOME_" value="C:\TMP\python" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.JepBridgeTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="-free 10" />
