@@ -30,7 +30,7 @@ import jep.PyConfig;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class JepGlobalConfig extends PyConfig {
+public class GlobalPythonConfiguration extends PyConfig {
     public static final String JEP_INSTALLATION_HINTS =
             """
                     To install "jep" with all required packages, please use the following command:
@@ -75,12 +75,12 @@ public class JepGlobalConfig extends PyConfig {
 
     public static final String JEP_CONFIG_PROPERTY_PREFIX = "jep.config.";
 
-    public static final JepGlobalConfig INSTANCE = new JepGlobalConfig();
+    public static final GlobalPythonConfiguration INSTANCE = new GlobalPythonConfiguration();
 
     private boolean used = false;
     private final Object lock = new Object();
 
-    private JepGlobalConfig() {
+    private GlobalPythonConfiguration() {
     }
 
     public int getNoSiteFlag() {
@@ -90,7 +90,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setNoSiteFlag(int noSiteFlag) {
+    public GlobalPythonConfiguration setNoSiteFlag(int noSiteFlag) {
         synchronized (lock) {
             super.setNoSiteFlag(noSiteFlag);
             return this;
@@ -104,7 +104,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setNoUserSiteDirectory(int noUserSiteDirectory) {
+    public GlobalPythonConfiguration setNoUserSiteDirectory(int noUserSiteDirectory) {
         synchronized (lock) {
             super.setNoUserSiteDirectory(noUserSiteDirectory);
             return this;
@@ -118,7 +118,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setIgnoreEnvironmentFlag(int ignoreEnvironmentFlag) {
+    public GlobalPythonConfiguration setIgnoreEnvironmentFlag(int ignoreEnvironmentFlag) {
         synchronized (lock) {
             super.setIgnoreEnvironmentFlag(ignoreEnvironmentFlag);
             return this;
@@ -132,7 +132,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setVerboseFlag(int verboseFlag) {
+    public GlobalPythonConfiguration setVerboseFlag(int verboseFlag) {
         synchronized (lock) {
             super.setVerboseFlag(verboseFlag);
             return this;
@@ -146,7 +146,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setOptimizeFlag(int optimizeFlag) {
+    public GlobalPythonConfiguration setOptimizeFlag(int optimizeFlag) {
         synchronized (lock) {
             super.setOptimizeFlag(optimizeFlag);
             return this;
@@ -160,7 +160,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setDontWriteBytecodeFlag(int dontWriteBytecodeFlag) {
+    public GlobalPythonConfiguration setDontWriteBytecodeFlag(int dontWriteBytecodeFlag) {
         synchronized (lock) {
             super.setDontWriteBytecodeFlag(dontWriteBytecodeFlag);
             return this;
@@ -174,7 +174,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setHashRandomizationFlag(int hashRandomizationFlag) {
+    public GlobalPythonConfiguration setHashRandomizationFlag(int hashRandomizationFlag) {
         synchronized (lock) {
             super.setHashRandomizationFlag(hashRandomizationFlag);
             return this;
@@ -188,7 +188,7 @@ public class JepGlobalConfig extends PyConfig {
     }
 
     @Override
-    public JepGlobalConfig setPythonHome(String pythonHome) {
+    public GlobalPythonConfiguration setPythonHome(String pythonHome) {
         synchronized (lock) {
             super.setPythonHome(pythonHome);
             return this;
@@ -212,7 +212,7 @@ public class JepGlobalConfig extends PyConfig {
         return pythonHomeInformation().pythonHome();
     }
 
-    public JepGlobalConfig loadFromSystemProperties() {
+    public GlobalPythonConfiguration loadFromSystemProperties() {
         synchronized (lock) {
             setNoSiteFlag(getPrefixedInt("noSiteFlag", noSiteFlag));
             setNoUserSiteDirectory(getPrefixedInt("noUserSiteDirectory", noUserSiteDirectory));
@@ -227,7 +227,7 @@ public class JepGlobalConfig extends PyConfig {
         }
     }
 
-    public JepGlobalConfig useForJep() {
+    public GlobalPythonConfiguration useForJep() {
         synchronized (lock) {
             MainInterpreter.setInitParams(this);
             this.used = true;

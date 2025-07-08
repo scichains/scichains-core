@@ -30,8 +30,8 @@ import jep.python.PyObject;
 import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.AtomicPyObject;
-import net.algart.bridges.jep.additions.JepExtendedConfig;
-import net.algart.bridges.jep.additions.JepGlobalConfig;
+import net.algart.bridges.jep.additions.JepExtendedConfiguration;
+import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
@@ -231,16 +231,16 @@ public class JepAPI {
 
     public static JepPerformerContainer initialize(JepPerformerContainer performerContainer) {
         Objects.requireNonNull(performerContainer, "Null performerContainer");
-        return performerContainer.setConfigSupplier(() -> initializeConfig(performerContainer));
+        return performerContainer.setConfigurationSupplier(() -> initializeConfig(performerContainer));
     }
 
-    public static JepExtendedConfig initializeConfig(JepPerformerContainer performerContainer) {
-        JepExtendedConfig config = new JepExtendedConfig();
+    public static JepExtendedConfiguration initializeConfig(JepPerformerContainer performerContainer) {
+        JepExtendedConfiguration configuration = new JepExtendedConfiguration();
         JepInterpreterKind jepInterpreterKind = performerContainer.getKind();
-        config.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
-        config.setStartupCode(initializingJepStartupCode(jepInterpreterKind));
-        config.setVerifier(standardJepVerifier(jepInterpreterKind));
-        return config;
+        configuration.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
+        configuration.setStartupCode(initializingJepStartupCode(jepInterpreterKind));
+        configuration.setVerifier(standardJepVerifier(jepInterpreterKind));
+        return configuration;
     }
 
     public static List<String> initializingJepStartupCode(JepInterpreterKind jepInterpreterKind) {
@@ -250,11 +250,11 @@ public class JepAPI {
                 STANDARD_STARTUP;
     }
 
-    public static void verifyLocal(Interpreter jepInterpreter, JepConfig config) {
+    public static void verifyLocal(Interpreter jepInterpreter, JepConfig configuration) {
         // does nothing in the current version
     }
 
-    public static void verifyShared(Interpreter jepInterpreter, JepConfig config) {
+    public static void verifyShared(Interpreter jepInterpreter, JepConfig configuration) {
         final Object array;
         try {
             try (PyCallable creator = jepInterpreter.getValue(STANDARD_API_JEP_VERIFIER_FUNCTION, PyCallable.class)) {
@@ -276,7 +276,7 @@ public class JepAPI {
                     "(it returns " +
                     (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
                     ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                    JepGlobalConfig.JEP_INSTALLATION_HINTS;
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
             if (REQUIRE_NUMPY_INTEGRATION) {
                 throw new JepException(message.get());
             } else {
@@ -291,7 +291,7 @@ public class JepAPI {
         return numpyIntegration;
     }
 
-    private static JepExtendedConfig.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
+    private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
         return jepInterpreterKind == JepInterpreterKind.SHARED ?
                 JepAPI::verifyShared :
                 JepAPI::verifyLocal;

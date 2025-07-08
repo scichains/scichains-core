@@ -26,7 +26,6 @@ package net.algart.executors.api;
 
 import jakarta.json.JsonObject;
 import net.algart.arrays.Arrays;
-import net.algart.bridges.jep.additions.JepGlobalConfig;
 import net.algart.executors.api.data.*;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.*;

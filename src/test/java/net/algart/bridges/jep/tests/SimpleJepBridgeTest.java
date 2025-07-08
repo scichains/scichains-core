@@ -27,22 +27,22 @@ package net.algart.bridges.jep.tests;
 import jep.Interpreter;
 import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
-import net.algart.bridges.jep.additions.JepGlobalConfig;
+import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
 
 public class SimpleJepBridgeTest {
     static final JepPerformerContainer CONTAINER = JepPerformerContainer.getContainer();
 
     public static void main(String[] args) {
         System.out.printf("Python information before initialization: %s%n",
-                JepGlobalConfig.INSTANCE.pythonHomeInformation());
-        JepGlobalConfig.INSTANCE
+                GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
+        GlobalPythonConfiguration.INSTANCE
                 .loadFromSystemProperties()
                 // - allows specifying python.path in the system properties
                 .setIgnoreEnvironmentFlag(0)
 //                .setPythonHome("\\tmp")
                 .useForJep();
 
-        System.out.printf("Python information: %s%n", JepGlobalConfig.INSTANCE.pythonHomeInformation());
+        System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
         final JepPerformer performer = CONTAINER.performer();
         final Interpreter context = performer.context();
         context.exec("def test():\n    return 'Hello from JEP'\n");

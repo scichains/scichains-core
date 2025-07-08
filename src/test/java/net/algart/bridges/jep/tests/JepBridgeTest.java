@@ -27,7 +27,7 @@ package net.algart.bridges.jep.tests;
 import net.algart.bridges.jep.JepPerformer;
 import net.algart.bridges.jep.JepPerformerContainer;
 import net.algart.bridges.jep.additions.AtomicPyObject;
-import net.algart.bridges.jep.additions.JepGlobalConfig;
+import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
 import net.algart.bridges.jep.additions.JepInterpreterKind;
 
 import java.lang.reflect.InvocationTargetException;
@@ -177,7 +177,7 @@ public class JepBridgeTest {
         }
         final int numberOfTests = Integer.parseInt(args[startArgIndex]);
 
-        System.out.printf("Python information: %s%n", JepGlobalConfig.INSTANCE.pythonHomeInformation());
+        System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
         System.out.printf("Number of active threads at the beginning: %d%n", Thread.activeCount());
         for (int m = 1; m < numberOfTests; m++) {
             System.out.printf("%n--------%nTest block #%d; number of active threads: %d%n", m, Thread.activeCount());

@@ -37,20 +37,20 @@ class JepCreationTools {
     private static final AtomicBoolean SHARED_CREATED = new AtomicBoolean(false);
     private static final Pattern IMPORT_MATCHER = Pattern.compile("^import\\s+(\\w+)");
 
-    static SubInterpreter newSubInterpreter(JepConfig config) {
-        Objects.requireNonNull(config, "Null config");
-        final SubInterpreter result = doCreate(() -> new SubInterpreter(config));
-        performStartupCodeForExtended(result, config, JepInterpreterKind.LOCAL);
+    static SubInterpreter newSubInterpreter(JepConfig configuration) {
+        Objects.requireNonNull(configuration, "Null configuration");
+        final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
+        performStartupCodeForExtended(result, configuration, JepInterpreterKind.LOCAL);
         return result;
     }
 
-    static SharedInterpreter newSharedInterpreter(JepConfig config) {
-        Objects.requireNonNull(config, "Null config");
+    static SharedInterpreter newSharedInterpreter(JepConfig configuration) {
+        Objects.requireNonNull(configuration, "Null configuration");
         if (!SHARED_CREATED.getAndSet(true)) {
-            SharedInterpreter.setConfig(config);
+            SharedInterpreter.setConfig(configuration);
         }
         final SharedInterpreter result = doCreate(SharedInterpreter::new);
-        performStartupCodeForExtended(result, config, JepInterpreterKind.SHARED);
+        performStartupCodeForExtended(result, configuration, JepInterpreterKind.SHARED);
         return result;
     }
 
@@ -65,7 +65,7 @@ class JepCreationTools {
     }
 
     private static String unsatisfiedLinkDiagnostics() {
-        final var homeInformation = JepGlobalConfig.INSTANCE.pythonHomeInformation();
+        final var homeInformation = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation();
         assert homeInformation != null;
         if (homeInformation.unknown()) {
             return homeInformation.systemEnvironmentDisabled() ?
@@ -79,7 +79,7 @@ class JepCreationTools {
                         "");
         if (homeInformation.exists()) {
             return "Python is not correctly installed at " + messageHome +
-                    "or \"jep\" module is not properly installed.\n" + JepGlobalConfig.JEP_INSTALLATION_HINTS;
+                    "or \"jep\" module is not properly installed.\n" + GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
         } else {
             return "Python home " + messageHome + "is not an existing Python directory";
         }
@@ -87,11 +87,11 @@ class JepCreationTools {
 
     private static void performStartupCodeForExtended(
             Interpreter jepInterpreter,
-            JepConfig config,
+            JepConfig configuration,
             JepInterpreterKind kind) {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
-        if (config instanceof final JepExtendedConfig extendedConfig) {
-            final List<String> startupCode = extendedConfig.getStartupCode();
+        if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
+            final List<String> startupCode = extendedConfiguration.getStartupCode();
             for (String codeSnippet : startupCode) {
                 try {
                     JepSingleThreadInterpreter.LOG.log(System.Logger.Level.TRACE,
@@ -108,8 +108,8 @@ class JepCreationTools {
                             " is not installed (Python message: " + e.getMessage() + ")", e);
                 }
             }
-            if (extendedConfig.hasVerifier()) {
-                extendedConfig.getVerifier().verify(jepInterpreter, config);
+            if (extendedConfiguration.hasVerifier()) {
+                extendedConfiguration.getVerifier().verify(jepInterpreter, configuration);
             }
         }
     }

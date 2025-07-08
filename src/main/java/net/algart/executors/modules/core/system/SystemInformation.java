@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.system;
 
-import net.algart.bridges.jep.additions.JepGlobalConfig;
+import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
@@ -75,7 +75,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("Current OS directory: %s%n", currentRelativePath));
         sb.append(String.format("Current directory: %s%n", getCurrentDirectory()));
         sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
-        String pythonHome = JepGlobalConfig.INSTANCE.pythonHomeInformation().pythonHome();
+        String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
         sb.append(String.format("Python home: %s%n", pythonHome == null ? "n/a" : pythonHome));
 
         final ExecutorLoaderSet global = ExecutionBlock.globalLoaders();

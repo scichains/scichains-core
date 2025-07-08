@@ -30,14 +30,14 @@ import jep.JepConfig;
 public enum JepInterpreterKind {
     LOCAL("local") {
         @Override
-        Interpreter doNewInterpreter(JepConfig config) {
-            return JepCreationTools.newSubInterpreter(config);
+        Interpreter doNewInterpreter(JepConfig configuration) {
+            return JepCreationTools.newSubInterpreter(configuration);
         }
     },
     SHARED("shared") {
         @Override
-        Interpreter doNewInterpreter(JepConfig config) {
-            return JepCreationTools.newSharedInterpreter(config);
+        Interpreter doNewInterpreter(JepConfig configuration) {
+            return JepCreationTools.newSharedInterpreter(configuration);
         }
     };
 
@@ -55,10 +55,10 @@ public enum JepInterpreterKind {
         return newInterpreter(null);
     }
 
-    public Interpreter newInterpreter(JepConfig config) {
-        return doNewInterpreter(config == null ? new JepExtendedConfig() : config);
+    public Interpreter newInterpreter(JepConfig configuration) {
+        return doNewInterpreter(configuration == null ? new JepExtendedConfiguration() : configuration);
     }
 
-    abstract Interpreter doNewInterpreter(JepConfig config);
+    abstract Interpreter doNewInterpreter(JepConfig configuration);
 
 }

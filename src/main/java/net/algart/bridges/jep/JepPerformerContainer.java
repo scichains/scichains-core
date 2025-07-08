@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
     private Supplier<Interpreter> contextSupplier;
-    private Supplier<JepConfig> configSupplier = null;
+    private Supplier<JepConfig> configurationSupplier = null;
     private JepInterpreterKind kind = JepInterpreterKind.SHARED;
     private String name = kind.kindName();
 
@@ -64,24 +64,24 @@ public final class JepPerformerContainer implements AutoCloseable {
         return this;
     }
 
-    public Supplier<JepConfig> getConfigSupplier() {
-        return configSupplier;
+    public Supplier<JepConfig> getConfigurationSupplier() {
+        return configurationSupplier;
     }
 
     /**
      * Sets supplier for JEP configuration. Used to create {@link JepConfig} object,
      * used for creating JEP {@link Interpreter}.
      *
-     * <p>Note: using supplier instead of explicit configuration object (stored inside this container)
+     * <p>Note: using a supplier instead of an explicit configuration object (stored inside this container)
      * helps to avoid long-time and possibly problematic operations while customizing this container object.
      * For example, maybe, you need to specify include paths inside {@link JepConfig},
-     * but you cannot find this paths without serious disc operations.
+     * but you cannot find these paths without serious disc operations.
      *
-     * @param configSupplier configuration supplier; may be <code>null</code>, then will be ignored.
+     * @param configurationSupplier configuration supplier; may be <code>null</code>, then will be ignored.
      * @return reference to this object.
      */
-    public JepPerformerContainer setConfigSupplier(Supplier<JepConfig> configSupplier) {
-        this.configSupplier = configSupplier;
+    public JepPerformerContainer setConfigurationSupplier(Supplier<JepConfig> configurationSupplier) {
+        this.configurationSupplier = configurationSupplier;
         return this;
     }
 
@@ -134,8 +134,8 @@ public final class JepPerformerContainer implements AutoCloseable {
         return performer;
     }
 
-    public JepConfig config() {
-        return configSupplier == null ? null : configSupplier.get();
+    public JepConfig configuration() {
+        return configurationSupplier == null ? null : configurationSupplier.get();
     }
 
     /**
@@ -156,6 +156,6 @@ public final class JepPerformerContainer implements AutoCloseable {
     }
 
     private void resetSupplier() {
-        contextSupplier = () -> kind.newInterpreter(config());
+        contextSupplier = () -> kind.newInterpreter(configuration());
     }
 }

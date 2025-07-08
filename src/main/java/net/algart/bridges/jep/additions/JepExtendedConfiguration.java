@@ -33,16 +33,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class JepExtendedConfig extends JepConfig {
+
+/**
+ * <p>An extended configuration object for constructing a Jep instance, corresponding to the
+ * configuration of the particular Python sub-interpreter. </p>
+ */
+public class JepExtendedConfiguration extends JepConfig {
     @FunctionalInterface
     public interface Verifier {
         /**
          * Executed once to check possible installation problems. Should throw an exception in a case of problems
          *
-         * @param jepInterpreter JEP interpreter; can be not used (if this code creates its own interpreter)
-         * @param config         JEP configuration
+         * @param jepInterpreter JEP interpreter; can be not used (if this code creates its own interpreter).
+         * @param configuration  JEP configuration.
          */
-        void verify(Interpreter jepInterpreter, JepConfig config) throws JepException;
+        void verify(Interpreter jepInterpreter, JepConfig configuration) throws JepException;
     }
 
     private List<String> startupCode = Collections.emptyList();
@@ -52,7 +57,7 @@ public class JepExtendedConfig extends JepConfig {
         return Collections.unmodifiableList(startupCode);
     }
 
-    public JepExtendedConfig setStartupCode(List<String> startupCode) {
+    public JepExtendedConfiguration setStartupCode(List<String> startupCode) {
         Objects.requireNonNull(startupCode, "Null startupCode");
         this.startupCode = new ArrayList<>(startupCode);
         return this;
@@ -66,7 +71,7 @@ public class JepExtendedConfig extends JepConfig {
         return verifier;
     }
 
-    public JepExtendedConfig setVerifier(Verifier verifier) {
+    public JepExtendedConfiguration setVerifier(Verifier verifier) {
         this.verifier = verifier;
         return this;
     }
