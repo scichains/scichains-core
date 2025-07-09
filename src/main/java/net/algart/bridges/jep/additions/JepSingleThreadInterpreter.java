@@ -109,7 +109,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public Object invoke(String name, Object... args) throws JepException {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, args));
     }
 
@@ -117,7 +116,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public Object invoke(String name, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, kwargs));
     }
 
@@ -125,28 +123,24 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public Object invoke(String name, Object[] args, Map<String, Object> kwargs) throws JepException {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().invoke(name, args, kwargs));
     }
 
     @Override
     public boolean eval(String str) throws JepException {
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().eval(str));
     }
 
     @Override
     public void exec(String str) throws JepException {
         checkStateAlive();
-        //noinspection resource
         executeInSingleThread(() -> state.configuredInterpreter.interpreter().exec(str));
     }
 
     @Override
     public void runScript(String script) throws JepException {
         checkStateAlive();
-        //noinspection resource
         executeInSingleThread(() -> state.configuredInterpreter.interpreter().runScript(script));
     }
 
@@ -154,7 +148,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public Object getValue(String name) throws JepException {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().getValue(name));
     }
 
@@ -163,7 +156,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
         Objects.requireNonNull(name, "Null name");
         Objects.requireNonNull(clazz, "Null class");
         checkStateAlive();
-        //noinspection resource
         return executeInSingleThread(() -> state.configuredInterpreter.interpreter().getValue(name, clazz));
     }
 
@@ -171,12 +163,12 @@ public class JepSingleThreadInterpreter implements Interpreter {
     public void set(String name, Object v) throws JepException {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
-        //noinspection resource
         executeInSingleThread(() -> state.configuredInterpreter.interpreter().set(name, v));
     }
 
     public JepConfig configuration() {
-        return checkStateAlive().configuration();
+        checkStateAlive();
+        return state.configuredInterpreter.configuration();
     }
 
     public boolean isClosed() {
@@ -194,13 +186,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
         return state.toBriefString();
     }
 
-    private ConfiguredInterpreter checkStateAlive() {
-        final ConfiguredInterpreter result = state.configuredInterpreter;
-        if (result == null) {
+    private void checkStateAlive() {
+        if (state.configuredInterpreter == null) {
             throw new IllegalStateException("Abnormal situation: interpreter is closed");
             // - should not occur while normal usage
         }
-        return result;
     }
 
     private void checkClosed() {
@@ -242,8 +232,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private static class ExpensiveCleanableState implements Runnable {
         private final String name;
         private static final AtomicInteger THREAD_COUNT = new AtomicInteger(1);
-        private volatile ThreadPoolExecutor singleThreadPool = null;
-        private volatile ConfiguredInterpreter configuredInterpreter = null;
+        private volatile ThreadPoolExecutor singleThreadPool;
+        private volatile ConfiguredInterpreter configuredInterpreter;
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 

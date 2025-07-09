@@ -29,13 +29,13 @@ import jep.JepConfig;
 
 import java.util.Objects;
 
-public record ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
+public record ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) implements AutoCloseable {
     public ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
         this.interpreter = Objects.requireNonNull(interpreter, "Null interpreter");
         this.configuration = configuration;
     }
 
-    void close() {
+    public void close() {
         interpreter.close();
     }
 
