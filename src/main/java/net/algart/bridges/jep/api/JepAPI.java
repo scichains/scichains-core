@@ -123,7 +123,7 @@ public class JepAPI {
         }
     }
 
-    // performer is not used in the current version
+    // Note: performer is used in loadNumbers only
     public Object readInputPort(JepPerformer performer, Port port) {
         Objects.requireNonNull(port, "Null port");
         if (!port.isInput()) {
@@ -135,9 +135,9 @@ public class JepAPI {
         if (data != null && data.isInitialized()) {
             // - normally data == null is impossible
             value = switch (data.type()) {
-                case SCALAR -> loadScalar(performer, port);
-                case NUMBERS -> loadNumbers(performer, port);
-                case MAT -> loadMat(performer, port);
+                case SCALAR -> loadScalarToJep(performer, port);
+                case NUMBERS -> loadNumbersToJep(performer, port);
+                case MAT -> loadMatToJep(performer, port);
             };
         }
         return value;
@@ -161,9 +161,9 @@ public class JepAPI {
         } else if (dataType != null) {
             // - normally port.getDataType() == null is impossible
             switch (dataType) {
-                case SCALAR -> storeScalar(performer, port, value);
-                case NUMBERS -> storeNumbers(performer, port, value);
-                case MAT -> storeMat(performer, port, value);
+                case SCALAR -> storeScalarFromJep(performer, port, value);
+                case NUMBERS -> storeNumbersFromJep(performer, port, value);
+                case MAT -> storeMatFromJep(performer, port, value);
             }
         }
     }
@@ -179,26 +179,33 @@ public class JepAPI {
         }
     }
 
-    public String loadScalar(JepPerformer performer, Port port) {
+    public String loadScalarToJep(JepPerformer performer, Port port) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
         return port.getData(SScalar.class, false).getValue();
     }
 
-    public void storeScalar(JepPerformer performer, Port port, Object value) {
+    public void storeScalarFromJep(JepPerformer performer, Port port, Object value) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
         value = closePyObject(performer, value);
         port.getData(SScalar.class, true).setTo(value);
     }
 
-    public NDArray<Object> loadNumbers(JepPerformer performer, Port port) {
+    public Object loadNumbersToJep(JepPerformer performer, Port port) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
-        return Jep2SNumbers.toNDArray(port.getData(SNumbers.class, false));
+        final SNumbers numbers = port.getData(SNumbers.class, false);
+        if (isNumpyIntegration(performer.configuration())) {
+            return Jep2SNumbers.toNDArray(numbers);
+        } else {
+            // - we can try to pass into Python, at least, 1-column simple array
+            checkNumbers(numbers);
+            return numbers.getArray();
+        }
     }
 
-    public void storeNumbers(JepPerformer performer, Port port, Object value) {
+    public void storeNumbersFromJep(JepPerformer performer, Port port, Object value) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
         final SNumbers data = port.getData(SNumbers.class, true);
@@ -210,13 +217,20 @@ public class JepAPI {
         }
     }
 
-    public DirectNDArray<Buffer> loadMat(JepPerformer performer, Port port) {
+    public DirectNDArray<Buffer> loadMatToJep(JepPerformer performer, Port port) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
-        return Jep2SMat.toNDArray(port.getData(SMat.class, false));
+        final SMat matrix = port.getData(SMat.class, false);
+        if (isNumpyIntegration(performer.configuration())) {
+            return Jep2SMat.toNDArray(matrix);
+        } else {
+            // Note: unlike loadNumberToJep, we cannot do anything without the normal jep+numpy integration:
+            // we MUST pass matrix dimensions, and the only way to do this is NDArray class
+            throw exceptionForMat(matrix);
+        }
     }
 
-    public void storeMat(JepPerformer performer, Port port, Object value) {
+    public void storeMatFromJep(JepPerformer performer, Port port, Object value) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
         final SMat data = port.getData(SMat.class, true);
@@ -310,7 +324,7 @@ public class JepAPI {
 
     private static Object closePyObject(JepPerformer performer, Object value) {
         if (value instanceof final PyObject pyObject) {
-            // - if Python function returned PyObject/PyCallable, we should close it immediately - it cannot be used
+            // - If a Python function returned PyObject/PyCallable, we should close it immediately - it cannot be used
             // outside the single thread (any attempt will lead to JepException "Invalid thread access").
             // In the case of scalar, we should also to convert it into String.
             try (AtomicPyObject atomicObject = performer.wrapObject(pyObject)) {
@@ -329,7 +343,33 @@ public class JepAPI {
         if (!(value instanceof NDArray<?> || (allowDirectArray && value instanceof DirectNDArray<?>))) {
             throw new JepException("Invalid type of property \"" + port.getName()
                     + "\" in Python outputs: numpy.ndarray expected, but actual Java type is \""
-                    + value.getClass().getCanonicalName() + "\"");
+                    + value.getClass().getCanonicalName() + "\".\n" +
+                    "Probably the reason is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
         }
+    }
+
+    private static void checkNumbers(SNumbers numbers) {
+        Objects.requireNonNull(numbers, "Null numbers");
+        if (!numbers.isInitialized()) {
+            throw new IllegalArgumentException("Not initialized numbers");
+        }
+        if (numbers.getBlockLength() != 1) {
+            throw new IllegalArgumentException("Cannot pass numbers with " + numbers.getBlockLength() +
+                    " > 1 columns\nto Python inputs: numpy.ndarray should be used in this case,\n" +
+                    " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+        }
+    }
+
+    private IllegalArgumentException exceptionForMat(SMat matrix) {
+        Objects.requireNonNull(matrix, "Null matrix");
+        if (!matrix.isInitialized()) {
+            throw new IllegalArgumentException("Not initialized matrix");
+        }
+        return new IllegalArgumentException("Cannot pass matrix\n    " + matrix +
+                "\nto Python inputs: numpy.ndarray should be used in this case,\n" +
+                " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
+                GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
     }
 }

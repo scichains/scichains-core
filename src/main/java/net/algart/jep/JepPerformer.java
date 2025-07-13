@@ -39,9 +39,11 @@ public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());
 
     final JepSingleThreadInterpreter context;
+    private JepConfig configuration;
 
     private JepPerformer(JepSingleThreadInterpreter context) {
         this.context = Objects.requireNonNull(context, "Null JEP context");
+        this.configuration = context.configuration();
     }
 
     public static JepPerformer newPerformer(JepSingleThreadInterpreter context) {
@@ -54,10 +56,11 @@ public final class JepPerformer implements AutoCloseable {
 
     /**
      * Returns JEP configuration used while creating this object.
+     *
      * @return current JEP configuration; may be <code>null</code>.
      */
     public JepConfig configuration() {
-        return context.configuration();
+        return configuration;
     }
 
     public Object verificationStatus() {

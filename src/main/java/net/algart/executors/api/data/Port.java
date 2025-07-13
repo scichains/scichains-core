@@ -182,7 +182,7 @@ public final class Port {
             throw new IllegalArgumentException("The " + portType.typeName + " port \""
                     + name + "\" has no data container");
             // External execution system should set up both input and output for any execution block
-            // with suitable data type. Note: Data is only a container, that is usually filled
+            // with a suitable data type. Note: Data is only a container that is usually filled
             // by actual data in execute() method.
         }
         if (!allowUninitializedData && !result.isInitialized()) {
