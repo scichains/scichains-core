@@ -123,7 +123,6 @@ public class JepAPI {
         }
     }
 
-    // Note: performer is used in loadNumbers only
     public Object readInputPort(JepPerformer performer, Port port) {
         Objects.requireNonNull(port, "Null port");
         if (!port.isInput()) {
@@ -226,7 +225,10 @@ public class JepAPI {
         } else {
             // Note: unlike loadNumberToJep, we cannot do anything without the normal jep+numpy integration:
             // we MUST pass matrix dimensions, and the only way to do this is NDArray class
-            throw exceptionForMat(matrix);
+            throw new IllegalArgumentException("Cannot pass the matrix\n    " + matrix +
+                    "\nto Python inputs: numpy.ndarray should be used in this case,\n" +
+                    " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
         }
     }
 
@@ -234,12 +236,18 @@ public class JepAPI {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
         final SMat data = port.getData(SMat.class, true);
-        if (value instanceof SMat) {
-            data.setTo((SMat) value);
+        if (isNumpyIntegration(performer.configuration())) {
+            if (value instanceof SMat) {
+                data.setTo((SMat) value);
+            } else {
+                checkJepNDArray(port, value, true, false);
+                Jep2SMat.setToArray(data, value);
+            }
         } else {
-            checkJepNDArray(port, value, true, false);
-            Jep2SMat.setToArray(data, value);
-        }
+            throw new IllegalStateException("Cannot load a matrix from Python outputs: " +
+                    "numpy.ndarray should be used in this case,\n" +
+                    " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);        }
     }
 
     public static JepPerformerContainer initialize(JepPerformerContainer performerContainer) {
@@ -362,14 +370,4 @@ public class JepAPI {
         }
     }
 
-    private IllegalArgumentException exceptionForMat(SMat matrix) {
-        Objects.requireNonNull(matrix, "Null matrix");
-        if (!matrix.isInitialized()) {
-            throw new IllegalArgumentException("Not initialized matrix");
-        }
-        return new IllegalArgumentException("Cannot pass matrix\n    " + matrix +
-                "\nto Python inputs: numpy.ndarray should be used in this case,\n" +
-                " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
-    }
 }
