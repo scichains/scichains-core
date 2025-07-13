@@ -212,7 +212,7 @@ public class JepAPI {
         if (value instanceof SNumbers) {
             data.setTo((SNumbers) value);
         } else {
-            checkNDArray(port, value, false, true);
+            checkJepNDArray(port, value, false, true);
             Jep2SNumbers.setToArray(data, value);
         }
     }
@@ -237,7 +237,7 @@ public class JepAPI {
         if (value instanceof SMat) {
             data.setTo((SMat) value);
         } else {
-            checkNDArray(port, value, true, false);
+            checkJepNDArray(port, value, true, false);
             Jep2SMat.setToArray(data, value);
         }
     }
@@ -335,7 +335,7 @@ public class JepAPI {
         return value;
     }
 
-    private static void checkNDArray(Port port, Object value, boolean allowDirectArray, boolean allowJavaArrays) {
+    private static void checkJepNDArray(Port port, Object value, boolean allowDirectArray, boolean allowJavaArrays) {
         Objects.requireNonNull(value, "Null value for storing in port " + port.getName());
         if (allowJavaArrays && value.getClass().isArray()) {
             return;
@@ -343,9 +343,9 @@ public class JepAPI {
         if (!(value instanceof NDArray<?> || (allowDirectArray && value instanceof DirectNDArray<?>))) {
             throw new JepException("Invalid type of property \"" + port.getName()
                     + "\" in Python outputs: numpy.ndarray expected, but actual Java type is \""
-                    + value.getClass().getCanonicalName() + "\".\n" +
-                    "Probably the reason is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+                    + value.getClass().getCanonicalName() + "\"");
+            // - this is possible not only as a result of the numpy+jep integration problem:
+            // the user just returned something wrong from Python code
         }
     }
 
