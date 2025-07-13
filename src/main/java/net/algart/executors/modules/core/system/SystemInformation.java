@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.system;
 
-import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
+import net.algart.jep.additions.GlobalPythonConfiguration;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;

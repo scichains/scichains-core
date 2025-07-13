@@ -27,12 +27,12 @@ package net.algart.bridges.jep.api;
 import jep.*;
 import jep.python.PyCallable;
 import jep.python.PyObject;
-import net.algart.bridges.jep.JepPerformer;
-import net.algart.bridges.jep.JepPerformerContainer;
-import net.algart.bridges.jep.additions.AtomicPyObject;
-import net.algart.bridges.jep.additions.JepExtendedConfiguration;
-import net.algart.bridges.jep.additions.GlobalPythonConfiguration;
-import net.algart.bridges.jep.additions.JepInterpreterKind;
+import net.algart.jep.JepPerformer;
+import net.algart.jep.JepPerformerContainer;
+import net.algart.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.JepExtendedConfiguration;
+import net.algart.jep.additions.GlobalPythonConfiguration;
+import net.algart.jep.additions.JepInterpreterKind;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
 
@@ -46,7 +46,7 @@ import java.util.function.Supplier;
 
 public class JepAPI {
     public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
-             "net.algart.bridges.jep.numpyIntegrationRequired", true);
+             "net.algart.jep.numpyIntegrationRequired", true);
 
     private static final AtomicBoolean NUMPY_INTEGRATION_PROBLEM_LOGGED = new AtomicBoolean(false);
 

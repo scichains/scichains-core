@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.scripting.python;
 
-import net.algart.bridges.jep.JepPerformer;
+import net.algart.jep.JepPerformer;
 
 public final class CallPythonLibrary extends AbstractCallPython {
     private String moduleName = "python_lib_demo_simple.SimpleDemo";

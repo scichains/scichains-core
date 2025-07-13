@@ -24,10 +24,10 @@
 
 package net.algart.executors.api.python;
 
-import net.algart.bridges.jep.JepPerformer;
-import net.algart.bridges.jep.JepPerformerContainer;
-import net.algart.bridges.jep.additions.AtomicPyCallable;
-import net.algart.bridges.jep.additions.AtomicPyObject;
+import net.algart.jep.JepPerformer;
+import net.algart.jep.JepPerformerContainer;
+import net.algart.jep.additions.AtomicPyCallable;
+import net.algart.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;

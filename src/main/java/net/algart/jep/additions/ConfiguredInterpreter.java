@@ -22,42 +22,28 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.additions;
+package net.algart.jep.additions;
 
+import jep.Interpreter;
 import jep.JepConfig;
 
-public enum JepInterpreterKind {
-    LOCAL("local") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSubInterpreter(configuration), configuration);
-        }
-    },
-    SHARED("shared") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSharedInterpreter(configuration), configuration);
-        }
-    };
+import java.util.Objects;
 
-    private final String kindName;
-
-    JepInterpreterKind(String kindName) {
-        this.kindName = kindName;
+public record ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) implements AutoCloseable {
+    public ConfiguredInterpreter(Interpreter interpreter, JepConfig configuration) {
+        this.interpreter = Objects.requireNonNull(interpreter, "Null interpreter");
+        this.configuration = configuration;
     }
 
-    public String kindName() {
-        return kindName;
+    public void close() {
+        interpreter.close();
     }
 
-    public ConfiguredInterpreter newInterpreter() {
-        return newInterpreter(null);
+    @Override
+    public String toString() {
+        return "ConfiguredInterpreter[" +
+                "interpreter=" + interpreter + ", " +
+                "configuration=" + configuration + ']';
     }
-
-    public ConfiguredInterpreter newInterpreter(JepConfig configuration) {
-        return doNewInterpreter(configuration == null ? new JepExtendedConfiguration() : configuration);
-    }
-
-    abstract ConfiguredInterpreter doNewInterpreter(JepConfig configuration);
 
 }

@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.python;
 
-import net.algart.bridges.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;

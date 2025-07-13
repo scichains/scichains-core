@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.scripting.python;
 
-import net.algart.bridges.jep.JepPerformer;
-import net.algart.bridges.jep.JepPerformerContainer;
-import net.algart.bridges.jep.additions.AtomicPyObject;
-import net.algart.bridges.jep.additions.JepInterpreterKind;
+import net.algart.jep.JepPerformer;
+import net.algart.jep.JepPerformerContainer;
+import net.algart.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.JepInterpreterKind;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;

@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep;
+package net.algart.jep;
 
 import jep.Interpreter;
 import jep.JepConfig;
-import net.algart.bridges.jep.additions.ConfiguredInterpreter;
-import net.algart.bridges.jep.additions.JepInterpreterKind;
-import net.algart.bridges.jep.additions.JepSingleThreadInterpreter;
+import net.algart.jep.additions.ConfiguredInterpreter;
+import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepSingleThreadInterpreter;
 
 import java.util.Objects;
 import java.util.function.Supplier;

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.additions;
+package net.algart.jep.additions;
 
 import jep.JepException;
 import jep.python.PyCallable;

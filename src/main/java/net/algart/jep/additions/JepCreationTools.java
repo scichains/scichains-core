@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.additions;
+package net.algart.jep.additions;
 
 import jep.*;
 
@@ -104,8 +104,11 @@ class JepCreationTools {
                         throw e;
                     }
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
-                            "\"; probably necessary Python package" + importedPackage(codeSnippet) +
-                            " is not installed (Python message: " + e.getMessage() + ")", e);
+                            "\".\nThe necessary Python package" + importedPackage(codeSnippet) +
+                            " was probably not installed correctly in Python\n" +
+                            "(Python error message: " + e.getMessage() +
+                            ").\n" +
+                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS, e);
                 }
             }
             if (extendedConfiguration.hasVerifier()) {
