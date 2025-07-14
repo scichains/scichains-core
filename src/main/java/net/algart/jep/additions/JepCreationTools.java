@@ -58,9 +58,10 @@ class JepCreationTools {
         try {
             return constructor.get();
         } catch (UnsatisfiedLinkError | JepException e) {
-            throw new JepException("Cannot load \"jep\" (Java Embedded Python) due to " +
+            throw new JepException("Cannot find Python: \"jep\" module (Java Embedded Python) " +
+                    "is not properly loaded (" +
                     e.getClass().getSimpleName() +
-                    "; probably " + unsatisfiedLinkDiagnostics(), e);
+                    ").\nProbably " + unsatisfiedLinkDiagnostics(), e);
         }
     }
 
@@ -71,7 +72,9 @@ class JepCreationTools {
             return homeInformation.systemEnvironmentDisabled() ?
                     "usage of PYTHONHOME environment variable is disabled, " +
                             "and Python home directory is not set properly" :
-                    "Python is not installed or PYTHONHOME environment variable is not set to Python home directory";
+                    "Python is not installed, or the path to your Python installation " +
+                            "is not specified properly\n" +
+                            "(for example via the PYTHONHOME system environment variable)";
         }
         final String messageHome = "\"" + homeInformation.pythonHome() + "\" " +
                 (homeInformation.systemEnvironmentUsed() ?
