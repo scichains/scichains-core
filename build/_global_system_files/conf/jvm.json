@@ -1,6 +1,6 @@
 {
   "jvm": {
-    "home": "$(running.home.directory)/jre",
+    "home": "$(running.home.directory)/jdk",
     "_comment": "Note: variable in round brackets $(running.home.directory) should be replaced at the running stage by the external program that calls JVM"
   },
   "classPath": [

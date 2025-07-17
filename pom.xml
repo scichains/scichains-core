@@ -6,7 +6,7 @@
 
     <groupId>net.algart.executors</groupId>
     <artifactId>scichains-core</artifactId>
-    <version>4.4.17</version>
+    <version>4.5.0</version>
 
     <name>SciChains base core</name>
     <description>Open-source libraries, providing the base core functionality for SciChains product.</description>
@@ -36,8 +36,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
 
         <!-- SciChains extension folder name -->
