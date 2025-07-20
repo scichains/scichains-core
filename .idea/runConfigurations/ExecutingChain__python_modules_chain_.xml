@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ExecutingChain (python_modules.chain)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.tests.ExecutingChain" />
+    <module name="scichains-core" />
+    <option name="PROGRAM_PARAMETERS" value="-all /SciChains/demo/chains/languages/python/python_modules.chain /SciChains/demo/images/lenna.png /tmp/result/" />
+    <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.pathReplacementAllowed=true -Dnet.algart.executors.root=${home}\ext\ -Dpython.home=/SciChains/python -Djava.util.logging.config.file=${home}\conf\logging.properties" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
