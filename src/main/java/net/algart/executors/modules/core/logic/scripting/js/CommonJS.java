@@ -667,8 +667,8 @@ public final class CommonJS extends Executor {
         synchronized (lock) {
             if (performerContainer == null) {
                 this.performerContainer = GraalAPI.getJSContainer(shareNamespace, safety);
-                // - we should re-create container here, because different shareNamespace values
-                // corresponds to different subclasses of GraalPerformerContainer
+                // - we should re-create the container here, because different shareNamespace
+                // values correspond to different subclasses of GraalPerformerContainer
             }
             return performerContainer;
         }

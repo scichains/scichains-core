@@ -53,7 +53,7 @@ public class GraalPerformerContainerTest {
 
     private void test(String id, boolean doClose) {
         System.out.println("Using " + performerContainer);
-        final String script = !performerContainer.getCustomizer().isSupportedJavaAccess() ?
+        final String script = !performerContainer.getCustomizer().isJavaAccessSupported() ?
                 "const a = 5; let b = 5; a+b" :
                 "var a = 5; var b = 5; var StringClass = Java.type('java.lang.String');\n"
                         + "var s = new StringClass(\"asd\");\n"

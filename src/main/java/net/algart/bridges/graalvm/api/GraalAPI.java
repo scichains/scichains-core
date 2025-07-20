@@ -413,7 +413,7 @@ public class GraalAPI {
 
     public static GraalPerformerContainer initializeJS(GraalPerformerContainer performerContainer) {
         Objects.requireNonNull(performerContainer, "Null performerContainer");
-        final boolean addStandardClasses = performerContainer.getCustomizer().isSupportedJavaAccess();
+        final boolean addStandardClasses = performerContainer.getCustomizer().isJavaAccessSupported();
         performerContainer.setConfigurator(performer -> standardConfigureJS(performer, addStandardClasses));
         return performerContainer;
     }

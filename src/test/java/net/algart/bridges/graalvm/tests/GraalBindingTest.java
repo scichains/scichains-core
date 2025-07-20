@@ -24,6 +24,7 @@
 
 package net.algart.bridges.graalvm.tests;
 
+import net.algart.arrays.Matrix;
 import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.executors.api.data.SMat;
 import org.graalvm.polyglot.Context;
@@ -31,12 +32,16 @@ import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 import javax.script.ScriptException;
+import java.nio.file.Path;
 
 public class GraalBindingTest {
 
     Context safe = GraalSafety.SAFE.newBuilder()
+            .currentWorkingDirectory(Path.of("/tmp").toAbsolutePath())
             .build();
     Context pure = GraalSafety.PURE.newBuilder()
+//            .currentWorkingDirectory(Path.of("/tmp").toAbsolutePath())
+            // - will not work from GraalVM 24.2 (but works in GraalVM 24.0)
 //             .allowHostAccess(org.graalvm.polyglot.HostAccess.newBuilder().allowArrayAccess(true).build())
             // - without this, we have no even access to Java arrays
             .build();
@@ -68,7 +73,7 @@ public class GraalBindingTest {
         Value obj = creator.execute();
         obj.putMember("a", new double[]{1.2, 10.0});
         obj.putMember("b", 100.0);
-        obj.putMember("c1", new SMat());
+        obj.putMember("c1", new SMat().setToInterleavedBGR(Matrix.newMatrix(byte.class, 1, 10, 10)));
         obj.putMember("c2", "JavaString");
         Value result = result = func.execute(obj);
         System.out.printf("Found %s = %s%n",

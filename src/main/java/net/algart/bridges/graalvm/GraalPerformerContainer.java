@@ -142,7 +142,7 @@ public abstract class GraalPerformerContainer {
     }
 
     /**
-     * Sets language for bindings. Should be set, if you want to use some predefined bindings.
+     * Sets language for bindings. Should be set if you want to use some predefined bindings.
      *
      * @param autoBindingLanguage new current language; <code>null</code> by default.
      * @return reference to this object.

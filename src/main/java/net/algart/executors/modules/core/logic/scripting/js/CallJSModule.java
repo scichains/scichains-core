@@ -334,7 +334,13 @@ public final class CallJSModule extends Executor {
         }
         long t2 = debugTime();
         performerContainer.setCustomizer(safety);
-        performerContainer.setWorkingDirectory(translateWorkingDirectory());
+        performerContainer.setWorkingDirectory(
+                safety.isWorkingDirectorySupported() ?
+                        translateWorkingDirectory() :
+                        null);
+        // - in PURE mode we cannot set the working directory in Context.Builder;
+        // note: we must explicitly set it to null if !isWorkingDirectorySupported -
+        // maybe the user changed the safety parameter!
         GraalAPI.initializeJS(performerContainer);
         final GraalPerformer performer = performerContainer.performer();
         long t3 = debugTime();

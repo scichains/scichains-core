@@ -123,8 +123,12 @@ public enum GraalSafety implements GraalContextCustomizer {
     }
 
     @Override
-    public boolean isSupportedJavaAccess() {
+    public boolean isJavaAccessSupported() {
         return supportedJavaAccess;
+    }
+
+    public boolean isWorkingDirectorySupported() {
+        return this != PURE;
     }
 
     @Override

@@ -834,7 +834,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Sets unique ID of the context, in which this executor works.
+     * Sets unique ID of the context in which this executor works.
      * It defines the scope of variables and other objects that should be shared between
      * several executors. For example, if it is an element of some chain, it can be a unique ID
      * of this chain in the memory.

@@ -52,7 +52,7 @@ public interface GraalContextCustomizer {
 
     void customize(Context.Builder builder);
 
-    default boolean isSupportedJavaAccess() {
+    default boolean isJavaAccessSupported() {
         return false;
     }
 

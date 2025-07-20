@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class GraalVMImportTest {
+    private static final boolean USE_EXPORTS = false;
 
     public static void main(String[] args) throws ScriptException {
 //        final String moduleFile = "./src/test/java/net/algart/bridges/graalvm/tests/js/sometest.mjs";
@@ -56,11 +57,10 @@ public class GraalVMImportTest {
         System.out.printf("Evaluating:%n*****%n%s%n*****%n", src);
 
 
-        boolean useExports = false;
         final Context.Builder builder = Context.newBuilder("js")
                 .allowAllAccess(true)
                 .currentWorkingDirectory(currentDirectory.toAbsolutePath());
-        if (useExports) {
+        if (USE_EXPORTS) {
             builder.allowExperimentalOptions(true).option("js.esm-eval-returns-exports", "true");
 
         }
@@ -69,7 +69,7 @@ public class GraalVMImportTest {
         Source source = Source.newBuilder("js", src, "test.mjs").buildLiteral();
         Value result = context.eval(source);
         System.out.println("eval result: " + result);
-        Value func = useExports ?
+        Value func = USE_EXPORTS ?
                 result.getMember("myFunc2") :
                 context.eval(source).getArrayElement(1);
         System.out.println("Function: " + func);
