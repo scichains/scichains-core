@@ -129,7 +129,7 @@ public final class SMat extends Data {
 //                System.out.println("!!! use cached " + cachedMultiMatrix);
                 return result;
             }
-            final Matrix<? extends PArray> m = thisMat.toInterleavedBGRMatrix(autoConvertUnsupportedDepth);
+            final Matrix<? extends PArray> m = thisMat.toInterleavedBGR(autoConvertUnsupportedDepth);
             assert m != null : "toInterleavedMatrix cannot be null for initialized SMat";
             if (m.dim(0) == 1) {
                 Matrix<? extends PArray> matrix = m.array().matrix(removeFirstElement(m.dimensions()));
@@ -440,7 +440,7 @@ public final class SMat extends Data {
 
     public SMat setTo(BufferedImage bufferedImage) {
         final Matrix<? extends PArray> interleaved = new ImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
-        return setToInterleavedMatrix(interleaved);
+        return setToInterleavedBGR(interleaved);
     }
 
     public SMat setTo(MultiMatrix multiMatrix) {
@@ -464,42 +464,43 @@ public final class SMat extends Data {
                 channelOrder == ChannelOrder.ORDER_IN_PACKED_BYTE_BUFFER ?
                         multiMatrix.allChannels() :
                         multiMatrix.allChannelsInBGRAOrder());
-        return setToInterleavedMatrix(interleave);
+        return setToInterleavedBGR(interleave);
     }
 
     /**
      * Loads data from AlgART matrix in the same elements order. The first dimension <code>dim(0)</code>
      * is the number of channels.
      *
-     * @param interleavedChannels interleaved matrix; for color matrices, the order must be the same
-     *                            as in {@link #getByteBuffer()} (BGR/BGRA for this class).
-     * @return the reference to this objects.
+     * @param interleavedBGRMatrix interleaved matrix; for color matrices, the order must be the same
+     *                             as in {@link #getByteBuffer()} (BGR/BGRA for this class).
+     * @return a reference to this object.
      */
-    private SMat setToInterleavedMatrix(Matrix<? extends PArray> interleavedChannels) {
-        Objects.requireNonNull(interleavedChannels, "Null BGR[A] matrix");
-        final int dimCount = interleavedChannels.dimCount();
+    public SMat setToInterleavedBGR(Matrix<? extends PArray> interleavedBGRMatrix) {
+        Objects.requireNonNull(interleavedBGRMatrix, "Null BGR[A] matrix");
+        final int dimCount = interleavedBGRMatrix.dimCount();
         if (dimCount < 2) {
-            throw new IllegalArgumentException("Interleaved BGR[A] matrix cannot be 1-dimensional: " + interleavedChannels
+            throw new IllegalArgumentException("Interleaved BGR[A] matrix cannot be 1-dimensional: " +
+                    interleavedBGRMatrix
                     + " (the 1st dimension is used to store channels)");
         }
-        final long numberOfChannels = interleavedChannels.dim(0);
+        final long numberOfChannels = interleavedBGRMatrix.dim(0);
         if (numberOfChannels > MAX_NUMBER_OF_CHANNELS) {
             throw new IllegalArgumentException("Number of channels cannot be >"
-                    + MAX_NUMBER_OF_CHANNELS + ": " + interleavedChannels);
+                    + MAX_NUMBER_OF_CHANNELS + ": " + interleavedBGRMatrix);
         }
-        Array array = interleavedChannels.array();
+        Array array = interleavedBGRMatrix.array();
         if (!(BufferMemoryModel.isBufferArray(array) && BufferMemoryModel.getBufferOffset(array) == 0)) {
             // Important: if offset != 0, it is a subarray, and we must create its copy before storing in SMat!
             array = array.updatableClone(BufferMemoryModel.getInstance());
         }
         assert BufferMemoryModel.isBufferArray(array);
         setNumberOfChannels((int) numberOfChannels);
-        setDimensions(removeFirstElement(interleavedChannels.dimensions()));
-        setDepth(SMat.Depth.of(interleavedChannels.elementType()));
+        setDimensions(removeFirstElement(interleavedBGRMatrix.dimensions()));
+        setDepth(SMat.Depth.of(interleavedBGRMatrix.elementType()));
         setByteBuffer(BufferMemoryModel.getByteBuffer(array));
         setInitializedAndResetFlags(true);
-//        System.out.println("Returning data: " + interleavedChannels.array() + ": "
-//            + Arrays.toString(interleavedChannels.array(),",",1000));
+//        System.out.println("Returning data: " + interleavedBGRMatrix.array() + ": "
+//            + Arrays.toString(interleavedBGRMatrix.array(),",",1000));
 //        System.out.println("Returning bytes: " + byteBuffer.order() + ": " + Arrays.toHexString(
 //            BufferMemoryModel.asUpdatableByteArray(byteBuffer), ",", 1000));
         return this;
@@ -552,7 +553,7 @@ public final class SMat extends Data {
         if (!isInitialized()) {
             return null;
         }
-        final Matrix<? extends PArray> interleaved = toInterleavedBGRMatrix2D(false);
+        final Matrix<? extends PArray> interleaved = toInterleavedBGR2D(false);
         if (interleaved == null) {
             // - already checked by isInitialized(): modification from a parallel thread?
             return null;
@@ -606,12 +607,12 @@ public final class SMat extends Data {
      * @return interleaved (n+1)-dimensional AlgART matrix; for color matrices, the order will be the same
      * as in {@link #getByteBuffer()} (BGR/BGRA for this class).
      */
-    public Matrix<? extends PArray> toInterleavedBGRMatrix(boolean autoConvertUnsupportedDepth) {
-        return toInterleavedBGRMatrix(autoConvertUnsupportedDepth, false);
+    public Matrix<? extends PArray> toInterleavedBGR(boolean autoConvertUnsupportedDepth) {
+        return toInterleavedBGR(autoConvertUnsupportedDepth, false);
     }
 
-    public Matrix<? extends PArray> toInterleavedBGRMatrix2D(boolean autoConvertUnsupportedDepth) {
-        return toInterleavedBGRMatrix(autoConvertUnsupportedDepth, true);
+    public Matrix<? extends PArray> toInterleavedBGR2D(boolean autoConvertUnsupportedDepth) {
+        return toInterleavedBGR(autoConvertUnsupportedDepth, true);
     }
 
     public SMat autoContrast() {
@@ -676,8 +677,8 @@ public final class SMat extends Data {
         return new SMat().setTo(multiMatrix, channelOrder);
     }
 
-    public static SMat ofInterleaved(Matrix<? extends PArray> interleavedChannels) {
-        return new SMat().setToInterleavedMatrix(interleavedChannels);
+    public static SMat ofInterleavedBGR(Matrix<? extends PArray> interleavedChannels) {
+        return new SMat().setToInterleavedBGR(interleavedChannels);
     }
 
     public static ByteBuffer cloneByteBuffer(ByteBuffer byteBuffer) {
@@ -815,7 +816,7 @@ public final class SMat extends Data {
         return numberOfChannels;
     }
 
-    private Matrix<? extends PArray> toInterleavedBGRMatrix(boolean autoConvertUnsupportedDepth, boolean require2D) {
+    private Matrix<? extends PArray> toInterleavedBGR(boolean autoConvertUnsupportedDepth, boolean require2D) {
         if (!isInitialized()) {
             return null;
         }

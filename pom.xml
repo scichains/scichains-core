@@ -36,7 +36,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <!-- SciChains extension folder name -->
         <extension.name>base-core</extension.name>
@@ -49,8 +49,8 @@
 
         <build.directory>${project.build.directory}/build</build.directory>
 
-        <algart.version>1.4.25</algart.version>
-        <graalvm.version>24.0.2</graalvm.version>
+        <algart.version>1.5.0</algart.version>
+        <graalvm.version>24.2.2</graalvm.version>
         <jep.version>4.2.2</jep.version>
     </properties>
 
@@ -91,6 +91,12 @@
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm.version}</version>
         </dependency>
+<!--        Probably for future versions (instead of JEP)-->
+<!--        <dependency>-->
+<!--            <groupId>org.graalvm.python</groupId>-->
+<!--            <artifactId>python-language</artifactId>-->
+<!--            <version>${graalvm.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -118,7 +124,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
                         <compress>false</compress>
@@ -141,7 +147,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -155,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>3.7.1</version>
                 <configuration>
                     <finalName>build</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
@@ -185,7 +191,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.11.2</version>
                         <configuration>
                             <encoding>UTF-8</encoding>
                             <doclint>none</doclint>

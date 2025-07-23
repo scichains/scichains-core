@@ -123,20 +123,19 @@ public final class DrawImage extends Executor {
             input = AWTFilter.convertMonoToColor(input);
         }
         final Matrix<? extends PArray> m = getInputMat(INPUT_IMAGE, !requireImage)
-                .toInterleavedBGRMatrix2D(false);
+                .toInterleavedBGR2D(false);
         if (m == null) {
             getMat().exchange(input);
             // Note: using "exchange" means that we must not implement ReadOnlyExecutionInput
             return;
         }
-        Matrix<? extends PArray> source = input.toInterleavedBGRMatrix2D(false);
+        Matrix<? extends PArray> source = input.toInterleavedBGR2D(false);
         assert source != null : "getInputMat() should not return non-initialized result";
         final int x = Arrays.round32(percents ? this.x / 100.0 * (input.getDimX() - 1) : this.x);
         final int y = Arrays.round32(percents ? this.y / 100.0 * (input.getDimY() - 1) : this.y);
         source = expandToFit(source,0, x + m.dim(1), y + m.dim(2));
-        final MatrixToImage converter = new MatrixToImage.InterleavedBGRToInterleaved().setBytesRequired(true);
-        final BufferedImage baseImage = converter.toBufferedImage(source);
-        final BufferedImage overlayImage = converter.toBufferedImage(m);
+        final BufferedImage baseImage = MatrixToImage.ofInterleavedBGR(source);
+        final BufferedImage overlayImage = MatrixToImage.ofInterleavedBGR(m);
         final Graphics2D g = baseImage.createGraphics();
             try {
                 if (opacity != 1.0) {

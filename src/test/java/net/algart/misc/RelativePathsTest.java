@@ -24,16 +24,24 @@
 
 package net.algart.misc;
 
-import net.algart.executors.api.Executor;
+import java.nio.file.Path;
 
-public class LoggingTest {
+public class RelativePathsTest {
+    private static Path resolve(Path parent, String child) {
+        final Path childPath = Path.of(child);
+        if (childPath.isAbsolute()) {
+            System.out.printf("  \"%s\" is absolute, so it will be returned as is%n", childPath);
+            return childPath;
+        } else {
+            System.out.printf("  \"%s\" is relative%n", childPath);
+            return parent.resolve(childPath);
+            // - works normally even with absolute paths!
+        }
+    }
     public static void main(String[] args) {
-        // Please try to configure "logging.properties" file
-        Executor.LOG.log(System.Logger.Level.ERROR, "Error logging");
-        Executor.LOG.log(System.Logger.Level.WARNING, "Warning logging");
-        Executor.LOG.log(System.Logger.Level.INFO, "Info logging");
-        Executor.LOG.log(System.Logger.Level.DEBUG, "Debug logging");
-        Executor.LOG.log(System.Logger.Level.TRACE, "Trace logging");
-        Executor.LOG.log(System.Logger.Level.ALL, "All logging");
+        Path base = Path.of("c:/tmp/");
+        System.out.println(resolve(base, "my_file"));
+        System.out.println(resolve(base, "d:my_file"));
+        System.out.println(resolve(base, "d:\\my_file"));
     }
 }
