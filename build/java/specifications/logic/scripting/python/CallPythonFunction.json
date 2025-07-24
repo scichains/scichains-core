@@ -80,11 +80,13 @@
     },
     {
       "value_type": "scalar",
-      "name": "d"
+      "name": "d",
+      "advanced": true
     },
     {
       "value_type": "scalar",
-      "name": "e"
+      "name": "e",
+      "advanced": true
     },
     {
       "value_type": "scalar",
@@ -152,7 +154,7 @@
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
-      "default": "from java.lang import System \n# - this Python implementation allows to use Java classes\n\ndef execute(params, inputs, outputs):\n    result = \"Hello from Python function!\"\n    print(result)\n    return result\n"
+      "default": "# from java.lang import System # - you may import Java classes\n\ndef execute(params, inputs, outputs):\n    # m = params._sys.local_import(\"my_module.py\")\n    # - Uncomment the previous line to import \"my_module.py\" from the current chain directory\n\n    # outputs.x1 = inputs.x1 # - you can access inputs and outputs\n    return \"Hello from Python function!\"\n"
     },
     {
       "name": "mainFunctionName",

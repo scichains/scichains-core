@@ -20,11 +20,45 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
+import os
+import hashlib
+import importlib.util
+
+
 class SSysParameters:
     def __init__(self):
         self.executor = None
         self.platform = None
         self.working_dir = None
+
+    def local_import(self, file_name, module_name=None):
+        """
+        Dynamically imports a module with the given name from a local file.
+        The file path is relative to `working_dir`
+
+        :param file_name: File path, relative to working_dir.
+        :param module_name: Module name to assign (can be arbitrary).
+        :return: Imported module object.
+        """
+        if not self.working_dir:
+            raise ValueError("working_dir is not set")
+            # should not occur while calling from SciChains
+
+        path = os.path.join(self.working_dir, file_name)
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"Local module file not found: '{path}'")
+
+        if module_name is None:
+            module_name = os.path.splitext(os.path.basename(file_name))[0]
+            # print(f"Module name not specified, using '{module_name}'")
+
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Cannot locally import module '{module_name}' from '{path}'")
+
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
 
 class SParameters:
     def __init__(self):

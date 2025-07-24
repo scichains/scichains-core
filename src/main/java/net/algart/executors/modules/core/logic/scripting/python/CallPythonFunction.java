@@ -25,7 +25,14 @@
 package net.algart.executors.modules.core.logic.scripting.python;
 
 public final class CallPythonFunction extends AbstractCallPython {
-    private String code = "def execute(params, inputs, outputs):\n" +
+    private String code =
+            "# from java.lang import System # - you may import Java classes\n" +
+            "\n" +
+            "def execute(params, inputs, outputs):\n" +
+            "    # m = params._sys.local_import(\"my_module.py\")\n" +
+            "    # - Uncomment the previous line to import \"my_module.py\" from the current chain directory\n" +
+            "\n" +
+            "    # outputs.x1 = inputs.x1 # - you can access inputs and outputs\n" +
             "    return \"Hello from Python function!\"\n";
 
     public CallPythonFunction() {
