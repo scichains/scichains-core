@@ -63,7 +63,6 @@ public class MemoryUsageTest {
 
     private static void showMemory(String message) {
         System.gc();
-        System.runFinalization();
         final Runtime rt = Runtime.getRuntime();
         for (int k = 0; k < 10; k++) {
             System.gc();

@@ -46,17 +46,17 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private final ExpensiveCleanableState state;
     private final Cleaner.Cleanable cleanable;
 
-    private JepSingleThreadInterpreter(Supplier<ConfiguredInterpreter> interpreterSupplier, String name) {
-        Objects.requireNonNull(interpreterSupplier, "Null interpreterSupplier");
-        this.state = new ExpensiveCleanableState(interpreterSupplier, name);
+    private JepSingleThreadInterpreter(Supplier<ConfiguredInterpreter> configuredInterpreterSupplier, String name) {
+        Objects.requireNonNull(configuredInterpreterSupplier, "Null configuredInterpreterSupplier");
+        this.state = new ExpensiveCleanableState(configuredInterpreterSupplier, name);
         checkStateAlive();
         this.cleanable = CLEANER.register(this, state);
     }
 
     public static JepSingleThreadInterpreter newInstance(
-            Supplier<ConfiguredInterpreter> interpreterSupplier,
+            Supplier<ConfiguredInterpreter> configuredInterpreterSupplier,
             String name) {
-        return new JepSingleThreadInterpreter(interpreterSupplier, name);
+        return new JepSingleThreadInterpreter(configuredInterpreterSupplier, name);
     }
 
     public static JepSingleThreadInterpreter newInstance(JepInterpreterKind jepInterpreterKind) {
@@ -237,7 +237,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
-        public ExpensiveCleanableState(Supplier<ConfiguredInterpreter> interpreterSupplier, String name) {
+        public ExpensiveCleanableState(Supplier<ConfiguredInterpreter> configuredInterpreterSupplier, String name) {
             if (name == null) {
                 name = "unknown";
             }
@@ -254,9 +254,9 @@ public class JepSingleThreadInterpreter implements Interpreter {
                         return t;
                     });
             try {
-                this.configuredInterpreter = this.singleThreadPool.submit(interpreterSupplier::get).get();
+                this.configuredInterpreter = this.singleThreadPool.submit(configuredInterpreterSupplier::get).get();
                 if (configuredInterpreter == null) {
-                    throw new IllegalArgumentException("Illegal interpreterSupplier: created null interpreter");
+                    throw new IllegalArgumentException("Illegal configuredInterpreterSupplier: created null result");
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

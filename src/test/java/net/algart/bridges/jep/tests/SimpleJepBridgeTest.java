@@ -31,7 +31,6 @@ import net.algart.jep.additions.GlobalPythonConfiguration;
 
 // Note: this test does not use JepAPI and does not automatically verify integration with numpy
 public class SimpleJepBridgeTest {
-    static final JepPerformerContainer CONTAINER = JepPerformerContainer.getContainer();
 
     public static void main(String[] args) {
         System.out.printf("Python information before initialization: %s%n",
@@ -43,12 +42,17 @@ public class SimpleJepBridgeTest {
 //                .setPythonHome("\\tmp")
                 .useForJep();
 
+        // - THE PREVIOUS CALL IS IMPORTANT: useForJep() calls the global static method
+        // MainInterpreter.setInitParams(PyConfig config)
+        // for GlobalPythonConfiguration.INSTANCE
+
+        final JepPerformerContainer container = JepPerformerContainer.getContainer();
         System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
-        final JepPerformer performer = CONTAINER.performer();
+        final JepPerformer performer = container.performer();
         final Interpreter context = performer.context();
         context.exec("def test():\n    return 'Hello from JEP'\n");
         Object result = context.invoke("test");
         System.out.printf("From Python function: %s%n", result);
-        CONTAINER.close();
+        container.close();
     }
 }

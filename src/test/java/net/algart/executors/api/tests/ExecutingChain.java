@@ -277,7 +277,6 @@ public class ExecutingChain {
         if (gc) {
             for (int k = 0; k < 10; k++) {
                 System.gc();
-                System.runFinalization();
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ignored) {

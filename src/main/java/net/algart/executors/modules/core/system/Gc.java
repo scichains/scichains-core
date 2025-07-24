@@ -50,7 +50,6 @@ public final class Gc extends Executor {
         }
         for (int k = 0; k < 3; k++) {
             System.gc();
-            System.runFinalization();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

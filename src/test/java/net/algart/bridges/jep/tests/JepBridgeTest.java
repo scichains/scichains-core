@@ -54,6 +54,9 @@ public class JepBridgeTest {
                     """;
     private static final String LOCAL_SCRIPT =
             """
+                    import numpy as np 
+
+                    constArray = np.array([2, 3, 4])
                     import time;
                     class TestClass:
                         def __init__(self):
@@ -63,6 +66,8 @@ public class JepBridgeTest {
                             # time.sleep(0.5)
                             return 'Hello from JEP';
                     """;
+    // - Note: numpy did not work in old versions of JEP: https://github.com/ninia/jep/issues/418
+
     final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
     final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.LOCAL);
 
@@ -76,7 +81,6 @@ public class JepBridgeTest {
 
     private static void gc() {
         System.gc();
-        System.runFinalization();
         for (int k = 0; k < 2; k++) {
             System.gc();
             try {
