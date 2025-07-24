@@ -265,6 +265,7 @@
     },
     {
       "name": "compilerKind",
+      "caption": "Python compiler kind",
       "value_type": "String",
       "edition_type": "enum",
       "items": [
@@ -277,7 +278,7 @@
           "caption": "Standard (JEP SharedInterpreter)"
         }
       ],
-      "description": "Strictly isolated mode tries to guarantee that any corrections in Python global structures like sys.path etc. will not affect to other Python executors. In this mode you may ignore the warning about global variables for \"Main Python code\".\n\nWARNING: this mode is incompatible with many native libraries like \"numpy\" and may lead to system crash if you will import them. Moreover, it can lead to impossibility to execute any other Python scripts in all the system, until full reloading of the application/server! We strictly recommend to avoid this mode, besides very simple examples written in pure Python, when you fully control the application (single user, single chain).",
+      "description": "\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors. In this mode, you may ignore the warning above about global variables for \"Main Python code\".\n\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries such as \"numpy\" and may cause the system to crash when importing them. Moreover, it may lead to inability to execute any other Python scripts on the entire system until full reloading the application/server! We strongly recommend to avoid this mode except for very simple examples written in pure Python, when you full control over the application (a single user, a single chain).",
       "default": "JEP_SHARED",
       "advanced": true
     },
