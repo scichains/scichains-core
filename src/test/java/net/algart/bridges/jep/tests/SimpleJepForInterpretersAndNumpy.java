@@ -1,17 +1,22 @@
 package net.algart.bridges.jep.tests;
 
 import jep.Interpreter;
+import jep.JepConfig;
 import jep.SharedInterpreter;
-import jep.SubInterpreter;
+import jep.python.PyCallable;
+import jep.python.PyObject;
 
-public class SimpleJepForSubInterpreterAndNumpy {
+public class SimpleJepForInterpretersAndNumpy {
     public static void main(String[] args) throws InterruptedException {
+        SharedInterpreter.setConfig(new JepConfig().redirectStdout(System.out));
+
         Thread t = new Thread(() -> {
-            try (Interpreter interp = new SubInterpreter()) {
+            try (Interpreter interp = new SharedInterpreter()) {
+                // SubInterpreter will not work properly with numpy!
                 Object result = null;
                 System.out.printf("%nInterpreter: %s%n", interp);
 // Numpy 1
-//                interp.exec("import numpy\n");
+                interp.exec("import numpy\n");
                 interp.exec("class myClass():\n    pass\n");
                 interp.exec("def createMyClass():\n    return myClass()\n");
                 interp.exec("def myTestString():\n    return '123'\n");
@@ -20,21 +25,21 @@ public class SimpleJepForSubInterpreterAndNumpy {
                 interp.exec("print(myTestNumber())");
 
 // Numpy 2
-//                System.out.println("Getting PyCallable");
-//                final PyCallable callable = interp.getValue("myClass", PyCallable.class);
-//                System.out.println("Calling PyCallable");
-//                result = callable.call();
-//                System.out.printf("call result: %s%n", result);
+                System.out.println("Getting PyCallable");
+                final PyCallable callable = interp.getValue("myClass", PyCallable.class);
+                System.out.println("Calling PyCallable");
+                result = callable.call();
+                System.out.printf("call result: %s%n", result);
 
 // Numpy 3
-//                System.out.println("Calling constructor");
-//                final PyObject myClass = (PyObject) interp.invoke("myClass");
-//                System.out.printf("invoke result: %s%n", myClass);
+                System.out.println("Calling constructor");
+                final PyObject myClass = (PyObject) interp.invoke("myClass");
+                System.out.printf("invoke result: %s%n", myClass);
 
 // Numpy 4
-//                interp.exec("_myClass = myClass()");
-//                result = interp.getValue("_myClass");
-//                System.out.printf("getValue result: %s%n", result);
+                interp.exec("_myClass = myClass()");
+                result = interp.getValue("_myClass");
+                System.out.printf("getValue result: %s%n", result);
 
                 System.out.println("Calling function");
                 result = interp.invoke("myTestString");

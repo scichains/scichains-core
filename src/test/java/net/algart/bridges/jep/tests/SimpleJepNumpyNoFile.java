@@ -6,7 +6,7 @@ import jep.SubInterpreter;
 
 import java.util.function.Supplier;
 
-public class SimpleJepNoFileNumpy {
+public class SimpleJepNumpyNoFile {
     public static void main(String[] args) {
         testNumpy(SharedInterpreter::new);
         // - Correct usage!

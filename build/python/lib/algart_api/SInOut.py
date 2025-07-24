@@ -20,14 +20,15 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-class SSysParameter:
+class SSysParameters:
     def __init__(self):
         self.executor = None
         self.platform = None
+        self.working_dir = None
 
 class SParameters:
     def __init__(self):
-        self._sys = SSysParameter()
+        self._sys = SSysParameters()
 
 class SInputs:
     pass

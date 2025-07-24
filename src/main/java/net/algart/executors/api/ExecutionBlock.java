@@ -891,7 +891,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Sets the path to file or folder, where the context of this executor is stored.
+     * Sets the path to the file or folder, where the context of this executor is stored.
      * For example, if it is an element of some chain, it can be the path to the chain JSON file.
      *
      * <p>This method should be called after
@@ -899,7 +899,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * Note that most executors do not use this ability, and you can stay undefined (<code>null</code>)
      * context path for them.
      *
-     * @param contextPath the path fo file/folder, storing the context; may be <code>null</code>.
+     * @param contextPath the path to the file/folder, storing the context; may be <code>null</code>.
      */
     @UsedForExternalCommunication
     public final void setContextPath(String contextPath) {

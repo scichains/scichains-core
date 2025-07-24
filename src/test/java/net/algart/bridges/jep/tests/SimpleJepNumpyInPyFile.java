@@ -5,7 +5,7 @@ import jep.SharedInterpreter;
 
 import java.io.FileNotFoundException;
 
-public class SimpleJepNumpy {
+public class SimpleJepNumpyInPyFile {
     public static void main(String[] args) throws FileNotFoundException {
         final String root = SimpleJepTest.pythonRoot();
         try (Interpreter interp = new SharedInterpreter()) {

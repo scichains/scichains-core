@@ -37,6 +37,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
 
 import java.nio.Buffer;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class JepAPI {
     public static final String STANDARD_API_PARAMETER = "_sys";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
+    public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "working_dir";
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".SJepVerifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
     public static final List<String> STANDARD_STARTUP = List.of(
@@ -96,6 +98,9 @@ public class JepAPI {
         try (AtomicPyObject parameter = parameters.getObject(STANDARD_API_PARAMETER)) {
             parameter.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
             parameter.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+            final Path currentDirectory = executor.getCurrentDirectory();
+            parameter.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
+                    currentDirectory == null ? null : currentDirectory.toString());
         }
     }
 
