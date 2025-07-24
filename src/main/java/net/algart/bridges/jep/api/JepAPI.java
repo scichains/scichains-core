@@ -259,6 +259,10 @@ public class JepAPI {
         JepExtendedConfiguration configuration = new JepExtendedConfiguration();
         JepInterpreterKind jepInterpreterKind = performerContainer.getKind();
         configuration.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
+        configuration.redirectStdout(System.out);
+        configuration.redirectStdErr(System.err);
+        // - this helps to correctly use "print" Python function:
+        // Python print will normally go to stdout, but some IDE redirect the java output elsewhere.
         configuration.setStartupCode(initializingJepStartupCode(jepInterpreterKind));
         configuration.setVerifier(standardJepVerifier(jepInterpreterKind));
         return configuration;
