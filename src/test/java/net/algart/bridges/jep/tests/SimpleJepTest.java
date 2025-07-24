@@ -21,7 +21,7 @@ public class SimpleJepTest {
 
     static void configurePython(String root) {
         JepConfig config = new JepConfig();
-        config.setIncludePath(root);
+        config.addIncludePaths(root);
         config.redirectStdout(System.out);
         config.redirectStdErr(System.err);
         // - necessary for correct working "print" method from IDE

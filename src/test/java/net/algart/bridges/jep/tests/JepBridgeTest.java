@@ -54,19 +54,15 @@ public class JepBridgeTest {
                     """;
     private static final String LOCAL_SCRIPT =
             """
-                    import numpy as np 
-
-                    constArray = np.array([2, 3, 4])
                     import time;
                     class TestClass:
                         def __init__(self):
                             pass
 
                         def test(self):
-                            # time.sleep(0.5)
                             return 'Hello from JEP';
                     """;
-    // - Note: numpy did not work in old versions of JEP: https://github.com/ninia/jep/issues/418
+    // - Note: numpy is INCOMPATIBLE with sub-interpreters (local script), see SimpleJepNoFileNumpy
 
     final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
     final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.LOCAL);
@@ -91,7 +87,7 @@ public class JepBridgeTest {
         }
     }
 
-    // Note: method should be called "test()" to avoid accidentally run it from maven
+    // Note: the method should be called "test()" to avoid accidentally running it from maven
     public void performTesting() throws InterruptedException {
         long t1, t2, t3, t4;
         showMemory("Starting memory");
@@ -155,6 +151,7 @@ public class JepBridgeTest {
 
     // This method calls JepAPI.initialize(): the executors system should be installed
     public static void configure(JepPerformerContainer performerContainer) {
+        // net.algart.bridges.jep.api.JepAPI.initialize(performerContainer);
         final String jepApiClassName = "net.algart.bridges.jep.api.JepAPI";
         // Use reflection to reduce dependence of other packages: may be useful while manually copying source code
         try {
@@ -189,6 +186,8 @@ public class JepBridgeTest {
         final int numberOfTests = Integer.parseInt(args[startArgIndex]);
 
         System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
+        GlobalPythonConfiguration.INSTANCE.useForJep();
+
         System.out.printf("Number of active threads at the beginning: %d%n", Thread.activeCount());
         for (int m = 1; m < numberOfTests; m++) {
             System.out.printf("%n--------%nTest block #%d; number of active threads: %d%n", m, Thread.activeCount());

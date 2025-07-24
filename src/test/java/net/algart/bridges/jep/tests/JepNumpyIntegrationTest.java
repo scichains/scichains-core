@@ -64,7 +64,7 @@ public class JepNumpyIntegrationTest {
                 System.out.printf("Numpy is normally installed: array = %s%n",
                         array.getClass().getSimpleName());
             } else {
-                System.out.printf("Numpy is not well-configured together with JEP: array = %s%n",
+                System.out.printf("Numpy IS NOT WELL-CONFIGURED TOGETHER with JEP: array = %s%n",
                         array == null ? null : array.getClass().getSimpleName());
             }
         }
