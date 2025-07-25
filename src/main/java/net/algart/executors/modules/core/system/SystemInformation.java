@@ -72,11 +72,12 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("Number of active threads: %d%n", Thread.activeCount()));
         sb.append(String.format("Number of CPU units: %d%n", Runtime.getRuntime().availableProcessors()));
         final Path currentRelativePath = Paths.get("").toAbsolutePath();
-        sb.append(String.format("Current OS directory: %s%n", currentRelativePath));
-        sb.append(String.format("Current directory: %s%n", getCurrentDirectory()));
-        sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
-        String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
+        sb.append(String.format("Java home: %s%n", System.getProperty("java.home")));
+        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
         sb.append(String.format("Python home: %s%n", pythonHome == null ? "n/a" : pythonHome));
+        sb.append(String.format("Current OS directory: %s%n", currentRelativePath));
+        sb.append(String.format("Current chain directory: %s%n", getCurrentDirectory()));
+        sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
 
         final ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
         final Set<String> allSessions = global.allSessionIds();

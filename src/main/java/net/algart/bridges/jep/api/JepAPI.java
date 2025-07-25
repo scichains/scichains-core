@@ -56,7 +56,7 @@ public class JepAPI {
     public static final String STANDARD_API_PARAMETERS_CLASS_NAME = STANDARD_API_IN_OUT + ".SParameters";
     public static final String STANDARD_API_INPUTS_CLASS_NAME = STANDARD_API_IN_OUT + ".SInputs";
     public static final String STANDARD_API_OUTPUTS_CLASS_NAME = STANDARD_API_IN_OUT + ".SOutputs";
-    public static final String STANDARD_API_PARAMETER = "_sys";
+    public static final String STANDARD_API_ENVIRONMENT = "_env";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
     public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "working_dir";
@@ -88,14 +88,18 @@ public class JepAPI {
     }
 
     public void loadParameters(Executor executor, AtomicPyObject parameters) {
-        loadSystemParameters(executor, parameters);
+        loadEnvironment(executor, parameters);
         loadParameters(executor.parameters(), parameters);
     }
 
-    public void loadSystemParameters(Executor executor, AtomicPyObject parameters) {
+    public static AtomicPyObject getEnvironment(AtomicPyObject parameters) {
+        return parameters.getObject(STANDARD_API_ENVIRONMENT);
+    }
+
+    public void loadEnvironment(Executor executor, AtomicPyObject parameters) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(parameters, "Null parameters");
-        try (AtomicPyObject parameter = parameters.getObject(STANDARD_API_PARAMETER)) {
+        try (AtomicPyObject parameter = getEnvironment(parameters)) {
             parameter.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
             parameter.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
             final Path currentDirectory = executor.getCurrentDirectory();

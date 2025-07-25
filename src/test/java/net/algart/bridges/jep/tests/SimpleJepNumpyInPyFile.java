@@ -18,7 +18,7 @@ public class SimpleJepNumpyInPyFile {
             interp.exec("from java.lang import System\n");
             interp.exec("s = 'Hello World'");
             interp.exec("print(s)"); // - will not work from IDE (see SimpleJepTest.configurePython)
-            interp.exec("System.out.println(\"(java:) \" + s)");
+            interp.exec("System.out.println(\"Hello from Java\")");
 
             interp.exec("result = demo()");
             interp.exec("print(result)");
