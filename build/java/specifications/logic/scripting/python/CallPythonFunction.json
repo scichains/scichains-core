@@ -272,15 +272,15 @@
       "edition_type": "enum",
       "items": [
         {
-          "value": "JEP_LOCAL",
-          "caption": "Strictly isolated (JEP SubInterpreter)"
-        },
-        {
           "value": "JEP_SHARED",
           "caption": "Standard (JEP SharedInterpreter)"
+        },
+        {
+          "value": "JEP_LOCAL",
+          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
-      "description": "\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors. In this mode, you may ignore the warning above about global variables for \"Main Python code\".\n\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries such as \"numpy\" and may cause the system to crash when importing them. Moreover, it may lead to inability to execute any other Python scripts on the entire system until full reloading the application/server! We strongly recommend to avoid this mode except for very simple examples written in pure Python, when you full control over the application (a single user, a single chain).",
+      "description": "\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors. In this mode, you may ignore the warning above about global variables for \"Main Python code\".\n\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries, such as \"numpy\", and IS VERY DANGEROUS: it may cause the entire system to crash — even you do not try to import such libraries. Moreover, it may lead to inability to execute any other Python scripts on the entire system until full reloading the application/server! We strongly recommend to AVOID THIS MODE. (For experts only: you may attempt it only for very simple examples written in pure Python — but only if you are absolute sure that no other Python code is running in the standard mode within the same JVM.)",
       "default": "JEP_SHARED",
       "advanced": true
     },

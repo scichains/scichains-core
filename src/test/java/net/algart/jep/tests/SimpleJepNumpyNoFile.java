@@ -32,6 +32,7 @@ import java.util.function.Supplier;
 
 public class SimpleJepNumpyNoFile {
     public static void main(String[] args) {
+        testNoNumpy((SubInterpreter::new));
         testNumpy(SharedInterpreter::new);
         // - Correct usage!
 
@@ -59,6 +60,19 @@ public class SimpleJepNumpyNoFile {
             at C:\Users\Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\numpy\__config__.<module>(__config__.py:4)
             at C:\Users\Daniel\AppData\Local\Programs\Python\Python313\Lib\site-packages\numpy\__init__.<module>(__init__.py:125)
          */
+    }
+
+    private static void testNoNumpy(Supplier<Interpreter> supplier) {
+        try (Interpreter interp = supplier.get()) {
+            System.out.println("Interpreter: " + interp);
+            System.out.println();
+            interp.exec("import sys");
+            interp.exec("from java.lang import System");
+            interp.exec("s = 'Hello World'");
+            interp.exec("System.out.println(\"(java:) \" + s)");
+            interp.exec("print(sys.path)");
+            interp.exec("print(s)");
+        }
     }
 
     private static void testNumpy(Supplier<Interpreter> supplier) {

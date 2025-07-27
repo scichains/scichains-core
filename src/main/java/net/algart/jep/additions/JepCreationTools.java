@@ -95,7 +95,16 @@ class JepCreationTools {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
+            assert startupCode != null : "setStartupCode did not check null string";
+            System.out.printf("Executing startup code %s for %s interpreter in thread %s%n",
+                    startupCode, kind, Thread.currentThread().getName());
             for (String codeSnippet : startupCode) {
+                if (kind == JepInterpreterKind.LOCAL && codeSnippet.contains("numpy")) {
+                    throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
+                            "\", because it works with NumPy, which is strictly forbidden " +
+                            "for Python sub-interpreters (interpreter kind " + kind +
+                            ") and may crash the entire application");
+                }
                 try {
                     JepSingleThreadInterpreter.LOG.log(System.Logger.Level.TRACE,
                             () -> "Executing " + kind.kindName() +

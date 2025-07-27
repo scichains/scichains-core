@@ -64,7 +64,9 @@ public class JepExtendedConfiguration extends JepConfig {
 
     public JepExtendedConfiguration setStartupCode(List<String> startupCode) {
         Objects.requireNonNull(startupCode, "Null startupCode");
-        this.startupCode = new ArrayList<>(startupCode);
+        final ArrayList<String> clone = new ArrayList<>(startupCode);
+        clone.forEach(s -> Objects.requireNonNull(s, "Null element of startupCode"));
+        this.startupCode = clone;
         return this;
     }
 

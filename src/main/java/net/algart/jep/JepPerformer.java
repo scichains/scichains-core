@@ -39,7 +39,7 @@ public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());
 
     final JepSingleThreadInterpreter context;
-    private JepConfig configuration;
+    private final JepConfig configuration;
 
     private JepPerformer(JepSingleThreadInterpreter context) {
         this.context = Objects.requireNonNull(context, "Null JEP context");
