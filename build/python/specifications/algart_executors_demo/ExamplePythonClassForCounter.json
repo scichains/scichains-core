@@ -8,7 +8,7 @@
   "id": "84e39463-1c32-4e57-ad8d-ab17f12c4456",
   "language": "python",
   "python": {
-    "module": "algart_executors_demo.ExampleUsingPythonClass",
+    "module": "algart_executors_demo.ExamplePythonClassForCounter",
     "class": "Counter",
     "function": "count"
   },

@@ -1,14 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SimpleJepBridgeTest" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="SimpleJepPerformerTest" type="Application" factoryName="Application" nameIsGenerated="true">
     <envs>
       <env name="_PYTHONHOME" value="\tmp1" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.SimpleJepBridgeTest" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.jep.tests.SimpleJepPerformerTest" />
     <module name="scichains-core" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.bridges.jep.tests.*" />
+        <option name="PATTERN" value="net.algart.jep.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

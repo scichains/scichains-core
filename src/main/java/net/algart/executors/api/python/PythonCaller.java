@@ -84,8 +84,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         }
     }
 
-    public void initialize() {
-        @SuppressWarnings("resource") final JepPerformer performer = performer();
+    public void initialize(Executor executor) {
+        final JepPerformer performer = performer();
+        jepAPI.initializedGlobalEnvironment(performer, executor);
         if (python.isClassMethod()) {
             final String className = python.getClassName();
             performer.perform(JepPerformer.importCode(python.getModule(), className));

@@ -156,7 +156,7 @@
     {
       "name": "mainFunctionName",
       "caption": "Main function name",
-      "description": "Function that will be called. It must be declared in the module, specified in the previous parameter. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of classes \"SParameters\", \"SInputs\" and \"SOutputs\" from standard Python API.",
+      "description": "Function that will be called. It must be declared in the module, specified in the previous parameter. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of classes \"Parameters\", \"Inputs\" and \"Outputs\" from standard Python API.",
       "value_type": "String",
       "edition_type": "value",
       "default": "execute"

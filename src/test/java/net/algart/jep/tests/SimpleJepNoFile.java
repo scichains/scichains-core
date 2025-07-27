@@ -22,38 +22,21 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.scripting.python;
+package net.algart.jep.tests;
 
-public final class CallPythonFunction extends AbstractCallPython {
-    private String code =
-            """
-                    # mod = pya.import_file("my_module.py") # - import from the chain directory
-                    
-                    def execute(params, inputs, outputs):
-                        # outputs.x1 = inputs.x1
-                        # outputs.m1 = inputs.m1 # - access inputs and outputs
-                        return "Hello from Python function!"
-                    """;
+import jep.Interpreter;
+import jep.SubInterpreter;
 
-    public CallPythonFunction() {
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public CallPythonFunction setCode(String code) {
-        this.code = nonNull(code).trim();
-        return this;
-    }
-
-    @Override
-    protected String code() {
-        return code;
-    }
-
-    @Override
-    protected String executorName() {
-        return "Python function";
+public class SimpleJepNoFile {
+    public static void main(String[] args) {
+        try (Interpreter interp = new SubInterpreter()) {
+            System.out.println("Interpreter: " + interp);
+            System.out.println();
+            interp.exec("def someClass():\n    pass\n");
+            interp.exec("def test():\n    return '123'\n");
+            interp.exec("print(test())");
+            Object result = interp.invoke("test");
+            System.out.printf("From Python: %s%n", result);
+        }
     }
 }

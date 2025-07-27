@@ -40,8 +40,9 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
 
     @Override
     public void initialize() {
+        useVisibleResultParameter();
         //noinspection resource
-        pythonCaller().initialize();
+        pythonCaller().initialize(this);
     }
 
     @Override

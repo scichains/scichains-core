@@ -3,13 +3,13 @@
     <envs>
       <env name="PYTHONHOME_" value="C:\TMP\python" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="net.algart.bridges.jep.tests.JepBridgeTest" />
+    <option name="MAIN_CLASS_NAME" value="net.algart.jep.tests.JepBridgeTest" />
     <module name="scichains-core" />
     <option name="PROGRAM_PARAMETERS" value="-free 10" />
     <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Dnet.algart.jep.numpyIntegrationRequired=false -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.bridges.jep.tests.*" />
+        <option name="PATTERN" value="net.algart.jep.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

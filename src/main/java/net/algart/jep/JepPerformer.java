@@ -91,6 +91,10 @@ public final class JepPerformer implements AutoCloseable {
         return context.getValue(valueName, valueClass);
     }
 
+    public AtomicPyObject getObject(String valueName) {
+        return context.wrapObject(getValueAs(valueName, PyObject.class));
+    }
+
     public AtomicPyCallable getCallable(String valueName) {
         return context.wrapCallable(getValueAs(valueName, PyCallable.class));
     }

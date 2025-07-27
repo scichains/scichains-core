@@ -39,6 +39,7 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
 
     @Override
     public void initialize() {
+        useVisibleResultParameter();
         //noinspection resource
         jsCaller().initialize();
     }

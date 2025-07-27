@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.tests;
+package net.algart.jep.tests;
 
 import jep.Interpreter;
 import net.algart.jep.JepPerformer;
@@ -30,7 +30,7 @@ import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.GlobalPythonConfiguration;
 
 // Note: this test does not use JepAPI and does not automatically verify integration with numpy
-public class SimpleJepBridgeTest {
+public class SimpleJepPerformerTest {
 
     public static void main(String[] args) {
         System.out.printf("Python information before initialization: %s%n",

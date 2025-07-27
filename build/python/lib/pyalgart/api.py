@@ -25,7 +25,7 @@ import hashlib
 import importlib.util
 
 
-class SEnvironment:
+class Environment:
     def __init__(self):
         self.executor = None
         self.platform = None
@@ -61,14 +61,24 @@ class SEnvironment:
         spec.loader.exec_module(module)
         return module
 
-class SParameters:
+class Parameters:
     def __init__(self):
-        self._env = SEnvironment()
+        self._env = _env;
 
 
-class SInputs:
+class Inputs:
     pass
 
 
-class SOutputs:
+class Outputs:
     pass
+
+_env = Environment()
+
+def env():
+    return _env
+
+def import_file(file_name, module_name=None):
+    return _env.import_file(file_name, module_name)
+
+

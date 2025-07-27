@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.tests;
+package net.algart.jep.tests;
 
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;

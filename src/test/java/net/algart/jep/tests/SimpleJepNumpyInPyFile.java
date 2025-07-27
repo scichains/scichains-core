@@ -22,38 +22,31 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.scripting.python;
+package net.algart.jep.tests;
 
-public final class CallPythonFunction extends AbstractCallPython {
-    private String code =
-            """
-                    # mod = pya.import_file("my_module.py") # - import from the chain directory
-                    
-                    def execute(params, inputs, outputs):
-                        # outputs.x1 = inputs.x1
-                        # outputs.m1 = inputs.m1 # - access inputs and outputs
-                        return "Hello from Python function!"
-                    """;
+import jep.Interpreter;
+import jep.SharedInterpreter;
 
-    public CallPythonFunction() {
-    }
+import java.io.FileNotFoundException;
 
-    public String getCode() {
-        return code;
-    }
+public class SimpleJepNumpyInPyFile {
+    public static void main(String[] args) throws FileNotFoundException {
+        final String root = SimpleJepTest.pythonRoot();
+        try (Interpreter interp = new SharedInterpreter()) {
+            System.out.println("Interpreter: " + interp);
+            System.out.println();
+            interp.exec("import sys");
+            interp.exec("sys.path.append('" + root + "')");
+            // - an alternative to JepConfig.setIncludePath
+            interp.exec("from tests.SimpleTestNumpy import demo");
+            interp.exec("from java.lang import System\n");
+            interp.exec("s = 'Hello World'");
+            interp.exec("print(s)"); // - will not work from IDE (see SimpleJepTest.configurePython)
+            interp.exec("System.out.println(\"Hello from Java\")");
 
-    public CallPythonFunction setCode(String code) {
-        this.code = nonNull(code).trim();
-        return this;
-    }
-
-    @Override
-    protected String code() {
-        return code;
-    }
-
-    @Override
-    protected String executorName() {
-        return "Python function";
+            interp.exec("result = demo()");
+            interp.exec("print(result)");
+            interp.exec("System.out.println(\"(java:) \" + result)");
+        }
     }
 }

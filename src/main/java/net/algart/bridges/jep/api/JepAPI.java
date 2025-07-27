@@ -51,27 +51,30 @@ public class JepAPI {
 
     private static final AtomicBoolean NUMPY_INTEGRATION_PROBLEM_LOGGED = new AtomicBoolean(false);
 
-    public static final String STANDARD_API_PACKAGE = "algart_api";
-    public static final String STANDARD_API_IN_OUT = STANDARD_API_PACKAGE + ".SInOut";
-    public static final String STANDARD_API_PARAMETERS_CLASS_NAME = STANDARD_API_IN_OUT + ".SParameters";
-    public static final String STANDARD_API_INPUTS_CLASS_NAME = STANDARD_API_IN_OUT + ".SInputs";
-    public static final String STANDARD_API_OUTPUTS_CLASS_NAME = STANDARD_API_IN_OUT + ".SOutputs";
-    public static final String STANDARD_API_ENVIRONMENT = "_env";
+    public static final String STANDARD_API_PACKAGE = "pyalgart";
+    // Note: simple "algart" name leads to error, probably due to the existing "net.algart" Java package
+    public static final String STANDARD_API_MODULE = STANDARD_API_PACKAGE + ".api";
+    public static final String STANDARD_API_MODULE_ALIAS = "pya";
+    // Note: there is no a constant for "Environment" class: we do not create this class outside Python code!
+    public static final String STANDARD_API_PARAMETERS_CLASS_NAME = STANDARD_API_MODULE + ".Parameters";
+    public static final String STANDARD_API_INPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Inputs";
+    public static final String STANDARD_API_OUTPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Outputs";
+    public static final String STANDARD_API_ENVIRONMENT_VARIABLE = "_env";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
     public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "working_dir";
-    public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".SJepVerifier";
+    public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
     public static final List<String> STANDARD_STARTUP = List.of(
-            "import " + STANDARD_API_IN_OUT + "\n\n");
+            "import " + STANDARD_API_MODULE + "\n\n");
     public static final List<String> STANDARD_STARTUP_SHARED = List.of(
             "import numpy\n",
-            "import " + STANDARD_API_IN_OUT + "\n",
+            "import " + STANDARD_API_MODULE + " as " + STANDARD_API_MODULE_ALIAS + "\n",
             "import " + STANDARD_API_JEP_VERIFIER + "\n\n");
 
     static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
 
-    // In the current version, this class has not any settings, but maybe they will be added in future
+    // In the current version, this class has not any settings, but maybe they will be added in the future
     private JepAPI() {
     }
 
@@ -88,24 +91,7 @@ public class JepAPI {
     }
 
     public void loadParameters(Executor executor, AtomicPyObject parameters) {
-        loadEnvironment(executor, parameters);
         loadParameters(executor.parameters(), parameters);
-    }
-
-    public static AtomicPyObject getEnvironment(AtomicPyObject parameters) {
-        return parameters.getObject(STANDARD_API_ENVIRONMENT);
-    }
-
-    public void loadEnvironment(Executor executor, AtomicPyObject parameters) {
-        Objects.requireNonNull(executor, "Null executor");
-        Objects.requireNonNull(parameters, "Null parameters");
-        try (AtomicPyObject parameter = getEnvironment(parameters)) {
-            parameter.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
-            parameter.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-            final Path currentDirectory = executor.getCurrentDirectory();
-            parameter.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
-                    currentDirectory == null ? null : currentDirectory.toString());
-        }
     }
 
     public void loadParameters(Map<String, Object> parametersMap, AtomicPyObject parameters) {
@@ -113,6 +99,16 @@ public class JepAPI {
         Objects.requireNonNull(parametersMap, "Null parametersMap");
         for (Map.Entry<String, Object> entry : parametersMap.entrySet()) {
             parameters.setAttribute(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public void initializedGlobalEnvironment(JepPerformer performer, Executor executor) {
+        try (AtomicPyObject environment = performer.getObject(STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {
+            environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
+            environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+            final Path currentDirectory = executor.getCurrentDirectory();
+            environment.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
+                    currentDirectory == null ? null : currentDirectory.toString());
         }
     }
 
@@ -182,7 +178,7 @@ public class JepAPI {
         } catch (JepException e) {
             throw new JepException("Cannot create an empty instance of Python class \"" + className
                     + "\"; maybe, the Python code does not import/declare this class. "
-                    + "Note that standard classes from \"" + STANDARD_API_IN_OUT + "\" "
+                    + "Note that standard classes from \"" + STANDARD_API_MODULE + "\" "
                     + "module are imported automatically", e);
         }
     }

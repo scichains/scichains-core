@@ -15,7 +15,11 @@
   "out_ports": [
     {
       "value_type": "scalar",
-      "name": "model"
+      "name": "specification"
+    },
+    {
+      "value_type": "scalar",
+      "name": "current_dir"
     },
     {
       "value_type": "scalar",
@@ -23,5 +27,23 @@
     }
   ],
   "controls": [
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "specification"
+        },
+        {
+          "value": "current_dir"
+        },
+        {
+          "value": "platform"
+        }
+      ],
+      "default": "specification"
+    }
   ]
 }
