@@ -100,8 +100,9 @@ public class JepAPI {
 
     public void initializedGlobalEnvironment(JepPerformer performer, Executor executor) {
         Objects.requireNonNull(performer, "Null performer");
-        if (performer.kind().isPure()) {
-            // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue(
+        if (performer.kind().isLocal()) {
+            // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue();
+            // but really this is not enough: other operations also do not work well
             return;
         }
         try (AtomicPyObject environment = performer.getObject(STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {

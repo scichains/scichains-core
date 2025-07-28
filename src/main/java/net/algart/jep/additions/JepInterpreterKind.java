@@ -24,23 +24,14 @@
 
 package net.algart.jep.additions;
 
+import jep.Interpreter;
 import jep.JepConfig;
 
 import java.util.function.Supplier;
 
 public enum JepInterpreterKind {
-    LOCAL("local") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSubInterpreter(configuration), configuration);
-        }
-    },
-    SHARED("shared") {
-        @Override
-        ConfiguredInterpreter doNewInterpreter(JepConfig configuration) {
-            return new ConfiguredInterpreter(JepCreationTools.newSharedInterpreter(configuration), configuration);
-        }
-    };
+    LOCAL("local"),
+    SHARED("shared");
 
     private final String kindName;
 
@@ -52,7 +43,7 @@ public enum JepInterpreterKind {
         return kindName;
     }
 
-    public boolean isPure() {
+    public boolean isLocal() {
         return this == LOCAL;
     }
 
@@ -61,9 +52,13 @@ public enum JepInterpreterKind {
     }
 
     public ConfiguredInterpreter newInterpreter(JepConfig configuration) {
-        return doNewInterpreter(configuration == null ? new JepExtendedConfiguration() : configuration);
+        if (configuration == null) {
+            configuration = new JepExtendedConfiguration();
+        }
+        Interpreter interpreter = isLocal() ?
+                JepCreationTools.newSubInterpreter(configuration) :
+                JepCreationTools.newSharedInterpreter(configuration);
+        return new ConfiguredInterpreter(interpreter, configuration);
     }
-
-    abstract ConfiguredInterpreter doNewInterpreter(JepConfig configuration);
 
 }
