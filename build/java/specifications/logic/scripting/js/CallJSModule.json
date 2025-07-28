@@ -80,11 +80,13 @@
     },
     {
       "value_type": "scalar",
-      "name": "d"
+      "name": "d",
+      "advanced": true
     },
     {
       "value_type": "scalar",
-      "name": "e"
+      "name": "e",
+      "advanced": true
     },
     {
       "value_type": "scalar",

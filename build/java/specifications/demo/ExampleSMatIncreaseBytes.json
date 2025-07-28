@@ -1,0 +1,34 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Matrix example: low-level increasing bytes (SMat)",
+  "tags": [
+    "demo"
+  ],
+  "id": "2f26e2d7-8678-4d08-af42-31b14a1665d4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleSMatIncreaseBytes"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "input"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "increment",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 50
+    }
+  ]
+}

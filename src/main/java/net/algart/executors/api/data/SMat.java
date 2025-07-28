@@ -383,6 +383,16 @@ public final class SMat extends Data {
         return pointer.getCachedByteBuffer(this);
     }
 
+    public byte[] getByteArray() {
+        ByteBuffer bb = getByteBuffer();
+        if (bb == null) {
+            return null;
+        }
+        byte[] result = new byte[bb.remaining()];
+        bb.get(result);
+        return result;
+    }
+
     public Buffer getBuffer() {
         return depth.asBuffer(getByteBuffer());
     }
@@ -418,6 +428,46 @@ public final class SMat extends Data {
                 new ConvertibleByteBufferMatrix(cloneByteBuffer ? cloneByteBuffer(byteBuffer) : byteBuffer));
     }
 
+    public SMat setAll(
+            long[] dimensions,
+            Depth depth,
+            int numberOfChannels,
+            byte[] byteArray) {
+        Objects.requireNonNull(byteArray, "Null byteArray");
+        return setAll(
+                dimensions,
+                depth,
+                numberOfChannels,
+                ByteBuffer.wrap(byteArray),
+                true);
+    }
+
+    public SMat setAll2D(
+            long dimX,
+            long dimY,
+            Depth depth,
+            int numberOfChannels,
+            byte[] byteArray) {
+        return setAll(
+                new long[] {dimX, dimY},
+                depth,
+                numberOfChannels,
+                ByteBuffer.wrap(byteArray),
+                true);
+    }
+
+    /**
+     * A simple version of {@link #setAll(long[], Depth, int, byte[])}, may be useful while calling
+     * from other languages such as JavaScript or Python.
+     */
+    public SMat setAll2DBytes(
+            long dimX,
+            long dimY,
+            int numberOfChannels,
+            byte[] byteArray) {
+        return setAll2D(dimX, dimY, Depth.U8, numberOfChannels, byteArray);
+    }
+
     public boolean isChannelsOrderCompatibleWithMultiMatrix() {
         return !(numberOfChannels == 3 || numberOfChannels == 4);
     }
@@ -430,7 +480,7 @@ public final class SMat extends Data {
         Objects.requireNonNull(mat, "Null mat");
         this.flags = mat.flags;
         setInitialized(mat.isInitialized());
-        // Note: we does not use setXxx methods to allow copy also incorrect SMat (for example, not initialized)
+        // Note: we do not use setXxx methods to allow copy also incorrect SMat (for example, not initialized)
         this.dimensions = mat.dimensions.clone();
         this.depth = mat.depth;
         this.numberOfChannels = mat.numberOfChannels;
@@ -663,6 +713,14 @@ public final class SMat extends Data {
             int numberOfChannels,
             ByteBuffer byteBuffer) {
         return new SMat().setAll(dimensions, depth, numberOfChannels, byteBuffer, true);
+    }
+
+    public static SMat of(
+            long[] dimensions,
+            Depth depth,
+            int numberOfChannels,
+            byte[] byteArray) {
+        return new SMat().setAll(dimensions, depth, numberOfChannels, byteArray);
     }
 
     public static SMat of(BufferedImage bufferedImage) {

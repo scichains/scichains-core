@@ -1,4 +1,30 @@
 {
+  "vm_options": [
+    "##################################################3######################################",
+    "### The following VM options will be passed to the JVM as command-line arguments.     ###",
+    "###                                                                                   ###",
+    "### Note: lines starting with '#' are comments and will be ignored.                   ###",
+    "### Note: variables using ths syntax $(xxxx) are automatically replaced               ###",
+    "### by the running system (SciChains software).                                       ###",
+    "### In particular, $(running.home.directory) refers to the SciChains home directory   ###",
+    "### relative the JDK home folder and usually replaced with .. (the parent directory). ###",
+    "#########################################################################################",
+
+    "-Xmx8G",
+    "### - Maximum available memory in Java VM",
+
+    "-Dnet.algart.executors.api.showInfo=true",
+    "-Dpython.home=$(running.home.directory)/python",
+    "-Dpolyglot.engine.WarnInterpreterOnly=false",
+    "-Djava.util.logging.config.file=$(running.home.directory)/conf/logging.properties",
+    "-Dnet.algart.executors.api.loggingStatusKind=INFORMATION",
+
+    "### The following system properties are examples of usage and are currently commented out (disabled):",
+    "#-Dnet.algart.bridges.standard=nashorn",
+    "#-Dnet.algart.executors.logic.compiler.subchains.path=/chains/examples/subchains;/chains/examples/model3d",
+    "#-Dnet.algart.executors.api.loggingStatusLevel=print",
+    "#-Dexecutors.timing.logging.level=INFO"
+  ],
   "classpath": [
     "lib/common/algart-${algart.version}.jar",
     "lib/common/jakarta.json-1.1.5.jar",
@@ -21,30 +47,5 @@
     "lib/common/graalvm/xz-${graalvm.version}.jar",
     "lib/common/${artifactId}-${version}.jar",
     "lib/common/${artifactId}-${version}-tests.jar"
-  ],
-  "vm_options": [
-    "##################################################3######################################",
-    "### The following VM options will be passed to the JVM as command-line arguments.     ###",
-    "###                                                                                   ###",
-    "### Note: lines starting with '#' are comments and will be ignored.                   ###",
-    "### Note: variables using ths syntax $(xxxx) are automatically replaced               ###",
-    "### by the running system (SciChains software).                                       ###",
-    "### In particular, $(running.home.directory) refers to the SciChains home directory   ###",
-    "### relative the JDK home folder and usually replaced with .. (the parent directory). ###",
-    "#########################################################################################",
-
-    "-Xmx8G",
-    "### - Maximum available memory in Java VM",
-
-    "-Dnet.algart.executors.api.showInfo=true",
-    "-Dpython.home=$(running.home.directory)/python",
-    "-Dpolyglot.engine.WarnInterpreterOnly=false",
-    "-Djava.util.logging.config.file=$(running.home.directory)/conf/logging.properties",
-    "-Dnet.algart.executors.api.loggingStatusKind=INFORMATION",
-
-    "#-Dnet.algart.bridges.standard=nashorn",
-    "#-Dnet.algart.executors.logic.compiler.subchains.path=/chains/examples/subchains;/chains/examples/model3d",
-    "#-Dnet.algart.executors.api.loggingStatusLevel=print",
-    "#-Dexecutors.timing.logging.level=INFO"
   ]
 }

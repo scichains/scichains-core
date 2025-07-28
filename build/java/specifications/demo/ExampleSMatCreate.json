@@ -9,7 +9,7 @@
   "id": "8011bc4b-6d0d-485b-986f-56b069f57589",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.demo.ExampleSMat"
+    "class": "net.algart.executors.modules.core.demo.ExampleSMatCreate"
   },
   "in_ports": [],
   "out_ports": [

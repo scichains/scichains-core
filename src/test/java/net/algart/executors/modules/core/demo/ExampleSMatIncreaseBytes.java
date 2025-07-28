@@ -25,51 +25,34 @@
 package net.algart.executors.modules.core.demo;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SMat;
 
-import java.nio.ByteBuffer;
-
-public final class ExampleSMat extends Executor {
-    private int width = 10;
-    private int height = 10;
-    private int channels = 1;
-
-    public ExampleSMat() {
+public final class ExampleSMatIncreaseBytes extends Executor {
+    private int increment = 50;
+    public ExampleSMatIncreaseBytes() {
 //        throw new AssertionError("Hmm...");
     }
 
     @Override
     public void process() {
-        Port output = getRequiredOutputPort("output");
+        SMat mat = getInputMat();
+        byte[] byteArray = mat.getByteArray();
 
-        SMat outMat = (SMat) output.getData();
-
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(height * width * channels);
-        byteBuffer.position(0);
-
-        outMat.setAll(
-                new long[]{width, height},
-                SMat.Depth.U8, channels, byteBuffer, false);
-        for (int i = 0; i < byteBuffer.capacity(); i++) {
-            int c = i % channels;
-            byteBuffer.put((byte) (i * (c + 1)));
+        for (int i = 0; i < byteArray.length; i++) {
+            byteArray[i] += (byte) increment;
         }
-        outMat.setInitialized(true);
+        mat.setAll(
+                mat.getDimensions(),
+                mat.getDepth(),
+                mat.getNumberOfChannels(),
+                byteArray);
+        getMat().setTo(mat);
     }
 
     @Override
     public void onChangeParameter(String name) {
-        switch (name) {
-            case "width" -> {
-                width = parameters().getInteger(name);
-            }
-            case "height" -> {
-                height = parameters().getInteger(name);
-            }
-            case "channels" -> {
-                channels = parameters().getInteger(name);
-            }
+        if (name.equals("increment")) {
+            increment = parameters().getInteger(name);
         }
     }
 }
