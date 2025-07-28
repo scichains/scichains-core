@@ -1,13 +1,23 @@
 {
-  "properties": [
+  "vm_options": [
     "-ea",
     "-esa",
+
     "-Dnet.algart.executors.api.extended=true",
+    "### - Informs Java functions that we are running in the extended mode",
+
     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
-    "-D_net.algart.executors.api.showLibraryPath=true",
-    "-D_net.algart.executors.api.warningForDeprecatedParameters=false",
-    "-D_net.algart.arrays.CPUCount=1",
-    "-D_net.algart.jep.numpyIntegrationRequired=false",
-    "-D_polyglot.js.nashorn-compat=true"
+    "### - Provides ability of remote debugging from IntelliJ IDEA or other IDE.",
+
+    "#-Dnet.algart.jep.numpyIntegrationRequired=false",
+    "### - 'false' option sets 'softer' requirements for integration of JEP and NumPy Python packages:",
+    "### even if you installed them in the wrong order, SciChains will still use Python,",
+    "### but some Python-based functions may not work correctly in that case.",
+    "### When using the built-in Python (from the 'python' folder), this property is set to true by default.",
+
+    "#-Dnet.algart.executors.api.showLibraryPath=true",
+    "#-Dnet.algart.executors.api.warningForDeprecatedParameters=false",
+    "#-Dnet.algart.arrays.CPUCount=1",
+    "#-Dpolyglot.js.nashorn-compat=true"
   ]
 }
