@@ -86,6 +86,11 @@ public final class JepPerformer implements AutoCloseable {
         context.set(valueName, value);
     }
 
+    public Object getValue(String valueName) {
+        Objects.requireNonNull(valueName, "Null valueName");
+        return context.getValue(valueName);
+    }
+
     public <T> T getValueAs(String valueName, Class<T> valueClass) {
         Objects.requireNonNull(valueName, "Null valueName");
         Objects.requireNonNull(valueClass, "Null valueClass");

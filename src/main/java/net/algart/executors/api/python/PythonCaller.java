@@ -141,7 +141,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
                 throw new IllegalStateException("initialize() was not called correcly");
             }
             try (final AtomicPyCallable method = instance.getCallable(python.getFunction())) {
-                return method.call(
+                return method.callAs(
+                        Object.class,
                         params.pyObject(),
                         inputs.pyObject(),
                         outputs.pyObject());

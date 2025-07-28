@@ -43,8 +43,8 @@ public class AtomicPyCallable extends AtomicPyObject {
         return i.wrapObject(callAs(PyObject.class, args));
     }
 
-    public Object call(Object... args) throws JepException {
-        return callAs(Object.class, args);
+    public Object callRaw(Object... args) throws JepException {
+        return i.executeInSingleThread(() -> pyCallable.call(args));
     }
 
     public <T> T callAs(Class<T> expectedType, Object... args) throws JepException {
