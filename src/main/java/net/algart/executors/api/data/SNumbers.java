@@ -364,7 +364,7 @@ public final class SNumbers extends Data implements Cloneable {
         }
     }
 
-    public static boolean isSupportedJavaArray(Object javaArray) {
+    public static boolean isJavaArraySupported(Object javaArray) {
         return javaArray instanceof byte[]
                 || javaArray instanceof short[]
                 || javaArray instanceof int[]
@@ -373,7 +373,7 @@ public final class SNumbers extends Data implements Cloneable {
                 || javaArray instanceof double[];
     }
 
-    public static boolean isSupportedJavaElementType(Class<?> elementType) {
+    public static boolean isElementTypeSupported(Class<?> elementType) {
         return elementType == byte.class
                 || elementType == short.class
                 || elementType == int.class
@@ -2471,7 +2471,7 @@ public final class SNumbers extends Data implements Cloneable {
 
     public SNumbers setTo(PNumberArray array, int blockLength) {
         Objects.requireNonNull(array, "Null array");
-        if (!isSupportedJavaElementType(array.elementType())) {
+        if (!isElementTypeSupported(array.elementType())) {
             throw new IllegalArgumentException("The element type of passed array is not supported (it is "
                     + array + ")");
         }
@@ -2556,7 +2556,7 @@ public final class SNumbers extends Data implements Cloneable {
 
     public SNumbers setToZeros(Class<?> elementType, int n, int blockLength) {
         Objects.requireNonNull(elementType, "Null elementType");
-        if (!isSupportedJavaElementType(elementType)) {
+        if (!isElementTypeSupported(elementType)) {
             throw new IllegalArgumentException("The element type is not byte, short, int, long, float "
                     + "or double (it is " + elementType + ")");
         }
@@ -3109,7 +3109,7 @@ public final class SNumbers extends Data implements Cloneable {
     @UsedForExternalCommunication
     private void setArray(Object javaArray) {
         Objects.requireNonNull(javaArray, "Null java array");
-        if (isSupportedJavaArray(javaArray)) {
+        if (isJavaArraySupported(javaArray)) {
             this.array = javaArray;
         } else {
             throw new IllegalArgumentException("The passed java-array argument is not byte[], short[], int[], "
@@ -3124,7 +3124,7 @@ public final class SNumbers extends Data implements Cloneable {
         if (blockLength <= 0) {
             throw new IllegalArgumentException("Block length " + blockLength + " is not positive");
         }
-        if (!isSupportedJavaArray(javaArray)) {
+        if (!isJavaArraySupported(javaArray)) {
             throw new IllegalArgumentException("The passed java-array argument is not byte[], short[], int[], "
                     + "long[], float[] or double[] (it is " + javaArray.getClass().getSimpleName() + ")");
         }

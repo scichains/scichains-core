@@ -335,7 +335,7 @@ public class GraalAPI {
                 }
                 data.setTo((Collection<?>) object, blockLength);
             } else {
-                if (!SNumbers.isSupportedJavaArray(object)) {
+                if (!SNumbers.isJavaArraySupported(object)) {
                     throw new IllegalArgumentException(
                             "Illegal type for output \"" + port.getName() +
                                     "\": JavaScript code must return java-array of primitive types or " +
