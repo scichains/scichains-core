@@ -42,25 +42,18 @@ public class JepSingleThreadInterpreter implements Interpreter {
     static final Logger LOG = System.getLogger(JepSingleThreadInterpreter.class.getName());
 
     private static final Cleaner CLEANER = Cleaner.create();
-    private static final GlobalInterpreterHolder GLOBAL_INTERPRETER_HOLDER = new GlobalInterpreterHolder();
+    private static final GlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new GlobalThreadPoolHolder();
 
     private final JepInterpreterKind kind;
-    private final boolean globalInJVM;
     private final ExpensiveState state;
     private final Cleaner.Cleanable cleanable;
 
     private JepSingleThreadInterpreter(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
         Objects.requireNonNull(kind, "Null kind");
         this.kind = kind;
-        this.globalInJVM = kind.isGlobalInJVM();
-        if (globalInJVM) {
-            this.state = GLOBAL_INTERPRETER_HOLDER.getGlobalState(kind, configurationSupplier);
-            this.cleanable = null;
-        } else {
-            final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(kind, configurationSupplier);
-            this.state = cleanableState;
-            this.cleanable = CLEANER.register(this, cleanableState);
-        }
+        final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(kind, configurationSupplier);
+        this.state = cleanableState;
+        this.cleanable = CLEANER.register(this, cleanableState);
         checkStateAlive();
     }
 
@@ -187,10 +180,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     @Override
     public void close() throws JepException {
-        if (!globalInJVM) {
-            state.normallyClosed = true;
-            cleanable.clean();
-        }
+        state.normallyClosed = true;
+        cleanable.clean();
     }
 
     @Override
@@ -243,6 +234,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     private static class ExpensiveState {
         private final String name;
+        private final boolean globalThreadPool;
         private static final AtomicInteger THREAD_COUNT = new AtomicInteger(1);
         private volatile ThreadPoolExecutor singleThreadPool;
         private volatile ConfiguredInterpreter configuredInterpreter;
@@ -252,22 +244,20 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private ExpensiveState(
                 Supplier<ConfiguredInterpreter> configuredInterpreterSupplier,
                 String name,
-                boolean globalForJVM) {
+                boolean globalThreadPool) {
             if (name == null) {
                 name = "unknown";
             }
             this.name = name;
-            String threadName = "JEP " + name + " single-thread wrapping thread #" + THREAD_COUNT.getAndIncrement();
-            LOG.log(System.Logger.Level.TRACE,
-                    () -> "Creating thread " + threadName + "; number of active threads was " + Thread.activeCount());
-            this.singleThreadPool = new ThreadPoolExecutor(1, 1,
-                    0L, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<>(),
-                    r -> {
-                        final Thread t = new Thread(r, threadName);
-                        t.setDaemon(true);
-                        return t;
-                    });
+            this.globalThreadPool = globalThreadPool;
+            if (globalThreadPool) {
+                this.singleThreadPool = GLOBAL_THREAD_POOL_HOLDER.getGlobalThreadPool();
+            } else {
+                String threadName = "JEP " + name + " wrapping thread #" + THREAD_COUNT.getAndIncrement();
+                LOG.log(Logger.Level.TRACE,
+                        () -> "Creating " + threadName + "; number of active threads was " + Thread.activeCount());
+                this.singleThreadPool = newSingleThreadPool(threadName);
+            }
             try {
                 this.configuredInterpreter = this.singleThreadPool.submit(configuredInterpreterSupplier::get).get();
                 if (configuredInterpreter == null) {
@@ -299,9 +289,9 @@ public class JepSingleThreadInterpreter implements Interpreter {
                     return;
                 }
                 if (normallyClosed) {
-                    LOG.log(System.Logger.Level.TRACE, () -> "Normal closing " + this);
+                    LOG.log(Logger.Level.TRACE, () -> "Normal closing " + this);
                 } else {
-                    LOG.log(System.Logger.Level.WARNING, () -> "CLEANING forgotten " + this);
+                    LOG.log(Logger.Level.WARNING, () -> "CLEANING forgotten " + this);
                 }
                 try {
                     singleThreadPool.submit(configuredInterpreter::close).get();
@@ -311,10 +301,12 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 } catch (ExecutionException e) {
                     throw translateException(e);
                 }
-                singleThreadPool.shutdownNow();
-                // - not just shutdown(): no sense to continue executing waiting tasks,
-                // because jepInterpreter is already closed and will not be able to process anything
-                singleThreadPool = null;
+                if (!globalThreadPool) {
+                    singleThreadPool.shutdownNow();
+                    // - not just shutdown(): no sense to continue executing waiting tasks,
+                    // because jepInterpreter is already closed and will not be able to process anything
+                    singleThreadPool = null;
+                }
                 configuredInterpreter = null;
             }
         }
@@ -336,15 +328,25 @@ public class JepSingleThreadInterpreter implements Interpreter {
             }
         }
 
+        static ThreadPoolExecutor newSingleThreadPool(String threadName) {
+            return new ThreadPoolExecutor(1, 1,
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>(),
+                    r -> {
+                        final Thread t = new Thread(r, threadName);
+                        t.setDaemon(true);
+                        return t;
+                    });
+        }
+
         private boolean isReallyClosed() {
-            return singleThreadPool == null;
+            return configuredInterpreter == null;
         }
     }
 
     private static class ExpensiveCleanableState extends ExpensiveState implements Runnable {
         public ExpensiveCleanableState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
             super(kind, configurationSupplier);
-            assert !kind.isGlobalInJVM() : "isGlobalInJVM() must be false for cleanable state";
         }
 
         // This method is called by JepSingleThreadInterpreter.CLEANER object
@@ -371,6 +373,27 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 }
             }
             return state;
+        }
+    }
+
+    private static class GlobalThreadPoolHolder {
+        private final Object lock = new Object();
+        private volatile ThreadPoolExecutor singleThreadPool;
+
+        // Note: this configuration supplier is used only once!
+        public ThreadPoolExecutor getGlobalThreadPool() {
+            ThreadPoolExecutor result = this.singleThreadPool;
+            if (result == null) {
+                synchronized (lock) {
+                    if (this.singleThreadPool == null) {
+                        final String threadName = "JEP global wrapping thread";
+                        LOG.log(Logger.Level.INFO, () -> "Creating " + threadName);
+                        this.singleThreadPool = ExpensiveState.newSingleThreadPool(threadName);
+                        result = this.singleThreadPool;
+                    }
+                }
+            }
+            return result;
         }
     }
 }
