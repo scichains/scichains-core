@@ -32,10 +32,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 class JepCreationTools {
     private static final AtomicBoolean SHARED_CREATED = new AtomicBoolean(false);
     private static final Pattern IMPORT_MATCHER = Pattern.compile("^import\\s+(\\w+)");
+
+    private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
     static SubInterpreter newSubInterpreter(JepConfig configuration) {
         Objects.requireNonNull(configuration, "Null configuration");
@@ -95,10 +98,15 @@ class JepCreationTools {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
-            assert startupCode != null : "setStartupCode did not check null string";
-//            System.out.printf("Executing startup code %s for %s interpreter in thread %s%n",
-//                    startupCode, kind, Thread.currentThread().getName());
+
+            LOG.log(System.Logger.Level.DEBUG, () ->
+                    "Executing start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
+                            kind,
+                            Thread.currentThread().getName(),
+                            startupCode.stream().map(s -> "<<" + s + ">>")
+                                    .collect(Collectors.joining("\n"))));
             for (String codeSnippet : startupCode) {
+                assert codeSnippet != null : "setStartupCode did not check null elements";
                 if (kind == JepInterpreterKind.LOCAL && codeSnippet.contains("numpy")) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
@@ -106,9 +114,6 @@ class JepCreationTools {
                             ") and may crash the entire application");
                 }
                 try {
-                    JepSingleThreadInterpreter.LOG.log(System.Logger.Level.TRACE,
-                            () -> "Executing " + kind.kindName() +
-                                    " JEP start-up code:\n" + String.join("", startupCode));
                     jepInterpreter.exec(codeSnippet);
                 } catch (JepException e) {
                     if (e.getMessage() != null && e.getMessage().contains("nterpreter change detected")) {

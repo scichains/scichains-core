@@ -66,11 +66,11 @@ public class JepAPI {
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
     public static final List<String> STANDARD_STARTUP = List.of(
-            "import " + STANDARD_API_MODULE + "\n\n");
+            "import " + STANDARD_API_MODULE);
     public static final List<String> STANDARD_STARTUP_SHARED = List.of(
-            "import numpy\n",
-            "import " + STANDARD_API_MODULE + " as " + STANDARD_API_MODULE_ALIAS + "\n",
-            "import " + STANDARD_API_JEP_VERIFIER + "\n\n");
+            "import numpy",
+            "import " + STANDARD_API_MODULE + " as " + STANDARD_API_MODULE_ALIAS,
+            "import " + STANDARD_API_JEP_VERIFIER);
 
     static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
 
