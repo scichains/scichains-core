@@ -29,6 +29,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.system.ExecutorSpecification;
+import net.algart.jep.additions.JepInterpreterKind;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -48,6 +49,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
+        private JepInterpreterKind interpreterKind = JepInterpreterKind.SHARED;
 
         public Python() {
         }
@@ -59,6 +61,11 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
+            final String interpreterKind = json.getString("interpreter_kind",
+                    JepInterpreterKind.SHARED.kindName());
+            this.interpreterKind = JepInterpreterKind.ofOrNull(interpreterKind);
+            Jsons.requireNonNull(this.interpreterKind, json, "interpreter_kind",
+                    "unknown (\"" + interpreterKind + "\")", file);
         }
 
         public String getModule() {
@@ -115,6 +122,15 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return this;
         }
 
+        public JepInterpreterKind getInterpreterKind() {
+            return interpreterKind;
+        }
+
+        public Python setInterpreterKind(JepInterpreterKind interpreterKind) {
+            this.interpreterKind = nonNull(interpreterKind);
+            return this;
+        }
+
         public boolean isClassMethod() {
             return className != null;
         }
@@ -133,6 +149,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                     ", outputsClass='" + outputsClass + '\'' +
                     ", className='" + className + '\'' +
                     ", function='" + function + '\'' +
+                    ", interpreterKind=" + interpreterKind +
                     '}';
         }
 
@@ -146,6 +163,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                 builder.add("class", className);
             }
             builder.add("function", function);
+            builder.add("interpreter_kind", interpreterKind.name());
         }
     }
 

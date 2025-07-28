@@ -40,20 +40,22 @@ class JepCreationTools {
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
-    static SubInterpreter newSubInterpreter(JepConfig configuration) {
+    static SubInterpreter newSubInterpreter(JepConfig configuration, JepInterpreterKind kind) {
         Objects.requireNonNull(configuration, "Null configuration");
+        Objects.requireNonNull(kind, "Null kind");
         final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
-        performStartupCodeForExtended(result, configuration, JepInterpreterKind.LOCAL);
+        performStartupCodeForExtended(result, configuration, kind);
         return result;
     }
 
-    static SharedInterpreter newSharedInterpreter(JepConfig configuration) {
+    static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpreterKind kind) {
         Objects.requireNonNull(configuration, "Null configuration");
+        Objects.requireNonNull(kind, "Null kind");
         if (!SHARED_CREATED.getAndSet(true)) {
             SharedInterpreter.setConfig(configuration);
         }
         final SharedInterpreter result = doCreate(SharedInterpreter::new);
-        performStartupCodeForExtended(result, configuration, JepInterpreterKind.SHARED);
+        performStartupCodeForExtended(result, configuration, kind);
         return result;
     }
 
@@ -98,7 +100,6 @@ class JepCreationTools {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
-
             LOG.log(System.Logger.Level.DEBUG, () ->
                     "Executing start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
                             kind,

@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class ControlSpecification extends AbstractConvertibleToJson implements Cloneable {
-    public static final String SUPPESS_WARNING_NO_SETTER = "no_setter";
+    public static final String SUPPRESS_WARNING_NO_SETTER = "no_setter";
 
     public static final class EnumItem extends AbstractConvertibleToJson implements Cloneable {
         private JsonValue value;
@@ -153,12 +153,12 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         this.description = json.getString("description", null);
         this.caption = json.getString("caption", null);
         this.hint = json.getString("hint", null);
-        String valueType = Jsons.reqString(json, "value_type", file);
+        final String valueType = Jsons.reqString(json, "value_type", file);
         this.valueType = ParameterValueType.ofOrNull(valueType);
         Jsons.requireNonNull(this.valueType, json, "value_type",
                 "unknown (\"" + valueType + "\")", file);
         this.valueClassName = json.getString("value_class_name", null);
-        String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
+        final String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
         this.editionType = ControlEditionType.ofOrNull(editionType);
         Jsons.requireNonNull(this.editionType, json, "edition_type",
                 "unknown (\"" + editionType + "\")", file);

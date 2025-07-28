@@ -157,6 +157,29 @@
       "default": "# mod = pya.import_file(\"my_module.py\") # - import from the chain directory\n\ndef execute(params, inputs, outputs):\n    # outputs.x1 = inputs.x1\n    # outputs.m1 = inputs.m1 # - access inputs and outputs\n    return \"Hello from Python function!\"\n"
     },
     {
+      "name": "compilerKind",
+      "caption": "Python compiler kind",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "JEP_SHARED",
+          "caption": "Standard"
+        },
+        {
+          "value": "JEP_GLOBAL",
+          "caption": "JVM-global (safe)"
+        },
+        {
+          "value": "JEP_LOCAL",
+          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
+        }
+      ],
+      "description": "\"JVM-global\" mode runs Python code in the single thread, global to the entire Java machine. This is safest mode, allowing you to use most Python libraries, even if they do not support multithreading very well (as \"matplotlib\" package). However, this mode reduces performance and is not good for multithreaded applications.\n\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors. In this mode, you may ignore the warning above about global variables for \"Main Python code\".\n\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries, such as \"numpy\", and IS VERY DANGEROUS: it may cause the entire system to crash — even you do not try to import such libraries. Moreover, it may lead to inability to execute any other Python scripts on the entire system until full reloading the application/server! We strongly recommend to AVOID THIS MODE. (For experts only: you may attempt it only for very simple examples written in pure Python — but only if you are absolute sure that no other Python code is running in the standard mode within the same JVM.)",
+
+      "default": "JEP_SHARED"
+    },
+    {
       "name": "mainFunctionName",
       "caption": "Main function name",
       "description": "Function that will be called. It can be declared it the code above or imported from some other module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nArguments \"params\", \"inputs\" and \"outputs\" should be instances of some Python classes. By default, we use classes \"Parameters\", \"Inputs\" and \"Outputs\" from standard Python API.",
@@ -264,25 +287,6 @@
       "value_type": "double",
       "edition_type": "value",
       "default": 0.0
-    },
-    {
-      "name": "compilerKind",
-      "caption": "Python compiler kind",
-      "value_type": "String",
-      "edition_type": "enum",
-      "items": [
-        {
-          "value": "JEP_SHARED",
-          "caption": "Standard (JEP SharedInterpreter)"
-        },
-        {
-          "value": "JEP_LOCAL",
-          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
-        }
-      ],
-      "description": "\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors. In this mode, you may ignore the warning above about global variables for \"Main Python code\".\n\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries, such as \"numpy\", and IS VERY DANGEROUS: it may cause the entire system to crash — even you do not try to import such libraries. Moreover, it may lead to inability to execute any other Python scripts on the entire system until full reloading the application/server! We strongly recommend to AVOID THIS MODE. (For experts only: you may attempt it only for very simple examples written in pure Python — but only if you are absolute sure that no other Python code is running in the standard mode within the same JVM.)",
-      "default": "JEP_SHARED",
-      "advanced": true
     },
     {
       "name": "visibleResult",

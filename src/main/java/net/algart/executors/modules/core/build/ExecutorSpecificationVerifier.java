@@ -253,7 +253,7 @@ public final class ExecutorSpecificationVerifier {
                             throw new JsonException("One of suppress_warnings is not string in " + f +
                                     " (" + value + ")");
                         }
-                        if (ControlSpecification.SUPPESS_WARNING_NO_SETTER.equals(
+                        if (ControlSpecification.SUPPRESS_WARNING_NO_SETTER.equals(
                                 jsonString.getString())) {
                             suppressNoSetter = true;
                         }

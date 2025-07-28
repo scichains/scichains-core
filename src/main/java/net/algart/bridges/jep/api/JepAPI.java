@@ -78,10 +78,6 @@ public class JepAPI {
         return new JepAPI();
     }
 
-    public static JepPerformerContainer getContainer() {
-        return initialize(JepPerformerContainer.getContainer(JepInterpreterKind.SHARED));
-    }
-
     public static JepPerformerContainer getContainer(JepInterpreterKind kind) {
         return initialize(JepPerformerContainer.getContainer(kind));
     }
@@ -100,7 +96,7 @@ public class JepAPI {
 
     public void initializedGlobalEnvironment(JepPerformer performer, Executor executor) {
         Objects.requireNonNull(performer, "Null performer");
-        if (performer.kind().isLocal()) {
+        if (performer.kind().isPure()) {
             // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue();
             // but really this is not enough: other operations also do not work well
             return;
@@ -278,9 +274,9 @@ public class JepAPI {
 
     public static List<String> initializingJepStartupCode(JepInterpreterKind jepInterpreterKind) {
         Objects.requireNonNull(jepInterpreterKind, "Null jepInterpreterKind");
-        return jepInterpreterKind == JepInterpreterKind.SHARED ?
-                STANDARD_STARTUP_SHARED :
-                STANDARD_STARTUP;
+        return jepInterpreterKind.isPure() ?
+                STANDARD_STARTUP :
+                STANDARD_STARTUP_SHARED;
     }
 
     public static VerificationStatus verifyLocal(Interpreter jepInterpreter, JepConfig configuration) {

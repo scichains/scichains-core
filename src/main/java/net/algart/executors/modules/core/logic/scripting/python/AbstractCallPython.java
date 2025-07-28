@@ -49,7 +49,8 @@ public abstract class AbstractCallPython extends Executor {
 
     public enum CompilerKind {
         JEP_LOCAL(e -> e.localContainer),
-        JEP_SHARED(e -> e.sharedContainer);
+        JEP_SHARED(e -> e.sharedContainer),
+        JEP_GLOBAL(e -> e.globalContainer);
 
         private final Function<AbstractCallPython, JepPerformerContainer> containerSupplier;
 
@@ -105,8 +106,9 @@ public abstract class AbstractCallPython extends Executor {
     private final JepAPI jepAPI = JepAPI.getInstance();
     private CompilerKind compilerKind = CompilerKind.JEP_SHARED;
 
-    final JepPerformerContainer sharedContainer = JepAPI.getContainer();
+    final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpreterKind.SHARED);
     final JepPerformerContainer localContainer = JepAPI.getContainer(JepInterpreterKind.LOCAL);
+    final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpreterKind.GLOBAL);
     private JepPerformer performer = null;
 
     public AbstractCallPython() {

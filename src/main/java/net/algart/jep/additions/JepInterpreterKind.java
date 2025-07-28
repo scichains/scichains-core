@@ -27,24 +27,44 @@ package net.algart.jep.additions;
 import jep.Interpreter;
 import jep.JepConfig;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public enum JepInterpreterKind {
-    LOCAL("local"),
-    SHARED("shared");
+    LOCAL("local", "local (sub-interpreter)"),
+    SHARED("shared", "shared"),
+    GLOBAL("global", "JVM-global");
 
     private final String kindName;
+    private final String prettyName;
 
-    JepInterpreterKind(String kindName) {
+    private static final Map<String, JepInterpreterKind> ALL_KINDS = new LinkedHashMap<>();
+
+    static {
+        for (JepInterpreterKind type : values()) {
+            ALL_KINDS.put(type.kindName, type);
+        }
+    }
+    JepInterpreterKind(String kindName, String prettyName) {
         this.kindName = kindName;
+        this.prettyName = prettyName;
     }
 
     public String kindName() {
         return kindName;
     }
 
-    public boolean isLocal() {
+    public String prettyName() {
+        return prettyName;
+    }
+
+    public boolean isPure() {
         return this == LOCAL;
+    }
+
+    public boolean isGlobalInJVM() {
+        return this == GLOBAL;
     }
 
     public ConfiguredInterpreter newInterpreter(Supplier<JepConfig> configurationSupplier) {
@@ -55,10 +75,13 @@ public enum JepInterpreterKind {
         if (configuration == null) {
             configuration = new JepExtendedConfiguration();
         }
-        Interpreter interpreter = isLocal() ?
-                JepCreationTools.newSubInterpreter(configuration) :
-                JepCreationTools.newSharedInterpreter(configuration);
+        Interpreter interpreter = this == LOCAL ?
+                JepCreationTools.newSubInterpreter(configuration, this) :
+                JepCreationTools.newSharedInterpreter(configuration, this);
         return new ConfiguredInterpreter(interpreter, configuration);
     }
 
+    public static JepInterpreterKind ofOrNull(String name) {
+        return ALL_KINDS.get(name);
+    }
 }

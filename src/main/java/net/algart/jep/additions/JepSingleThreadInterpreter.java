@@ -42,17 +42,26 @@ public class JepSingleThreadInterpreter implements Interpreter {
     static final Logger LOG = System.getLogger(JepSingleThreadInterpreter.class.getName());
 
     private static final Cleaner CLEANER = Cleaner.create();
+    private static final GlobalInterpreterHolder GLOBAL_INTERPRETER_HOLDER = new GlobalInterpreterHolder();
 
     private final JepInterpreterKind kind;
-    private final ExpensiveCleanableState state;
+    private final boolean globalInJVM;
+    private final ExpensiveState state;
     private final Cleaner.Cleanable cleanable;
 
     private JepSingleThreadInterpreter(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
         Objects.requireNonNull(kind, "Null kind");
         this.kind = kind;
-        this.state = new ExpensiveCleanableState(() -> kind.newInterpreter(configurationSupplier), kind.kindName());
+        this.globalInJVM = kind.isGlobalInJVM();
+        if (globalInJVM) {
+            this.state = GLOBAL_INTERPRETER_HOLDER.getGlobalState(kind, configurationSupplier);
+            this.cleanable = null;
+        } else {
+            final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(kind, configurationSupplier);
+            this.state = cleanableState;
+            this.cleanable = CLEANER.register(this, cleanableState);
+        }
         checkStateAlive();
-        this.cleanable = CLEANER.register(this, state);
     }
 
     public static JepSingleThreadInterpreter newInstance(
@@ -178,8 +187,10 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     @Override
     public void close() throws JepException {
-        state.normallyClosed = true;
-        cleanable.clean();
+        if (!globalInJVM) {
+            state.normallyClosed = true;
+            cleanable.clean();
+        }
     }
 
     @Override
@@ -230,7 +241,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         throw new AssertionError("Impossible checked exception: " + exception);
     }
 
-    private static class ExpensiveCleanableState implements Runnable {
+    private static class ExpensiveState {
         private final String name;
         private static final AtomicInteger THREAD_COUNT = new AtomicInteger(1);
         private volatile ThreadPoolExecutor singleThreadPool;
@@ -238,7 +249,10 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
-        public ExpensiveCleanableState(Supplier<ConfiguredInterpreter> configuredInterpreterSupplier, String name) {
+        private ExpensiveState(
+                Supplier<ConfiguredInterpreter> configuredInterpreterSupplier,
+                String name,
+                boolean globalForJVM) {
             if (name == null) {
                 name = "unknown";
             }
@@ -273,9 +287,13 @@ public class JepSingleThreadInterpreter implements Interpreter {
             assert singleThreadPool != null : "created via new operation above: singleThreadPool == null";
         }
 
-        // This method is called by JepSingleThreadInterpreter.CLEANER object
-        @Override
-        public void run() {
+        public ExpensiveState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+            this(() -> kind.newInterpreter(configurationSupplier),
+                    kind.kindName(),
+                    kind.isGlobalInJVM());
+        }
+
+        void shutdown() {
             synchronized (this.lock) {
                 if (isReallyClosed()) {
                     return;
@@ -320,6 +338,39 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
         private boolean isReallyClosed() {
             return singleThreadPool == null;
+        }
+    }
+
+    private static class ExpensiveCleanableState extends ExpensiveState implements Runnable {
+        public ExpensiveCleanableState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+            super(kind, configurationSupplier);
+            assert !kind.isGlobalInJVM() : "isGlobalInJVM() must be false for cleanable state";
+        }
+
+        // This method is called by JepSingleThreadInterpreter.CLEANER object
+        @Override
+        public void run() {
+            shutdown();
+        }
+    }
+
+    private static class GlobalInterpreterHolder {
+        private final Object lock = new Object();
+        private volatile ExpensiveState state = null;
+
+        // Note: this configuration supplier is used only once!
+        public ExpensiveState getGlobalState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+            Objects.requireNonNull(kind, "Null kind");
+            assert kind.isGlobalInJVM() : "isGlobalInJVM() must be true for global state";
+            ExpensiveState state = this.state;
+            if (state == null) {
+                synchronized (lock) {
+                    if (this.state == null) {
+                        this.state = state = new ExpensiveState(kind, configurationSupplier);
+                    }
+                }
+            }
+            return state;
         }
     }
 }
