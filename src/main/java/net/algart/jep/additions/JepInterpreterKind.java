@@ -26,6 +26,8 @@ package net.algart.jep.additions;
 
 import jep.JepConfig;
 
+import java.util.function.Supplier;
+
 public enum JepInterpreterKind {
     LOCAL("local") {
         @Override
@@ -50,8 +52,12 @@ public enum JepInterpreterKind {
         return kindName;
     }
 
-    public ConfiguredInterpreter newInterpreter() {
-        return newInterpreter(null);
+    public boolean isPure() {
+        return this == LOCAL;
+    }
+
+    public ConfiguredInterpreter newInterpreter(Supplier<JepConfig> configurationSupplier) {
+        return newInterpreter(configurationSupplier == null ? null : configurationSupplier.get());
     }
 
     public ConfiguredInterpreter newInterpreter(JepConfig configuration) {

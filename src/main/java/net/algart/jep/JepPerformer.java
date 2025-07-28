@@ -27,10 +27,7 @@ package net.algart.jep;
 import jep.JepConfig;
 import jep.python.PyCallable;
 import jep.python.PyObject;
-import net.algart.jep.additions.AtomicPyCallable;
-import net.algart.jep.additions.AtomicPyObject;
-import net.algart.jep.additions.JepExtendedConfiguration;
-import net.algart.jep.additions.JepSingleThreadInterpreter;
+import net.algart.jep.additions.*;
 
 import java.lang.System.Logger;
 import java.util.Objects;
@@ -52,6 +49,10 @@ public final class JepPerformer implements AutoCloseable {
 
     public JepSingleThreadInterpreter context() {
         return context;
+    }
+
+    public JepInterpreterKind kind() {
+        return context.kind();
     }
 
     /**

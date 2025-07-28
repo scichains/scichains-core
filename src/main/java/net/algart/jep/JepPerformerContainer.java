@@ -34,35 +34,22 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
-    private Supplier<ConfiguredInterpreter> contextSupplier;
     private Supplier<JepConfig> configurationSupplier = null;
-    private JepInterpreterKind kind = JepInterpreterKind.SHARED;
-    private String name = kind.kindName();
+    private final JepInterpreterKind kind;
 
     private volatile JepPerformer performer = null;
     private final Object lock = new Object();
 
-    private JepPerformerContainer() {
-        resetSupplier();
-    }
-
-    public static JepPerformerContainer getContainer() {
-        return new JepPerformerContainer();
+    private JepPerformerContainer(JepInterpreterKind kind) {
+        this.kind = Objects.requireNonNull(kind, "Null kind");
     }
 
     public static JepPerformerContainer getContainer(JepInterpreterKind kind) {
-        return getContainer().setKind(kind);
+        return new JepPerformerContainer(kind);
     }
 
     public JepInterpreterKind getKind() {
         return kind;
-    }
-
-    public JepPerformerContainer setKind(JepInterpreterKind kind) {
-        this.kind = Objects.requireNonNull(kind, "Null kind");
-        this.name = kind.kindName();
-        resetSupplier();
-        return this;
     }
 
     public Supplier<JepConfig> getConfigurationSupplier() {
@@ -86,39 +73,6 @@ public final class JepPerformerContainer implements AutoCloseable {
         return this;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public JepPerformerContainer setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
-     * Sets custom supplier of JEP interpreter. In this case, the kind is ignored.
-     *
-     * @param customContextSupplier custom supplier.
-     * @param name                  name of created interpreter (used in toString and logging).
-     * @return reference to this object.
-     */
-    public JepPerformerContainer setContextSupplier(
-            Supplier<ConfiguredInterpreter> customContextSupplier,
-            String name) {
-        Objects.requireNonNull(customContextSupplier, "Null customContextSupplier");
-        this.contextSupplier = customContextSupplier;
-        this.name = name;
-        return this;
-    }
-
-    public JepPerformerContainer setContextSupplier(Supplier<ConfiguredInterpreter> customInterpreterSupplier) {
-        return setContextSupplier(customInterpreterSupplier, null);
-    }
-
-    public Supplier<ConfiguredInterpreter> getContextSupplier() {
-        return contextSupplier;
-    }
-
     public JepPerformer performer() {
         // Maybe in the future this will be reworked: https://github.com/ninia/jep/issues/411
         JepPerformer performer;
@@ -127,7 +81,7 @@ public final class JepPerformerContainer implements AutoCloseable {
             performer = this.performer;
             if (performer == null) {
                 this.performer = performer = JepPerformer.newPerformer(
-                        JepSingleThreadInterpreter.newInstance(contextSupplier, name));
+                        JepSingleThreadInterpreter.newInstance(kind, configurationSupplier));
                 created = true;
             }
         }
@@ -135,10 +89,6 @@ public final class JepPerformerContainer implements AutoCloseable {
             JepPerformer.LOG.log(System.Logger.Level.DEBUG, "Created new " + performer);
         }
         return performer;
-    }
-
-    public JepConfig configuration() {
-        return configurationSupplier == null ? null : configurationSupplier.get();
     }
 
     /**
@@ -156,9 +106,5 @@ public final class JepPerformerContainer implements AutoCloseable {
         if (message != null) {
             JepPerformer.LOG.log(System.Logger.Level.DEBUG, "Closed " + message);
         }
-    }
-
-    private void resetSupplier() {
-        contextSupplier = () -> kind.newInterpreter(configuration());
     }
 }

@@ -43,26 +43,32 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     private static final Cleaner CLEANER = Cleaner.create();
 
+    private final JepInterpreterKind kind;
     private final ExpensiveCleanableState state;
     private final Cleaner.Cleanable cleanable;
 
-    private JepSingleThreadInterpreter(Supplier<ConfiguredInterpreter> configuredInterpreterSupplier, String name) {
-        Objects.requireNonNull(configuredInterpreterSupplier, "Null configuredInterpreterSupplier");
-        this.state = new ExpensiveCleanableState(configuredInterpreterSupplier, name);
+    private JepSingleThreadInterpreter(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+        Objects.requireNonNull(kind, "Null kind");
+        this.kind = kind;
+        this.state = new ExpensiveCleanableState(() -> kind.newInterpreter(configurationSupplier), kind.kindName());
         checkStateAlive();
         this.cleanable = CLEANER.register(this, state);
     }
 
     public static JepSingleThreadInterpreter newInstance(
-            Supplier<ConfiguredInterpreter> configuredInterpreterSupplier,
-            String name) {
-        return new JepSingleThreadInterpreter(configuredInterpreterSupplier, name);
+            JepInterpreterKind kind,
+            Supplier<JepConfig> configurationSupplier) {
+        Objects.requireNonNull(kind, "Null kind");
+        return new JepSingleThreadInterpreter(kind, configurationSupplier);
     }
 
-    public static JepSingleThreadInterpreter newInstance(JepInterpreterKind jepInterpreterKind) {
-        Objects.requireNonNull(jepInterpreterKind, "Null jepInterpreterKind");
-        return new JepSingleThreadInterpreter(
-                jepInterpreterKind::newInterpreter, jepInterpreterKind.kindName());
+    public JepInterpreterKind kind() {
+        return kind;
+    }
+
+    public JepConfig configuration() {
+        checkStateAlive();
+        return state.configuredInterpreter.configuration();
     }
 
     public <T> T executeInSingleThread(Callable<T> task) {
@@ -164,11 +170,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
         Objects.requireNonNull(name, "Null name");
         checkStateAlive();
         executeInSingleThread(() -> state.configuredInterpreter.interpreter().set(name, v));
-    }
-
-    public JepConfig configuration() {
-        checkStateAlive();
-        return state.configuredInterpreter.configuration();
     }
 
     public boolean isClosed() {

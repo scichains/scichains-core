@@ -29,10 +29,7 @@ import jep.python.PyCallable;
 import jep.python.PyObject;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
-import net.algart.jep.additions.AtomicPyObject;
-import net.algart.jep.additions.JepExtendedConfiguration;
-import net.algart.jep.additions.GlobalPythonConfiguration;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
 
@@ -50,6 +47,7 @@ public class JepAPI {
              "net.algart.jep.numpyIntegrationRequired", true);
 
     private static final AtomicBoolean NUMPY_INTEGRATION_PROBLEM_LOGGED = new AtomicBoolean(false);
+    private static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
 
     public static final String STANDARD_API_PACKAGE = "pyalgart";
     // Note: simple "algart" name leads to error, probably due to the existing "net.algart" Java package
@@ -72,8 +70,6 @@ public class JepAPI {
             "import " + STANDARD_API_MODULE + " as " + STANDARD_API_MODULE_ALIAS,
             "import " + STANDARD_API_JEP_VERIFIER);
 
-    static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
-
     // In the current version, this class has not any settings, but maybe they will be added in the future
     private JepAPI() {
     }
@@ -83,7 +79,7 @@ public class JepAPI {
     }
 
     public static JepPerformerContainer getContainer() {
-        return initialize(JepPerformerContainer.getContainer());
+        return initialize(JepPerformerContainer.getContainer(JepInterpreterKind.SHARED));
     }
 
     public static JepPerformerContainer getContainer(JepInterpreterKind kind) {
@@ -103,6 +99,11 @@ public class JepAPI {
     }
 
     public void initializedGlobalEnvironment(JepPerformer performer, Executor executor) {
+        Objects.requireNonNull(performer, "Null performer");
+        if (performer.kind().isPure()) {
+            // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue(
+            return;
+        }
         try (AtomicPyObject environment = performer.getObject(STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {
             environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
             environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
@@ -270,6 +271,7 @@ public class JepAPI {
         // Python print will normally go to stdout, but some IDE redirect the java output elsewhere.
         configuration.setStartupCode(initializingJepStartupCode(jepInterpreterKind));
         configuration.setVerifier(standardJepVerifier(jepInterpreterKind));
+        LOG.log(System.Logger.Level.TRACE, "Configuring " + performerContainer + ": " + configuration);
         return configuration;
     }
 

@@ -28,6 +28,7 @@ import jep.Interpreter;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.GlobalPythonConfiguration;
+import net.algart.jep.additions.JepInterpreterKind;
 
 // Note: this test does not use JepAPI and does not automatically verify integration with numpy
 public class SimpleJepPerformerTest {
@@ -46,7 +47,7 @@ public class SimpleJepPerformerTest {
         // MainInterpreter.setInitParams(PyConfig config)
         // for GlobalPythonConfiguration.INSTANCE
 
-        final JepPerformerContainer container = JepPerformerContainer.getContainer();
+        final JepPerformerContainer container = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
         System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
         final JepPerformer performer = container.performer();
         final Interpreter context = performer.context();
