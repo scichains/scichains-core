@@ -26,21 +26,27 @@ package net.algart.jep.tests;
 
 import jep.*;
 import jep.python.PyCallable;
+import jep.python.PyObject;
 
-public class CustomPythonTest {
+public class СommonPythonTest {
     private static final String TEST_SCRIPT =
             """
                     import sys
+                    
+                    class TestClass:
+                        def __init__(self):
+                            self.a = 12
 
                     def test():
                         result = str(sys.path)
                         result = result + "\\nHello from Python: " + str(sys.version)
+                        a = TestClass()
                         return result
                     """;
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.printf("Usage: %s path_to_Python%n", CustomPythonTest.class.getName());
+            System.out.printf("Usage: %s path_to_Python%n", СommonPythonTest.class.getName());
             return;
         }
 
@@ -68,6 +74,10 @@ public class CustomPythonTest {
         PyCallable testFunction = interpreter.getValue("test", PyCallable.class);
         result = testFunction.callAs(Object.class);
         System.out.printf("callAs:%n%s%n", result);
+        PyCallable testClass = interpreter.getValue("TestClass", PyCallable.class);
+        PyObject testInstance = testClass.callAs(PyObject.class);
+        result = testInstance.getAttr("a");
+        System.out.printf("getAttr:%n%s%n", result);
         interpreter.close();
 
         interpreter = new SubInterpreter();
@@ -77,6 +87,9 @@ public class CustomPythonTest {
         result = testFunction.call();
         // - old style (without type cast): necessary when numpy is integrated!
         System.out.printf("call:%n%s%n", result);
+        testInstance = (PyObject) interpreter.invoke("TestClass");
+        result = testInstance.getAttr("a");
+        System.out.printf("getAttr:%n%s%n", result);
         interpreter.close();
     }
 }

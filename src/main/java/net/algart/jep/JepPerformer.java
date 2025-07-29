@@ -117,11 +117,11 @@ public final class JepPerformer implements AutoCloseable {
 
     public AtomicPyObject newObject(String className, Object... args) {
         Objects.requireNonNull(className, "Null Python class name");
-            try (final AtomicPyCallable callable = getCallable(className)) {
-                return kind.isPure() ?
-                        callable.callRawAtomic(args) :
-                        callable.callAsAtomic(args);
-            }
+        try (final AtomicPyCallable callable = getCallable(className)) {
+            return kind.isPure() ?
+                    callable.callRawAtomic(args) :
+                    callable.callAsAtomic(args);
+        }
     }
 
     public AtomicPyObject wrapObject(PyObject pyObject) {
