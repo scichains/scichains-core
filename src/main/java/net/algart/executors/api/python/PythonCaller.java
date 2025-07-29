@@ -91,7 +91,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public void initialize(Executor executor) {
         final JepPerformer performer = performer();
-        jepAPI.initializedGlobalEnvironment(performer, executor);
+        jepAPI.initializedGlobalEnvironment(performer, executor, null);
         if (python.isClassMethod()) {
             final String className = python.getClassName();
             performer.perform(JepPerformer.importCode(python.getModule(), className));
@@ -145,7 +145,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             if (instance == null) {
                 throw new IllegalStateException("initialize() was not called correcly");
             }
-            try (final AtomicPyCallable method = instance.getCallable(python.getFunction())) {
+            try (final AtomicPyCallable method = instance.getAtomicCallable(python.getFunction())) {
                 return method.callAs(
                         Object.class,
                         params.pyObject(),

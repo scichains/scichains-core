@@ -43,11 +43,11 @@ public class AtomicPyObject implements AutoCloseable {
         return pyObject;
     }
 
-    public AtomicPyObject getObject(String name) throws JepException {
+    public AtomicPyObject getAtomic(String name) throws JepException {
         return i.wrapObject(getAttributeAs(name, PyObject.class));
     }
 
-    public AtomicPyCallable getCallable(String name) throws JepException {
+    public AtomicPyCallable getAtomicCallable(String name) throws JepException {
         return i.wrapCallable(getAttributeAs(name, PyCallable.class));
     }
 
@@ -91,7 +91,7 @@ public class AtomicPyObject implements AutoCloseable {
     public <T> T invokeAs(String methodName, Class<T> resultClass, Object... args) {
         Objects.requireNonNull(methodName, "Null methodName");
         Objects.requireNonNull(resultClass, "Null resultClass");
-        try (final AtomicPyCallable callable = getCallable(methodName)) {
+        try (final AtomicPyCallable callable = getAtomicCallable(methodName)) {
             return callable.callAs(resultClass, args);
         }
     }

@@ -39,7 +39,11 @@ public class AtomicPyCallable extends AtomicPyObject {
         this.pyCallable = pyCallable;
     }
 
-    public AtomicPyObject callAsObject(Object... args) throws JepException {
+    public AtomicPyObject callRawAtomic(Object... args) throws JepException {
+        return i.wrapObject((PyObject) callRaw(args));
+    }
+
+    public AtomicPyObject callAsAtomic(Object... args) throws JepException {
         return i.wrapObject(callAs(PyObject.class, args));
     }
 

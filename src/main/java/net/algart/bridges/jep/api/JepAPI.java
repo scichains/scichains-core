@@ -94,17 +94,18 @@ public class JepAPI {
         }
     }
 
-    public void initializedGlobalEnvironment(JepPerformer performer, Executor executor) {
+    public void initializedGlobalEnvironment(JepPerformer performer, Executor executor, Path workingDirectory) {
         Objects.requireNonNull(performer, "Null performer");
         if (performer.kind().isPure()) {
             // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue();
             // but really this is not enough: other operations also do not work well
             return;
         }
-        try (AtomicPyObject environment = performer.getObject(STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {
+        try (AtomicPyObject environment = performer.getObject(
+                STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {
             environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
             environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-            final Path currentDirectory = executor.getCurrentDirectory();
+            Path currentDirectory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
             environment.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
                     currentDirectory == null ? null : currentDirectory.toString());
         }
@@ -377,5 +378,6 @@ public class JepAPI {
                     GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
         }
     }
+
 
 }

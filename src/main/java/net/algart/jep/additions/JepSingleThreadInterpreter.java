@@ -57,6 +57,10 @@ public class JepSingleThreadInterpreter implements Interpreter {
         checkStateAlive();
     }
 
+    public static Object getGlobalLock() {
+        return GLOBAL_THREAD_POOL_HOLDER.getLock();
+    }
+
     public static JepSingleThreadInterpreter newInstance(
             JepInterpreterKind kind,
             Supplier<JepConfig> configurationSupplier) {
@@ -254,11 +258,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 this.singleThreadPool = GLOBAL_THREAD_POOL_HOLDER.getGlobalThreadPool();
             } else {
                 String threadName = "JEP " + name + " wrapping thread #" + THREAD_COUNT.getAndIncrement();
-                LOG.log(Logger.Level.TRACE,
-                        () -> "Creating " + threadName + "; number of active threads was " + Thread.activeCount());
+                LOG.log(Logger.Level.DEBUG, () -> "Creating " + threadName);
                 this.singleThreadPool = newSingleThreadPool(threadName);
             }
             try {
+                LOG.log(Logger.Level.DEBUG, () -> "Creating JEP " + this.name + " interpreter");
                 this.configuredInterpreter = this.singleThreadPool.submit(configuredInterpreterSupplier::get).get();
                 if (configuredInterpreter == null) {
                     throw new IllegalArgumentException("Illegal configuredInterpreterSupplier: created null result");
@@ -271,8 +275,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 this.singleThreadPool.shutdownNow();
                 throw translateException(e);
             }
-            LOG.log(Logger.Level.DEBUG,
-                    () -> "Created " + this + "; number of active threads is " + Thread.activeCount());
+            LOG.log(Logger.Level.DEBUG, () -> "Created " + toBriefString());
             assert configuredInterpreter != null : "already checked above: configuredInterpreter == null";
             assert singleThreadPool != null : "created via new operation above: singleThreadPool == null";
         }
@@ -295,6 +298,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 }
                 try {
                     singleThreadPool.submit(configuredInterpreter::close).get();
+                    LOG.log(Logger.Level.DEBUG, () -> "Closed JEP " + this.name + " interpreter");
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     throw translateException(e);
@@ -356,29 +360,13 @@ public class JepSingleThreadInterpreter implements Interpreter {
         }
     }
 
-    private static class GlobalInterpreterHolder {
-        private final Object lock = new Object();
-        private volatile ExpensiveState state = null;
-
-        // Note: this configuration supplier is used only once!
-        public ExpensiveState getGlobalState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
-            Objects.requireNonNull(kind, "Null kind");
-            assert kind.isGlobalInJVM() : "isGlobalInJVM() must be true for global state";
-            ExpensiveState state = this.state;
-            if (state == null) {
-                synchronized (lock) {
-                    if (this.state == null) {
-                        this.state = state = new ExpensiveState(kind, configurationSupplier);
-                    }
-                }
-            }
-            return state;
-        }
-    }
-
-    private static class GlobalThreadPoolHolder {
+    static class GlobalThreadPoolHolder {
         private final Object lock = new Object();
         private volatile ThreadPoolExecutor singleThreadPool;
+
+        public Object getLock() {
+            return lock;
+        }
 
         // Note: this configuration supplier is used only once!
         public ThreadPoolExecutor getGlobalThreadPool() {

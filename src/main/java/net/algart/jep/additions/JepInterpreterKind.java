@@ -81,6 +81,10 @@ public enum JepInterpreterKind {
         return new ConfiguredInterpreter(interpreter, configuration);
     }
 
+    public static Object getGlobalLock() {
+        return JepSingleThreadInterpreter.getGlobalLock();
+    }
+
     public static JepInterpreterKind ofOrNull(String name) {
         return ALL_KINDS.get(name);
     }

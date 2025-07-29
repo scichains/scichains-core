@@ -101,7 +101,7 @@ class JepCreationTools {
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
             LOG.log(System.Logger.Level.DEBUG, () ->
-                    "Executing start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
+                    "Executing JEP start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
                             kind,
                             Thread.currentThread().getName(),
                             startupCode.stream().map(s -> "<<" + s + ">>")

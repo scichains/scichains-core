@@ -24,10 +24,8 @@
 
 package net.algart.jep.tests;
 
-import jep.Interpreter;
-import jep.MainInterpreter;
-import jep.PyConfig;
-import jep.SharedInterpreter;
+import jep.*;
+import jep.python.PyCallable;
 
 public class CustomPythonTest {
     private static final String TEST_SCRIPT =
@@ -56,14 +54,29 @@ public class CustomPythonTest {
 //        MainInterpreter.setInitParams(pyConfig);
         // - Note: after this operator, the environment variable PYTHONHOME will be used, if it is not disabled
 
-        try (Interpreter interpreter = new SharedInterpreter()) {
-            System.out.println("Interpreter: " + interpreter);
-            System.out.println();
-            interpreter.exec(TEST_SCRIPT);
-            Object result = interpreter.invoke("test");
-            System.out.printf("From Python:%n%s%n", result);
-        }
+        Interpreter interpreter = new SharedInterpreter();
+        System.out.printf("Interpreter 1: %s%n", interpreter);
+        interpreter.exec(TEST_SCRIPT);
+        Object result = interpreter.invoke("test");
+        System.out.printf("invoke():%n%s%n", result);
+        interpreter.close();
+        // - The second SharedInterpreter will not work in the same thread before closing the previous
 
+        interpreter = new SharedInterpreter();
+        System.out.printf("%nInterpreter 2: %s%n", interpreter);
+        interpreter.exec(TEST_SCRIPT);
+        PyCallable testFunction = interpreter.getValue("test", PyCallable.class);
+        result = testFunction.callAs(Object.class);
+        System.out.printf("callAs:%n%s%n", result);
+        interpreter.close();
 
+        interpreter = new SubInterpreter();
+        System.out.printf("%nInterpreter 3: %s%n", interpreter);
+        interpreter.exec(TEST_SCRIPT);
+        testFunction = (PyCallable) interpreter.getValue("test");
+        result = testFunction.call();
+        // - old style (without type cast): necessary when numpy is integrated!
+        System.out.printf("call:%n%s%n", result);
+        interpreter.close();
     }
 }

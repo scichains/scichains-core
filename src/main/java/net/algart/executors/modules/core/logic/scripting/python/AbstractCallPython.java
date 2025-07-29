@@ -24,15 +24,17 @@
 
 package net.algart.executors.modules.core.logic.scripting.python;
 
-import net.algart.jep.JepPerformer;
-import net.algart.jep.JepPerformerContainer;
-import net.algart.jep.additions.AtomicPyObject;
-import net.algart.jep.additions.JepInterpreterKind;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;
+import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
+import net.algart.jep.JepPerformer;
+import net.algart.jep.JepPerformerContainer;
+import net.algart.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.JepInterpreterKind;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ public abstract class AbstractCallPython extends Executor {
     public static final String OUTPUT_SUPPLIED_PYTHON_ROOTS = "supplied_python_roots";
 
     private String mainFunctionName = "execute";
+    private String workingDirectory = ".";
     private String paramsClassName = "";
     private String inputsClassName = "";
     private String outputsClassName = "";
@@ -151,6 +154,20 @@ public abstract class AbstractCallPython extends Executor {
         this.mainFunctionName = nonEmptyTrimmed(mainFunctionName).trim();
         return this;
     }
+
+    public String getWorkingDirectory() {
+        return workingDirectory;
+    }
+
+    public AbstractCallPython setWorkingDirectory(String workingDirectory) {
+        workingDirectory = nonEmptyTrimmed(workingDirectory);
+        if (!workingDirectory.equals(this.workingDirectory)) {
+            closePerformerContainers();
+            this.workingDirectory = workingDirectory;
+        }
+        return this;
+    }
+
 
     public final String getParamsClassName() {
         return paramsClassName;
@@ -292,7 +309,12 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     public final AbstractCallPython setCompilerKind(CompilerKind compilerKind) {
-        this.compilerKind = nonNull(compilerKind);
+        nonNull(compilerKind);
+        if (compilerKind != this.compilerKind) {
+            closePerformerContainers();
+            // - this is safer to close all containers, not only the current
+            this.compilerKind = compilerKind;
+        }
         return this;
     }
 
@@ -310,13 +332,15 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void initialize() {
+        //TODO!! move implementation into a private methods and add global synchronization if necessary
+        //TODO!! (with only one process() method, empty initialize())
         long t1 = debugTime();
         //noinspection resource
         performer = container().performer();
         long t2 = debugTime();
         final String code = code();
         if (!code.isEmpty()) {
-            jepAPI.initializedGlobalEnvironment(performer, this);
+            jepAPI.initializedGlobalEnvironment(performer, this, translateWorkingDirectory());
             performer.perform(code);
         }
         long t3 = debugTime();
@@ -362,16 +386,25 @@ public abstract class AbstractCallPython extends Executor {
     @Override
     public final void close() {
         super.close();
-        sharedContainer.close();
-        localContainer.close();
+        closePerformerContainers();
     }
 
     protected abstract String code();
 
     protected abstract String executorName();
 
+    private void closePerformerContainers() {
+        globalContainer.close();
+        sharedContainer.close();
+        localContainer.close();
+    }
+
     private JepPerformerContainer container() {
         return compilerKind.containerSupplier.apply(this);
+    }
+
+    private Path translateWorkingDirectory() {
+        return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(workingDirectory, this);
     }
 
     private static <K, V> Map<K, V> subMap(Map<K, V> map, Collection<K> requestedKeys) {

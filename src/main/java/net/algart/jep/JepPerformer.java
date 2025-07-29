@@ -36,10 +36,12 @@ public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());
 
     final JepSingleThreadInterpreter context;
+    private final JepInterpreterKind kind;
     private final JepConfig configuration;
 
     private JepPerformer(JepSingleThreadInterpreter context) {
         this.context = Objects.requireNonNull(context, "Null JEP context");
+        this.kind = context.kind();
         this.configuration = context.configuration();
     }
 
@@ -52,7 +54,7 @@ public final class JepPerformer implements AutoCloseable {
     }
 
     public JepInterpreterKind kind() {
-        return context.kind();
+        return kind;
     }
 
     /**
@@ -86,7 +88,7 @@ public final class JepPerformer implements AutoCloseable {
         context.set(valueName, value);
     }
 
-    public Object getValue(String valueName) {
+    public Object getRawValue(String valueName) {
         Objects.requireNonNull(valueName, "Null valueName");
         return context.getValue(valueName);
     }
@@ -102,7 +104,10 @@ public final class JepPerformer implements AutoCloseable {
     }
 
     public AtomicPyCallable getCallable(String valueName) {
-        return context.wrapCallable(getValueAs(valueName, PyCallable.class));
+        final PyCallable callable = kind.isPure() ?
+                (PyCallable) getRawValue(valueName) :
+                getValueAs(valueName, PyCallable.class);
+        return context.wrapCallable(callable);
     }
 
     public Object invokeFunction(String functionName, Object... args) {
@@ -112,9 +117,11 @@ public final class JepPerformer implements AutoCloseable {
 
     public AtomicPyObject newObject(String className, Object... args) {
         Objects.requireNonNull(className, "Null Python class name");
-        try (final AtomicPyCallable callable = getCallable(className)) {
-            return callable.callAsObject(args);
-        }
+            try (final AtomicPyCallable callable = getCallable(className)) {
+                return kind.isPure() ?
+                        callable.callRawAtomic(args) :
+                        callable.callAsAtomic(args);
+            }
     }
 
     public AtomicPyObject wrapObject(PyObject pyObject) {

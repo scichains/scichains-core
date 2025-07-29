@@ -27,21 +27,21 @@ package net.algart.misc;
 import java.nio.file.Path;
 
 public class RelativePathsTest {
-    private static Path resolve(Path parent, String child) {
+    private static void resolveTest(Path parent, String child) {
         final Path childPath = Path.of(child);
-        if (childPath.isAbsolute()) {
-            System.out.printf("  \"%s\" is absolute, so it will be returned as is%n", childPath);
-            return childPath;
-        } else {
-            System.out.printf("  \"%s\" is relative%n", childPath);
-            return parent.resolve(childPath);
-            // - works normally even with absolute paths!
-        }
+        System.out.printf("  \"%s\" is %s, resolved results: %s for Path, %s for String%n",
+                childPath,
+                childPath.isAbsolute() ? "absolute" : "relative",
+                parent.resolve(childPath),
+                parent.resolve(child));
+        // - resolve() works normally even with absolute paths!
     }
+
     public static void main(String[] args) {
         Path base = Path.of("c:/tmp/");
-        System.out.println(resolve(base, "my_file"));
-        System.out.println(resolve(base, "d:my_file"));
-        System.out.println(resolve(base, "d:\\my_file"));
+        System.out.println("Base path: " + base);
+        resolveTest(base, "my_file");
+        resolveTest(base, "d:my_file");
+        resolveTest(base, "d:\\my_file");
     }
 }

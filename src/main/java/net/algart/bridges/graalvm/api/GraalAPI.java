@@ -67,7 +67,7 @@ public class GraalAPI {
     private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER = GraalSourceContainer
             .newLiteral()
             .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE, "__S_service");
-    // - note: creating container is a very "light" operation, not leading to using any Graal code
+    // - note: creating a container is a very "light" operation, not leading to using any Graal code
 
     private static final Logger LOG = System.getLogger(GraalAPI.class.getName());
     private static final java.util.logging.Logger JAVA_LOG =
