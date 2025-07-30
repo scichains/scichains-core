@@ -396,10 +396,10 @@ public abstract class Executor extends ExecutionBlock {
         return setter == null ? null : setter.parameterType;
     }
 
+    // Note: this method should be executed EVEN if we requested to cancel execution
+    // (it usually performs necessary initialization)
     @Override
     public void reset() {
-        // Note: this method should be executed EVEN if we requested to cancel execution
-        // (it usually performs necessary initialization)
         initialize();
     }
 
