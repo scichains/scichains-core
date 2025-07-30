@@ -28,7 +28,7 @@ import jep.*;
 import jep.python.PyCallable;
 import jep.python.PyObject;
 
-public class СommonPythonTest {
+public class JepAccessMembersTest {
     private static final String TEST_SCRIPT =
             """
                     import sys
@@ -46,7 +46,7 @@ public class СommonPythonTest {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.printf("Usage: %s path_to_Python%n", СommonPythonTest.class.getName());
+            System.out.printf("Usage: %s path_to_Python%n", JepAccessMembersTest.class.getName());
             return;
         }
 
