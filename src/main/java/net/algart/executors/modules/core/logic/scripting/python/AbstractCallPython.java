@@ -50,9 +50,9 @@ public abstract class AbstractCallPython extends Executor {
             "a", "b", "c", "d", "e", "f", "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
 
     public enum CompilerKind {
-        JEP_LOCAL(e -> e.localContainer),
-        JEP_SHARED(e -> e.sharedContainer),
-        JEP_GLOBAL(e -> e.globalContainer);
+        LOCAL(e -> e.localContainer),
+        SHARED(e -> e.sharedContainer),
+        GLOBAL(e -> e.globalContainer);
 
         private final Function<AbstractCallPython, JepPerformerContainer> containerSupplier;
 
@@ -107,11 +107,12 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private CompilerKind compilerKind = CompilerKind.JEP_SHARED;
+    private CompilerKind compilerKind = CompilerKind.SHARED;
 
     final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpreterKind.SHARED);
     final JepPerformerContainer localContainer = JepAPI.getContainer(JepInterpreterKind.LOCAL);
     final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpreterKind.GLOBAL);
+    // - 3 lightweight containers is a simple alternative for recreating a single container
     private JepPerformer performer = null;
 
     public AbstractCallPython() {

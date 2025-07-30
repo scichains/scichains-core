@@ -32,7 +32,7 @@ public class CallPythonFunctionTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
         try (CallPythonFunction e = new CallPythonFunction()) {
-            e.setCompilerKind(AbstractCallPython.CompilerKind.JEP_LOCAL);
+            e.setCompilerKind(AbstractCallPython.CompilerKind.LOCAL);
             e.reset();
             e.execute();
         }

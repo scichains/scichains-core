@@ -398,7 +398,7 @@ public abstract class Executor extends ExecutionBlock {
 
     @Override
     public void reset() {
-        // Note: this method should be executed EVEN we requested cancelling execution
+        // Note: this method should be executed EVEN if we requested to cancel execution
         // (it usually performs necessary initialization)
         initialize();
     }
