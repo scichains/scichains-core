@@ -31,7 +31,7 @@ import net.algart.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 
 import java.util.Objects;
 
@@ -52,7 +52,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
-        final JepInterpreterKind kind = this.python.getInterpreterKind();
+        final JepInterpretation.Kind kind = this.python.getInterpretationKind();
         if (kind.isPure()) {
             throw new IllegalArgumentException("Pure interpreter (" + kind + "is not allowed");
         }

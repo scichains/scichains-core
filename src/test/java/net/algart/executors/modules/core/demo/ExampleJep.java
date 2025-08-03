@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.demo;
 
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 import net.algart.executors.api.Executor;
 
 import java.util.Locale;
@@ -37,8 +37,8 @@ public class ExampleJep extends Executor {
 
     private boolean shared = false;
 
-    private final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
-    private final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SUB_INTERPRETER);
+    private final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpretation.Kind.SHARED);
+    private final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpretation.Kind.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
 
     public boolean isShared() {

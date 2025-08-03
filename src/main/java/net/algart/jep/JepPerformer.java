@@ -36,7 +36,7 @@ public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());
 
     final JepSingleThreadInterpreter context;
-    private final JepInterpreterKind kind;
+    private final JepInterpretation.Kind kind;
     private final JepConfig configuration;
 
     private JepPerformer(JepSingleThreadInterpreter context) {
@@ -53,7 +53,7 @@ public final class JepPerformer implements AutoCloseable {
         return context;
     }
 
-    public JepInterpreterKind kind() {
+    public JepInterpretation.Kind kind() {
         return kind;
     }
 

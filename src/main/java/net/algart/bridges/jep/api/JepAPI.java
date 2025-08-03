@@ -78,7 +78,7 @@ public class JepAPI {
         return new JepAPI();
     }
 
-    public static JepPerformerContainer getContainer(JepInterpreterKind kind) {
+    public static JepPerformerContainer getContainer(JepInterpretation.Kind kind) {
         return initialize(JepPerformerContainer.getContainer(kind));
     }
 
@@ -261,22 +261,22 @@ public class JepAPI {
     }
 
     public static JepExtendedConfiguration initializeConfiguration(JepPerformerContainer performerContainer) {
-        JepExtendedConfiguration configuration = new JepExtendedConfiguration();
-        JepInterpreterKind jepInterpreterKind = performerContainer.getKind();
+        final JepExtendedConfiguration configuration = new JepExtendedConfiguration();
+        final JepInterpretation.Kind kind = performerContainer.getKind();
         configuration.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
         configuration.redirectStdout(System.out);
         configuration.redirectStdErr(System.err);
         // - this helps to correctly use "print" Python function:
         // Python print will normally go to stdout, but some IDE redirect the java output elsewhere.
-        configuration.setStartupCode(initializingJepStartupCode(jepInterpreterKind));
-        configuration.setVerifier(standardJepVerifier(jepInterpreterKind));
+        configuration.setStartupCode(initializingJepStartupCode(kind));
+        configuration.setVerifier(standardJepVerifier(kind));
         LOG.log(System.Logger.Level.TRACE, "Configuring " + performerContainer + ": " + configuration);
         return configuration;
     }
 
-    public static List<String> initializingJepStartupCode(JepInterpreterKind jepInterpreterKind) {
-        Objects.requireNonNull(jepInterpreterKind, "Null jepInterpreterKind");
-        return jepInterpreterKind.isPure() ?
+    public static List<String> initializingJepStartupCode(JepInterpretation.Kind kind) {
+        Objects.requireNonNull(kind, "Null JEP interpretation kind");
+        return kind.isPure() ?
                 STANDARD_STARTUP :
                 STANDARD_STARTUP_SHARED;
     }
@@ -335,8 +335,8 @@ public class JepAPI {
     public record VerificationStatus(boolean numpyIntegration) {
     }
 
-    private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
-        return jepInterpreterKind.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
+    private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpretation.Kind kind) {
+        return kind.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
     }
 
     private static Object closePyObject(JepPerformer performer, Object value) {

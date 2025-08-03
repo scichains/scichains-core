@@ -41,18 +41,18 @@ class JepCreationTools {
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
-    static SubInterpreter newSubInterpreter(JepConfig configuration, JepInterpreterKind kind) {
+    static SubInterpreter newSubInterpreter(JepConfig configuration, JepInterpretation.Kind kind) {
         Objects.requireNonNull(configuration, "Null configuration");
-        Objects.requireNonNull(kind, "Null kind");
+        Objects.requireNonNull(kind, "Null JEP interpretation kind");
         final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
         SUB_INTERPRETER_CREATED.set(true);
         performStartupCodeForExtended(result, configuration, kind);
         return result;
     }
 
-    static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpreterKind kind) {
+    static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpretation.Kind kind) {
         Objects.requireNonNull(configuration, "Null configuration");
-        Objects.requireNonNull(kind, "Null kind");
+        Objects.requireNonNull(kind, "Null JEP interpretation kind");
         if (!SHARED_INTERPRETER_CREATED.getAndSet(true)) {
             SharedInterpreter.setConfig(configuration);
         }
@@ -102,7 +102,7 @@ class JepCreationTools {
     private static void performStartupCodeForExtended(
             Interpreter jepInterpreter,
             JepConfig configuration,
-            JepInterpreterKind kind) {
+            JepInterpretation.Kind kind) {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
@@ -116,7 +116,7 @@ class JepCreationTools {
             for (String codeSnippet : startupCode) {
                 assert codeSnippet != null : "setStartupCode did not check null elements";
                 final boolean probablyNumpy = codeSnippet.contains("numpy");
-                if (kind == JepInterpreterKind.SUB_INTERPRETER && probablyNumpy) {
+                if (kind == JepInterpretation.Kind.SUB_INTERPRETER && probablyNumpy) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
                             "for Python sub-interpreters (interpreter kind " + kind +

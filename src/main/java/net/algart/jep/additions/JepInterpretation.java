@@ -34,66 +34,75 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public enum JepInterpreterKind {
-    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)"),
-    SHARED("shared", "shared"),
-    GLOBAL("global", "JVM-global");
+public class JepInterpretation {
+    public enum Kind {
+        SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)"),
+        SHARED("shared", "shared"),
+        GLOBAL("global", "JVM-global");
 
-    private final String kindName;
-    private final String prettyName;
+        private final String kindName;
+        private final String prettyName;
 
-    private static final Map<String, JepInterpreterKind> ALL_KINDS = new LinkedHashMap<>();
+        private static final Map<String, Kind> ALL_KINDS = new LinkedHashMap<>();
 
-    static {
-        for (JepInterpreterKind type : values()) {
-            ALL_KINDS.put(type.kindName, type);
+        static {
+            for (Kind type : values()) {
+                ALL_KINDS.put(type.kindName, type);
+            }
+        }
+
+        Kind(String kindName, String prettyName) {
+            this.kindName = kindName;
+            this.prettyName = prettyName;
+        }
+
+        public String kindName() {
+            return kindName;
+        }
+
+        public String prettyName() {
+            return prettyName;
+        }
+
+        public boolean isPure() {
+            return this == SUB_INTERPRETER;
+        }
+
+        /**
+         * Returns <code>true</code> if this interpreter uses the single thread, global to the entire JVM.
+         *
+         * <p>Note: in this case, you <b>must globally synchronize</b>
+         * the entire code from creation {@link jep.SharedInterpreter}
+         * (usually via {@link net.algart.jep.JepPerformerContainer}) until destroying by
+         * {@link SharedInterpreter#close()} (usually via {@link JepPerformerContainer#close()}.
+         * You may use {@link JepInterpretation#executeWithJVMGlobalLock(Runnable, Runnable, Runnable)} method to do this.
+         *
+         * @return whether this interpreter executes Python code in the single thread for the entire JVM.
+         */
+        public boolean isJVMGlobal() {
+            return this == GLOBAL;
+        }
+
+        public ConfiguredInterpreter newInterpreter(Supplier<JepConfig> configurationSupplier) {
+            return newInterpreter(configurationSupplier == null ? null : configurationSupplier.get());
+        }
+
+        public ConfiguredInterpreter newInterpreter(JepConfig configuration) {
+            if (configuration == null) {
+                configuration = new JepExtendedConfiguration();
+            }
+            final Interpreter interpreter = this == SUB_INTERPRETER ?
+                    JepCreationTools.newSubInterpreter(configuration, this) :
+                    JepCreationTools.newSharedInterpreter(configuration, this);
+            return new ConfiguredInterpreter(interpreter, configuration);
+        }
+
+        public static Kind ofOrNull(String name) {
+            return ALL_KINDS.get(name);
         }
     }
 
-    JepInterpreterKind(String kindName, String prettyName) {
-        this.kindName = kindName;
-        this.prettyName = prettyName;
-    }
-
-    public String kindName() {
-        return kindName;
-    }
-
-    public String prettyName() {
-        return prettyName;
-    }
-
-    public boolean isPure() {
-        return this == SUB_INTERPRETER;
-    }
-
-    /**
-     * Returns <code>true</code> if this interpreter uses the single thread, global to the entire JVM.
-     *
-     * <p>Note: in this case, you <b>must globally synchronize</b>
-     * the entire code from creation {@link jep.SharedInterpreter}
-     * (usually via {@link net.algart.jep.JepPerformerContainer}) until destroying by
-     * {@link SharedInterpreter#close()} (usually via {@link JepPerformerContainer#close()}.
-     * You may use {@link #executeWithJVMGlobalLock(Runnable, Runnable, Runnable)} method to do this.
-     *
-     * @return whether this interpreter executes Python code in the single thread for the entire JVM.
-     */
-    public boolean isJVMGlobal() {
-        return this == GLOBAL;
-    }
-
-    public ConfiguredInterpreter newInterpreter(Supplier<JepConfig> configurationSupplier) {
-        return newInterpreter(configurationSupplier == null ? null : configurationSupplier.get());
-    }
-
-    public ConfiguredInterpreter newInterpreter(JepConfig configuration) {
-        if (configuration == null) {
-            configuration = new JepExtendedConfiguration();
-        }
-        final Interpreter interpreter = this == SUB_INTERPRETER ?
-                JepCreationTools.newSubInterpreter(configuration, this) :
-                JepCreationTools.newSharedInterpreter(configuration, this);
-        return new ConfiguredInterpreter(interpreter, configuration);
+    private JepInterpretation() {
     }
 
     public static Object getJVMGlobalLock() {
@@ -134,9 +143,5 @@ public enum JepInterpreterKind {
                 // - should close that SharedInterpreter; must be called even in case of exception!
             }
         }
-    }
-
-    public static JepInterpreterKind ofOrNull(String name) {
-        return ALL_KINDS.get(name);
     }
 }

@@ -26,8 +26,7 @@ package net.algart.jep;
 
 import jep.Interpreter;
 import jep.JepConfig;
-import net.algart.jep.additions.ConfiguredInterpreter;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 import net.algart.jep.additions.JepSingleThreadInterpreter;
 
 import java.util.Objects;
@@ -35,20 +34,20 @@ import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
     private Supplier<JepConfig> configurationSupplier = null;
-    private final JepInterpreterKind kind;
+    private final JepInterpretation.Kind kind;
 
     private volatile JepPerformer performer = null;
     private final Object lock = new Object();
 
-    private JepPerformerContainer(JepInterpreterKind kind) {
-        this.kind = Objects.requireNonNull(kind, "Null kind");
+    private JepPerformerContainer(JepInterpretation.Kind kind) {
+        this.kind = Objects.requireNonNull(kind, "Null JEP interpretation kind");
     }
 
-    public static JepPerformerContainer getContainer(JepInterpreterKind kind) {
+    public static JepPerformerContainer getContainer(JepInterpretation.Kind kind) {
         return new JepPerformerContainer(kind);
     }
 
-    public JepInterpreterKind getKind() {
+    public JepInterpretation.Kind getKind() {
         return kind;
     }
 

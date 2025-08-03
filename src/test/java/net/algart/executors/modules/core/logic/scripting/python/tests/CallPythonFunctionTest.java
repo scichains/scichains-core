@@ -26,13 +26,13 @@ package net.algart.executors.modules.core.logic.scripting.python.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.modules.core.logic.scripting.python.CallPythonFunction;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 
 public class CallPythonFunctionTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
         try (CallPythonFunction e = new CallPythonFunction()) {
-            e.setInterpreterKind(JepInterpreterKind.SUB_INTERPRETER);
+            e.setInterpretationKind(JepInterpretation.Kind.SUB_INTERPRETER);
             e.reset();
             e.execute();
         }

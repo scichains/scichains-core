@@ -32,7 +32,7 @@ import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyObject;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -94,11 +94,11 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private JepInterpreterKind interpreterKind = JepInterpreterKind.SHARED;
+    private JepInterpretation.Kind interpretationKind = JepInterpretation.Kind.SHARED;
 
-    final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpreterKind.SHARED);
-    final JepPerformerContainer subContainer = JepAPI.getContainer(JepInterpreterKind.SUB_INTERPRETER);
-    final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpreterKind.GLOBAL);
+    final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpretation.Kind.SHARED);
+    final JepPerformerContainer subContainer = JepAPI.getContainer(JepInterpretation.Kind.SUB_INTERPRETER);
+    final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpretation.Kind.GLOBAL);
     // - 3 lightweight containers is a simple alternative for recreating a single container
     private JepPerformer performer = null;
 
@@ -292,16 +292,16 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final JepInterpreterKind getInterpreterKind() {
-        return interpreterKind;
+    public final JepInterpretation.Kind getInterpretationKind() {
+        return interpretationKind;
     }
 
-    public final AbstractCallPython setInterpreterKind(JepInterpreterKind interpreterKind) {
-        nonNull(interpreterKind);
-        if (interpreterKind != this.interpreterKind) {
+    public final AbstractCallPython setInterpretationKind(JepInterpretation.Kind interpretationKind) {
+        nonNull(interpretationKind);
+        if (interpretationKind != this.interpretationKind) {
             closePython();
             // - this is safer to close all containers, not only the current
-            this.interpreterKind = interpreterKind;
+            this.interpretationKind = interpretationKind;
         }
         return this;
     }
@@ -320,15 +320,15 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void initialize() {
-        if (!interpreterKind.isJVMGlobal()) {
+        if (!interpretationKind.isJVMGlobal()) {
             initializePython();
         }
     }
 
     @Override
     public final void process() {
-        if (interpreterKind.isJVMGlobal()) {
-            JepInterpreterKind.executeWithJVMGlobalLock(
+        if (interpretationKind.isJVMGlobal()) {
+            JepInterpretation.executeWithJVMGlobalLock(
                     this::initializePython,
                     this::callPython,
                     this::closePython);
@@ -361,7 +361,7 @@ public abstract class AbstractCallPython extends Executor {
         long t3 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Python (%s) reset in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
-                interpreterKind,
+                interpretationKind,
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
@@ -405,7 +405,7 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     private JepPerformerContainer container() {
-        return switch (interpreterKind) {
+        return switch (interpretationKind) {
             case SUB_INTERPRETER -> subContainer;
             case SHARED -> sharedContainer;
             case GLOBAL -> globalContainer;

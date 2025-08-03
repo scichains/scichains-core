@@ -28,7 +28,7 @@ import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyObject;
 import net.algart.jep.additions.GlobalPythonConfiguration;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,8 +64,8 @@ public class JepBridgeTest {
                     """;
     // - Note: numpy is INCOMPATIBLE with sub-interpreters (local script), see SimpleJepNoFileNumpy
 
-    final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
-    final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SUB_INTERPRETER);
+    final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpretation.Kind.SHARED);
+    final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpretation.Kind.SUB_INTERPRETER);
 
     private static void showMemory(String message) {
         final Runtime rt = Runtime.getRuntime();

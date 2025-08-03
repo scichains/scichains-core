@@ -29,7 +29,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.bridges.jep.api.JepAPI;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.jep.additions.JepInterpreterKind;
+import net.algart.jep.additions.JepInterpretation;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -49,7 +49,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepInterpreterKind interpreterKind = JepInterpreterKind.SHARED;
+        private JepInterpretation.Kind interpretationKind = JepInterpretation.Kind.SHARED;
 
         public Python() {
         }
@@ -61,11 +61,11 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String interpreterKind = json.getString("interpreter_kind",
-                    JepInterpreterKind.SHARED.kindName());
-            this.interpreterKind = JepInterpreterKind.ofOrNull(interpreterKind);
-            Jsons.requireNonNull(this.interpreterKind, json, "interpreter_kind",
-                    "unknown (\"" + interpreterKind + "\")", file);
+            final String interpretationKind = json.getString("interpretation_kind",
+                    JepInterpretation.Kind.SHARED.kindName());
+            this.interpretationKind = JepInterpretation.Kind.ofOrNull(interpretationKind);
+            Jsons.requireNonNull(this.interpretationKind, json, "interpretation_kind",
+                    "unknown (\"" + interpretationKind + "\")", file);
         }
 
         public String getModule() {
@@ -122,12 +122,12 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public JepInterpreterKind getInterpreterKind() {
-            return interpreterKind;
+        public JepInterpretation.Kind getInterpretationKind() {
+            return interpretationKind;
         }
 
-        public Python setInterpreterKind(JepInterpreterKind interpreterKind) {
-            this.interpreterKind = nonNull(interpreterKind);
+        public Python setInterpretationKind(JepInterpretation.Kind interpretationKind) {
+            this.interpretationKind = nonNull(interpretationKind);
             return this;
         }
 
@@ -149,7 +149,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                     ", outputsClass='" + outputsClass + '\'' +
                     ", className='" + className + '\'' +
                     ", function='" + function + '\'' +
-                    ", interpreterKind=" + interpreterKind +
+                    ", interpretationKind=" + interpretationKind +
                     '}';
         }
 
@@ -163,7 +163,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                 builder.add("class", className);
             }
             builder.add("function", function);
-            builder.add("interpreter_kind", interpreterKind.name());
+            builder.add("interpretation_kind", interpretationKind.name());
         }
     }
 

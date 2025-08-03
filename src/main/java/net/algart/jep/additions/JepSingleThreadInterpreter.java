@@ -44,12 +44,12 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private static final Cleaner CLEANER = Cleaner.create();
     private static final JVMGlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new JVMGlobalThreadPoolHolder();
 
-    private final JepInterpreterKind kind;
+    private final JepInterpretation.Kind kind;
     private final ExpensiveState state;
     private final Cleaner.Cleanable cleanable;
 
-    private JepSingleThreadInterpreter(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
-        Objects.requireNonNull(kind, "Null kind");
+    private JepSingleThreadInterpreter(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
+        Objects.requireNonNull(kind, "Null JEP interpretation kind");
         this.kind = kind;
         final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(kind, configurationSupplier);
         this.state = cleanableState;
@@ -62,13 +62,13 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     public static JepSingleThreadInterpreter newInstance(
-            JepInterpreterKind kind,
+            JepInterpretation.Kind kind,
             Supplier<JepConfig> configurationSupplier) {
-        Objects.requireNonNull(kind, "Null kind");
+        Objects.requireNonNull(kind, "Null JEP interpretation kind");
         return new JepSingleThreadInterpreter(kind, configurationSupplier);
     }
 
-    public JepInterpreterKind kind() {
+    public JepInterpretation.Kind kind() {
         return kind;
     }
 
@@ -240,7 +240,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
-        public ExpensiveState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+        public ExpensiveState(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
             this(() -> kind.newInterpreter(configurationSupplier),
                     kind.kindName(),
                     kind.isJVMGlobal());
@@ -345,7 +345,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     private static class ExpensiveCleanableState extends ExpensiveState implements Runnable {
-        public ExpensiveCleanableState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+        public ExpensiveCleanableState(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
             super(kind, configurationSupplier);
         }
 
