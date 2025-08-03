@@ -47,7 +47,7 @@ public class SimpleJepPerformerTest {
         // MainInterpreter.setInitParams(PyConfig config)
         // for GlobalPythonConfiguration.INSTANCE
 
-        final JepPerformerContainer container = JepPerformerContainer.getContainer(JepInterpretation.Kind.SHARED);
+        final JepPerformerContainer container = JepPerformerContainer.newContainer(JepInterpretation.Mode.SHARED);
         System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
         final JepPerformer performer = container.performer();
         final Interpreter context = performer.context();

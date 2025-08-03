@@ -35,29 +35,29 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class JepInterpretation {
-    public enum Kind {
+    public enum Mode {
         SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)"),
         SHARED("shared", "shared"),
         GLOBAL("global", "JVM-global");
 
-        private final String kindName;
+        private final String modeName;
         private final String prettyName;
 
-        private static final Map<String, Kind> ALL_KINDS = new LinkedHashMap<>();
+        private static final Map<String, Mode> ALL_MODES = new LinkedHashMap<>();
 
         static {
-            for (Kind type : values()) {
-                ALL_KINDS.put(type.kindName, type);
+            for (Mode type : values()) {
+                ALL_MODES.put(type.modeName, type);
             }
         }
 
-        Kind(String kindName, String prettyName) {
-            this.kindName = kindName;
+        Mode(String modeName, String prettyName) {
+            this.modeName = modeName;
             this.prettyName = prettyName;
         }
 
-        public String kindName() {
-            return kindName;
+        public String modeName() {
+            return modeName;
         }
 
         public String prettyName() {
@@ -97,8 +97,8 @@ public class JepInterpretation {
             return new ConfiguredInterpreter(interpreter, configuration);
         }
 
-        public static Kind ofOrNull(String name) {
-            return ALL_KINDS.get(name);
+        public static Mode ofOrNull(String name) {
+            return ALL_MODES.get(name);
         }
     }
 

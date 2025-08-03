@@ -41,23 +41,23 @@ class JepCreationTools {
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
-    static SubInterpreter newSubInterpreter(JepConfig configuration, JepInterpretation.Kind kind) {
+    static SubInterpreter newSubInterpreter(JepConfig configuration, JepInterpretation.Mode mode) {
         Objects.requireNonNull(configuration, "Null configuration");
-        Objects.requireNonNull(kind, "Null JEP interpretation kind");
+        Objects.requireNonNull(mode, "Null JEP interpretation mode");
         final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
         SUB_INTERPRETER_CREATED.set(true);
-        performStartupCodeForExtended(result, configuration, kind);
+        performStartupCodeForExtended(result, configuration, mode);
         return result;
     }
 
-    static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpretation.Kind kind) {
+    static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpretation.Mode mode) {
         Objects.requireNonNull(configuration, "Null configuration");
-        Objects.requireNonNull(kind, "Null JEP interpretation kind");
+        Objects.requireNonNull(mode, "Null JEP interpretation mode");
         if (!SHARED_INTERPRETER_CREATED.getAndSet(true)) {
             SharedInterpreter.setConfig(configuration);
         }
         final SharedInterpreter result = doCreate(SharedInterpreter::new);
-        performStartupCodeForExtended(result, configuration, kind);
+        performStartupCodeForExtended(result, configuration, mode);
         return result;
     }
 
@@ -102,24 +102,24 @@ class JepCreationTools {
     private static void performStartupCodeForExtended(
             Interpreter jepInterpreter,
             JepConfig configuration,
-            JepInterpretation.Kind kind) {
+            JepInterpretation.Mode mode) {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
             LOG.log(System.Logger.Level.DEBUG,
                     () -> "Executing JEP start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
-                            kind,
+                            mode,
                             Thread.currentThread().getName(),
                             startupCode.stream().map(s -> "<<" + s + ">>")
                                     .collect(Collectors.joining("\n"))));
-            // - note: even for GLOBAL kind, this code is executed many times - before creating SharedInterpreter
+            // - note: even for GLOBAL mode, this code is executed many times - before creating SharedInterpreter
             for (String codeSnippet : startupCode) {
                 assert codeSnippet != null : "setStartupCode did not check null elements";
                 final boolean probablyNumpy = codeSnippet.contains("numpy");
-                if (kind == JepInterpretation.Kind.SUB_INTERPRETER && probablyNumpy) {
+                if (mode == JepInterpretation.Mode.SUB_INTERPRETER && probablyNumpy) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
-                            "for Python sub-interpreters (interpreter kind " + kind +
+                            "for Python sub-interpreters (interpretation mode " + mode +
                             ") and may crash the entire application");
                 }
                 try {

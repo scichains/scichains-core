@@ -49,7 +49,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepInterpretation.Kind interpretationKind = JepInterpretation.Kind.SHARED;
+        private JepInterpretation.Mode interpretationMode = JepInterpretation.Mode.SHARED;
 
         public Python() {
         }
@@ -61,11 +61,11 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String interpretationKind = json.getString("interpretation_kind",
-                    JepInterpretation.Kind.SHARED.kindName());
-            this.interpretationKind = JepInterpretation.Kind.ofOrNull(interpretationKind);
-            Jsons.requireNonNull(this.interpretationKind, json, "interpretation_kind",
-                    "unknown (\"" + interpretationKind + "\")", file);
+            final String interpretationMode = json.getString("interpretation_mode",
+                    JepInterpretation.Mode.SHARED.modeName());
+            this.interpretationMode = JepInterpretation.Mode.ofOrNull(interpretationMode);
+            Jsons.requireNonNull(this.interpretationMode, json, "interpretation_mode",
+                    "unknown (\"" + interpretationMode + "\")", file);
         }
 
         public String getModule() {
@@ -122,12 +122,12 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public JepInterpretation.Kind getInterpretationKind() {
-            return interpretationKind;
+        public JepInterpretation.Mode getInterpretationMode() {
+            return interpretationMode;
         }
 
-        public Python setInterpretationKind(JepInterpretation.Kind interpretationKind) {
-            this.interpretationKind = nonNull(interpretationKind);
+        public Python setInterpretationMode(JepInterpretation.Mode interpretationMode) {
+            this.interpretationMode = nonNull(interpretationMode);
             return this;
         }
 
@@ -149,7 +149,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                     ", outputsClass='" + outputsClass + '\'' +
                     ", className='" + className + '\'' +
                     ", function='" + function + '\'' +
-                    ", interpretationKind=" + interpretationKind +
+                    ", interpretationMode=" + interpretationMode +
                     '}';
         }
 
@@ -163,7 +163,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                 builder.add("class", className);
             }
             builder.add("function", function);
-            builder.add("interpretation_kind", interpretationKind.name());
+            builder.add("interpretation_mode", interpretationMode.name());
         }
     }
 

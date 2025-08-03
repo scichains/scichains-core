@@ -52,11 +52,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
-        final JepInterpretation.Kind kind = this.python.getInterpretationKind();
-        if (kind.isPure()) {
-            throw new IllegalArgumentException("Pure interpreter (" + kind + "is not allowed");
+        final JepInterpretation.Mode mode = this.python.getInterpretationMode();
+        if (mode.isPure()) {
+            throw new IllegalArgumentException("Pure interpreter (" + mode + "is not allowed");
         }
-        this.container = JepAPI.getContainer(kind);
+        this.container = JepAPI.newContainer(mode);
     }
 
     public static PythonCaller of(PythonCallerSpecification specification) {

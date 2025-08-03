@@ -170,8 +170,8 @@
       "default": "."
     },
     {
-      "name": "interpretationKind",
-      "caption": "Python interpretation kind",
+      "name": "interpretationMode",
+      "caption": "Python interpretation mode",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

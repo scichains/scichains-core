@@ -36,12 +36,12 @@ public final class JepPerformer implements AutoCloseable {
     static final Logger LOG = System.getLogger(JepPerformer.class.getName());
 
     final JepSingleThreadInterpreter context;
-    private final JepInterpretation.Kind kind;
+    private final JepInterpretation.Mode mode;
     private final JepConfig configuration;
 
     private JepPerformer(JepSingleThreadInterpreter context) {
         this.context = Objects.requireNonNull(context, "Null JEP context");
-        this.kind = context.kind();
+        this.mode = context.mode();
         this.configuration = context.configuration();
     }
 
@@ -53,8 +53,8 @@ public final class JepPerformer implements AutoCloseable {
         return context;
     }
 
-    public JepInterpretation.Kind kind() {
-        return kind;
+    public JepInterpretation.Mode mode() {
+        return mode;
     }
 
     /**
@@ -104,7 +104,7 @@ public final class JepPerformer implements AutoCloseable {
     }
 
     public AtomicPyCallable getCallable(String valueName) {
-        final PyCallable callable = kind.isPure() ?
+        final PyCallable callable = mode.isPure() ?
                 (PyCallable) getRawValue(valueName) :
                 getValueAs(valueName, PyCallable.class);
         return context.wrapCallable(callable);
@@ -118,7 +118,7 @@ public final class JepPerformer implements AutoCloseable {
     public AtomicPyObject newObject(String className, Object... args) {
         Objects.requireNonNull(className, "Null Python class name");
         try (final AtomicPyCallable callable = getCallable(className)) {
-            return kind.isPure() ?
+            return mode.isPure() ?
                     callable.callRawAtomic(args) :
                     callable.callAsAtomic(args);
         }

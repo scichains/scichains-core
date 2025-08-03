@@ -78,8 +78,8 @@ public class JepAPI {
         return new JepAPI();
     }
 
-    public static JepPerformerContainer getContainer(JepInterpretation.Kind kind) {
-        return initialize(JepPerformerContainer.getContainer(kind));
+    public static JepPerformerContainer newContainer(JepInterpretation.Mode mode) {
+        return initialize(JepPerformerContainer.newContainer(mode));
     }
 
     public void loadParameters(Executor executor, AtomicPyObject parameters) {
@@ -96,7 +96,7 @@ public class JepAPI {
 
     public void initializedGlobalEnvironment(JepPerformer performer, Executor executor, Path workingDirectory) {
         Objects.requireNonNull(performer, "Null performer");
-        if (performer.kind().isPure()) {
+        if (performer.mode().isPure()) {
             // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue();
             // but really this is not enough: other operations also do not work well
             return;
@@ -262,21 +262,21 @@ public class JepAPI {
 
     public static JepExtendedConfiguration initializeConfiguration(JepPerformerContainer performerContainer) {
         final JepExtendedConfiguration configuration = new JepExtendedConfiguration();
-        final JepInterpretation.Kind kind = performerContainer.getKind();
+        final JepInterpretation.Mode mode = performerContainer.mode();
         configuration.addIncludePaths(JepPlatforms.pythonRootFolders().toArray(new String[0]));
         configuration.redirectStdout(System.out);
         configuration.redirectStdErr(System.err);
         // - this helps to correctly use "print" Python function:
         // Python print will normally go to stdout, but some IDE redirect the java output elsewhere.
-        configuration.setStartupCode(initializingJepStartupCode(kind));
-        configuration.setVerifier(standardJepVerifier(kind));
+        configuration.setStartupCode(initializingJepStartupCode(mode));
+        configuration.setVerifier(standardJepVerifier(mode));
         LOG.log(System.Logger.Level.TRACE, "Configuring " + performerContainer + ": " + configuration);
         return configuration;
     }
 
-    public static List<String> initializingJepStartupCode(JepInterpretation.Kind kind) {
-        Objects.requireNonNull(kind, "Null JEP interpretation kind");
-        return kind.isPure() ?
+    public static List<String> initializingJepStartupCode(JepInterpretation.Mode mode) {
+        Objects.requireNonNull(mode, "Null JEP interpretation mode");
+        return mode.isPure() ?
                 STANDARD_STARTUP :
                 STANDARD_STARTUP_SHARED;
     }
@@ -335,8 +335,8 @@ public class JepAPI {
     public record VerificationStatus(boolean numpyIntegration) {
     }
 
-    private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpretation.Kind kind) {
-        return kind.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
+    private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpretation.Mode mode) {
+        return mode.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
     }
 
     private static Object closePyObject(JepPerformer performer, Object value) {

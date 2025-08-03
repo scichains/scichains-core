@@ -34,21 +34,21 @@ import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
     private Supplier<JepConfig> configurationSupplier = null;
-    private final JepInterpretation.Kind kind;
+    private final JepInterpretation.Mode mode;
 
     private volatile JepPerformer performer = null;
     private final Object lock = new Object();
 
-    private JepPerformerContainer(JepInterpretation.Kind kind) {
-        this.kind = Objects.requireNonNull(kind, "Null JEP interpretation kind");
+    private JepPerformerContainer(JepInterpretation.Mode mode) {
+        this.mode = Objects.requireNonNull(mode, "Null JEP interpretation mode");
     }
 
-    public static JepPerformerContainer getContainer(JepInterpretation.Kind kind) {
-        return new JepPerformerContainer(kind);
+    public static JepPerformerContainer newContainer(JepInterpretation.Mode mode) {
+        return new JepPerformerContainer(mode);
     }
 
-    public JepInterpretation.Kind getKind() {
-        return kind;
+    public JepInterpretation.Mode mode() {
+        return mode;
     }
 
     public Supplier<JepConfig> getConfigurationSupplier() {
@@ -80,7 +80,7 @@ public final class JepPerformerContainer implements AutoCloseable {
             performer = this.performer;
             if (performer == null) {
                 this.performer = performer = JepPerformer.newPerformer(
-                        JepSingleThreadInterpreter.newInstance(kind, configurationSupplier));
+                        JepSingleThreadInterpreter.newInstance(mode, configurationSupplier));
                 created = true;
             }
         }

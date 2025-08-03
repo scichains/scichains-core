@@ -44,14 +44,14 @@ public class JepSingleThreadInterpreter implements Interpreter {
     private static final Cleaner CLEANER = Cleaner.create();
     private static final JVMGlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new JVMGlobalThreadPoolHolder();
 
-    private final JepInterpretation.Kind kind;
+    private final JepInterpretation.Mode mode;
     private final ExpensiveState state;
     private final Cleaner.Cleanable cleanable;
 
-    private JepSingleThreadInterpreter(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
-        Objects.requireNonNull(kind, "Null JEP interpretation kind");
-        this.kind = kind;
-        final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(kind, configurationSupplier);
+    private JepSingleThreadInterpreter(JepInterpretation.Mode mode, Supplier<JepConfig> configurationSupplier) {
+        Objects.requireNonNull(mode, "Null JEP interpretation mode");
+        this.mode = mode;
+        final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(mode, configurationSupplier);
         this.state = cleanableState;
         this.cleanable = CLEANER.register(this, cleanableState);
         checkStateAlive();
@@ -62,14 +62,14 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     public static JepSingleThreadInterpreter newInstance(
-            JepInterpretation.Kind kind,
+            JepInterpretation.Mode mode,
             Supplier<JepConfig> configurationSupplier) {
-        Objects.requireNonNull(kind, "Null JEP interpretation kind");
-        return new JepSingleThreadInterpreter(kind, configurationSupplier);
+        Objects.requireNonNull(mode, "Null JEP interpretation mode");
+        return new JepSingleThreadInterpreter(mode, configurationSupplier);
     }
 
-    public JepInterpretation.Kind kind() {
-        return kind;
+    public JepInterpretation.Mode mode() {
+        return mode;
     }
 
     public JepConfig configuration() {
@@ -240,10 +240,10 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
-        public ExpensiveState(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
-            this(() -> kind.newInterpreter(configurationSupplier),
-                    kind.kindName(),
-                    kind.isJVMGlobal());
+        ExpensiveState(JepInterpretation.Mode mode, Supplier<JepConfig> configurationSupplier) {
+            this(() -> mode.newInterpreter(configurationSupplier),
+                    mode.modeName(),
+                    mode.isJVMGlobal());
         }
 
         private ExpensiveState(
@@ -345,8 +345,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     private static class ExpensiveCleanableState extends ExpensiveState implements Runnable {
-        public ExpensiveCleanableState(JepInterpretation.Kind kind, Supplier<JepConfig> configurationSupplier) {
-            super(kind, configurationSupplier);
+        public ExpensiveCleanableState(JepInterpretation.Mode mode, Supplier<JepConfig> configurationSupplier) {
+            super(mode, configurationSupplier);
         }
 
         // This method is called by JepSingleThreadInterpreter.CLEANER object

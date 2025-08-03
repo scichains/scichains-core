@@ -94,11 +94,11 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private JepInterpretation.Kind interpretationKind = JepInterpretation.Kind.SHARED;
+    private JepInterpretation.Mode interpretationMode = JepInterpretation.Mode.SHARED;
 
-    final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpretation.Kind.SHARED);
-    final JepPerformerContainer subContainer = JepAPI.getContainer(JepInterpretation.Kind.SUB_INTERPRETER);
-    final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpretation.Kind.GLOBAL);
+    final JepPerformerContainer sharedContainer = JepAPI.newContainer(JepInterpretation.Mode.SHARED);
+    final JepPerformerContainer subContainer = JepAPI.newContainer(JepInterpretation.Mode.SUB_INTERPRETER);
+    final JepPerformerContainer globalContainer = JepAPI.newContainer(JepInterpretation.Mode.GLOBAL);
     // - 3 lightweight containers is a simple alternative for recreating a single container
     private JepPerformer performer = null;
 
@@ -292,16 +292,16 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final JepInterpretation.Kind getInterpretationKind() {
-        return interpretationKind;
+    public final JepInterpretation.Mode getInterpretationMode() {
+        return interpretationMode;
     }
 
-    public final AbstractCallPython setInterpretationKind(JepInterpretation.Kind interpretationKind) {
-        nonNull(interpretationKind);
-        if (interpretationKind != this.interpretationKind) {
+    public final AbstractCallPython setInterpretationMode(JepInterpretation.Mode interpretationMode) {
+        nonNull(interpretationMode);
+        if (interpretationMode != this.interpretationMode) {
             closePython();
             // - this is safer to close all containers, not only the current
-            this.interpretationKind = interpretationKind;
+            this.interpretationMode = interpretationMode;
         }
         return this;
     }
@@ -320,14 +320,14 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void initialize() {
-        if (!interpretationKind.isJVMGlobal()) {
+        if (!interpretationMode.isJVMGlobal()) {
             initializePython();
         }
     }
 
     @Override
     public final void process() {
-        if (interpretationKind.isJVMGlobal()) {
+        if (interpretationMode.isJVMGlobal()) {
             JepInterpretation.executeWithJVMGlobalLock(
                     this::initializePython,
                     this::callPython,
@@ -361,7 +361,7 @@ public abstract class AbstractCallPython extends Executor {
         long t3 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Python (%s) reset in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
-                interpretationKind,
+                interpretationMode,
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
@@ -405,7 +405,7 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     private JepPerformerContainer container() {
-        return switch (interpretationKind) {
+        return switch (interpretationMode) {
             case SUB_INTERPRETER -> subContainer;
             case SHARED -> sharedContainer;
             case GLOBAL -> globalContainer;
