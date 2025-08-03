@@ -38,7 +38,7 @@ public class ExampleJep extends Executor {
     private boolean shared = false;
 
     private final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
-    private final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.LOCAL);
+    private final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
 
     public boolean isShared() {

@@ -173,8 +173,8 @@
       "default": "."
     },
     {
-      "name": "compilerKind",
-      "caption": "Python compiler kind",
+      "name": "interpreterKind",
+      "caption": "Python interpreter kind",
       "value_type": "String",
       "edition_type": "enum",
       "items": [
@@ -187,7 +187,7 @@
           "caption": "JVM-global (safe)"
         },
         {
-          "value": "LOCAL",
+          "value": "SUB_INTERPRETER",
           "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],

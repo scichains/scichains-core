@@ -170,8 +170,8 @@
       "default": "."
     },
     {
-      "name": "compilerKind",
-      "caption": "Python compiler kind",
+      "name": "interpreterKind",
+      "caption": "Python interpreter kind",
       "value_type": "String",
       "edition_type": "enum",
       "items": [
@@ -182,6 +182,10 @@
         {
           "value": "GLOBAL",
           "caption": "JVM-global (safe)"
+        },
+        {
+          "value": "SUB_INTERPRETER",
+          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
       "description": "\"JVM-global\" mode runs Python code in the single thread, global to the entire Java machine. This is safest mode, allowing you to use most Python libraries, even if they do not support multithreading very well (as \"matplotlib\" package). However, this mode reduces performance and is not good for multithreaded applications.\n",

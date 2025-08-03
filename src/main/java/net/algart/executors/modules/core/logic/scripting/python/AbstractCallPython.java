@@ -36,7 +36,6 @@ import net.algart.jep.additions.JepInterpreterKind;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 // Should be public for normal using setters in PropertySetter
@@ -48,18 +47,6 @@ public abstract class AbstractCallPython extends Executor {
     private static final List<String> OUTPUTS_NAMES = List.of(
             DEFAULT_OUTPUT_PORT,
             "a", "b", "c", "d", "e", "f", "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
-
-    public enum CompilerKind {
-        LOCAL(e -> e.localContainer),
-        SHARED(e -> e.sharedContainer),
-        GLOBAL(e -> e.globalContainer);
-
-        private final Function<AbstractCallPython, JepPerformerContainer> containerSupplier;
-
-        CompilerKind(Function<AbstractCallPython, JepPerformerContainer> containerSupplier) {
-            this.containerSupplier = containerSupplier;
-        }
-    }
 
     public static final String INPUT_X1 = "x1";
     public static final String INPUT_X2 = "x2";
@@ -107,10 +94,10 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private CompilerKind compilerKind = CompilerKind.SHARED;
+    private JepInterpreterKind interpreterKind = JepInterpreterKind.SHARED;
 
     final JepPerformerContainer sharedContainer = JepAPI.getContainer(JepInterpreterKind.SHARED);
-    final JepPerformerContainer localContainer = JepAPI.getContainer(JepInterpreterKind.LOCAL);
+    final JepPerformerContainer subContainer = JepAPI.getContainer(JepInterpreterKind.SUB_INTERPRETER);
     final JepPerformerContainer globalContainer = JepAPI.getContainer(JepInterpreterKind.GLOBAL);
     // - 3 lightweight containers is a simple alternative for recreating a single container
     private JepPerformer performer = null;
@@ -305,16 +292,16 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final CompilerKind getCompilerKind() {
-        return compilerKind;
+    public final JepInterpreterKind getInterpreterKind() {
+        return interpreterKind;
     }
 
-    public final AbstractCallPython setCompilerKind(CompilerKind compilerKind) {
-        nonNull(compilerKind);
-        if (compilerKind != this.compilerKind) {
+    public final AbstractCallPython setInterpreterKind(JepInterpreterKind interpreterKind) {
+        nonNull(interpreterKind);
+        if (interpreterKind != this.interpreterKind) {
             closePerformerContainers();
             // - this is safer to close all containers, not only the current
-            this.compilerKind = compilerKind;
+            this.interpreterKind = interpreterKind;
         }
         return this;
     }
@@ -397,11 +384,15 @@ public abstract class AbstractCallPython extends Executor {
     private void closePerformerContainers() {
         globalContainer.close();
         sharedContainer.close();
-        localContainer.close();
+        subContainer.close();
     }
 
     private JepPerformerContainer container() {
-        return compilerKind.containerSupplier.apply(this);
+        return switch (interpreterKind) {
+            case SUB_INTERPRETER -> subContainer;
+            case SHARED -> sharedContainer;
+            case GLOBAL -> globalContainer;
+        };
     }
 
     private Path translateWorkingDirectory() {

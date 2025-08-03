@@ -108,7 +108,7 @@ class JepCreationTools {
                                     .collect(Collectors.joining("\n"))));
             for (String codeSnippet : startupCode) {
                 assert codeSnippet != null : "setStartupCode did not check null elements";
-                if (kind == JepInterpreterKind.LOCAL && codeSnippet.contains("numpy")) {
+                if (kind == JepInterpreterKind.SUB_INTERPRETER && codeSnippet.contains("numpy")) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
                             "for Python sub-interpreters (interpreter kind " + kind +

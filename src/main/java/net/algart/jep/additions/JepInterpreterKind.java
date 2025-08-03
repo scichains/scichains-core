@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public enum JepInterpreterKind {
-    LOCAL("local", "local (sub-interpreter)"),
+    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)"),
     SHARED("shared", "shared"),
     GLOBAL("global", "JVM-global");
 
@@ -60,7 +60,7 @@ public enum JepInterpreterKind {
     }
 
     public boolean isPure() {
-        return this == LOCAL;
+        return this == SUB_INTERPRETER;
     }
 
     public boolean isGlobalInJVM() {
@@ -75,7 +75,7 @@ public enum JepInterpreterKind {
         if (configuration == null) {
             configuration = new JepExtendedConfiguration();
         }
-        Interpreter interpreter = this == LOCAL ?
+        Interpreter interpreter = this == SUB_INTERPRETER ?
                 JepCreationTools.newSubInterpreter(configuration, this) :
                 JepCreationTools.newSharedInterpreter(configuration, this);
         return new ConfiguredInterpreter(interpreter, configuration);

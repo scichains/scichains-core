@@ -65,7 +65,7 @@ public class JepBridgeTest {
     // - Note: numpy is INCOMPATIBLE with sub-interpreters (local script), see SimpleJepNoFileNumpy
 
     final JepPerformerContainer sharedContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SHARED);
-    final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.LOCAL);
+    final JepPerformerContainer localContainer = JepPerformerContainer.getContainer(JepInterpreterKind.SUB_INTERPRETER);
 
     private static void showMemory(String message) {
         final Runtime rt = Runtime.getRuntime();
