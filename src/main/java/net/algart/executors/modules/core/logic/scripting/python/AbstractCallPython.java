@@ -150,7 +150,7 @@ public abstract class AbstractCallPython extends Executor {
     public AbstractCallPython setWorkingDirectory(String workingDirectory) {
         workingDirectory = nonEmptyTrimmed(workingDirectory);
         if (!workingDirectory.equals(this.workingDirectory)) {
-            closePerformerContainers();
+            closePython();
             this.workingDirectory = workingDirectory;
         }
         return this;
@@ -299,7 +299,7 @@ public abstract class AbstractCallPython extends Executor {
     public final AbstractCallPython setInterpreterKind(JepInterpreterKind interpreterKind) {
         nonNull(interpreterKind);
         if (interpreterKind != this.interpreterKind) {
-            closePerformerContainers();
+            closePython();
             // - this is safer to close all containers, not only the current
             this.interpreterKind = interpreterKind;
         }
@@ -320,8 +320,35 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void initialize() {
-        //TODO!! move implementation into a private methods and add global synchronization if necessary
-        //TODO!! (with only one process() method, empty initialize())
+        if (!interpreterKind.isJVMGlobal()) {
+            initializePython();
+        }
+    }
+
+    @Override
+    public final void process() {
+        if (interpreterKind.isJVMGlobal()) {
+            JepInterpreterKind.executeWithJVMGlobalLock(
+                    this::initializePython,
+                    this::callPython,
+                    this::closePython);
+        } else {
+            callPython();
+        }
+    }
+
+    @Override
+    public final void close() {
+        super.close();
+        closePython();
+        // - not a problem to close again even if was closed by process() in the global mode
+    }
+
+    protected abstract String code();
+
+    protected abstract String executorName();
+
+    private void initializePython() {
         long t1 = debugTime();
         //noinspection resource
         performer = container().performer();
@@ -333,13 +360,13 @@ public abstract class AbstractCallPython extends Executor {
         }
         long t3 = debugTime();
         logDebug(() -> String.format(Locale.US,
-                "Python reset in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
+                "Python (%s) reset in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
+                interpreterKind,
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
 
-    @Override
-    public final void process() {
+    private void callPython() {
         long t1 = debugTime(), t2, t3, t4;
         if (performer == null) {
             throw new IllegalStateException(getClass() + " is not initialized");
@@ -364,24 +391,14 @@ public abstract class AbstractCallPython extends Executor {
         getScalar(OUTPUT_SUPPLIED_PYTHON_ROOTS).setTo(
                 String.join(String.format("%n"), JepPlatforms.pythonRootFolders()));
         logDebug(() -> String.format(Locale.US,
-                "%s \"%s\" executed in %.3f ms:"
+                "%s \"%s\" (%s) executed in %.3f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                executorName(), mainFunctionName,
+                executorName(), mainFunctionName, inputsClassName,
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }
 
-    @Override
-    public final void close() {
-        super.close();
-        closePerformerContainers();
-    }
-
-    protected abstract String code();
-
-    protected abstract String executorName();
-
-    private void closePerformerContainers() {
+    private void closePython() {
         globalContainer.close();
         sharedContainer.close();
         subContainer.close();

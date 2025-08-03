@@ -42,7 +42,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     static final Logger LOG = System.getLogger(JepSingleThreadInterpreter.class.getName());
 
     private static final Cleaner CLEANER = Cleaner.create();
-    private static final GlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new GlobalThreadPoolHolder();
+    private static final JVMGlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new JVMGlobalThreadPoolHolder();
 
     private final JepInterpreterKind kind;
     private final ExpensiveState state;
@@ -84,10 +84,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             checkClosed();
             try {
                 return state.singleThreadPool.submit(task).get();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw translateException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw translateException(e);
             }
         }
@@ -100,10 +97,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             checkClosed();
             try {
                 state.singleThreadPool.submit(task).get();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw translateException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw translateException(e);
             }
         }
@@ -210,7 +204,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     private static AssertionError translateException(Throwable exception) {
         if (exception instanceof InterruptedException) {
-            throw new JepException("Interruption of Jep operation", exception);
+            Thread.currentThread().interrupt();
+            throw new JepException("Interruption of JEP operation", exception);
         }
         if (exception instanceof ExecutionException) {
             final Throwable cause = exception.getCause();
@@ -245,6 +240,12 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private volatile boolean normallyClosed = false;
         private final Object lock = new Object();
 
+        public ExpensiveState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
+            this(() -> kind.newInterpreter(configurationSupplier),
+                    kind.kindName(),
+                    kind.isJVMGlobal());
+        }
+
         private ExpensiveState(
                 Supplier<ConfiguredInterpreter> configuredInterpreterSupplier,
                 String name,
@@ -257,7 +258,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             if (globalThreadPool) {
                 this.singleThreadPool = GLOBAL_THREAD_POOL_HOLDER.getGlobalThreadPool();
             } else {
-                String threadName = "JEP " + name + " wrapping thread #" + THREAD_COUNT.getAndIncrement();
+                String threadName = "JEP " + name + " execution thread #" + THREAD_COUNT.getAndIncrement();
                 LOG.log(Logger.Level.DEBUG, () -> "Creating " + threadName);
                 this.singleThreadPool = newSingleThreadPool(threadName);
             }
@@ -267,12 +268,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 if (configuredInterpreter == null) {
                     throw new IllegalArgumentException("Illegal configuredInterpreterSupplier: created null result");
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                this.singleThreadPool.shutdownNow();
-                throw translateException(e);
             } catch (Throwable e) {
-                this.singleThreadPool.shutdownNow();
+                shutdownLocalThreadPool(e);
                 throw translateException(e);
             }
             LOG.log(Logger.Level.DEBUG, () -> "Created " + toBriefString());
@@ -280,13 +277,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             assert singleThreadPool != null : "created via new operation above: singleThreadPool == null";
         }
 
-        public ExpensiveState(JepInterpreterKind kind, Supplier<JepConfig> configurationSupplier) {
-            this(() -> kind.newInterpreter(configurationSupplier),
-                    kind.kindName(),
-                    kind.isGlobalInJVM());
-        }
-
-        void shutdown() {
+        void closeInterpreter() {
             synchronized (this.lock) {
                 if (isReallyClosed()) {
                     return;
@@ -299,20 +290,25 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 try {
                     singleThreadPool.submit(configuredInterpreter::close).get();
                     LOG.log(Logger.Level.DEBUG, () -> "Closed JEP " + this.name + " interpreter");
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw translateException(e);
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     throw translateException(e);
                 }
-                if (!globalThreadPool) {
-                    singleThreadPool.shutdownNow();
-                    // - not just shutdown(): no sense to continue executing waiting tasks,
-                    // because jepInterpreter is already closed and will not be able to process anything
-                    singleThreadPool = null;
-                }
+                shutdownLocalThreadPool(null);
                 configuredInterpreter = null;
             }
+        }
+
+        private void shutdownLocalThreadPool(Throwable exception) {
+            assert singleThreadPool != null :
+                    "shutdownLocalThreadPool() was called twice or without normal creation: singleThreadPool == null";
+            if (!globalThreadPool) {
+                LOG.log(Logger.Level.DEBUG, () -> "Shutting down JEP " + name + " thread pool" +
+                        (exception == null ? "" : " (because of " + exception + ")"));
+                singleThreadPool.shutdownNow();
+                // - not just shutdown(): no sense to continue executing waiting tasks,
+                // because jepInterpreter is already closed and will not be able to process anything
+            }
+            singleThreadPool = null;
         }
 
         public String toBriefString() {
@@ -356,11 +352,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
         // This method is called by JepSingleThreadInterpreter.CLEANER object
         @Override
         public void run() {
-            shutdown();
+            closeInterpreter();
         }
     }
 
-    static class GlobalThreadPoolHolder {
+    static class JVMGlobalThreadPoolHolder {
         private final Object lock = new Object();
         private volatile ThreadPoolExecutor singleThreadPool;
 
@@ -374,7 +370,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             if (result == null) {
                 synchronized (lock) {
                     if (this.singleThreadPool == null) {
-                        final String threadName = "JEP global wrapping thread";
+                        final String threadName = "JEP JVM-global execution thread";
                         LOG.log(Logger.Level.INFO, () -> "Creating " + threadName);
                         this.singleThreadPool = ExpensiveState.newSingleThreadPool(threadName);
                         result = this.singleThreadPool;

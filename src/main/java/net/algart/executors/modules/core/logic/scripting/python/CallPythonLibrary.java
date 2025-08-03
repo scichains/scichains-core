@@ -52,10 +52,6 @@ public final class CallPythonLibrary extends AbstractCallPython {
 
     @Override
     protected String executorName() {
-        return "Python library function";
+        return "Python external function";
     }
-
-//    public static void main(String[] args) {
-//        new CallPythonLibrary().setModuleName("1s3423  ");
-//    }
 }

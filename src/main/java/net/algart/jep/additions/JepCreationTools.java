@@ -35,7 +35,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class JepCreationTools {
-    private static final AtomicBoolean SHARED_CREATED = new AtomicBoolean(false);
+    private static final AtomicBoolean SUB_INTERPRETER_CREATED = new AtomicBoolean(false);
+    private static final AtomicBoolean SHARED_INTERPRETER_CREATED = new AtomicBoolean(false);
     private static final Pattern IMPORT_MATCHER = Pattern.compile("^import\\s+(\\w+)");
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
@@ -44,6 +45,7 @@ class JepCreationTools {
         Objects.requireNonNull(configuration, "Null configuration");
         Objects.requireNonNull(kind, "Null kind");
         final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
+        SUB_INTERPRETER_CREATED.set(true);
         performStartupCodeForExtended(result, configuration, kind);
         return result;
     }
@@ -51,12 +53,16 @@ class JepCreationTools {
     static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepInterpreterKind kind) {
         Objects.requireNonNull(configuration, "Null configuration");
         Objects.requireNonNull(kind, "Null kind");
-        if (!SHARED_CREATED.getAndSet(true)) {
+        if (!SHARED_INTERPRETER_CREATED.getAndSet(true)) {
             SharedInterpreter.setConfig(configuration);
         }
         final SharedInterpreter result = doCreate(SharedInterpreter::new);
         performStartupCodeForExtended(result, configuration, kind);
         return result;
+    }
+
+    static boolean wasSubInterpreterCreated() {
+        return SUB_INTERPRETER_CREATED.get();
     }
 
     private static <T extends Interpreter> T doCreate(Supplier<T> constructor) {
@@ -100,15 +106,17 @@ class JepCreationTools {
         Objects.requireNonNull(jepInterpreter, "Null jepInterpreter");
         if (configuration instanceof final JepExtendedConfiguration extendedConfiguration) {
             final List<String> startupCode = extendedConfiguration.getStartupCode();
-            LOG.log(System.Logger.Level.DEBUG, () ->
-                    "Executing JEP start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
+            LOG.log(System.Logger.Level.DEBUG,
+                    () -> "Executing JEP start-up code for %s Python interpreter in a thread \"%s\":%n%s".formatted(
                             kind,
                             Thread.currentThread().getName(),
                             startupCode.stream().map(s -> "<<" + s + ">>")
                                     .collect(Collectors.joining("\n"))));
+            // - note: even for GLOBAL kind, this code is executed many times - before creating SharedInterpreter
             for (String codeSnippet : startupCode) {
                 assert codeSnippet != null : "setStartupCode did not check null elements";
-                if (kind == JepInterpreterKind.SUB_INTERPRETER && codeSnippet.contains("numpy")) {
+                final boolean probablyNumpy = codeSnippet.contains("numpy");
+                if (kind == JepInterpreterKind.SUB_INTERPRETER && probablyNumpy) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
                             "for Python sub-interpreters (interpreter kind " + kind +
@@ -123,10 +131,12 @@ class JepCreationTools {
                     }
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\".\nThe necessary Python package" + importedPackage(codeSnippet) +
-                            " was probably not installed correctly in Python\n" +
-                            "(Python error message: " + e.getMessage() +
-                            ").\n" +
-                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS, e);
+                            " was probably not installed correctly in Python" +
+                            (probablyNumpy && wasSubInterpreterCreated() ?
+                                    ",\nor you already used JEP SubInterpreter, which is completely " +
+                                            "incompatible with NumPy even if was used once." :
+                                    ".\n(Python error message: " + e.getMessage() + ").\n" +
+                                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS), e);
                 }
             }
             if (extendedConfiguration.hasVerifier()) {

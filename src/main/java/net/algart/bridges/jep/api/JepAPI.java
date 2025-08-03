@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 
 public class JepAPI {
     public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
-             "net.algart.jep.numpyIntegrationRequired", true);
+            "net.algart.jep.numpyIntegrationRequired", true);
 
     private static final AtomicBoolean NUMPY_INTEGRATION_PROBLEM_LOGGED = new AtomicBoolean(false);
     private static final System.Logger LOG = System.getLogger(JepAPI.class.getName());
@@ -251,7 +251,8 @@ public class JepAPI {
             throw new IllegalStateException("Cannot load a matrix from Python outputs: " +
                     "numpy.ndarray should be used in this case,\n" +
                     " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);        }
+                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+        }
     }
 
     public static JepPerformerContainer initialize(JepPerformerContainer performerContainer) {
@@ -280,7 +281,7 @@ public class JepAPI {
                 STANDARD_STARTUP_SHARED;
     }
 
-    public static VerificationStatus verifyLocal(Interpreter jepInterpreter, JepConfig configuration) {
+    public static VerificationStatus verifyPure(Interpreter jepInterpreter, JepConfig configuration) {
         // does nothing in the current version
         return null;
     }
@@ -301,12 +302,12 @@ public class JepAPI {
         if (!ok) {
             final Supplier<String> message = () ->
                     "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
-                    "the function that creates numpy.ndarray for integers " +
-                    "does not return the correct Java type NDArray/DirectNDArray " +
-                    "(it returns " +
-                    (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
-                    ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
+                            "the function that creates numpy.ndarray for integers " +
+                            "does not return the correct Java type NDArray/DirectNDArray " +
+                            "(it returns " +
+                            (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
+                            ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
+                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
             if (REQUIRE_NUMPY_INTEGRATION) {
                 throw new JepException(message.get());
             } else {
@@ -326,17 +327,16 @@ public class JepAPI {
 
     public static boolean isNumpyIntegration(JepConfig configuration) {
         return configuration instanceof JepExtendedConfiguration extendedConfiguration
-                && extendedConfiguration.getVerificationStatus() instanceof VerificationStatus status
-                && status.numpyIntegration();
+                && extendedConfiguration.getVerificationStatus()
+                instanceof VerificationStatus(boolean numpyIntegration)
+                && numpyIntegration;
     }
 
     public record VerificationStatus(boolean numpyIntegration) {
     }
 
     private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpreterKind jepInterpreterKind) {
-        return jepInterpreterKind == JepInterpreterKind.SHARED ?
-                JepAPI::verifyShared :
-                JepAPI::verifyLocal;
+        return jepInterpreterKind.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
     }
 
     private static Object closePyObject(JepPerformer performer, Object value) {

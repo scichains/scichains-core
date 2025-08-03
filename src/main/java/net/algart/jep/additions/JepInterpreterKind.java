@@ -26,9 +26,12 @@ package net.algart.jep.additions;
 
 import jep.Interpreter;
 import jep.JepConfig;
+import jep.SharedInterpreter;
+import net.algart.jep.JepPerformerContainer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public enum JepInterpreterKind {
@@ -46,6 +49,7 @@ public enum JepInterpreterKind {
             ALL_KINDS.put(type.kindName, type);
         }
     }
+
     JepInterpreterKind(String kindName, String prettyName) {
         this.kindName = kindName;
         this.prettyName = prettyName;
@@ -63,7 +67,18 @@ public enum JepInterpreterKind {
         return this == SUB_INTERPRETER;
     }
 
-    public boolean isGlobalInJVM() {
+    /**
+     * Returns <code>true</code> if this interpreter uses the single thread, global to the entire JVM.
+     *
+     * <p>Note: in this case, you <b>must globally synchronize</b>
+     * the entire code from creation {@link jep.SharedInterpreter}
+     * (usually via {@link net.algart.jep.JepPerformerContainer}) until destroying by
+     * {@link SharedInterpreter#close()} (usually via {@link JepPerformerContainer#close()}.
+     * You may use {@link #executeWithJVMGlobalLock(Runnable, Runnable, Runnable)} method to do this.
+     *
+     * @return whether this interpreter executes Python code in the single thread for the entire JVM.
+     */
+    public boolean isJVMGlobal() {
         return this == GLOBAL;
     }
 
@@ -75,14 +90,50 @@ public enum JepInterpreterKind {
         if (configuration == null) {
             configuration = new JepExtendedConfiguration();
         }
-        Interpreter interpreter = this == SUB_INTERPRETER ?
+        final Interpreter interpreter = this == SUB_INTERPRETER ?
                 JepCreationTools.newSubInterpreter(configuration, this) :
                 JepCreationTools.newSharedInterpreter(configuration, this);
         return new ConfiguredInterpreter(interpreter, configuration);
     }
 
-    public static Object getGlobalLock() {
+    public static Object getJVMGlobalLock() {
         return JepSingleThreadInterpreter.getGlobalLock();
+    }
+
+    /**
+     * Executes a sequence of actions under the JVM-global synchronization lock: {@link #getJVMGlobalLock()}.
+     * Here:
+     * <ul>
+     *     <li><code>creation</code>:
+     *     creates the interpreter (usually {@link JepSingleThreadInterpreter}
+     *     or {@link JepPerformerContainer});</li>
+     *     <li><code>processing</code>: performs the main logic using the created interpteter;</li>
+     *     <li><code>closing</code>: closes the resource (for example, {@link JepPerformerContainer#close()} or
+     *     {@link JepPerformerContainer#close()}; guaranteed to be called even in case of exception.
+     * </ul>
+     *
+     * <p>This method uses <code>synchronized (getJVMGlobalLock()) {...}</code> operators
+     * for executing all 3 stages.
+     *
+     * @param creation   create the interpreter.
+     * @param processing process Python operations.
+     * @param closing    close the interpreter.
+     * @throws NullPointerException if any of arguments is <code>null</code>.
+     */
+    public static void executeWithJVMGlobalLock(Runnable creation, Runnable processing, Runnable closing) {
+        Objects.requireNonNull(creation, "Null creation");
+        Objects.requireNonNull(processing, "Null processing");
+        Objects.requireNonNull(closing, "Null closing");
+        synchronized (getJVMGlobalLock()) {
+            try {
+                creation.run();
+                // - should create a single SharedInterpreter
+                processing.run();
+            } finally {
+                closing.run();
+                // - should close that SharedInterpreter; must be called even in case of exception!
+            }
+        }
     }
 
     public static JepInterpreterKind ofOrNull(String name) {
