@@ -20,9 +20,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-import numpy
-
 
 def returnTestNdArray():
+    import numpy
     return numpy.array([1, 2])
     # - no sense in trying to optimize this (like returning a constant or zero array): it all depends on the compiler

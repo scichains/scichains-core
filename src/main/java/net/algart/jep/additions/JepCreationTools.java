@@ -93,7 +93,7 @@ class JepCreationTools {
                         "");
         if (homeInformation.exists()) {
             return "Python is not correctly installed at " + messageHome +
-                    "or \"jep\" module is not properly installed.\n" + GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
+                    "or \"jep\" module is not properly installed.\n" + JepInterpretation.JEP_INSTALLATION_HINTS;
         } else {
             return "Python home " + messageHome + "is not an existing Python directory";
         }
@@ -136,7 +136,7 @@ class JepCreationTools {
                                     ",\nor you already used JEP SubInterpreter, which is completely " +
                                             "incompatible with NumPy even if was used once." :
                                     ".\n(Python error message: " + e.getMessage() + ").\n" +
-                                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS), e);
+                                            JepInterpretation.JEP_INSTALLATION_HINTS), e);
                 }
             }
             if (extendedConfiguration.hasVerifier()) {

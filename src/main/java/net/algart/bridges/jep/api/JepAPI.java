@@ -232,7 +232,7 @@ public class JepAPI {
             throw new IllegalArgumentException("Cannot pass the matrix\n    " + matrix +
                     "\nto Python inputs: numpy.ndarray should be used in this case,\n" +
                     " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+                    JepInterpretation.JEP_INSTALLATION_HINTS);
         }
     }
 
@@ -251,7 +251,7 @@ public class JepAPI {
             throw new IllegalStateException("Cannot load a matrix from Python outputs: " +
                     "numpy.ndarray should be used in this case,\n" +
                     " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+                    JepInterpretation.JEP_INSTALLATION_HINTS);
         }
     }
 
@@ -287,37 +287,20 @@ public class JepAPI {
     }
 
     public static VerificationStatus verifyShared(Interpreter jepInterpreter, JepConfig configuration) {
-        final Object array;
         try {
-            try (PyCallable creator = jepInterpreter.getValue(STANDARD_API_JEP_VERIFIER_FUNCTION, PyCallable.class)) {
-                array = creator.call();
-            }
-        } catch (JepException e) {
-            throw new JepException("Cannot execute Python verification function \"" +
-                    STANDARD_API_JEP_VERIFIER_FUNCTION +
-                    "\"; maybe, the Python module " + STANDARD_API_JEP_VERIFIER +
-                    " was not installed correctly", e);
-        }
-        final boolean ok = array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
-        if (!ok) {
-            final Supplier<String> message = () ->
-                    "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
-                            "the function that creates numpy.ndarray for integers " +
-                            "does not return the correct Java type NDArray/DirectNDArray " +
-                            "(it returns " +
-                            (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
-                            ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                            GlobalPythonConfiguration.JEP_INSTALLATION_HINTS;
+            JepInterpretation.checkNumpyIntegration(jepInterpreter, STANDARD_API_JEP_VERIFIER_FUNCTION);
+            return new VerificationStatus(true);
+        } catch (JepNumpyIntegrationException e) {
             if (REQUIRE_NUMPY_INTEGRATION) {
-                throw new JepException(message.get());
+                throw e;
             } else {
                 System.Logger.Level level = NUMPY_INTEGRATION_PROBLEM_LOGGED.getAndSet(true) ?
                         System.Logger.Level.DEBUG :
                         System.Logger.Level.WARNING;
-                LOG.log(level, message);
+                LOG.log(level, e.getMessage());
+                return new VerificationStatus(false);
             }
         }
-        return new VerificationStatus(ok);
     }
 
     public static boolean isNumpyIntegrationVerified(JepConfig configuration) {
@@ -332,11 +315,13 @@ public class JepAPI {
                 && numpyIntegration;
     }
 
-    public record VerificationStatus(boolean numpyIntegration) {
+    public record VerificationStatus(boolean numpyAvailable) {
     }
 
     private static JepExtendedConfiguration.Verifier standardJepVerifier(JepInterpretation.Mode mode) {
-        return mode.isPure() ? JepAPI::verifyPure : JepAPI::verifyShared;
+        return mode.isPure() ?
+                JepAPI::verifyPure :
+                JepAPI::verifyShared;
     }
 
     private static Object closePyObject(JepPerformer performer, Object value) {
@@ -375,7 +360,7 @@ public class JepAPI {
             throw new IllegalArgumentException("Cannot pass numbers with " + numbers.getBlockLength() +
                     " > 1 columns\nto Python inputs: numpy.ndarray should be used in this case,\n" +
                     " but there is an integration problem between Python packages \"jep\" and \"numpy\".\n" +
-                    GlobalPythonConfiguration.JEP_INSTALLATION_HINTS);
+                    JepInterpretation.JEP_INSTALLATION_HINTS);
         }
     }
 
