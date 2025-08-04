@@ -64,6 +64,9 @@ class Environment:
 class Parameters:
     def __init__(self):
         self._env = _env;
+        if (_env is not None):
+            self._executor = _env.executor;
+            self._platform = _env.platform;
 
 
 class Inputs:

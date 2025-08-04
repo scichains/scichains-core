@@ -968,7 +968,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
         return interruptionRequested || rootCaller.interruptionRequested;
         /*
          - usually rootCaller.interruptionRequested is enough;
-         but interruptionRequested is also checked - for a situation, when we (maybe) ignore the logic of "caller"
+         but interruptionRequested is also checked - for a situation when we (maybe) ignore the logic of "caller"
         */
     }
 

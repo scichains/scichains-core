@@ -49,7 +49,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepInterpretation.Mode interpretationMode = JepInterpretation.Mode.SHARED;
+        private JepInterpretation.Mode mode = JepInterpretation.Mode.SHARED;
 
         public Python() {
         }
@@ -61,11 +61,9 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String interpretationMode = json.getString("interpretation_mode",
-                    JepInterpretation.Mode.SHARED.modeName());
-            this.interpretationMode = JepInterpretation.Mode.ofOrNull(interpretationMode);
-            Jsons.requireNonNull(this.interpretationMode, json, "interpretation_mode",
-                    "unknown (\"" + interpretationMode + "\")", file);
+            final String mode = json.getString("mode", JepInterpretation.Mode.SHARED.modeName());
+            this.mode = JepInterpretation.Mode.ofOrNull(mode);
+            Jsons.requireNonNull(this.mode, json, "mode", "unknown (\"" + mode + "\")", file);
         }
 
         public String getModule() {
@@ -122,12 +120,12 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public JepInterpretation.Mode getInterpretationMode() {
-            return interpretationMode;
+        public JepInterpretation.Mode getMode() {
+            return mode;
         }
 
-        public Python setInterpretationMode(JepInterpretation.Mode interpretationMode) {
-            this.interpretationMode = nonNull(interpretationMode);
+        public Python setMode(JepInterpretation.Mode mode) {
+            this.mode = nonNull(mode);
             return this;
         }
 
@@ -143,14 +141,14 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         @Override
         public String toString() {
             return "Python{" +
-                    "module='" + module + '\'' +
-                    ", paramsClass='" + paramsClass + '\'' +
-                    ", inputsClass='" + inputsClass + '\'' +
-                    ", outputsClass='" + outputsClass + '\'' +
-                    ", className='" + className + '\'' +
-                    ", function='" + function + '\'' +
-                    ", interpretationMode=" + interpretationMode +
-                    '}';
+                   "module='" + module + '\'' +
+                   ", paramsClass='" + paramsClass + '\'' +
+                   ", inputsClass='" + inputsClass + '\'' +
+                   ", outputsClass='" + outputsClass + '\'' +
+                   ", className='" + className + '\'' +
+                   ", function='" + function + '\'' +
+                   ", interpretationMode=" + mode +
+                   '}';
         }
 
         @Override
@@ -163,7 +161,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
                 builder.add("class", className);
             }
             builder.add("function", function);
-            builder.add("interpretation_mode", interpretationMode.name());
+            builder.add("mode", mode.name());
         }
     }
 
@@ -176,7 +174,8 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         super(json, file);
         final JsonObject pythonJson = json.getJsonObject("python");
         if (isPythonExecutor() && pythonJson == null) {
-            throw new JsonException("Invalid executor configuration JSON" + (file == null ? "" : " " + file)
+            throw new JsonException(
+                    "Invalid executor configuration JSON" + (file == null ? "" : " " + file)
                     + ": \"python\" section required when \"language\" is \"python\"");
         }
         this.python = pythonJson == null ? null : new Python(pythonJson, file);
@@ -258,8 +257,8 @@ public class PythonCallerSpecification extends ExecutorSpecification {
     @Override
     public String toString() {
         return "PythonCallerSpecification{" +
-                "python=" + python +
-                "}, extending " + super.toString();
+               "python=" + python +
+               "}, extending " + super.toString();
     }
 
     @Override

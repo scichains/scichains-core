@@ -41,13 +41,22 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     @Override
     public void initialize() {
         useVisibleResultParameter();
-        //noinspection resource
-        pythonCaller().initialize(this);
+        long t1 = debugTime();
+        @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
+        long t2 = debugTime();
+        pythonCaller.initialize(this);
+        long t3 = debugTime();
+        logDebug(() -> String.format(Locale.US,
+                "Python module \"%s\" (%s) initialized in %.3f ms: " +
+                "%.6f ms getting caller + %.6f ms initializing code",
+                pythonCaller.name(), pythonCaller.interpretationMode(),
+                (t3 - t1) * 1e-6,
+                (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
 
     @Override
     public void process() {
-        long t1 = System.nanoTime(), t2, t3, t4;
+        long t1 = debugTime(), t2, t3, t4;
         @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
         try (AtomicPyObject params = pythonCaller.loadParameters(this);
              AtomicPyObject inputs = pythonCaller.readInputPorts(this);
@@ -62,9 +71,9 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
         }
         setSystemOutputs();
         logDebug(() -> String.format(Locale.US,
-                "Python \"%s\" executed in %.5f ms:"
+                "Python module \"%s\" (%s) executed in %.5f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                pythonCaller.name(),
+                pythonCaller.name(), pythonCaller.interpretationMode(),
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }

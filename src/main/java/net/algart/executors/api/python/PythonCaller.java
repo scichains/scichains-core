@@ -39,6 +39,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.Python python;
     private final JepPerformerContainer container;
+    private final JepInterpretation.Mode interpretationMode;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject instance = null;
 
@@ -52,10 +53,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
-        final JepInterpretation.Mode mode = this.python.getInterpretationMode();
+        final JepInterpretation.Mode mode = this.python.getMode();
         if (mode.isPure()) {
             throw new IllegalArgumentException("Pure interpreter (" + mode + "is not allowed");
         }
+        this.interpretationMode = mode;
         this.container = JepAPI.newContainer(mode);
     }
 
@@ -77,6 +79,14 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public String platformId() {
         return specification.getPlatformId();
+    }
+
+    public JepInterpretation.Mode interpretationMode() {
+        return interpretationMode;
+    }
+
+    public boolean isGlobalSynchronizationRequired() {
+        return interpretationMode.isJVMGlobal();
     }
 
     public JepPerformer performer() {

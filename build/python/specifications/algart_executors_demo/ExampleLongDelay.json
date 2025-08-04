@@ -1,0 +1,36 @@
+{
+  "app": "executor",
+  "category": "~examples.python",
+  "name": "Python example: long delay",
+  "tags": [
+    "demo"
+  ],
+  "id": "0709bf7d-c6c7-401c-a611-e043e9ed932b",
+  "language": "python",
+  "python": {
+    "module": "algart_executors_demo.ExampleLongDelay",
+    "mode": "global"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "title",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "Long delay"
+    },
+    {
+      "name": "delay",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 60
+    }
+  ]
+}

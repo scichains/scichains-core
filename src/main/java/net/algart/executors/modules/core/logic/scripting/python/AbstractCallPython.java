@@ -320,14 +320,14 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void initialize() {
-        if (!interpretationMode.isJVMGlobal()) {
+        if (!isGlobalSynchronizationRequired()) {
             initializePython();
         }
     }
 
     @Override
     public final void process() {
-        if (interpretationMode.isJVMGlobal()) {
+        if (isGlobalSynchronizationRequired()) {
             JepInterpretation.executeWithJVMGlobalLock(
                     this::initializePython,
                     this::callPython,
@@ -348,6 +348,10 @@ public abstract class AbstractCallPython extends Executor {
 
     protected abstract String executorName();
 
+    private boolean isGlobalSynchronizationRequired() {
+        return interpretationMode.isJVMGlobal();
+    }
+
     private void initializePython() {
         long t1 = debugTime();
         //noinspection resource
@@ -360,8 +364,8 @@ public abstract class AbstractCallPython extends Executor {
         }
         long t3 = debugTime();
         logDebug(() -> String.format(Locale.US,
-                "Python (%s) reset in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
-                interpretationMode,
+                "%s (%s) initialized in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
+                executorName(), interpretationMode,
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
@@ -393,7 +397,7 @@ public abstract class AbstractCallPython extends Executor {
         logDebug(() -> String.format(Locale.US,
                 "%s \"%s\" (%s) executed in %.3f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                executorName(), mainFunctionName, inputsClassName,
+                executorName(), mainFunctionName, interpretationMode,
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }

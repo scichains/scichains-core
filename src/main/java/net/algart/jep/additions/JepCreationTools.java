@@ -69,10 +69,12 @@ class JepCreationTools {
         try {
             return constructor.get();
         } catch (UnsatisfiedLinkError | JepException e) {
-            throw new JepException("Cannot find Python: \"jep\" module (Java Embedded Python) " +
-                    "is not properly loaded (" +
-                    e.getClass().getSimpleName() +
-                    ").\nProbably " + unsatisfiedLinkDiagnostics(), e);
+            throw new JepException(
+                    "Cannot find Python: \"jep\" module (Java Embedded Python) " +
+                            "is not properly loaded.\n" +
+                            e.getClass().getSimpleName() +
+                            (e instanceof UnsatisfiedLinkError ? "" : ": " + e.getMessage()) +
+                            "\nProbably " + unsatisfiedLinkDiagnostics(), e);
         }
     }
 
@@ -87,8 +89,9 @@ class JepCreationTools {
                             "is not specified properly\n" +
                             "(for example via the PYTHONHOME system environment variable)";
         }
-        final String messageHome = "\"" + homeInformation.pythonHome() + "\" " +
-                (homeInformation.systemEnvironmentUsed() ?
+        final String messageHome =
+                "\"" + homeInformation.pythonHome() +
+                        "\" " + (homeInformation.systemEnvironmentUsed() ?
                         "(value of PYTHONHOME environment variable) " :
                         "");
         if (homeInformation.exists()) {
