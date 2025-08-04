@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class CallJSModule extends Executor {
+public final class CallJSFunction extends Executor {
     private static final List<String> PARAMETERS_NAMES = List.of(
             "a", "b", "c", "d", "e", "f", "p", "q", "r", "s", "t", "u");
     private static final List<String> INPUTS_NAMES = List.of(
@@ -102,7 +102,7 @@ public final class CallJSModule extends Executor {
 
     private final Object lock = new Object();
 
-    public CallJSModule() {
+    public CallJSFunction() {
         useVisibleResultParameter();
         addInputNumbers(INPUT_X1);
         addInputNumbers(INPUT_X2);
@@ -137,7 +137,7 @@ public final class CallJSModule extends Executor {
         return code;
     }
 
-    public CallJSModule setCode(String code) {
+    public CallJSFunction setCode(String code) {
         this.code = nonEmptyTrimmed(code);
         return this;
     }
@@ -146,7 +146,7 @@ public final class CallJSModule extends Executor {
         return mainFunctionName;
     }
 
-    public CallJSModule setMainFunctionName(String mainFunctionName) {
+    public CallJSFunction setMainFunctionName(String mainFunctionName) {
         this.mainFunctionName = nonEmptyTrimmed(mainFunctionName);
         return this;
     }
@@ -155,7 +155,7 @@ public final class CallJSModule extends Executor {
         return workingDirectory;
     }
 
-    public CallJSModule setWorkingDirectory(String workingDirectory) {
+    public CallJSFunction setWorkingDirectory(String workingDirectory) {
         workingDirectory = nonEmptyTrimmed(workingDirectory);
         if (!workingDirectory.equals(this.workingDirectory)) {
             closePerformerContainer();
@@ -168,7 +168,7 @@ public final class CallJSModule extends Executor {
         return a;
     }
 
-    public CallJSModule setA(String a) {
+    public CallJSFunction setA(String a) {
         this.a = a;
         return this;
     }
@@ -177,7 +177,7 @@ public final class CallJSModule extends Executor {
         return b;
     }
 
-    public CallJSModule setB(String b) {
+    public CallJSFunction setB(String b) {
         this.b = b;
         return this;
     }
@@ -186,7 +186,7 @@ public final class CallJSModule extends Executor {
         return c;
     }
 
-    public CallJSModule setC(String c) {
+    public CallJSFunction setC(String c) {
         this.c = c;
         return this;
     }
@@ -195,7 +195,7 @@ public final class CallJSModule extends Executor {
         return d;
     }
 
-    public CallJSModule setD(String d) {
+    public CallJSFunction setD(String d) {
         this.d = d;
         return this;
     }
@@ -204,7 +204,7 @@ public final class CallJSModule extends Executor {
         return e;
     }
 
-    public CallJSModule setE(String e) {
+    public CallJSFunction setE(String e) {
         this.e = e;
         return this;
     }
@@ -213,7 +213,7 @@ public final class CallJSModule extends Executor {
         return f;
     }
 
-    public CallJSModule setF(String f) {
+    public CallJSFunction setF(String f) {
         this.f = f;
         return this;
     }
@@ -222,7 +222,7 @@ public final class CallJSModule extends Executor {
         return p;
     }
 
-    public CallJSModule setP(double p) {
+    public CallJSFunction setP(double p) {
         this.p = p;
         return this;
     }
@@ -231,7 +231,7 @@ public final class CallJSModule extends Executor {
         return q;
     }
 
-    public CallJSModule setQ(double q) {
+    public CallJSFunction setQ(double q) {
         this.q = q;
         return this;
     }
@@ -240,7 +240,7 @@ public final class CallJSModule extends Executor {
         return r;
     }
 
-    public CallJSModule setR(double r) {
+    public CallJSFunction setR(double r) {
         this.r = r;
         return this;
     }
@@ -249,7 +249,7 @@ public final class CallJSModule extends Executor {
         return s;
     }
 
-    public CallJSModule setS(double s) {
+    public CallJSFunction setS(double s) {
         this.s = s;
         return this;
     }
@@ -258,7 +258,7 @@ public final class CallJSModule extends Executor {
         return t;
     }
 
-    public CallJSModule setT(double t) {
+    public CallJSFunction setT(double t) {
         this.t = t;
         return this;
     }
@@ -267,7 +267,7 @@ public final class CallJSModule extends Executor {
         return u;
     }
 
-    public CallJSModule setU(double u) {
+    public CallJSFunction setU(double u) {
         this.u = u;
         return this;
     }
@@ -276,7 +276,7 @@ public final class CallJSModule extends Executor {
         return graalAPI.isConvertInputScalarToNumber();
     }
 
-    public CallJSModule setConvertInputScalarToNumber(boolean convertInputScalarToNumber) {
+    public CallJSFunction setConvertInputScalarToNumber(boolean convertInputScalarToNumber) {
         graalAPI.setConvertInputScalarToNumber(convertInputScalarToNumber);
         return this;
     }
@@ -285,7 +285,7 @@ public final class CallJSModule extends Executor {
         return graalAPI.isConvertInputNumbersToArray();
     }
 
-    public CallJSModule setConvertInputNumbersToArray(boolean convertInputNumbersToArray) {
+    public CallJSFunction setConvertInputNumbersToArray(boolean convertInputNumbersToArray) {
         graalAPI.setConvertInputNumbersToArray(convertInputNumbersToArray);
         return this;
     }
@@ -294,7 +294,7 @@ public final class CallJSModule extends Executor {
         return graalAPI.isConvertInputArraysToDouble();
     }
 
-    public CallJSModule setConvertInputArraysToDouble(boolean convertInputArraysToDouble) {
+    public CallJSFunction setConvertInputArraysToDouble(boolean convertInputArraysToDouble) {
         graalAPI.setConvertInputArraysToDouble(convertInputArraysToDouble);
         return this;
     }
@@ -303,7 +303,7 @@ public final class CallJSModule extends Executor {
         return graalAPI.isConvertOutputIntegerToBriefForm();
     }
 
-    public CallJSModule setConvertOutputIntegersToBriefForm(boolean convertOutputIntegersToBriefForm) {
+    public CallJSFunction setConvertOutputIntegersToBriefForm(boolean convertOutputIntegersToBriefForm) {
         graalAPI.setConvertOutputIntegersToBriefForm(convertOutputIntegersToBriefForm);
         return this;
     }
@@ -312,7 +312,7 @@ public final class CallJSModule extends Executor {
         return safety;
     }
 
-    public CallJSModule setSafety(GraalSafety safety) {
+    public CallJSFunction setSafety(GraalSafety safety) {
         nonNull(safety);
         if (safety != this.safety) {
             closePerformerContainer();

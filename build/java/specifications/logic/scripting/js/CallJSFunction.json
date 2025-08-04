@@ -2,14 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "logic.scripting.js",
-  "name": "Call JavaScript module function",
+  "name": "Call JavaScript function",
   "tags": [
     "logic"
   ],
   "id": "358d8094-7fc7-484c-b836-a3f2763e0866",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.logic.scripting.js.CallJSModule"
+    "class": "net.algart.executors.modules.core.logic.scripting.js.CallJSFunction"
   },
   "in_ports": [
     {
