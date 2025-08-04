@@ -11,7 +11,7 @@ def execute(params, inputs, outputs):
         print(f"{params.title}: {i} from {n} seconds")
         time.sleep(1)
     print(f"Done {params.title}: {i} seconds")
-    outputs.output = i
+    return i
 
 if __name__ == '__main__':
     from types import SimpleNamespace
