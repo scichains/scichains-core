@@ -37,6 +37,7 @@ public record ConfiguredInterpreter(Interpreter interpreter, JepConfig configura
 
     public void close() {
         interpreter.close();
+//        System.out.println("!!! Closing interpreter " + interpreter + " in " + Thread.currentThread().getName());
     }
 
     @Override

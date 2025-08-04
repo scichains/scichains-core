@@ -339,9 +339,9 @@ public abstract class AbstractCallPython extends Executor {
 
     @Override
     public final void close() {
-        super.close();
         closePython();
         // - not a problem to close again even if was closed by process() in the global mode
+        super.close();
     }
 
     protected abstract String code();

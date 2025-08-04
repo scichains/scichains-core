@@ -28,6 +28,7 @@ import net.algart.jep.additions.AtomicPyObject;
 import net.algart.bridges.jep.api.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.jep.additions.JepInterpretation;
 
 import java.util.Locale;
 
@@ -35,47 +36,37 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     private volatile PythonCaller pythonCaller = null;
 
     public InterpretPython() {
+        useVisibleResultParameter();
         disableOnChangeParametersAutomatic();
     }
 
     @Override
     public void initialize() {
-        useVisibleResultParameter();
-        long t1 = debugTime();
-        @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
-        long t2 = debugTime();
-        pythonCaller.initialize(this);
-        long t3 = debugTime();
-        logDebug(() -> String.format(Locale.US,
-                "Python module \"%s\" (%s) initialized in %.3f ms: " +
-                "%.6f ms getting caller + %.6f ms initializing code",
-                pythonCaller.name(), pythonCaller.interpretationMode(),
-                (t3 - t1) * 1e-6,
-                (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
+        final PythonCaller pythonCaller = pythonCaller();
+        if (!pythonCaller.isGlobalSynchronizationRequired()) {
+            initializePython(pythonCaller);
+        }
     }
 
     @Override
     public void process() {
-        long t1 = debugTime(), t2, t3, t4;
-        @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
-        try (AtomicPyObject params = pythonCaller.loadParameters(this);
-             AtomicPyObject inputs = pythonCaller.readInputPorts(this);
-             AtomicPyObject outputs = pythonCaller.createOutputs()) {
-            t2 = debugTime();
-            final Object result = pythonCaller.callPython(params, inputs, outputs);
-            t3 = debugTime();
-            pythonCaller.writeOutputPorts(this, outputs);
-            pythonCaller.writeOptionalOutputPort(this, DEFAULT_OUTPUT_PORT, result, true);
-            // - note: direct assignment "outputs.output = xxx" overrides simple returning result
-            t4 = debugTime();
+        final PythonCaller pythonCaller = pythonCaller();
+        if (pythonCaller.isGlobalSynchronizationRequired()) {
+            JepInterpretation.executeWithJVMGlobalLock(
+                    () -> initializePython(pythonCaller),
+                    () -> processPython(pythonCaller),
+                    this::closePython);
+
+        } else {
+            processPython(pythonCaller);
         }
-        setSystemOutputs();
-        logDebug(() -> String.format(Locale.US,
-                "Python module \"%s\" (%s) executed in %.5f ms:"
-                        + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                pythonCaller.name(), pythonCaller.interpretationMode(),
-                (t4 - t1) * 1e-6,
-                (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
+    }
+
+    @Override
+    public void close() {
+        closePython();
+        // - not a problem to close again even if was closed by process() in the global mode
+        super.close();
     }
 
     public PythonCaller pythonCaller() {
@@ -101,18 +92,48 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     }
 
     @Override
-    public void close() {
+    protected boolean skipStandardAutomaticParameters() {
+        return true;
+    }
+
+    private void initializePython(PythonCaller pythonCaller) {
+        long t1 = debugTime();
+        pythonCaller.initialize(this);
+        long t2 = debugTime();
+        logDebug(() -> String.format(Locale.US,
+                "Python module \"%s\" (%s) initialized in %.3f ms",
+                pythonCaller.name(), pythonCaller.interpretationMode(),
+                (t2 - t1) * 1e-6));
+    }
+
+    private void processPython(PythonCaller pythonCaller) {
+        long t1 = debugTime(), t2, t3, t4;
+        try (AtomicPyObject params = pythonCaller.loadParameters(this);
+             AtomicPyObject inputs = pythonCaller.readInputPorts(this);
+             AtomicPyObject outputs = pythonCaller.createOutputs()) {
+            t2 = debugTime();
+            final Object result = pythonCaller.callPython(params, inputs, outputs);
+            t3 = debugTime();
+            pythonCaller.writeOutputPorts(this, outputs);
+            pythonCaller.writeOptionalOutputPort(this, DEFAULT_OUTPUT_PORT, result, true);
+            // - note: direct assignment "outputs.output = xxx" overrides simple returning result
+            t4 = debugTime();
+        }
+        setSystemOutputs();
+        logDebug(() -> String.format(Locale.US,
+                "Python module \"%s\" (%s) executed in %.5f ms:"
+                        + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
+                pythonCaller.name(), pythonCaller.interpretationMode(),
+                (t4 - t1) * 1e-6,
+                (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
+    }
+
+    private void closePython() {
         PythonCaller pythonCaller = this.pythonCaller;
         if (pythonCaller != null) {
             this.pythonCaller = null;
             pythonCaller.close();
         }
-        super.close();
-    }
-
-    @Override
-    protected boolean skipStandardAutomaticParameters() {
-        return true;
     }
 
     private void setSystemOutputs() {

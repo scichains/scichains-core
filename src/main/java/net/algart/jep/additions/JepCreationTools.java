@@ -57,6 +57,7 @@ class JepCreationTools {
             SharedInterpreter.setConfig(configuration);
         }
         final SharedInterpreter result = doCreate(SharedInterpreter::new);
+//        System.out.println("!!! Created shared interpreter: " + result + " in " + Thread.currentThread().getName());
         performStartupCodeForExtended(result, configuration, mode);
         return result;
     }
