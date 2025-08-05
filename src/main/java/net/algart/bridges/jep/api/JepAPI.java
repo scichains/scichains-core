@@ -25,7 +25,6 @@
 package net.algart.bridges.jep.api;
 
 import jep.*;
-import jep.python.PyCallable;
 import jep.python.PyObject;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
@@ -40,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
 public class JepAPI {
     public static final boolean REQUIRE_NUMPY_INTEGRATION = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
@@ -58,6 +56,8 @@ public class JepAPI {
     public static final String STANDARD_API_INPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Inputs";
     public static final String STANDARD_API_OUTPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Outputs";
     public static final String STANDARD_API_ENVIRONMENT_VARIABLE = "_env";
+    public static final String STANDARD_API_ENVIRONMENT_FIELD = "_env";
+    public static final String STANDARD_API_EXECUTOR_FIELD = "_executor";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
     public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "working_dir";
@@ -85,6 +85,20 @@ public class JepAPI {
     public void loadParameters(Executor executor, AtomicPyObject parameters) {
         loadParameters(executor.parameters(), parameters);
     }
+
+    public void loadSystemParameters(Executor executor, AtomicPyObject parameters) {
+        Objects.requireNonNull(executor, "Null executor");
+        Objects.requireNonNull(parameters, "Null parameters");
+        try (AtomicPyObject parameter = parameters.getAtomic(STANDARD_API_ENVIRONMENT_FIELD)) {
+            parameter.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
+            parameter.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+            final Path currentDirectory = executor.getCurrentDirectory();
+            parameter.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
+                    currentDirectory == null ? null : currentDirectory.toString());
+        }
+        parameters.setAttribute(STANDARD_API_EXECUTOR_FIELD, executor);
+    }
+
 
     public void loadParameters(Map<String, Object> parametersMap, AtomicPyObject parameters) {
         Objects.requireNonNull(parameters, "Null parameters");

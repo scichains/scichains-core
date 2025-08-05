@@ -48,11 +48,11 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
     public void process() {
         long t1 = System.nanoTime(), t2, t3, t4;
         @SuppressWarnings("resource") final JSCaller jsCaller = jsCaller();
-        Value params = jsCaller.loadParameters(this);
+        Value parameters = jsCaller.loadParameters(this);
         Value inputs = jsCaller.readInputPorts(this);
         Value outputs = jsCaller.createOutputs();
         t2 = debugTime();
-        final Value result = jsCaller.callJS(params, inputs, outputs);
+        final Value result = jsCaller.callJS(parameters, inputs, outputs);
         t3 = debugTime();
         jsCaller.writeOutputPorts(this, outputs);
         jsCaller.writeOptionalOutputPort(this, DEFAULT_OUTPUT_PORT, result, true);

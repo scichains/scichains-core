@@ -196,7 +196,7 @@
       "default": "SHARED"
     },
     {
-      "name": "paramsClassName",
+      "name": "parametersClassName",
       "caption": "Class name for argument \"params\"",
       "description": "If empty (not specified), the standard class \"pyalgart.api.Parameters\" is used.",
       "value_type": "String",

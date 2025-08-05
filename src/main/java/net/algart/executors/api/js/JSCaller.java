@@ -97,9 +97,9 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     public Value loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
-        final Value params = createEmptyObjectFunction.execute();
-        graalAPI.loadParameters(executor, params);
-        return params;
+        final Value parameters = createEmptyObjectFunction.execute();
+        graalAPI.loadParameters(executor, parameters);
+        return parameters;
     }
 
     public Value readInputPorts(Executor executor) {
@@ -128,8 +128,8 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         }
     }
 
-    public Value callJS(Value params, Value inputs, Value outputs) {
-        return mainFunction.execute(params, inputs, outputs);
+    public Value callJS(Value parameters, Value inputs, Value outputs) {
+        return mainFunction.execute(parameters, inputs, outputs);
     }
 
     @Override

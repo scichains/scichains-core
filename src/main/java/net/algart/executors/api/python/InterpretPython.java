@@ -108,11 +108,11 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
 
     private void processPython(PythonCaller pythonCaller) {
         long t1 = debugTime(), t2, t3, t4;
-        try (AtomicPyObject params = pythonCaller.loadParameters(this);
+        try (AtomicPyObject parameters = pythonCaller.loadParameters(this);
              AtomicPyObject inputs = pythonCaller.readInputPorts(this);
              AtomicPyObject outputs = pythonCaller.createOutputs()) {
             t2 = debugTime();
-            final Object result = pythonCaller.callPython(params, inputs, outputs);
+            final Object result = pythonCaller.callPython(parameters, inputs, outputs);
             t3 = debugTime();
             pythonCaller.writeOutputPorts(this, outputs);
             pythonCaller.writeOptionalOutputPort(this, DEFAULT_OUTPUT_PORT, result, true);

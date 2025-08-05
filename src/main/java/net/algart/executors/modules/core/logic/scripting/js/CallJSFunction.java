@@ -364,14 +364,14 @@ public final class CallJSFunction extends Executor {
         if (mainFunction == null || createEmptyObjectFunction == null) {
             throw new IllegalStateException(getClass() + " is not initialized");
         }
-        final Value params = createEmptyObjectFunction.execute();
+        final Value parameters = createEmptyObjectFunction.execute();
         final Value inputs = createEmptyObjectFunction.execute();
         final Value outputs = createEmptyObjectFunction.execute();
-        graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), params);
-        graalAPI.loadSystemParameters(this, params);
+        graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), parameters);
+        graalAPI.loadSystemParameters(this, parameters);
         graalAPI.readInputPorts(subSet(inputPorts(), INPUTS_NAMES), inputs);
         t2 = debugTime();
-        final Value result = mainFunction.execute(params, inputs, outputs);
+        final Value result = mainFunction.execute(parameters, inputs, outputs);
         t3 = debugTime();
         graalAPI.writeOutputPorts(subSet(outputPorts(), OUTPUTS_NAMES), outputs);
         graalAPI.writeOutputPort(getOutputPort(DEFAULT_OUTPUT_PORT), result, true);

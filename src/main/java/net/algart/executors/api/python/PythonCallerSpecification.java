@@ -44,7 +44,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         public static final String DEFAULT_FUNCTION = "execute";
 
         private String module;
-        private String paramsClass = JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME;
+        private String parametersClass = JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME;
         private String inputsClass = JepAPI.STANDARD_API_INPUTS_CLASS_NAME;
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
@@ -56,7 +56,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
 
         private Python(JsonObject json, Path file) {
             this.module = Jsons.reqString(json, "module", file);
-            this.paramsClass = json.getString("params_class", paramsClass);
+            this.parametersClass = json.getString("parameters_class", parametersClass);
             this.inputsClass = json.getString("inputs_class", inputsClass);
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
@@ -75,12 +75,12 @@ public class PythonCallerSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public String getParamsClass() {
-            return paramsClass;
+        public String getParametersClass() {
+            return parametersClass;
         }
 
-        public Python setParamsClass(String paramsClass) {
-            this.paramsClass = nonEmpty(paramsClass);
+        public Python setParametersClass(String parametersClass) {
+            this.parametersClass = nonEmpty(parametersClass);
             return this;
         }
 
@@ -142,7 +142,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         public String toString() {
             return "Python{" +
                    "module='" + module + '\'' +
-                   ", paramsClass='" + paramsClass + '\'' +
+                   ", parametersClass='" + parametersClass + '\'' +
                    ", inputsClass='" + inputsClass + '\'' +
                    ", outputsClass='" + outputsClass + '\'' +
                    ", className='" + className + '\'' +
@@ -154,7 +154,7 @@ public class PythonCallerSpecification extends ExecutorSpecification {
         @Override
         public void buildJson(JsonObjectBuilder builder) {
             builder.add("module", module);
-            builder.add("params_class", paramsClass);
+            builder.add("parameters_class", parametersClass);
             builder.add("inputs_class", inputsClass);
             builder.add("outputs_class", outputsClass);
             if (className != null) {

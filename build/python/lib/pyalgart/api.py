@@ -63,11 +63,11 @@ class Environment:
 
 class Parameters:
     def __init__(self):
-        self._env = _env
+        self._env = Environment()
         self._executor = None
-        if (_env is not None):
-            self._executor = _env.executor
-            # TODO!!
+        # Important! We could use the global variable _env here, but it's not the best solution:
+        # it is much better if all instances of Parameters, Inputs and Outputs are created and filled out locally,
+        # so that they can be used in a multithreaded environment.
 
 
 class Inputs:

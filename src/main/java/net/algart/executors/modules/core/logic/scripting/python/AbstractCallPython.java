@@ -78,7 +78,7 @@ public abstract class AbstractCallPython extends Executor {
 
     private String mainFunctionName = "execute";
     private String workingDirectory = ".";
-    private String paramsClassName = "";
+    private String parametersClassName = "";
     private String inputsClassName = "";
     private String outputsClassName = "";
     private String a = "";
@@ -157,12 +157,12 @@ public abstract class AbstractCallPython extends Executor {
     }
 
 
-    public final String getParamsClassName() {
-        return paramsClassName;
+    public final String getParametersClassName() {
+        return parametersClassName;
     }
 
-    public final AbstractCallPython setParamsClassName(String paramsClassName) {
-        this.paramsClassName = nonNull(paramsClassName).trim();
+    public final AbstractCallPython setParametersClassName(String parametersClassName) {
+        this.parametersClassName = nonNull(parametersClassName).trim();
         return this;
     }
 
@@ -306,8 +306,8 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final String paramsClassName() {
-        return paramsClassName.isEmpty() ? JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME : paramsClassName;
+    public final String parametersClassName() {
+        return parametersClassName.isEmpty() ? JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME : parametersClassName;
     }
 
     public final String inputsClassName() {
@@ -376,14 +376,15 @@ public abstract class AbstractCallPython extends Executor {
             throw new IllegalStateException(getClass() + " is not initialized");
         }
         final Object result;
-        try (AtomicPyObject pythonParams = jepAPI.newAPIObject(performer, paramsClassName());
+        try (AtomicPyObject pythonParameters = jepAPI.newAPIObject(performer, parametersClassName());
              AtomicPyObject pythonInputs = jepAPI.newAPIObject(performer, inputsClassName());
              AtomicPyObject pythonOutputs = jepAPI.newAPIObject(performer, outputsClassName())) {
-            jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParams);
+            jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
+            jepAPI.loadSystemParameters(this, pythonParameters);
             jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);
             t2 = debugTime();
             result = performer.invokeFunction(mainFunctionName,
-                    pythonParams.pyObject(),
+                    pythonParameters.pyObject(),
                     pythonInputs.pyObject(),
                     pythonOutputs.pyObject());
             t3 = debugTime();

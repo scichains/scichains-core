@@ -117,9 +117,10 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public AtomicPyObject loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
-        AtomicPyObject params = jepAPI.newAPIObject(performer(), python.getParamsClass());
-        jepAPI.loadParameters(executor, params);
-        return params;
+        AtomicPyObject parameters = jepAPI.newAPIObject(performer(), python.getParametersClass());
+        jepAPI.loadParameters(executor, parameters);
+        jepAPI.loadSystemParameters(executor, parameters);
+        return parameters;
     }
 
     public AtomicPyObject readInputPorts(Executor executor) {
@@ -149,7 +150,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         }
     }
 
-    public Object callPython(AtomicPyObject params, AtomicPyObject inputs, AtomicPyObject outputs) {
+    public Object callPython(AtomicPyObject parameters, AtomicPyObject inputs, AtomicPyObject outputs) {
         if (python.isClassMethod()) {
             @SuppressWarnings("resource") final AtomicPyObject instance = pythonInstance();
             if (instance == null) {
@@ -158,14 +159,14 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             try (final AtomicPyCallable method = instance.getAtomicCallable(python.getFunction())) {
                 return method.callAs(
                         Object.class,
-                        params.pyObject(),
+                        parameters.pyObject(),
                         inputs.pyObject(),
                         outputs.pyObject());
             }
         } else {
             @SuppressWarnings("resource") final JepPerformer performer = performer();
             return performer.invokeFunction(python.getFunction(),
-                    params.pyObject(),
+                    parameters.pyObject(),
                     inputs.pyObject(),
                     outputs.pyObject());
         }

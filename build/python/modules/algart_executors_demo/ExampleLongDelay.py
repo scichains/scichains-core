@@ -4,11 +4,14 @@ print("==== Initializing long delay! ====")
 def execute(params, inputs, outputs):
     n = params.delay or 60
     for i in range(1, n + 1):
-        if (hasattr(params, "_executor") and params._executor.isInterrupted()):
+        info = ""
+        if (hasattr(params, "_executor")):
             # hasattr is added for testing from the command line
-            print("Sleeping interrupted!")
-            break
-        print(f"{params.title}: {i} from {n} seconds")
+            info = " (" + params._executor.getContextPath() + ", session " + params._executor.getSessionId() + ")"
+            if (params._executor.isInterrupted()):
+                print("Sleeping interrupted!")
+                break
+        print(f"{params.title}{info}: {i} from {n} seconds")
         time.sleep(1)
     print(f"Done {params.title}: {i} seconds")
     return i
