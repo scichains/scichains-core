@@ -8,7 +8,7 @@
   "id": "a8df5a34-35ec-4bda-883d-5a58c1e791f2",
   "language": "python",
   "python": {
-    "module": "algart_executors_demo.scalars.example_scalar_sum"
+    "module": "pyalgart_executors_demo.scalars.example_scalar_sum"
   },
   "in_ports": [
   ],

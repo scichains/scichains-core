@@ -2,14 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.python.matrices",
-  "name": "Python example: calling \"Intensity\" executor",
+  "name": "Python example: Gaussian blur",
   "tags": [
     "demo"
   ],
-  "id": "5304be0a-ad9d-4fcd-9490-f8f0e99fd495",
+  "id": "7e495a21-6737-4c18-9f0e-2be8f1eae7de",
   "language": "python",
   "python": {
-    "module": "algart_executors_demo.matrices.example_call_intensity"
+    "module": "pyalgart_executors_demo.matrices.example_mat_blur"
   },
   "in_ports": [
     {
@@ -25,12 +25,12 @@
   ],
   "controls": [
     {
-      "caption": "RGB result",
-      "description": "This parameter is passed to Java-based executor \"Intensity\".\n",
-      "name": "rgbResult",
-      "value_type": "boolean",
+      "name": "kernelSize",
+      "caption": "Kernel size",
+      "description": "If even, it is automatically increased by 1 (OpenCV requires odd values)",
+      "value_type": "int",
       "edition_type": "value",
-      "default": false
+      "default": 30
     }
   ]
 }

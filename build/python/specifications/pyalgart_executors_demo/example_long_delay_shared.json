@@ -1,15 +1,15 @@
 {
   "app": "executor",
   "category": "~examples.python",
-  "name": "Python example: long delay (global synchronization)",
+  "name": "Python example: long delay (shared)",
   "tags": [
     "demo"
   ],
-  "id": "0709bf7d-c6c7-401c-a611-e043e9ed932b",
+  "id": "287f5a8f-5819-4a6a-bf63-639c9aed06e0",
   "language": "python",
   "python": {
-    "module": "algart_executors_demo.example_long_delay",
-    "mode": "global"
+    "module": "pyalgart_executors_demo.example_long_delay",
+    "mode": "shared"
   },
   "in_ports": [
   ],
@@ -24,7 +24,7 @@
       "name": "title",
       "value_type": "String",
       "edition_type": "value",
-      "default": "Long delay (global)"
+      "default": "Long delay (shared)"
     },
     {
       "name": "delay",
