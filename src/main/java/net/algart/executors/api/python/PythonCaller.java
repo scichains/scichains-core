@@ -24,13 +24,13 @@
 
 package net.algart.executors.api.python;
 
+import net.algart.bridges.jep.api.JepAPI;
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.data.Port;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyCallable;
 import net.algart.jep.additions.AtomicPyObject;
-import net.algart.bridges.jep.api.JepAPI;
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.Port;
 import net.algart.jep.additions.JepInterpretation;
 
 import java.util.Objects;
@@ -90,7 +90,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public JepPerformer performer() {
-        return container.performer();
+        synchronized (lock) {
+            return container.performer();
+        }
     }
 
     public AtomicPyObject pythonInstance() {
@@ -100,20 +102,21 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public void initialize(Executor executor) {
-        @SuppressWarnings("resource") final JepPerformer performer = performer();
-        // - We do not call jepAPI.initializedGlobalEnvironment:
-        // if the same PythonCaller reuses the same SharedInterpreter,
-        // it can lead to invalid value of the global variable _env
-        if (python.isClassMethod()) {
-            final String className = python.getClassName();
-            performer.perform(JepPerformer.importCode(python.getModule(), className));
-            synchronized (lock) {
+        synchronized (lock) {
+            @SuppressWarnings("resource") final JepPerformer performer = performer();
+//         jepAPI.initializedGlobalEnvironment(performer, executor, null);
+            // - We do not call initialize the global environment (the previous commented line):
+            // if the same PythonCaller reuses the same SharedInterpreter,
+            // it can lead to invalid value of the global variable _env
+            if (python.isClassMethod()) {
+                final String className = python.getClassName();
+                performer.perform(JepPerformer.importCode(python.getModule(), className));
                 if (instance == null) {
                     instance = performer.newObject(className);
                 }
+            } else {
+                performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
             }
-        } else {
-            performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
         }
     }
 
@@ -178,6 +181,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     public PythonCaller clone() {
         try {
             return (PythonCaller) super.clone();
+            // - we could create a new container, but we prefer reusing the same one
+            // with the same SharedInterpreter and the same single-thread pool
+
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
@@ -190,7 +196,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
                 instance.close();
                 instance = null;
             }
+            container.close();
         }
-        container.close();
     }
 }

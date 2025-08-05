@@ -2,10 +2,10 @@ import time
 import pyalgart.api as pya
 
 print("==== Initializing long delay! ====")
-# pya.import_file("test.py") # should lead to RuntimeError
+# pya.import_file("test.py") # should lead to RuntimeError in a module
 
 def execute(params, inputs, outputs):
-    # print(pya._env.context_path) # should be None
+    print("Global environment context path: " + str(pya._env.context_path) + " (should be None in a module)")
     n = params.delay or 60
     for i in range(1, n + 1):
         info = ""
