@@ -28,8 +28,10 @@ import net.algart.bridges.graalvm.*;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
+import net.algart.multimatrix.MultiMatrix;
 import org.graalvm.polyglot.Value;
 
+import java.awt.image.BufferedImage;
 import java.lang.System.Logger;
 import java.util.*;
 
@@ -48,7 +50,7 @@ public class GraalAPI {
             function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
-
+            
             [__SYS_createEmptyObjectImpl]
             """;
     private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
@@ -58,7 +60,7 @@ public class GraalAPI {
             function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
-
+            
             [__SYS_createEmptyObjectImpl, Java.type("%s"), Java.type("%s"), Java.type("%s")]
             """.formatted(
             SScalar.class.getCanonicalName(),
@@ -392,13 +394,17 @@ public class GraalAPI {
             port.removeData();
         } else {
             final SMat data = port.getData(SMat.class, true);
-            if (!(object instanceof SMat)) {
-                throw new IllegalStateException(
+            switch (object) {
+                case SMat mat -> data.setTo(mat);
+                case BufferedImage bufferedImage -> data.setTo(bufferedImage);
+                case MultiMatrix multiMatrix -> data.setTo(multiMatrix);
+                default -> throw new IllegalStateException(
                         "Illegal type for of output \"" + port.getName() +
-                                "\": JavaScript code must return " + SMat.class.getCanonicalName()
-                                + ", but it returned " + object.getClass().getCanonicalName());
+                                "\": JavaScript code must return " + SMat.class.getCanonicalName() +
+                                ", " + BufferedImage.class.getCanonicalName() +
+                                " or " + MultiMatrix.class.getCanonicalName() + ", " +
+                                "but it returned " + object.getClass().getCanonicalName());
             }
-            data.setTo((SMat) object);
         }
     }
 
