@@ -1,69 +1,69 @@
 {
   "app": "executor",
   "version": "0.0.1",
-  "category": "numbers.arithmetic",
-  "name": "Python formula (elementwise) for arrays",
+  "category": "matrices.arithmetic",
+  "name": "Python formula (elementwise) for matrices",
   "tags": [
-    "numbers",
+    "matrices",
     "python"
   ],
-  "id": "fe8147eb-99ba-4de1-93e6-e95809407151",
+  "id": "a304c4a6-60f0-404b-bae3-96e1268afbcc",
   "language": "python",
   "python": {
-    "module": "algart_executors_core.numbers.ElementwiseFormula"
+    "module": "algart_executors_core.matrices.elementwise_formula"
   },
   "in_ports": [
     {
-      "value_type": "numbers",
-      "name": "x1"
+      "value_type": "mat",
+      "name": "m1"
     },
     {
-      "value_type": "numbers",
-      "name": "x2"
+      "value_type": "mat",
+      "name": "m2"
     },
     {
-      "value_type": "numbers",
-      "name": "x3"
+      "value_type": "mat",
+      "name": "m3"
     },
     {
-      "value_type": "numbers",
-      "name": "x4",
+      "value_type": "mat",
+      "name": "m4",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x5",
+      "value_type": "mat",
+      "name": "m5",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x6",
+      "value_type": "mat",
+      "name": "m6",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x7",
+      "value_type": "mat",
+      "name": "m7",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x8",
+      "value_type": "mat",
+      "name": "m8",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x9",
+      "value_type": "mat",
+      "name": "m9",
       "advanced": true
     },
     {
-      "value_type": "numbers",
-      "name": "x10",
+      "value_type": "mat",
+      "name": "m10",
       "advanced": true
     }
   ],
   "out_ports": [
     {
-      "value_type": "numbers",
+      "value_type": "mat",
       "name": "output"
     }
   ],
@@ -71,11 +71,11 @@
     {
       "name": "formula",
       "caption": "Formula",
-      "description": "This Python formula is evaluated all arrays. Note that in Python operation with whole matrix/array means are performed with all elements.\nThe following packages are imported automatically: math, numpy as np.",
+      "description": "This Python formula is evaluated all matrices. Note that in Python operation with whole matrix/array means are performed with all elements.\nThe following packages are imported automatically: math, numpy as np.",
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
-      "default": "a * x1 + b"
+      "default": "a * m1 + b"
     },
     {
       "name": "a",

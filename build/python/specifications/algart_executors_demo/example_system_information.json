@@ -8,7 +8,7 @@
   "id": "503bf4a8-adeb-4769-bbc6-a8a32a05e9fc",
   "language": "python",
   "python": {
-    "module": "algart_executors_demo.ExampleSystemInformation"
+    "module": "algart_executors_demo.example_system_information"
   },
   "in_ports": [
   ],
