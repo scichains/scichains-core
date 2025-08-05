@@ -90,6 +90,18 @@ public final class JepPerformerContainer implements AutoCloseable {
         return performer;
     }
 
+    public boolean isEmpty() {
+        return performer == null;
+    }
+
+    @Override
+    public String toString() {
+        final JepPerformer performer = this.performer;
+        return "JEP performer container (" + mode + "), " +
+                (performer == null ? "EMPTY" : performer.toString()) + ", " +
+                "identity 0x" + System.identityHashCode(this);
+    }
+
     /**
      * @apiNote Will be automatically revived while usage after closing.
      */

@@ -93,6 +93,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public JepPerformer performer() {
         synchronized (lock) {
+//            System.out.println("!!! Opening " + container);
             return container.performer();
         }
     }
@@ -182,11 +183,14 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     @Override
     public PythonCaller clone() {
         try {
+//            PythonCaller clone = (PythonCaller) super.clone();
+//            clone.container = JepAPI.newContainer(interpretationMode);
+//            return clone;
+            // - We could create a new container as shown above, but we prefer reusing the same one
+            // with the same SharedInterpreter and the same single-thread pool.
+            // Thus, we can be sure that the number of such thread pools in a multi-chain system
+            // will not be greater than the number of DIFFERENT Python executors.
             return (PythonCaller) super.clone();
-            //TODO!! JepAPI.newContainer(mode)
-            // - we could create a new container, but we prefer reusing the same one
-            // with the same SharedInterpreter and the same single-thread pool
-
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
@@ -200,6 +204,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
                 pythonClassInstance = null;
             }
             container.close();
+//            System.out.println("!!! Closing " + container);
         }
     }
 }
