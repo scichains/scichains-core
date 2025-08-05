@@ -122,7 +122,9 @@ public class JepInterpretation {
      * <p>This method calls the specified Python function (provided by name),
      * which must return a NumPy array. If the result of the call is correctly
      * converted into an instance of {@link jep.NDArray} or {@link jep.DirectNDArray},
-     * the method returns normally. Otherwise, it throws {@link JepNumpyIntegrationException}.
+     * the method returns this object ({@link jep.NDArray} or {@link jep.DirectNDArray}).
+     * Otherwise, it throws {@link JepNumpyIntegrationException}, and the actual result of conversion
+     * can be retrieved by {@link JepNumpyIntegrationException#returnedArray()} method.
      *
      * <p>This test helps verify that JEP was properly built with NumPy support in the current Python implementation.
      * To provide correct JEP+NumPy integration, the "numpy" package must be installed
@@ -143,12 +145,13 @@ public class JepInterpretation {
      *
      * @param jepInterpreter              the JEP interpreter instance used to evaluate the Python function.
      * @param functionReturningNumpyArray the name of a no-argument Python function that returns a NumPy array.
-     * @throws JepNumpyIntegrationException if the result of execution is not a valid
-     *                                      {@code NDArray} or {@code DirectNDArray}.
+     * @return an object returned as the result of calling the Python function.
+     * @throws JepNumpyIntegrationException if the Python function returns an object
+     *                                      that is not an instance of {@code NDArray} or {@code DirectNDArray}.
      * @throws JepException                 if an error occurred while attempting to execute the function.
      * @throws NullPointerException         if either argument is {@code null}
      */
-    public static void checkNumpyIntegration(Interpreter jepInterpreter, String functionReturningNumpyArray)
+    public static Object checkNumpyIntegration(Interpreter jepInterpreter, String functionReturningNumpyArray)
             throws JepNumpyIntegrationException {
         Objects.requireNonNull(jepInterpreter, "Null JEP interpreter");
         Objects.requireNonNull(functionReturningNumpyArray, "Null verification function name");
@@ -165,13 +168,14 @@ public class JepInterpretation {
         if (!(array instanceof NDArray<?> || array instanceof DirectNDArray<?>)) {
             throw new JepNumpyIntegrationException(
                     "Integration problem between Python packages \"jep\" and \"numpy\":\n" +
-                            "the function that creates numpy.ndarray for integers " +
+                            "the function that creates numpy.ndarray " +
                             "does not return a correct Java type NDArray/DirectNDArray " +
                             "(it returns " +
                             (array == null ? null : "\"" + array.getClass().getCanonicalName() + "\"") +
                             ").\nThe \"jep\" package was probably not installed correctly in Python.\n" +
-                            JEP_INSTALLATION_HINTS);
+                            JEP_INSTALLATION_HINTS, array);
         }
+        return array;
     }
 
     public static Object getJVMGlobalLock() {

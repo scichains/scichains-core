@@ -63,10 +63,11 @@ class Environment:
 
 class Parameters:
     def __init__(self):
-        self._env = _env;
+        self._env = _env
+        self._executor = None
         if (_env is not None):
-            self._executor = _env.executor;
-            self._platform = _env.platform;
+            self._executor = _env.executor
+            # TODO!!
 
 
 class Inputs:

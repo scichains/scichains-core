@@ -32,7 +32,18 @@ public class JepNumpyIntegrationException extends JepException {
     @Serial
     private static final long serialVersionUID = -9124872870861729446L;
 
-    public JepNumpyIntegrationException(String message) {
+    private final Class<?> actualResultClass;
+
+    public JepNumpyIntegrationException(String message, Object returnedArray) {
         super(message);
+        this.actualResultClass = returnedArray == null ? null : returnedArray.getClass();
+    }
+
+    public Class<?> getActualResultClass() {
+        return actualResultClass;
+    }
+
+    public boolean isReturnedNull() {
+        return actualResultClass == null;
     }
 }

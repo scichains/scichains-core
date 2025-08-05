@@ -25,6 +25,8 @@
 package net.algart.jep.tests;
 
 import jep.*;
+import net.algart.jep.additions.JepInterpretation;
+import net.algart.jep.additions.JepNumpyIntegrationException;
 
 public class JepNumpyIntegrationTest {
     private static final String NUMPY_SCRIPT =
@@ -58,15 +60,19 @@ public class JepNumpyIntegrationTest {
             System.out.println("From Python:");
             final Object info = interpreter.invoke("info");
             System.out.printf("%ninfo() = %s%n", info);
-            final Object array = interpreter.invoke("array");
-            System.out.printf("%narray() = %s%n", array);
-            if (array instanceof NDArray<?> || array instanceof DirectNDArray<?>) {
-                System.out.printf("Numpy is normally installed: array = %s%n",
-                        array.getClass().getSimpleName());
-            } else {
-                System.out.printf("Numpy IS NOT WELL-CONFIGURED TOGETHER with JEP: array = %s%n",
-                        array == null ? null : array.getClass().getSimpleName());
+            final Object array;
+            try {
+                array = JepInterpretation.checkNumpyIntegration(interpreter, "array");
+            } catch (JepNumpyIntegrationException e) {
+                System.out.printf("Numpy IS NOT WELL-CONFIGURED TOGETHER with JEP: returned array is %s%n",
+                        e.isReturnedNull() ? null : e.getActualResultClass().getSimpleName());
+                System.out.printf("%nException:%n%s%n", e.getMessage());
+                return;
             }
+            System.out.printf("%narray() = %s%n", array);
+            assert array instanceof NDArray<?> || array instanceof DirectNDArray<?>;
+            System.out.printf("Numpy is normally installed: array = %s%n",
+                    array.getClass().getSimpleName());
         }
     }
 }
