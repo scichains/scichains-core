@@ -118,7 +118,7 @@ public class JepAPI {
         }
     }
 
-    public static void loadEnvironment(Executor executor, AtomicPyObject environment, Path workingDirectory) {
+    public void loadEnvironment(Executor executor, AtomicPyObject environment, Path workingDirectory) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(environment, "Null environment");
         environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);

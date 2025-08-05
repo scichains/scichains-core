@@ -30,7 +30,7 @@
       "name": "delay",
       "value_type": "int",
       "edition_type": "value",
-      "default": 60
+      "default": 10
     }
   ]
 }
