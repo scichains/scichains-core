@@ -100,8 +100,10 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     public void initialize(Executor executor) {
-        final JepPerformer performer = performer();
-        jepAPI.initializedGlobalEnvironment(performer, executor, null);
+        @SuppressWarnings("resource") final JepPerformer performer = performer();
+        // - We do not call jepAPI.initializedGlobalEnvironment:
+        // if the same PythonCaller reuses the same SharedInterpreter,
+        // it can lead to invalid value of the global variable _env
         if (python.isClassMethod()) {
             final String className = python.getClassName();
             performer.perform(JepPerformer.importCode(python.getModule(), className));
@@ -119,7 +121,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         Objects.requireNonNull(executor, "Null executor");
         AtomicPyObject parameters = jepAPI.newAPIObject(performer(), python.getParametersClass());
         jepAPI.loadParameters(executor, parameters);
-        jepAPI.loadSystemParameters(executor, parameters);
+        jepAPI.loadSystemParameters(executor, parameters, null);
         return parameters;
     }
 

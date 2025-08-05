@@ -30,6 +30,7 @@ class Environment:
         self.executor = None
         self.platform = None
         self.working_dir = None
+        self.context_path = None
 
     def import_file(self, file_name, module_name=None):
         """
@@ -41,7 +42,7 @@ class Environment:
         :return: Imported module object.
         """
         if not os.path.isabs(file_name):
-            if not self.working_dir:
+            if self.working_dir is None:
                 raise ValueError("working_dir is not set")
             path = os.path.join(self.working_dir, file_name)
         else:
@@ -80,9 +81,14 @@ class Outputs:
 _env = Environment()
 
 def env():
+    if _env.executor is None:
+        raise RuntimeError("Global environment is not set")
     return _env
 
 def import_file(file_name, module_name=None):
+    if _env.executor is None:
+        raise RuntimeError("Cannot use global import_file() function: global environment is not set; "
+           "please use params._env.import_file() instead")
     return _env.import_file(file_name, module_name)
 
 

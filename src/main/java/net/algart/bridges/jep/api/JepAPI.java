@@ -61,6 +61,7 @@ public class JepAPI {
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
     public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "working_dir";
+    public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "context_path";
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
     public static final List<String> STANDARD_STARTUP = List.of(
@@ -86,15 +87,11 @@ public class JepAPI {
         loadParameters(executor.parameters(), parameters);
     }
 
-    public void loadSystemParameters(Executor executor, AtomicPyObject parameters) {
+    public void loadSystemParameters(Executor executor, AtomicPyObject parameters, Path workingDirectory) {
         Objects.requireNonNull(executor, "Null executor");
         Objects.requireNonNull(parameters, "Null parameters");
-        try (AtomicPyObject parameter = parameters.getAtomic(STANDARD_API_ENVIRONMENT_FIELD)) {
-            parameter.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
-            parameter.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-            final Path currentDirectory = executor.getCurrentDirectory();
-            parameter.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
-                    currentDirectory == null ? null : currentDirectory.toString());
+        try (AtomicPyObject environment = parameters.getAtomic(STANDARD_API_ENVIRONMENT_FIELD)) {
+            loadEnvironment(executor, environment, workingDirectory);
         }
         parameters.setAttribute(STANDARD_API_EXECUTOR_FIELD, executor);
     }
@@ -117,12 +114,21 @@ public class JepAPI {
         }
         try (AtomicPyObject environment = performer.getObject(
                 STANDARD_API_MODULE + "." + STANDARD_API_ENVIRONMENT_VARIABLE)) {
-            environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
-            environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-            Path currentDirectory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
-            environment.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
-                    currentDirectory == null ? null : currentDirectory.toString());
+            loadEnvironment(executor, environment, workingDirectory);
         }
+    }
+
+    public static void loadEnvironment(Executor executor, AtomicPyObject environment, Path workingDirectory) {
+        Objects.requireNonNull(executor, "Null executor");
+        Objects.requireNonNull(environment, "Null environment");
+        environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
+        environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+        final Path currentDirectory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
+        environment.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
+                currentDirectory == null ? null : currentDirectory.toString());
+        final Path contextPath = executor.contextPath();
+        environment.setAttribute(STANDARD_API_PARAMETER_CONTEXT_PATH,
+                contextPath == null ? null : contextPath.toString());
     }
 
     public void readInputPorts(JepPerformer performer, Collection<Port> inputPorts, AtomicPyObject inputs) {

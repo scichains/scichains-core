@@ -2,15 +2,16 @@ import time
 import pyalgart.api as pya
 
 def execute(params, inputs, outputs):
-    env = pya.env()
+    env = params._env
     e = env.executor
     # print("Executor: " + str(e))
     msg = (
             "Hello from Python System information!" +
             "\nI am " + e.getSpecification().getName() +
             "\n    id: " + e.getExecutorId() +
-            "\n    working in: " + str(env.working_dir) +
-            "\n    to string: " + str(e)
+            "\n    working in folder: " + env.working_dir +
+            "\n    executed in chain: " + env.context_path +
+            "\n    toString(): " + str(e)
     )
     e.showStatus(msg)
     print(msg)
