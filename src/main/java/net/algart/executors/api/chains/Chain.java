@@ -146,7 +146,7 @@ public final class Chain implements AutoCloseable {
      */
     public Chain cleanCopy() {
         return new Chain(this);
-        // Copying constructor is better than cloning, because we do not clone final fields like "lock"
+        // Copying constructor is better than cloning because we do not clone final fields like "lock"
 
 //        final Chain clone;
 //        try {
