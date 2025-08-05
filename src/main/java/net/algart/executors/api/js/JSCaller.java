@@ -47,6 +47,9 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
 
+    private final Object lock = new Object();
+    // - Note: copied while cloning! This lock little simplifies understanding logic in a multithreaded environment.
+
     private JSCaller(JSCallerSpecification specification, Path workingDirectory) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
@@ -82,17 +85,21 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     }
 
     public GraalPerformer performer() {
-        return performerContainer.performer();
+        synchronized (lock) {
+            return performerContainer.performer();
+        }
     }
 
     public void initialize() {
-        importCode.setModuleJS(GraalPerformer.importAndReturnJSFunction(js.getModule(), js.getFunction()),
-                "importing");
-        // - name "importing" is not important: we will not use share this performer (Graal context)
-        // Note: no sense to check importCode.changed(), because it cannot change until reloading all chain.
-        final GraalPerformer performer = performer();
-        mainFunction = performer.perform(importCode);
-        createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
+        synchronized (lock) {
+            importCode.setModuleJS(GraalPerformer.importAndReturnJSFunction(js.getModule(), js.getFunction()),
+                    "importing");
+            // - name "importing" is not important: we will not use share this performer (Graal context)
+            // Note: no sense to check importCode.changed(), because it cannot change until reloading all chain.
+            final GraalPerformer performer = performer();
+            mainFunction = performer.perform(importCode);
+            createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
+        }
     }
 
     public Value loadParameters(Executor executor) {
@@ -143,7 +150,9 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     @Override
     public void close() {
-        closePerformerContainer();
+        synchronized (lock) {
+            closePerformerContainer();
+        }
     }
 
     private void closePerformerContainer() {

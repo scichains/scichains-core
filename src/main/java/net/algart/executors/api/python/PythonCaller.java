@@ -41,9 +41,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     private final JepPerformerContainer container;
     private final JepInterpretation.Mode interpretationMode;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private volatile AtomicPyObject instance = null;
+    private volatile AtomicPyObject pythonClassInstance = null;
 
     private final Object lock = new Object();
+    // - Note: copied while cloning! This lock little simplifies understanding logic in a multithreaded environment.
+    // It is also important for stable access to pythonClassInstance
 
     private PythonCaller(PythonCallerSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
@@ -95,9 +97,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         }
     }
 
-    public AtomicPyObject pythonInstance() {
+    public AtomicPyObject pythonClassInstance() {
         synchronized (lock) {
-            return instance;
+            return pythonClassInstance;
         }
     }
 
@@ -111,8 +113,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             if (python.isClassMethod()) {
                 final String className = python.getClassName();
                 performer.perform(JepPerformer.importCode(python.getModule(), className));
-                if (instance == null) {
-                    instance = performer.newObject(className);
+                if (pythonClassInstance == null) {
+                    pythonClassInstance = performer.newObject(className);
                 }
             } else {
                 performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
@@ -157,7 +159,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public Object callPython(AtomicPyObject parameters, AtomicPyObject inputs, AtomicPyObject outputs) {
         if (python.isClassMethod()) {
-            @SuppressWarnings("resource") final AtomicPyObject instance = pythonInstance();
+            @SuppressWarnings("resource") final AtomicPyObject instance = pythonClassInstance();
             if (instance == null) {
                 throw new IllegalStateException("initialize() was not called correcly");
             }
@@ -192,9 +194,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     @Override
     public void close() {
         synchronized (lock) {
-            if (instance != null) {
-                instance.close();
-                instance = null;
+            if (pythonClassInstance != null) {
+                pythonClassInstance.close();
+                pythonClassInstance = null;
             }
             container.close();
         }
