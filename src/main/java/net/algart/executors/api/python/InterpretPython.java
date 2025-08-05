@@ -99,6 +99,10 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     private void initializePython(PythonCaller pythonCaller) {
         long t1 = debugTime();
         pythonCaller.initialize(this);
+//        System.out.println("Sleeping in " + contextPath());
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {}
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Python module \"%s\" (%s) initialized in %.3f ms",
