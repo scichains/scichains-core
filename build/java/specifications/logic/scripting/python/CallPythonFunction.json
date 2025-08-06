@@ -154,6 +154,7 @@
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
+      "edition_rows": 7,
       "default": "# mod = pya.import_file(\"my_module.py\") # - import from the chain directory\n\ndef execute(params, inputs, outputs):\n    # outputs.x1 = inputs.x1\n    # outputs.m1 = inputs.m1 # - access inputs and outputs\n    return \"Hello from Python function!\"\n"
     },
     {
