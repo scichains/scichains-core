@@ -156,18 +156,10 @@
     {
       "name": "mainFunctionName",
       "caption": "Main function name",
-      "description": "Function that will be called. It must be declared in the module, specified in the previous parameter. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of classes \"Parameters\", \"Inputs\" and \"Outputs\" from standard Python API.",
+      "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
       "value_type": "String",
       "edition_type": "value",
       "default": "execute"
-    },
-    {
-      "caption": "Current working folder",
-      "name": "workingDirectory",
-      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths..\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
-      "value_type": "String",
-      "edition_type": "value",
-      "default": "."
     },
     {
       "name": "interpretationMode",
@@ -177,7 +169,7 @@
       "items": [
         {
           "value": "SHARED",
-          "caption": "Standard"
+          "caption": "Shared"
         },
         {
           "value": "GLOBAL",
@@ -188,9 +180,16 @@
           "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
-      "description": "\"JVM-global\" mode runs Python code in the single thread, global to the entire Java machine. This is the safest mode, allowing you to use most Python libraries, even if they do not support multithreading very well (as \"matplotlib\" package). However, this mode reduces performance and is not good for multithreaded applications.\n",
-
-      "default": "SHARED"
+      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.",
+      "default": "GLOBAL"
+    },
+    {
+      "caption": "Current working folder",
+      "name": "workingDirectory",
+      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths..\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "."
     },
     {
       "name": "a",

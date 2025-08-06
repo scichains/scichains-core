@@ -150,7 +150,7 @@
     {
       "name": "code",
       "caption": "Main Python code",
-      "description": "This code allows to import some necessary modules, define some functions etc.\nNote: while executing in a loop, this code is performed only once, before 1st execution.\nAlso note: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this code, for example, if you changed import statements or function declaration: it allows to reset environment and remove all previous declarations.\nNote: you can use Java classes from Python, for example:\n    from java.lang import System\nAfter this, you may call:\n    System.out.println(\"Hello from Java\")\nYou also may сall\n    mod = pya.import_file(\"xxxx.py\")\nwhere \"pya\" is an alias for \"pyalgart.api\": this allows you to import a Python module from a file (e.g. xxxx.py) located in the current chain folder or at an absolute path. After that, you can call its functions, for example:\n    mod.my_function()\n\nWARNING: the code above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
+      "description": "This code allows to import the necessary modules, define functions etc.\nNote: while executing in a loop, this code is executed only once, before the 1st execution.\nAlso note: the Python runtime environment is created on the first execution and persists across all subsequent executions until the chain is closed. Therefore, we recommend to reload the chain after changing this code to reset the environment and remove all previous declarations.\nNote: you can use Java classes from Python, for example:\n    from java.lang import System\nAfter this, you may call:\n    System.out.println(\"Hello from Java\")\nYou also may сall\n    mod = pya.import_file(\"xxxx.py\")\nwhere \"pya\" is an alias for \"pyalgart.api\": this allows you to import a Python module from a file (e.g. xxxx.py) located in the current chain folder or at an absolute path. After that, you can call its functions, for example:\n    mod.my_function()\n\nWARNING: the code above should not change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
@@ -159,18 +159,10 @@
     {
       "name": "mainFunctionName",
       "caption": "Main function name",
-      "description": "Function that will be called. It can be declared it the code above or imported from some other module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nArguments \"params\", \"inputs\" and \"outputs\" should be instances of some Python classes. By default, we use classes \"Parameters\", \"Inputs\" and \"Outputs\" from standard Python API.",
+      "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
       "value_type": "String",
       "edition_type": "value",
       "default": "execute"
-    },
-    {
-      "caption": "Current working folder",
-      "name": "workingDirectory",
-      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths..\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
-      "value_type": "String",
-      "edition_type": "value",
-      "default": "."
     },
     {
       "name": "interpretationMode",
@@ -180,7 +172,7 @@
       "items": [
         {
           "value": "SHARED",
-          "caption": "Standard"
+          "caption": "Shared"
         },
         {
           "value": "GLOBAL",
@@ -191,9 +183,16 @@
           "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
-      "description": "\"JVM-global\" mode runs Python code in the single thread, global to the entire Java machine. This is the safest mode, allowing you to use most Python libraries, even if they do not support multithreading very well (as \"matplotlib\" package). However, this mode reduces performance and is not good for multithreaded applications.\n\n\"Strictly isolated\" mode tries to guarantee that any changes to Python global structures such as sys.path etc. will not affect to other Python executors.\nWARNING: this mode, based on the use of Python sub-interpreters, is incompatible with many native libraries, such as \"numpy\", and IS VERY DANGEROUS: it may cause the entire system to crash — even you do not try to import such libraries. Please AVOID THIS MODE, if you are not an expert.",
-
-      "default": "SHARED"
+      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.\n\n\"Strictly isolated\" mode uses Python sub-interpreters to ensure that any changes to Python global structures such as sys.path. will not affect other Python executors.\nWARNING: this mode is incompatible with many native libraries such as \"numpy\" and IS VERY DANGEROUS — it may crash the entire system. Please AVOID THIS MODE unless you are an expert.",
+      "default": "GLOBAL"
+    },
+    {
+      "caption": "Current working folder",
+      "name": "workingDirectory",
+      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths..\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "."
     },
     {
       "name": "parametersClassName",
