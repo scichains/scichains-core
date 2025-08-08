@@ -33,12 +33,15 @@ import org.graalvm.polyglot.Value;
 
 import java.awt.image.BufferedImage;
 import java.lang.System.Logger;
+import java.nio.file.Path;
 import java.util.*;
 
 public class GraalAPI {
-    public static final String STANDARD_API_ENVIRONMENT = "_env";
+    public static final String STANDARD_API_ENVIRONMENT_FIELD = "_env";
+    public static final String STANDARD_API_EXECUTOR_FIELD = "_executor";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
+    public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "context_path";
     public static final String STANDARD_API_CREATE_OBJECT_PROPERTY_NAME = "__SYS_createEmptyObject";
     public static final String STANDARD_API_LOGGER_NAME = "LOGGER";
     public static final String STANDARD_API_SCALAR_CLASS = "SScalarClass";
@@ -148,7 +151,10 @@ public class GraalAPI {
         // Not Map.of: executorPlatform may  be null
         parameter.put(STANDARD_API_PARAMETER_EXECUTOR, executor);
         parameter.put(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-        parameters.putMember(STANDARD_API_ENVIRONMENT, Collections.unmodifiableMap(parameter));
+        final Path contextPath = executor.contextPath();
+        parameter.put(STANDARD_API_PARAMETER_CONTEXT_PATH, contextPath == null ? null : contextPath.toString());
+        parameters.putMember(STANDARD_API_ENVIRONMENT_FIELD, Collections.unmodifiableMap(parameter));
+        parameters.putMember(STANDARD_API_EXECUTOR_FIELD, executor);
     }
 
     public void loadParameters(Executor executor, Value parameters) {

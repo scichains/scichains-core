@@ -1,0 +1,35 @@
+{
+  "app": "executor",
+  "category": "~examples.js",
+  "name": "JS example: long delay",
+  "tags": [
+    "demo"
+  ],
+  "id": "ee0e9b25-6f03-49eb-bf74-99b71d4a621e",
+  "language": "js",
+  "js": {
+    "module": "demo/ExampleLongDelay.mjs"
+  },
+  "in_ports": [
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "title",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "Long delay (JS module)"
+    },
+    {
+      "name": "delay",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 10
+    }
+  ]
+}
