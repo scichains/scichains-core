@@ -158,7 +158,6 @@ public class GraalAPI {
     }
 
     public void loadParameters(Executor executor, Value parameters) {
-        loadSystemParameters(executor, parameters);
         loadParameters(executor.parameters(), parameters);
     }
 

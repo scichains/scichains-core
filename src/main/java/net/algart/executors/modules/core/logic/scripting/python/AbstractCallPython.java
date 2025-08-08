@@ -379,8 +379,8 @@ public abstract class AbstractCallPython extends Executor {
         try (AtomicPyObject pythonParameters = jepAPI.newAPIObject(performer, parametersClassName());
              AtomicPyObject pythonInputs = jepAPI.newAPIObject(performer, inputsClassName());
              AtomicPyObject pythonOutputs = jepAPI.newAPIObject(performer, outputsClassName())) {
-            jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
             jepAPI.loadSystemParameters(this, pythonParameters, translateWorkingDirectory());
+            jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
             jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);
             t2 = debugTime();
             result = performer.invokeFunction(mainFunctionName,

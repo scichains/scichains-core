@@ -132,8 +132,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     public AtomicPyObject loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         AtomicPyObject parameters = jepAPI.newAPIObject(performer(), python.getParametersClass());
-        jepAPI.loadParameters(executor, parameters);
         jepAPI.loadSystemParameters(executor, parameters, null);
+        jepAPI.loadParameters(executor, parameters);
         return parameters;
     }
 

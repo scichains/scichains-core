@@ -367,8 +367,8 @@ public final class CallJSFunction extends Executor {
         final Value parameters = createEmptyObjectFunction.execute();
         final Value inputs = createEmptyObjectFunction.execute();
         final Value outputs = createEmptyObjectFunction.execute();
-        graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), parameters);
         graalAPI.loadSystemParameters(this, parameters);
+        graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), parameters);
         graalAPI.readInputPorts(subSet(inputPorts(), INPUTS_NAMES), inputs);
         t2 = debugTime();
         final Value result = mainFunction.execute(parameters, inputs, outputs);

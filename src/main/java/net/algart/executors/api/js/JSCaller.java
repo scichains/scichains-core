@@ -105,6 +105,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     public Value loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         final Value parameters = createEmptyObjectFunction.execute();
+        graalAPI.loadSystemParameters(executor, parameters);
         graalAPI.loadParameters(executor, parameters);
         return parameters;
     }
