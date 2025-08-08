@@ -36,9 +36,15 @@ import net.algart.jep.additions.JepInterpretation;
 import java.util.Objects;
 
 public final class PythonCaller implements Cloneable, AutoCloseable {
+    private static final boolean REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES = true;
+    // Should be true. We could create a new container for every instance, but we prefer reusing the same one
+    // with the same SharedInterpreter and the same single-thread pool.
+    // Thus, we can be sure that the number of such thread pools in a multi-chain system
+    // will not be greater than the number of DIFFERENT Python executors.
+
     private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.Python python;
-    private final JepPerformerContainer container;
+    private volatile JepPerformerContainer container;
     private final JepInterpretation.Mode interpretationMode;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject pythonClassInstance = null;
@@ -183,14 +189,13 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     @Override
     public PythonCaller clone() {
         try {
-//            PythonCaller clone = (PythonCaller) super.clone();
-//            clone.container = JepAPI.newContainer(interpretationMode);
-//            return clone;
-            // - We could create a new container as shown above, but we prefer reusing the same one
-            // with the same SharedInterpreter and the same single-thread pool.
-            // Thus, we can be sure that the number of such thread pools in a multi-chain system
-            // will not be greater than the number of DIFFERENT Python executors.
-            return (PythonCaller) super.clone();
+            if (REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
+                return (PythonCaller) super.clone();
+            } else {
+                PythonCaller clone = (PythonCaller) super.clone();
+                clone.container = JepAPI.newContainer(interpretationMode);
+                return clone;
+            }
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
