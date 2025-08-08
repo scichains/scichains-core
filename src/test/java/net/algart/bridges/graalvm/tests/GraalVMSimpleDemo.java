@@ -27,23 +27,25 @@ package net.algart.bridges.graalvm.tests;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
 
+import java.util.List;
+
 public class GraalVMSimpleDemo {
     public void testUsual() {
         System.out.println("testUsual");
     }
 
-    public static void callJs() {
-        try (Context context = Context.newBuilder("js")
+    public static Context callJs() {
+        Context context = Context.newBuilder("js")
                 .allowAllAccess(true)
-                .build()) {
-            String source = """
-                    let a = 5;
-                    let b = 10;
-                    java.lang.System.out.println(a + b);
-                    a * b""";
-            Value result = context.eval("js", source);
-            System.out.println("result: " + result);
-        }
+                .build();
+        String source = """
+                let a = 5;
+                let b = 10;
+                java.lang.System.out.println(a + b);
+                a * b""";
+        Value result = context.eval("js", source);
+        System.out.println("result: " + result);
+        return context;
     }
 
     public static void callPython() {
@@ -88,10 +90,23 @@ public class GraalVMSimpleDemo {
     }
 
     public static void main(String[] args) {
-        callJs();
+        Runtime rt = Runtime.getRuntime();
+        List<Context> contexts = new java.util.ArrayList<>();
+        for (int k = 1; k < 100; k++) {
+            System.out.printf("Iteration %d...%n", k);
+            long t1 = System.nanoTime();
+            Context context = callJs();
+            contexts.add(context);
 //        callPython();
-        // - uncomment if you added the necessary dependence in pom.xml
+            // - uncomment if you added the necessary dependence in pom.xml
 //        callPythonNumpy();
-        // - does not work without installed GraalVM with installed numpy
+            // - does not work without installed GraalVM with installed numpy
+            long t2 = System.nanoTime();
+
+            System.out.printf("Creating context: %.3f ms, used memory: %.5f MB / %.5f MB%n",
+                    (t2 - t1) * 1e-6,
+                    (rt.totalMemory() - rt.freeMemory()) / 1048576.0,
+                    rt.maxMemory() / 1048576.0);
+        }
     }
 }
