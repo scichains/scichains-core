@@ -89,6 +89,10 @@ public abstract class GraalPerformerContainer {
         return getLocalPure().setCustomizer(GraalContextCustomizer.ALL_ACCESS);
     }
 
+    public static Local getLocalAllAccess(Path workingDirectory) {
+        return getLocalAllAccess().setWorkingDirectory(workingDirectory);
+    }
+
     public static Local getLocal(GraalContextCustomizer customizer) {
         Objects.requireNonNull(customizer, "Mull customizer");
         return (Local) getContainer(false).setCustomizer(customizer);

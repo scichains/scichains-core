@@ -36,9 +36,14 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public final class JSCaller implements Cloneable, AutoCloseable {
+    private static final boolean REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES = false;
+    // Should be false: otherwise, we will need strict synchronization to avoid parallel
+    // call of the same JSCaller from other SciChains windows.
+
     private final JSCallerSpecification specification;
+    private final Path workingDirectory;
     private final JSCallerSpecification.JS js;
-    private final GraalPerformerContainer.Local performerContainer;
+    private volatile GraalPerformerContainer.Local performerContainer;
     private final GraalAPI graalAPI = GraalAPI.getInstance()
             .setConvertInputScalarToNumber(false)
             .setConvertInputNumbersToArray(false)
@@ -52,16 +57,14 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     private JSCaller(JSCallerSpecification specification, Path workingDirectory) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
-        Objects.requireNonNull(workingDirectory, "Null workingDirectory");
+        this.workingDirectory = Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         this.js = specification.getJS();
         if (js == null) {
             final Path file = specification.getSpecificationFile();
             throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
                     + " is not a JS executor configuration: no \"JS\" section");
         }
-        this.performerContainer = GraalPerformerContainer.getLocalAllAccess();
-        this.performerContainer.setWorkingDirectory(workingDirectory);
-        GraalAPI.initializeJS(this.performerContainer);
+        createPerformerContainer();
     }
 
     public static JSCaller of(JSCallerSpecification specification, Path workingDirectory) {
@@ -143,7 +146,11 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     @Override
     public JSCaller clone() {
         try {
-            return (JSCaller) super.clone();
+            JSCaller clone = (JSCaller) super.clone();
+            if (!REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
+                clone.createPerformerContainer();
+            }
+            return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
@@ -160,5 +167,10 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         this.mainFunction = null;
         // - enforce re-creating this function by perform()
         this.performerContainer.freeResources();
+    }
+
+    private void createPerformerContainer() {
+        this.performerContainer = GraalPerformerContainer.getLocalAllAccess(workingDirectory);
+        GraalAPI.initializeJS(this.performerContainer);
     }
 }

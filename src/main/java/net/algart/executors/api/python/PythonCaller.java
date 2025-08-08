@@ -189,13 +189,12 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     @Override
     public PythonCaller clone() {
         try {
-            if (REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
-                return (PythonCaller) super.clone();
-            } else {
-                PythonCaller clone = (PythonCaller) super.clone();
+            PythonCaller clone = (PythonCaller) super.clone();
+            if (!REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
                 clone.container = JepAPI.newContainer(interpretationMode);
-                return clone;
             }
+            return clone;
+
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
