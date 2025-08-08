@@ -41,6 +41,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     // with the same SharedInterpreter and the same single-thread pool.
     // Thus, we can be sure that the number of such thread pools in a multi-chain system
     // will not be greater than the number of DIFFERENT Python executors.
+    // Another reason: different instances of SharedInterpreter still use the same global variables,
+    // and there are no any ways to provide correct access to them in Python from parallel threads
+    // (which become possible when using different containers with different single-thread pools).
 
     private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.Python python;
