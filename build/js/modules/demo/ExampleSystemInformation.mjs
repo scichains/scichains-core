@@ -1,6 +1,11 @@
 export function execute(params, inputs, outputs) {
     const e = params._env.executor
-    const msg = "Hello! I am " + e.getSpecification().getName() + ", id " + e.getExecutorId() + " - " + e
+    const msg = "Hello from JS System information! " +
+            "\nI am " + e.getSpecification().getName() +
+            "\n    id: " + e.getExecutorId() +
+            "\n    working in folder: " + params._env.workingDirectory +
+            "\n    executed in chain: " + params._env.contextPath +
+            "\n    toString(): " + e;
     e.showStatus(msg)
     print(msg)
     e.defaultOutputPortName("specification")

@@ -4,7 +4,7 @@ console.log("==== Initializing JS module long delay! ====");
 
 
 export function execute(params, inputs, outputs) {
-    console.log("Global environment context path: " + params._env.context_path);
+    console.log("Global environment context path: " + params._env.contextPath);
 
     global_counter += 1;
     console.log("Starting JS module loop; module counter: " + global_counter);

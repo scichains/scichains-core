@@ -97,6 +97,7 @@ public final class CallJSFunction extends Executor {
 
     private final GraalPerformerContainer.Local performerContainer = GraalPerformerContainer.getLocalPure();
     private final GraalSourceContainer javaScriptCode = GraalSourceContainer.newLiteral();
+    private volatile Path translatedDirectory = null;
     private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
 
@@ -333,11 +334,9 @@ public final class CallJSFunction extends Executor {
             closePerformerContainer();
         }
         long t2 = debugTime();
+        translatedDirectory = translateWorkingDirectory();
         performerContainer.setCustomizer(safety);
-        performerContainer.setWorkingDirectory(
-                safety.isWorkingDirectorySupported() ?
-                        translateWorkingDirectory() :
-                        null);
+        performerContainer.setWorkingDirectory(safety.isWorkingDirectorySupported() ? translatedDirectory : null);
         // - in PURE mode we cannot set the working directory in Context.Builder;
         // note: we must explicitly set it to null if !isWorkingDirectorySupported -
         // maybe the user changed the safety parameter!
@@ -367,7 +366,10 @@ public final class CallJSFunction extends Executor {
         final Value parameters = createEmptyObjectFunction.execute();
         final Value inputs = createEmptyObjectFunction.execute();
         final Value outputs = createEmptyObjectFunction.execute();
-        graalAPI.loadSystemParameters(this, parameters);
+        if (safety.isJavaAccessSupported()) {
+            // - no sense to create _env if we have no ways to read its fields from a Java Map object
+            graalAPI.loadSystemParameters(this, parameters, translatedDirectory);
+        }
         graalAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), parameters);
         graalAPI.readInputPorts(subSet(inputPorts(), INPUTS_NAMES), inputs);
         t2 = debugTime();

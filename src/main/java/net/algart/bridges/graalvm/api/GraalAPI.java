@@ -41,7 +41,8 @@ public class GraalAPI {
     public static final String STANDARD_API_EXECUTOR_FIELD = "_executor";
     public static final String STANDARD_API_PARAMETER_EXECUTOR = "executor";
     public static final String STANDARD_API_PARAMETER_PLATFORM = "platform";
-    public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "context_path";
+    public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "contextPath";
+    public static final String STANDARD_API_PARAMETER_WORKING_DIRECTORY = "workingDirectory";
     public static final String STANDARD_API_CREATE_OBJECT_PROPERTY_NAME = "__SYS_createEmptyObject";
     public static final String STANDARD_API_LOGGER_NAME = "LOGGER";
     public static final String STANDARD_API_SCALAR_CLASS = "SScalarClass";
@@ -145,12 +146,14 @@ public class GraalAPI {
     // Unlike loadParameters, we use here usual Map (instead of Value):
     // it allows avoiding creating a special empty object with name
     // STANDARD_API_PARAMETER inside "parameters" object
-    public void loadSystemParameters(Executor executor, Value parameters) {
+    public void loadSystemParameters(Executor executor, Value parameters, Path workingDirectory) {
         Objects.requireNonNull(executor, "Null executor");
         final Map<String, Object> parameter = new LinkedHashMap<>();
-        // Not Map.of: executorPlatform may  be null
+        // Not Map.of: some fields may be null
         parameter.put(STANDARD_API_PARAMETER_EXECUTOR, executor);
         parameter.put(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+        final Path directory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
+        parameter.put(STANDARD_API_PARAMETER_WORKING_DIRECTORY, directory == null ? null : directory.toString());
         final Path contextPath = executor.contextPath();
         parameter.put(STANDARD_API_PARAMETER_CONTEXT_PATH, contextPath == null ? null : contextPath.toString());
         parameters.putMember(STANDARD_API_ENVIRONMENT_FIELD, Collections.unmodifiableMap(parameter));

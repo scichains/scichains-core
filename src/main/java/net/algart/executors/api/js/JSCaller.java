@@ -100,7 +100,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
             importCode.setModuleJS(GraalPerformer.importAndReturnJSFunction(js.getModule(), js.getFunction()),
                     "importing");
             // - name "importing" is not important: we will not use share this performer (Graal context)
-            // Note: no sense to check importCode.changed(), because it cannot change until reloading all chain.
+            // Note: no sense to check importCode.changed(), because it cannot change until reloading the entire chain.
             final GraalPerformer performer = performer();
             mainFunction = performer.perform(importCode);
             createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
@@ -110,7 +110,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     public Value loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
         final Value parameters = createEmptyObjectFunction.execute();
-        graalAPI.loadSystemParameters(executor, parameters);
+        graalAPI.loadSystemParameters(executor, parameters, null);
         graalAPI.loadParameters(executor, parameters);
         return parameters;
     }

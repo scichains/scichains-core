@@ -120,17 +120,15 @@ public class JepAPI {
         }
     }
 
-    public void loadEnvironment(Executor executor, AtomicPyObject environment, Path workingDirectory) {
+    public void loadEnvironment(Executor executor, AtomicPyObject env, Path workingDirectory) {
         Objects.requireNonNull(executor, "Null executor");
-        Objects.requireNonNull(environment, "Null environment");
-        environment.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
-        environment.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
-        final Path currentDirectory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
-        environment.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY,
-                currentDirectory == null ? null : currentDirectory.toString());
+        Objects.requireNonNull(env, "Null environment");
+        env.setAttribute(STANDARD_API_PARAMETER_EXECUTOR, executor);
+        env.setAttribute(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+        final Path directory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
+        env.setAttribute(STANDARD_API_PARAMETER_WORKING_DIRECTORY, directory == null ? null : directory.toString());
         final Path contextPath = executor.contextPath();
-        environment.setAttribute(STANDARD_API_PARAMETER_CONTEXT_PATH,
-                contextPath == null ? null : contextPath.toString());
+        env.setAttribute(STANDARD_API_PARAMETER_CONTEXT_PATH, contextPath == null ? null : contextPath.toString());
     }
 
     public void readInputPorts(JepPerformer performer, Collection<Port> inputPorts, AtomicPyObject inputs) {
