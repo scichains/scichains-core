@@ -31,7 +31,9 @@ import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.*;
+import net.algart.multimatrix.MultiMatrix;
 
+import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -231,12 +233,12 @@ public class JepAPI {
     public void storeNumbersFromJep(JepPerformer performer, Port port, Object value) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
-        final SNumbers data = port.getData(SNumbers.class, true);
+        final SNumbers resultNumbers = port.getData(SNumbers.class, true);
         if (value instanceof SNumbers) {
-            data.setTo((SNumbers) value);
+            resultNumbers.setTo((SNumbers) value);
         } else {
             checkJepNDArray(port, value, false, true);
-            Jep2SNumbers.setToArray(data, value);
+            Jep2SNumbers.setToArray(resultNumbers, value);
         }
     }
 
@@ -259,13 +261,17 @@ public class JepAPI {
     public void storeMatFromJep(JepPerformer performer, Port port, Object value) {
         Objects.requireNonNull(performer, "Null performer");
         Objects.requireNonNull(port, "Null port");
-        final SMat data = port.getData(SMat.class, true);
+        Objects.requireNonNull(value, "Null value for storing in port " + port.getName());
+        final SMat resultMat = port.getData(SMat.class, true);
         if (isNumpyIntegration(performer.configuration())) {
-            if (value instanceof SMat) {
-                data.setTo((SMat) value);
-            } else {
-                checkJepNDArray(port, value, true, false);
-                Jep2SMat.setToArray(data, value);
+            switch (value) {
+                case SMat sMat -> resultMat.setTo(sMat);
+                case BufferedImage bufferedImage -> resultMat.setTo(bufferedImage);
+                case MultiMatrix multiMatrix -> resultMat.setTo(multiMatrix);
+                default -> {
+                    checkJepNDArray(port, value, true, false);
+                    Jep2SMat.setToArray(resultMat, value);
+                }
             }
         } else {
             throw new IllegalStateException("Cannot load a matrix from Python outputs: " +

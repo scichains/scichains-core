@@ -27,11 +27,12 @@ package net.algart.executors.modules.core.logic.scripting.python;
 public final class CallPythonFunction extends AbstractCallPython {
     private String code =
             """
-                    # mod = pya.import_file("my_module.py") # - import from the chain directory
+                    # mod = pya.import_file("my_module.py")
+                    # - import .py-file from the chain directory
                     
                     def execute(params, inputs, outputs):
                         # outputs.x1 = inputs.x1
-                        # outputs.m1 = inputs.m1 # - access inputs and outputs
+                        # outputs.m1 = inputs.m1 # - copy input to output
                         return "Hello from Python function!"
                     """;
 

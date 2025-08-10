@@ -150,12 +150,12 @@
     {
       "name": "code",
       "caption": "Main Python code",
-      "description": "This code allows to import the necessary modules, define functions etc.\nNote: while executing in a loop, this code is executed only once, before the 1st execution.\nAlso note: the Python runtime environment is created on the first execution and persists across all subsequent executions until the chain is closed. Therefore, we recommend to reload the chain after changing this code to reset the environment and remove all previous declarations.\nNote: you can use Java classes from Python, for example:\n    from java.lang import System\nAfter this, you may call:\n    System.out.println(\"Hello from Java\")\nYou also may сall\n    mod = pya.import_file(\"xxxx.py\")\nwhere \"pya\" is an alias for \"pyalgart.api\": this allows you to import a Python module from a file (e.g. xxxx.py) located in the current chain folder or at an absolute path. After that, you can call its functions, for example:\n    mod.my_function()\n\nWARNING: the code above should not change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
+      "description": "This code allows you to import modules, define functions etc.\nNote: while executing in a loop, this code is performed only once, before 1st execution.\nAlso note: the Python runtime environment is created on the first execution and persists across all subsequent executions until the chain is closed. Therefore, we recommend to reload the chain after changing this code to reset the environment and remove all previous declarations.\nNote: you can use Java classes from Python, see ninia/jep documentation.\nYou also may сall:\n    mod = pya.import_file(\"xxxx.py\")\n(\"pya\" is an alias for \"pyalgart.api\" standard package): this allows you to import a Python module from a file (e.g. xxxx.py) located in the current chain folder or at an absolute path. After that, you can call its functions:\n    mod.my_function()\n\nWARNING: the code above should not change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
       "value_type": "String",
       "edition_type": "value",
       "multiline": true,
-      "edition_rows": 7,
-      "default": "# mod = pya.import_file(\"my_module.py\") # - import from the chain directory\n\ndef execute(params, inputs, outputs):\n    # outputs.x1 = inputs.x1\n    # outputs.m1 = inputs.m1 # - access inputs and outputs\n    return \"Hello from Python function!\"\n"
+      "edition_rows": 9,
+      "default": "# mod = pya.import_file(\"my_module.py\")\n# - import .py-file from the chain directory\n\ndef execute(params, inputs, outputs):\n    # outputs.x1 = inputs.x1\n    # outputs.m1 = inputs.m1 # - copy input to output\n    return \"Hello from Python function!\"\n"
     },
     {
       "name": "mainFunctionName",
@@ -163,7 +163,8 @@
       "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
       "value_type": "String",
       "edition_type": "value",
-      "default": "execute"
+      "default": "execute",
+      "advanced": true
     },
     {
       "name": "interpretationMode",

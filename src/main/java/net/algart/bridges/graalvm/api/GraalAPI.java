@@ -329,9 +329,9 @@ public class GraalAPI {
         if (object == null) {
             port.removeData();
         } else {
-            final SNumbers data = port.getData(SNumbers.class, true);
+            final SNumbers resultNumbers = port.getData(SNumbers.class, true);
             if (object instanceof SNumbers) {
-                data.setTo((SNumbers) object);
+                resultNumbers.setTo((SNumbers) object);
             } else if (object instanceof Collection<?>) {
                 int blockLength = 1;
                 if (value.hasMember(JS_ARRAY_BLOCK_LENGTH_PROPERTY_NAME)) {
@@ -340,7 +340,7 @@ public class GraalAPI {
                         blockLength = blockLengthValue.asInt();
                     }
                 }
-                data.setTo((Collection<?>) object, blockLength);
+                resultNumbers.setTo((Collection<?>) object, blockLength);
             } else {
                 if (!SNumbers.isJavaArraySupported(object)) {
                     throw new IllegalArgumentException(
@@ -349,7 +349,7 @@ public class GraalAPI {
                                     SMat.class.getCanonicalName()
                                     + ", but it returned " + object.getClass().getCanonicalName());
                 }
-                data.setToArray(object, defaultBlockLength);
+                resultNumbers.setToArray(object, defaultBlockLength);
             }
         }
     }
@@ -398,11 +398,11 @@ public class GraalAPI {
         if (object == null) {
             port.removeData();
         } else {
-            final SMat data = port.getData(SMat.class, true);
+            final SMat resultMat = port.getData(SMat.class, true);
             switch (object) {
-                case SMat mat -> data.setTo(mat);
-                case BufferedImage bufferedImage -> data.setTo(bufferedImage);
-                case MultiMatrix multiMatrix -> data.setTo(multiMatrix);
+                case SMat mat -> resultMat.setTo(mat);
+                case BufferedImage bufferedImage -> resultMat.setTo(bufferedImage);
+                case MultiMatrix multiMatrix -> resultMat.setTo(multiMatrix);
                 default -> throw new IllegalStateException(
                         "Illegal type for of output \"" + port.getName() +
                                 "\": JavaScript code must return " + SMat.class.getCanonicalName() +
