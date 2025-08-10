@@ -42,15 +42,14 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
 
     @Override
     public void initialize() {
-        final PythonCaller pythonCaller = pythonCaller();
-        if (!pythonCaller.isGlobalSynchronizationRequired()) {
-            initializePython(pythonCaller);
-        }
+        // We could call here initializePython only  if PythonCaller.REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES=false.
+        // When reusing the thread, we MUST execute initialize+process in a synchronized block
+        // because another SciChains window may close this object at the same time.
     }
 
     @Override
     public void process() {
-        final PythonCaller pythonCaller = pythonCaller();
+        @SuppressWarnings("resource") final PythonCaller pythonCaller = pythonCaller();
         if (pythonCaller.isGlobalSynchronizationRequired()) {
             JepInterpretation.executeWithJVMGlobalLock(
                     () -> initializePython(pythonCaller),
@@ -58,7 +57,12 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
                     this::closePython);
 
         } else {
-            processPython(pythonCaller);
+            pythonCaller.executeWithLock(
+                    () -> initializePython(pythonCaller),
+                    () -> processPython(pythonCaller)
+                    // But we do not close it!
+                    // Thus, when all chains are loaded and "warmed up", there should be no lack in performance.
+            );
         }
     }
 
@@ -99,10 +103,6 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
     private void initializePython(PythonCaller pythonCaller) {
         long t1 = debugTime();
         pythonCaller.initialize(this);
-//        System.out.println("Sleeping in " + contextPath());
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {}
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Python module \"%s\" (%s) initialized in %.3f ms",
@@ -137,6 +137,20 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
         if (pythonCaller != null) {
             this.pythonCaller = null;
             pythonCaller.close();
+            // Strictly speaking, closing PythonCaller is not an entirely correct operation,
+            // just like we never close the global running thread if isGlobalSynchronizationRequired()
+            // (we only close SharedInterpreter instances).
+            // We suppose that this PythonCaller will be reused in all instances of the same Python class,
+            // just like JVM reuses the same Java class and never destroys it.
+            // But PythonCaller is a very heavy object: it runs an OS thread in a single-thread pool,
+            // and we SHOULD close it sometimes.
+            // Closing this SciChains executor (InterpretPython) is a possible reason.
+            // Typically, this happens when the user closes a chain, and even if we have other open windows
+            // with instances of the same executor, they will be automatically revived.
+            // If this becomes a serious performance issue in the future (hundreds of users on the same server),
+            // we will be able to improve this solution, for example, checking 10-second delay without access
+            // before actually freeing resources.
+
         }
     }
 

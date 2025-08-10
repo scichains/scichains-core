@@ -45,6 +45,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     // and there are no any ways to provide correct access to them in Python from parallel threads
     // (which become possible when using different containers with different single-thread pools).
 
+    private static final boolean DEBUG_SLEEP_FOR_PARALLEL_EXECUTION = false;
+    // Must be false.
+
     private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.Python python;
     private volatile JepPerformerContainer container;
@@ -63,7 +66,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         this.python = specification.getPython();
         if (python == null) {
             final var file = specification.getSpecificationFile();
-            throw new IllegalArgumentException("JSON" + (file == null ? "" : " " + file)
+            throw new IllegalArgumentException(
+                    "JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
         final JepInterpretation.Mode mode = this.python.getMode();
@@ -104,7 +108,6 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
 
     public JepPerformer performer() {
         synchronized (lock) {
-//            System.out.println("!!! Opening " + container);
             return container.performer();
         }
     }
@@ -115,12 +118,40 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         }
     }
 
+    /**
+     * Executes a sequence of actions under the internal synchronization lock of this object.
+     * This is necessary if the methods of this object are called in a multithreaded environment.
+     * Here:
+     * <ul>
+     *     <li><code>initializing</code>:
+     *     initialized python function (usually {@link #initialize(Executor)};</li>
+     *     <li><code>processing</code>: performs the main logic, typically using the {@link #loadParameters(Executor)},
+     *     {@link #readInputPorts(Executor)}, {@link #writeOutputPorts(Executor, AtomicPyObject)} and
+     *     {@link #callPython(AtomicPyObject, AtomicPyObject, AtomicPyObject)};</li>
+     * </ul>
+     *
+     * <p>This method uses <code>synchronized (lock) {...}</code> operators
+     * for executing all 2 stages.
+     *
+     * @param initializing create and initialize the interpreter.
+     * @param processing   process Python operations.
+     * @throws NullPointerException if any of arguments is <code>null</code>.
+     */
+    public void executeWithLock(Runnable initializing, Runnable processing) {
+        Objects.requireNonNull(initializing, "Null initializing");
+        Objects.requireNonNull(processing, "Null processing");
+        synchronized (lock) {
+            initializing.run();
+            processing.run();
+        }
+    }
+
     public void initialize(Executor executor) {
         synchronized (lock) {
             @SuppressWarnings("resource") final JepPerformer performer = performer();
 //         jepAPI.initializedGlobalEnvironment(performer, executor, null);
             // - We do not call initialize the global environment (the previous commented line):
-            // if the same PythonCaller reuses the same SharedInterpreter,
+            // if the same PythonCaller in another InterpretPython instance reuses the same SharedInterpreter,
             // it can lead to invalid value of the global variable _env
             if (python.isClassMethod()) {
                 final String className = python.getClassName();
@@ -132,11 +163,20 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
                 performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
             }
         }
+        if (DEBUG_SLEEP_FOR_PARALLEL_EXECUTION) {
+            System.out.println("~~~ Sleeping 10 seconds for " + container);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ignored) {
+            }
+            System.out.println("~~~ ...finish sleeping for " + container);
+        }
     }
 
     public AtomicPyObject loadParameters(Executor executor) {
         Objects.requireNonNull(executor, "Null executor");
-        AtomicPyObject parameters = jepAPI.newAPIObject(performer(), python.getParametersClass());
+        final JepPerformer performer = performer();
+        AtomicPyObject parameters = jepAPI.newAPIObject(performer, python.getParametersClass());
         jepAPI.loadSystemParameters(executor, parameters, null);
         jepAPI.loadParameters(executor, parameters);
         return parameters;

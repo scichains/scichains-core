@@ -79,6 +79,7 @@ public final class JepPerformerContainer implements AutoCloseable {
         synchronized (lock) {
             performer = this.performer;
             if (performer == null) {
+//                System.out.println("!!! Requesting new performer in " + this);
                 this.performer = performer = JepPerformer.newPerformer(
                         JepSingleThreadInterpreter.newInstance(mode, configurationSupplier));
                 created = true;
