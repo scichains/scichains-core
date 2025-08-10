@@ -42,7 +42,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
     static final Logger LOG = System.getLogger(JepSingleThreadInterpreter.class.getName());
 
     private static final Cleaner CLEANER = Cleaner.create();
-    private static final JVMGlobalThreadPoolHolder GLOBAL_THREAD_POOL_HOLDER = new JVMGlobalThreadPoolHolder();
 
     private final JepInterpretation.Mode mode;
     private final ExpensiveState state;
@@ -58,7 +57,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     public static Object getGlobalLock() {
-        return GLOBAL_THREAD_POOL_HOLDER.getLock();
+        return GLOBAL_LOCK;
     }
 
     public static JepSingleThreadInterpreter newInstance(
@@ -256,7 +255,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
             this.name = name;
             this.globalThreadPool = globalThreadPool;
             if (globalThreadPool) {
-                this.singleThreadPool = GLOBAL_THREAD_POOL_HOLDER.getGlobalThreadPool();
+                this.singleThreadPool = JVMGlobalThreadPoolHolder.INSTANCE.getSingleThreadPool();
             } else {
                 String threadName = "JEP " + name + " execution thread #" + THREAD_COUNT.getAndIncrement();
                 LOG.log(Logger.Level.DEBUG, () -> "Creating " + threadName);
@@ -356,28 +355,20 @@ public class JepSingleThreadInterpreter implements Interpreter {
         }
     }
 
-    static class JVMGlobalThreadPoolHolder {
-        private final Object lock = new Object();
-        private volatile ThreadPoolExecutor singleThreadPool;
+    private final static Object GLOBAL_LOCK = new Object();
+    private static class JVMGlobalThreadPoolHolder {
+        static final JVMGlobalThreadPoolHolder INSTANCE = new JVMGlobalThreadPoolHolder();
 
-        public Object getLock() {
-            return lock;
+        private final ThreadPoolExecutor singleThreadPool;
+
+        private JVMGlobalThreadPoolHolder() {
+            final String threadName = "JEP JVM-global execution thread";
+            LOG.log(Logger.Level.INFO, () -> "Creating " + threadName);
+            this.singleThreadPool = ExpensiveState.newSingleThreadPool(threadName);
         }
 
-        // Note: this configuration supplier is used only once!
-        public ThreadPoolExecutor getGlobalThreadPool() {
-            ThreadPoolExecutor result = this.singleThreadPool;
-            if (result == null) {
-                synchronized (lock) {
-                    if (this.singleThreadPool == null) {
-                        final String threadName = "JEP JVM-global execution thread";
-                        LOG.log(Logger.Level.INFO, () -> "Creating " + threadName);
-                        this.singleThreadPool = ExpensiveState.newSingleThreadPool(threadName);
-                        result = this.singleThreadPool;
-                    }
-                }
-            }
-            return result;
+        public ThreadPoolExecutor getSingleThreadPool() {
+            return singleThreadPool;
         }
     }
 }
