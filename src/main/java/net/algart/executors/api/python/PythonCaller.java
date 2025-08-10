@@ -48,6 +48,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     private final PythonCallerSpecification specification;
     private final PythonCallerSpecification.Python python;
     private volatile JepPerformerContainer container;
+    // volatile is not necessary, but COULD become necessary if we will not use synchronization
+    // it is not "final" because of clone() method, so JVM do not provide the same guarantees as for "final"
     private final JepInterpretation.Mode interpretationMode;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject pythonClassInstance = null;

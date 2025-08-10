@@ -44,6 +44,8 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private final Path workingDirectory;
     private final JSCallerSpecification.JS js;
     private volatile GraalPerformerContainer.Local performerContainer;
+    // volatile is not necessary, but COULD become necessary if we will not use synchronization:
+    // it is not "final" because of clone() method, so JVM do not provide the same guarantees as for "final"
     private final GraalAPI graalAPI = GraalAPI.getInstance()
             .setConvertInputScalarToNumber(false)
             .setConvertInputNumbersToArray(false)
