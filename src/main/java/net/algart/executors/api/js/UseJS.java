@@ -25,7 +25,7 @@
 package net.algart.executors.api.js;
 
 import net.algart.graalvm.GraalSourceContainer;
-import net.algart.bridges.graalvm.api.GraalPlatforms;
+import net.algart.executors.api.graalvm.GraalPlatforms;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.system.DefaultExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;

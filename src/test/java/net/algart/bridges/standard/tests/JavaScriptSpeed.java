@@ -24,8 +24,8 @@
 
 package net.algart.bridges.standard.tests;
 
-import net.algart.bridges.standard.JavaScriptContextContainer;
-import net.algart.bridges.standard.JavaScriptPerformer;
+import net.algart.executors.api.js.engine.JavaScriptContextContainer;
+import net.algart.executors.api.js.engine.JavaScriptPerformer;
 
 import javax.script.ScriptEngine;
 import java.util.Locale;

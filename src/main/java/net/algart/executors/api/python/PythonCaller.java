@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.python;
 
-import net.algart.bridges.jep.api.JepAPI;
+import net.algart.executors.api.jep.JepAPI;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;
 import net.algart.jep.JepPerformer;

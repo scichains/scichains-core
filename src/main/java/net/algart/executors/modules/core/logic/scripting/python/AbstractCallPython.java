@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.scripting.python;
 
-import net.algart.bridges.jep.api.JepAPI;
-import net.algart.bridges.jep.api.JepPlatforms;
+import net.algart.executors.api.jep.JepAPI;
+import net.algart.executors.api.jep.JepPlatforms;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;

@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.scripting.js;
 
-import net.algart.bridges.standard.JavaScriptContextContainer;
-import net.algart.bridges.standard.JavaScriptPerformer;
+import net.algart.executors.api.js.engine.JavaScriptContextContainer;
+import net.algart.executors.api.js.engine.JavaScriptPerformer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;

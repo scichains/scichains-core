@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.logic.scripting.js.tests;
 
-import net.algart.bridges.standard.JavaScriptPerformer;
+import net.algart.executors.api.js.engine.JavaScriptPerformer;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.logic.scripting.js.arrays.BlockJSModifyingNamedNumbers;
 import net.algart.executors.modules.core.numbers.creation.CreateRandomNumbers;

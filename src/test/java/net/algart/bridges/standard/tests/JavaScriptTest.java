@@ -24,7 +24,7 @@
 
 package net.algart.bridges.standard.tests;
 
-import net.algart.bridges.standard.JavaScriptPerformer;
+import net.algart.executors.api.js.engine.JavaScriptPerformer;
 
 public class JavaScriptTest {
     public static void main(String[] args) {

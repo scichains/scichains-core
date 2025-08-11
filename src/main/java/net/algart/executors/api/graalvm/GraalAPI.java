@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm.api;
+package net.algart.executors.api.graalvm;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;

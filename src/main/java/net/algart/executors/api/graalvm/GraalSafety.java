@@ -22,25 +22,56 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.standard;
+package net.algart.executors.api.graalvm;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.function.Predicate;
+import net.algart.graalvm.GraalContextCustomizer;
+import net.algart.executors.api.data.SMat;
+import net.algart.executors.api.data.SNumbers;
+import net.algart.executors.api.data.SScalar;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.io.IOAccess;
 
-// This class does not depend on Graal directly, but customizes ScriptEngine according Graal requirements
-class ScriptEngineTools {
-    private static final String DEFAULT_ENGINE_NAME = getStringProperty(
-            "net.algart.bridges.standard", "javascript");
-    // - we don't use "graal.js" by default: "javascript" is more flexible
+import java.util.*;
+
+/**
+ * Levels of GraalVM safety for SciChains environment.
+ * In addition to {@link GraalContextCustomizer} constants,
+ * this enum provides additional level {@link #SAFE} which provides access
+ * to the standard Java class and to the classes necessary for SciChains:
+ * {@link SScalar}, {@link SNumbers}, {@link SMat}.
+ */
+public enum GraalSafety implements GraalContextCustomizer {
+    PURE(false, "pure") {
+        @Override
+        public void customize(Context.Builder builder) {
+        }
+    },
+
+    SAFE(true, "safe") {
+        @Override
+        public void customize(Context.Builder builder) {
+            builder.allowIO(IOAccess.ALL);
+            // - necessary to import JavaScript modules
+            builder.allowHostAccess(HostAccess.ALL);
+            builder.allowHostClassLookup(GraalSafety::isSafeClass);
+        }
+    },
+
+    ALL_ACCESS(true, "all-access") {
+        @Override
+        public void customize(Context.Builder builder) {
+            GraalContextCustomizer.ALL_ACCESS.customize(builder);
+        }
+
+        @Override
+        public boolean isAllAccess() {
+            return true;
+        }
+    };
 
     private static final Set<String> SAFE_CLASSES = new HashSet<>(Arrays.asList(
+            Object.class.getCanonicalName(),
             String.class.getCanonicalName(),
             Locale.class.getCanonicalName(),
             Float.class.getCanonicalName(),
@@ -65,50 +96,54 @@ class ScriptEngineTools {
             int[].class.getCanonicalName(),
             long[].class.getCanonicalName(),
             float[].class.getCanonicalName(),
-            double[].class.getCanonicalName()
+            double[].class.getCanonicalName(),
             // - previous types are necessary for creating primitive Java arrays from JavaScript,
             // like in the following code:
             //      var IntsC = Java.type("int[]");
             //      var ja = new IntsC(100);
+            SScalar.class.getCanonicalName(),
+            SNumbers.class.getCanonicalName(),
+            SMat.class.getCanonicalName()
     ));
 
-    static ScriptEngine newEngine() {
-        // Actually this function is equivalent to doNewEngine(), but outputs a log message.
-        final ScriptEngine engine = doNewEngine();
-        JavaScriptPerformer.LOG.log(System.Logger.Level.DEBUG,
-                "Creating new local JavaScript engine: " + engine.getClass());
-        return engine;
+    private final boolean supportedJavaAccess;
+    private final String safetyName;
+
+    GraalSafety(boolean supportedJavaAccess, String safetyName) {
+        this.supportedJavaAccess = supportedJavaAccess;
+        this.safetyName = safetyName;
     }
 
-    static ScriptEngine doNewEngine() {
-        final ScriptEngine engine = new ScriptEngineManager(JavaScriptPerformer.class.getClassLoader())
-                .getEngineByName(DEFAULT_ENGINE_NAME);
-        // - without explicit argument JavaScriptContextContainer.class.getClassLoader(), we will have a problem
-        // in ScriptEngineManager: it will use getContextClassLoader, but it can be null while calling from JNI
-        if (engine == null) {
-            throw new UnsupportedOperationException("Default script engine \""
-                    + DEFAULT_ENGINE_NAME + "\" is not supported");
+
+    public String safetyName() {
+        return safetyName;
+    }
+
+    public static GraalSafety ofOrNull(String name) {
+        Objects.requireNonNull(name, "Null safety name");
+        for (GraalSafety safety : values()) {
+            if (name.equals(safety.safetyName)) {
+                return safety;
+            }
         }
-        final Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        bindings.put("polyglot.js.allowHostAccess", true);
-        bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) SAFE_CLASSES::contains);
-        // - allows access to several safe classes only (graal,js)
-        engine.put("LOGGER", JavaScriptPerformer.LOG);
-        return engine;
+        return null;
     }
 
-    private static String getStringProperty(String propertyName) {
-        try {
-            return System.getProperty(propertyName);
-        } catch (Exception e) {
-            // for a case of SecurityException
-            return null;
-        }
+    @Override
+    public boolean isJavaAccessSupported() {
+        return supportedJavaAccess;
     }
 
-    private static String getStringProperty(String propertyName, String defaultValue) {
-        final String result = getStringProperty(propertyName);
-        return result != null ? result : defaultValue;
+    public boolean isWorkingDirectorySupported() {
+        return this != PURE;
     }
 
+    @Override
+    public String toString() {
+        return safetyName;
+    }
+
+    private static boolean isSafeClass(String className) {
+        return SAFE_CLASSES.contains(className);
+    }
 }

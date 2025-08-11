@@ -24,7 +24,7 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.executors.api.graalvm.GraalSafety;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.jep.api;
+package net.algart.executors.api.jep;
 
 import jep.DirectNDArray;
 import jep.NDArray;

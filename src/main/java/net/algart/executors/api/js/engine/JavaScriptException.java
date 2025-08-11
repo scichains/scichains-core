@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.standard;
+package net.algart.executors.api.js.engine;
 
 import javax.script.ScriptException;
 import java.io.Serial;

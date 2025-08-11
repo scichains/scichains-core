@@ -25,7 +25,7 @@
 package net.algart.graalvm.tests;
 
 import net.algart.arrays.Matrix;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.executors.api.graalvm.GraalSafety;
 import net.algart.executors.api.data.SMat;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;

@@ -22,20 +22,26 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm.api;
+package net.algart.executors.api.jep;
 
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 
-public class GraalPlatforms {
-    public static final String GRAAL_TECHNOLOGY = "graal";
+import java.util.List;
 
-    private static final InstalledPlatformsForTechnology GRAAL_PLATFORMS =
-            InstalledPlatformsForTechnology.of(GRAAL_TECHNOLOGY);
+public class JepPlatforms {
+    public static final String JEP_TECHNOLOGY = "jep";
 
-    private GraalPlatforms() {
+    private static final InstalledPlatformsForTechnology PYTHON_PLATFORMS =
+            InstalledPlatformsForTechnology.of(JEP_TECHNOLOGY);
+
+    private JepPlatforms() {
     }
 
-    public static InstalledPlatformsForTechnology graalPlatforms() {
-        return GRAAL_PLATFORMS;
+    public static InstalledPlatformsForTechnology pythonPlatforms() {
+        return PYTHON_PLATFORMS;
+    }
+
+    public static List<String> pythonRootFolders() {
+        return PYTHON_PLATFORMS.installedImplementationFolders();
     }
 }

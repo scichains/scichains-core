@@ -27,9 +27,9 @@ package net.algart.executors.modules.core.logic.scripting.js;
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.graalvm.GraalSourceContainer;
-import net.algart.bridges.graalvm.api.GraalAPI;
-import net.algart.bridges.graalvm.api.GraalSafety;
-import net.algart.bridges.standard.JavaScriptContextContainer;
+import net.algart.executors.api.graalvm.GraalAPI;
+import net.algart.executors.api.graalvm.GraalSafety;
+import net.algart.executors.api.js.engine.JavaScriptContextContainer;
 import net.algart.executors.api.Executor;
 import org.graalvm.polyglot.Value;
 
