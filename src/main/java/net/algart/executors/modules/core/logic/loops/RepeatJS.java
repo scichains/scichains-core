@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.logic.loops;
 
-import net.algart.bridges.graalvm.GraalPerformer;
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.GraalSourceContainer;
-import net.algart.bridges.graalvm.GraalValues;
+import net.algart.graalvm.GraalPerformer;
+import net.algart.graalvm.GraalPerformerContainer;
+import net.algart.graalvm.GraalSourceContainer;
+import net.algart.graalvm.GraalValues;
 import net.algart.bridges.graalvm.api.GraalAPI;
 import net.algart.bridges.graalvm.api.GraalSafety;
 import net.algart.executors.api.ExecutionBlock;

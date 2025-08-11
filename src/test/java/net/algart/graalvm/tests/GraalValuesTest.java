@@ -24,8 +24,8 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformer;
-import net.algart.bridges.graalvm.GraalValues;
+import net.algart.graalvm.GraalPerformer;
+import net.algart.graalvm.GraalValues;
 import net.algart.bridges.standard.JavaScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;

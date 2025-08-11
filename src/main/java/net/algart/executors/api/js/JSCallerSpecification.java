@@ -27,7 +27,7 @@ package net.algart.executors.api.js;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import net.algart.bridges.graalvm.GraalSourceContainer;
+import net.algart.graalvm.GraalSourceContainer;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;

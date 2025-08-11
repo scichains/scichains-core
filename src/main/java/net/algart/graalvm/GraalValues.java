@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm;
+package net.algart.graalvm;
 
 import net.algart.executors.api.data.SScalar;
 import org.graalvm.polyglot.Value;

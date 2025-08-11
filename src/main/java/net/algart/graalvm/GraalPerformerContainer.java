@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm;
+package net.algart.graalvm;
 
 import org.graalvm.polyglot.Context;
 

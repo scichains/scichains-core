@@ -24,8 +24,8 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.graalvm.GraalContextCustomizer;
+import net.algart.graalvm.GraalPerformerContainer;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
@@ -44,7 +44,7 @@ public class GraalVMScriptEngineTest {
     }
 
     private static void test() throws ScriptException {
-        final String moduleFile = "./src/test/java/net/algart/bridges/graalvm/tests/js/sometest.mjs";
+        final String moduleFile = "./src/test/java/net/algart/graalvm/tests/js/sometest.mjs";
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
         Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
@@ -80,8 +80,8 @@ public class GraalVMScriptEngineTest {
         System.out.println();
 
         String language = "js";
-        GraalPerformerContainer container = GraalPerformerContainer.getShared(GraalSafety.ALL_ACCESS);
-        Context context = container.performer("some-id").context();
+        GraalPerformerContainer container = GraalPerformerContainer.getShared(GraalContextCustomizer.ALL_ACCESS);
+        @SuppressWarnings("resource") Context context = container.performer("some-id").context();
         final Source source = Source.newBuilder(language, script, "Unnamed.mjs").buildLiteral();
         Value v = context.eval(source);
         System.out.println("Result of script: " + v);

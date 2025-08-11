@@ -37,8 +37,8 @@ import java.nio.file.Paths;
 public class GraalVMLiteralOrFileTest {
 
     public static void main(String[] args) throws ScriptException, IOException {
-//        final String moduleFile = "./src/test/java/net/algart/bridges/graalvm/tests/js/sometest.mjs";
-        final Path currentDirectory = Paths.get("src/test/java/net/algart/bridges/graalvm/tests");
+//        final String moduleFile = "./src/test/java/net/algart/graalvm/tests/js/sometest.mjs";
+        final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
         // - no difference, whether we use ./ in the beginning
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));

@@ -24,7 +24,7 @@
 
 package net.algart.bridges.graalvm.api;
 
-import net.algart.bridges.graalvm.GraalContextCustomizer;
+import net.algart.graalvm.GraalContextCustomizer;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
@@ -34,6 +34,13 @@ import org.graalvm.polyglot.io.IOAccess;
 
 import java.util.*;
 
+/**
+ * Levels of GraalVM safety for SciChains environment.
+ * In addition to {@link GraalContextCustomizer} constants,
+ * this enum provides additional level {@link #SAFE} which provides access
+ * to the standard Java class and to the classes necessary for SciChains:
+ * {@link SScalar}, {@link SNumbers}, {@link SMat}.
+ */
 public enum GraalSafety implements GraalContextCustomizer {
     PURE(false, "pure") {
         @Override

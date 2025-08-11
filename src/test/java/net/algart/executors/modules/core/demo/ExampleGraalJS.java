@@ -24,7 +24,7 @@
 
 package net.algart.executors.modules.core.demo;
 
-import net.algart.bridges.graalvm.GraalPerformerContainer;
+import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SNumbers;
 import org.graalvm.polyglot.Context;

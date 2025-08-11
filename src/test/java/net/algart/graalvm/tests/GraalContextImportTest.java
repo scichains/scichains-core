@@ -24,11 +24,7 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalJSType;
-import net.algart.bridges.graalvm.GraalPerformer;
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.GraalSourceContainer;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.graalvm.*;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
@@ -41,7 +37,7 @@ import java.util.Locale;
 public class GraalContextImportTest {
 
     public static void main(String[] args) throws ScriptException {
-        final Path currentDirectory = Paths.get("src/test/java/net/algart/bridges/graalvm/tests");
+        final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
         // - no difference, whether we use ./ in the beginning
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
@@ -59,10 +55,11 @@ public class GraalContextImportTest {
         for (int test = 1; test <= 10; test++) {
             System.out.printf("%n%nTest #%d%n", test);
             long t1 = System.nanoTime();
-            final GraalPerformerContainer.Local performerContainer = GraalPerformerContainer
-                    .getLocal(GraalSafety.ALL_ACCESS)
+            @SuppressWarnings("resource") final GraalPerformerContainer.Local performerContainer =
+                    GraalPerformerContainer
+                            .getLocal(GraalContextCustomizer.ALL_ACCESS)
 //                    .setJS()
-                    .setWorkingDirectory(currentDirectory.toAbsolutePath());
+                            .setWorkingDirectory(currentDirectory.toAbsolutePath());
             long t2 = System.nanoTime();
             GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteral()
                     .setModuleJS(src, "test");
@@ -121,7 +118,7 @@ public class GraalContextImportTest {
             System.out.println();
             System.out.println("Calling function");
             t1 = System.nanoTime();
-            Object intArray = new int[] {11, 12, 13};
+            Object intArray = new int[]{11, 12, 13};
             Value execute = func.execute(intArray);
             t2 = System.nanoTime();
             System.out.printf(Locale.US, "Calling function: %.3f mcs%n",

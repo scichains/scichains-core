@@ -22,48 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm;
+package net.algart.graalvm;
 
 import org.graalvm.polyglot.Context;
 
-public interface GraalContextCustomizer {
-    GraalContextCustomizer DEFAULT = new GraalContextCustomizer() {
-        @Override
-        public void customize(Context.Builder builder) {
-        }
-
-        @Override
-        public String toString() {
-            return "default (pure)";
-        }
-    };
-
-    GraalContextCustomizer ALL_ACCESS = new GraalContextCustomizer() {
-        @Override
-        public void customize(Context.Builder builder) {
-            builder.allowAllAccess(true);
-        }
-
-        @Override
-        public String toString() {
-            return "all-access";
-        }
-    };
-
-    void customize(Context.Builder builder);
-
-    default boolean isJavaAccessSupported() {
-        return false;
-    }
-
-    default boolean isAllAccess() {
-        return false;
-    }
-
-    default Context.Builder newBuilder(String... permittedLanguages) {
-        final Context.Builder builder = Context.newBuilder(permittedLanguages);
-        GraalCreationTools.correctClassLoader(builder);
-        customize(builder);
-        return builder;
+class GraalCreationTools {
+    static void correctClassLoader(Context.Builder builder) {
+        builder.hostClassLoader(GraalCreationTools.class.getClassLoader());
+        // - necessary in GraalVM 22.2 while calling from JNI to correctly find application classes
     }
 }

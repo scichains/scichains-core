@@ -24,9 +24,9 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformer;
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.GraalSourceContainer;
+import net.algart.graalvm.GraalPerformer;
+import net.algart.graalvm.GraalPerformerContainer;
+import net.algart.graalvm.GraalSourceContainer;
 import org.graalvm.polyglot.Value;
 
 import javax.script.ScriptException;

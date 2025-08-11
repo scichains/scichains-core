@@ -24,8 +24,8 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.api.GraalSafety;
+import net.algart.graalvm.GraalContextCustomizer;
+import net.algart.graalvm.GraalPerformerContainer;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 
@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
 
 public class GraalVMInfo {
     public static void main(String[] args) throws ScriptException, InterruptedException {
-        var container = GraalPerformerContainer.getLocal(GraalSafety.ALL_ACCESS);
+        var container = GraalPerformerContainer.getLocal(GraalContextCustomizer.ALL_ACCESS);
         Context context = container.performer().context();
 
         final Engine e = context.getEngine();

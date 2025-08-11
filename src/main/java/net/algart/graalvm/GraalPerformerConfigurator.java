@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm;
+package net.algart.graalvm;
 
 @FunctionalInterface
 public interface GraalPerformerConfigurator {
