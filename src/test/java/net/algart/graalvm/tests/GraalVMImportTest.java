@@ -62,9 +62,8 @@ public class GraalVMImportTest {
                 .currentWorkingDirectory(currentDirectory.toAbsolutePath());
         if (USE_EXPORTS) {
             builder.allowExperimentalOptions(true).option("js.esm-eval-returns-exports", "true");
-
         }
-        final Context context = builder.build();
+        @SuppressWarnings("resource") final Context context = builder.build();
 
         Source source = Source.newBuilder("js", src, "test.mjs").buildLiteral();
         Value result = context.eval(source);
