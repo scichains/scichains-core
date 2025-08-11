@@ -345,7 +345,7 @@ public final class CallJSFunction extends Executor {
         final GraalPerformer performer = performerContainer.performer();
         long t3 = debugTime();
         if (mainFunction == null) {
-            // no sense to perform ECMA module, if it was not changed: re-executing will have no effect
+            // no sense to perform ECMA module if it was not changed: re-executing will have no effect
             mainFunction = performer.perform(javaScriptCode);
         }
         createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
