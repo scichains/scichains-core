@@ -29,12 +29,46 @@ import net.algart.executors.modules.core.logic.scripting.python.CallPythonFuncti
 import net.algart.jep.additions.JepInterpretation;
 
 public class CallPythonFunctionTest {
+    private static final boolean DO_CLOSE = true;
+    // - set to false, and gc() should lead to cleaning Pythong threads
+
+    private static void testPython() {
+        System.out.printf("CallPythonFunctionTest test%n");
+        CallPythonFunction e = new CallPythonFunction();
+        // e.setInterpretationMode(JepInterpretation.Mode.SUB_INTERPRETER);
+        // - in the current version, leads to warnings in the console
+        e.setInterpretationMode(JepInterpretation.Mode.SHARED);
+        e.execute();
+        if (DO_CLOSE) {
+            e.close();
+        }
+    }
+
+    public static void callGc() {
+        System.out.printf("CallGC%n");
+        for (int k = 0; k < 3; k++) {
+            System.gc();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        final Runtime rt = Runtime.getRuntime();
+        System.out.printf(
+                "Used memory: %.5f MB / %.5f MB%n"
+                        + "Number of active threads: %d%n",
+                (rt.totalMemory() - rt.freeMemory()) / 1048576.0,
+                rt.maxMemory() / 1048576.0,
+                Thread.activeCount());
+    }
+
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
-        System.out.printf("%nCallPythonFunctionTest test%n");
-        try (CallPythonFunction e = new CallPythonFunction()) {
-            e.setInterpretationMode(JepInterpretation.Mode.SUB_INTERPRETER);
-            e.execute();
+        for (int test = 1; test <= 10; test++) {
+            System.out.printf("%nTest #%d%n", test);
+            testPython();
+            callGc();
         }
     }
 }

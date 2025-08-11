@@ -284,7 +284,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
                 if (normallyClosed) {
                     LOG.log(Logger.Level.TRACE, () -> "Normal closing " + this);
                 } else {
-                    LOG.log(Logger.Level.INFO, () -> "CLEANING " + this);
+                    LOG.log(Logger.Level.INFO, () -> "CLEANING " + toBriefString());
                 }
                 try {
                     singleThreadPool.submit(configuredInterpreter::close).get();

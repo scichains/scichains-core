@@ -104,7 +104,7 @@ public final class JepPerformerContainer implements AutoCloseable {
     }
 
     /**
-     * @apiNote Will be automatically revived while usage after closing.
+     * Will be automatically revived while usage after closing.
      */
     public void close() {
         String message = null;

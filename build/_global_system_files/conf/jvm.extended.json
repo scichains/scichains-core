@@ -15,9 +15,10 @@
     "### but some Python-based functions may not work correctly in that case.",
     "### When using the built-in Python (from the 'python' folder), this property is set to true by default.",
 
+    "#-Dnet.algart.arrays.CPUCount=1",
     "#-Dnet.algart.executors.api.showLibraryPath=true",
     "#-Dnet.algart.executors.api.warningForDeprecatedParameters=false",
-    "#-Dnet.algart.arrays.CPUCount=1",
+    "#-Dnet.algart.executors.api.python.enforceShutdownOnClose=false",
     "#-Dpolyglot.js.nashorn-compat=true"
   ]
 }

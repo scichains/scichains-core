@@ -36,9 +36,11 @@ import java.util.Locale;
 public class InterpretPython extends Executor implements ReadOnlyExecutionInput {
     private static final boolean ENFORCE_SHUTDOWN_ON_CLOSE = Arrays.SystemSettings.getBooleanProperty(
             "net.algart.executors.api.python.enforceShutdownOnClose", true);
-    // In the current version, it is set to true, which ensures that PythonCaller is closed in the close() method.
+    // Should be set to true, which ensures that PythonCaller is closed in the close() method.
+    // If we will set it to false, it will lead to staying Python threads forever:
+    // the original PythonCaller is registered by registeredWorker in the global space.
     // Strictly speaking, closing PythonCaller is not an entirely correct operation,
-    // just like we never close the global running thread if isGlobalSynchronizationRequired()
+    // just like we never close the global running thread, if isGlobalSynchronizationRequired()
     // (we only close SharedInterpreter instances).
     // We suppose that this PythonCaller will be reused in all instances of the same Python class,
     // just like JVM reuses the same Java class and never destroys it.
