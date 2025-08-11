@@ -306,15 +306,19 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final String parametersClassName() {
+    public String mainFunctionName() {
+        return mainFunctionName;
+    }
+
+    public String parametersClassName() {
         return parametersClassName.isEmpty() ? JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME : parametersClassName;
     }
 
-    public final String inputsClassName() {
+    public String inputsClassName() {
         return inputsClassName.isEmpty() ? JepAPI.STANDARD_API_INPUTS_CLASS_NAME : inputsClassName;
     }
 
-    public final String outputsClassName() {
+    public String outputsClassName() {
         return outputsClassName.isEmpty() ? JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME : outputsClassName;
     }
 
@@ -383,7 +387,7 @@ public abstract class AbstractCallPython extends Executor {
             jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
             jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);
             t2 = debugTime();
-            result = performer.invokeFunction(mainFunctionName,
+            result = performer.invokeFunction(mainFunctionName(),
                     pythonParameters.pyObject(),
                     pythonInputs.pyObject(),
                     pythonOutputs.pyObject());

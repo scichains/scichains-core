@@ -26,17 +26,17 @@ package net.algart.executors.modules.core.logic.scripting.python;
 
 import net.algart.jep.JepPerformer;
 
-public final class CallPythonLibrary extends AbstractCallPython {
+public final class CallPythonExternalFunction extends AbstractCallPython {
     private String moduleName = "python_lib_demo_simple.SimpleDemo";
 
-    public CallPythonLibrary() {
+    public CallPythonExternalFunction() {
     }
 
     public String getModuleName() {
         return moduleName;
     }
 
-    public CallPythonLibrary setModuleName(String moduleName) {
+    public CallPythonExternalFunction setModuleName(String moduleName) {
         moduleName = nonNull(moduleName).trim();
         if (!moduleName.matches("\\S+")) {
             throw new IllegalArgumentException("Python module name must not contain space characters");
@@ -48,6 +48,7 @@ public final class CallPythonLibrary extends AbstractCallPython {
     @Override
     protected String code() {
         return JepPerformer.importCode(moduleName, getMainFunctionName());
+        //TODO!! create full code for calling external "mod."+getMainFunctionName()
     }
 
     @Override

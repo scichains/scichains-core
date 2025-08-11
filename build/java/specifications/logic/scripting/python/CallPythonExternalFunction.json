@@ -2,14 +2,14 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "logic.scripting.python",
-  "name": "Call Python library function",
+  "name": "Call Python external function",
   "tags": [
     "logic"
   ],
   "id": "f7ba3331-b902-4de3-b3c4-04560aa59124",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.modules.core.logic.scripting.python.CallPythonLibrary"
+    "class": "net.algart.executors.modules.core.logic.scripting.python.CallPythonExternalFunction"
   },
   "in_ports": [
     {
