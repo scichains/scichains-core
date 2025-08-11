@@ -39,7 +39,8 @@ public final class MergeColorChannels extends ColorSpaceConversion {
     public static final long DEFAULT_DIM_X_WHEN_NO_SOURCE = 512;
     public static final long DEFAULT_DIM_Y_WHEN_NO_SOURCE = 512;
 
-    private final double[] defaultFillerForChannels = new double[]{1.0, 1.0, 1.0};
+    private final double[] defaultFillerForChannels = new double[]{1.0, 1.0, 1.0, 1.0};
+    private boolean force4Channels = false;
 
     public MergeColorChannels() {
         addOutputMat(DEFAULT_OUTPUT_PORT);
@@ -72,6 +73,23 @@ public final class MergeColorChannels extends ColorSpaceConversion {
         this.defaultFillerForChannels[2] = defaultFillerForChannel3;
     }
 
+    public double getDefaultFillerForChannel4() {
+        return defaultFillerForChannels[3];
+    }
+
+    public void setDefaultFillerForChannel4(double defaultFillerForChannel4) {
+        this.defaultFillerForChannels[3] = defaultFillerForChannel4;
+    }
+
+    public boolean isForce4Channels() {
+        return force4Channels;
+    }
+
+    public MergeColorChannels setForce4Channels(boolean force4Channels) {
+        this.force4Channels = force4Channels;
+        return this;
+    }
+
     @Override
     public void process() {
         final List<Matrix<? extends PArray>> channels = new ArrayList<>();
@@ -86,9 +104,8 @@ public final class MergeColorChannels extends ColorSpaceConversion {
                 channels.add(m);
                 initialized.add(m);
             } else {
-                if (channelIndex == 3) {
+                if (channelIndex == 3 && !force4Channels) {
                     break;
-                    // - alpha is optional
                 }
                 logDebug(() -> "Merged channel #" + (channelIndex + 1)
                         + " is empty: it will be filled by default value " + defaultFillerForChannels[channelIndex]);

@@ -76,6 +76,21 @@
       "value_type": "double",
       "edition_type": "value",
       "default": 1.0
+    },
+    {
+      "name": "defaultFillerForChannel4",
+      "caption": "Default \"channel_4\" value",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 1.0
+    },
+    {
+      "name": "force4Channels",
+      "caption": "Always 4 channels ",
+      "description": "Force adding a 4th channel (alpha) even if there is no corresponding input",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
     }
   ]
 }
