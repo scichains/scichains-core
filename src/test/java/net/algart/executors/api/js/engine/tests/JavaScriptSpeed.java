@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.standard.tests;
+package net.algart.executors.api.js.engine.tests;
 
 import net.algart.executors.api.js.engine.JavaScriptContextContainer;
 import net.algart.executors.api.js.engine.JavaScriptPerformer;

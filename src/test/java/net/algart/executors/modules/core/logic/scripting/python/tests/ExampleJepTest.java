@@ -32,7 +32,6 @@ public class ExampleJepTest {
         ExecutionBlock.initializeExecutionSystem();
         try (ExampleJep e = new ExampleJep()) {
             e.setShared(false);
-            e.reset();
             e.execute();
         }
     }

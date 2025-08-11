@@ -31,9 +31,9 @@ import net.algart.jep.additions.JepInterpretation;
 public class CallPythonFunctionTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
+        System.out.printf("%nCallPythonFunctionTest test%n");
         try (CallPythonFunction e = new CallPythonFunction()) {
             e.setInterpretationMode(JepInterpretation.Mode.SUB_INTERPRETER);
-            e.reset();
             e.execute();
         }
     }

@@ -42,6 +42,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -75,7 +76,7 @@ public abstract class Executor extends ExecutionBlock {
                     "net.algart.executors.api.createExecutionKeyFile", false);
     private static final boolean WARNING_FOR_DEPRECATED_PARAMETERS =
             net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
-            "net.algart.executors.api.warningForDeprecatedParameters", true);
+                    "net.algart.executors.api.warningForDeprecatedParameters", true);
     // - false value allows avoiding warning for old chains with deprecated "system parameters":
     // such names are detected with debug logging instead
 
@@ -119,6 +120,7 @@ public abstract class Executor extends ExecutionBlock {
 
     private final ExecutionStatus status = ExecutionStatus.newNamedInstance(getClass().getName());
 
+    private final AtomicBoolean initialized = new AtomicBoolean(false);
     private boolean multithreadingEnvironment = false;
 
     private volatile long startProcessingTimeStamp = Long.MIN_VALUE;
@@ -294,13 +296,13 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     /**
-     * Informs the executor, is it performed in multithreading environment: other executors
-     * are probable performed in other threads.
+     * Informs the executor, is it performed in a multithreading environment: other executors
+     * are probably performed in other threads.
      *
-     * <p>You <b>must</b> call this method before actual executing, if the executor uses
+     * <p>You <b>must</b> call this method before actually executing, if the executor uses
      * native-code or other non-Java resources, like GPU memory: then, maybe, it will
-     * make efforts to correctly synchronize or serialize external resources, that cannot be
-     * synchronized by standard Java synchronization mechanism.
+     * make efforts to correctly synchronize or serialize external resources that cannot be
+     * synchronized by the standard Java synchronization mechanism.
      * (For example, it is possible that the object, created in GPU memory and stored
      * in the external port, will be unavailable from other Java threads if the executor
      * does not call special native methods before finishing execution.)
@@ -311,7 +313,7 @@ public abstract class Executor extends ExecutionBlock {
      *
      * <p>By default, this flag contains <code>false</code>.
      *
-     * @param multithreadingEnvironment whether this object is executed in multithreading environment.
+     * @param multithreadingEnvironment whether this object is executed in a multithreading environment.
      */
     public final void setMultithreadingEnvironment(boolean multithreadingEnvironment) {
         this.multithreadingEnvironment = multithreadingEnvironment;
@@ -396,10 +398,22 @@ public abstract class Executor extends ExecutionBlock {
         return setter == null ? null : setter.parameterType;
     }
 
-    // Note: this method should be executed EVEN if we requested to cancel execution
-    // (it usually performs necessary initialization)
+    public boolean isInitialized() {
+        return initialized.get();
+    }
+
+    /**
+     * Resets the execution: usually performs necessary initialization.
+     *
+     * <p>This method sets {@link #isInitialized() initialized} flag and then calls {@link #initialize()} method.
+     * If this method was never called (this flag is not set),
+     * {@link #execute()} method also calls {@link #initialize()} (and sets that flag) when the first call.
+     *
+     * <p>Note: this method should be executed <b>even</b> if we requested to cancel execution.
+     */
     @Override
     public void reset() {
+        initialized.set(true);
         initialize();
     }
 
@@ -411,6 +425,9 @@ public abstract class Executor extends ExecutionBlock {
     @Override
     public void execute(ExecutionMode executionMode) {
         Objects.requireNonNull(executionMode, "Null executionMode");
+        if (!initialized.getAndSet(true)) {
+            initialize();
+        }
         long t1 = System.nanoTime(), t1Processing, t2Processing;
         resetTiming();
         if (isCancellingExecutionRequested()) {
@@ -568,7 +585,7 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     /**
-     * Called from {@link #reset()}.
+     * Called by {@link #reset()} and, it that method was not called, by the 1st call of {@link #execute()}.
      * We recommend overriding this method instead of {@link #reset()}.
      */
     public void initialize() {
