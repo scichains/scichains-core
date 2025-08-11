@@ -34,15 +34,15 @@ import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.system.ExecutorLoaderSet;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.ExecutorSpecificationSet;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.Language;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class SystemInformation extends Executor implements ReadOnlyExecutionInput {
@@ -73,11 +73,27 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("Number of CPU units: %d%n", Runtime.getRuntime().availableProcessors()));
         final Path currentRelativePath = Paths.get("").toAbsolutePath();
         sb.append(String.format("Java home: %s%n", System.getProperty("java.home")));
-        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
-        sb.append(String.format("Python home: %s%n", pythonHome == null ? "n/a" : pythonHome));
         sb.append(String.format("Current OS directory: %s%n", currentRelativePath));
         sb.append(String.format("Current chain directory: %s%n", getCurrentDirectory()));
         sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
+
+        sb.append("Python (JEP):%n".formatted());
+        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
+        sb.append("    Python home directory: %s%n".formatted(pythonHome == null ? "n/a" : pythonHome));
+        try (Context context = Context.newBuilder().build()) {
+            final Engine engine = context.getEngine();
+            sb.append("GraalVM:%n".formatted());
+            sb.append("    Graal version: %s%n".formatted(engine.getVersion()));
+            sb.append("    Graal implementation: %s%n".formatted(engine.getImplementationName()));
+            final Map<String, Language> languages = engine.getLanguages();
+            sb.append("    Graal supported %d language%s: %n".formatted(
+                    languages.size(), languages.size() == 1 ? "" : "s"));
+            for (var e : languages.entrySet()) {
+                final Language l = e.getValue();
+                sb.append("        %s: id \"%s\", name \"%s\", implementation \"%s\", version \"%s\"%n".formatted(
+                        e.getKey(), l.getId(), l.getName(), l.getImplementationName(), l.getVersion()));
+            }
+        }
 
         final ExecutorLoaderSet global = ExecutionBlock.globalLoaders();
         final Set<String> allSessions = global.allSessionIds();

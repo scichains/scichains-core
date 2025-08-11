@@ -22,36 +22,31 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm.tests;
+package net.algart.graalvm.tests;
 
-import net.algart.bridges.graalvm.GraalPerformer;
 import net.algart.bridges.graalvm.GraalPerformerContainer;
-import net.algart.bridges.graalvm.GraalSourceContainer;
-import org.graalvm.polyglot.Value;
+import net.algart.bridges.graalvm.api.GraalSafety;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
 
 import javax.script.ScriptException;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class GraalTwoPerformersTest {
-    @SuppressWarnings("resource")
+public class GraalVMInfo {
     public static void main(String[] args) throws ScriptException, InterruptedException {
-        GraalPerformerContainer container1 = GraalPerformerContainer.getContainer(false);
-        GraalPerformerContainer container2 = GraalPerformerContainer.getContainer(false);
-        GraalPerformer performer1 = container1.performer("dummy");
-        GraalPerformer performer2 = container2.performer("dummy");
-        performer1.performJS("var a = 'a'; var b = 'b'; print(a)");
-        performer2.performJS("print(typeof(a))");
-        System.out.println();
+        var container = GraalPerformerContainer.getLocal(GraalSafety.ALL_ACCESS);
+        Context context = container.performer().context();
 
-        GraalSourceContainer source1 = GraalSourceContainer.newLiteral();
-        source1.setModuleJS("function exec() { print(a, 'module1') }\nexec\n", "module");
-        GraalSourceContainer source2 = GraalSourceContainer.newLiteral();
-        source2.setModuleJS("function exec() { print('module2') }\nexec\n", "module");
-        // - if we use here the same module name, it will work normally only under DIFFERENT performes
-        final Value exec1 = performer1.perform(source1);
-        final Value exec2 = performer2.perform(source2);
-        exec1.execute();
-        exec2.execute();
-        exec1.execute();
-        exec2.execute();
+        final Engine e = context.getEngine();
+        System.out.println("Version: " + e.getVersion());
+        System.out.println("Implementation name: " + e.getImplementationName());
+        System.out.println("Languages: " + e.getLanguages());
+        System.out.println("Instruments: " + e.getInstruments());
+
+        System.out.printf("%nOptions:%n%s", StreamSupport.stream(e.getOptions().spliterator(), false)
+                .map(Object::toString).collect(Collectors.joining(String.format("%n"))));
+
+
     }
 }

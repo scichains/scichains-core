@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.bridges.graalvm.tests;
+package net.algart.graalvm.tests;
 
 import net.algart.arrays.Matrix;
 import net.algart.bridges.graalvm.api.GraalSafety;
