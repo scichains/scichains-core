@@ -75,6 +75,8 @@
             <artifactId>jep</artifactId>
             <version>${jep.version}</version>
         </dependency>
+        <!-- GraalVM dependencies: -->
+        <!-- https://www.graalvm.org/latest/reference-manual/embed-languages/#dependency-setup -->
         <dependency>
             <groupId>org.graalvm.polyglot</groupId>
             <artifactId>polyglot</artifactId>
@@ -86,17 +88,26 @@
             <version>${graalvm.version}</version>
             <type>pom</type>
         </dependency>
+        <!-- Probably for future versions (in addition or instead of JEP)-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.graalvm.polyglot</groupId>-->
+        <!--            <artifactId>python</artifactId>-->
+        <!--            <version>${graalvm.version}</version>-->
+        <!--            <type>pom</type>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.graalvm.polyglot</groupId>-->
+        <!--            <artifactId>ruby</artifactId>-->
+        <!--            <version>${graalvm.version}</version>-->
+        <!--            <type>pom</type>-->
+        <!--        </dependency>-->
+
+        <!-- js-scriptengine provides support of ScriptEngine interface: -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm.version}</version>
         </dependency>
-<!--        Probably for future versions (instead of JEP)-->
-<!--        <dependency>-->
-<!--            <groupId>org.graalvm.python</groupId>-->
-<!--            <artifactId>python-language</artifactId>-->
-<!--            <version>${graalvm.version}</version>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>

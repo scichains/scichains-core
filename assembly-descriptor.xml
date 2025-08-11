@@ -12,6 +12,7 @@
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <includes>
                 <include>org.graalvm.polyglot:*</include>
+                <!-- js-scriptengine provides support of ScriptEngine interface: -->
                 <include>org.graalvm.js:js-scriptengine:*</include>
             </includes>
             <outputDirectory>/_global_system_files/lib/common/graalvm</outputDirectory>
