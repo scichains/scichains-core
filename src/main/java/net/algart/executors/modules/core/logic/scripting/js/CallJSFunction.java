@@ -325,9 +325,10 @@ public final class CallJSFunction extends Executor {
     @Override
     public void initialize() {
         long t1 = debugTime();
-        javaScriptCode.setModuleJS(GraalPerformer.addReturningJSFunction(code, mainFunctionName), "main_code");
-        // - name "main_code" is not important: we will not use share this performer (Graal context) with other
-        // executors; but if we want to use several scripts INSIDE this executor, they must have different module names
+        String code = GraalPerformer.addReturningJSFunction(this.code, mainFunctionName);
+        javaScriptCode.setModuleJS(code, "main_code");
+        // - name "main_code" is not important: we will not share this performer (Graal context) with other
+        // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
         final boolean changed = javaScriptCode.changed();
         if (changed) {
             logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");

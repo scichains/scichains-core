@@ -112,7 +112,7 @@ public abstract class GraalSourceContainer {
      * in particular, in a case of ECMA modules (inside the same context, the content of a module
      * is executed only once).</p>
      *
-     * @return whether this container settings were changed.
+     * @return whether this container's settings were changed.
      */
     public boolean changed() {
         return setChanged(false);
@@ -133,7 +133,7 @@ public abstract class GraalSourceContainer {
     }
 
     /**
-     * Sets the script origin: string, byte sequence, File object etc. (see Source.newBuilder methods).
+     * Sets the script origin: string, byte sequence, File object, etc. (see Source.newBuilder methods).
      *
      * <p><b>Note:</b> this method also sets the name!
      *

@@ -148,14 +148,6 @@ public class GraalPerformer implements AutoCloseable {
         return state.toString();
     }
 
-    public static String addReturningJSFunction(String code, String functionName) {
-        Objects.requireNonNull(code, "Null code");
-        Objects.requireNonNull(functionName, "Null functionName");
-        return code + "\n\n\n" + functionName;
-        // - this solution is necessary because "js.esm-eval-returns-exports" is yet
-        // an experimental function in GraalVM 22.2
-    }
-
     public static String importAndReturnJSFunction(String from, String functionName) {
         Objects.requireNonNull(from, "Null from");
         Objects.requireNonNull(functionName, "Null functionName");
@@ -181,6 +173,15 @@ public class GraalPerformer implements AutoCloseable {
             // - will be true even WHILE executing cleanable.clean
             throw new IllegalStateException("Cannot use " + this);
         }
+    }
+
+    // This function was strongly necessary because "js.esm-eval-returns-exports" was
+    // only an experimental function in GraalVM 22.2
+    // Today, it allows to avoid declaration user's function as "export"
+    public static String addReturningJSFunction(String code, String functionName) {
+        Objects.requireNonNull(code, "Null code");
+        Objects.requireNonNull(functionName, "Null functionName");
+        return code + "\n\n\n" + functionName;
     }
 
     private static class ExpensiveCleanableState implements Runnable {
