@@ -24,6 +24,7 @@
 
 package net.algart.executors.api.python;
 
+import net.algart.arrays.Arrays;
 import net.algart.jep.additions.AtomicPyObject;
 import net.algart.executors.api.jep.JepPlatforms;
 import net.algart.executors.api.Executor;
@@ -33,6 +34,23 @@ import net.algart.jep.additions.JepInterpretation;
 import java.util.Locale;
 
 public class InterpretPython extends Executor implements ReadOnlyExecutionInput {
+    private static final boolean ENFORCE_SHUTDOWN_ON_CLOSE = Arrays.SystemSettings.getBooleanProperty(
+            "net.algart.executors.api.python.enforceShutdownOnClose", true);
+    // In the current version, it is set to true, which ensures that PythonCaller is closed in the close() method.
+    // Strictly speaking, closing PythonCaller is not an entirely correct operation,
+    // just like we never close the global running thread if isGlobalSynchronizationRequired()
+    // (we only close SharedInterpreter instances).
+    // We suppose that this PythonCaller will be reused in all instances of the same Python class,
+    // just like JVM reuses the same Java class and never destroys it.
+    // But PythonCaller is a very heavy object: it runs an OS thread in a single-thread pool,
+    // and we SHOULD close it sometimes.
+    // Closing this SciChains executor (InterpretPython) is a possible reason.
+    // Typically, this happens when the user closes a chain, and even if we have other open windows
+    // with instances of the same executor, they will be automatically revived.
+    // If this becomes a serious performance issue in the future (hundreds of users on the same server),
+    // we will be able to improve this solution, for example, checking 10-second delay without access
+    // before actually freeing resources.
+
     private volatile PythonCaller pythonCaller = null;
 
     public InterpretPython() {
@@ -54,7 +72,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
             JepInterpretation.executeWithJVMGlobalLock(
                     () -> initializePython(pythonCaller),
                     () -> processPython(pythonCaller),
-                    this::closePython);
+                    () -> closePython(true));
 
         } else {
             pythonCaller.executeWithLock(
@@ -68,7 +86,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
 
     @Override
     public void close() {
-        closePython();
+        closePython(ENFORCE_SHUTDOWN_ON_CLOSE);
         // - not a problem to close again even if was closed by process() in the global mode
         super.close();
     }
@@ -132,25 +150,13 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }
 
-    private void closePython() {
+    private void closePython(boolean doClose) {
         PythonCaller pythonCaller = this.pythonCaller;
         if (pythonCaller != null) {
             this.pythonCaller = null;
-            pythonCaller.close();
-            // Strictly speaking, closing PythonCaller is not an entirely correct operation,
-            // just like we never close the global running thread if isGlobalSynchronizationRequired()
-            // (we only close SharedInterpreter instances).
-            // We suppose that this PythonCaller will be reused in all instances of the same Python class,
-            // just like JVM reuses the same Java class and never destroys it.
-            // But PythonCaller is a very heavy object: it runs an OS thread in a single-thread pool,
-            // and we SHOULD close it sometimes.
-            // Closing this SciChains executor (InterpretPython) is a possible reason.
-            // Typically, this happens when the user closes a chain, and even if we have other open windows
-            // with instances of the same executor, they will be automatically revived.
-            // If this becomes a serious performance issue in the future (hundreds of users on the same server),
-            // we will be able to improve this solution, for example, checking 10-second delay without access
-            // before actually freeing resources.
-
+            if (doClose) {
+                pythonCaller.close();
+            }
         }
     }
 

@@ -84,13 +84,14 @@ public class GraalVMSimpleDemo {
 
             Value javaList = context.asValue(new int[]{10, 20, 30});
             Value pythonResult = pythonFunction.execute(javaList);
-            java.util.List<Long> resultList = pythonResult.as(java.util.List.class);
+            java.util.List<?> resultList = pythonResult.as(java.util.List.class);
             System.out.println("Result Python: " + resultList); // Вывод: [20, 40, 60]
         }
     }
 
     public static void main(String[] args) {
         Runtime rt = Runtime.getRuntime();
+        //noinspection MismatchedQueryAndUpdateOfCollection
         List<Context> contexts = new java.util.ArrayList<>();
         for (int k = 1; k < 100; k++) {
             System.out.printf("Iteration %d...%n", k);
