@@ -34,9 +34,14 @@ import net.algart.math.functions.Func;
 import net.algart.multimatrix.MultiMatrix;
 
 public final class ChangePrecision extends MultiMatrixChannelFilter {
+    public static final String OUTPUT_ELEMENT_TYPE = "element_type";
     private boolean rawCast = false;
     private Class<?> elementType = byte.class;
     private boolean requireInput = false;
+
+    public ChangePrecision() {
+        addOutputScalar(OUTPUT_ELEMENT_TYPE);
+    }
 
     public boolean isRawCast() {
         return rawCast;
@@ -51,13 +56,16 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
         return elementType;
     }
 
+    /**
+     * Note: <code>null</code> value is allowed, it means "unchanged".
+     */
     public ChangePrecision setElementType(Class<?> elementType) {
-        this.elementType = nonNull(elementType, "element type");
+        this.elementType = elementType;
         return this;
     }
 
     public ChangePrecision setElementType(String elementType) {
-        return setElementType(MultiMatrixGenerator.elementType(elementType));
+        return setElementType(MultiMatrixGenerator.elementType(elementType, true));
     }
 
     public boolean isRequireInput() {
@@ -74,9 +82,11 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
         if (source == null) {
             return null;
         }
-        if (elementType == source.elementType()) {
+        if (elementType == null || elementType == source.elementType()) {
+            setOutputScalar(OUTPUT_ELEMENT_TYPE, source.elementType().getSimpleName());
             return source;
         }
+        setOutputScalar(OUTPUT_ELEMENT_TYPE, elementType.getSimpleName());
         if (rawCast) {
             return super.process(source);
             // i.e. using processChannel below

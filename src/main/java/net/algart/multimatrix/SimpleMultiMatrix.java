@@ -88,6 +88,7 @@ class SimpleMultiMatrix implements MultiMatrix {
 
     @Override
     public MultiMatrix toPrecisionIfNot(Class<?> newElementType) {
+        Objects.requireNonNull(newElementType, "Null newElementType");
         if (newElementType == elementType()) {
             return this;
         }
@@ -101,10 +102,10 @@ class SimpleMultiMatrix implements MultiMatrix {
                 new SimpleMultiMatrix(Collections.singletonList(intensityChannel()));
     }
 
-    public MultiMatrix asOtherNumberOfChannels(int newNumberOfChannels) {
+    public MultiMatrix asOtherNumberOfChannels(int newNumberOfChannels, boolean fillAlphaWithMaxValue) {
         return newNumberOfChannels == numberOfChannels() ?
                 this :
-                new SimpleMultiMatrix(otherNumberOfChannels(newNumberOfChannels));
+                new SimpleMultiMatrix(otherNumberOfChannels(newNumberOfChannels, fillAlphaWithMaxValue));
     }
 
     @Override
@@ -127,7 +128,18 @@ class SimpleMultiMatrix implements MultiMatrix {
                 JArrays.toString(dimensions, "x", 1000)) + ")";
     }
 
-    List<Matrix<? extends PArray>> otherNumberOfChannels(int newNumberOfChannels) {
+    List<Matrix<? extends PArray>> otherNumberOfChannels(
+            int newNumberOfChannels,
+            boolean fillAlphaWithMaxValue) {
+        return otherNumberOfChannels(newNumberOfChannels, fillAlphaWithMaxValue ? 3 : Integer.MAX_VALUE);
+    }
+
+    List<Matrix<? extends PArray>> otherNumberOfChannels(
+            int newNumberOfChannels,
+            int firstChannelIndexToFillWithMaxValue) {
+        if (firstChannelIndexToFillWithMaxValue < 0) {
+            throw new IllegalArgumentException("Negative firstChannelIndexToFillWithMaxValue");
+        }
         if (newNumberOfChannels == 1 && isColor()) {
             return Collections.singletonList(intensityChannel());
         } else if (newNumberOfChannels < numberOfChannels()) {
@@ -135,14 +147,15 @@ class SimpleMultiMatrix implements MultiMatrix {
             return allChannels().subList(0, newNumberOfChannels);
         } else {
             assert newNumberOfChannels > numberOfChannels();
-            // in current implementation (possible 1, 3, 4 channels) it means
-            // that result is RGBA, but source is grayscale or RGB
+            // in the current implementation (possible 1, 3, 4 channels) it means
+            // that the result is RGBA, but the source is grayscale or RGB
             final List<Matrix<? extends PArray>> newChannels = new ArrayList<>(this.channels);
-            for (int i = newChannels.size(), n = Math.min(3, newNumberOfChannels); i < n; i++) {
-                // suppose that 1st 3 channels are identical (probably intensity)
-                newChannels.add(this.channels.get(0));
+            final int n = Math.min(firstChannelIndexToFillWithMaxValue, newNumberOfChannels);
+            for (int i = newChannels.size(); i < n; i++) {
+                // suppose that 1st firstChannelIndexToFillWithMaxValue channels are identical (probably intensity)
+                newChannels.add(this.channels.getFirst());
             }
-            // if newNumberOfChannels > 3, let's append it by alpha=1.0 (opacity)
+            // if newNumberOfChannels > firstChannelIndexToFillWithMaxValue, let's append it by alpha=1.0 (opacity)
             for (int i = newChannels.size(); i < newNumberOfChannels; i++) {
                 newChannels.add(constantMatrix(maxPossibleValue()));
             }

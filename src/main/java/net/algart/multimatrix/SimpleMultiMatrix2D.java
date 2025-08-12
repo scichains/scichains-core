@@ -29,6 +29,7 @@ import net.algart.arrays.PArray;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 class SimpleMultiMatrix2D extends SimpleMultiMatrix implements MultiMatrix2D {
     private final long dimX;
@@ -36,7 +37,7 @@ class SimpleMultiMatrix2D extends SimpleMultiMatrix implements MultiMatrix2D {
 
     SimpleMultiMatrix2D(List<? extends Matrix<? extends PArray>> channels) {
         super(channels);
-        final Matrix<? extends PArray> ch = this.channels.get(0);
+        final Matrix<? extends PArray> ch = this.channels.getFirst();
         if (ch.dimCount() != 2) {
             throw new IllegalArgumentException("2-dimensional matrices allowed only");
         }
@@ -64,6 +65,7 @@ class SimpleMultiMatrix2D extends SimpleMultiMatrix implements MultiMatrix2D {
 
     @Override
     public MultiMatrix2D toPrecisionIfNot(Class<?> newElementType) {
+        Objects.requireNonNull(newElementType, "Null newElementType");
         if (newElementType == elementType()) {
             return this;
         }
@@ -77,10 +79,10 @@ class SimpleMultiMatrix2D extends SimpleMultiMatrix implements MultiMatrix2D {
                 new SimpleMultiMatrix2D(Collections.singletonList(intensityChannel()));
     }
 
-    public MultiMatrix2D asOtherNumberOfChannels(int newNumberOfChannels) {
+    public MultiMatrix2D asOtherNumberOfChannels(int newNumberOfChannels, boolean fillAlphaWithMaxValue) {
         return newNumberOfChannels == numberOfChannels() ?
                 this :
-                new SimpleMultiMatrix2D(otherNumberOfChannels(newNumberOfChannels));
+                new SimpleMultiMatrix2D(otherNumberOfChannels(newNumberOfChannels, fillAlphaWithMaxValue));
     }
 
     @Override

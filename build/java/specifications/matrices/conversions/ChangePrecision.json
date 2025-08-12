@@ -21,6 +21,11 @@
     {
       "value_type": "mat",
       "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "element_type",
+      "hint": "Actual result element type"
     }
   ],
   "controls": [
@@ -29,6 +34,10 @@
       "value_type": "String",
       "edition_type": "enum",
       "items": [
+        {
+          "value": "unchanged",
+          "caption": "unchanged"
+        },
         {
           "value": "boolean",
           "caption": "boolean"
@@ -54,7 +63,7 @@
           "caption": "double"
         }
       ],
-      "default": "byte"
+      "default": "unchanged"
     },
     {
       "name": "rawCast",

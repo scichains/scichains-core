@@ -152,6 +152,10 @@ public interface MultiMatrix extends Cloneable {
 
     MultiMatrix toPrecisionIfNot(Class<?> newElementType);
 
+    default MultiMatrix toPrecision(Class<?> newElementType) {
+        return newElementType.equals(elementType()) ? clone() : toPrecisionIfNot(newElementType);
+    }
+
     default MultiMatrix asFloatingPoint() {
         return isFloatingPoint() ? this : asPrecision(float.class);
     }
@@ -183,7 +187,11 @@ public interface MultiMatrix extends Cloneable {
         return isMono() ? this : asMono().clone();
     }
 
-    MultiMatrix asOtherNumberOfChannels(int numberOfChannels);
+    default MultiMatrix asOtherNumberOfChannels(int newNumberOfChannels) {
+        return asOtherNumberOfChannels(newNumberOfChannels, true);
+    }
+
+    MultiMatrix asOtherNumberOfChannels(int numberOfChannels, boolean fillAlphaWithMaxValue);
 
     /**
      * Returns an exact updatable clone of this multi-matrix.

@@ -38,8 +38,10 @@ public abstract class SeveralMultiMatricesChannelOperation
         extends SeveralMultiMatricesOperation
         implements ChannelOperation {
     private int minimalRequiredNumberOfChannels = 0;
+    private boolean fillAlphaWithMaxValue = true;
 
     private MultiMatrix sampleMultiMatrix = null;
+    private Class<?> sampleElementType = null;
     private Class<? extends PArray> sampleType = null;
     private int indexOfSampleInputForEqualizing = 0;
     private int currentChannel = 0;
@@ -59,12 +61,25 @@ public abstract class SeveralMultiMatricesChannelOperation
         return this;
     }
 
+    public boolean isFillAlphaWithMaxValue() {
+        return fillAlphaWithMaxValue;
+    }
+
+    public SeveralMultiMatricesChannelOperation setFillAlphaWithMaxValue(boolean fillAlphaWithMaxValue) {
+        this.fillAlphaWithMaxValue = fillAlphaWithMaxValue;
+        return this;
+    }
+
     public final int currentChannel() {
         return currentChannel;
     }
 
     public final int numberOfChannels() {
         return numberOfChannels;
+    }
+
+    protected final Class<?> sampleElementType() {
+        return sampleElementType;
     }
 
     protected final Class<? extends PArray> sampleType() {
@@ -83,7 +98,7 @@ public abstract class SeveralMultiMatricesChannelOperation
     public MultiMatrix process(List<MultiMatrix> sources) {
         this.indexOfSampleInputForEqualizing = findSampleInputForEqualizing(sources);
         if (indexOfSampleInputForEqualizing >= sources.size()) {
-            throw new IllegalStateException("Invalid sample input mmatrix index " + indexOfSampleInputForEqualizing);
+            throw new IllegalStateException("Invalid sample input matrix index " + indexOfSampleInputForEqualizing);
         }
         this.sampleMultiMatrix = sources.get(indexOfSampleInputForEqualizing);
         if (sampleMultiMatrix == null) {
@@ -92,6 +107,7 @@ public abstract class SeveralMultiMatricesChannelOperation
         }
         try {
             this.numberOfChannels = Math.max(sampleMultiMatrix.numberOfChannels(), minimalRequiredNumberOfChannels);
+            this.sampleElementType = sampleMultiMatrix.elementType();
             this.sampleType = sampleMultiMatrix.arrayType();
             final Class<?> resultElementType = sampleMultiMatrix.elementType();
             final double resultMax = sampleMultiMatrix.maxPossibleValue();
@@ -101,7 +117,8 @@ public abstract class SeveralMultiMatricesChannelOperation
                 if (source == null) {
                     channels = null;
                 } else {
-                    channels = source.asOtherNumberOfChannels(numberOfChannels).allChannels();
+                    channels = source.asOtherNumberOfChannels(numberOfChannels, fillAlphaWithMaxValue)
+                            .allChannels();
                     assert channels.size() == numberOfChannels;
                 }
                 sourceMultiMatrices.add(channels);
@@ -136,7 +153,7 @@ public abstract class SeveralMultiMatricesChannelOperation
     }
 
     // This method is not public: usually it's direct call, not from process(), can lead to
-    // incorrect results, because currentChannel and numberOfChannels are not set properly
+    // incorrect results because the currentChannel and numberOfChannels are not set properly
     protected abstract Matrix<? extends PArray> processChannel(List<Matrix<? extends PArray>> m);
 
     // May be overridden!

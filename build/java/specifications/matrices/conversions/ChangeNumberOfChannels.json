@@ -25,16 +25,25 @@
   ],
   "controls": [
     {
-      "caption": "New number of channels (0 to stay unchanged)",
+      "caption": "Requires input",
+      "name": "requireInput",
+      "description": "If set, the input port must contain some initialized matrix; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "New number of channels",
+      "description": "0 value means \"stay unchanged\".",
       "name": "numberOfChannels",
       "value_type": "int",
       "edition_type": "value",
       "default": 3
     },
     {
-      "caption": "Requires input",
-      "name": "requireInput",
-      "description": "If set, the input port must contain some initialized matrix; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
+      "caption": "Fill alpha",
+      "name": "fillAlphaWithMaxValue",
+      "description": "If set and new number of channels > 3, then the 4th resulting channel (alpha) and all subsequent \"extra\" channels (if any) will be filled with the maximal possible value. For the alpha-channel, this means \"full opacity\".\nIf not set, all \"extra\" channels added to the result will be copies of the first source channel.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

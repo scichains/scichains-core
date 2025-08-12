@@ -60,6 +60,6 @@ public abstract class MultiMatrixChannelFilter extends MultiMatrixFilter impleme
     }
 
     // This method is not public: usually it's direct call, not from process(), can lead to
-    // incorrect results, because currentChannel and numberOfChannels are not set properly
+    // incorrect results because the currentChannel and numberOfChannels are not set properly
     protected abstract Matrix<? extends PArray> processChannel(Matrix<? extends PArray> m);
 }

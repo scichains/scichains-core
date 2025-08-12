@@ -28,8 +28,18 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.multimatrix.MultiMatrix;
 
 public final class ChangeNumberOfChannels extends MultiMatrixFilter {
-    private int numberOfChannels = 0;
     private boolean requireInput = false;
+    private int numberOfChannels = 0;
+    private boolean fillAlphaWithMaxValue = false;
+
+    public boolean isRequireInput() {
+        return requireInput;
+    }
+
+    public ChangeNumberOfChannels setRequireInput(boolean requireInput) {
+        this.requireInput = requireInput;
+        return this;
+    }
 
     public int getNumberOfChannels() {
         return numberOfChannels;
@@ -40,12 +50,12 @@ public final class ChangeNumberOfChannels extends MultiMatrixFilter {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isFillAlphaWithMaxValue() {
+        return fillAlphaWithMaxValue;
     }
 
-    public ChangeNumberOfChannels setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public ChangeNumberOfChannels setFillAlphaWithMaxValue(boolean fillAlphaWithMaxValue) {
+        this.fillAlphaWithMaxValue = fillAlphaWithMaxValue;
         return this;
     }
 
@@ -60,7 +70,7 @@ public final class ChangeNumberOfChannels extends MultiMatrixFilter {
         }
         logDebug(() -> "Changing number of channels " + source.numberOfChannels() + " -> "
                 + numberOfChannels + " for matrix " + source);
-        return source.asOtherNumberOfChannels(numberOfChannels).clone();
+        return source.asOtherNumberOfChannels(numberOfChannels, fillAlphaWithMaxValue).clone();
     }
 
     @Override

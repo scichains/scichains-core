@@ -30,6 +30,8 @@ import net.algart.multimatrix.MultiMatrix;
 import java.util.Objects;
 
 public abstract class MultiMatrixGenerator extends Executor {
+    public static final String SAME_ELEMENT_TYPE = "unchanged";
+
     private int numberOfChannels = 1;
     private long dimX = 64;
     private long dimY = 64;
@@ -95,7 +97,14 @@ public abstract class MultiMatrixGenerator extends Executor {
     public abstract MultiMatrix create();
 
     public static Class<?> elementType(String primitiveElementTypeName) {
+        return elementType(primitiveElementTypeName, false);
+    }
+
+    public static Class<?> elementType(String primitiveElementTypeName, boolean nullForUnchanged) {
         Objects.requireNonNull(primitiveElementTypeName, "Null element type name");
+        if (nullForUnchanged && primitiveElementTypeName.equals(SAME_ELEMENT_TYPE)) {
+            return null;
+        }
         return switch (primitiveElementTypeName) {
             case "boolean" -> boolean.class;
             case "byte" -> byte.class;
@@ -107,4 +116,5 @@ public abstract class MultiMatrixGenerator extends Executor {
             default -> throw new IllegalArgumentException("Illegal name of element type");
         };
     }
+
 }

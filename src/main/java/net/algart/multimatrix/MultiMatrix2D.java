@@ -77,6 +77,10 @@ public interface MultiMatrix2D extends MultiMatrix {
 
     MultiMatrix2D asPrecision(Class<?> newElementType);
 
+    default MultiMatrix2D toPrecision(Class<?> newElementType) {
+        return newElementType.equals(elementType()) ? clone() : toPrecisionIfNot(newElementType);
+    }
+
     MultiMatrix2D toPrecisionIfNot(Class<?> newElementType);
 
     default MultiMatrix2D asFloatingPoint() {
@@ -97,7 +101,11 @@ public interface MultiMatrix2D extends MultiMatrix {
         return isMono() ? this : asMono().clone();
     }
 
-    MultiMatrix2D asOtherNumberOfChannels(int numberOfChannels);
+    default MultiMatrix2D asOtherNumberOfChannels(int numberOfChannels) {
+        return asOtherNumberOfChannels(numberOfChannels, true);
+    }
+    
+    MultiMatrix2D asOtherNumberOfChannels(int numberOfChannels, boolean fillAlphaWithMaxValue);
 
     MultiMatrix2D clone();
 

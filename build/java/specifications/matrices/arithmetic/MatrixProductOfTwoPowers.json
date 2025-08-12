@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "matrices.arithmetic",
-  "name": "Product of two powers m·xᵃ·yᵇ (elementwise)",
+  "name": "Product of two powers m·xᵃ·yᵇ (elementwise multiplication)",
   "description": "Returns product of powers <i>m&sdot;x<sup>a</sup></i><i>y<sup>b</sup></i> (multiplied by <i>m</i> parameter). Second argument <i>y</i> is optional: if it is skipped, performs single power operation <i>m&sdot;x<sup>a</sup></i>.",
   "tags": [
     "matrices"
@@ -47,6 +47,50 @@
       "value_type": "double",
       "edition_type": "value",
       "default": 1.0
+    },
+    {
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "unchanged",
+          "caption": "same as in \"x\" matrix"
+        },
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "unchanged"
+    },
+    {
+      "caption": "Fill alpha",
+      "name": "fillAlphaWithMaxValue",
+      "description": "This flag is important when the number of channels in image \"y\" is less than the number of channels in image \"x\".\nIf the flag is set, and the number of \"x\" channels ≥4 and is greater than the number of \"y\" channels, then the 4th \"y\" channel (alpha) and all subsequent \"extra\" channels will be supposed to be filled with the maximal possible value. For the alpha-channel, this means \"full opacity\".\nIf the flag is not set, all \"extra\" \"y\" channels will be supposed to be copies of the first \"y\" channel.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
     }
   ]
 }
