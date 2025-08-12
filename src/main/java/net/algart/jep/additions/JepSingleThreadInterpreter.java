@@ -328,8 +328,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         }
 
         static ThreadPoolExecutor newSingleThreadPool(String threadName) {
-            //noinspection UnnecessaryLocalVariable
-            ThreadPoolExecutor result = new ThreadPoolExecutor(1, 1,
+            return new ThreadPoolExecutor(1, 1,
                     0L, TimeUnit.MILLISECONDS,
                     new LinkedBlockingQueue<>(),
                     r -> {
@@ -337,11 +336,14 @@ public class JepSingleThreadInterpreter implements Interpreter {
                         t.setDaemon(true);
                         return t;
                     });
-            // result.allowCoreThreadTimeOut(true);
-            // result.setKeepAliveTime(60, TimeUnit.SECONDS);
-            // - possible ideas for the future; note that we usually must disable timeout
-            // and re-create SharedExecutor before reusing thread
-            return result;
+            // Note: we could make this pool more flexible with calls
+            //      result.allowCoreThreadTimeOut(true);
+            //      result.setKeepAliveTime(60, TimeUnit.SECONDS);
+            // But in any case we MUST ensure that the same ShareInterpreter is running inside the same thread,
+            // so we can allow the timeout only AFTER closing the ShareInterpreter and
+            // should recreate if after restarting a new thread.
+            // Instead, we prefer just to shut down this pool together with closing the ShareInterpreter
+            // (closeInterpreter() method called from JepSingleThreadInterpreter.close())
         }
 
         private boolean isReallyClosed() {
