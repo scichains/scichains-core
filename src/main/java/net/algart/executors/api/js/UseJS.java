@@ -89,10 +89,10 @@ public class UseJS extends FileOperation {
         }
     }
 
-    public void useSeveralPaths(List<Path> jsCallerSpecificationsPaths) throws IOException {
-        Objects.requireNonNull(jsCallerSpecificationsPaths, "Null paths to JS specifications files");
+    public void useSeveralPaths(List<Path> jsSpecificationsPaths) throws IOException {
+        Objects.requireNonNull(jsSpecificationsPaths, "Null paths to JS specifications files");
         StringBuilder sb = isOutputNecessary(DEFAULT_OUTPUT_PORT) ? new StringBuilder() : null;
-        for (Path path : jsCallerSpecificationsPaths) {
+        for (Path path : jsSpecificationsPaths) {
             usePath(path, null, sb);
         }
         if (sb != null) {
@@ -100,68 +100,68 @@ public class UseJS extends FileOperation {
         }
     }
 
-    public void usePath(Path jsCallerSpecificationsPaths) throws IOException {
-        usePath(jsCallerSpecificationsPaths, null, null);
+    public void usePath(Path jsSpecificationsPaths) throws IOException {
+        usePath(jsSpecificationsPaths, null, null);
     }
 
     public int usePath(
-            Path jsCallerSpecificationsPaths,
+            Path jsSpecificationsPaths,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(jsCallerSpecificationsPaths, "Null path to JS specification files");
-        final List<JSCallerSpecification> jsCallerSpecifications;
-        if (Files.isDirectory(jsCallerSpecificationsPaths)) {
-            jsCallerSpecifications = JSCallerSpecification.readAllIfValid(jsCallerSpecificationsPaths);
+        Objects.requireNonNull(jsSpecificationsPaths, "Null path to JS specification files");
+        final List<JSSpecification> jsSpecifications;
+        if (Files.isDirectory(jsSpecificationsPaths)) {
+            jsSpecifications = JSSpecification.readAllIfValid(jsSpecificationsPaths);
         } else {
-            jsCallerSpecifications = Collections.singletonList(JSCallerSpecification.read(jsCallerSpecificationsPaths));
+            jsSpecifications = Collections.singletonList(JSSpecification.read(jsSpecificationsPaths));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        ExecutorSpecification.checkIdDifference(jsCallerSpecifications);
-        final int n = jsCallerSpecifications.size();
+        ExecutorSpecification.checkIdDifference(jsSpecifications);
+        final int n = jsSpecifications.size();
         for (int i = 0; i < n; i++) {
-            final JSCallerSpecification jsCallerSpecification = jsCallerSpecifications.get(i);
+            final JSSpecification jsSpecification = jsSpecifications.get(i);
             logDebug("Loading JS caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                    + "from " + jsCallerSpecification.getSpecificationFile() + "...");
+                    + "from " + jsSpecification.getSpecificationFile() + "...");
             if (platform != null) {
-                jsCallerSpecification.updateCategoryPrefix(platform.getCategory());
-                jsCallerSpecification.addTags(platform.getTags());
-                jsCallerSpecification.setPlatformId(platform.getId());
+                jsSpecification.updateCategoryPrefix(platform.getCategory());
+                jsSpecification.addTags(platform.getTags());
+                jsSpecification.setPlatformId(platform.getId());
             }
-            use(jsCallerSpecification);
+            use(jsSpecification);
             if (report != null) {
-                report.append(jsCallerSpecification.getSpecificationFile()).append("\n");
+                report.append(jsSpecification.getSpecificationFile()).append("\n");
             }
         }
         return n;
     }
 
     // Note: corrects the argument
-    public void use(JSCallerSpecification jsCallerSpecification) throws IOException {
+    public void use(JSSpecification jsSpecification) throws IOException {
         final String sessionId = getSessionId();
         final Path workingDirectory = translateWorkingDirectory();
-        correctJSExecutorSpecification(jsCallerSpecification, workingDirectory);
-        final JSCaller jsCaller = JSCaller.of(jsCallerSpecification, workingDirectory);
-        JS_CALLER_LOADER.registerWorker(sessionId, jsCallerSpecification, jsCaller);
+        correctJSExecutorSpecification(jsSpecification, workingDirectory);
+        final JSCaller jsCaller = JSCaller.of(jsSpecification, workingDirectory);
+        JS_CALLER_LOADER.registerWorker(sessionId, jsSpecification, jsCaller);
     }
 
     private Path translateWorkingDirectory() {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(workingDirectory, this);
     }
 
-    private void correctJSExecutorSpecification(JSCallerSpecification jsCallerSpecification, Path workingDirectory) {
-        Objects.requireNonNull(jsCallerSpecification, "Null jsCallerSpecification");
+    private void correctJSExecutorSpecification(JSSpecification jsSpecification, Path workingDirectory) {
+        Objects.requireNonNull(jsSpecification, "Null jsSpecification");
         Objects.requireNonNull(workingDirectory, "Null workingDirectory");
-        jsCallerSpecification.setTo(new InterpretJS());
+        jsSpecification.setTo(new InterpretJS());
         // - adds the Java object, (maybe) parameters and some ports
-        jsCallerSpecification.addSystemExecutorIdPort();
-        if (jsCallerSpecification.hasPlatformId()) {
-            jsCallerSpecification.addSystemPlatformIdPort();
+        jsSpecification.addSystemExecutorIdPort();
+        if (jsSpecification.hasPlatformId()) {
+            jsSpecification.addSystemPlatformIdPort();
         }
-        addSpecialOutputPorts(jsCallerSpecification);
-        jsCallerSpecification.setSourceInfoForSpecification()
+        addSpecialOutputPorts(jsSpecification);
+        jsSpecification.setSourceInfoForSpecification()
                 .setLanguageName(JS_LANGUAGE_NAME)
-                .setAbsoluteModulePath(workingDirectory.resolve(jsCallerSpecification.getJS().getModule()));
+                .setAbsoluteModulePath(workingDirectory.resolve(jsSpecification.getJS().getModule()));
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {

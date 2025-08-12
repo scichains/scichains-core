@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.modules.core.logic.compiler.python.api.tests;
+package net.algart.executors.modules.core.logic.compiler.js.api.tests;
 
-import net.algart.executors.api.python.PythonCallerSpecification;
+import net.algart.executors.api.js.JSSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class PythonCallerSpecificationTest {
+public class JSSpecificationTest {
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 2) {
-            System.out.printf("Usage: %s python_executor_specification.json result.json%n",
-                    PythonCallerSpecificationTest.class.getName());
+            System.out.printf("Usage: %s js_executor_specification.json result.json%n",
+                    JSSpecificationTest.class.getName());
             return;
         }
         final Path specificationFile = Paths.get(args[0]);
         final Path resultFile = Paths.get(args[1]);
-        PythonCallerSpecification specification = PythonCallerSpecification.read(specificationFile);
+        JSSpecification specification = JSSpecification.read(specificationFile);
         specification.write(resultFile);
-        System.out.printf("Python configuration:%n");
-        System.out.println(specification.getPython());
+        System.out.printf("JS configuration:%n");
+        System.out.println(specification.getJS());
     }
 }

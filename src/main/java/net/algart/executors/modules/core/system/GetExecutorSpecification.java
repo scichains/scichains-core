@@ -136,7 +136,7 @@ public class GetExecutorSpecification extends Executor implements ReadOnlyExecut
         long t3 = debugTime();
         getScalar().setTo(extended.jsonString());
         // - note: this JSON can have more information than ExecutorSpecification extended
-        // (for example, it has additional fields for PythonCallerSpecification)
+        // (for example, it has additional fields for PythonSpecification)
         long t4 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Executor \"%s\" is an extended executor \"%s\": %.5f ms = " +

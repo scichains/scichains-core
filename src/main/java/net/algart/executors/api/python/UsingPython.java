@@ -54,56 +54,56 @@ public class UsingPython {
             "List of Python executor specification folders, " +
                     "supplied by this application and used to find Python-based executors";
 
-    private static final DefaultExecutorLoader<PythonCaller> PYTHON_CALLER_LOADER =
-            new DefaultExecutorLoader<>("Python loader");
+    private static final DefaultExecutorLoader<JepCaller> JEP_CALLER_LOADER =
+            new DefaultExecutorLoader<>("Python JEP loader");
 
     static {
-        ExecutionBlock.globalLoaders().register(PYTHON_CALLER_LOADER);
+        ExecutionBlock.globalLoaders().register(JEP_CALLER_LOADER);
     }
 
     private UsingPython() {
     }
 
-    public static DefaultExecutorLoader<PythonCaller> pythonCallerLoader() {
-        return PYTHON_CALLER_LOADER;
+    public static DefaultExecutorLoader<JepCaller> jepCallerLoader() {
+        return JEP_CALLER_LOADER;
     }
 
     public static int usePath(
             String sessionId,
-            Path pythonCallerSpecificationPath,
+            Path pythonSpecificationPath,
             ExtensionSpecification.Platform platform)
             throws IOException {
-        Objects.requireNonNull(pythonCallerSpecificationPath, "Null path to Python specification files");
-        final List<PythonCallerSpecification> pythonCallerSpecifications;
-        if (Files.isDirectory(pythonCallerSpecificationPath)) {
-            pythonCallerSpecifications = PythonCallerSpecification.readAllIfValid(pythonCallerSpecificationPath);
+        Objects.requireNonNull(pythonSpecificationPath, "Null path to Python specification files");
+        final List<PythonSpecification> pythonSpecifications;
+        if (Files.isDirectory(pythonSpecificationPath)) {
+            pythonSpecifications = PythonSpecification.readAllIfValid(pythonSpecificationPath);
         } else {
-            pythonCallerSpecifications = Collections.singletonList(
-                    PythonCallerSpecification.read(pythonCallerSpecificationPath));
+            pythonSpecifications = Collections.singletonList(
+                    PythonSpecification.read(pythonSpecificationPath));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
-        ExecutorSpecification.checkIdDifference(pythonCallerSpecifications);
-        final int n = pythonCallerSpecifications.size();
+        ExecutorSpecification.checkIdDifference(pythonSpecifications);
+        final int n = pythonSpecifications.size();
         for (int i = 0; i < n; i++) {
-            final PythonCallerSpecification pythonCallerSpecification = pythonCallerSpecifications.get(i);
+            final PythonSpecification pythonSpecification = pythonSpecifications.get(i);
             Executor.LOG.log(System.Logger.Level.DEBUG,
                     "Loading Python caller " + (n > 1 ? (i + 1) + "/" + n + " " : "")
-                            + "from " + pythonCallerSpecification.getSpecificationFile() + "...");
+                            + "from " + pythonSpecification.getSpecificationFile() + "...");
             if (platform != null) {
-                pythonCallerSpecification.updateCategoryPrefix(platform.getCategory());
-                pythonCallerSpecification.addTags(platform.getTags());
-                pythonCallerSpecification.setPlatformId(platform.getId());
+                pythonSpecification.updateCategoryPrefix(platform.getCategory());
+                pythonSpecification.addTags(platform.getTags());
+                pythonSpecification.setPlatformId(platform.getId());
             }
-            use(sessionId, pythonCallerSpecification);
+            use(sessionId, pythonSpecification);
         }
         return n;
     }
 
     // Note: corrects the argument
-    public static void use(String sessionId, PythonCallerSpecification pythonCallerSpecification) throws IOException {
-        correctPythonExecutorSpecification(pythonCallerSpecification);
-        final PythonCaller pythonCaller = PythonCaller.of(pythonCallerSpecification);
-        PYTHON_CALLER_LOADER.registerWorker(sessionId, pythonCallerSpecification, pythonCaller);
+    public static void use(String sessionId, PythonSpecification pythonSpecification) throws IOException {
+        correctPythonExecutorSpecification(pythonSpecification);
+        final JepCaller jepCaller = JepCaller.of(pythonSpecification);
+        JEP_CALLER_LOADER.registerWorker(sessionId, pythonSpecification, jepCaller);
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
@@ -126,16 +126,16 @@ public class UsingPython {
         Executor.LOG.log(System.Logger.Level.INFO, () -> "Python home: " + (pythonHome == null ? "n/a" : pythonHome));
     }
 
-    private static void correctPythonExecutorSpecification(PythonCallerSpecification pythonCallerSpecification) {
-        Objects.requireNonNull(pythonCallerSpecification, "Null pythonCallerSpecification");
-        pythonCallerSpecification.setTo(new InterpretPython());
+    private static void correctPythonExecutorSpecification(PythonSpecification pythonSpecification) {
+        Objects.requireNonNull(pythonSpecification, "Null pythonSpecification");
+        pythonSpecification.setTo(new InterpretPython());
         // - adds JavaConf, (maybe) parameters and some ports
-        pythonCallerSpecification.addSystemExecutorIdPort();
-        if (pythonCallerSpecification.hasPlatformId()) {
-            pythonCallerSpecification.addSystemPlatformIdPort();
+        pythonSpecification.addSystemExecutorIdPort();
+        if (pythonSpecification.hasPlatformId()) {
+            pythonSpecification.addSystemPlatformIdPort();
         }
-        addSpecialOutputPorts(pythonCallerSpecification);
-        pythonCallerSpecification.setSourceInfoForSpecification().setLanguageName(PYTHON_LANGUAGE_NAME);
+        addSpecialOutputPorts(pythonSpecification);
+        pythonSpecification.setSourceInfoForSpecification().setLanguageName(PYTHON_LANGUAGE_NAME);
     }
 
     private static void addSpecialOutputPorts(ExecutorSpecification result) {

@@ -40,9 +40,9 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     // Should be false: otherwise, we will need strict synchronization to avoid parallel
     // call of the same JSCaller from other SciChains windows.
 
-    private final JSCallerSpecification specification;
+    private final JSSpecification specification;
     private final Path workingDirectory;
-    private final JSCallerSpecification.JS js;
+    private final JSSpecification.JS js;
     private volatile GraalPerformerContainer.Local performerContainer;
     // volatile is not necessary, but COULD become necessary if we will not use synchronization:
     // it is not "final" because of clone() method, so JVM do not provide the same guarantees as for "final"
@@ -57,7 +57,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
     private final Object lock = new Object();
     // - Note: copied while cloning! This lock little simplifies understanding logic in a multithreaded environment.
 
-    private JSCaller(JSCallerSpecification specification, Path workingDirectory) {
+    private JSCaller(JSSpecification specification, Path workingDirectory) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.workingDirectory = Objects.requireNonNull(workingDirectory, "Null workingDirectory");
         this.js = specification.getJS();
@@ -69,11 +69,11 @@ public final class JSCaller implements Cloneable, AutoCloseable {
         createPerformerContainer();
     }
 
-    public static JSCaller of(JSCallerSpecification specification, Path workingDirectory) {
+    public static JSCaller of(JSSpecification specification, Path workingDirectory) {
         return new JSCaller(specification, workingDirectory);
     }
 
-    public JSCallerSpecification specification() {
+    public JSSpecification specification() {
         return specification;
     }
 

@@ -35,7 +35,7 @@ import net.algart.jep.additions.JepInterpretation;
 
 import java.util.Objects;
 
-public final class PythonCaller implements Cloneable, AutoCloseable {
+public final class JepCaller implements Cloneable, AutoCloseable {
     private static final boolean REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES = true;
     // Should be true. We could create a new container for every instance, but we prefer reusing the same one
     // with the same SharedInterpreter and the same single-thread pool.
@@ -48,8 +48,8 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     private static final boolean DEBUG_SLEEP_FOR_PARALLEL_EXECUTION = false;
     // Must be false.
 
-    private final PythonCallerSpecification specification;
-    private final PythonCallerSpecification.Python python;
+    private final PythonSpecification specification;
+    private final PythonSpecification.Python python;
     private volatile JepPerformerContainer container;
     // volatile is not necessary, but COULD become necessary if we will not use synchronization
     // it is not "final" because of clone() method, so JVM do not provide the same guarantees as for "final"
@@ -61,7 +61,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     // - Note: copied while cloning! This lock little simplifies understanding logic in a multithreaded environment.
     // It is also important for stable access to pythonClassInstance
 
-    private PythonCaller(PythonCallerSpecification specification) {
+    private JepCaller(PythonSpecification specification) {
         this.specification = Objects.requireNonNull(specification, "Null specification");
         this.python = specification.getPython();
         if (python == null) {
@@ -78,11 +78,11 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
         this.container = JepAPI.newContainer(mode);
     }
 
-    public static PythonCaller of(PythonCallerSpecification specification) {
-        return new PythonCaller(specification);
+    public static JepCaller of(PythonSpecification specification) {
+        return new JepCaller(specification);
     }
 
-    public PythonCallerSpecification specification() {
+    public PythonSpecification specification() {
         return specification;
     }
 
@@ -151,7 +151,7 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
             @SuppressWarnings("resource") final JepPerformer performer = performer();
 //         jepAPI.initializedGlobalEnvironment(performer, executor, null);
             // - We do not call initialize the global environment (the previous commented line):
-            // if the same PythonCaller in another InterpretPython instance reuses the same SharedInterpreter,
+            // if the same JepCaller in another InterpretPython instance reuses the same SharedInterpreter,
             // it can lead to invalid value of the global variable _env
             if (python.isClassMethod()) {
                 final String className = python.getClassName();
@@ -232,9 +232,9 @@ public final class PythonCaller implements Cloneable, AutoCloseable {
     }
 
     @Override
-    public PythonCaller clone() {
+    public JepCaller clone() {
         try {
-            PythonCaller clone = (PythonCaller) super.clone();
+            JepCaller clone = (JepCaller) super.clone();
             if (!REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
                 clone.container = JepAPI.newContainer(interpretationMode);
             }

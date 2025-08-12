@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
-public class JSCallerSpecification extends ExecutorSpecification {
+public class JSSpecification extends ExecutorSpecification {
     public static final class JS extends AbstractConvertibleToJson {
 
         public static final String DEFAULT_FUNCTION = "execute";
@@ -94,10 +94,10 @@ public class JSCallerSpecification extends ExecutorSpecification {
 
     private JS js = null;
 
-    public JSCallerSpecification() {
+    public JSSpecification() {
     }
 
-    protected JSCallerSpecification(JsonObject json, Path file) {
+    protected JSSpecification(JsonObject json, Path file) {
         super(json, file);
         final JsonObject jsJson = json.getJsonObject("js");
         if (isJSExecutor() && jsJson == null) {
@@ -107,13 +107,13 @@ public class JSCallerSpecification extends ExecutorSpecification {
         this.js = jsJson == null ? null : new JS(jsJson, file);
     }
 
-    public static JSCallerSpecification read(Path specificationFile) throws IOException {
+    public static JSSpecification read(Path specificationFile) throws IOException {
         Objects.requireNonNull(specificationFile, "Null specificationFile");
         final JsonObject json = Jsons.readJson(specificationFile);
-        return new JSCallerSpecification(json, specificationFile);
+        return new JSSpecification(json, specificationFile);
     }
 
-    public static JSCallerSpecification readIfValid(Path specificationFile) {
+    public static JSSpecification readIfValid(Path specificationFile) {
         Objects.requireNonNull(specificationFile, "Null specificationFile");
         final JsonObject json;
         try {
@@ -125,38 +125,38 @@ public class JSCallerSpecification extends ExecutorSpecification {
         if (!isExecutorSpecification(json)) {
             return null;
         }
-        return new JSCallerSpecification(json, specificationFile);
+        return new JSSpecification(json, specificationFile);
     }
 
-    public static List<JSCallerSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
+    public static List<JSSpecification> readAllIfValid(Path containingJsonPath) throws IOException {
         return readAllIfValid(null, containingJsonPath);
     }
 
-    public static List<JSCallerSpecification> readAllIfValid(
-            List<JSCallerSpecification> result,
+    public static List<JSSpecification> readAllIfValid(
+            List<JSSpecification> result,
             Path containingJsonPath)
             throws IOException {
         return ExecutorSpecification.readAllJsonIfValid(
-                result, containingJsonPath, JSCallerSpecification::readIfValid);
+                result, containingJsonPath, JSSpecification::readIfValid);
     }
 
-    public static JSCallerSpecification of(JsonObject specificationJson) {
-        return new JSCallerSpecification(specificationJson, null);
+    public static JSSpecification of(JsonObject specificationJson) {
+        return new JSSpecification(specificationJson, null);
     }
 
-    public static JSCallerSpecification of(String specificationString) {
+    public static JSSpecification of(String specificationString) {
         Objects.requireNonNull(specificationString, "Null specificationString");
         final JsonObject executorSpecification = Jsons.toJson(specificationString);
-        return new JSCallerSpecification(executorSpecification, null);
+        return new JSSpecification(executorSpecification, null);
     }
 
-    public static JSCallerSpecification ofIfValid(String specificationString) {
+    public static JSSpecification ofIfValid(String specificationString) {
         Objects.requireNonNull(specificationString, "Null specificationString");
         final JsonObject json = Jsons.toJson(specificationString);
         if (!isExecutorSpecification(json)) {
             return null;
         }
-        return new JSCallerSpecification(json, null);
+        return new JSSpecification(json, null);
     }
 
     public final boolean isJSExecutor() {
@@ -167,7 +167,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
         return js;
     }
 
-    public JSCallerSpecification setJS(JS js) {
+    public JSSpecification setJS(JS js) {
         this.js = js;
         return this;
     }
@@ -182,7 +182,7 @@ public class JSCallerSpecification extends ExecutorSpecification {
 
     @Override
     public String toString() {
-        return "JSCallerSpecification{" +
+        return "JSSpecification{" +
                 "js=" + js +
                 "}, extending " + super.toString();
     }
