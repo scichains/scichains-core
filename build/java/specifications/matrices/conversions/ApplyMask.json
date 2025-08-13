@@ -50,7 +50,7 @@
     {
       "caption": "Filling color",
       "name": "filler",
-      "description": "See supported color formats in \"Create constant matrix\" function.",
+      "description": "Supported color formats:\n    #FF0000 — HTML standard RRGGBBB without alpha (red color)\n    #FF000080 — HTML standard RRGGBBBAA with alpha (red color with alpha 0.5)\n    0xFF0000 — hexadecimal RRGGBBB, alpha not allowed (red color)\n    (1.0, 0.0, 0.0, 0.5) — all channels (normalized to 0.0..1.0), alpha allowed (red color with alpha 0.5)\n    [255, 173, 0] — raw (non-normalized) values for each channels, alpha allowed\n    0.5 — grayscale (normalized to 0.0..1.0)",
       "value_type": "String",
       "edition_type": "value",
       "default": "#000000"
