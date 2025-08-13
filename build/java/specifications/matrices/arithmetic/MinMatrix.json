@@ -27,6 +27,10 @@
     {
       "value_type": "mat",
       "name": "input_4"
+    },
+    {
+      "value_type": "mat",
+      "name": "input_5"
     }
   ],
   "out_ports": [
@@ -36,5 +40,13 @@
     }
   ],
   "controls": [
+    {
+      "caption": "Fill alpha",
+      "name": "fillAlphaWithMaxValue",
+      "description": "This flag is important when the number of channels in image \"input_K\" (K>1) is less than the number of channels in image \"input_1\".\nIf the flag is set, and the number of \"input_1\" channels ≥4 and is greater than the number of \"input_K\" channels, then the 4th \"input_K\" channel (alpha) and all subsequent \"extra\" channels will be supposed to be filled with the maximal possible value. For the alpha-channel, this means \"full opacity\".\nIf the flag is not set, all \"extra\" \"input_K\" channels will be supposed to be copies of the first \"input_K\" channel.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    }
   ]
 }
