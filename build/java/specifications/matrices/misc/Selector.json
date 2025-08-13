@@ -1,0 +1,219 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "matrices.misc",
+  "name": "Selector",
+  "tags": [
+    "matrices"
+  ],
+  "id": "3a0711e9-70b2-4b5a-8465-6daa75e4ac34",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.matrices.misc.Selector"
+  },
+  "in_ports": [
+    {
+      "value_type": "mat",
+      "name": "selector"
+    },
+    {
+      "value_type": "mat",
+      "name": "m0",
+      "alias": [
+        "input_1"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "alias": [
+        "input_2"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m2",
+      "alias": [
+        "input_3"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "alias": [
+        "input_4"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "alias": [
+        "input_5"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "alias": [
+        "input_6"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m6",
+      "alias": [
+        "input_7"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m7",
+      "alias": [
+        "input_8"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m8",
+      "alias": [
+        "input_9"
+      ]
+    },
+    {
+      "value_type": "mat",
+      "name": "m9",
+      "alias": [
+        "input_10"
+      ]
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "minimalRequiredNumberOfChannels",
+      "caption": "Minimal required number of channels",
+      "value_type": "int",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": 1,
+          "caption": "1"
+        },
+        {
+          "value": 3,
+          "caption": "3"
+        },
+        {
+          "value": 4,
+          "caption": "4"
+        }
+      ],
+      "default": 1
+    },
+    {
+      "name": "selectorType",
+      "caption": "Selector type",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "BINARY_MATRIX",
+          "caption": "Binary matrix: 0 selects m0, any nonzero select m1"
+        },
+        {
+          "value": "INT_MATRIX",
+          "caption": "Int matrix (0,1,2,...): value K selects mK"
+        },
+        {
+          "value": "INT_VALUE",
+          "caption": "Int value \"selector value\" below (\"selector\" matrix ignored)"
+        }
+      ],
+      "default": "BINARY_MATRIX"
+    },
+    {
+      "caption": "Selector value",
+      "name": "selectorValue",
+      "description": "Used for \"Int value\" selector type instead of \"selector\" matrix",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 0
+    },
+    {
+      "caption": "Filler 0",
+      "description": "Constant color, used instead of \"m0\" if it is not specified.\nSupported color formats:\n    #FF0000 — HTML standard RRGGBBB without alpha (red color)\n    #FF000080 — HTML standard RRGGBBBAA with alpha (red color with alpha 0.5)\n    0xFF0000 — hexadecimal RRGGBBB, alpha not allowed (red color)\n    (1.0, 0.0, 0.0, 0.5) — all channels (normalized to 0.0..1.0), alpha allowed (red color with alpha 0.5)\n    [255, 173, 0] — raw (non-normalized) values for each channels, alpha allowed\n    0.5 — grayscale (normalized to 0.0..1.0)",
+      "name": "filler_0",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#0000FF"
+    },
+    {
+      "caption": "Filler 1",
+      "name": "filler_1",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#00FF00"
+    },
+    {
+      "caption": "Filler 2",
+      "name": "filler_2",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FF0000"
+    },
+    {
+      "caption": "Filler 3",
+      "name": "filler_3",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "#FFFF00"
+    },
+    {
+      "caption": "Filler 4",
+      "name": "filler_4",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    },
+    {
+      "caption": "Filler 5",
+      "name": "filler_5",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    },
+    {
+      "caption": "Filler 6",
+      "name": "filler_6",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    },
+    {
+      "caption": "Filler 7",
+      "name": "filler_7",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    },
+    {
+      "caption": "Filler 8",
+      "name": "filler_8",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    },
+    {
+      "caption": "Filler 9",
+      "name": "filler_9",
+      "value_type": "String",
+      "edition_type": "color",
+      "default": "[0]"
+    }
+  ]
+}
