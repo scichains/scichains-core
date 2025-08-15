@@ -25,11 +25,25 @@
 package net.algart.executors.modules.core.logic.scripting.python;
 
 import net.algart.jep.JepPerformer;
+import net.algart.jep.additions.AtomicPyObject;
 
 public final class CallPythonExternalFunction extends AbstractCallPython {
-    private String moduleName = "python_lib_demo_simple.SimpleDemo";
+    private static final String STANDARD_API_FILE_TO_IMPORT_FIELD = "_env_file_to_import";
+
+    private String pyFile = "";
+    private String moduleName = "pyalgart_lib_demo_simple.simple_demo";
 
     public CallPythonExternalFunction() {
+    }
+
+
+    public String getPyFile() {
+        return pyFile;
+    }
+
+    public CallPythonExternalFunction setPyFile(String pyFile) {
+        this.pyFile = nonNull(pyFile).trim();
+        return this;
     }
 
     public String getModuleName() {
@@ -47,8 +61,34 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
 
     @Override
     protected String code() {
-        return JepPerformer.importCode(moduleName, getMainFunctionName());
-        //TODO!! create full code for calling external "mod."+getMainFunctionName()
+        if (!pyFile.isEmpty()) {
+            return """
+                    def _execute_external(params, inputs, outputs):
+                        _external_module = params._env.import_file(params.%s)
+                        return _external_module.%s(params, inputs, outputs)
+                    """.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
+
+        } else {
+            return JepPerformer.importCode(moduleName, getMainFunctionName());
+        }
+    }
+
+    @Override
+    protected Object callFunction(
+            AtomicPyObject pythonParameters,
+            AtomicPyObject pythonInputs,
+            AtomicPyObject pythonOutputs) {
+        if (!pyFile.isEmpty()) {
+            // translatePropertiesAndCurrentDirectory should not be used here!
+            // All translations were already done with the working directory.
+            pythonParameters.setAttribute(STANDARD_API_FILE_TO_IMPORT_FIELD, pyFile);
+            return performer.invokeFunction("_execute_external",
+                    pythonParameters.pyObject(),
+                    pythonInputs.pyObject(),
+                    pythonOutputs.pyObject());
+        } else {
+            return super.callFunction(pythonParameters, pythonInputs, pythonOutputs);
+        }
     }
 
     @Override

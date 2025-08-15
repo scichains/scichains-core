@@ -40,14 +40,6 @@ import java.util.stream.Collectors;
 
 // Should be public for normal using setters in PropertySetter
 public abstract class AbstractCallPython extends Executor {
-    private static final List<String> PARAMETERS_NAMES = List.of(
-            "a", "b", "c", "d", "e", "f", "p", "q", "r", "s", "t", "u");
-    private static final List<String> INPUTS_NAMES = List.of(
-            "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
-    private static final List<String> OUTPUTS_NAMES = List.of(
-            DEFAULT_OUTPUT_PORT,
-            "a", "b", "c", "d", "e", "f", "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
-
     public static final String INPUT_X1 = "x1";
     public static final String INPUT_X2 = "x2";
     public static final String INPUT_X3 = "x3";
@@ -74,7 +66,16 @@ public abstract class AbstractCallPython extends Executor {
     public static final String OUTPUT_M3 = "m3";
     public static final String OUTPUT_M4 = "m4";
     public static final String OUTPUT_M5 = "m5";
+    public static final String OUTPUT_CODE = "code";
     public static final String OUTPUT_SUPPLIED_PYTHON_ROOTS = "supplied_python_roots";
+
+    private static final List<String> PARAMETERS_NAMES = List.of(
+            "a", "b", "c", "d", "e", "f", "p", "q", "r", "s", "t", "u");
+    private static final List<String> INPUTS_NAMES = List.of(
+            "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
+    private static final List<String> OUTPUTS_NAMES = List.of(
+            DEFAULT_OUTPUT_PORT,
+            "a", "b", "c", "d", "e", "f", "x1", "x2", "x3", "x4", "x5", "m1", "m2", "m3", "m4", "m5");
 
     private String mainFunctionName = "execute";
     private String workingDirectory = ".";
@@ -100,7 +101,7 @@ public abstract class AbstractCallPython extends Executor {
     final JepPerformerContainer subContainer = JepAPI.newContainer(JepInterpretation.Mode.SUB_INTERPRETER);
     final JepPerformerContainer globalContainer = JepAPI.newContainer(JepInterpretation.Mode.GLOBAL);
     // - 3 lightweight containers is a simple alternative for recreating a single container
-    private JepPerformer performer = null;
+    volatile JepPerformer performer = null;
 
     public AbstractCallPython() {
         useVisibleResultParameter();
@@ -131,6 +132,7 @@ public abstract class AbstractCallPython extends Executor {
         addOutputMat(OUTPUT_M3);
         addOutputMat(OUTPUT_M4);
         addOutputMat(OUTPUT_M5);
+        addOutputScalar(OUTPUT_CODE);
         addOutputScalar(OUTPUT_SUPPLIED_PYTHON_ROOTS);
     }
 
@@ -306,10 +308,6 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public String mainFunctionName() {
-        return mainFunctionName;
-    }
-
     public String parametersClassName() {
         return parametersClassName.isEmpty() ? JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME : parametersClassName;
     }
@@ -334,10 +332,10 @@ public abstract class AbstractCallPython extends Executor {
         if (isGlobalSynchronizationRequired()) {
             JepInterpretation.executeWithJVMGlobalLock(
                     this::initializePython,
-                    this::callPython,
+                    this::executePython,
                     this::closePython);
         } else {
-            callPython();
+            executePython();
         }
     }
 
@@ -349,6 +347,17 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     protected abstract String code();
+
+    protected Object callFunction(
+            AtomicPyObject pythonParameters,
+            AtomicPyObject pythonInputs,
+            AtomicPyObject pythonOutputs) {
+        return performer.invokeFunction(mainFunctionName,
+                pythonParameters.pyObject(),
+                pythonInputs.pyObject(),
+                pythonOutputs.pyObject());
+    }
+
 
     protected abstract String executorName();
 
@@ -367,6 +376,9 @@ public abstract class AbstractCallPython extends Executor {
             performer.perform(code);
         }
         long t3 = debugTime();
+        setOutputScalar(OUTPUT_CODE, code);
+        setOutputScalar(OUTPUT_SUPPLIED_PYTHON_ROOTS, () ->
+                String.join(String.format("%n"), JepPlatforms.pythonRootFolders()));
         logDebug(() -> String.format(Locale.US,
                 "%s (%s) initialized in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
                 executorName(), interpretationMode,
@@ -374,7 +386,7 @@ public abstract class AbstractCallPython extends Executor {
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
 
-    private void callPython() {
+    private void executePython() {
         long t1 = debugTime(), t2, t3, t4;
         if (performer == null) {
             throw new IllegalStateException(getClass() + " is not initialized");
@@ -387,18 +399,13 @@ public abstract class AbstractCallPython extends Executor {
             jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
             jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);
             t2 = debugTime();
-            result = performer.invokeFunction(mainFunctionName(),
-                    pythonParameters.pyObject(),
-                    pythonInputs.pyObject(),
-                    pythonOutputs.pyObject());
+            result = callFunction(pythonParameters, pythonInputs, pythonOutputs);
             t3 = debugTime();
             jepAPI.writeOutputPorts(performer, subSet(outputPorts(), OUTPUTS_NAMES), pythonOutputs);
             jepAPI.writeOutputPort(performer, getOutputPort(DEFAULT_OUTPUT_PORT), result, true);
             // - note: direct assignment "outputs.output = xxx" overrides simple returning result
             t4 = debugTime();
         }
-        getScalar(OUTPUT_SUPPLIED_PYTHON_ROOTS).setTo(
-                String.join(String.format("%n"), JepPlatforms.pythonRootFolders()));
         logDebug(() -> String.format(Locale.US,
                 "%s \"%s\" (%s) executed in %.3f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",

@@ -139,6 +139,12 @@
     },
     {
       "value_type": "scalar",
+      "name": "code",
+      "caption": "code",
+      "hint": "Actually executed Python code."
+    },
+    {
+      "value_type": "scalar",
       "name": "supplied_python_roots",
       "caption": "Supplied Python roots",
       "hint": "List of Python root folders, supplied by this application and added to Python search paths."
@@ -146,12 +152,20 @@
   ],
   "controls": [
     {
+      "caption": "External module source file",
+      "name": "pyFile",
+      "description": "A .py-file containing the source code for the Python module. This path can be absolute or relative; in the latter case, it is relative to the working directory specified in \"Current working folder\".\nIf this parameter is empty, the following \"External module name\" is used instead.",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
       "name": "moduleName",
       "caption": "External module name",
-      "description": "Full name of some Python module, from which the system will import a function with the name, specified in the following parameter. You can specify here any module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nNote: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this name: it allows to reset environment and remove all previous declarations.\n\nWARNING: the module above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.",
+      "description": "Full name of some Python module, from which the system will import a function with the name, specified in the parameter \"Main function name\". You can specify here any module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nNote: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this name: it allows to reset environment and remove all previous declarations.\n\nWARNING: the module above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.",
       "value_type": "String",
       "edition_type": "value",
-      "default": "python_lib_demo_simple.SimpleDemo"
+      "default": "pyalgart_lib_demo_simple.simple_demo"
     },
     {
       "name": "mainFunctionName",
