@@ -29,6 +29,7 @@ import net.algart.arrays.Matrices;
 import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.executors.modules.core.common.OptionalArguments;
+import net.algart.executors.modules.core.common.matrices.MultiMatrixGenerator;
 import net.algart.executors.modules.core.common.matrices.SeveralMultiMatricesChannelOperation;
 import net.algart.math.functions.LinearFunc;
 
@@ -40,29 +41,49 @@ public final class MatrixLinearCombination extends SeveralMultiMatricesChannelOp
     private final Map<Integer, Double> a = new HashMap<>();
     private double b = 0.0;
     private boolean rawValues = false;
+    private Class<?> elementType = null;
 
     public double getA(int index) {
         return a.getOrDefault(index, 0.0);
     }
 
-    public void setA(int index, double a) {
+    public MatrixLinearCombination setA(int index, double a) {
         this.a.put(index, a);
+        return this;
     }
 
     public double getB() {
         return b;
     }
 
-    public void setB(double b) {
+    public MatrixLinearCombination setB(double b) {
         this.b = b;
+        return this;
     }
 
     public boolean isRawValues() {
         return rawValues;
     }
 
-    public void setRawValues(boolean rawValues) {
+    public MatrixLinearCombination setRawValues(boolean rawValues) {
         this.rawValues = rawValues;
+        return this;
+    }
+
+    public Class<?> getElementType() {
+        return elementType;
+    }
+
+    /**
+     * Note: <code>null</code> value is allowed, it means "the same as the first matrix".
+     */
+    public MatrixLinearCombination setElementType(Class<?> elementType) {
+        this.elementType = elementType;
+        return this;
+    }
+
+    public MatrixLinearCombination setElementType(String elementType) {
+        return setElementType(MultiMatrixGenerator.elementType(elementType, true));
     }
 
     @Override
@@ -74,6 +95,7 @@ public final class MatrixLinearCombination extends SeveralMultiMatricesChannelOp
             } catch (NumberFormatException ignored) {
                 return;
             }
+            //noinspection resource
             setA(index, parameters().getDouble(name));
             return;
         }
@@ -85,8 +107,11 @@ public final class MatrixLinearCombination extends SeveralMultiMatricesChannelOp
         final OptionalArguments<Matrix<? extends PArray>> arguments = new OptionalArguments<>(m);
         final List<Matrix<? extends PArray>> mNonNull = arguments.extract();
         final double[] aForNonNull = arguments.extractParallelDoubles(this.a, 1.0);
-        final double scale = rawValues ? 1.0 : Arrays.maxPossibleValue(sampleType(), 1.0);
+        Class<? extends PArray> requiredType = elementType != null ?
+                Arrays.type(PArray.class, elementType) :
+                sampleType();
+        final double scale = rawValues ? 1.0 : Arrays.maxPossibleValue(requiredType, 1.0);
         return Matrices.clone(
-                Matrices.asFuncMatrix(LinearFunc.getInstance(scale * b, aForNonNull), sampleType(), mNonNull));
+                Matrices.asFuncMatrix(LinearFunc.getInstance(scale * b, aForNonNull), requiredType, mNonNull));
     }
 }

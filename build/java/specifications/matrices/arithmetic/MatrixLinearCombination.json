@@ -85,6 +85,50 @@
       "value_type": "boolean",
       "edition_type": "value",
       "default": false
+    },
+    {
+      "name": "elementType",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "unchanged",
+          "caption": "same as in \"x₁\" matrix"
+        },
+        {
+          "value": "boolean",
+          "caption": "boolean"
+        },
+        {
+          "value": "byte",
+          "caption": "byte"
+        },
+        {
+          "value": "short",
+          "caption": "short"
+        },
+        {
+          "value": "int",
+          "caption": "int"
+        },
+        {
+          "value": "float",
+          "caption": "float"
+        },
+        {
+          "value": "double",
+          "caption": "double"
+        }
+      ],
+      "default": "unchanged"
+    },
+    {
+      "caption": "Fill alpha",
+      "name": "fillAlphaWithMaxValue",
+      "description": "This flag is important when the number of channels in image \"xₖ\" (k>1) is less than the number of channels in image \"x₁\".\nIf the flag is set, and the number of \"x₁\" channels ≥4 and is greater than the number of \"xₖ\" channels, then the 4th \"xₖ\" channel (alpha) and all subsequent \"extra\" channels will be supposed to be filled with the maximal possible value. For the alpha-channel, this means \"full opacity\".\nIf the flag is not set, all \"extra\" \"xₖ\" channels will be supposed to be copies of the first \"xₖ\" channel.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
     }
   ]
 }

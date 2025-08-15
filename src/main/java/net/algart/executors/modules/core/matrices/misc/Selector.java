@@ -45,7 +45,7 @@ public final class Selector extends SeveralMultiMatricesChannelOperation {
 
     private SelectorType selectorType = SelectorType.BINARY_MATRIX;
     private int selectorValue = 0;
-    private Map<Integer, String> filler = new HashMap<>();
+    private final Map<Integer, String> filler = new HashMap<>();
 
     private Matrix<? extends PArray> selector = null;
 
@@ -139,8 +139,8 @@ public final class Selector extends SeveralMultiMatricesChannelOperation {
     protected Matrix<? extends PArray> processChannel(List<Matrix<? extends PArray>> m) {
         final Class<? extends PArray> requiredType =
                 indexOfSampleInputForEqualizing() == 0 ? ByteArray.class : sampleType();
-        // - if we used the selector as sample (no other inputs), let's set the result type to byte:
-        // it is a degenerated case of building two-color image from the selector
+        // - if we used the selector as the sample (no other inputs), let's set the result type to byte:
+        // it is a degenerated case of building a two-color image from the selector
         final double maxPossibleValue = Arrays.maxPossibleValue(requiredType, 1.0);
         if (currentChannel() == 0) {
             logDebug(() -> "Combining " + (m.size() - 1) + " images to " + Arrays.elementType(requiredType) + "["
