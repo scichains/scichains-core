@@ -150,7 +150,7 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     public AbstractCallPython setWorkingDirectory(String workingDirectory) {
-        workingDirectory = nonEmptyTrimmed(workingDirectory);
+        workingDirectory = nonNull(workingDirectory).trim();
         if (!workingDirectory.equals(this.workingDirectory)) {
             closePython();
             this.workingDirectory = workingDirectory;
@@ -357,7 +357,6 @@ public abstract class AbstractCallPython extends Executor {
                 pythonInputs.pyObject(),
                 pythonOutputs.pyObject());
     }
-
 
     protected abstract String executorName();
 

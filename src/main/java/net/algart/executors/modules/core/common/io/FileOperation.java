@@ -298,12 +298,14 @@ public abstract class FileOperation extends Executor {
 //        return result;
     }
 
-//    public static void main(String[] args) {
+//    public static void main(String[] args) throws IOException {
 //        Path osPath = Paths.get("/SciChains/bin/").toAbsolutePath();
 //        Path absolutePath = Paths.get("C:\\SciChains\\ext\\base-core\\extension.json").toAbsolutePath();
 //        System.out.println(osPath);
 //        System.out.println(absolutePath);
 //        System.out.println(osPath.relativize(absolutePath));
-//
+//        System.out.println(osPath.resolve(""));
+//        System.out.println(osPath.resolve(".").toRealPath());
+//        System.out.println(osPath.resolve("..").toRealPath());
 //    }
 }

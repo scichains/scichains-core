@@ -36,7 +36,6 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
     public CallPythonExternalFunction() {
     }
 
-
     public String getPyFile() {
         return pyFile;
     }

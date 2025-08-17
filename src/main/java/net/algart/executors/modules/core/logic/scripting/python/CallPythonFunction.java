@@ -44,7 +44,7 @@ public final class CallPythonFunction extends AbstractCallPython {
     }
 
     public CallPythonFunction setCode(String code) {
-        this.code = nonNull(code).trim();
+        this.code = nonEmptyTrimmed(code);
         return this;
     }
 
