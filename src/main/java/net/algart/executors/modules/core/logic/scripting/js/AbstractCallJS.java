@@ -74,7 +74,6 @@ public abstract class AbstractCallJS extends Executor {
     public static final String OUTPUT_M3 = "m3";
     public static final String OUTPUT_M4 = "m4";
     public static final String OUTPUT_M5 = "m5";
-    public static final String OUTPUT_CODE = "code";
 
     private String mainFunctionName = "execute";
     private String workingDirectory = ".";
@@ -94,12 +93,8 @@ public abstract class AbstractCallJS extends Executor {
     private GraalSafety safety = GraalSafety.SAFE;
 
     private final GraalPerformerContainer.Local performerContainer = GraalPerformerContainer.getLocalPure();
-    private final GraalSourceContainer javaScriptCode = GraalSourceContainer.newLiteral();
     private volatile Path translatedDirectory = null;
-    private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
-
-    private final Object lock = new Object();
 
     public AbstractCallJS() {
         useVisibleResultParameter();
@@ -130,7 +125,6 @@ public abstract class AbstractCallJS extends Executor {
         addOutputMat(OUTPUT_M3);
         addOutputMat(OUTPUT_M4);
         addOutputMat(OUTPUT_M5);
-        addOutputScalar(OUTPUT_CODE);
     }
 
     public String getMainFunctionName() {
@@ -315,15 +309,7 @@ public abstract class AbstractCallJS extends Executor {
     @Override
     public void initialize() {
         long t1 = debugTime();
-        final String code = GraalPerformer.addReturningJSFunction(code(), mainFunctionName);
-        javaScriptCode.setModuleJS(code, "main_code");
-        // - name "main_code" is not important: we will not share this performer (Graal context) with other
-        // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
-        final boolean changed = javaScriptCode.changed();
-        if (changed) {
-            logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
-            closePerformerContainer();
-        }
+        compileSource();
         long t2 = debugTime();
         translatedDirectory = translateWorkingDirectory();
         performerContainer.setCustomizer(safety);
@@ -334,17 +320,13 @@ public abstract class AbstractCallJS extends Executor {
         GraalAPI.initializeJS(performerContainer);
         final GraalPerformer performer = performerContainer.performer();
         long t3 = debugTime();
-        if (mainFunction == null) {
-            // no sense to perform ECMA module if it was not changed: re-executing will have no effect
-            mainFunction = performer.perform(javaScriptCode);
-        }
+        executeSource(performer);
         createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
         long t4 = debugTime();
-        setOutputScalar(OUTPUT_CODE, code);
         logDebug(() -> String.format(Locale.US,
                 "%s \"%s\" initialized in %.5f ms:"
                         + " %.6f ms recompiling + %.6f ms getting performer + %.6f ms executing module",
-                mainFunctionName,
+                executorName(), mainFunctionName,
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }
@@ -352,7 +334,7 @@ public abstract class AbstractCallJS extends Executor {
     @Override
     public void process() {
         long t1 = debugTime(), t2, t3, t4;
-        if (mainFunction == null || createEmptyObjectFunction == null) {
+        if (createEmptyObjectFunction == null) {
             throw new IllegalStateException(getClass() + " is not initialized");
         }
         final Value parameters = createEmptyObjectFunction.execute();
@@ -387,18 +369,18 @@ public abstract class AbstractCallJS extends Executor {
 
     protected abstract String code();
 
-    protected Value callFunction(
+    protected abstract void compileSource();
+
+    protected abstract void executeSource(GraalPerformer performer);
+
+    protected abstract Value callFunction(
             Value graalParameters,
             Value graalInputs,
-            Value graalOutputs) {
-        return mainFunction.execute(graalParameters, graalInputs, graalOutputs);
-    }
+            Value graalOutputs);
 
     protected abstract String executorName();
 
-    private void closePerformerContainer() {
-        this.mainFunction = null;
-        // - enforce re-creating this function by perform()
+    protected void closePerformerContainer() {
         this.performerContainer.freeResources();
     }
 

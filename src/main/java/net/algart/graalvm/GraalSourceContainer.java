@@ -34,6 +34,7 @@ import java.io.Reader;
 import java.lang.System.Logger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
@@ -85,6 +86,10 @@ public abstract class GraalSourceContainer {
         return setJS(GraalJSType.MODULE, script, name);
     }
 
+    public GraalSourceContainer setModuleJS(Path scriptFile, String name) {
+        return setJS(GraalJSType.MODULE, scriptFile, name);
+    }
+
     public GraalSourceContainer setJS(GraalJSType type, CharSequence script) {
         return setJS(type, script, null);
     }
@@ -92,6 +97,12 @@ public abstract class GraalSourceContainer {
     public GraalSourceContainer setJS(GraalJSType type, CharSequence script, String name) {
         Objects.requireNonNull(type, "Null type");
         type.configure(this, script, name);
+        return this;
+    }
+
+    public GraalSourceContainer setJS(GraalJSType type, Path scriptFile, String name) {
+        Objects.requireNonNull(type, "Null type");
+        type.configure(this, scriptFile, name);
         return this;
     }
 
@@ -261,12 +272,16 @@ public abstract class GraalSourceContainer {
 
         @Override
         boolean isOriginCorrect(Object origin) {
-            return origin instanceof File;
+            return origin instanceof File || origin instanceof Path;
         }
 
         @Override
         Source.Builder newBuilder(String language, Object origin) {
-            return Source.newBuilder(language, (File) origin).name(getName());
+            if (!isOriginCorrect(origin)) {
+                throw new ClassCastException("Illegal type of source origin (" + origin.getClass() + ")");
+            }
+            final File file = origin instanceof Path path ? path.toFile() : (File) origin;
+            return Source.newBuilder(language, file).name(getName());
         }
     }
 

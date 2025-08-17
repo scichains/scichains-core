@@ -66,11 +66,11 @@ public enum GraalJSType {
         return null;
     }
 
-    public void configure(GraalSourceContainer container, CharSequence script, String name) {
+    public void configure(GraalSourceContainer container, Object scriptOrigin, String name) {
         Objects.requireNonNull(container, "Null container");
-        Objects.requireNonNull(script, "Null script");
+        Objects.requireNonNull(scriptOrigin, "Null script origin");
         container.setLanguage(GraalSourceContainer.JAVASCRIPT_LANGUAGE);
-        container.setOrigin(script, name);
+        container.setOrigin(scriptOrigin, name);
         doConfigure(container);
     }
 

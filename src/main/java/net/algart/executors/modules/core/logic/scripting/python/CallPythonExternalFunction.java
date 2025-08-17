@@ -29,6 +29,11 @@ import net.algart.jep.additions.AtomicPyObject;
 
 public final class CallPythonExternalFunction extends AbstractCallPython {
     private static final String STANDARD_API_FILE_TO_IMPORT_FIELD = "_env_file_to_import";
+    private static final String EXTERNAL_EXECUTE_CODE = """
+            def _execute_external(params, inputs, outputs):
+                _external_module = params._env.import_file(params.%s)
+                return _external_module.%s(params, inputs, outputs)
+            """;
 
     private String pyFile = "";
     private String moduleName = "pyalgart_lib_demo_simple.simple_demo";
@@ -61,12 +66,7 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
     @Override
     protected String code() {
         if (!pyFile.isEmpty()) {
-            return """
-                    def _execute_external(params, inputs, outputs):
-                        _external_module = params._env.import_file(params.%s)
-                        return _external_module.%s(params, inputs, outputs)
-                    """.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
-
+            return EXTERNAL_EXECUTE_CODE.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
         } else {
             return JepPerformer.importCode(moduleName, getMainFunctionName());
         }

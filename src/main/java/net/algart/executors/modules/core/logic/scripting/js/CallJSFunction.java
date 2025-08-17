@@ -25,20 +25,12 @@
 package net.algart.executors.modules.core.logic.scripting.js;
 
 import net.algart.graalvm.GraalPerformer;
-import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.graalvm.GraalSourceContainer;
-import net.algart.executors.api.graalvm.GraalAPI;
-import net.algart.executors.api.graalvm.GraalSafety;
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.data.Port;
-import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import org.graalvm.polyglot.Value;
 
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
 public final class CallJSFunction extends AbstractCallJS {
+    public static final String OUTPUT_CODE = "code";
+
     private String code =
             """
                     function execute(params, inputs, outputs) {
@@ -46,7 +38,11 @@ public final class CallJSFunction extends AbstractCallJS {
                     }
                     """;
 
+    private final GraalSourceContainer javaScriptCode = GraalSourceContainer.newLiteral();
+    private volatile Value mainFunction = null;
+
     public CallJSFunction() {
+        addOutputScalar(OUTPUT_CODE);
     }
 
     public String getCode() {
@@ -61,6 +57,44 @@ public final class CallJSFunction extends AbstractCallJS {
     @Override
     protected String code() {
         return code;
+    }
+
+    @Override
+    protected void compileSource() {
+        final String mainFunctionName = getMainFunctionName();
+        final String code = GraalPerformer.addReturningJSFunction(code(), mainFunctionName);
+        javaScriptCode.setModuleJS(code, "main_code");
+        // - name "main_code" is not important: we will not share this performer (Graal context) with other
+        // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
+        final boolean changed = javaScriptCode.changed();
+        if (changed) {
+            logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
+            closePerformerContainer();
+        }
+        setOutputScalar(OUTPUT_CODE, code);
+    }
+
+    @Override
+    protected void executeSource(GraalPerformer performer ) {
+        if (mainFunction == null) {
+            // no sense to perform ECMA module if it was not changed: re-executing will have no effect
+            mainFunction = performer.perform(javaScriptCode);
+        }
+    }
+
+    @Override
+    protected void closePerformerContainer() {
+        this.mainFunction = null;
+        // - enforce re-creating this function by perform()
+        super.closePerformerContainer();
+    }
+
+    @Override
+    protected Value callFunction(Value graalParameters, Value graalInputs, Value graalOutputs) {
+        if (mainFunction == null) {
+            throw new IllegalStateException(getClass() + " is not initialized");
+        }
+        return mainFunction.execute(graalParameters, graalInputs, graalOutputs);
     }
 
     @Override
