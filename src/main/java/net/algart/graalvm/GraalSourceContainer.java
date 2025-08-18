@@ -74,8 +74,12 @@ public abstract class GraalSourceContainer {
         return sourceKind.creator.get();
     }
 
-    public static GraalSourceContainer newLiteral() {
+    public static GraalSourceContainer newLiteralContainer() {
         return newContainer(SourceKind.LITERAL);
+    }
+
+    public static GraalSourceContainer newFileContainer() {
+        return newContainer(SourceKind.FILE);
     }
 
     public GraalSourceContainer setCommonJS(CharSequence script) {

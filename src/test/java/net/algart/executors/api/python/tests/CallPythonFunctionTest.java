@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.tests;
+package net.algart.executors.api.python.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.python.core.CallPythonFunction;

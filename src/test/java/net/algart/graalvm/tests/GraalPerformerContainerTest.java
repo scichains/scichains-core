@@ -64,7 +64,7 @@ public class GraalPerformerContainerTest {
                         + "print('JS printing: ' + s);\n"
                         + "s.length + a+b";
         GraalPerformer performer = performerContainer.performer(id);
-        GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteral()
+        GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteralContainer()
                 .setJS(GraalJSType.COMMON, script, "test");
         Value emptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
         System.out.println("Empty object function: \"" + emptyObjectFunction

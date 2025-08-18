@@ -58,7 +58,7 @@ public class GraalAPI {
             [__SYS_createEmptyObjectImpl]
             """;
     private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
-            .newLiteral()
+            .newLiteralContainer()
             .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE_PURE, "__S_service_pure");
     private static final String STANDARD_API_JS_SERVICE_SOURCE = """
             function __SYS_createEmptyObjectImpl() {
@@ -71,7 +71,7 @@ public class GraalAPI {
             SNumbers.class.getCanonicalName(),
             SMat.class.getCanonicalName());
     private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER = GraalSourceContainer
-            .newLiteral()
+            .newLiteralContainer()
             .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE, "__S_service");
     // - note: creating a container is a very "light" operation, not leading to using any Graal code
 

@@ -153,7 +153,7 @@
     {
       "name": "mainFunctionName",
       "caption": "Main function name",
-      "description": "Function that will be called. It can be declared it the code above or imported from some other module.\nThis function must jave 3 arguments: 1st will contain a map of the parameters (listed below), 2nd will contain a map of all input ports, and 3rd will be a map where all output values should be stored.",
+      "description": "Function that will be called. This function can be declared it the code above or imported from some other module.\nThis function must jave 3 arguments: 1st will contain a map of the parameters (listed below), 2nd will contain a map of all input ports, and 3rd will be a map where all output values should be stored.",
       "value_type": "String",
       "edition_type": "value",
       "default": "execute",

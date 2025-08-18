@@ -50,7 +50,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
             .setConvertInputScalarToNumber(false)
             .setConvertInputNumbersToArray(false)
             .setConvertOutputIntegersToBriefForm(true);
-    private final GraalSourceContainer importCode = GraalSourceContainer.newLiteral();
+    private final GraalSourceContainer importCode = GraalSourceContainer.newLiteralContainer();
     private volatile Value mainFunction = null;
     private volatile Value createEmptyObjectFunction = null;
 

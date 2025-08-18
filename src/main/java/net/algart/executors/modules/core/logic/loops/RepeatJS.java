@@ -83,20 +83,20 @@ public final class RepeatJS extends Executor {
     private boolean closeSharedContext = true;
 
     private GraalPerformerContainer performerContainer = null;
-    private final GraalSourceContainer javaScriptInitializingOperator = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultA = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultB = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultC = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultD = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultI = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultJ = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultK = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultX1 = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultX2 = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptResultX3 = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptStatus = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptDoOperator = GraalSourceContainer.newLiteral();
-    private final GraalSourceContainer javaScriptWhileCondition = GraalSourceContainer.newLiteral();
+    private final GraalSourceContainer javaScriptInitializingOperator = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultA = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultB = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultC = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultD = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultI = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultJ = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultK = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultX1 = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultX2 = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptResultX3 = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptStatus = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptDoOperator = GraalSourceContainer.newLiteralContainer();
+    private final GraalSourceContainer javaScriptWhileCondition = GraalSourceContainer.newLiteralContainer();
     private boolean isFirstIteration = false;
     private boolean isLastIteration = false;
 

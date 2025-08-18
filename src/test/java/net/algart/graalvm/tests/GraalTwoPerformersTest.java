@@ -42,9 +42,9 @@ public class GraalTwoPerformersTest {
         performer2.performJS("print(typeof(a))");
         System.out.println();
 
-        GraalSourceContainer source1 = GraalSourceContainer.newLiteral();
+        GraalSourceContainer source1 = GraalSourceContainer.newLiteralContainer();
         source1.setModuleJS("function exec() { print(a, 'module1') }\nexec\n", "module");
-        GraalSourceContainer source2 = GraalSourceContainer.newLiteral();
+        GraalSourceContainer source2 = GraalSourceContainer.newLiteralContainer();
         source2.setModuleJS("function exec() { print('module2') }\nexec\n", "module");
         // - if we use here the same module name, it will work normally only under DIFFERENT performes
         final Value exec1 = performer1.perform(source1);

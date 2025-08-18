@@ -74,7 +74,7 @@ public abstract class AbstractCallJS extends Executor {
     public static final String OUTPUT_M5 = "m5";
 
     private String mainFunctionName = "execute";
-    private String workingDirectory = ".";
+    private String workingDirectory = "";
     private String a = "";
     private String b = "";
     private String c = "";
@@ -365,16 +365,22 @@ public abstract class AbstractCallJS extends Executor {
         closePerformerContainer();
     }
 
-    protected abstract String code();
+    protected abstract Value mainFunction();
 
     protected abstract void compileSource();
 
     protected abstract void executeSource(GraalPerformer performer);
 
-    protected abstract Value callFunction(
+    protected Value callFunction(
             Value graalParameters,
             Value graalInputs,
-            Value graalOutputs);
+            Value graalOutputs) {
+        Value mainFunction = mainFunction();
+        if (mainFunction == null) {
+            throw new IllegalStateException(getClass() + " is not properly initialized");
+        }
+        return mainFunction.execute(graalParameters, graalInputs, graalOutputs);
+    }
 
     protected abstract String executorName();
 

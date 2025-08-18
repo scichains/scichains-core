@@ -61,7 +61,7 @@ public class GraalContextImportTest {
 //                    .setJS()
                             .setWorkingDirectory(currentDirectory.toAbsolutePath());
             long t2 = System.nanoTime();
-            GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteral()
+            GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteralContainer()
                     .setModuleJS(src, "test");
 //                    .setJS(GraalJSType.COMMON, src, "test.mjs");
             // - second variant is also possible
@@ -106,7 +106,7 @@ public class GraalContextImportTest {
 
             System.out.println();
             System.out.println("Again, new source with same name:");
-            sourceContainer = GraalSourceContainer.newLiteral();
+            sourceContainer = GraalSourceContainer.newLiteralContainer();
             sourceContainer.setJS(GraalJSType.MODULE, src, "test");
             performer.perform(sourceContainer);
 

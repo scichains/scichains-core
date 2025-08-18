@@ -24,30 +24,28 @@
 
 package net.algart.executors.api.js.core;
 
+import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalSourceContainer;
 import org.graalvm.polyglot.Value;
 
-public final class CallJSFunction extends AbstractCallJS {
-    private String code =
-            """
-                    function execute(params, inputs, outputs) {
-                        return "Hello from JavaScript function!"
-                    }
-                    """;
+import java.nio.file.Path;
 
-    private final GraalSourceContainer jsCodeContainer = GraalSourceContainer.newLiteralContainer();
+public final class CallJSExternalFunction extends AbstractCallJS {
+    private final GraalSourceContainer jsFileContainer = GraalSourceContainer.newFileContainer();
     private volatile Value mainFunction = null;
 
-    public CallJSFunction() {
+    private String jsFile = "";
+
+    public CallJSExternalFunction() {
     }
 
-    public String getCode() {
-        return code;
+    public String getJsFile() {
+        return jsFile;
     }
 
-    public CallJSFunction setCode(String code) {
-        this.code = nonEmptyTrimmed(code);
+    public CallJSExternalFunction setJsFile(String jsFile) {
+        this.jsFile = nonEmptyTrimmed(jsFile);
         return this;
     }
 
@@ -58,23 +56,27 @@ public final class CallJSFunction extends AbstractCallJS {
 
     @Override
     protected void compileSource() {
-        final String mainFunctionName = getMainFunctionName();
-        final String code = GraalPerformer.addReturningJSFunction(this.code, mainFunctionName);
-        jsCodeContainer.setModuleJS(code, "main_code");
-        // - name "main_code" is not important: we will not share this performer (Graal context) with other
+        jsFileContainer.setModuleJS(translateJsFile(), "main_module");
+        // - name "main_module" is not important: we will not share this performer (Graal context) with other
         // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
-        final boolean changed = jsCodeContainer.changed();
+        final boolean changed = jsFileContainer.changed();
         if (changed) {
-            logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
+            logDebug(() -> "Changing file/settings \"" + jsFile + "\" detected: rebuilding performer");
             closePerformerContainer();
         }
     }
 
     @Override
     protected void executeSource(GraalPerformer performer ) {
+        final String mainFunctionName = getMainFunctionName();
         if (mainFunction == null) {
             // no sense to perform ECMA module if it was not changed: re-executing will have no effect
-            mainFunction = performer.perform(jsCodeContainer);
+            final Value module = performer.perform(jsFileContainer);
+            mainFunction = module.getMember(mainFunctionName);
+            if (mainFunction == null) {
+                throw new IllegalArgumentException("JS module \"" + jsFile +
+                        "\" does not export function \"" + mainFunctionName + "\"");
+            }
         }
     }
 
@@ -86,7 +88,21 @@ public final class CallJSFunction extends AbstractCallJS {
     }
 
     @Override
-    protected String executorName() {
-        return "JavaScript function";
+    protected Value callFunction(Value graalParameters, Value graalInputs, Value graalOutputs) {
+        if (mainFunction == null) {
+            throw new IllegalStateException(getClass() + " is not initialized");
+        }
+        return mainFunction.execute(graalParameters, graalInputs, graalOutputs);
     }
+
+    @Override
+    protected String executorName() {
+        return "JavaScript external function";
+    }
+
+    private Path translateJsFile() {
+        return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(jsFile, this);
+    }
+
+
 }

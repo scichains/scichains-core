@@ -160,7 +160,7 @@
     {
       "name": "mainFunctionName",
       "caption": "Main function name",
-      "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
+      "description": "The function to be called. This function can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
       "value_type": "String",
       "edition_type": "value",
       "default": "execute",
