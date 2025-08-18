@@ -63,7 +63,7 @@ public class ExampleGraalJS extends Executor {
                             "'  aa'");
             return value == null ?
                     result + "\n" +
-                            "Number of stored performers: " + GraalPerformerContainer.numberOfStoredPerformers() :
+                            "Number of stored performers: " + GraalPerformerContainer.numberOfSharedPerformers() :
                     value;
         }
     }

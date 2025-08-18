@@ -24,13 +24,12 @@
 
 package net.algart.executors.api.js.core;
 
+import net.algart.executors.api.Executor;
+import net.algart.executors.api.graalvm.GraalAPI;
+import net.algart.executors.api.graalvm.GraalSafety;
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.graalvm.GraalSourceContainer;
-import net.algart.executors.api.graalvm.GraalAPI;
-import net.algart.executors.api.graalvm.GraalSafety;
-import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
-import net.algart.executors.api.Executor;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;
@@ -625,11 +624,11 @@ public final class CommonJS extends Executor {
         logDebug(() -> String.format(Locale.US,
                 "JavaScript \"%s\" executed in %.5f ms:" +
                         " %.2f mcs compiling + %.2f mcs adding vars + %.2f mcs main script + " +
-                        "%.2f mcs additional outputs (%d stored actual script engines)",
+                        "%.2f mcs additional outputs (%d shared script performers)",
                 scriptToShortString(formula),
                 (t5 - t1) * 1e-6,
                 (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, (t5 - t4) * 1e-3,
-                JavaScriptContextContainer.numberOfStoredScriptEngines()));
+                GraalPerformerContainer.numberOfSharedPerformers()));
     }
 
     @Override

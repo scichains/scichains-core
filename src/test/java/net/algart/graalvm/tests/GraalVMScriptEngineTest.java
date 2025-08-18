@@ -90,7 +90,7 @@ public class GraalVMScriptEngineTest {
         System.out.println("Languages: " + e.getLanguages());
         System.out.println("Instruments: " + e.getInstruments());
 
-        System.out.println("Number of shared contexts: " + GraalPerformerContainer.numberOfStoredPerformers());
+        System.out.println("Number of shared contexts: " + GraalPerformerContainer.numberOfSharedPerformers());
         System.out.println();
         System.out.println("Again:");
         v = context.eval(source);
@@ -106,7 +106,7 @@ public class GraalVMScriptEngineTest {
         }
         executeResult = v.execute("Some string");
         System.out.println("Stored function result: " + executeResult);
-        System.out.println("Number of shared contexts (inside) " + GraalPerformerContainer.numberOfStoredPerformers());
+        System.out.println("Number of shared contexts (inside) " + GraalPerformerContainer.numberOfSharedPerformers());
         container.freeResources(false);
         // - helps for local container, but not for shared
     }
@@ -114,7 +114,7 @@ public class GraalVMScriptEngineTest {
     public static void main(String[] args) throws ScriptException, InterruptedException {
         test();
         gc();
-        System.out.println("Number of shared contexts (outside) " + GraalPerformerContainer.numberOfStoredPerformers());
+        System.out.println("Number of shared contexts (outside) " + GraalPerformerContainer.numberOfSharedPerformers());
         gc();
         gc();
         // - sometimes necessary to call several times to allow finalizer/cleaner to perform closing

@@ -229,8 +229,8 @@ public abstract class GraalPerformerContainer {
      */
     public abstract void freeResources(boolean freeSharedContexts);
 
-    public static int numberOfStoredPerformers() {
-        return ContextKey.numberOfStoredPerformers();
+    public static int numberOfSharedPerformers() {
+        return ContextKey.numberOfSharedPerformers();
     }
 
     abstract String typeName();
@@ -494,7 +494,7 @@ public abstract class GraalPerformerContainer {
             return Objects.hash(contextId);
         }
 
-        private static int numberOfStoredPerformers() {
+        private static int numberOfSharedPerformers() {
             synchronized (performers) {
                 return performers.size();
             }
