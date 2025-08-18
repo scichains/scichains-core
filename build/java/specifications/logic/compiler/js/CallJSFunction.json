@@ -1,0 +1,362 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.js",
+  "name": "Call JavaScript function",
+  "tags": [
+    "logic"
+  ],
+  "id": "358d8094-7fc7-484c-b836-a3f2763e0866",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.js.core.CallJSFunction"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "code",
+      "caption": "Main JavaScript code",
+      "description": "Source code of some JavaScript function(s), implemented in a form of ECMAScript module. This code can define its own functions or import some other modules.\nNote: while executing in a loop, this code is performed only once, before 1st execution. This module is compiled only inside this executor and is not shared with other executors.\nAlso note: JavaScript environment is created while the first execution and kept while all further executions until closing this chain. But it is automatically re-created if the source code or other settings were changed.\nAlso note: actual JavaScript code of the module is not exactly the code in this parameter; it is a result of concatenation of this code and the main function name, specified below. It is necessary to access to this function from the execution system. For example, default settings will lead to executing the following JavaScript:\n\nfunction execute(params, inputs, outputs) {\n    return \"Hello from JavaScript function!\"\n}",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "function execute(params, inputs, outputs) {\n    return \"Hello from JavaScript function!\"\n}\n"
+    },
+    {
+      "name": "mainFunctionName",
+      "caption": "Main function name",
+      "description": "Function that will be called. It can be declared it the code above or imported from some other module.\nThis function must jave 3 arguments: 1st will contain a map of the parameters (listed below), 2nd will contain a map of all input ports, and 3rd will be a map where all output values should be stored.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "execute",
+      "advanced": true
+    },
+    {
+      "caption": "Current working folder",
+      "name": "workingDirectory",
+      "description": "Folder, which will be current working directory used by JavaScript to resolve relative paths. In particular, it is used to find imported ECMAScript modules.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"js\". They will be resolved relative the current folder, containing the executed chain (\".\" or \"\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": "."
+    },
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "e",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "description": "Parameters \"a\"-\"f\" will become string fields of \"params\" object.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "description": "Parameters \"p\"-\"u\" will become number fields of \"params\" object.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "convertInputScalarToNumber",
+      "caption": "Convert input scalars to double",
+      "description": "If set, the input scalars \"a\", \"b\", ... are automatically converted to double value, if it is possible (if they contain correctly written decimal real number).\nIf cleared, they are stored in JavaScript variables \"a\", \"b\", ... as string values.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "convertInputNumbersToArray",
+      "caption": "Convert input numbers to Java arrays",
+      "description": "If set, the input numbers \"x1\", \"x2\", ... are automatically converted to Java arrays (SNumbers.getArray() method).\nIf cleared, they are stored in JavaScript variables \"x1\", \"x2\", ... as original Java objects SNumbers. It allows access to all methods of SNumbers class, in particular, allows to know the number of columns (SNumbers.getBlockLength() method).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "convertInputArraysToDouble",
+      "caption": "Convert input arrays to double[]",
+      "description": "If set and if the previous flag \"Convert input numbers to Java arrays\" is also set, the input arrays \"x1\", \"x2\", ... are automatically converted to double[] array (SNumbers.toDoubleArray() method).\nIf cleared, they are stored in JavaScript variables \"x1\", \"x2\", ... as Java arrays without conversions (SNumbers.getArray() method).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "convertOutputIntegersToBriefForm",
+      "caption": "Convert output integer scalars to brief form",
+      "description": "If set, then every of output scalars \"a\", \"b\", ..., containing floating-point value, which is ACTUALLY integer (like 2.0), will be stored in a form of integer number, i.e. \"2\" instead of \"2.0\". It can be important for further passing a value to other functions, expecting to receive an integer value as an input.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "safety",
+      "caption": "Safety level",
+      "description": "Note: in \"Pure JavaScript\" your script will be able to process only scalars: strings and numbers. You will not be able to access the elements of arrays \"x1\", \"x2\", ... or the methods of matrices \"m1\", \"m2\", ..., and params._env will also be unavailable.\n\nWARNING! If you use \"All access\" mode (default setting), please DO NOT PROVIDE the end user of your solution an ability to edit any JavaScript code, executed by this function, including formulas for outputs! In this mode, this function will execute JavaScript WITHOUT ANY SECURITY RESTRICTIONS and allow it accessing to the entire computer, in particular, to the file system.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "PURE",
+          "caption": "Pure JavaScript"
+        },
+        {
+          "value": "SAFE",
+          "caption": "JavaScript + some safe Java classes"
+        },
+        {
+          "value": "ALL_ACCESS",
+          "caption": "All access (no restrictions)"
+        }
+      ],
+      "default": "ALL_ACCESS"
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output"
+        },
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        },
+        {
+          "value": "e"
+        },
+        {
+          "value": "f"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

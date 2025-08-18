@@ -1,0 +1,345 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.python",
+  "name": "Call Python external function",
+  "tags": [
+    "logic"
+  ],
+  "id": "f7ba3331-b902-4de3-b3c4-04560aa59124",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.python.core.CallPythonExternalFunction"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "code",
+      "caption": "code",
+      "hint": "Actually executed Python code."
+    },
+    {
+      "value_type": "scalar",
+      "name": "supplied_python_roots",
+      "caption": "Supplied Python roots",
+      "hint": "List of Python root folders, supplied by this application and added to Python search paths."
+    }
+  ],
+  "controls": [
+    {
+      "caption": "External module source file",
+      "name": "pyFile",
+      "description": "A .py-file containing the source code for the Python module. This path can be absolute or relative; in the latter case, it is relative to the working directory specified in \"Current working folder\".\nIf this parameter is empty, the following \"External module name\" is used instead.",
+      "value_type": "String",
+      "edition_type": "file",
+      "default": ""
+    },
+    {
+      "name": "moduleName",
+      "caption": "External module name",
+      "description": "Full name of some Python module, from which the system will import a function with the name, specified in the parameter \"Main function name\". You can specify here any module, supplied with the system. (You will see the list of folders with available Python extensions in the output \"Supplied Python roots\".)\nNote: Python runtime environment is created while the first execution and kept while all further executions until closing this chain. So we strictly recommend to reload all the chain after changing this name: it allows to reset environment and remove all previous declarations.\n\nWARNING: the module above SHOULD NOT change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "pyalgart_lib_demo_simple.simple_demo"
+    },
+    {
+      "name": "mainFunctionName",
+      "caption": "Main function name",
+      "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "execute"
+    },
+    {
+      "name": "interpretationMode",
+      "caption": "Python interpretation mode",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "SHARED",
+          "caption": "Shared"
+        },
+        {
+          "value": "GLOBAL",
+          "caption": "JVM-global (safe)"
+        },
+        {
+          "value": "SUB_INTERPRETER",
+          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
+        }
+      ],
+      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.",
+      "default": "GLOBAL"
+    },
+    {
+      "caption": "Current working folder",
+      "name": "workingDirectory",
+      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths..\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" or \"\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": "."
+    },
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "e",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "description": "Parameters \"a\"-\"f\" will become string fields of \"params\" object.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "description": "Parameters \"p\"-\"u\" will become number fields of \"params\" object.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output"
+        },
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        },
+        {
+          "value": "e"
+        },
+        {
+          "value": "f"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

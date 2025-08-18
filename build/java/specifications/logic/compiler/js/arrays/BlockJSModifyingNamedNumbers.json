@@ -1,0 +1,196 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.js.arrays",
+  "name": "Formula, modifying 1 multi-column array with named columns",
+  "tags": [
+    "logic"
+  ],
+  "id": "ed1b184f-b08e-45b5-92f3-135eb986cd4a",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.js.core.arrays.BlockJSModifyingNamedNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "input",
+      "hint": "Multi-column source array, processed by the main JavaScript row-by-row."
+    },
+    {
+      "value_type": "numbers",
+      "name": "tags_1",
+      "hint": "[Optional] Additional array with the same number of rows (block): see \"Name of tag #1\" parameter.\nThis array is processed row-by-row (read and modified) together with the main source array.\nIt can contain some additional data, for example, some integer tag, describing this block of source data.\nUsually this array is single-column, but multi-column array is also possible."
+    },
+    {
+      "value_type": "numbers",
+      "name": "tags_2",
+      "hint": "[Optional] Additional array with the same number of rows (block): see \"Name of tag #2\" parameter.\nThis array is processed row-by-row (read and modified) together with the main source array.\nIt can contain some additional data, for example, some integer tag, describing this block of source data.\nUsually this array is single-column, but multi-column array is also possible."
+    },
+    {
+      "value_type": "scalar",
+      "caption": "column names",
+      "name": "column_names",
+      "hint": "Names of columns of the source array, separated by \\n (name of every column in a separate line).\nUsed only if \"Use column names\" flag is set."
+    },
+    {
+      "value_type": "scalar",
+      "name": "o1",
+      "hint": "[Optional] 1st JSON object. Note: this JSON be used also via alternate name \"o\"."
+    },
+    {
+      "value_type": "scalar",
+      "name": "o2",
+      "hint": "[Optional] 2nd JSON object."
+    },
+    {
+      "value_type": "scalar",
+      "name": "o3",
+      "hint": "[Optional] 3rd JSON object."
+    },
+    {
+      "value_type": "numbers",
+      "name": "a",
+      "hint": "[Optional] Some numbers array, that can be used in JavaScript."
+    },
+    {
+      "value_type": "numbers",
+      "name": "b",
+      "hint": "[Optional] Some numbers array, that can be used in JavaScript."
+    },
+    {
+      "value_type": "numbers",
+      "name": "c",
+      "hint": "[Optional] Some numbers array, that can be used in JavaScript."
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "output",
+      "hint": "Copy of the source array, probably modified by the main JavaScript."
+    },
+    {
+      "value_type": "numbers",
+      "name": "tags_1",
+      "hint": "Copy of the array \"tags_1\" (when it is specified), maybe modified by the main JavaScript."
+    },
+    {
+      "value_type": "numbers",
+      "name": "tags_2",
+      "hint": "Copy of the array \"tags_2\" (when it is specified), maybe modified by the main JavaScript."
+    }
+  ],
+  "controls": [
+    {
+      "name": "initializingOperator",
+      "caption": "Initializing JavaScript code",
+      "description": "While executing in a loop, this operator is performed only once, before 1st execution. If there is no loop, this operator is executed always before processing the array.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "name": "mainOperator",
+      "caption": "Main JavaScript code",
+      "description": "This JavaScript code is evaluated for all blocks (rows) of the array. In this and in the initializing code, \"p\", \"q\", etc. are the values of the parameters below; \"a\", \"b\", \"c\" are the input arrays, \"o1\" (=\"o\"), \"o2\", \"o3\" are input JavaScript objects (or null if they are not specified). In this code (but not in the inialization) the variable \"x\" will be a short double[] array, containing the currently processed block. See also \"Use column names\", \"Name of tag #1\" and \"Name of tag #2\".",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "x0 = x1 * p"
+    },
+    {
+      "caption": "Use column names",
+      "name": "useColumnNames",
+      "description": "If set, you will be able to access (read and write) the elements of every block (row) via \"column names\". For example, if the first name is \"area\", then \"area\" variable will be a synonym for \"x[0]\". If \"column names\" are not specified or if their number is too little, missing names will be created automatically as \"x0\", \"x1\", ...\nNote: this mode can slow down processing large arrays (millions of elements). You may clear this flag for optimization, but then you will have to access elements by indexes: \"x[0]\", \"x[1]\", ...\nNote: if this flag is set, you cannot MODIFY elements via \"x[i]=...\" operator, but still can READ their values from \"x[i]\".",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "caption": "Use \"k\" index variable",
+      "name": "useK",
+      "description": "If set, you will be able to use additional JavaScript variable \"k\", containing the index of current block (row). Note: it slows down processing large arrays (millions of elements).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "tags1Name",
+      "caption": "Name of tag #1 (xxx)",
+      "description": "If the \"tags_1\" source array is specified, then, for every processed block (row) #k of the source array, you will be able to access (read and write) the 1st element of the corresponding block #k in \"tags_1\" array via the given name \"xxx\" (by default, via JavaScript variable \"tag\"). Moreover, \"tags1\" variable will contain a short double[] array with all elements of this block; it can be useful if \"tags_1\" source array contain >1 column. Note: you can READ its 1st element as \"tags1[0]\", but cannot MODIFY it in such a way —  you should use this name \"xxx\".",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "tag"
+    },
+    {
+      "name": "tags2Name",
+      "caption": "Name of tag #2 (xxx)",
+      "description": "See comments to the previous parameter. Default name of JavaScript varibale here is \"kind\".",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "kind"
+    },
+    {
+      "name": "simpleAccessToJson1",
+      "caption": "Simple access to o1 fields (\"with (o1)\")",
+      "description": "If set, all values of  \"o1\" JSON objects are copied to local variables with the corresponding names before start of the initializing code. For example, if \"o1\" contains a value {\"PI\":3.14159|, you will be able to use PI constant in your code instead of 3.14159 value. It works like \"with(o1)\" JavaScript operator, but more quickly.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "simpleAccessToJson2",
+      "caption": "Simple access to o2 fields (\"with (o2)\")",
+      "description": "An analog of previous parameter for \"o2\" JSON object.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "simpleAccessToJson3",
+      "caption": "Simple access to o3 fields (\"with (o3)\")",
+      "description": "An analog of previous parameter for \"o3\" JSON object.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    }
+  ]
+}

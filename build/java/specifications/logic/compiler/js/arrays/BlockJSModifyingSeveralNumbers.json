@@ -1,0 +1,118 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.js.arrays",
+  "name": "Formula, modifying several multi-column arrays",
+  "tags": [
+    "logic"
+  ],
+  "id": "4953b383-9c3f-43a6-8e83-631be10cd58c",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.js.core.arrays.BlockJSModifyingSeveralNumbers"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "a"
+    },
+    {
+      "value_type": "numbers",
+      "name": "b"
+    },
+    {
+      "value_type": "numbers",
+      "name": "c"
+    },
+    {
+      "value_type": "numbers",
+      "name": "d"
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "numbers",
+      "name": "a"
+    },
+    {
+      "value_type": "numbers",
+      "name": "b"
+    },
+    {
+      "value_type": "numbers",
+      "name": "c"
+    },
+    {
+      "value_type": "numbers",
+      "name": "d"
+    }
+  ],
+  "controls": [
+    {
+      "name": "javaScriptCode",
+      "caption": "JavaScript code",
+      "description": "This JavaScript code is evaluated for all blocks of all arrays",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "a[0] = a[0] * p + k"
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        }
+      ],
+      "default": "a"
+    }
+  ]
+}

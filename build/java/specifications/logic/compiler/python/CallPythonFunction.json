@@ -1,0 +1,361 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.python",
+  "name": "Call Python function",
+  "tags": [
+    "logic"
+  ],
+  "id": "4a2fa4ed-a415-4f0a-90aa-d092a6a362ee",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.python.core.CallPythonFunction"
+  },
+  "in_ports": [
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x4",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x5",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "supplied_python_roots",
+      "caption": "Supplied Python roots",
+      "hint": "List of Python root folders, supplied by this application and added to Python search paths."
+    }
+  ],
+  "controls": [
+    {
+      "name": "code",
+      "caption": "Main Python code",
+      "description": "This code allows you to import modules, define functions etc.\nNote: while executing in a loop, this code is performed only once, before 1st execution.\nAlso note: the Python runtime environment is created on the first execution and persists across all subsequent executions until the chain is closed. Therefore, we recommend to reload the chain after changing this code to reset the environment and remove all previous declarations.\nNote: you can use Java classes from Python, see ninia/jep documentation.\nYou also may сall:\n    mod = pya.import_file(\"xxxx.py\")\n(\"pya\" is an alias for \"pyalgart.api\" standard package): this allows you to import a Python module from a file (e.g. xxxx.py) located in the current chain folder or at an absolute path. After that, you can call its functions:\n    mod.my_function()\n\nWARNING: the code above should not change any global Python variables, like sys.path, because such changes will affect to ALL USERS AND CHAINS until full reboot of the system.\n\nAlso: please DO NOT PROVIDE the end user of your solution an ability to edit this code or a part of this code! It is executed almost WITHOUT ANY SECURITY RESTRICTIONS and has access to all computer, in particular, to the file system.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "edition_rows": 9,
+      "default": "# mod = pya.import_file(\"my_module.py\")\n# - import .py-file from the chain directory\n\ndef execute(params, inputs, outputs):\n    # outputs.x1 = inputs.x1\n    # outputs.m1 = inputs.m1 # - copy input to output\n    return \"Hello from Python function!\"\n"
+    },
+    {
+      "name": "mainFunctionName",
+      "caption": "Main function name",
+      "description": "The function to be called. It can be declared it the code above or imported from another module. The function must have 3 arguments  \"params\", \"inputs\" and \"outputs\": instances of the classes \"Parameters\", \"Inputs\" and \"Outputs\" from the standard SciChains Python API.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "execute",
+      "advanced": true
+    },
+    {
+      "name": "interpretationMode",
+      "caption": "Python interpretation mode",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "SHARED",
+          "caption": "Shared"
+        },
+        {
+          "value": "GLOBAL",
+          "caption": "JVM-global (safe)"
+        },
+        {
+          "value": "SUB_INTERPRETER",
+          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
+        }
+      ],
+      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.\n\n\"Strictly isolated\" mode uses Python sub-interpreters to ensure that any changes to Python global structures such as sys.path. will not affect other Python executors.\nWARNING: this mode is incompatible with many native libraries such as \"numpy\" and IS VERY DANGEROUS — it may crash the entire system. Please AVOID THIS MODE unless you are an expert.",
+      "default": "GLOBAL"
+    },
+    {
+      "caption": "Current working folder",
+      "name": "workingDirectory",
+      "description": "Folder, which will be current working directory used by pya.import_file() function to resolve relative paths.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"lib\". They will be resolved relative the current folder, containing the executed chain (\".\" or or \"\" means this folder itself).\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_file.dat, %TEMP%/my_file.dat or (in Windows) %TEMP%\\my_file.dat.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "value_type": "String",
+      "edition_type": "folder",
+      "default": "."
+    },
+    {
+      "name": "parametersClassName",
+      "caption": "Class name for argument \"params\"",
+      "description": "If empty (not specified), the standard class \"pyalgart.api.Parameters\" is used.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "inputsClassName",
+      "caption": "Class name for argument \"inputs\"",
+      "description": "If empty (not specified), the standard class \"pyalgart.api.Inputs\" is used.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "outputsClassName",
+      "caption": "Class name for argument \"outputs\"",
+      "description": "If empty (not specified), the standard class \"pyalgart.api.Outputs\" is used.\nArguments \"params\", \"inputs\" and \"outputs\" of the main function should be instances of some Python classes, which names (available in current scope) are specified by the last 3 parameters.\nYou may specify them and use any classes for arguments of the main function, like simple empty classes, as declared in the standard \"SInOut\" module. Standard classes are imported automatically. If you will specify non-standard names of these 3 classes, you must import your classes manually or declare them in your  main code, so that they will be available in Python under the specified names.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "a",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "b",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "c",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "d",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "e",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "f",
+      "description": "Parameters \"a\"-\"f\" will become string fields of \"params\" object.",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "p",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "q",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "r",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "s",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "t",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "u",
+      "description": "Parameters \"p\"-\"u\" will become number fields of \"params\" object.",
+      "value_type": "double",
+      "edition_type": "value",
+      "default": 0.0
+    },
+    {
+      "name": "visibleResult",
+      "caption": "Visible result",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "output"
+        },
+        {
+          "value": "a"
+        },
+        {
+          "value": "b"
+        },
+        {
+          "value": "c"
+        },
+        {
+          "value": "d"
+        },
+        {
+          "value": "e"
+        },
+        {
+          "value": "f"
+        },
+        {
+          "value": "x1"
+        },
+        {
+          "value": "x2"
+        },
+        {
+          "value": "x3"
+        },
+        {
+          "value": "x4"
+        },
+        {
+          "value": "x5"
+        },
+        {
+          "value": "m1"
+        },
+        {
+          "value": "m2"
+        },
+        {
+          "value": "m3"
+        },
+        {
+          "value": "m4"
+        },
+        {
+          "value": "m5"
+        }
+      ],
+      "default": "output"
+    }
+  ]
+}

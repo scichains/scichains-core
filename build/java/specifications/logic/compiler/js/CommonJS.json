@@ -1,0 +1,473 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "logic.compiler.js",
+  "name": "Common JavaScript",
+  "tags": [
+    "logic"
+  ],
+  "id": "54d4a3bd-d7ab-453a-bc39-08c83dc8f3f4",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.api.js.core.CommonJS"
+  },
+  "in_ports": [
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "e",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1",
+      "hint": "Note: this array can be used also via alternate name \"x\""
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1",
+      "hint": "Note: this matrix can be used also via alternate name \"m\""
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "out_ports": [
+    {
+      "value_type": "scalar",
+      "name": "output"
+    },
+    {
+      "value_type": "scalar",
+      "name": "a"
+    },
+    {
+      "value_type": "scalar",
+      "name": "b"
+    },
+    {
+      "value_type": "scalar",
+      "name": "c"
+    },
+    {
+      "value_type": "scalar",
+      "name": "d"
+    },
+    {
+      "value_type": "scalar",
+      "name": "e"
+    },
+    {
+      "value_type": "scalar",
+      "name": "f",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "g",
+      "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "h",
+      "advanced": true
+    },
+    {
+      "value_type": "numbers",
+      "name": "x1"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x2"
+    },
+    {
+      "value_type": "numbers",
+      "name": "x3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m1"
+    },
+    {
+      "value_type": "mat",
+      "name": "m2"
+    },
+    {
+      "value_type": "mat",
+      "name": "m3",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m4",
+      "advanced": true
+    },
+    {
+      "value_type": "mat",
+      "name": "m5",
+      "advanced": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "initializingOperator",
+      "caption": "Initializing operator(s) (JavaScript)",
+      "description": "While executing in a loop, this operator is performed only once, before 1st execution",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": ""
+    },
+    {
+      "name": "formula",
+      "caption": "Main JavaScript code",
+      "description": "Note: this code, as well as all JavaScript code in this function, is executed as a usual script, not as ECMAScript modules.",
+      "value_type": "String",
+      "edition_type": "value",
+      "multiline": true,
+      "default": "a + b"
+    },
+    {
+      "name": "resultA",
+      "caption": "Formula for output scalar \"a\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultB",
+      "caption": "Formula for output scalar \"b\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultC",
+      "caption": "Formula for output scalar \"c\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultD",
+      "caption": "Formula for output scalar \"d\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultE",
+      "caption": "Formula for output scalar \"e\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultF",
+      "caption": "Formula for output scalar \"f\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultG",
+      "caption": "Formula for output scalar \"g\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultH",
+      "caption": "Formula for output scalar \"h\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultX1",
+      "caption": "Formula for output array \"x1\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultX2",
+      "caption": "Formula for output array \"x2\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultX3",
+      "caption": "Formula for output array \"x3\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultM1",
+      "caption": "Formula for output matrix \"m1\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultM2",
+      "caption": "Formula for output matrix \"m2\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "name": "resultM3",
+      "caption": "Formula for output matrix \"m3\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultM4",
+      "caption": "Formula for output matrix \"m4\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "name": "resultM5",
+      "caption": "Formula for output matrix \"m5\" (JavaScript)",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "",
+      "advanced": true
+    },
+    {
+      "caption": "a (default value)",
+      "name": "defaultA",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "b (default value)",
+      "name": "defaultB",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "c (default value)",
+      "name": "defaultC",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0"
+    },
+    {
+      "caption": "d (default value)",
+      "name": "defaultD",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "caption": "e (default value)",
+      "name": "defaultE",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "caption": "f (default value)",
+      "name": "defaultF",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": "0",
+      "advanced": true
+    },
+    {
+      "caption": "Block length of output array \"x1\"",
+      "name": "resultX1BlockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Block length of output array \"x2\"",
+      "name": "resultX2BlockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1
+    },
+    {
+      "caption": "Block length of output array \"x3\"",
+      "name": "resultX3BlockLength",
+      "value_type": "int",
+      "edition_type": "value",
+      "advanced": true,
+      "default": 1
+    },
+    {
+      "caption": "Callable executor #1 ID",
+      "name": "callableExecutorId1",
+      "description": "If non-empty, this script will be able to use an executor \"exec1\" (instance of Executor Java class), specified in the system by this ID.\nNote: this executor can be used also via alternate name \"exec\".",
+      "value_type": "String",
+      "edition_type": "value",
+      "default": ""
+    },
+    {
+      "caption": "Callable executor #2 ID",
+      "name": "callableExecutorId2",
+      "description": "If non-empty, this script will be able to use an executor \"exec2\" (instance of Executor Java class), specified in the system by this ID.",
+      "value_type": "String",
+      "edition_type": "value",
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "caption": "Callable executor #3 ID",
+      "name": "callableExecutorId3",
+      "description": "If non-empty, this script will be able to use an executor \"exec3\" (instance of Executor Java class), specified in the system by this ID.\n\nAs an alternative way, you can create any executor by its ID dynamically by the call\nexecutorFactory.get(\"....\")\nIn this case, we recommend to close this executor after usage, if it uses some native code. Executors \"exec1\" (\"exec\"), \"exec2\" and \"exec3\" are closed automatically.",
+      "value_type": "String",
+      "edition_type": "value",
+      "advanced": true,
+      "default": ""
+    },
+    {
+      "name": "callableExecutorOutputsNecessaryAlways",
+      "caption": "Executors' outputs are calculated always",
+      "description": "If the flag is cleared, callable executors can work faster in some cases: they will calculate only really necessary outputs. But in this case you MUST specify the necessary outputs (usually in initializing section) by calls like\nexec.addOutputScalar(\"output\")\nexec.requestOutput(\"output\")",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "convertInputScalarToNumber",
+      "caption": "Convert input scalars to double",
+      "description": "If set, the input scalars \"a\", \"b\", ... are automatically converted to double value, if it is possible (if they contain correctly written decimal real number).\nIf cleared, they are stored in JavaScript variables \"a\", \"b\", ... as string values.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "convertInputNumbersToArray",
+      "caption": "Convert input numbers to Java arrays",
+      "description": "If set, the input numbers \"x1\", \"x2\", ... are automatically converted to Java arrays (SNumbers.getArray() method).\nIf cleared, they are stored in JavaScript variables \"x1\", \"x2\", ... as original Java objects SNumbers. It allows access to all methods of SNumbers class, in particular, allows to know the number of columns (SNumbers.getBlockLength() method).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "convertInputArraysToDouble",
+      "caption": "Convert input arrays to double[]",
+      "description": "If set and if the previous flag \"Convert input numbers to Java arrays\" is also set, the input arrays \"x1\", \"x2\", ... are automatically converted to double[] array (SNumbers.toDoubleArray() method).\nIf cleared, they are stored in JavaScript variables \"x1\", \"x2\", ... as Java arrays without conversions (SNumbers.getArray() method).",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
+      "name": "convertOutputIntegersToBriefForm",
+      "caption": "Convert output integer scalars to brief form",
+      "description": "If set, then every of output scalars \"a\", \"b\", ..., containing floating-point value, which is ACTUALLY integer (like 2.0), will be stored in a form of integer number, i.e. \"2\" instead of \"2.0\". It can be important for further passing a value to other functions, expecting to receive an integer value as an input.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true,
+      "advanced": true
+    },
+    {
+      "name": "safety",
+      "caption": "Safety level",
+      "description": "Note: if you set the following flag \"Share namespace\", please be sure that all JavaScript executors inside the chain, having this parameter, use the same safety level. If you change this level for one of executors, you MUST reload all the chain, in another case the results of execution will be unpredictable.\n\nWARNING! If you choose \"All access\" mode, please DO NOT PROVIDE the end user of your solution an ability to edit any JavaScript code, executed by this function, including formulas for outputs! In this mode, this function will execute JavaScript WITHOUT ANY SECURITY RESTRICTIONS and allow it accessing to all computer, in particular, to the file system.",
+      "value_type": "String",
+      "edition_type": "enum",
+      "items": [
+        {
+          "value": "PURE",
+          "caption": "Pure JavaScript"
+        },
+        {
+          "value": "SAFE",
+          "caption": "JavaScript + some safe Java classes"
+        },
+        {
+          "value": "ALL_ACCESS",
+          "caption": "All access (no restrictions)"
+        }
+      ],
+      "default": "SAFE",
+      "advanced": true
+    },
+    {
+      "name": "shareNamespace",
+      "caption": "Share namespace",
+      "description": "If set, all variables, defined/used in JavaScript, will be \"global\", i.e. shared with other executors in the current chain, where this flag is set also. But the namespace is never shared with OTHER chains.\n\nWARNING! Sharing namespace can be DANGEROUS if this chain is executed in multithreading mode, i.e. several executors can be performed simultaneously. Thus, if you want to set this flag, you must:\nA) either be sure that multithreading is disabled for this chain,\nB) or provide a chain logic (system of dependencies between executors) when this executor cannot be performed at the same time with any other JavaScript executor, which also shares its namespace.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    },
+    {
+      "name": "closeSharedContext",
+      "caption": "Auto-close shared context",
+      "description": "If set, this executor will automatically close JavaScript context (namespace) when it is closed itself (usually while closing the chain), EVEN it is shared with other executors (previous flag \"Share namespace\" is set). Usually is it a normal behaviour.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "advanced": true,
+      "default": true
+    }
+  ]
+}
