@@ -41,6 +41,7 @@ public class GraalSourceFileTest {
     public static void main(String[] args) throws ScriptException {
         final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
+        // - the last line in mjs should return the necessary function!
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
 
         for (int test = 1; test <= 10; test++) {
@@ -58,22 +59,19 @@ public class GraalSourceFileTest {
             long t4 = System.nanoTime();
             final Source source = sourceContainer.source();
             long t5 = System.nanoTime();
-            Value module = performer.perform(source);
+            Value func = performer.perform(source);
             long t6 = System.nanoTime();
-            Value func = module.getMember("simpleTest");
-            long t7 = System.nanoTime();
             Value result = func.execute();
-            long t8 = System.nanoTime();
+            long t7 = System.nanoTime();
 
             System.out.printf(Locale.US, "Creating context container: %.3f mcs%n" +
                             "Creating source container: %.3f mcs%n" +
                             "Getting performer: %.3f mcs%n" +
                             "Getting source: %.3f mcs%n" +
                             "Performing code: %.3f mcs%n" +
-                            "Getting function: %.3f mcs%n" +
                             "Calling function: %.3f mcs%n%n",
                     (t2 - t1) * 1e-3, (t3 - t2) * 1e-3, (t4 - t3) * 1e-3, (t5 - t4) * 1e-3,
-                    (t6 - t5) * 1e-3, (t7 - t6) * 1e-3, (t8 - t7) * 1e-3);
+                    (t6 - t5) * 1e-3, (t7 - t6) * 1e-3);
 
             System.out.println("execute result: " + result);
             System.out.println("Function: " + func);

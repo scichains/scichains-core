@@ -29,6 +29,8 @@ import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalSourceContainer;
 import org.graalvm.polyglot.Value;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class CallJSExternalFunction extends AbstractCallJS {
@@ -104,5 +106,21 @@ public final class CallJSExternalFunction extends AbstractCallJS {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(jsFile, this);
     }
 
+    //TODO!!
+    public static String toJsModulePath(Path path) throws IOException {
+        if (!Files.exists(path)) {
+            throw new IOException("Module file does not exist: " + path);
+        }
+        if (!Files.isRegularFile(path)) {
+            throw new IOException("Not a regular file: " + path);
+        }
 
+        String uri = path.toAbsolutePath().normalize().toUri().toString();
+        // we have "file:///C:/dir/module.mjs" or "file:///home/user/module.mjs"
+
+        uri = uri.replace("\\", "\\\\")
+                .replace("'", "\\'");
+
+        return uri;
+    }
 }

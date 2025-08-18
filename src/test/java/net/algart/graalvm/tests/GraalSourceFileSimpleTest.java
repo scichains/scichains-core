@@ -38,7 +38,9 @@ public class GraalSourceFileSimpleTest {
     public static void main(String[] args) throws ScriptException, IOException {
         final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
+        // - the last line in mjs should return the necessary function!
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
+        System.out.println("Loading " + modulePath.toAbsolutePath().normalize().toUri());
 
         Source.Builder builder = Source.newBuilder("js", modulePath.toFile());
         builder.mimeType("application/javascript+module");
@@ -46,9 +48,7 @@ public class GraalSourceFileSimpleTest {
         try (Context context = Context.newBuilder("js")
                 .allowAllAccess(true)
                 .build()) {
-            Value module = context.eval(source);
-            System.out.println("Member: " + module.hasMember("simpleTest"));
-            Value func = module.getMember("simpleTest");
+            Value func = context.eval(source);
             Value result = func.execute();
             System.out.println("execute result: " + result);
             System.out.println("Function: " + func);
