@@ -22,14 +22,16 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.multichains;
+package net.algart.executors.api.multichains.core;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.chains.ChainSpecification;
+import net.algart.executors.api.multichains.MultiChain;
+import net.algart.executors.api.multichains.MultiChainSettingsBuilder;
 import net.algart.executors.api.settings.SettingsBuilder;
-import net.algart.executors.api.settings.CombineChainSettings;
+import net.algart.executors.api.settings.core.CombineChainSettings;
 import net.algart.json.Jsons;
 
 import java.util.Objects;
@@ -45,7 +47,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
             throw new IllegalStateException("Invalid usage of " + this
                     + ": settings object is not MultiChainSettingsBuilder");
         }
-        return multiChainSettingsBuilder.multiChain;
+        return multiChainSettingsBuilder.multiChain();
     }
 
     public void selectChainVariant(String variant) {
@@ -67,7 +69,7 @@ public class CombineMultiChainSettings extends CombineChainSettings {
             throw new IllegalArgumentException("Invalid usage of " + this
                     + ": settings object is not MultiChainSettingsBuilder");
         }
-        final MultiChain multiChain = multiChainSettingsBuilder.multiChain;
+        @SuppressWarnings("resource") final MultiChain multiChain = multiChainSettingsBuilder.multiChain();
         final String chainId = settingsJson.getString(MultiChain.SELECTED_CHAIN_ID, null);
         if (chainId == null) {
             // - selection by name is used, no sense to add anything

@@ -26,8 +26,8 @@ package net.algart.executors.api.demo;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.ChainExecutor;
-import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.chains.core.ChainExecutor;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.json.Jsons;

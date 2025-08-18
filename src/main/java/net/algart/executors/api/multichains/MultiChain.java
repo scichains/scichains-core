@@ -28,7 +28,12 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
+import net.algart.executors.api.chains.core.InterpretSubChain;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.multichains.core.CombineMultiChainSettings;
+import net.algart.executors.api.multichains.core.MultiChainExecutor;
+import net.algart.executors.api.multichains.core.UseMultiChainSettings;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.*;
@@ -197,7 +202,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         return defaultChainIdOrName;
     }
 
-    SettingsBuilder multiChainOnlyCommonSettingsBuilder() {
+    public SettingsBuilder multiChainOnlyCommonSettingsBuilder() {
         return multiChainOnlyCommonSettingsBuilder;
     }
 
@@ -440,7 +445,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         // otherwise, the user will not be able to understand, which parameter he must use to select the variant
     }
 
-    static String setSettings(Chain selectedChain, JsonObject selectedChainSettings) {
+    public static String setSettings(Chain selectedChain, JsonObject selectedChainSettings) {
         if (selectedChainSettings == null) {
             return null;
         }

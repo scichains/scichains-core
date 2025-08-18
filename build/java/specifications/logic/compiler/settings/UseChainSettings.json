@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.settings.UseChainSettings"
+    "class": "net.algart.executors.api.settings.core.UseChainSettings"
   },
   "in_ports": [],
   "out_ports": [

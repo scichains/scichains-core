@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js;
+package net.algart.executors.api.js.core;
 
+import net.algart.executors.api.js.JSCaller;
+import net.algart.executors.api.js.JSSpecification;
 import net.algart.graalvm.GraalSourceContainer;
 import net.algart.executors.api.graalvm.GraalPlatforms;
 import net.algart.executors.api.extensions.ExtensionSpecification;

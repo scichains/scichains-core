@@ -39,6 +39,7 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
     private String moduleName = "pyalgart_lib_demo_simple.simple_demo";
 
     public CallPythonExternalFunction() {
+        addOutputScalar(OUTPUT_CODE);
     }
 
     public String getPyFile() {

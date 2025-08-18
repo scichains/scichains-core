@@ -27,7 +27,7 @@ package net.algart.executors.api.demo;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.mappings.MappingBuilder;
-import net.algart.executors.api.mappings.UseMapping;
+import net.algart.executors.api.mappings.core.UseMapping;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.json.Jsons;

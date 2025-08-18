@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings;
+package net.algart.executors.api.settings.core;
 
 public class UseChainSettings extends UseSettings {
     public UseChainSettings() {

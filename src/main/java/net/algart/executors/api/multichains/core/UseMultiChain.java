@@ -22,18 +22,20 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.multichains;
+package net.algart.executors.api.multichains.core;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
 import net.algart.executors.api.chains.ChainLoadingException;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
+import net.algart.executors.api.multichains.MultiChain;
+import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.DefaultExecutorLoader;

@@ -22,9 +22,16 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.multichains;
+package net.algart.executors.api.multichains.core;
 
-import net.algart.executors.api.settings.*;
+import net.algart.executors.api.multichains.MultiChain;
+import net.algart.executors.api.multichains.MultiChainSettingsBuilder;
+import net.algart.executors.api.settings.SettingsBuilder;
+import net.algart.executors.api.settings.SettingsSpecification;
+import net.algart.executors.api.settings.core.CombineSettings;
+import net.algart.executors.api.settings.core.GetNamesOfSettings;
+import net.algart.executors.api.settings.core.SplitSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ExecutorSpecification;
 
 // Note: it is not an executor, it is an internal class for usage inside UseMultiChain and MultiChain

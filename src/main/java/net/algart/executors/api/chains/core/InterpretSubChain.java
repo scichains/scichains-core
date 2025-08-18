@@ -22,14 +22,18 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.chains.core;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.chains.Chain;
+import net.algart.executors.api.chains.ChainBlock;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.settings.*;
+import net.algart.executors.api.settings.core.CombineSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;

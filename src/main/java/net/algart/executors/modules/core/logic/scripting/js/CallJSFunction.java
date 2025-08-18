@@ -29,8 +29,6 @@ import net.algart.graalvm.GraalSourceContainer;
 import org.graalvm.polyglot.Value;
 
 public final class CallJSFunction extends AbstractCallJS {
-    public static final String OUTPUT_CODE = "code";
-
     private String code =
             """
                     function execute(params, inputs, outputs) {
@@ -42,7 +40,6 @@ public final class CallJSFunction extends AbstractCallJS {
     private volatile Value mainFunction = null;
 
     public CallJSFunction() {
-        addOutputScalar(OUTPUT_CODE);
     }
 
     public String getCode() {
@@ -71,7 +68,6 @@ public final class CallJSFunction extends AbstractCallJS {
             logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
             closePerformerContainer();
         }
-        setOutputScalar(OUTPUT_CODE, code);
     }
 
     @Override

@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.python;
+package net.algart.executors.api.python.core;
 
+import net.algart.executors.api.python.JepCaller;
+import net.algart.executors.api.python.PythonSpecification;
 import net.algart.jep.additions.GlobalPythonConfiguration;
 import net.algart.executors.api.jep.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;

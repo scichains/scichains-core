@@ -26,6 +26,7 @@ package net.algart.executors.api.mappings;
 
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.mappings.core.UseMapping;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.math.IRange;

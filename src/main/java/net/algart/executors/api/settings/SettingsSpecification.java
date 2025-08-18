@@ -26,6 +26,7 @@ package net.algart.executors.api.settings;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.io.MatrixIO;

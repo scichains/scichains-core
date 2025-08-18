@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.chains.ReloadInstalledChains"
+    "class": "net.algart.executors.api.chains.core.ReloadInstalledChains"
   },
   "in_ports": [],
   "out_ports": [

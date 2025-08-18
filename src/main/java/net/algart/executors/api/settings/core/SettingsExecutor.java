@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings;
+package net.algart.executors.api.settings.core;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.settings.SettingsBuilder;
 
 public abstract class SettingsExecutor extends Executor implements ReadOnlyExecutionInput {
     volatile SettingsBuilder settingsBuilder = null;

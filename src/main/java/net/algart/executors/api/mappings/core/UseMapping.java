@@ -22,9 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.mappings;
+package net.algart.executors.api.mappings.core;
 
 import net.algart.executors.api.data.SScalar;
+import net.algart.executors.api.mappings.MappingBuilder;
+import net.algart.executors.api.mappings.MappingSpecification;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
@@ -207,7 +209,8 @@ public class UseMapping extends FileOperation {
         return mappingBuilder(mappingSpecification, true);
     }
 
-    MappingBuilder mappingBuilder(MappingSpecification mappingSpecification, boolean calledWithObject) throws IOException {
+    public MappingBuilder mappingBuilder(MappingSpecification mappingSpecification, boolean calledWithObject)
+            throws IOException {
         final SScalar.MultiLineOrJsonSplitter keys = keys(mappingSpecification, calledWithObject);
         final SScalar.MultiLineOrJsonSplitter items = enumItems(mappingSpecification, calledWithObject);
         return MappingBuilder.of(

@@ -29,11 +29,15 @@ import net.algart.executors.api.settings.SettingsSpecification;
 
 import java.util.Objects;
 
-class MultiChainSettingsBuilder extends SettingsBuilder {
+public final class MultiChainSettingsBuilder extends SettingsBuilder {
     final MultiChain multiChain;
 
-    MultiChainSettingsBuilder(SettingsSpecification specification, MultiChain multiChain) {
+    public MultiChainSettingsBuilder(SettingsSpecification specification, MultiChain multiChain) {
         super(specification);
         this.multiChain = Objects.requireNonNull(multiChain, "Null multiChain");
+    }
+
+    public MultiChain multiChain() {
+        return multiChain;
     }
 }

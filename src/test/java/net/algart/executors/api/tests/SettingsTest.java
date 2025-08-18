@@ -29,7 +29,7 @@ import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.json.Jsons;
 

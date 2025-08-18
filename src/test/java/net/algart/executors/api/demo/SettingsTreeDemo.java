@@ -26,16 +26,16 @@ package net.algart.executors.api.demo;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.ChainExecutor;
+import net.algart.executors.api.chains.core.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.UseSubChain;
-import net.algart.executors.api.multichains.MultiChainExecutor;
+import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.multichains.core.MultiChainExecutor;
 import net.algart.executors.api.multichains.MultiChainSpecification;
-import net.algart.executors.api.multichains.UseMultiChain;
+import net.algart.executors.api.multichains.core.UseMultiChain;
 import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.settings.CombineSettings;
+import net.algart.executors.api.settings.core.CombineSettings;
 import net.algart.executors.api.settings.SettingsSpecification;
-import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.*;
 import net.algart.json.Jsons;
 

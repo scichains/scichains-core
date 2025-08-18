@@ -26,10 +26,11 @@ package net.algart.executors.api.chains;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.chains.core.ChainExecutor;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
-import net.algart.executors.api.settings.CombineChainSettings;
+import net.algart.executors.api.settings.core.CombineChainSettings;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;

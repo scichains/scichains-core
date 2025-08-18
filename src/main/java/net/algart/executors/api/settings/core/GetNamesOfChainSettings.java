@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.settings;
+package net.algart.executors.api.settings.core;
 
 // Separate class helps the user to distinguish usual settings and chain settings
 public class GetNamesOfChainSettings extends GetNamesOfSettings {

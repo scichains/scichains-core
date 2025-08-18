@@ -25,7 +25,6 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.UseSubChain;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
 
@@ -40,7 +39,7 @@ public enum CreateMode {
      * The executor is created by its constructor or an equivalent instantiation method.
      * No additional initialization is performed.
      * Note that some executors can be unable to operate normally in this mode: for example, a
-     * {@link UseSubChain#newExecutor}
+     * {@link net.algart.executors.api.chains.core.UseSubChain#newExecutor}
      * requires information about its executor ID.
      */
     NO_ACTIONS {
@@ -98,7 +97,7 @@ public enum CreateMode {
     /**
      * The same as {@link #NO_REQUEST}, but in addition this mode calls
      * {@link ExecutionBlock#requestDefaultOutput() executor.requestDefaultOutput()}.
-     * Usually this is a good balanced choice, when the executor has only one resulting port.
+     * Usually this is a good balanced choice when the executor has only one resulting port.
      * If it has several output ports, we recommend using the {@link #REQUEST_ALL} option or
      * directly selecting the required ports with help of {@link ExecutionBlock#requestOutput(String...)} method.
      */
@@ -113,7 +112,7 @@ public enum CreateMode {
      * The same as {@link #REQUEST_DEFAULT}, but in addition this mode calls
      * {@link ExecutionBlock#setAllOutputsNecessary(boolean) executor.setAllOutputsNecessary(true)}.
      * Usually this is the desired behavior, excepting some complex cases when the executor has
-     * several resulting ports, and we need to calculate only part from them for saving executing time.
+     * several resulting ports, and we need to calculate only part from them to save executing time.
      */
     REQUEST_ALL {
         @Override

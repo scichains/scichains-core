@@ -22,27 +22,8 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.settings.core;
 
-import net.algart.executors.api.Executor;
-import net.algart.executors.api.multichains.UseMultiChain;
-
-import java.io.IOError;
-import java.io.IOException;
-
-public final class ReloadInstalledChains extends Executor {
-    public ReloadInstalledChains() {
-        setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
-    }
-
-    @Override
-    public void process() {
-        try {
-            UseSubChain.useAllInstalledInSharedContext();
-            UseMultiChain.useAllInstalledInSharedContext();
-            getScalar().setTo("Done; see logs for details");
-        } catch (IOException e) {
-            throw new IOError(e);
-        }
-    }
+// Separate class helps the user to distinguish usual settings and chain settings
+public class SplitChainSettings extends SplitSettings {
 }

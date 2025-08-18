@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.mappings;
+package net.algart.executors.api.mappings.core;
 
 import jakarta.json.JsonObject;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.mappings.MappingBuilder;
+import net.algart.executors.api.mappings.MappingSpecification;
 import net.algart.json.Jsons;
 
 import java.util.Locale;

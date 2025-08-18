@@ -132,7 +132,6 @@ public abstract class AbstractCallPython extends Executor {
         addOutputMat(OUTPUT_M3);
         addOutputMat(OUTPUT_M4);
         addOutputMat(OUTPUT_M5);
-        addOutputScalar(OUTPUT_CODE);
         addOutputScalar(OUTPUT_SUPPLIED_PYTHON_ROOTS);
     }
 

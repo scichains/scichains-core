@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.chains.core;
 
 import jakarta.json.JsonValue;
 import net.algart.arrays.Arrays;
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.parameters.ParameterValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
-import net.algart.executors.api.settings.UseChainSettings;
-import net.algart.executors.api.settings.UseSettings;
+import net.algart.executors.api.settings.core.UseChainSettings;
+import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
@@ -571,7 +572,6 @@ public final class UseSubChain extends FileOperation {
             boolean executeIsolatedLoadingTimeFunctions) {
         for (ChainBlock block : chain.getAllBlocks().values()) {
             if (block.isExecutedAtLoadingTime()) {
-                final boolean executorIsCreatedNow = block.executor == null;
                 block.reinitialize(true);
                 if (block.numberOfConnectedInputPorts() == 0) {
                     // Note: we do not execute loading-time SUBCHAINS,

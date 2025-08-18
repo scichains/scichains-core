@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.tests;
 
-import net.algart.executors.api.chains.ChainExecutor;
-import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.chains.core.ChainExecutor;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.ExecutorSpecification;

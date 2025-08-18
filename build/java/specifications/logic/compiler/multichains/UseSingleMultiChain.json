@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.multichains.UseMultiChain"
+    "class": "net.algart.executors.api.multichains.core.UseMultiChain"
   },
   "in_ports": [],
   "out_ports": [

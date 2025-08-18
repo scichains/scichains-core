@@ -26,9 +26,9 @@ package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
-import net.algart.executors.api.chains.ChainExecutor;
+import net.algart.executors.api.chains.core.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;

@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js;
+package net.algart.executors.api.js.core;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
+import net.algart.executors.api.js.JSCaller;
 import org.graalvm.polyglot.Value;
 
 import java.util.Locale;

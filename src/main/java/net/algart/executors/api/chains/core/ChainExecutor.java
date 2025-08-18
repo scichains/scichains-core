@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.chains;
+package net.algart.executors.api.chains.core;
 
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.data.Port;
-import net.algart.executors.api.settings.CombineChainSettings;
+import net.algart.executors.api.settings.core.CombineChainSettings;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.system.ExecutorFactory;
 

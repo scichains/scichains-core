@@ -10,7 +10,7 @@
   "id": "178f4421-b367-4555-a0f8-52904109b88d",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.settings.AddSubSettings"
+    "class": "net.algart.executors.api.settings.core.AddSubSettings"
   },
   "in_ports": [
     {

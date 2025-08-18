@@ -30,11 +30,11 @@ import net.algart.executors.api.data.*;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
-import net.algart.executors.api.js.UseJS;
-import net.algart.executors.api.python.UsingPython;
-import net.algart.executors.api.settings.UseSettings;
-import net.algart.executors.api.multichains.UseMultiChain;
-import net.algart.executors.api.chains.UseSubChain;
+import net.algart.executors.api.js.core.UseJS;
+import net.algart.executors.api.python.core.UsingPython;
+import net.algart.executors.api.settings.core.UseSettings;
+import net.algart.executors.api.multichains.core.UseMultiChain;
+import net.algart.executors.api.chains.core.UseSubChain;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.PropertyChecker;
 
