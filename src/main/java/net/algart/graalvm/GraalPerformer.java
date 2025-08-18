@@ -175,9 +175,7 @@ public class GraalPerformer implements AutoCloseable {
         }
     }
 
-    // This function was strongly necessary because "js.esm-eval-returns-exports" was
-    // only an experimental function in GraalVM 22.2
-    // Today, it allows to avoid declaration user's function as "export"
+    // This trick is necessary to access functions from ECMA modules
     public static String addReturningJSFunction(String code, String functionName) {
         Objects.requireNonNull(code, "Null code");
         Objects.requireNonNull(functionName, "Null functionName");
