@@ -22,28 +22,22 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.engine.tests;
+package net.algart.executors.api.js.scriptengine.tests;
 
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import java.util.List;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 
-public class AvailableEngines {
+public class JavaScriptTest {
     public static void main(String[] args) {
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        List<ScriptEngineFactory> factories = mgr.getEngineFactories();
-        for (ScriptEngineFactory factory : factories) {
-            System.out.println("ScriptEngineFactory Info");
-            String engName = factory.getEngineName();
-            String engVersion = factory.getEngineVersion();
-            String langName = factory.getLanguageName();
-            String langVersion = factory.getLanguageVersion();
-            System.out.printf("\tScript Engine: %s (%s)\n", engName, engVersion);
-            List<String> engNames = factory.getNames();
-            for (String name : engNames) {
-                System.out.printf("\tEngine Alias: %s\n", name);
-            }
-            System.out.printf("\tLanguage: %s (%s)\n", langName, langVersion);
-        }
+        JavaScriptPerformer formula = JavaScriptPerformer.newInstance("print(1);\n"
+                + "//java.lang.System.out.println('2');\n"
+                + "print(new java.lang.String());\n"
+                + "var IntsC = Java.type('int[]');\n"
+                + "print(IntsC);\n"
+                + "print(new IntsC(2).length);\n"
+                + "5 < 10");
+        Object result = formula.perform();
+        System.out.printf("Engine: %s%n", formula.context());
+        System.out.printf("%s: %s%n", result.getClass(), result);
+        System.out.printf("evalBoolean: %s%n", formula.calculateBoolean());
     }
 }

@@ -29,7 +29,7 @@ import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.graalvm.GraalSourceContainer;
 import net.algart.executors.api.graalvm.GraalAPI;
 import net.algart.executors.api.graalvm.GraalSafety;
-import net.algart.executors.api.js.engine.JavaScriptContextContainer;
+import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
 import net.algart.executors.api.Executor;
 import org.graalvm.polyglot.Value;
 

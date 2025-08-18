@@ -22,22 +22,24 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.engine.tests;
+package net.algart.executors.api.js.scriptengine.tests;
 
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 
-public class JavaScriptTest {
+public class JavaScriptStringFormatTest {
     public static void main(String[] args) {
-        JavaScriptPerformer formula = JavaScriptPerformer.newInstance("print(1);\n"
-                + "//java.lang.System.out.println('2');\n"
-                + "print(new java.lang.String());\n"
-                + "var IntsC = Java.type('int[]');\n"
-                + "print(IntsC);\n"
-                + "print(new IntsC(2).length);\n"
-                + "5 < 10");
+        final JavaScriptPerformer formula = JavaScriptPerformer.newInstance(
+                "var StringC = Java.type(\"java.lang.String\");\n"
+                        + "var DoubleC = Java.type(\"java.lang.Double\");\n"
+                        + "var index = parseInt(3);\n"
+                        + "var n = java.lang.Math.round(3.0);\n"
+                        + "var ix = java.lang.Math.round(parseInt('3'));\n"
+                        + "var iy = parseInt('4');\n"
+                        + "var perc = DoubleC.valueOf(index * 100.0 / n);\n"
+                        + "print(StringC.format(java.util.Locale.US, \"%s/%s (%.1f%%) [x:%s, y:%s]\","
+                        + "index, n, perc, ix, iy));\n"
+                        + "n");
         Object result = formula.perform();
-        System.out.printf("Engine: %s%n", formula.context());
-        System.out.printf("%s: %s%n", result.getClass(), result);
-        System.out.printf("evalBoolean: %s%n", formula.calculateBoolean());
+        System.out.printf("%s:%n%s%n", result.getClass(), result);
     }
 }

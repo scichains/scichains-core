@@ -24,8 +24,8 @@
 
 package net.algart.executors.modules.core.logic.loops;
 
-import net.algart.executors.api.js.engine.JavaScriptContextContainer;
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SNumbers;

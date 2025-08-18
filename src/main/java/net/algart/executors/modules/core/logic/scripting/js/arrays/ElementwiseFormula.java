@@ -25,7 +25,7 @@
 package net.algart.executors.modules.core.logic.scripting.js.arrays;
 
 import net.algart.arrays.*;
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.numbers.SeveralNumberArraysOperation;
 import net.algart.executors.modules.core.logic.SimpleResultElementType;

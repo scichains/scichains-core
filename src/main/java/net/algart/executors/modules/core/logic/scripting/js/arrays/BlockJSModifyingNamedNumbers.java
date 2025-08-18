@@ -25,9 +25,9 @@
 package net.algart.executors.modules.core.logic.scripting.js.arrays;
 
 import jakarta.json.JsonObject;
-import net.algart.executors.api.js.engine.JavaScriptContextContainer;
-import net.algart.executors.api.js.engine.JavaScriptException;
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
+import net.algart.executors.api.js.scriptengine.JavaScriptException;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;

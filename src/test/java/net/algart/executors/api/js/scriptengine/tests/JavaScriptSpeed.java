@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.engine.tests;
+package net.algart.executors.api.js.scriptengine.tests;
 
-import net.algart.executors.api.js.engine.JavaScriptContextContainer;
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
+import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
 
 import javax.script.ScriptEngine;
 import java.util.Locale;

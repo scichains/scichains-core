@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.engine;
+package net.algart.executors.api.js.scriptengine;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -34,7 +34,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
 
-// This class does not depend on Graal directly, but customizes ScriptEngine according Graal requirements
+// This class does not depend on Graal directly but customizes ScriptEngine according Graal requirements
 class ScriptEngineTools {
     private static final String DEFAULT_ENGINE_NAME = getStringProperty(
             "net.algart.bridges.standard", "javascript");

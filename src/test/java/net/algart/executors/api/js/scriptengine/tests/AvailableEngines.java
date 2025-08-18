@@ -22,24 +22,28 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.engine.tests;
+package net.algart.executors.api.js.scriptengine.tests;
 
-import net.algart.executors.api.js.engine.JavaScriptPerformer;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import java.util.List;
 
-public class JavaScriptStringFormatTest {
+public class AvailableEngines {
     public static void main(String[] args) {
-        final JavaScriptPerformer formula = JavaScriptPerformer.newInstance(
-                "var StringC = Java.type(\"java.lang.String\");\n"
-                        + "var DoubleC = Java.type(\"java.lang.Double\");\n"
-                        + "var index = parseInt(3);\n"
-                        + "var n = java.lang.Math.round(3.0);\n"
-                        + "var ix = java.lang.Math.round(parseInt('3'));\n"
-                        + "var iy = parseInt('4');\n"
-                        + "var perc = DoubleC.valueOf(index * 100.0 / n);\n"
-                        + "print(StringC.format(java.util.Locale.US, \"%s/%s (%.1f%%) [x:%s, y:%s]\","
-                        + "index, n, perc, ix, iy));\n"
-                        + "n");
-        Object result = formula.perform();
-        System.out.printf("%s:%n%s%n", result.getClass(), result);
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        List<ScriptEngineFactory> factories = mgr.getEngineFactories();
+        for (ScriptEngineFactory factory : factories) {
+            System.out.println("ScriptEngineFactory Info");
+            String engName = factory.getEngineName();
+            String engVersion = factory.getEngineVersion();
+            String langName = factory.getLanguageName();
+            String langVersion = factory.getLanguageVersion();
+            System.out.printf("\tScript Engine: %s (%s)\n", engName, engVersion);
+            List<String> engNames = factory.getNames();
+            for (String name : engNames) {
+                System.out.printf("\tEngine Alias: %s\n", name);
+            }
+            System.out.printf("\tLanguage: %s (%s)\n", langName, langVersion);
+        }
     }
 }

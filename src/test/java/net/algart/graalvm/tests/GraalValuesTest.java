@@ -26,7 +26,7 @@ package net.algart.graalvm.tests;
 
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalValues;
-import net.algart.executors.api.js.engine.JavaScriptException;
+import net.algart.executors.api.js.scriptengine.JavaScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
 
