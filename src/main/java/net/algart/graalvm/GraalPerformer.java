@@ -148,18 +148,6 @@ public class GraalPerformer implements AutoCloseable {
         return state.toString();
     }
 
-    public static String importAndReturnJSFunction(String from, String functionName) {
-        Objects.requireNonNull(from, "Null from");
-        Objects.requireNonNull(functionName, "Null functionName");
-        return addReturningJSFunction(importJSCode(from, functionName), functionName);
-    }
-
-    public static String importJSCode(String from, String... what) {
-        Objects.requireNonNull(from, "Null from");
-        Objects.requireNonNull(what, "Null what");
-        return "import { " + String.join(", ", what) + " } from \"" + from + "\"\n";
-    }
-
     void setCustomizerInfo(String customizerToString) {
         state.customizerToString = customizerToString;
     }
@@ -173,13 +161,6 @@ public class GraalPerformer implements AutoCloseable {
             // - will be true even WHILE executing cleanable.clean
             throw new IllegalStateException("Cannot use " + this);
         }
-    }
-
-    // This trick is necessary to access functions from ECMA modules
-    public static String addReturningJSFunction(String code, String functionName) {
-        Objects.requireNonNull(code, "Null code");
-        Objects.requireNonNull(functionName, "Null functionName");
-        return code + "\n\n\n" + functionName;
     }
 
     private static class ExpensiveCleanableState implements Runnable {

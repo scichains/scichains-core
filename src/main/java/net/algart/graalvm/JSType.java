@@ -26,7 +26,7 @@ package net.algart.graalvm;
 
 import java.util.Objects;
 
-public enum GraalJSType {
+public enum JSType {
     /**
      * Common behavior. However, if it is a file with a name, ending by ".mjs", or if you manually specify a name
      * ending with ".mjs", it will work as a module.
@@ -48,7 +48,7 @@ public enum GraalJSType {
 
     private final String typeName;
 
-    GraalJSType(String typeName) {
+    JSType(String typeName) {
         this.typeName = typeName;
     }
 
@@ -56,9 +56,9 @@ public enum GraalJSType {
         return typeName;
     }
 
-    public static GraalJSType valueOfTypeNameOrNull(String name) {
+    public static JSType valueOfTypeNameOrNull(String name) {
         Objects.requireNonNull(name, "Null type name");
-        for (GraalJSType type : values()) {
+        for (JSType type : values()) {
             if (name.equals(type.typeName)) {
                 return type;
             }

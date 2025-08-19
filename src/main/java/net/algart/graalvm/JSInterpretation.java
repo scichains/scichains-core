@@ -22,41 +22,24 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core;
+package net.algart.graalvm;
 
-import net.algart.graalvm.GraalPerformer;
-import net.algart.graalvm.GraalSourceContainer;
-import net.algart.graalvm.JSInterpretation;
-import org.graalvm.polyglot.Value;
+import java.util.Objects;
 
-public final class CallJSFunction extends AbstractCallJS {
-    private String code =
-            """
-                    function execute(params, inputs, outputs) {
-                        return "Hello from JavaScript function!"
-                    }
-                    """;
-
-
-    public CallJSFunction() {
+public class JSInterpretation {
+    private JSInterpretation() {
     }
 
-    public String getCode() {
-        return code;
+    public static String importJSCode(String from, String... what) {
+        Objects.requireNonNull(from, "Null from");
+        Objects.requireNonNull(what, "Null what");
+        return "import { " + String.join(", ", what) + " } from \"" + from + "\"\n";
     }
 
-    public CallJSFunction setCode(String code) {
-        this.code = nonEmptyTrimmed(code);
-        return this;
-    }
-
-    @Override
-    protected String code() {
-        return code;
-    }
-
-    @Override
-    protected String executorName() {
-        return "JavaScript function";
+    // This trick is necessary to access functions from ECMA modules
+    public static String addReturningJSFunction(String jsCode, String functionName) {
+        Objects.requireNonNull(jsCode, "Null jsCode");
+        Objects.requireNonNull(functionName, "Null functionName");
+        return jsCode + "\n\n\n" + functionName;
     }
 }

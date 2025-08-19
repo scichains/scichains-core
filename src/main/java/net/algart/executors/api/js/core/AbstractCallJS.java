@@ -31,6 +31,8 @@ import net.algart.executors.api.graalvm.GraalSafety;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalPerformerContainer;
+import net.algart.graalvm.GraalSourceContainer;
+import net.algart.graalvm.JSInterpretation;
 import org.graalvm.polyglot.Value;
 
 import java.nio.file.Path;
@@ -72,6 +74,7 @@ public abstract class AbstractCallJS extends Executor {
     public static final String OUTPUT_M3 = "m3";
     public static final String OUTPUT_M4 = "m4";
     public static final String OUTPUT_M5 = "m5";
+    public static final String OUTPUT_CODE = "code";
 
     private String mainFunctionName = "execute";
     private String workingDirectory = "";
@@ -90,9 +93,11 @@ public abstract class AbstractCallJS extends Executor {
     private final GraalAPI graalAPI = GraalAPI.getInstance();
     private GraalSafety safety = GraalSafety.SAFE;
 
+    private final GraalSourceContainer jsCodeContainer = GraalSourceContainer.newLiteralContainer();
     private final GraalPerformerContainer.Local performerContainer = GraalPerformerContainer.getLocalPure();
     private volatile Path translatedDirectory = null;
     private volatile Value createEmptyObjectFunction = null;
+    volatile Value mainFunction = null;
 
     public AbstractCallJS() {
         useVisibleResultParameter();
@@ -365,11 +370,33 @@ public abstract class AbstractCallJS extends Executor {
         closePerformerContainer();
     }
 
-    protected abstract Value mainFunction();
+    protected abstract String code();
 
-    protected abstract void compileSource();
+    protected Value mainFunction() {
+        return mainFunction;
+    }
 
-    protected abstract void executeSource(GraalPerformer performer);
+    protected void compileSource()  {
+        final String mainFunctionName = getMainFunctionName();
+        final String code = code();
+        final String script = JSInterpretation.addReturningJSFunction(code, mainFunctionName);
+        jsCodeContainer.setModuleJS(script, "main_code");
+        // - name "main_code" is not important: we will not share this performer (Graal context) with other
+        // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
+        final boolean changed = jsCodeContainer.changed();
+        if (changed) {
+            logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
+            closePerformerContainer();
+        }
+        setOutputScalar(OUTPUT_CODE, code);
+    }
+
+    protected void executeSource(GraalPerformer performer) {
+        if (mainFunction == null) {
+            // no sense to perform ECMA module if it was not changed: re-executing will have no effect
+            mainFunction = performer.perform(jsCodeContainer);
+        }
+    }
 
     protected Value callFunction(
             Value graalParameters,
@@ -385,6 +412,8 @@ public abstract class AbstractCallJS extends Executor {
     protected abstract String executorName();
 
     protected void closePerformerContainer() {
+        this.mainFunction = null;
+        // - enforce re-creating this function by perform()
         this.performerContainer.freeResources();
     }
 

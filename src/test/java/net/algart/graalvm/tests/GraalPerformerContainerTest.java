@@ -24,7 +24,7 @@
 
 package net.algart.graalvm.tests;
 
-import net.algart.graalvm.GraalJSType;
+import net.algart.graalvm.JSType;
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalPerformerContainer;
 import net.algart.graalvm.GraalSourceContainer;
@@ -65,7 +65,7 @@ public class GraalPerformerContainerTest {
                         + "s.length + a+b";
         GraalPerformer performer = performerContainer.performer(id);
         GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteralContainer()
-                .setJS(GraalJSType.COMMON, script, "test");
+                .setJS(JSType.COMMON, script, "test");
         Value emptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
         System.out.println("Empty object function: \"" + emptyObjectFunction
                 + "\"; its result: " + emptyObjectFunction.execute());

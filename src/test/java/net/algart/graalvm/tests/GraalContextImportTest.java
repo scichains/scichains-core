@@ -107,7 +107,7 @@ public class GraalContextImportTest {
             System.out.println();
             System.out.println("Again, new source with same name:");
             sourceContainer = GraalSourceContainer.newLiteralContainer();
-            sourceContainer.setJS(GraalJSType.MODULE, src, "test");
+            sourceContainer.setJS(JSType.MODULE, src, "test");
             performer.perform(sourceContainer);
 
             System.out.println();

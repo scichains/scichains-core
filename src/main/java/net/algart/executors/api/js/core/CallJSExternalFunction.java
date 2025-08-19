@@ -35,11 +35,11 @@ import java.nio.file.Path;
 
 public final class CallJSExternalFunction extends AbstractCallJS {
     private final GraalSourceContainer jsFileContainer = GraalSourceContainer.newFileContainer();
-    private volatile Value mainFunction = null;
 
     private String jsFile = "";
 
     public CallJSExternalFunction() {
+        addOutputScalar(OUTPUT_CODE);
     }
 
     public String getJsFile() {
@@ -52,8 +52,8 @@ public final class CallJSExternalFunction extends AbstractCallJS {
     }
 
     @Override
-    protected Value mainFunction() {
-        return mainFunction;
+    protected String code() {
+        throw new UnsupportedOperationException("Unused");
     }
 
     @Override

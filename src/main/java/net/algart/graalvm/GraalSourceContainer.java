@@ -83,28 +83,28 @@ public abstract class GraalSourceContainer {
     }
 
     public GraalSourceContainer setCommonJS(CharSequence script) {
-        return setJS(GraalJSType.COMMON, script);
+        return setJS(JSType.COMMON, script);
     }
 
     public GraalSourceContainer setModuleJS(CharSequence script, String name) {
-        return setJS(GraalJSType.MODULE, script, name);
+        return setJS(JSType.MODULE, script, name);
     }
 
     public GraalSourceContainer setModuleJS(Path scriptFile, String name) {
-        return setJS(GraalJSType.MODULE, scriptFile, name);
+        return setJS(JSType.MODULE, scriptFile, name);
     }
 
-    public GraalSourceContainer setJS(GraalJSType type, CharSequence script) {
+    public GraalSourceContainer setJS(JSType type, CharSequence script) {
         return setJS(type, script, null);
     }
 
-    public GraalSourceContainer setJS(GraalJSType type, CharSequence script, String name) {
+    public GraalSourceContainer setJS(JSType type, CharSequence script, String name) {
         Objects.requireNonNull(type, "Null type");
         type.configure(this, script, name);
         return this;
     }
 
-    public GraalSourceContainer setJS(GraalJSType type, Path scriptFile, String name) {
+    public GraalSourceContainer setJS(JSType type, Path scriptFile, String name) {
         Objects.requireNonNull(type, "Null type");
         type.configure(this, scriptFile, name);
         return this;
