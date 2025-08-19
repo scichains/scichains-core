@@ -4,8 +4,8 @@
     "root": {
         "scale": 1.0000000000000027,
         "desktop": {
-            "scroll_h": 0.6311894328810403,
-            "scroll_v": 0.537076163824704
+            "scroll_h": 0.6235570505250028,
+            "scroll_v": 0.5470617516361101
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -2109,7 +2109,7 @@
                 "parameters": [
                     {
                         "name": "value",
-                        "value": 10.0
+                        "value": 20.0
                     }
                 ],
                 "system": {
@@ -2403,7 +2403,7 @@
                     },
                     {
                         "name": "settings",
-                        "value": "{\n    \"@multi_scalar\": {\n        \"___selectedChainName\": \"scalar_sum_with_settings\",\n        \"a\": 3.0,\n        \"b\": 1.5,\n        \"@scalar_sum_with_settings\": {\n            \"a\": 3.0,\n            \"b\": 1.0,\n            \"delta\": \"0.07\",\n            \"print_pattern\": \"Result: $$$\",\n            \"some_unused\": \"text\"\n        }\n    }\n}"
+                        "value": "{\n    \"@multi_scalar\": {\n        \"___selectedChainName\": \"scalar_sum_with_settings\",\n        \"a\": 3.0,\n        \"b\": 5.0,\n        \"@scalar_sum_with_settings\": {\n            \"a\": 3.0,\n            \"b\": 1.0,\n            \"delta\": \"0.072\",\n            \"print_pattern\": \"Result: $$$\",\n            \"some_unused\": \"text\"\n        }\n    }\n}"
                     }
                 ],
                 "system": {

@@ -113,7 +113,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
             t2 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.readInputPortsFromExecutor(this);
             t3 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
-            selectedChainSettingsString = MultiChain.setSettings(selectedChain, selectedChainSettings);
+            selectedChainSettingsString = selectedChain.setSettings(selectedChainSettings);
             // - used if this chain variant has its own settings block for detailed customization
             t4 = timingNumberOfCalls > 0 ? System.nanoTime() : 0;
             selectedChain.executeNecessary(this);

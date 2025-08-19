@@ -24,6 +24,7 @@
 
 package net.algart.executors.api.chains;
 
+import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.core.ChainExecutor;
@@ -36,6 +37,7 @@ import net.algart.executors.api.system.ExecutorFactory;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.modules.core.common.TimingStatistics;
+import net.algart.json.Jsons;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -648,6 +650,23 @@ public final class Chain implements AutoCloseable {
             throw new IllegalStateException("The chain has no main settings: " + this);
         }
         return mainSettingsBuilder;
+    }
+
+    public String setSettings(JsonObject selectedChainSettings) {
+        if (selectedChainSettings == null) {
+            return null;
+        }
+        if (mainSettingsBlockId == null) {
+            // - should not occur while normal usage (selectedChainSettings is not null)
+            throw new IllegalStateException("The chain has no built-in settings: " + this);
+        }
+        final ChainBlock settingsBlock = getBlock(mainSettingsBlockId);
+        if (settingsBlock == null)
+            throw new AssertionError("Main settings block  '"
+                    + mainSettingsBlockId + "' is not found in the chain " + this);
+        final String prettyString = Jsons.toPrettyString(selectedChainSettings);
+        settingsBlock.setActualInputData(Executor.SETTINGS, SScalar.of(prettyString));
+        return prettyString;
     }
 
     public void assignSettings(SettingsBuilder mainSettingsBuilder) {
