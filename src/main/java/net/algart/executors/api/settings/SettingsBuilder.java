@@ -215,7 +215,7 @@ public class SettingsBuilder implements Cloneable {
     }
 
     public JsonObject buildDefault() {
-        return buildExecutor(null, false);
+        return buildFromExecutor(null, false);
     }
 
     public JsonObject build(Executor executor, JsonObject defaultSettings) {
@@ -224,11 +224,11 @@ public class SettingsBuilder implements Cloneable {
     }
 
     public JsonObject build(Executor executor) {
-        return buildExecutor(executor, true);
+        return buildFromExecutor(executor, true);
     }
 
     public JsonObject build(Parameters parameters) {
-        return buildParametersAndPorts(null, parameters, null);
+        return buildFromParametersAndPorts(null, parameters, null);
     }
 
     public void parseSettingsToParameters(Parameters parameters, JsonObject settings) {
@@ -377,13 +377,13 @@ public class SettingsBuilder implements Cloneable {
         }
     }
 
-    private JsonObject buildExecutor(Executor executor, boolean useExecutorParameters) {
+    private JsonObject buildFromExecutor(Executor executor, boolean useExecutorParameters) {
         final Parameters parameters = useExecutorParameters ? executor.parameters() : null;
         final Map<String, Port> inputPortsMap = useExecutorParameters ? executor.inputPortsMap() : null;
-        return buildParametersAndPorts(executor, parameters, inputPortsMap);
+        return buildFromParametersAndPorts(executor, parameters, inputPortsMap);
     }
 
-    private JsonObject buildParametersAndPorts(
+    private JsonObject buildFromParametersAndPorts(
             Executor executor,
             Parameters parameters,
             Map<String, Port> inputPortsMap) {

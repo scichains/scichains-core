@@ -76,9 +76,9 @@
     },
     {
       "id": "18d3e7bb-e5c0-439f-8d69-62bc245d3615",
-      "name": "Base-core-examples-sub-chains",
+      "name": "Base-core-examples-chains",
       "category": "core",
-      "description": "Core examples, sub-chains",
+      "description": "Core examples, chains",
       "tags": [
         "$core",
         "$public",
