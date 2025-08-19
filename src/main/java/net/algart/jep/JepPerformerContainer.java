@@ -26,29 +26,29 @@ package net.algart.jep;
 
 import jep.Interpreter;
 import jep.JepConfig;
-import net.algart.jep.additions.JepInterpretation;
 import net.algart.jep.additions.JepSingleThreadInterpreter;
+import net.algart.jep.additions.JepType;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
     private Supplier<JepConfig> configurationSupplier = null;
-    private final JepInterpretation.Mode mode;
+    private final JepType type;
 
     private volatile JepPerformer performer = null;
     private final Object lock = new Object();
 
-    private JepPerformerContainer(JepInterpretation.Mode mode) {
-        this.mode = Objects.requireNonNull(mode, "Null JEP interpretation mode");
+    private JepPerformerContainer(JepType type) {
+        this.type = Objects.requireNonNull(type, "Null JEP interpretation type");
     }
 
-    public static JepPerformerContainer newContainer(JepInterpretation.Mode mode) {
-        return new JepPerformerContainer(mode);
+    public static JepPerformerContainer newContainer(JepType type) {
+        return new JepPerformerContainer(type);
     }
 
-    public JepInterpretation.Mode mode() {
-        return mode;
+    public JepType type() {
+        return type;
     }
 
     public Supplier<JepConfig> getConfigurationSupplier() {
@@ -81,7 +81,7 @@ public final class JepPerformerContainer implements AutoCloseable {
             if (performer == null) {
 //                System.out.println("!!! Requesting new performer in " + this);
                 this.performer = performer = JepPerformer.newPerformer(
-                        JepSingleThreadInterpreter.newInstance(mode, configurationSupplier));
+                        JepSingleThreadInterpreter.newInstance(type, configurationSupplier));
                 created = true;
             }
         }
@@ -98,7 +98,7 @@ public final class JepPerformerContainer implements AutoCloseable {
     @Override
     public String toString() {
         final JepPerformer performer = this.performer;
-        return "JEP performer container (" + mode + "), " +
+        return "JEP performer container (" + type + "), " +
                 (performer == null ? "EMPTY" : performer.toString()) + ", " +
                 "identity 0x" + System.identityHashCode(this);
     }

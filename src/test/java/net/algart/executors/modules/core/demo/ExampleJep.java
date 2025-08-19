@@ -24,10 +24,10 @@
 
 package net.algart.executors.modules.core.demo;
 
+import net.algart.executors.api.Executor;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
-import net.algart.jep.additions.JepInterpretation;
-import net.algart.executors.api.Executor;
+import net.algart.jep.additions.JepType;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,9 +38,9 @@ public class ExampleJep extends Executor {
     private boolean shared = false;
 
     private final JepPerformerContainer sharedContainer =
-            JepPerformerContainer.newContainer(JepInterpretation.Mode.SHARED);
+            JepPerformerContainer.newContainer(JepType.SHARED);
     private final JepPerformerContainer localContainer =
-            JepPerformerContainer.newContainer(JepInterpretation.Mode.SUB_INTERPRETER);
+            JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
 
     public boolean isShared() {

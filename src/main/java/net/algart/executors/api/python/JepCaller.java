@@ -31,7 +31,7 @@ import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyCallable;
 import net.algart.jep.additions.AtomicPyObject;
-import net.algart.jep.additions.JepInterpretation;
+import net.algart.jep.additions.JepType;
 
 import java.util.Objects;
 
@@ -53,7 +53,7 @@ public final class JepCaller implements Cloneable, AutoCloseable {
     private volatile JepPerformerContainer container;
     // volatile is not necessary, but COULD become necessary if we will not use synchronization
     // it is not "final" because of clone() method, so JVM do not provide the same guarantees as for "final"
-    private final JepInterpretation.Mode interpretationMode;
+    private final JepType type;
     private final JepAPI jepAPI = JepAPI.getInstance();
     private volatile AtomicPyObject pythonClassInstance = null;
 
@@ -70,12 +70,12 @@ public final class JepCaller implements Cloneable, AutoCloseable {
                     "JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
-        final JepInterpretation.Mode mode = this.python.getMode();
-        if (mode.isPure()) {
-            throw new IllegalArgumentException("Pure interpreter (" + mode + "is not allowed");
+        final JepType type = this.python.getMode();
+        if (type.isPure()) {
+            throw new IllegalArgumentException("Pure interpreter (" + type + "is not allowed");
         }
-        this.interpretationMode = mode;
-        this.container = JepAPI.newContainer(mode);
+        this.type = type;
+        this.container = JepAPI.newContainer(type);
     }
 
     public static JepCaller of(PythonSpecification specification) {
@@ -98,12 +98,12 @@ public final class JepCaller implements Cloneable, AutoCloseable {
         return specification.getPlatformId();
     }
 
-    public JepInterpretation.Mode interpretationMode() {
-        return interpretationMode;
+    public JepType type() {
+        return type;
     }
 
     public boolean isGlobalSynchronizationRequired() {
-        return interpretationMode.isJVMGlobal();
+        return type.isJVMGlobal();
     }
 
     public JepPerformer performer() {
@@ -236,7 +236,7 @@ public final class JepCaller implements Cloneable, AutoCloseable {
         try {
             JepCaller clone = (JepCaller) super.clone();
             if (!REUSE_SINGLE_THREAD_FOR_ALL_INSTANCES) {
-                clone.container = JepAPI.newContainer(interpretationMode);
+                clone.container = JepAPI.newContainer(type);
             }
             return clone;
 

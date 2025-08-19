@@ -127,7 +127,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
         long t2 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "Python module \"%s\" (%s) initialized in %.3f ms",
-                jepCaller.name(), jepCaller.interpretationMode(),
+                jepCaller.name(), jepCaller.type(),
                 (t2 - t1) * 1e-6));
     }
 
@@ -148,7 +148,7 @@ public class InterpretPython extends Executor implements ReadOnlyExecutionInput 
         logDebug(() -> String.format(Locale.US,
                 "Python module \"%s\" (%s) executed in %.5f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                jepCaller.name(), jepCaller.interpretationMode(),
+                jepCaller.name(), jepCaller.type(),
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }

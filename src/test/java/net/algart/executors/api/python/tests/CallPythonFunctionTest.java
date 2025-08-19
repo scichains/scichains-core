@@ -26,7 +26,7 @@ package net.algart.executors.api.python.tests;
 
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.python.core.CallPythonFunction;
-import net.algart.jep.additions.JepInterpretation;
+import net.algart.jep.additions.JepType;
 
 public class CallPythonFunctionTest {
     private static final boolean DO_CLOSE = true;
@@ -37,7 +37,7 @@ public class CallPythonFunctionTest {
         CallPythonFunction e = new CallPythonFunction();
         // e.setInterpretationMode(JepInterpretation.Mode.SUB_INTERPRETER);
         // - in the current version, leads to warnings in the console
-        e.setInterpretationMode(JepInterpretation.Mode.SHARED);
+        e.setInterpretationMode(JepType.SHARED);
         e.execute();
         if (DO_CLOSE) {
             e.close();

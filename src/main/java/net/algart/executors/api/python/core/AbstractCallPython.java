@@ -33,6 +33,7 @@ import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyObject;
 import net.algart.jep.additions.JepInterpretation;
+import net.algart.jep.additions.JepType;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -95,11 +96,11 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private JepInterpretation.Mode interpretationMode = JepInterpretation.Mode.SHARED;
+    private JepType interpretationMode = JepType.SHARED;
 
-    final JepPerformerContainer sharedContainer = JepAPI.newContainer(JepInterpretation.Mode.SHARED);
-    final JepPerformerContainer subContainer = JepAPI.newContainer(JepInterpretation.Mode.SUB_INTERPRETER);
-    final JepPerformerContainer globalContainer = JepAPI.newContainer(JepInterpretation.Mode.GLOBAL);
+    final JepPerformerContainer sharedContainer = JepAPI.newContainer(JepType.SHARED);
+    final JepPerformerContainer subContainer = JepAPI.newContainer(JepType.SUB_INTERPRETER);
+    final JepPerformerContainer globalContainer = JepAPI.newContainer(JepType.GLOBAL);
     // - 3 lightweight containers is a simple alternative for recreating a single container
     volatile JepPerformer performer = null;
 
@@ -293,11 +294,11 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final JepInterpretation.Mode getInterpretationMode() {
+    public final JepType getInterpretationMode() {
         return interpretationMode;
     }
 
-    public final AbstractCallPython setInterpretationMode(JepInterpretation.Mode interpretationMode) {
+    public final AbstractCallPython setInterpretationMode(JepType interpretationMode) {
         nonNull(interpretationMode);
         if (interpretationMode != this.interpretationMode) {
             closePython();

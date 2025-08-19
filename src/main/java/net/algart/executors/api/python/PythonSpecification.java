@@ -29,7 +29,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import net.algart.executors.api.jep.JepAPI;
 import net.algart.executors.api.system.ExecutorSpecification;
-import net.algart.jep.additions.JepInterpretation;
+import net.algart.jep.additions.JepType;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
 
@@ -49,7 +49,7 @@ public class PythonSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepInterpretation.Mode mode = JepInterpretation.Mode.SHARED;
+        private JepType mode = JepType.SHARED;
 
         public Python() {
         }
@@ -61,8 +61,8 @@ public class PythonSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String mode = json.getString("mode", JepInterpretation.Mode.SHARED.modeName());
-            this.mode = JepInterpretation.Mode.ofOrNull(mode);
+            final String mode = json.getString("mode", JepType.SHARED.typeName());
+            this.mode = JepType.ofOrNull(mode);
             Jsons.requireNonNull(this.mode, json, "mode", "unknown (\"" + mode + "\")", file);
         }
 
@@ -120,11 +120,11 @@ public class PythonSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public JepInterpretation.Mode getMode() {
+        public JepType getMode() {
             return mode;
         }
 
-        public Python setMode(JepInterpretation.Mode mode) {
+        public Python setMode(JepType mode) {
             this.mode = nonNull(mode);
             return this;
         }
@@ -147,7 +147,7 @@ public class PythonSpecification extends ExecutorSpecification {
                    ", outputsClass='" + outputsClass + '\'' +
                    ", className='" + className + '\'' +
                    ", function='" + function + '\'' +
-                   ", interpretationMode=" + mode +
+                   ", mode=" + mode +
                    '}';
         }
 
