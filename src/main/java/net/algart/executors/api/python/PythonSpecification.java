@@ -49,7 +49,7 @@ public class PythonSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepType mode = JepType.SHARED;
+        private JepType jepType = JepType.SHARED;
 
         public Python() {
         }
@@ -61,9 +61,9 @@ public class PythonSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String mode = json.getString("mode", JepType.SHARED.typeName());
-            this.mode = JepType.ofOrNull(mode);
-            Jsons.requireNonNull(this.mode, json, "mode", "unknown (\"" + mode + "\")", file);
+            final String jepType = json.getString("jepType", JepType.SHARED.typeName());
+            this.jepType = JepType.ofOrNull(jepType);
+            Jsons.requireNonNull(this.jepType, json, "jepType", "unknown (\"" + jepType + "\")", file);
         }
 
         public String getModule() {
@@ -120,12 +120,12 @@ public class PythonSpecification extends ExecutorSpecification {
             return this;
         }
 
-        public JepType getMode() {
-            return mode;
+        public JepType getJepType() {
+            return jepType;
         }
 
-        public Python setMode(JepType mode) {
-            this.mode = nonNull(mode);
+        public Python setJepType(JepType jepType) {
+            this.jepType = nonNull(jepType);
             return this;
         }
 
@@ -147,7 +147,7 @@ public class PythonSpecification extends ExecutorSpecification {
                    ", outputsClass='" + outputsClass + '\'' +
                    ", className='" + className + '\'' +
                    ", function='" + function + '\'' +
-                   ", mode=" + mode +
+                   ", jepType=" + jepType +
                    '}';
         }
 
@@ -161,7 +161,7 @@ public class PythonSpecification extends ExecutorSpecification {
                 builder.add("class", className);
             }
             builder.add("function", function);
-            builder.add("mode", mode.name());
+            builder.add("jepType", jepType.name());
         }
     }
 

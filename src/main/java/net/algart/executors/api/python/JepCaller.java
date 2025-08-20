@@ -70,7 +70,7 @@ public final class JepCaller implements Cloneable, AutoCloseable {
                     "JSON" + (file == null ? "" : " " + file)
                     + " is not a Python executor configuration: no \"python\" section");
         }
-        final JepType type = this.python.getMode();
+        final JepType type = this.python.getJepType();
         if (type.isPure()) {
             throw new IllegalArgumentException("Pure interpreter (" + type + "is not allowed");
         }

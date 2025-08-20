@@ -167,8 +167,8 @@
       "advanced": true
     },
     {
-      "name": "interpretationMode",
-      "caption": "Python interpretation mode",
+      "name": "jepType",
+      "caption": "Python interpretation type",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

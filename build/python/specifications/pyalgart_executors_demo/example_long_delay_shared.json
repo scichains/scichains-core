@@ -9,7 +9,7 @@
   "language": "python",
   "python": {
     "module": "pyalgart_executors_demo.example_long_delay",
-    "mode": "shared"
+    "jepType": "shared"
   },
   "in_ports": [
   ],

@@ -96,7 +96,7 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private JepType interpretationMode = JepType.SHARED;
+    private JepType jepType = JepType.SHARED;
 
     final JepPerformerContainer sharedContainer = JepAPI.newContainer(JepType.SHARED);
     final JepPerformerContainer subContainer = JepAPI.newContainer(JepType.SUB_INTERPRETER);
@@ -294,16 +294,16 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public final JepType getInterpretationMode() {
-        return interpretationMode;
+    public final JepType getJepType() {
+        return jepType;
     }
 
-    public final AbstractCallPython setInterpretationMode(JepType interpretationMode) {
-        nonNull(interpretationMode);
-        if (interpretationMode != this.interpretationMode) {
+    public final AbstractCallPython setJepType(JepType jepType) {
+        nonNull(jepType);
+        if (jepType != this.jepType) {
             closePython();
             // - this is safer to close all containers, not only the current
-            this.interpretationMode = interpretationMode;
+            this.jepType = jepType;
         }
         return this;
     }
@@ -361,7 +361,7 @@ public abstract class AbstractCallPython extends Executor {
     protected abstract String executorName();
 
     private boolean isGlobalSynchronizationRequired() {
-        return interpretationMode.isJVMGlobal();
+        return jepType.isJVMGlobal();
     }
 
     private void initializePython() {
@@ -380,7 +380,7 @@ public abstract class AbstractCallPython extends Executor {
                 String.join(String.format("%n"), JepPlatforms.pythonRootFolders()));
         logDebug(() -> String.format(Locale.US,
                 "%s (%s) initialized in %.3f ms: %.6f ms getting context + %.6f ms initializing code",
-                executorName(), interpretationMode,
+                executorName(), jepType,
                 (t3 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6));
     }
@@ -408,7 +408,7 @@ public abstract class AbstractCallPython extends Executor {
         logDebug(() -> String.format(Locale.US,
                 "%s \"%s\" (%s) executed in %.3f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
-                executorName(), mainFunctionName, interpretationMode,
+                executorName(), mainFunctionName, jepType,
                 (t4 - t1) * 1e-6,
                 (t2 - t1) * 1e-6, (t3 - t2) * 1e-6, (t4 - t3) * 1e-6));
     }
@@ -420,7 +420,7 @@ public abstract class AbstractCallPython extends Executor {
     }
 
     private JepPerformerContainer container() {
-        return switch (interpretationMode) {
+        return switch (jepType) {
             case SUB_INTERPRETER -> subContainer;
             case SHARED -> sharedContainer;
             case GLOBAL -> globalContainer;
