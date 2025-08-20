@@ -87,7 +87,7 @@ public final class UseMultiChain extends FileOperation {
     public static final String IGNORE_PARAMETERS_PARAMETER_CAPTION = "Ignore parameters below";
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
             "If set, the behavior is fully determined by the input settings port and internal settings " +
-                    "of the sub-chain. All parameters below are not included into the settings JSON " +
+                    "of the chain. All parameters below are not included into the settings JSON " +
                     "even if they are not specified in the section \"" +
                     SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
                     "of the input settings JSON.\n" +
@@ -180,7 +180,7 @@ public final class UseMultiChain extends FileOperation {
     public void process() {
         // Note: unlike UseChain, this function does not allow specifying multichain in a text parameter.
         // It is useless because it does not allow avoiding files at all:
-        // a multi-chain in any case requires several files for sub-chain variants.
+        // a multi-chain in any case requires several files for chain variants.
         try {
             useSeveralPaths(completeSeveralFilePaths());
         } catch (IOException e) {
@@ -237,7 +237,7 @@ public final class UseMultiChain extends FileOperation {
                     Collections.singletonList(chainSpecification);
             if (multiChainSpecification == null && chainSpecification == null) {
                 throw new JsonException("JSON " + multiChainSpecificationPath
-                        + " is not a valid multi-chain or sub-chain configuration");
+                        + " is not a valid multi-chain or chain configuration");
 
             }
         }
@@ -257,7 +257,7 @@ public final class UseMultiChain extends FileOperation {
             final MultiChain multiChain;
             long t1 = infoTime();
             try {
-                // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
+                // Note: recursion is not a problem here; in this case, all chains will be just skipped
                 multiChain = use(multiChainSpecification, chainFactory, settingsFactory);
             } catch (ChainLoadingException e) {
                 throw e;
@@ -271,7 +271,7 @@ public final class UseMultiChain extends FileOperation {
             final Set<String> blockedChainModelNames = multiChain.blockedChainSpecificationNames();
             // - Note: in a multi-chain, all chain variants always have different names
             // (it is checked in MultiChainSpecification.readChainVariants method).
-            // Note: recursive usage of multi-chain is a sub-chain is possible, but seems to be an error,
+            // Note: recursive usage of a multi-chain is a chain is possible, but seems to be an error,
             // so, we use WARNING level here.
             final int index = i;
             final boolean hasBlocked = !blockedChainModelNames.isEmpty();
@@ -302,7 +302,7 @@ public final class UseMultiChain extends FileOperation {
     }
 
     public MultiChain use(MultiChainSpecification multiChainSpecification) throws IOException {
-        // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
+        // Note: recursion is not a problem here; in this case, all chains will be just skipped
         final UseChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
         return use(multiChainSpecification, chainFactory, settingsFactory);
@@ -314,7 +314,7 @@ public final class UseMultiChain extends FileOperation {
             UseMultiChainSettings settingsFactory)
             throws IOException {
         final MultiChain multiChain = MultiChain.of(multiChainSpecification, chainFactory, settingsFactory);
-        // - Actually use all sub-chains and built-in multi-chain settings combiner
+        // - Actually use all chains and built-in multi-chain settings combiners
         multiChain.checkImplementationCompatibility(strictMode);
         MULTI_CHAIN_LOADER.registerWorker(getSessionId(), buildMultiChainSpecification(multiChain), multiChain);
         return multiChain;

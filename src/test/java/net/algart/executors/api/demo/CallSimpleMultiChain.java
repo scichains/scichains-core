@@ -52,7 +52,7 @@ public class CallSimpleMultiChain {
             .setString("a", a)
             .setString("b", b)
             .setString(variant, "{\"delta\": 0.003}");
-        // - adding "delta" parameter for a case when the sub-chain "understands" it
+        // - adding "delta" parameter for a case when the chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
         executor.putSettings(settingsJson);
@@ -65,7 +65,7 @@ public class CallSimpleMultiChain {
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
         combiner.putStringScalar(variant, "{\"delta\": 0.003}");
-        // - adding "delta" sub-parameter for a case when the sub-chain "understands" it
+        // - adding "delta" sub-parameter for a case when the chain "understands" it
         final var settings = combiner.combine();
         System.out.printf("%nCombined JSON: %s%n%n", settings);
         executor.putSettings(settings);
@@ -79,7 +79,7 @@ public class CallSimpleMultiChain {
         final JsonObject settings = tree.settingsJson(path -> {
             if (path.lastName().equals("delta")) {
                 return Jsons.toJsonDoubleValue(0.004);
-                // - setting some "delta" sub-parameter for a case when the sub-chain has it
+                // - setting some "delta" sub-parameter for a case when the chain has it
             }
             return switch (path.toString()) {
                 case "/" + MultiChain.SELECTED_CHAIN_NAME  -> Jsons.toJsonStringValue(variant);

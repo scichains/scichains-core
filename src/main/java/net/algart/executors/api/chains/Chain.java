@@ -664,6 +664,19 @@ public final class Chain implements AutoCloseable {
         if (settingsBlock == null)
             throw new AssertionError("Main settings block  '"
                     + mainSettingsBlockId + "' is not found in the chain " + this);
+        final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
+        if (settingsSpecification != null) {
+            // - In the current version, settingsSpecification will usually be null.
+            // We build every ChainBlock at the stage of loading a chain, BEFORE executing its loading-time
+            // functions; at this stage, settings are not registered yet, and we have no correct JSON.
+            if (!settingsSpecification.isRoleSettings()) {
+                throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
+                        "a correct role \"settings\" (its options are " +
+                        settingsSpecification.getOptions() + ")");
+                // Note: this role MAY be not a main role if we loaded these settings not only with a correct
+                // function UseChainSettings, but also with a simple UseSettings
+            }
+        }
         final String prettyString = Jsons.toPrettyString(selectedChainSettings);
         settingsBlock.setActualInputData(Executor.SETTINGS, SScalar.of(prettyString));
         return prettyString;

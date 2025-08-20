@@ -572,7 +572,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     public List<Path> resolveChainVariantPaths() {
-        return chainVariantPaths.stream().map(p -> resolve(p, "sub-chain path")).toList();
+        return chainVariantPaths.stream().map(p -> resolve(p, "chain path")).toList();
     }
 
     /**
@@ -600,7 +600,7 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
             }
         }
         if (result.isEmpty()) {
-            throw new FileNotFoundException("No valid sub-chains found for multi-chain \"" + name
+            throw new FileNotFoundException("No valid chains found for multi-chain \"" + name
                     + "\" among the following paths: " + paths);
         }
         ChainSpecification.checkIdDifference(result);
@@ -756,10 +756,10 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
     }
 
     private static List<String> checkChainVariantPaths(List<String> chainFileNames) {
-        Objects.requireNonNull(chainFileNames, "Null array of sub-chain file names");
+        Objects.requireNonNull(chainFileNames, "Null array of chain file names");
         chainFileNames = new ArrayList<>(chainFileNames);
         if (chainFileNames.isEmpty()) {
-            throw new IllegalArgumentException("Empty array of sub-chain file names");
+            throw new IllegalArgumentException("Empty array of chain file names");
         }
         for (int k = 0, n = chainFileNames.size(); k < n; k++) {
             Objects.requireNonNull(chainFileNames.get(k), "Null element #" + k
@@ -804,9 +804,9 @@ public final class MultiChainSpecification extends AbstractConvertibleToJson {
         System.out.println(modifyIdForSettings(id));
 
         MultiChainSpecification multiChainSpecification = read(Paths.get(args[0]));
-        System.out.println("Multi sub-chain:");
+        System.out.println("Multi-chain:");
         System.out.println(multiChainSpecification);
-        System.out.println("Sub-chain paths:");
+        System.out.println("Chain paths:");
         System.out.println(multiChainSpecification.resolveChainVariantPaths());
         System.out.println("JSON:");
         System.out.println(Jsons.toPrettyString(multiChainSpecification.toJson()));

@@ -185,7 +185,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
         final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
         if (settingsSpecification != null) {
             // - In the current version, settingsSpecification will usually be null.
-            // We build every ChainBlock at the stage of loading a sub-chain, BEFORE executing its loading-time
+            // We build every ChainBlock at the stage of loading a chain, BEFORE executing its loading-time
             // functions; at this stage, settings are not registered yet, and we have no correct JSON.
             if (!settingsSpecification.isRoleSettings()) {
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
@@ -195,11 +195,11 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
                 // function UseChainSettings, but also with a simple UseSettings
             }
         }
-        final var settingsExecutor = settingsBlock.getExecutor();
-        if (!(settingsExecutor instanceof CombineSettings)) {
-            throw new AssertionError("Dynamic executor '" + settingsExecutor.getExecutorId()
-                    + "' must be an instance of CombineSettings, but it is " + settingsExecutor);
-        }
+//        final var settingsExecutor = settingsBlock.getExecutor();
+//        if (!(settingsExecutor instanceof CombineSettings)) {
+//            throw new AssertionError("Dynamic executor '" + settingsExecutor.getExecutorId()
+//                    + "' must be an instance of CombineSettings, but it is " + settingsExecutor);
+//        }
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(SETTINGS)) {
