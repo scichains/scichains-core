@@ -2,8 +2,8 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "logic.compiler.chains",
-  "name": "Use sub-chain",
-  "description": "Allows to use the given sub-chain (registers it as a new executor).<br>Note: this function is identical to \"Use sub-chain(s)\". The only difference is the &quot;file&quot; parameter is edited hear as a path to some single file.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "name": "Use chain",
+  "description": "Allows to use the given chain (registers it as a new executor).<br>Note: this function is identical to \"Use sub-chain(s)\". The only difference is the &quot;file&quot; parameter is edited hear as a path to some single file.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
   "tags": [
     "logic"
   ],

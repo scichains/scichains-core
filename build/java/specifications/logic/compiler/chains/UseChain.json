@@ -2,8 +2,8 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "logic.compiler.chains",
-  "name": "Use sub-chain(s)",
-  "description": "Allows to use the given sub-chain (registers it as a new executor) or a set of sub-chains.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "name": "Use chain(s)",
+  "description": "Allows to use the given chain (registers it as a new executor) or a set of sub-chains.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
   "tags": [
     "logic"
   ],

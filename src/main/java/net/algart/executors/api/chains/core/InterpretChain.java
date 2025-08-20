@@ -159,7 +159,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
         }
         final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
         // Note: the chain is a cleanCopy() of the original chain, so, we need
-        // to find CombineSettings block again by its ID
+        // to find the block with CombineSettings again by its ID
         if (settingsBlock == null)
             throw new AssertionError("Dynamic executor '"
                     + chain.getMainSettingsBlockId() + "' not found in the chain " + chain);
@@ -172,7 +172,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
                 throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
                         "a correct role \"settings\" (its options are " +
                         settingsSpecification.getOptions() + ")");
-                // Note: this role MAY be not a main role, if we loaded these settings not only with a correct
+                // Note: this role MAY be not a main role if we loaded these settings not only with a correct
                 // function UseChainSettings, but also with a simple UseSettings
             }
         }
