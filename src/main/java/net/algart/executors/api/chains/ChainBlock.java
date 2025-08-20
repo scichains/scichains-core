@@ -158,9 +158,9 @@ public final class ChainBlock {
         // Results may be even worse if an executor has a non-trivial internal state.
         //
         // Note: this problem rarely occurs because usually the cloned chain contains
-        // non-initialized executors (created by UseSubChain or UseMultiChain).
+        // non-initialized executors (created by UseChain or UseMultiChain).
         // But here is an important exception: method ExecutorSpecification.setTo(Chain chain),
-        // used inside UseSubChain to build a chain executor specification,
+        // used inside UseChain to build a chain executor specification,
         // initializes data blocks (with options.behavior.data = true) to know the default
         // corresponding parameters values of the sub-chain executor.
         // This situation really can lead to bug in recursive chains.

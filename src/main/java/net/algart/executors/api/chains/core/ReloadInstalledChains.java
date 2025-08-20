@@ -38,7 +38,7 @@ public final class ReloadInstalledChains extends Executor {
     @Override
     public void process() {
         try {
-            UseSubChain.useAllInstalledInSharedContext();
+            UseChain.useAllInstalledInSharedContext();
             UseMultiChain.useAllInstalledInSharedContext();
             getScalar().setTo("Done; see logs for details");
         } catch (IOException e) {

@@ -29,7 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.core.ChainExecutor;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
@@ -93,13 +93,13 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         selectedChain.reinitializeAll();
         selectedChain.setCaller(this);
         final Level timingLogLevel = ofLogLevel(parameters().getString(
-                UseMultiChain.TIMING_LOG_LEVEL_NAME, UseSubChain.TIMING_LOG_LEVEL_DEFAULT));
+                UseMultiChain.TIMING_LOG_LEVEL_NAME, UseChain.TIMING_LOG_LEVEL_DEFAULT));
         final int timingNumberOfCalls = LOG.isLoggable(timingLogLevel) ?
                 parameters().getInteger(
-                        UseMultiChain.TIMING_NUMBER_OF_CALLS_NAME, UseSubChain.TIMING_NUMBER_OF_CALLS_DEFAULT) :
+                        UseMultiChain.TIMING_NUMBER_OF_CALLS_NAME, UseChain.TIMING_NUMBER_OF_CALLS_DEFAULT) :
                 0;
         final int timingNumberOfPercentiles = parameters().getInteger(
-                UseMultiChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseSubChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
+                UseMultiChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
         final TimingStatistics.Settings timingConfiguration = new TimingStatistics.Settings();
         timingConfiguration.setUniformPercentileLevels(timingNumberOfPercentiles);
         selectedChain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
@@ -128,7 +128,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
         timing.updateExecution(t5 - t4);
         timing.updateSummary(t7 - t1);
         if (timingNumberOfCalls > 0 &&
-                parameters().getBoolean(UseMultiChain.LOG_TIMING_NAME, UseSubChain.LOG_TIMING_DEFAULT)) {
+                parameters().getBoolean(UseMultiChain.LOG_TIMING_NAME, UseChain.LOG_TIMING_DEFAULT)) {
             timing.analyse();
             final Path file = multiChain.specification().getSpecificationFile();
             LOG.log(timingLogLevel, () -> String.format(Locale.US,

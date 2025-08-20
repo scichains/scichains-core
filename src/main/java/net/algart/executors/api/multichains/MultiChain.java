@@ -27,8 +27,8 @@ package net.algart.executors.api.multichains;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.chains.*;
-import net.algart.executors.api.chains.core.InterpretSubChain;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.InterpretChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.multichains.core.CombineMultiChainSettings;
 import net.algart.executors.api.multichains.core.MultiChainExecutor;
 import net.algart.executors.api.multichains.core.UseMultiChainSettings;
@@ -60,7 +60,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
     // for executing anything; but it is used as a context ID for multi-chain settings.
     private final MultiChainSpecification specification;
-    private final UseSubChain chainFactory;
+    private final UseChain chainFactory;
     private final List<ChainSpecification> chainSpecifications;
     private final List<ChainSpecification> blockedChainSpecifications;
     private final Set<String> blockedChainSpecificationNames;
@@ -81,7 +81,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     private MultiChain(
             MultiChainSpecification specification,
-            UseSubChain chainFactory,
+            UseChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
         renewContextId();
@@ -165,7 +165,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     public static MultiChain of(
             MultiChainSpecification specification,
-            UseSubChain chainFactory,
+            UseChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
         return new MultiChain(specification, chainFactory, settingsFactory);
@@ -243,7 +243,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         }
     }
 
-    public UseSubChain сhainFactory() {
+    public UseChain сhainFactory() {
         assert chainFactory != null;
         return chainFactory;
     }
@@ -542,7 +542,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         Map<String, Chain> result = new LinkedHashMap<>();
         for (ChainSpecification chainSpecification : this.chainSpecifications) {
             final String executorId = chainSpecification.chainId();
-            final Chain chain = InterpretSubChain.registeredChain(chainFactory.getSessionId(), executorId);
+            final Chain chain = InterpretChain.registeredChain(chainFactory.getSessionId(), executorId);
             if (specification.isBehaviourSettingsRequired() && !chain.hasSettings()) {
                 throw new IllegalStateException("Chain \"" + chain.name()
                         + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()

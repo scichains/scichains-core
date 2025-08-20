@@ -25,6 +25,7 @@
 package net.algart.executors.api.system;
 
 import net.algart.executors.api.ExecutionBlock;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.parameters.Parameters;
 
@@ -39,7 +40,7 @@ public enum CreateMode {
      * The executor is created by its constructor or an equivalent instantiation method.
      * No additional initialization is performed.
      * Note that some executors can be unable to operate normally in this mode: for example, a
-     * {@link net.algart.executors.api.chains.core.UseSubChain#newExecutor}
+     * {@link UseChain#newExecutor}
      * requires information about its executor ID.
      */
     NO_ACTIONS {

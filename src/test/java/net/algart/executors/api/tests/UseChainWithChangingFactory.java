@@ -25,7 +25,7 @@
 package net.algart.executors.api.tests;
 
 import net.algart.executors.api.chains.core.ChainExecutor;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.extensions.InstalledExtensions;
 import net.algart.executors.api.system.CreateMode;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -33,19 +33,19 @@ import net.algart.executors.api.system.ExecutorSpecification;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class UseSubChainWithChangingFactory {
+public class UseChainWithChangingFactory {
     @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
         final String path1 = "src/test/resources/chains/chain_from_java/simplest_scalar/scalar_product.chain";
         final String path2 = "src/test/resources/chains/chain_from_java/simplest_scalar/scalar_sum.chain";
 
-        UseSubChain useSubChain1 = new UseSubChain();
-        useSubChain1.setSessionId("Session_1");
-        ChainExecutor e1 = useSubChain1.newExecutor(Path.of(path1), CreateMode.REQUEST_DEFAULT);
-        UseSubChain useSubChain2 = new UseSubChain();
-        useSubChain2.setSessionId("Session_2");
-        ChainExecutor e2 = useSubChain2.newExecutor(Path.of(path2), CreateMode.REQUEST_DEFAULT);
+        UseChain useChain1 = new UseChain();
+        useChain1.setSessionId("Session_1");
+        ChainExecutor e1 = useChain1.newExecutor(Path.of(path1), CreateMode.REQUEST_DEFAULT);
+        UseChain useChain2 = new UseChain();
+        useChain2.setSessionId("Session_2");
+        ChainExecutor e2 = useChain2.newExecutor(Path.of(path2), CreateMode.REQUEST_DEFAULT);
         ExecutorSpecification s2 = e1.executorFactory().getSpecification(e2.getExecutorId());
         if (s2 != null) {
             throw new AssertionError("Must be null");

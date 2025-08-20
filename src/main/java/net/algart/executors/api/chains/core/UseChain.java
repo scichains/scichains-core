@@ -48,7 +48,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class UseSubChain extends FileOperation {
+public final class UseChain extends FileOperation {
     public static final String SUB_CHAIN_LANGUAGE_NAME = "sub-chain";
     public static final String ADDITIONAL_STANDARD_SUBCHAINS_PATH = Arrays.SystemSettings.getStringProperty(
             "net.algart.executors.logic.compiler.subchains.path", null);
@@ -126,16 +126,16 @@ public final class UseSubChain extends FileOperation {
     final AtomicInteger loadedChainsCount = new AtomicInteger(0);
     // - for logging needs
 
-    public UseSubChain() {
+    public UseChain() {
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
-    public static UseSubChain getInstance(String sessionId) {
-        return setSession(new UseSubChain(), sessionId);
+    public static UseChain getInstance(String sessionId) {
+        return setSession(new UseChain(), sessionId);
     }
 
-    public static UseSubChain getSharedInstance() {
-        return setShared(new UseSubChain());
+    public static UseChain getSharedInstance() {
+        return setShared(new UseChain());
     }
 
     public static DefaultExecutorLoader<Chain> subChainLoader() {
@@ -143,7 +143,7 @@ public final class UseSubChain extends FileOperation {
     }
 
     @Override
-    public UseSubChain setFile(String file) {
+    public UseChain setFile(String file) {
         super.setFile(file);
         return this;
     }
@@ -152,7 +152,7 @@ public final class UseSubChain extends FileOperation {
         return subChainJsonContent;
     }
 
-    public UseSubChain setSubChainJsonContent(String subChainJsonContent) {
+    public UseChain setSubChainJsonContent(String subChainJsonContent) {
         this.subChainJsonContent = nonNull(subChainJsonContent);
         return this;
     }
@@ -161,7 +161,7 @@ public final class UseSubChain extends FileOperation {
         return fileExistenceRequired;
     }
 
-    public UseSubChain setFileExistenceRequired(boolean fileExistenceRequired) {
+    public UseChain setFileExistenceRequired(boolean fileExistenceRequired) {
         this.fileExistenceRequired = fileExistenceRequired;
         return this;
     }
@@ -170,7 +170,7 @@ public final class UseSubChain extends FileOperation {
         return executeIsolatedLoadingTimeFunctions;
     }
 
-    public UseSubChain setExecuteIsolatedLoadingTimeFunctions(boolean executeIsolatedLoadingTimeFunctions) {
+    public UseChain setExecuteIsolatedLoadingTimeFunctions(boolean executeIsolatedLoadingTimeFunctions) {
         this.executeIsolatedLoadingTimeFunctions = executeIsolatedLoadingTimeFunctions;
         return this;
     }
@@ -179,7 +179,7 @@ public final class UseSubChain extends FileOperation {
         return overrideBehaviour;
     }
 
-    public UseSubChain setOverrideBehaviour(boolean overrideBehaviour) {
+    public UseChain setOverrideBehaviour(boolean overrideBehaviour) {
         this.overrideBehaviour = overrideBehaviour;
         return this;
     }
@@ -188,7 +188,7 @@ public final class UseSubChain extends FileOperation {
         return multithreading;
     }
 
-    public UseSubChain setMultithreading(boolean multithreading) {
+    public UseChain setMultithreading(boolean multithreading) {
         this.multithreading = multithreading;
         return this;
     }
@@ -197,7 +197,7 @@ public final class UseSubChain extends FileOperation {
         return executeAll;
     }
 
-    public UseSubChain setExecuteAll(boolean executeAll) {
+    public UseChain setExecuteAll(boolean executeAll) {
         this.executeAll = executeAll;
         return this;
     }
@@ -348,16 +348,16 @@ public final class UseSubChain extends FileOperation {
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
-        final UseSubChain useSubChain = UseSubChain.getSharedInstance();
+        final UseChain useChain = UseChain.getSharedInstance();
         for (ExtensionSpecification.Platform platform : SUB_CHAIN_PLATFORMS.installedPlatforms()) {
             if (platform.hasSpecifications()) {
-                useInstalledFolder(useSubChain, platform.specificationsFolder(), platform,
+                useInstalledFolder(useChain, platform.specificationsFolder(), platform,
                         "installed chain specifications");
             }
         }
         if (ADDITIONAL_STANDARD_SUBCHAINS_PATH != null) {
-            for (String folder : UseSubChain.ADDITIONAL_STANDARD_SUBCHAINS_PATH.split("[\\;]")) {
-                useInstalledFolder(useSubChain, Paths.get(folder), null,
+            for (String folder : UseChain.ADDITIONAL_STANDARD_SUBCHAINS_PATH.split("[\\;]")) {
+                useInstalledFolder(useChain, Paths.get(folder), null,
                         "additional chain specifications");
             }
         }
@@ -507,10 +507,10 @@ public final class UseSubChain extends FileOperation {
         final ExecutorFactory executorFactory = executorFactory();
         Chain chain = Chain.of(this, executorFactory, chainSpecification);
         if (chain.getCurrentDirectory() == null) {
-            // - If the chain was loaded not from file, but from the executor text parameter,
-            // chainSpecification does not contain information about current folder;
+            // - If the chain was loaded not from a file, but from the executor text parameter,
+            // chainSpecification does not contain information about the current folder;
             // in this case, we suppose that the current folder is equal
-            // to the current folder of this UseSubChain executor.
+            // to the current folder of this UseChain executor.
             chain.setCurrentDirectory(this.getCurrentDirectory());
         }
         if (overrideBehaviour) {
@@ -528,7 +528,7 @@ public final class UseSubChain extends FileOperation {
     private ExecutorSpecification buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(Chain chain) {
         Objects.requireNonNull(chain, "Null chain");
         final ExecutorSpecification result = new ExecutorSpecification();
-        result.setTo(new InterpretSubChain());
+        result.setTo(new InterpretChain());
         // - adds JavaConf and (maybe) parameters with setters
         result.setTo(chain);
         result.setSourceInfo(
@@ -595,12 +595,12 @@ public final class UseSubChain extends FileOperation {
     }
 
     private static void useInstalledFolder(
-            UseSubChain useSubChain,
+            UseChain useChain,
             Path folder,
             ExtensionSpecification.Platform platform,
             String name) throws IOException {
         final long t1 = System.nanoTime();
-        final int n = useSubChain.usePath(folder, platform, null);
+        final int n = useChain.usePath(folder, platform, null);
         final long t2 = System.nanoTime();
         logInfo(() -> String.format(Locale.US,
                 "Loading %d %s from %s: %.3f ms",

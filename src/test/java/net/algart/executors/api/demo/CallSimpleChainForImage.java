@@ -25,7 +25,7 @@
 package net.algart.executors.api.demo;
 
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.system.ExecutorLoader;
 import net.algart.executors.api.system.ExecutorSpecification;
@@ -62,7 +62,7 @@ public class CallSimpleChainForImage {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (var executor = UseSubChain.newSharedExecutor(chainPath, CreateMode.REQUEST_DEFAULT)) {
+        try (var executor = UseChain.newSharedExecutor(chainPath, CreateMode.REQUEST_DEFAULT)) {
             printSubChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);
@@ -91,7 +91,7 @@ public class CallSimpleChainForImage {
     }
 
     static void printSubChainExecutors() {
-        final ExecutorLoader loader = UseSubChain.subChainLoader();
+        final ExecutorLoader loader = UseChain.subChainLoader();
         System.out.printf("All registered sub-chain IDs: %s%n",
                 loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
         System.out.println("All registered sub-chains:");

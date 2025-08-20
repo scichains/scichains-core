@@ -44,21 +44,21 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Locale;
 
-public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutionInput {
+public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionInput {
     public static final String SETTINGS = SettingsSpecification.SETTINGS;
 
     private final FunctionTiming timing = FunctionTiming.newDisabledInstance();
 
-    public InterpretSubChain() {
+    public InterpretChain() {
         disableOnChangeParametersAutomatic();
     }
 
     @Override
     public void process() {
-        // UseSubChain.useSystemSubChainsPath(getSessionId(), true);
+        // UseChain.useSystemSubChainsPath(getSessionId(), true);
         // - it was incorrect solution
         long t1 = System.nanoTime(), t2, t3, t4, t5, t6, t7, t8;
-        final boolean doAction = parameters().getBoolean(UseSubChain.DO_ACTION_NAME, true);
+        final boolean doAction = parameters().getBoolean(UseChain.DO_ACTION_NAME, true);
         if (!doAction) {
             copyInputToOutput(this);
             return;
@@ -71,13 +71,13 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         chain.reinitializeAll();
         chain.setCaller(this);
         final Level timingLogLevel = ofLogLevel(parameters().getString(
-                UseSubChain.TIMING_LOG_LEVEL_NAME, UseSubChain.TIMING_LOG_LEVEL_DEFAULT));
+                UseChain.TIMING_LOG_LEVEL_NAME, UseChain.TIMING_LOG_LEVEL_DEFAULT));
         final int timingNumberOfCalls = LOG.isLoggable(timingLogLevel) ?
                 parameters().getInteger(
-                        UseSubChain.TIMING_NUMBER_OF_CALLS_NAME, UseSubChain.TIMING_NUMBER_OF_CALLS_DEFAULT) :
+                        UseChain.TIMING_NUMBER_OF_CALLS_NAME, UseChain.TIMING_NUMBER_OF_CALLS_DEFAULT) :
                 0;
         final int timingNumberOfPercentiles = parameters().getInteger(
-                UseSubChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseSubChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
+                UseChain.TIMING_NUMBER_OF_PERCENTILES_NAME, UseChain.TIMING_NUMBER_OF_PERCENTILES_DEFAULT);
         final TimingStatistics.Settings timingConfiguration = new TimingStatistics.Settings();
         timingConfiguration.setUniformPercentileLevels(timingNumberOfPercentiles);
         chain.setTimingSettings(timingNumberOfCalls, timingConfiguration);
@@ -105,7 +105,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
         timing.updateExecution(t6 - t5);
         timing.updateSummary(t8 - t1);
         if (timingNumberOfCalls > 0 &&
-                parameters().getBoolean(UseSubChain.LOG_TIMING_NAME, UseSubChain.LOG_TIMING_DEFAULT)) {
+                parameters().getBoolean(UseChain.LOG_TIMING_NAME, UseChain.LOG_TIMING_DEFAULT)) {
             final String name = chain.name() == null ? "" : " \"" + chain.name() + "\"";
             timing.analyse();
             final Path file = chain.chainSpecificationPath();
@@ -135,7 +135,7 @@ public class InterpretSubChain extends ChainExecutor implements ReadOnlyExecutio
 
     @Override
     public String visibleOutputPortName() {
-        String result = parameters().getString(UseSubChain.VISIBLE_RESULT_PARAMETER_NAME, null);
+        String result = parameters().getString(UseChain.VISIBLE_RESULT_PARAMETER_NAME, null);
         if (result == null) {
             final Collection<Port> outputPorts = outputPorts();
             if (!outputPorts.isEmpty()) {

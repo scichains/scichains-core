@@ -27,7 +27,7 @@ package net.algart.executors.api.demo;
 import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.core.ChainExecutor;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.json.Jsons;
@@ -93,7 +93,7 @@ public class CallSimpleChainWithSettings {
         ExecutionBlock.initializeExecutionSystem();
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
-        try (var executor = UseSubChain.newSharedExecutor(chainPath)) {
+        try (var executor = UseChain.newSharedExecutor(chainPath)) {
             CallSimpleChainForImage.printSubChainExecutors();
             CallSimpleChainForImage.printExecutorInterface(executor);
             executor.putStringScalar("x", x);

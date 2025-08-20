@@ -34,7 +34,7 @@ import net.algart.executors.api.js.core.UseJS;
 import net.algart.executors.api.python.core.UsingPython;
 import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.multichains.core.UseMultiChain;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.external.UsedForExternalCommunication;
 import net.algart.json.PropertyChecker;
 
@@ -1241,7 +1241,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
                     UsingPython.useAllInstalledInSharedContext();
                     UseJS.useAllInstalledInSharedContext();
                     UseSettings.useAllInstalledInSharedContext();
-                    UseSubChain.useAllInstalledInSharedContext();
+                    UseChain.useAllInstalledInSharedContext();
                     UseMultiChain.useAllInstalledInSharedContext();
                     initialized = true;
                     // - in the case of any error, next initialization will raise an error again

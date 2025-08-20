@@ -28,7 +28,7 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonValue;
 import net.algart.executors.api.chains.ChainLoadingException;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.multichains.MultiChainSpecification;
@@ -178,7 +178,7 @@ public final class UseMultiChain extends FileOperation {
 
     @Override
     public void process() {
-        // Note: unlike UseSubChain, this function does not allow to specify multi-chain in a text parameter.
+        // Note: unlike UseChain, this function does not allow specifying multichain in a text parameter.
         // It is useless because it does not allow avoiding files at all:
         // a multi-chain in any case requires several files for sub-chain variants.
         try {
@@ -242,7 +242,7 @@ public final class UseMultiChain extends FileOperation {
             }
         }
         use(multiChainSpecifications, report);
-        try (UseSubChain chainFactory = createChainFactory()) {
+        try (UseChain chainFactory = createChainFactory()) {
             chainFactory.use(chainSpecifications, report);
         }
         return multiChainSpecifications.size();
@@ -250,7 +250,7 @@ public final class UseMultiChain extends FileOperation {
 
     public void use(List<MultiChainSpecification> multiChainSpecifications, StringBuilder report) throws IOException {
         MultiChainSpecification.checkIdDifference(multiChainSpecifications);
-        final UseSubChain chainFactory = createChainFactory();
+        final UseChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
         for (int i = 0, n = multiChainSpecifications.size(); i < n; i++) {
             final MultiChainSpecification multiChainSpecification = multiChainSpecifications.get(i);
@@ -303,14 +303,14 @@ public final class UseMultiChain extends FileOperation {
 
     public MultiChain use(MultiChainSpecification multiChainSpecification) throws IOException {
         // Note: recursion is not a problem here; in this case, all sub-chains will be just skipped
-        final UseSubChain chainFactory = createChainFactory();
+        final UseChain chainFactory = createChainFactory();
         final UseMultiChainSettings settingsFactory = createSettingsFactory();
         return use(multiChainSpecification, chainFactory, settingsFactory);
     }
 
     public MultiChain use(
             MultiChainSpecification multiChainSpecification,
-            UseSubChain chainFactory,
+            UseChain chainFactory,
             UseMultiChainSettings settingsFactory)
             throws IOException {
         final MultiChain multiChain = MultiChain.of(multiChainSpecification, chainFactory, settingsFactory);
@@ -334,7 +334,7 @@ public final class UseMultiChain extends FileOperation {
         result.setLanguage(MULTICHAIN_LANGUAGE);
         result.setInputPorts(specification.getInputPorts());
         result.setOutputPorts(specification.getOutputPorts());
-        UseSubChain.addSettingsPorts(result);
+        UseChain.addSettingsPorts(result);
         final SettingsBuilder multiChainSettingsBuilder = multiChain.settingsBuilder();
         addSystemParameters(result, multiChain);
         UseSettings.addMultiChainControlsAndPorts(result, multiChain.multiChainOnlyCommonSettingsBuilder());
@@ -349,7 +349,7 @@ public final class UseMultiChain extends FileOperation {
                 .setGrouping(true)
                 .setGroupSelector(multiChain.selectedChainParameter());
         options.createServiceIfAbsent().setSettingsId(multiChainSettingsBuilder.id());
-        final ControlSpecification visibleResult = UseSubChain.createVisibleResultControl(
+        final ControlSpecification visibleResult = UseChain.createVisibleResultControl(
                 result, VISIBLE_RESULT_PARAMETER_NAME);
         if (visibleResult != null) {
             result.addControl(visibleResult);
@@ -380,10 +380,10 @@ public final class UseMultiChain extends FileOperation {
                     .setDefaultJsonValue(JsonValue.TRUE)
                     .setAdvanced(false));
         }
-        result.addControl(UseSubChain.createLogTimingControl(LOG_TIMING_NAME));
-        result.addControl(UseSubChain.createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
-        result.addControl(UseSubChain.createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
-        result.addControl(UseSubChain.createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
+        result.addControl(UseChain.createLogTimingControl(LOG_TIMING_NAME));
+        result.addControl(UseChain.createTimingLogLevelControl(TIMING_LOG_LEVEL_NAME));
+        result.addControl(UseChain.createTimingNumberOfCallsControl(TIMING_NUMBER_OF_CALLS_NAME));
+        result.addControl(UseChain.createTimingNumberOfPercentilesControl(TIMING_NUMBER_OF_PERCENTILES_NAME));
         result.addControl(new ControlSpecification()
                 .setName(EXTRACT_SUB_SETTINGS_PARAMETER_NAME)
                 .setCaption(EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", multiChainName))
@@ -407,8 +407,8 @@ public final class UseMultiChain extends FileOperation {
                 .setAdvanced(true));
     }
 
-    private UseSubChain createChainFactory() {
-        final UseSubChain chainFactory = new UseSubChain();
+    private UseChain createChainFactory() {
+        final UseChain chainFactory = new UseChain();
         chainFactory.setSessionId(getSessionId());
         // - Besides this, we use standard parameters of this executor: do not try to customize them.
         // It is a lightweight object, no sense to optimize its creation.

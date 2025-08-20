@@ -28,7 +28,7 @@ import jakarta.json.JsonObject;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.core.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.multichains.core.MultiChainExecutor;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.multichains.core.UseMultiChain;
@@ -78,7 +78,7 @@ public class SettingsTreeDemo {
         if (SettingsSpecification.isSettingsSpecificationFile(executorPath)) {
             executor = UseSettings.newSharedExecutor(factory, executorPath);
         } else if (ChainSpecification.isChainSpecificationFile(executorPath)) {
-            final ChainExecutor chainExecutor = UseSubChain.newSharedExecutor(executorPath);
+            final ChainExecutor chainExecutor = UseChain.newSharedExecutor(executorPath);
             executor = chainExecutor.newCombine();
             // - exception if there are no settings
         } else if (MultiChainSpecification.isMultiChainSpecificationFile(executorPath)) {

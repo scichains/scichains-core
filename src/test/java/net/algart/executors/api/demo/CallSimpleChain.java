@@ -28,7 +28,7 @@ import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.chains.Chain;
 import net.algart.executors.api.chains.core.ChainExecutor;
 import net.algart.executors.api.chains.ChainSpecification;
-import net.algart.executors.api.chains.core.UseSubChain;
+import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.parameters.Parameters;
@@ -51,11 +51,11 @@ public class CallSimpleChain {
 
     private ChainExecutor createExecutor(Path chainPath) throws IOException {
         if (!executeAll) {
-            return UseSubChain.newSharedExecutor(chainPath);
+            return UseChain.newSharedExecutor(chainPath);
             // - this is maximally simple
         } else if (CUSTOMIZING_USE) {
             final ChainSpecification specification = ChainSpecification.read(chainPath);
-            final UseSubChain use = UseSubChain.getSharedInstance().setOverrideBehaviour(true).setExecuteAll(true);
+            final UseChain use = UseChain.getSharedInstance().setOverrideBehaviour(true).setExecuteAll(true);
             // - Note: setOverrideBehaviour is necessary!
             // By default, the chain behavior depends on the specification:
             // the flags in the Executor / Options/ Execution section.
@@ -67,7 +67,7 @@ public class CallSimpleChain {
         } else {
             final ChainSpecification specification = ChainSpecification.read(chainPath);
             specification.getExecutor().getOptions().getExecution().setAll(true);
-            return UseSubChain.newSharedExecutor(specification, CreateMode.REQUEST_ALL);
+            return UseChain.newSharedExecutor(specification, CreateMode.REQUEST_ALL);
             // - you can do it like this too
         }
     }

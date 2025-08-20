@@ -132,11 +132,11 @@ public class DefaultExecutorFactory implements ExecutorFactory {
             }
             specification = loaderSet.getSpecification(sessionId, executorId, true);
             if (specification == null) {
-                // - It will be null, when there is no available executor: for example, it is a dynamic executor
+                // - It will be null when there is no available executor: for example, it is a dynamic executor
                 // (which was not created yet by the corresponding static executor),
                 // or it is not a Java executor (but we have loaded Java only).
-                // The typical example is creating/initializing new Chain in UseSubChain static executor.
-                // This process consists of 3 stages (see UseSubChain.use(ChainSpecification) method):
+                // The typical example is creating/initializing a new Chain in UseChain static executor.
+                // This process consists of 3 stages (see UseChain.use(ChainSpecification) method):
                 //      A) we create a Chain instance with all its blocks (ChainBlock);
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);
