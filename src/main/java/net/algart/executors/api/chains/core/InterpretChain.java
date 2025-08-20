@@ -173,39 +173,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
                 settingsBuilder.build(this);
         final JsonObject overriddenSettings = settingsBuilder.overrideSettings(executorSettings, parentSettings);
 
-        final String settingsString;
-        if (true) {
-            settingsString = chain.setSettings(overriddenSettings);
-        } else {
-            final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
-            // Note: the chain is a cleanCopy() of the original chain, so, we need
-            // to find the block with CombineSettings again by its ID
-            if (settingsBlock == null)
-                throw new AssertionError("Dynamic executor '"
-                        + chain.getMainSettingsBlockId() + "' not found in the chain " + chain);
-            final ExecutorSpecification settingsSpecification = settingsBlock.getExecutorSpecification();
-            if (settingsSpecification != null) {
-                // - In the current version, settingsSpecification will usually be null.
-                // We build every ChainBlock at the stage of loading a chain, BEFORE executing its loading-time
-                // functions; at this stage, settings are not registered yet, and we have no correct JSON.
-                if (!settingsSpecification.isRoleSettings()) {
-                    throw new IllegalArgumentException("Incorrect main chain settings block: it doesn't have " +
-                            "a correct role \"settings\" (its options are " +
-                            settingsSpecification.getOptions() + ")");
-                    // Note: this role MAY be not a main role if we loaded these settings not only with a correct
-                    // function UseChainSettings, but also with a simple UseSettings
-                }
-            }
-//        final var settingsExecutor = settingsBlock.getExecutor();
-//        if (!(settingsExecutor instanceof CombineSettings)) {
-//            throw new AssertionError("Dynamic executor '" + settingsExecutor.getExecutorId()
-//                    + "' must be an instance of CombineSettings, but it is " + settingsExecutor);
-//        }
-            settingsString = Jsons.toPrettyString(overriddenSettings);
-            settingsBlock.setActualInputData(SETTINGS, SScalar.of(settingsString));
-        }
-
-
+        final String settingsString = chain.setSettings(overriddenSettings);
         if (hasOutputPort(SETTINGS)) {
             // - we check the port to be on the safe side; in a correctly created chain, it must exist
             getScalar(SETTINGS).setTo(settingsString);
