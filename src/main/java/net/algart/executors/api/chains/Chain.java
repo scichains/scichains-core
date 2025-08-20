@@ -78,7 +78,7 @@ public final class Chain implements AutoCloseable {
     private volatile boolean timingByExecutorsEnabled = false;
     // - This flag enables executors, called from the chain, to collect statistics about their timing.
     // By default, disabled: measuring time while multithreading execution cannot be correct;
-    // instead, we will measure the time of SubChain executor, which executes this chain.
+    // instead, we will measure the time of Chain executor, which executes this chain.
     // But this flag can be set by debugging applications, like ExecutingChain class.
     private volatile String mainSettingsBlockId = null;
     private volatile SettingsBuilder mainSettingsBuilder = null;
@@ -497,8 +497,8 @@ public final class Chain implements AutoCloseable {
         Objects.requireNonNull(parameters, "Null parameters map");
         synchronized (chainLock) {
             for (ChainBlock block : getAllData()) {
-                final String subChainParameterName = block.getStandardParameterName();
-                if (subChainParameterName == null) {
+                final String chainParameterName = block.getStandardParameterName();
+                if (chainParameterName == null) {
                     continue;
                 }
                 final ChainInputPort inputPort = block.reqStandardDataPort();
@@ -508,7 +508,7 @@ public final class Chain implements AutoCloseable {
                     continue;
                 }
 
-                final String value = parameters.getString(subChainParameterName, null);
+                final String value = parameters.getString(chainParameterName, null);
                 // - should be called after checking for a scalar type: for other types,
                 // ExecutorSpecification.setTo(Chain) does not add parameters
                 if (value != null) {
@@ -606,7 +606,7 @@ public final class Chain implements AutoCloseable {
                 this.needToRepeat = false;
                 Collection<ChainBlock> blocksToExecute = executeAll ? all :
                         executor == null || executor.isAllOutputsNecessary() ?
-                                // This executor (like SubChain from the extensions) probably doesn't know
+                                // This executor (like a chain from the extensions) probably doesn't know
                                 // its output ports yet: they will be added dynamically by this chain.
                                 // So, if it wants to receive ALL results, we should use ALL outputs of this chain.
                                 getAllOutputs() :

@@ -63,7 +63,7 @@ public class CallSimpleChainForImage {
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
         try (var executor = UseChain.newSharedExecutor(chainPath, CreateMode.REQUEST_DEFAULT)) {
-            printSubChainExecutors();
+            printChainExecutors();
             printExecutorInterface(executor);
             executor.putMat(inputMat);
             if (parameterA != null) {
@@ -90,8 +90,8 @@ public class CallSimpleChainForImage {
         }
     }
 
-    static void printSubChainExecutors() {
-        final ExecutorLoader loader = UseChain.subChainLoader();
+    static void printChainExecutors() {
+        final ExecutorLoader loader = UseChain.chainLoader();
         System.out.printf("All registered sub-chain IDs: %s%n",
                 loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
         System.out.println("All registered sub-chains:");

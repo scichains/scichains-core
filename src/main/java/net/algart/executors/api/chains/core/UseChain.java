@@ -49,8 +49,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class UseChain extends FileOperation {
-    public static final String SUB_CHAIN_LANGUAGE_NAME = "sub-chain";
-    public static final String ADDITIONAL_STANDARD_SUBCHAINS_PATH = Arrays.SystemSettings.getStringProperty(
+    public static final String CHAIN_LANGUAGE_NAME = "chain";
+    public static final String ADDITIONAL_STANDARD_CHAINS_PATH = Arrays.SystemSettings.getStringProperty(
             "net.algart.executors.api.chains.path", null);
 
     public static final String DO_ACTION_NAME = "_sch___doAction";
@@ -97,18 +97,19 @@ public final class UseChain extends FileOperation {
 
     static final String RECURSIVE_LOADING_BLOCKED_MESSAGE = "[recursive loading chain blocked]";
 
-    private static final InstalledPlatformsForTechnology SUB_CHAIN_PLATFORMS =
+    private static final InstalledPlatformsForTechnology CHAIN_PLATFORMS =
             InstalledPlatformsForTechnology.of(ChainSpecification.CHAIN_TECHNOLOGY);
-    private static final DefaultExecutorLoader<Chain> SUB_CHAIN_LOADER =
-            new DefaultExecutorLoader<>("sub-chains loader");
+    private static final DefaultExecutorLoader<Chain> CHAIN_LOADER =
+            new DefaultExecutorLoader<>("chains loader");
 
     static {
-        globalLoaders().register(SUB_CHAIN_LOADER);
+        globalLoaders().register(CHAIN_LOADER);
     }
 
     private static final Set<String> NOW_USED_CHAIN_IDS = Collections.synchronizedSet(new HashSet<>());
 
     private String subChainJsonContent = "";
+    // - we preserve the old-style name for compatibility
     private boolean fileExistenceRequired = true;
     private boolean executeIsolatedLoadingTimeFunctions = true;
     private boolean overrideBehaviour = false;
@@ -116,7 +117,7 @@ public final class UseChain extends FileOperation {
     private boolean executeAll = false;
 
     private volatile ExecutorFactory executorFactory = null;
-    // - Note: this factory is not shared with sub-chains called from blocks of this chain.
+    // - Note: this factory is not shared with chains called from blocks of this chain.
     // This could be implemented in executeLoadingTimeBlocksWithoutInputs, but there is no serious point
     // in doing so: it is a minor optimization, and it can lead to potential problems with freeing resources
     // (cache inside the executor factory).
@@ -138,8 +139,8 @@ public final class UseChain extends FileOperation {
         return setShared(new UseChain());
     }
 
-    public static DefaultExecutorLoader<Chain> subChainLoader() {
-        return SUB_CHAIN_LOADER;
+    public static DefaultExecutorLoader<Chain> chainLoader() {
+        return CHAIN_LOADER;
     }
 
     @Override
@@ -238,8 +239,8 @@ public final class UseChain extends FileOperation {
         } else {
             final String subChainJsonContent = this.subChainJsonContent.trim();
             if (subChainJsonContent.isEmpty()) {
-                throw new IllegalArgumentException("One of arguments \"Sub-chain JSON file/folder\" "
-                        + "or \"Sub-chain JSON content\" must be non-empty");
+                throw new IllegalArgumentException("One of arguments \"Chain JSON file/folder\" "
+                        + "or \"Chain JSON content\" must be non-empty");
             }
             useContent(subChainJsonContent);
         }
@@ -281,7 +282,7 @@ public final class UseChain extends FileOperation {
         final List<ChainSpecification> chainSpecifications;
         if (!Files.exists(chainSpecificationPath)) {
             if (fileExistenceRequired) {
-                throw new FileNotFoundException("Sub-chain file or sub-chains folder " + chainSpecificationPath
+                throw new FileNotFoundException("Chain file or chains folder " + chainSpecificationPath
                         + " does not exist");
             } else {
                 return 0;
@@ -303,7 +304,7 @@ public final class UseChain extends FileOperation {
         final Optional<Chain> chain = useIfNonRecursive(chainSpecification);
         long t2 = infoTime();
         LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
-                () -> String.format(Locale.US, "Sub-chain \"%s\"%s %screated from text parameter in %.3f ms",
+                () -> String.format(Locale.US, "Chain \"%s\"%s %screated from text parameter in %.3f ms",
                         chain.isEmpty() ? RECURSIVE_LOADING_BLOCKED_MESSAGE : chain.get().name(),
                         additionalChainInformation(chain.orElse(null)),
                         chain.isPresent() ? "" : "not ",
@@ -334,7 +335,7 @@ public final class UseChain extends FileOperation {
             if (NOW_USED_CHAIN_IDS.contains(chainId)) {
                 // - Avoid infinite recursion.
                 // Note that we cannot do this via fields of this class:
-                // SUB_CHAIN_LOADER.registerWorker method always creates new Chain instances
+                // CHAIN_LOADER.registerWorker method always creates new Chain instances
                 // with new clean blocks and their executors.
                 return Optional.empty();
             }
@@ -349,14 +350,14 @@ public final class UseChain extends FileOperation {
 
     public static void useAllInstalledInSharedContext() throws IOException {
         final UseChain useChain = UseChain.getSharedInstance();
-        for (ExtensionSpecification.Platform platform : SUB_CHAIN_PLATFORMS.installedPlatforms()) {
+        for (ExtensionSpecification.Platform platform : CHAIN_PLATFORMS.installedPlatforms()) {
             if (platform.hasSpecifications()) {
                 useInstalledFolder(useChain, platform.specificationsFolder(), platform,
                         "installed chain specifications");
             }
         }
-        if (ADDITIONAL_STANDARD_SUBCHAINS_PATH != null) {
-            for (String folder : UseChain.ADDITIONAL_STANDARD_SUBCHAINS_PATH.split("[\\;]")) {
+        if (ADDITIONAL_STANDARD_CHAINS_PATH != null) {
+            for (String folder : UseChain.ADDITIONAL_STANDARD_CHAINS_PATH.split("[\\;]")) {
                 useInstalledFolder(useChain, Paths.get(folder), null,
                         "additional chain specifications");
             }
@@ -482,7 +483,7 @@ public final class UseChain extends FileOperation {
             // Note: recursive usage of sub-chains is a rare situation,
             // but NOT an error, so we use only INFO level here.
             LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
-                    () -> String.format(Locale.US, "Sub-chain %s\"%s\"%s %sloaded from %s in %.3f ms",
+                    () -> String.format(Locale.US, "Chain %s\"%s\"%s %sloaded from %s in %.3f ms",
                             n > 1 ? (index + 1) + "/" + n + " " : "",
                             chainSpecification.getExecutor().getName(),
                             additionalChainInformation(chain.orElse(null)),
@@ -517,15 +518,15 @@ public final class UseChain extends FileOperation {
             chain.setMultithreading(multithreading);
             chain.setExecuteAll(executeAll);
         }
-        SUB_CHAIN_LOADER.registerWorker(
+        CHAIN_LOADER.registerWorker(
                 executorFactory.sessionId(),
-                buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(chain),
+                buildChainSpecificationAndExecuteLoadingTimeWithoutInputs(chain),
                 chain);
         loadedChainsCount.incrementAndGet();
         return chain;
     }
 
-    private ExecutorSpecification buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs(Chain chain) {
+    private ExecutorSpecification buildChainSpecificationAndExecuteLoadingTimeWithoutInputs(Chain chain) {
         Objects.requireNonNull(chain, "Null chain");
         final ExecutorSpecification result = new ExecutorSpecification();
         result.setTo(new InterpretChain());
@@ -533,7 +534,7 @@ public final class UseChain extends FileOperation {
         result.setTo(chain);
         result.setSourceInfo(
                 null,
-                chain.chainSpecificationPath()).setLanguageName(SUB_CHAIN_LANGUAGE_NAME);
+                chain.chainSpecificationPath()).setLanguageName(CHAIN_LANGUAGE_NAME);
         if (chain.hasPlatformId()) {
             result.setPlatformId(chain.platformId());
         }
@@ -574,7 +575,7 @@ public final class UseChain extends FileOperation {
             if (block.isExecutedAtLoadingTime()) {
                 block.reinitialize(true);
                 if (block.numberOfConnectedInputPorts() == 0) {
-                    // Note: we do not execute loading-time SUBCHAINS,
+                    // Note: we do not execute loading-time chains,
                     // only isolated blocks without input ports.
                     // It is enough for most needs.
                     final ExecutionBlock executor = block.getExecutor();
@@ -617,14 +618,14 @@ public final class UseChain extends FileOperation {
     private static void addChainSettings(ExecutorSpecification result, Chain chain) {
         final ChainBlock useChainSettingsBlock = findUseChainSettings(chain);
         if (useChainSettingsBlock == null) {
-            UseSettings.addSubChainControlsAndPorts(result, null);
+            UseSettings.addChainControlsAndPorts(result, null);
             return;
         }
         final UseChainSettings useChainSettings = (UseChainSettings) useChainSettingsBlock.getExecutor();
         final SettingsBuilder mainSettingsBuilder = useChainSettings.settingsBuilder();
         // - mainSettings was already executed in executeLoadingTimeBlocksWithoutInputs(chain)
         chain.assignSettings(mainSettingsBuilder);
-        UseSettings.addSubChainControlsAndPorts(result, mainSettingsBuilder);
+        UseSettings.addChainControlsAndPorts(result, mainSettingsBuilder);
         result.setSettings(mainSettingsBuilder.specification());
         result.createOptionsIfAbsent().createServiceIfAbsent().setSettingsId(mainSettingsBuilder.id());
         addSettingsPorts(result);

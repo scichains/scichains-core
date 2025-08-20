@@ -32,7 +32,6 @@ import net.algart.executors.api.chains.ChainBlock;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.api.settings.*;
-import net.algart.executors.api.settings.core.CombineSettings;
 import net.algart.executors.api.settings.core.UseSettings;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.FunctionTiming;
@@ -55,8 +54,6 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
 
     @Override
     public void process() {
-        // UseChain.useSystemSubChainsPath(getSessionId(), true);
-        // - it was incorrect solution
         long t1 = System.nanoTime(), t2, t3, t4, t5, t6, t7, t8;
         final boolean doAction = parameters().getBoolean(UseChain.DO_ACTION_NAME, true);
         if (!doAction) {
@@ -162,7 +159,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
                 SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE);
         final boolean extractSubSettings = parameters().getBoolean(
                 UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
-                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT);
+                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_CHAIN_DEFAULT);
         final boolean ignoreInputParameters = parameters().getBoolean(
                 UseSettings.IGNORE_PARAMETERS_PARAMETER_NAME,
                 UseSettings.IGNORE_PARAMETERS_PARAMETER_DEFAULT);

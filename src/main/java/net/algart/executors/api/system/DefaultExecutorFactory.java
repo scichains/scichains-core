@@ -141,7 +141,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
                 //      B) we execute all its static executors, like UseSettings, UseMapping etc.
                 // (executeLoadingTimeBlocksWithoutInputs method);
                 //      C) we finish creating the chain executor specification by
-                // buildSubChainSpecificationAndExecuteLoadingTimeWithoutInputs method and register it.
+                // buildChainSpecificationAndExecuteLoadingTimeWithoutInputs method and register it.
                 // Let this chain contain some dynamic executors like CombineSettings or InterpretMultiChain,
                 // together with necessary static executors, which create them (UseSettings or UseMultiChain).
                 // Every ChainBlock tries to get ExecutorSpecification for its executor already at stage A,

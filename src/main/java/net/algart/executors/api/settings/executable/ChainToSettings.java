@@ -35,14 +35,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-public final class SubChainToSettings {
+public final class ChainToSettings {
     public static final String SESSION_ID = "~~DUMMY_SESSION";
 
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
-            System.out.printf("Usage: %s sub_chain.json " +
+            System.out.printf("Usage: %s chain.json " +
                             "new_resulting_settings_specification.json executor_name%n",
-                    SubChainToSettings.class);
+                    ChainToSettings.class);
             return;
         }
 

@@ -109,7 +109,7 @@ public class CallSimpleMultiChain {
         }
         if (args.length < startArgIndex + 4) {
             System.out.printf("Usage: " +
-                            "%s [-builder|-combine|-tree] some_multi_chain.mchain x y sub_chain_variant [a b]%n" +
+                            "%s [-builder|-combine|-tree] some_multi_chain.mchain x y chain_variant [a b]%n" +
                             "some_multi_chain.mchain should be a multi-chain, which process 2 scalars x and y " +
                             "and have 2 parameters named a and b;%n" +
                             "it should calculate some formula like ax+by and return the result in the output.",
@@ -127,7 +127,7 @@ public class CallSimpleMultiChain {
 
         System.out.printf("Loading %s...%n", multiChainPath.toAbsolutePath());
         try (var executor = UseMultiChain.newSharedExecutor(multiChainPath)) {
-            CallSimpleChainForImage.printSubChainExecutors();
+            CallSimpleChainForImage.printChainExecutors();
             CallSimpleChainForImage.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);

@@ -48,7 +48,7 @@ public class CallSimpleChainWithSettings {
             .setString("a", a)
             .setString("b", b)
             .setDouble("delta", 0.003);
-        // - adding "delta" parameter for a case when the sub-chain "understands" it
+        // - adding "delta" parameter for a case when the chain "understands" it
         final JsonObject settingsJson = settingsBuilder.build(parameters);
         System.out.printf("%nSettings JSON: %s%n%n", Jsons.toPrettyString(settingsJson));
         executor.putSettings(settingsJson);
@@ -59,7 +59,7 @@ public class CallSimpleChainWithSettings {
         combiner.setStringParameter("a", a);
         combiner.setStringParameter("b", b);
         combiner.setDoubleParameter("delta", 0.003);
-        // - adding "delta" parameter for a case when the sub-chain "understands" it
+        // - adding "delta" parameter for a case when the chain "understands" it
         final var settingsScalar = combiner.combine();
         System.out.printf("%nCombined JSON: %s%n%n", settingsScalar);
         executor.putSettings(settingsScalar);
@@ -94,7 +94,7 @@ public class CallSimpleChainWithSettings {
 
         System.out.printf("Loading %s...%n", chainPath.toAbsolutePath());
         try (var executor = UseChain.newSharedExecutor(chainPath)) {
-            CallSimpleChainForImage.printSubChainExecutors();
+            CallSimpleChainForImage.printChainExecutors();
             CallSimpleChainForImage.printExecutorInterface(executor);
             executor.putStringScalar("x", x);
             executor.putStringScalar("y", y);

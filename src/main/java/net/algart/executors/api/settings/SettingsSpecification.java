@@ -527,14 +527,14 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
      * </pre>
      *
      * <p>By default, the chain category and name are calculated based on the chain file name.
-     * In this example, the chain category for the task A will be <code>$subchains.net.algart.project</code>
-     * (with the prefix <code>$subchains</code>),
+     * In this example, the chain category for the task A will be <code>$chains.net.algart.project</code>
+     * (with the prefix <code>$chains</code>),
      * and the name will be <code>task_a</code>: the substring after the last dot ".".
      * The additional dots (.) in the category are interpreted as separators between packages/subpackages,
      * as in the Java language.
      * So in the function tree, we will see the chain executors as:</p>
      * <pre>
-     *      $subchains
+     *      $chains
      *          net
      *              algart
      *                  project

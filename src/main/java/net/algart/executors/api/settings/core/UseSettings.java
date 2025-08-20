@@ -70,7 +70,7 @@ public class UseSettings extends FileOperation {
     public static final String ABSOLUTE_PATHS_NAME_PARAMETER_DESCRIPTION =
             "If set, all parameters below, describing paths to files or folders, are automatically replaced " +
                     "with full absolute disk paths. It can be useful if you need to pass these parameters " +
-                    "to other sub-chains, that probably work in other \"current\" directories.\n" +
+                    "to other chains, that probably work in other \"current\" directories.\n" +
                     "Also, in this case you can use in such parameters Java system properties: " +
                     "\"${name}\", like \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", " +
                     "\"${path.name}\", \"${file.name.ext}\", \"${file.name}\" " +
@@ -90,25 +90,25 @@ public class UseSettings extends FileOperation {
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_NAME = "_cs___extractSubSettings";
     public static final String EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION =
             "Extract sub-settings \"%%%\" from input \"settings\" JSON";
-    public static final String EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DESCRIPTION =
-            "If set, the parameters of this sub-chain are determined by the section \"" +
+    public static final String EXTRACT_SUB_SETTINGS_PARAMETER_FOR_CHAIN_DESCRIPTION =
+            "If set, the parameters of this chain are determined by the section \"" +
                     SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
-                    "of the input settings JSON. If cleared, the parameters of this sub-chain " +
+                    "of the input settings JSON. If cleared, the parameters of this chain " +
                     "are extracted directly from the top level of the input settings JSON. " +
                     "Parameters below have less priority, they are used only if there are no " +
                     "parameters with same names in the input settings JSON or its section \"" +
                     SettingsSpecification.SUBSETTINGS_PREFIX + "%%%\" " +
                     "and if the flag \"Ignore parameters below\" is not set.\n" +
-                    "Normal state of this flag — set to true. Usually every sub-chain B1, B2, ... of your chain B " +
+                    "Normal state of this flag — set to true. Usually every chain B1, B2, ... of your chain B " +
                     "is customized by some sub-settings of main JSON settings, specifying behaviour of the chain B." +
-                    "However, sometimes you need just to pass all settings to next sub-chaining level " +
+                    "However, sometimes you need just to pass all settings to next chaining level " +
                     "without changes; then you can clear this flag.";
-    public static final boolean EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT = true;
+    public static final boolean EXTRACT_SUB_SETTINGS_PARAMETER_FOR_CHAIN_DEFAULT = true;
     public static final String IGNORE_PARAMETERS_PARAMETER_NAME = "_cs___ignoreInputParameter";
     public static final String IGNORE_PARAMETERS_PARAMETER_CAPTION = "Ignore parameters below";
     public static final String IGNORE_PARAMETERS_PARAMETER_DESCRIPTION =
             "If set, the behavior is completely determined by the input settings port and internal settings " +
-                    "of the sub-chain. All parameters below are not included into the settings JSON " +
+                    "of the chain. All parameters below are not included into the settings JSON " +
                     "even if there is no input settings.\n" +
                     "However: if there are parameters in the chain that are specified in the chain blocks " +
                     "and not in the JSON, they are copied from the corresponding parameters below in any case.";
@@ -118,7 +118,7 @@ public class UseSettings extends FileOperation {
     public static final String LOG_SETTINGS_PARAMETER_NAME = "_cs___logSettings";
     public static final String LOG_SETTINGS_PARAMETER_CAPTION = "Log settings";
     public static final String LOG_SETTINGS_PARAMETER_DESCRIPTION =
-            "If set, all settings, passed to the sub-chain, are logged with level WARNING. " +
+            "If set, all settings, passed to the chain, are logged with level WARNING. " +
                     "Can be used for debugging needs.";
 
     public static final String PATH_PARENT_FOLDER_HINT =
@@ -334,7 +334,7 @@ public class UseSettings extends FileOperation {
 //      will depend on the order of loading chains!
 //      It is possible, when the same main chain settings are used both as actual main settings for some chain A
 //      and as a settings specification for some another chain B.
-//      Moreover, the category of the settings will depend on a fact, which sub-chain uses it.
+//      Moreover, the category of the settings will depend on a fact, which chain uses it.
 //
 //        final String chainName = removeExtension(contextFileName());
 //      // - note: will be null while calling from MultiChain constructor
@@ -449,8 +449,8 @@ public class UseSettings extends FileOperation {
         getSharedInstance().useAllInstalled();
     }
 
-    // Used for adding controls and ports to InterpretSubChain executor
-    public static void addSubChainControlsAndPorts(ExecutorSpecification result, SettingsBuilder settingsBuilder) {
+    // Used for adding controls and ports to InterpretChain executor
+    public static void addChainControlsAndPorts(ExecutorSpecification result, SettingsBuilder settingsBuilder) {
         final boolean withSettings = settingsBuilder != null;
         if (withSettings) {
             addInputControlsAndPorts(
@@ -575,7 +575,7 @@ public class UseSettings extends FileOperation {
             ExecutorSpecification result,
             SettingsBuilder settingsBuilder,
             boolean mainForChain,
-            boolean subChainMode,
+            boolean chainMode,
             boolean noSystemFlags) {
         if (mainForChain) {
             result.addControl(new ControlSpecification()
@@ -591,7 +591,7 @@ public class UseSettings extends FileOperation {
             /*
             // We decided not to add this information: the settings are usually created by external dashboard,
             // direct using settings combiners is not a typical case
-            if (!subChainMode) {
+            if (!chainMode) {
                 addBooleanControl(result,
                         ADD_SETTINGS_CLASS_PARAMETER_NAME,
                         ADD_SETTINGS_CLASS_PARAMETER_CAPTION.replace("%%%", settingsName),
@@ -600,12 +600,12 @@ public class UseSettings extends FileOperation {
                         true);
             }
              */
-            if (subChainMode) {
+            if (chainMode) {
                 addBooleanControl(result,
                         EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
                         EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", settingsName),
-                        EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DESCRIPTION.replace("%%%", settingsName),
-                        EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT,
+                        EXTRACT_SUB_SETTINGS_PARAMETER_FOR_CHAIN_DESCRIPTION.replace("%%%", settingsName),
+                        EXTRACT_SUB_SETTINGS_PARAMETER_FOR_CHAIN_DEFAULT,
                         false);
             }
             if (settingsBuilder.hasPathControl()) {
@@ -617,7 +617,7 @@ public class UseSettings extends FileOperation {
                         false);
             }
         }
-        if (subChainMode && !noSystemFlags) {
+        if (chainMode && !noSystemFlags) {
             addBooleanControl(result,
                     LOG_SETTINGS_PARAMETER_NAME,
                     LOG_SETTINGS_PARAMETER_CAPTION,
@@ -635,7 +635,7 @@ public class UseSettings extends FileOperation {
         for (Map.Entry<String, ControlSpecification> entry : specification.getControls().entrySet()) {
             final String name = entry.getKey();
             ControlSpecification controlSpecification = entry.getValue().clone();
-            if (controlSpecification.getValueType().isSettings() && !subChainMode) {
+            if (controlSpecification.getValueType().isSettings() && !chainMode) {
                 final PortSpecification portSpecification = new PortSpecification();
                 portSpecification.setName(name);
                 portSpecification.setCaption(controlSpecification.getCaption());

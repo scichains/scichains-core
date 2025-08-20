@@ -50,8 +50,8 @@ public final class ChainBlock {
 
     private static final boolean ANALYSE_CONDITIONAL_INPUTS = Arrays.SystemSettings.getBooleanProperty(
             "net.algart.executors.api.analyseConditionalInputs", true);
-    // - can be set to false for debugging needs; it will decrease the speed of executing some sub-chains
-    // and will lead to stack overflow in recursive sub-chains
+    // - can be set to false for debugging needs; it will decrease the speed of executing some chains
+    // and will lead to stack overflow in recursive chains
 
     private static final Logger LOG = System.getLogger(ChainBlock.class.getName());
 
@@ -59,7 +59,7 @@ public final class ChainBlock {
     final String id;
     private final String executorId;
     private final ExecutorSpecification executorSpecification;
-    // - The last field MAY stay to be null if it refers to a dynamic executor (like another sub-chain).
+    // - The last field MAY stay to be null if it refers to a dynamic executor (like another chain).
     // We use this information:
     // 1) for detecting standardInput, standardOutput, standardData in ChainBlock.valueOf method
     // and (for standard data) for their getDataType() in setTo(Chain) method;
@@ -118,7 +118,7 @@ public final class ChainBlock {
         // - Note: executorSpecification MAY be null until initializing and registering all dynamic executors:
         // see comments to this field.
         // We must be able to CREATE a new chain when some executors are not registered yet:
-        // we do it, for example, while registering new sub-chains-as-executors
+        // we do it, for example, while registering new chains-as-executors
         // (see comments inside DefaultExecutorFactory.specification()).
         // But we can delay actual assigning correct executorSpecification until reinitialize method.
         initialize();
@@ -162,7 +162,7 @@ public final class ChainBlock {
         // But here is an important exception: method ExecutorSpecification.setTo(Chain chain),
         // used inside UseChain to build a chain executor specification,
         // initializes data blocks (with options.behavior.data = true) to know the default
-        // corresponding parameters values of the sub-chain executor.
+        // corresponding parameters values of the chain executor.
         // This situation really can lead to bug in recursive chains.
 
         initialize();

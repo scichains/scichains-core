@@ -57,7 +57,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
     // probably used in the system in other ways (109, 99 are ASCII codes of letters 'mc').
 
     private volatile long contextId;
-    // - Unique ID for every multi-chain. Unlike sub-chains, it is almost not used: a multi-chain is not an environment
+    // - Unique ID for every multi-chain. Unlike chains, it is almost not used: a multi-chain is not an environment
     // for executing anything; but it is used as a context ID for multi-chain settings.
     private final MultiChainSpecification specification;
     private final UseChain chainFactory;
@@ -114,7 +114,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot initialize the sub-chain "
+                throw new ChainRunningException("Cannot initialize the chain "
                         + chainSpecification.getSpecificationFile() + ", variant of multi-chain "
                         + specification.getSpecificationFile(), e);
             }
@@ -342,7 +342,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
         final String multiChainName = name();
         final String selectedChainName = selectedChain.name();
-        final Set<String> selectedSubChainActualKeys = mainSettingsBuilder.settingsKeySet();
+        final Set<String> selectedChainActualKeys = mainSettingsBuilder.settingsKeySet();
 
         final JsonObject multiSettings = SettingsBuilder.getSubSettingsByName(parentSettings, multiChainName);
         final JsonObject parentSubSettings = SettingsBuilder.getSubSettingsByName(parentSettings, selectedChainName);
@@ -359,14 +359,14 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
         // 1st overriding: by section @sss, sss is the name of selected chain
         if (selectedSubSettings != null) {
-            final JsonObject onlyActual = Jsons.filterJson(selectedSubSettings, selectedSubChainActualKeys);
+            final JsonObject onlyActual = Jsons.filterJson(selectedSubSettings, selectedChainActualKeys);
             // - only actual: maybe this sub-settings contains a lot of other information (for deeper levels)
             result = Jsons.overrideEntries(result, onlyActual);
         }
 
         // 2nd overriding: by section @MMM (when extractSubSettings), MMM is the name of multi-chain
         if (multiSettings != null) {
-            final JsonObject onlyActual = Jsons.filterJson(multiSettings, selectedSubChainActualKeys);
+            final JsonObject onlyActual = Jsons.filterJson(multiSettings, selectedChainActualKeys);
             // - only actual: maybe this sub-settings contains a lot of other information (for other variants)
             result = Jsons.overrideEntries(result, onlyActual);
             // - Note: we use THE SAME actual keys, not multi-chain actual keys!
@@ -556,7 +556,7 @@ public final class MultiChain implements Cloneable, AutoCloseable {
 
     /*
     private Chain registeredChain(String sessionId, String executorId) {
-        final Chain chain = InterpretSubChain.registeredChain(sessionId, executorId);
+        final Chain chain = InterpretChain.registeredChain(sessionId, executorId);
         if (chain.getMainSettings() == null) {
             throw new IllegalStateException("Chain \"" + chain.name()
                     + " \" (ID \"" + chain.id() + "\") of multi-chain \"" + name()

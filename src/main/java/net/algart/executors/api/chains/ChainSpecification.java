@@ -60,13 +60,13 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
     public static final String CHAIN_APP_NAME = "chain";
     public static final String CURRENT_VERSION = "1.1";
 
-    public static final String DEFAULT_CHAIN_CATEGORY = "subchains";
+    public static final String DEFAULT_CHAIN_CATEGORY = "chains";
     public static final String DEFAULT_CHAIN_CATEGORY_PREFIX =
             DEFAULT_CHAIN_CATEGORY + ExecutorSpecification.CATEGORY_SEPARATOR;
     public static final String DEFAULT_CHAIN_NAME = "Sub-chain";
 
-    private static final String CHAIN_SECTION_ALIAS = "stare_chain";
-    private static final String CHAIN_APP_NAME_ALIAS = "stare-chain";
+    private static final String CHAIN_SECTION_LEGACY_ALIAS = "stare_chain";
+    private static final String CHAIN_APP_NAME_LEGACY_ALIAS = "stare-chain";
 
     private static final Pattern COMPILED_CHAIN_FILE_PATTERN = Pattern.compile(CHAIN_FILE_PATTERN);
 
@@ -901,12 +901,12 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         final LinkedHashMap<String, JsonValue> clone;
         if (Files.exists(containingJsonFile)) {
             final JsonObject existingJson = Jsons.readJson(containingJsonFile);
-            Jsons.reqJsonObjectWithAlias(existingJson, CHAIN_SECTION, CHAIN_SECTION_ALIAS, containingJsonFile);
+            Jsons.reqJsonObjectWithAlias(existingJson, CHAIN_SECTION, CHAIN_SECTION_LEGACY_ALIAS, containingJsonFile);
             clone = new LinkedHashMap<>(existingJson);
         } else {
             clone = new LinkedHashMap<>();
         }
-        clone.remove(CHAIN_SECTION_ALIAS);
+        clone.remove(CHAIN_SECTION_LEGACY_ALIAS);
         clone.put(CHAIN_SECTION, toJson());
         final JsonObjectBuilder builder = Json.createObjectBuilder();
         for (Map.Entry<String, JsonValue> entry : clone.entrySet()) {
@@ -926,15 +926,15 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             return false;
         }
         final String appName = specificationJson.getString("app", null);
-        return CHAIN_APP_NAME.equals(appName) || CHAIN_APP_NAME_ALIAS.equals(appName);
+        return CHAIN_APP_NAME.equals(appName) || CHAIN_APP_NAME_LEGACY_ALIAS.equals(appName);
     }
 
     public static JsonObject getChainSpecification(JsonObject json) {
         Objects.requireNonNull(json, "Null json");
         if (json.containsKey(CHAIN_SECTION)) {
             return Jsons.getJsonObject(json, CHAIN_SECTION, null);
-        } else if (json.containsKey(CHAIN_SECTION_ALIAS)) {
-            return Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, null);
+        } else if (json.containsKey(CHAIN_SECTION_LEGACY_ALIAS)) {
+            return Jsons.getJsonObject(json, CHAIN_SECTION_LEGACY_ALIAS, null);
         }
         return null;
     }
@@ -1109,7 +1109,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         final JsonObject json = Jsons.readJson(containingJsonFile);
         JsonObject chainSpecification = Jsons.getJsonObject(json, CHAIN_SECTION, containingJsonFile);
         if (chainSpecification == null) {
-            chainSpecification = Jsons.getJsonObject(json, CHAIN_SECTION_ALIAS, containingJsonFile);
+            chainSpecification = Jsons.getJsonObject(json, CHAIN_SECTION_LEGACY_ALIAS, containingJsonFile);
         }
         if (!ChainSpecification.isChainSpecification(chainSpecification) && !requireValid) {
             return null;

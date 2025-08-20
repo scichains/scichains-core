@@ -79,7 +79,7 @@ public abstract class ChainExecutor extends Executor {
     public static Chain registeredChain(String sessionId, String executorId) {
         Objects.requireNonNull(sessionId, "Cannot find sub-chain worker: session ID is not set");
         Objects.requireNonNull(executorId, "Cannot find sub-chain worker: executor ID is not set");
-        Chain chain = UseChain.subChainLoader().registeredWorker(sessionId, executorId);
+        Chain chain = UseChain.chainLoader().registeredWorker(sessionId, executorId);
         chain = chain.cleanCopy();
         // - every instance of this executor has its own space for data, as activations of usual procedures
         // (necessary for recursion)
