@@ -38,7 +38,7 @@
     {
       "caption": "How to represent result",
       "name": "conditionStyle",
-      "description": "How the created boolean value will be represented in the result scalar.\nC-like: true is \"1\", false is \"0\".\nJava-like: true is \"true\" string, false is \"false\" string.\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a sub-chain from other solutions.",
+      "description": "How the created boolean value will be represented in the result scalar.\nC-like: true is \"1\", false is \"0\".\nJava-like: true is \"true\" string, false is \"false\" string.\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a chain from other solutions.",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

@@ -63,7 +63,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
     public static final String DEFAULT_CHAIN_CATEGORY = "chains";
     public static final String DEFAULT_CHAIN_CATEGORY_PREFIX =
             DEFAULT_CHAIN_CATEGORY + ExecutorSpecification.CATEGORY_SEPARATOR;
-    public static final String DEFAULT_CHAIN_NAME = "Sub-chain";
+    public static final String DEFAULT_CHAIN_NAME = "chain";
 
     private static final String CHAIN_SECTION_LEGACY_ALIAS = "stare_chain";
     private static final String CHAIN_APP_NAME_LEGACY_ALIAS = "stare-chain";

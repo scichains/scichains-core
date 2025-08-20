@@ -498,7 +498,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         // which are created as a serving companion for the chain
         private Service service = null;
         // - information about some service executors;
-        // usually applied for sub-chains or multi-chains
+        // usually applied for chains or multi-chains
         private Behavior behavior = null;
         private Controlling controlling = null;
         private JsonObject extension = null;
@@ -1575,7 +1575,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         this.setOutputPorts(outputPorts);
         final Map<String, ControlSpecification> controls = new LinkedHashMap<>(this.controls);
         for (ChainBlock block : chain.getAllData()) {
-            // - data blocks (with options.behavior.data = true) are used as parameters of the sub-chain executor
+            // - data blocks (with options.behavior.data = true) are used as parameters of the chain executor
             final String parameterName = block.getStandardParameterName();
             if (parameterName == null) {
                 continue;

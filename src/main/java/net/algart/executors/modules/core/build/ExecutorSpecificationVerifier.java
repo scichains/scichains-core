@@ -319,7 +319,7 @@ public final class ExecutorSpecificationVerifier {
         }
         try {
             ExecutorSpecification.of(json);
-            // - check for all other problems, possible while usage in sub-chains
+            // - check for all other problems, possible while usage in chains
         } catch (Exception e) {
             throw new JsonException("Some problem detected while parsing " + f, e);
         }

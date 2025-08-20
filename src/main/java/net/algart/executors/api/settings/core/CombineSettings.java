@@ -85,7 +85,7 @@ public class CombineSettings extends SettingsExecutor implements ReadOnlyExecuti
                 "Combining%s %ssettings \"%s\": %.3f ms%s",
                 !inputSettings.isInitialized() ? "" :
                         " and overriding" + (extractSubSettings ? " extracted " : ""),
-                this instanceof CombineChainSettings ? "sub-chain " : "",
+                this instanceof CombineChainSettings ? "chain " : "",
                 settingsBuilder.name(),
                 (t2 - t1) * 1e-6,
                 LOGGABLE_TRACE ?

@@ -26,7 +26,7 @@
       "value_type": "scalar",
       "name": "settings_specification",
       "caption": "settings specification",
-      "hint": "If this executor has an associated settings specification JSON,\nas settings, sub-chains or multi-chains,\nit is returned, otherwise this port stays empty"
+      "hint": "If this executor has an associated settings specification JSON,\nas settings, chains or multi-chains,\nit is returned, otherwise this port stays empty"
     },
     {
       "value_type": "scalar",
@@ -69,7 +69,7 @@
     {
       "value_type": "scalar",
       "name": "built_in",
-      "hint": "Will contain \"true\" if this executor is built-in — it is a Java-executor, available directly after starting JVM.\nWill contain \"false\" for extended executors like Python, JavaScript, sub-chains etc."
+      "hint": "Will contain \"true\" if this executor is built-in — it is a Java-executor, available directly after starting JVM.\nWill contain \"false\" for extended executors like Python, JavaScript, chains etc."
     }
   ],
   "controls": [

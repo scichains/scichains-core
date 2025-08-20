@@ -35,8 +35,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Loader of {@link ExecutionBlock executors}. Every kind of executors, like sub-chains, settings,
- * Python function uses their own loaders.
+ * Loader of {@link ExecutionBlock executors}. Every kind of executors, like chains, settings or
+ * Python functions, use their own loaders.
  *
  * <p>This class registers new executor specifications by
  * {@link #setSpecification(String, ExecutorSpecification)} method.

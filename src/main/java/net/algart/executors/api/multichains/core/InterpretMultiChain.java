@@ -158,7 +158,7 @@ public class InterpretMultiChain extends MultiChainExecutor implements ReadOnlyE
                 selectedChain.name(),
                 extractSubSettings ? "extracted sub-settings" : "json-settings",
                 quoteContextName(this),
-                selectedChainSettings == null ? "    [this sub-chain has no settings]" : selectedChainSettingsString));
+                selectedChainSettings == null ? "    [this chain has no settings]" : selectedChainSettingsString));
         setOutputScalar(SETTINGS, selectedChainSettingsString);
         setOutputScalar(UseSettings.SETTINGS_ID_OUTPUT_NAME, multiChain.settingsId());
     }

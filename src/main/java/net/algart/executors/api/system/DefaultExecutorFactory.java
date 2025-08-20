@@ -48,7 +48,7 @@ public class DefaultExecutorFactory implements ExecutorFactory {
      * by teh {@link ExecutionBlock#setSessionId(String)} method.
      * It is passed as the first argument to the loader set methods.</p>
      *
-     * <p>This is important if you want to use executors like sub-chains that dynamically create other executors,
+     * <p>This is important if you want to use executors like chains that dynamically create other executors,
      * possibly having the same executor IDs.
      * Executor factories with different <code>sessionID</code> are isolated from each other
      * and can be used simultaneously.

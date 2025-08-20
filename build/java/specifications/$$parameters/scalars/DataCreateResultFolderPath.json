@@ -56,7 +56,7 @@
     {
       "caption": "What to do?",
       "name": "operation",
-      "description": "What to do with the path.\nFor \"check xxx\" operations, this function throws exception if there is no existing file or folder (or if we needs a file, but it is a folder, and vice versa).\nFor \"create xxx\" operations, this function does nothing if the folder or file, requested to create, already exists.\nNote: 3 operations with parent folder (check existence, create parent, create all parents) do nothing if the specified path has no parents, i.e. if it is a root folder.\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a sub-chain from other solutions.",
+      "description": "What to do with the path.\nFor \"check xxx\" operations, this function throws exception if there is no existing file or folder (or if we needs a file, but it is a folder, and vice versa).\nFor \"create xxx\" operations, this function does nothing if the folder or file, requested to create, already exists.\nNote: 3 operations with parent folder (check existence, create parent, create all parents) do nothing if the specified path has no parents, i.e. if it is a root folder.\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a chain from other solutions.",
       "value_type": "String",
       "edition_type": "enum",
       "items": [

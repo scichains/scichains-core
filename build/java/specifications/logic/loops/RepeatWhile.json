@@ -107,7 +107,7 @@
     {
       "caption": "Maximal iterations count",
       "name": "maxIterationsCount",
-      "description": "Maximal number of iterations. If specified (contains non-empty string), the loop is stopped after such number of iterations, even if the input while condition (\"xxx\" or inverted \"xxx\") is still true.\nNote: this parameter MUST be specified if the input port \"while\" is empty.\n\nREMEMBER: you SHOULD \"build\" this operation into some chain of other functions with help of input/output ports \"s\", \"x\" or \"m\", so that the final result of the chain will DEPEND on some outputs of this function. This is important: if results of this function are not used, then it is usually ignored when this chain is used as a sub-chain.",
+      "description": "Maximal number of iterations. If specified (contains non-empty string), the loop is stopped after such number of iterations, even if the input while condition (\"xxx\" or inverted \"xxx\") is still true.\nNote: this parameter MUST be specified if the input port \"while\" is empty.\n\nREMEMBER: you SHOULD \"build\" this operation into some chain of other functions with help of input/output ports \"s\", \"x\" or \"m\", so that the final result of the chain will DEPEND on some outputs of this function. This is important: if results of this function are not used, then it is usually ignored when this chain is used as a chain.",
       "value_type": "String",
       "edition_type": "value",
       "default": ""

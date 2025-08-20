@@ -33,7 +33,7 @@ import java.io.IOException;
 public class CallExecutorRecursiveFactorial {
     public static final String MY_SESSION_ID = "~~DUMMY_SESSION";
     public static final String RECURSIVE_FACTORIAL_ID = "8585f3b5-decf-45e5-be50-e91b7a1a693c";
-    // - ID of the sub-chain recursive_factorial.chain in the "build" folder
+    // - ID of the chain recursive_factorial.chain in the "build" folder
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         if (args.length < 1) {
@@ -45,7 +45,7 @@ public class CallExecutorRecursiveFactorial {
 
         ExecutionBlock.initializeExecutionSystem();
         // - automatically registers RECURSIVE_FACTORIAL_CHAIN_ID, because
-        // it is a part of the platform folder for sub-chains
+        // it is a part of the platform folder for chains
         final ExecutorFactory factory = ExecutorFactory.newFactory(MY_SESSION_ID);
         try (var executor = factory.newExecutor(RECURSIVE_FACTORIAL_ID, CreateMode.REQUEST_ALL)) {
             CallSimpleChainForImage.printExecutorInterface(executor);

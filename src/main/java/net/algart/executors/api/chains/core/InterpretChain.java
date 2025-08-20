@@ -62,7 +62,7 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
         }
         final Chain chain = chain();
         t2 = System.nanoTime();
-        status().setExecutorSimpleClassName(chain.name() == null ? "sub-chain" : chain.name());
+        status().setExecutorSimpleClassName(chain.name() == null ? "chain" : chain.name());
         final JsonObject inputSettings = !hasInputPort(SETTINGS) ? Jsons.newEmptyJson() :
                 Jsons.toJson(getInputScalar(SETTINGS, true).getValue(), true);
         chain.reinitializeAll();
@@ -107,13 +107,13 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
             timing.analyse();
             final Path file = chain.chainSpecificationPath();
             LOG.log(timingLogLevel, () -> String.format(Locale.US,
-                    "Sub-chain%s executed%s%s in %.3f ms:%n" +
+                    "Chain%s executed%s%s in %.3f ms:%n" +
                             "  %.3f mcs getting chain, " +
                             "%.3f mcs setting parameters, %.3f mcs loading inputs, %.3f mcs set chain settings, " +
                             "%.3f mcs process, " +
                             "%.3f mcs returning outputs, %.3f mcs freeing%n" +
-                            "  Sub-chain ID: %s (identity %X)%n" +
-                            "  Sub-chain specification file: %s%n%s" +
+                            "  Chain ID: %s (identity %X)%n" +
+                            "  Chain specification file: %s%n%s" +
                             "  All%s, %s",
                     name,
                     chain.isMultithreading() ? " (multithreading mode)" : " (single-thread mode)",

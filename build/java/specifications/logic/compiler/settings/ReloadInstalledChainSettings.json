@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "category": "logic.compiler.settings",
   "name": "Reload installed chain main settings",
-  "description": "Special version of \"Use settings\" function, reloading all installed settings, describing settings of the whole chains, in the context of the current chain. It is necessary, if the execution system uses installed chain settings to customize all the chain with help of some special GUI.<br>This function is invoked automatically while using this chain as a sub-chain by \"Use sub-chain\" function.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
+  "description": "Special version of \"Use settings\" function, reloading all installed settings, describing settings of the whole chains, in the context of the current chain. It is necessary, if the execution system uses installed chain settings to customize all the chain with help of some special GUI.<br>This function is invoked automatically while using this chain as a chain by \"Use chain\" function.<br>It is a <b>loading-time</b> function. So, you should <b>reload</b> the current chain for changes to these settings to take effect.",
   "tags": [
     "logic"
   ],

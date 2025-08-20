@@ -31,7 +31,7 @@
     {
       "name": "value",
       "value_type": "String",
-      "description": "\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a sub-chain from other solutions.",
+      "description": "\n\nNOTE: you SHOULD specify system name of this function to use this block as an input parameter, if you are calling this chain as a chain from other solutions.",
       "edition_type": "value",
       "multiline": true,
       "default": "New scalar"

@@ -310,7 +310,7 @@ public final class UseChain extends FileOperation {
                         chain.isPresent() ? "" : "not ",
                         (t2 - t1) * 1e-6));
         if (isOutputNecessary(DEFAULT_OUTPUT_PORT)) {
-            getScalar().setTo("Sub-chain:\nCategory: '" + chainSpecification.chainCategory()
+            getScalar().setTo("Chain:\nCategory: '" + chainSpecification.chainCategory()
                     + "'\nName: '" + chainSpecification.chainName() + "'");
         }
     }
@@ -480,8 +480,8 @@ public final class UseChain extends FileOperation {
             }
             long t2 = infoTime();
             final int index = i;
-            // Note: recursive usage of sub-chains is a rare situation,
-            // but NOT an error, so we use only INFO level here.
+            // Note: recursive usage of chains is a rare situation,
+            // but NOT an error, so we use only the INFO level here.
             LOG.log(chain.isPresent() ? System.Logger.Level.DEBUG : System.Logger.Level.INFO,
                     () -> String.format(Locale.US, "Chain %s\"%s\"%s %sloaded from %s in %.3f ms",
                             n > 1 ? (index + 1) + "/" + n + " " : "",

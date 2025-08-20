@@ -564,7 +564,7 @@ public final class SettingsSpecification extends AbstractConvertibleToJson {
      * </pre>
      *
      * <p>This is a good mode if these settings are the {@link UseSettings#isMainChainSettings() main chain settings}.
-     * For other kinds of settings, for example, settings of some internal sub-chains or other functions
+     * For other kinds of settings, for example, settings of some internal chains or other functions
      * ("some_subtask_of_a.ss" in the example above), the argument of this method should be <code>false</code>.
      * Then the full parent subfolder name will become the category, and we will see the following tree:</p>
 

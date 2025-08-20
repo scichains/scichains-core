@@ -139,7 +139,7 @@
     {
       "caption": "Modify status of caller",
       "name": "modifyCallerStatus",
-      "description": "If set, this function modifies the status of the CALLER of this function, for example, status of some sub-chain that includes this function as one of its blocks. If there is no caller (this function is executed directly), no any status is modified.\nUsually it is the correct expected behaviour: \"status\" of this function itself has no sense after it will finish execution. i.e. almost immediately. In particular, GUI, actually showing status line, may automatically clear it when this function will finish.\nRecommended value is true.",
+      "description": "If set, this function modifies the status of the CALLER of this function, for example, status of some chain that includes this function as one of its blocks. If there is no caller (this function is executed directly), no any status is modified.\nUsually it is the correct expected behaviour: \"status\" of this function itself has no sense after it will finish execution. i.e. almost immediately. In particular, GUI, actually showing status line, may automatically clear it when this function will finish.\nRecommended value is true.",
       "value_type": "boolean",
       "edition_type": "value",
       "advanced": true,

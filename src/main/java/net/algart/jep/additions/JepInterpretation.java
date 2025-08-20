@@ -55,8 +55,8 @@ public class JepInterpretation {
      * which must return a NumPy array. If the result of the call is correctly
      * converted into an instance of {@link jep.NDArray} or {@link jep.DirectNDArray},
      * the method returns this object ({@link jep.NDArray} or {@link jep.DirectNDArray}).
-     * Otherwise, it throws {@link JepNumpyIntegrationException}, and the actual result of conversion
-     * can be retrieved by {@link JepNumpyIntegrationException#returnedArray()} method.
+     * Otherwise, it throws {@link JepNumpyIntegrationException}, and the type of the actual result
+     * can be retrieved by {@link JepNumpyIntegrationException#getActualResultClass()} method.
      *
      * <p>This test helps verify that JEP was properly built with NumPy support in the current Python implementation.
      * To provide correct JEP+NumPy integration, the "numpy" package must be installed

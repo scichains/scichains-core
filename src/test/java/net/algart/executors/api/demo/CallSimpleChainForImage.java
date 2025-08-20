@@ -92,9 +92,9 @@ public class CallSimpleChainForImage {
 
     static void printChainExecutors() {
         final ExecutorLoader loader = UseChain.chainLoader();
-        System.out.printf("All registered sub-chain IDs: %s%n",
+        System.out.printf("All registered chain IDs: %s%n",
                 loader.allExecutorIds(ExecutionBlock.GLOBAL_SHARED_SESSION_ID));
-        System.out.println("All registered sub-chains:");
+        System.out.println("All registered chains:");
         for (String serialized : loader.allSerializedSpecifications(
                 ExecutionBlock.GLOBAL_SHARED_SESSION_ID).values()) {
             ExecutorSpecification specification = ExecutorSpecification.of(serialized);
