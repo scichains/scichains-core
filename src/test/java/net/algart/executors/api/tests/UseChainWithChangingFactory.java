@@ -37,8 +37,8 @@ public class UseChainWithChangingFactory {
     @SuppressWarnings("resource")
     public static void main(String[] args) throws IOException {
         System.setProperty(InstalledExtensions.EXTENSIONS_ROOT_PROPERTY, "build");
-        final String path1 = "src/test/resources/chains/chain_from_java/simplest_scalar/scalar_product.chain";
-        final String path2 = "src/test/resources/chains/chain_from_java/simplest_scalar/scalar_sum.chain";
+        final String path1 = "src/test/resources/multichains/simple_scalar/scalar_product.chain";
+        final String path2 = "src/test/resources/multichains/simple_scalar/scalar_sum.chain";
 
         UseChain useChain1 = new UseChain();
         useChain1.setSessionId("Session_1");
