@@ -157,6 +157,25 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
         if (settingsBuilder == null) {
             return;
         }
+        final boolean absolutePaths = parameters().getBoolean(
+                UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
+                SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE);
+        final boolean extractSubSettings = parameters().getBoolean(
+                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
+                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT);
+        final boolean ignoreInputParameters = parameters().getBoolean(
+                UseSettings.IGNORE_PARAMETERS_PARAMETER_NAME,
+                UseSettings.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
+        final boolean logSettings = parameters().getBoolean(
+                UseSettings.LOG_SETTINGS_PARAMETER_NAME,
+                false);
+        settingsBuilder.setAbsolutePaths(absolutePaths);
+        settingsBuilder.setExtractSubSettings(extractSubSettings);
+        final JsonObject executorSettings = ignoreInputParameters ?
+                Jsons.newEmptyJson() :
+                settingsBuilder.build(this);
+        final JsonObject overriddenSettings = settingsBuilder.overrideSettings(executorSettings, parentSettings);
+
         final ChainBlock settingsBlock = chain.getBlock(chain.getMainSettingsBlockId());
         // Note: the chain is a cleanCopy() of the original chain, so, we need
         // to find the block with CombineSettings again by its ID
@@ -181,24 +200,6 @@ public class InterpretChain extends ChainExecutor implements ReadOnlyExecutionIn
             throw new AssertionError("Dynamic executor '" + settingsExecutor.getExecutorId()
                     + "' must be an instance of CombineSettings, but it is " + settingsExecutor);
         }
-        final boolean absolutePaths = parameters().getBoolean(
-                UseSettings.ABSOLUTE_PATHS_NAME_PARAMETER_NAME,
-                SettingsBuilder.ABSOLUTE_PATHS_DEFAULT_VALUE);
-        final boolean extractSubSettings = parameters().getBoolean(
-                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_NAME,
-                UseSettings.EXTRACT_SUB_SETTINGS_PARAMETER_FOR_SUB_CHAIN_DEFAULT);
-        final boolean ignoreInputParameters = parameters().getBoolean(
-                UseSettings.IGNORE_PARAMETERS_PARAMETER_NAME,
-                UseSettings.IGNORE_PARAMETERS_PARAMETER_DEFAULT);
-        final boolean logSettings = parameters().getBoolean(
-                UseSettings.LOG_SETTINGS_PARAMETER_NAME,
-                false);
-        settingsBuilder.setAbsolutePaths(absolutePaths);
-        settingsBuilder.setExtractSubSettings(extractSubSettings);
-        final JsonObject executorSettings = ignoreInputParameters ?
-                Jsons.newEmptyJson() :
-                settingsBuilder.build(this);
-        final JsonObject overriddenSettings = settingsBuilder.overrideSettings(executorSettings, parentSettings);
         final String settingsString = Jsons.toPrettyString(overriddenSettings);
         settingsBlock.setActualInputData(SETTINGS, SScalar.of(settingsString));
         if (hasOutputPort(SETTINGS)) {
