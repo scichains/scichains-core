@@ -116,8 +116,7 @@ public class ExecutingChain {
                     ExecutingChain.class.getName());
             System.out.println("Also please specify the following system variables:");
             System.out.println("    -Dnet.algart.executors.path=folder_with_all_executor_JSONs");
-            System.out.println("    -Dnet.algart.executors.logic.compiler.subchains.path="
-                    + "folder_standard_subchains (optional)");
+            System.out.println("    -Dnet.algart.executors.api.chains.path=folder_standard_subchains (optional)");
             System.out.println("    -Dnet.algart.executors.modules.opencv.useGPU=true/false (optional)");
             return;
         }

@@ -607,7 +607,7 @@ public final class Chain implements AutoCloseable {
                 Collection<ChainBlock> blocksToExecute = executeAll ? all :
                         executor == null || executor.isAllOutputsNecessary() ?
                                 // This executor (like SubChain from the extensions) probably doesn't know
-                                // its output ports yet: they will be added dynamically by this sub-chain.
+                                // its output ports yet: they will be added dynamically by this chain.
                                 // So, if it wants to receive ALL results, we should use ALL outputs of this chain.
                                 getAllOutputs() :
                                 getAllNecessaryOutputs(executor);
@@ -700,7 +700,7 @@ public final class Chain implements AutoCloseable {
             }
         }
         if (mainSettingsBlock == null) {
-            throw new IllegalStateException("Sub-chain \"" + canonicalName() +
+            throw new IllegalStateException("Chain \"" + canonicalName() +
                     "\" does not contain the settings combiner \"" + mainSettingsBuilder.className() +
                     "\" ('" + id + "'), created by its UseChainSettings function");
         }

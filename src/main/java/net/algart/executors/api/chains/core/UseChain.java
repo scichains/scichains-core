@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class UseChain extends FileOperation {
     public static final String SUB_CHAIN_LANGUAGE_NAME = "sub-chain";
     public static final String ADDITIONAL_STANDARD_SUBCHAINS_PATH = Arrays.SystemSettings.getStringProperty(
-            "net.algart.executors.logic.compiler.subchains.path", null);
+            "net.algart.executors.api.chains.path", null);
 
     public static final String DO_ACTION_NAME = "_sch___doAction";
     public static final String DO_ACTION_CAPTION = "Do actions";

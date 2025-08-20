@@ -21,7 +21,7 @@
 
     "### The following system properties are examples of usage and are currently commented out (disabled):",
     "#-Dnet.algart.bridges.standard=nashorn",
-    "#-Dnet.algart.executors.logic.compiler.subchains.path=/chains/examples/subchains;/chains/examples/model3d",
+    "#-Dnet.algart.executors.api.chains.path=/chains/examples/subchains;/chains/examples/model3d",
     "#-Dnet.algart.executors.api.loggingStatusLevel=print",
     "#-Dexecutors.timing.logging.level=INFO"
   ],
