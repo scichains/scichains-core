@@ -63,6 +63,9 @@ public interface GraalContextCustomizer {
     default Context.Builder newBuilder(String... permittedLanguages) {
         final Context.Builder builder = Context.newBuilder(permittedLanguages);
         GraalCreationTools.correctClassLoader(builder);
+        // Note: wo do not use the following operator
+        //      builder.option("js.esm-eval-returns-exports", "true")
+        // So, we must use JSInterpretation.addReturningJSFunction.
         customize(builder);
         return builder;
     }
