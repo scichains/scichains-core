@@ -69,7 +69,7 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
         if (!pyFile.isEmpty()) {
             return EXTERNAL_EXECUTE_CODE.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
         } else {
-            return JepInterpretation.importCode(moduleName, getMainFunctionName());
+            return JepInterpretation.importPythonCode(moduleName, getMainFunctionName());
         }
     }
 

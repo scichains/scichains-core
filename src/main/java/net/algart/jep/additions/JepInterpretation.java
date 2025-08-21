@@ -28,10 +28,7 @@ import jep.*;
 import jep.python.PyCallable;
 import net.algart.jep.JepPerformerContainer;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class JepInterpretation {
     public static final String JEP_INSTALLATION_HINTS =
@@ -150,7 +147,7 @@ public class JepInterpretation {
         }
     }
 
-    public static String importCode(String from, String what) {
+    public static String importPythonCode(String from, String what) {
         Objects.requireNonNull(from, "Null from");
         Objects.requireNonNull(what, "Null what");
         return "from " + from + " import " + what + "\n";

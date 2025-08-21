@@ -156,12 +156,12 @@ public final class JepCaller implements Cloneable, AutoCloseable {
             // it can lead to invalid value of the global variable _env
             if (python.isClassMethod()) {
                 final String className = python.getClassName();
-                performer.perform(JepInterpretation.importCode(python.getModule(), className));
+                performer.perform(JepInterpretation.importPythonCode(python.getModule(), className));
                 if (pythonClassInstance == null) {
                     pythonClassInstance = performer.newObject(className);
                 }
             } else {
-                performer.perform(JepInterpretation.importCode(python.getModule(), python.getFunction()));
+                performer.perform(JepInterpretation.importPythonCode(python.getModule(), python.getFunction()));
             }
         }
         if (DEBUG_SLEEP_FOR_PARALLEL_EXECUTION) {
