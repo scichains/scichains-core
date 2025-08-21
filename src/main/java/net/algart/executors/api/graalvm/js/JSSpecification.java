@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js;
+package net.algart.executors.api.graalvm.js;
 
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;

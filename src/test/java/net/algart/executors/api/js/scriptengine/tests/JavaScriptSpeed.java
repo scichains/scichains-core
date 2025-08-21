@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.js.scriptengine.tests;
 
-import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptContextContainer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 
 import javax.script.ScriptEngine;
 import java.util.Locale;

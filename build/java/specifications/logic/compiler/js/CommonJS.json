@@ -9,7 +9,7 @@
   "id": "54d4a3bd-d7ab-453a-bc39-08c83dc8f3f4",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.CommonJS"
+    "class": "net.algart.executors.api.graalvm.js.core.CommonJS"
   },
   "in_ports": [
     {

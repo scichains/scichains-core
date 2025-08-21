@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js;
+package net.algart.executors.api.graalvm.js;
 
 import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalPerformerContainer;

@@ -9,7 +9,7 @@
   "id": "ea0c2dfb-244b-4ff4-ad18-8b16723b5145",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.arrays.ElementwiseFormula"
+    "class": "net.algart.executors.api.graalvm.js.core.arrays.ElementwiseFormula"
   },
   "in_ports": [
     {

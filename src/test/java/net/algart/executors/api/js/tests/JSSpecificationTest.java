@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.js.tests;
 
-import net.algart.executors.api.js.JSSpecification;
+import net.algart.executors.api.graalvm.js.JSSpecification;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -22,12 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core;
-
-import net.algart.graalvm.GraalPerformer;
-import net.algart.graalvm.GraalSourceContainer;
-import net.algart.graalvm.JSInterpretation;
-import org.graalvm.polyglot.Value;
+package net.algart.executors.api.graalvm.js.core;
 
 public final class CallJSFunction extends AbstractCallJS {
     private String code =

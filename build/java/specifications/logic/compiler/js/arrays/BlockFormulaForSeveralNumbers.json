@@ -9,7 +9,7 @@
   "id": "729da55c-6426-4342-8d1b-d28b68a44227",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.arrays.BlockFormulaForSeveralNumbers"
+    "class": "net.algart.executors.api.graalvm.js.core.arrays.BlockFormulaForSeveralNumbers"
   },
   "in_ports": [
     {

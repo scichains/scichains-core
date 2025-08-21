@@ -10,7 +10,7 @@
   "description": "Simplified version of &quot;Common JavaScript&quot;.",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.CommonJS"
+    "class": "net.algart.executors.api.graalvm.js.core.CommonJS"
   },
   "in_ports": [
     {

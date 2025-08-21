@@ -24,9 +24,9 @@
 
 package net.algart.executors.api.js.tests;
 
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.data.SNumbers;
-import net.algart.executors.api.js.core.arrays.BlockJSModifyingNamedNumbers;
+import net.algart.executors.api.graalvm.js.core.arrays.BlockJSModifyingNamedNumbers;
 import net.algart.executors.modules.core.numbers.creation.CreateRandomNumbers;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;

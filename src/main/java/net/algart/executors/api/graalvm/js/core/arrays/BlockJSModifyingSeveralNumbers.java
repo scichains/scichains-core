@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core.arrays;
+package net.algart.executors.api.graalvm.js.core.arrays;
 
 import net.algart.arrays.SizeMismatchException;
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SNumbers;
 

@@ -24,7 +24,7 @@
 
 package net.algart.executors.api.js.scriptengine.tests;
 
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 
 public class JavaScriptTest {
     public static void main(String[] args) {

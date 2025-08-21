@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.scriptengine;
+package net.algart.executors.api.graalvm.js.scriptengine;
 
 import javax.script.ScriptEngine;
 import java.util.Map;

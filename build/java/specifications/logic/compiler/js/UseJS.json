@@ -13,7 +13,7 @@
   },
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.UseJS"
+    "class": "net.algart.executors.api.graalvm.js.core.UseJS"
   },
   "in_ports": [],
   "out_ports": [

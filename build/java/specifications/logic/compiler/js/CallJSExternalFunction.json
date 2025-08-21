@@ -9,7 +9,7 @@
   "id": "dff4f98a-ba7b-4e49-9184-9e926ef9212b",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.CallJSExternalFunction"
+    "class": "net.algart.executors.api.graalvm.js.core.CallJSExternalFunction"
   },
   "in_ports": [
     {

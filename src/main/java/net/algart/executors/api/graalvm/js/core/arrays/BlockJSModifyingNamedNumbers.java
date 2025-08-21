@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core.arrays;
+package net.algart.executors.api.graalvm.js.core.arrays;
 
 import jakarta.json.JsonObject;
-import net.algart.executors.api.js.scriptengine.JavaScriptContextContainer;
-import net.algart.executors.api.js.scriptengine.JavaScriptException;
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptContextContainer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptException;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;

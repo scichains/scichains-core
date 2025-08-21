@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core.arrays;
+package net.algart.executors.api.graalvm.js.core.arrays;
 
-import net.algart.executors.api.js.scriptengine.JavaScriptPerformer;
+import net.algart.executors.api.graalvm.js.scriptengine.JavaScriptPerformer;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.modules.core.common.numbers.SeveralNumbersOperation;
 import net.algart.executors.modules.core.logic.SimpleResultElementType;

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.scriptengine;
+package net.algart.executors.api.graalvm.js.scriptengine;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;

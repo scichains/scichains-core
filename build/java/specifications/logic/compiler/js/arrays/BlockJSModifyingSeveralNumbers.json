@@ -9,7 +9,7 @@
   "id": "4953b383-9c3f-43a6-8e83-631be10cd58c",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.arrays.BlockJSModifyingSeveralNumbers"
+    "class": "net.algart.executors.api.graalvm.js.core.arrays.BlockJSModifyingSeveralNumbers"
   },
   "in_ports": [
     {

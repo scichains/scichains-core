@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core;
+package net.algart.executors.api.graalvm.js.core;
 
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;

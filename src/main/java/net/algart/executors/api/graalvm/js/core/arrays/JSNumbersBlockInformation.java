@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package net.algart.executors.api.js.core.arrays;
+package net.algart.executors.api.graalvm.js.core.arrays;
 
 import net.algart.executors.api.data.SNumbers;
 

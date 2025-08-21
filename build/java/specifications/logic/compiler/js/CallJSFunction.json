@@ -9,7 +9,7 @@
   "id": "358d8094-7fc7-484c-b836-a3f2763e0866",
   "language": "java",
   "java": {
-    "class": "net.algart.executors.api.js.core.CallJSFunction"
+    "class": "net.algart.executors.api.graalvm.js.core.CallJSFunction"
   },
   "in_ports": [
     {
