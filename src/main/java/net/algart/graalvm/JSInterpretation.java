@@ -36,7 +36,9 @@ public class JSInterpretation {
         return "import { " + String.join(", ", what) + " } from \"" + from + "\"\n";
     }
 
-    // This trick is necessary to access functions from ECMA modules
+    // This trick is necessary to access functions from ECMA modules,
+    // unless we use the following customization:
+    // .option("js.esm-eval-returns-exports", "true")
     public static String addReturningJSFunction(String jsCode, String functionName) {
         Objects.requireNonNull(jsCode, "Null jsCode");
         Objects.requireNonNull(functionName, "Null functionName");
