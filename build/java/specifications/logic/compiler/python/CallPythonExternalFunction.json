@@ -184,19 +184,15 @@
       "edition_type": "enum",
       "items": [
         {
-          "value": "SHARED",
-          "caption": "Shared"
+          "value": "NORMAL",
+          "caption": "Normal"
         },
         {
           "value": "GLOBAL",
           "caption": "JVM-global (safe)"
-        },
-        {
-          "value": "SUB_INTERPRETER",
-          "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
-      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.",
+      "description": "\"Normal\" interpretation type is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a dedicated OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Normal\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" type (the default) is the safest option: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.",
       "default": "GLOBAL"
     },
     {

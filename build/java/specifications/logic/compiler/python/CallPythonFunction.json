@@ -173,8 +173,8 @@
       "edition_type": "enum",
       "items": [
         {
-          "value": "SHARED",
-          "caption": "Shared"
+          "value": "NORMAL",
+          "caption": "Normal"
         },
         {
           "value": "GLOBAL",
@@ -185,7 +185,7 @@
           "caption": "Strictly isolated (DANGEROUS: JEP SubInterpreter)"
         }
       ],
-      "description": "\"Shared\" mode is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a separate OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Shared\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" mode (the default) is maximally safe: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.\n\n\"Strictly isolated\" mode uses Python sub-interpreters to ensure that any changes to Python global structures such as sys.path. will not affect other Python executors.\nWARNING: this mode is incompatible with many native libraries such as \"numpy\" and IS VERY DANGEROUS — it may crash the entire system. Please AVOID THIS MODE unless you are an expert.",
+      "description": "\"Normal\" interpretation type is recommended for most cases, unless you are using \"matplotlib\" or other \"heavy\" Python libraries that are incompatible with multithreading. Python code will be executed in a dedicated OS thread reserved for this function. Disadvantage: if hundreds of Python functions are running in \"Normal\" mode, this can require a lot of memory and system resources.\n\n\"JVM-global\" type (the default) is the safest option: it runs Python code in a single thread, global to the entire Java machine. This allows you to use most Python libraries, even \"matplotlib\" and others. Disadvantage: this mode reduces performance and is not good for multithreaded applications.\n\n\"Strictly isolated\" type uses Python sub-interpreters to ensure that any changes to Python global structures such as sys.path will not affect other Python executors. (Both other types use Python shared interpreters.)\nWARNING: this mode is incompatible with many native libraries such as \"numpy\" and IS VERY DANGEROUS — it may crash the entire system. Please AVOID THIS MODE unless you are an expert.",
       "default": "GLOBAL"
     },
     {

@@ -66,9 +66,9 @@ public class JepAPI {
     public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "context_path";
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
-    public static final List<String> STANDARD_STARTUP = List.of(
+    public static final List<String> STANDARD_STARTUP_PURE = List.of(
             "import " + STANDARD_API_MODULE);
-    public static final List<String> STANDARD_STARTUP_SHARED = List.of(
+    public static final List<String> STANDARD_STARTUP_NORMAL = List.of(
             "import numpy",
             "import " + STANDARD_API_MODULE + " as " + STANDARD_API_MODULE_ALIAS,
             "import " + STANDARD_API_JEP_VERIFIER);
@@ -301,8 +301,8 @@ public class JepAPI {
     public static List<String> initializingJepStartupCode(JepType type) {
         Objects.requireNonNull(type, "Null JEP interpretation mode");
         return type.isPure() ?
-                STANDARD_STARTUP :
-                STANDARD_STARTUP_SHARED;
+                STANDARD_STARTUP_PURE :
+                STANDARD_STARTUP_NORMAL;
     }
 
     public static VerificationStatus verifyPure(Interpreter jepInterpreter, JepConfig configuration) {
@@ -310,7 +310,7 @@ public class JepAPI {
         return null;
     }
 
-    public static VerificationStatus verifyShared(Interpreter jepInterpreter, JepConfig configuration) {
+    public static VerificationStatus verifyNormal(Interpreter jepInterpreter, JepConfig configuration) {
         try {
             JepInterpretation.checkNumpyIntegration(jepInterpreter, STANDARD_API_JEP_VERIFIER_FUNCTION);
             return new VerificationStatus(true);
@@ -345,7 +345,7 @@ public class JepAPI {
     private static JepExtendedConfiguration.Verifier standardJepVerifier(JepType type) {
         return type.isPure() ?
                 JepAPI::verifyPure :
-                JepAPI::verifyShared;
+                JepAPI::verifyNormal;
     }
 
     private static Object closePyObject(JepPerformer performer, Object value) {

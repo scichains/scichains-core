@@ -96,11 +96,11 @@ public abstract class AbstractCallPython extends Executor {
     private double t = 0.0;
     private double u = 0.0;
     private final JepAPI jepAPI = JepAPI.getInstance();
-    private JepType jepType = JepType.SHARED;
+    private JepType jepType = JepType.NORMAL;
 
-    final JepPerformerContainer sharedContainer = JepAPI.newContainer(JepType.SHARED);
-    final JepPerformerContainer subContainer = JepAPI.newContainer(JepType.SUB_INTERPRETER);
+    final JepPerformerContainer normalContainer = JepAPI.newContainer(JepType.NORMAL);
     final JepPerformerContainer globalContainer = JepAPI.newContainer(JepType.GLOBAL);
+    final JepPerformerContainer subContainer = JepAPI.newContainer(JepType.SUB_INTERPRETER);
     // - 3 lightweight containers is a simple alternative for recreating a single container
     volatile JepPerformer performer = null;
 
@@ -415,14 +415,14 @@ public abstract class AbstractCallPython extends Executor {
 
     private void closePython() {
         globalContainer.close();
-        sharedContainer.close();
+        normalContainer.close();
         subContainer.close();
     }
 
     private JepPerformerContainer container() {
         return switch (jepType) {
             case SUB_INTERPRETER -> subContainer;
-            case SHARED -> sharedContainer;
+            case NORMAL -> normalContainer;
             case GLOBAL -> globalContainer;
         };
     }

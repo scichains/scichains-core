@@ -34,9 +34,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public enum JepType {
-    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)"),
-    SHARED("shared", "shared"),
-    GLOBAL("global", "JVM-global");
+    NORMAL("normal", "normal"),
+    GLOBAL("global", "JVM-global"),
+    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)");
 
     private final String typeName;
     private final String prettyName;

@@ -37,7 +37,7 @@ public class CallPythonFunctionTest {
         CallPythonFunction e = new CallPythonFunction();
         // e.setJepType(JepType.SUB_INTERPRETER);
         // - in the current version, leads to warnings in the console
-        e.setJepType(JepType.SHARED);
+        e.setJepType(JepType.NORMAL);
         e.execute();
         if (DO_CLOSE) {
             e.close();

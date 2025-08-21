@@ -37,8 +37,8 @@ public class ExampleJep extends Executor {
 
     private boolean shared = false;
 
-    private final JepPerformerContainer sharedContainer =
-            JepPerformerContainer.newContainer(JepType.SHARED);
+    private final JepPerformerContainer normalContainer =
+            JepPerformerContainer.newContainer(JepType.NORMAL);
     private final JepPerformerContainer localContainer =
             JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
@@ -71,7 +71,7 @@ public class ExampleJep extends Executor {
 //
 
         long t1 = System.nanoTime();
-        final JepPerformer performer = (shared ? sharedContainer : localContainer).performer();
+        final JepPerformer performer = (shared ? normalContainer : localContainer).performer();
         long t2 = System.nanoTime();
         final String script = "from java.lang import System\n"
                 + (shared ? "import numpy\n" : "")
@@ -91,7 +91,7 @@ public class ExampleJep extends Executor {
     @Override
     public void close() {
         super.close();
-        sharedContainer.close();
+        normalContainer.close();
         localContainer.close();
     }
 

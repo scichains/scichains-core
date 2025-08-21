@@ -49,7 +49,7 @@ public class PythonSpecification extends ExecutorSpecification {
         private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
-        private JepType jepType = JepType.SHARED;
+        private JepType jepType = JepType.NORMAL;
 
         public Python() {
         }
@@ -61,7 +61,7 @@ public class PythonSpecification extends ExecutorSpecification {
             this.outputsClass = json.getString("outputs_class", outputsClass);
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
-            final String jepType = json.getString("jepType", JepType.SHARED.typeName());
+            final String jepType = json.getString("jepType", JepType.NORMAL.typeName());
             this.jepType = JepType.ofOrNull(jepType);
             Jsons.requireNonNull(this.jepType, json, "jepType", "unknown (\"" + jepType + "\")", file);
         }
