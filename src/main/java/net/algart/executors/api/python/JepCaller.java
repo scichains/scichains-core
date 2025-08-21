@@ -31,6 +31,7 @@ import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.AtomicPyCallable;
 import net.algart.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.JepInterpretation;
 import net.algart.jep.additions.JepType;
 
 import java.util.Objects;
@@ -155,12 +156,12 @@ public final class JepCaller implements Cloneable, AutoCloseable {
             // it can lead to invalid value of the global variable _env
             if (python.isClassMethod()) {
                 final String className = python.getClassName();
-                performer.perform(JepPerformer.importCode(python.getModule(), className));
+                performer.perform(JepInterpretation.importCode(python.getModule(), className));
                 if (pythonClassInstance == null) {
                     pythonClassInstance = performer.newObject(className);
                 }
             } else {
-                performer.perform(JepPerformer.importCode(python.getModule(), python.getFunction()));
+                performer.perform(JepInterpretation.importCode(python.getModule(), python.getFunction()));
             }
         }
         if (DEBUG_SLEEP_FOR_PARALLEL_EXECUTION) {

@@ -24,8 +24,8 @@
 
 package net.algart.executors.api.python.core;
 
-import net.algart.jep.JepPerformer;
 import net.algart.jep.additions.AtomicPyObject;
+import net.algart.jep.additions.JepInterpretation;
 
 public final class CallPythonExternalFunction extends AbstractCallPython {
     private static final String STANDARD_API_FILE_TO_IMPORT_FIELD = "_env_file_to_import";
@@ -69,7 +69,7 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
         if (!pyFile.isEmpty()) {
             return EXTERNAL_EXECUTE_CODE.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
         } else {
-            return JepPerformer.importCode(moduleName, getMainFunctionName());
+            return JepInterpretation.importCode(moduleName, getMainFunctionName());
         }
     }
 

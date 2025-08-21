@@ -142,9 +142,4 @@ public final class JepPerformer implements AutoCloseable {
         return "Python performer of " + context;
     }
 
-    public static String importCode(String from, String what) {
-        Objects.requireNonNull(from, "Null from");
-        Objects.requireNonNull(what, "Null what");
-        return "from " + from + " import " + what + "\n";
-    }
 }
