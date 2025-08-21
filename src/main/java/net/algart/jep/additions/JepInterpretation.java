@@ -28,6 +28,7 @@ import jep.*;
 import jep.python.PyCallable;
 import net.algart.jep.JepPerformerContainer;
 
+import javax.lang.model.SourceVersion;
 import java.util.Objects;
 
 public class JepInterpretation {
@@ -150,6 +151,32 @@ public class JepInterpretation {
     public static String importPythonCode(String from, String what) {
         Objects.requireNonNull(from, "Null from");
         Objects.requireNonNull(what, "Null what");
+        checkValidPythonImportName(what);
+        checkValidPythonModuleName(from);
         return "from " + from + " import " + what + "\n";
+    }
+
+    private static void checkValidPythonImportName(String what) {
+        if (what.isBlank()) {
+            throw new IllegalArgumentException("Empty Python attribute name \"" + what +
+                    "\" in import is not allowed");
+        }
+        if (!SourceVersion.isIdentifier(what)) {
+            throw new IllegalArgumentException("Invalid Python attribute  name \"" + what + "\" in import: " +
+                    "it contains illegal characters");
+        }
+    }
+
+    private static void checkValidPythonModuleName(String from) {
+        if (from.isBlank()) {
+            throw new IllegalArgumentException("Empty Python module name \"" + from + "\" is not allowed");
+        }
+        String[] parts = from.split("\\.");
+        for (String part : parts) {
+            if (!SourceVersion.isIdentifier(part)) {
+                throw new IllegalArgumentException("Invalid Python module name \"" + from  + "\": " +
+                        "it contains illegal characters in the part \"" + part + "\"");
+            }
+        }
     }
 }
