@@ -33,25 +33,27 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class GraalSourceFileSimpleTest {
+public class GraalSourceModuleSimpleTest {
+    private static final String source = """
+            export function simpleTest() {
+                return "Hello!";
+            }
+            simpleTest
+            """;
 
     public static void main(String[] args) throws ScriptException, IOException {
         boolean useReturnExports = args.length > 0 && args[0].equals("exports");
         System.out.println("useReturnExports: " + useReturnExports);
-        final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
-        final String moduleFile = "./js/sometest.mjs";
-        final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
-        System.out.println("Loading " + modulePath.toAbsolutePath().normalize().toUri());
-
-        Source.Builder sourceBuilder = Source.newBuilder("js", modulePath.toFile());
+        Source.Builder sourceBuilder = Source.newBuilder("js", source,"myTest");
         sourceBuilder.mimeType("application/javascript+module");
         Source source = sourceBuilder.build();
         Context.Builder contextBuilder = Context.newBuilder("js");
-        contextBuilder.allowAllAccess(true);
         if (useReturnExports) {
             contextBuilder.option("js.esm-eval-returns-exports", "true");
             // - without this, the last line in mjs should return the necessary function
         }
+        // Note: we use maximally pure mode! No allowAllAccess or similar calls.
+        // So, we theoretically could use "js.esm-eval-returns-exports" even for GraalSafety.PURE
         try (Context context = contextBuilder.build()) {
             Value module = context.eval(source);
             System.out.println("Module/last line: " + module);
