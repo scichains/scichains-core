@@ -54,9 +54,9 @@ public class JepAPI {
     public static final String STANDARD_API_MODULE = STANDARD_API_PACKAGE + ".api";
     public static final String STANDARD_API_MODULE_ALIAS = "pya";
     // Note: there is no a constant for "Environment" class: we do not create this class outside Python code!
-    public static final String STANDARD_API_PARAMETERS_CLASS_NAME = STANDARD_API_MODULE + ".Parameters";
-    public static final String STANDARD_API_INPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Inputs";
-    public static final String STANDARD_API_OUTPUTS_CLASS_NAME = STANDARD_API_MODULE + ".Outputs";
+    public static final String STANDARD_API_PARAMETERS_CLASS = STANDARD_API_MODULE + ".Parameters";
+    public static final String STANDARD_API_INPUTS_CLASS = STANDARD_API_MODULE + ".Inputs";
+    public static final String STANDARD_API_OUTPUTS_CLASS = STANDARD_API_MODULE + ".Outputs";
     public static final String STANDARD_API_ENVIRONMENT_VARIABLE = "_env";
     public static final String STANDARD_API_ENVIRONMENT_FIELD = "_env";
     public static final String STANDARD_API_EXECUTOR_FIELD = "_executor";

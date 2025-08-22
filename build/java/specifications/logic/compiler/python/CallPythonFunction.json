@@ -197,33 +197,6 @@
       "default": "."
     },
     {
-      "name": "parametersClassName",
-      "caption": "Class name for argument \"params\"",
-      "description": "If empty (not specified), the standard class \"pyalgart.api.Parameters\" is used.",
-      "value_type": "String",
-      "edition_type": "value",
-      "default": "",
-      "advanced": true
-    },
-    {
-      "name": "inputsClassName",
-      "caption": "Class name for argument \"inputs\"",
-      "description": "If empty (not specified), the standard class \"pyalgart.api.Inputs\" is used.",
-      "value_type": "String",
-      "edition_type": "value",
-      "default": "",
-      "advanced": true
-    },
-    {
-      "name": "outputsClassName",
-      "caption": "Class name for argument \"outputs\"",
-      "description": "If empty (not specified), the standard class \"pyalgart.api.Outputs\" is used.\nArguments \"params\", \"inputs\" and \"outputs\" of the main function should be instances of some Python classes, which names (available in current scope) are specified by the last 3 parameters.\nYou may specify them and use any classes for arguments of the main function, like simple empty classes, as declared in the standard \"SInOut\" module. Standard classes are imported automatically. If you will specify non-standard names of these 3 classes, you must import your classes manually or declare them in your  main code, so that they will be available in Python under the specified names.",
-      "value_type": "String",
-      "edition_type": "value",
-      "default": "",
-      "advanced": true
-    },
-    {
       "name": "a",
       "value_type": "String",
       "edition_type": "value",

@@ -59,6 +59,7 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
         moduleName = nonNull(moduleName).trim();
         if (!moduleName.matches("\\S+")) {
             throw new IllegalArgumentException("Python module name must not contain space characters");
+            // - most typical mistake; it will be tested thoroughly in code()
         }
         this.moduleName = moduleName;
         return this;
@@ -66,10 +67,12 @@ public final class CallPythonExternalFunction extends AbstractCallPython {
 
     @Override
     protected String code() {
+        final String mainFunctionName = getMainFunctionName();
+        JepInterpretation.checkValidPythonFunctionName(mainFunctionName);
         if (!pyFile.isEmpty()) {
-            return EXTERNAL_EXECUTE_CODE.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, getMainFunctionName());
+            return EXTERNAL_EXECUTE_CODE.formatted(STANDARD_API_FILE_TO_IMPORT_FIELD, mainFunctionName);
         } else {
-            return JepInterpretation.importPythonCode(moduleName, getMainFunctionName());
+            return JepInterpretation.importPythonCode(moduleName, mainFunctionName);
         }
     }
 

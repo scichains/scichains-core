@@ -80,9 +80,6 @@ public abstract class AbstractCallPython extends Executor {
 
     private String mainFunctionName = "execute";
     private String workingDirectory = ".";
-    private String parametersClassName = "";
-    private String inputsClassName = "";
-    private String outputsClassName = "";
     private String a = "";
     private String b = "";
     private String c = "";
@@ -158,33 +155,6 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-
-    public final String getParametersClassName() {
-        return parametersClassName;
-    }
-
-    public final AbstractCallPython setParametersClassName(String parametersClassName) {
-        this.parametersClassName = nonNull(parametersClassName).trim();
-        return this;
-    }
-
-    public final String getInputsClassName() {
-        return inputsClassName;
-    }
-
-    public final AbstractCallPython setInputsClassName(String inputsClassName) {
-        this.inputsClassName = nonNull(inputsClassName).trim();
-        return this;
-    }
-
-    public final String getOutputsClassName() {
-        return outputsClassName;
-    }
-
-    public final AbstractCallPython setOutputsClassName(String outputsClassName) {
-        this.outputsClassName = nonNull(outputsClassName).trim();
-        return this;
-    }
 
     public final String getA() {
         return a;
@@ -308,18 +278,6 @@ public abstract class AbstractCallPython extends Executor {
         return this;
     }
 
-    public String parametersClassName() {
-        return parametersClassName.isEmpty() ? JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME : parametersClassName;
-    }
-
-    public String inputsClassName() {
-        return inputsClassName.isEmpty() ? JepAPI.STANDARD_API_INPUTS_CLASS_NAME : inputsClassName;
-    }
-
-    public String outputsClassName() {
-        return outputsClassName.isEmpty() ? JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME : outputsClassName;
-    }
-
     @Override
     public final void initialize() {
         if (!isGlobalSynchronizationRequired()) {
@@ -391,9 +349,9 @@ public abstract class AbstractCallPython extends Executor {
             throw new IllegalStateException(getClass() + " is not initialized");
         }
         final Object result;
-        try (AtomicPyObject pythonParameters = jepAPI.newAPIObject(performer, parametersClassName());
-             AtomicPyObject pythonInputs = jepAPI.newAPIObject(performer, inputsClassName());
-             AtomicPyObject pythonOutputs = jepAPI.newAPIObject(performer, outputsClassName())) {
+        try (AtomicPyObject pythonParameters = jepAPI.newAPIObject(performer, JepAPI.STANDARD_API_PARAMETERS_CLASS);
+             AtomicPyObject pythonInputs = jepAPI.newAPIObject(performer, JepAPI.STANDARD_API_INPUTS_CLASS);
+             AtomicPyObject pythonOutputs = jepAPI.newAPIObject(performer, JepAPI.STANDARD_API_OUTPUTS_CLASS)) {
             jepAPI.loadSystemParameters(this, pythonParameters, translateWorkingDirectory());
             jepAPI.loadParameters(subMap(parameters(), PARAMETERS_NAMES), pythonParameters);
             jepAPI.readInputPorts(performer, subSet(inputPorts(), INPUTS_NAMES), pythonInputs);

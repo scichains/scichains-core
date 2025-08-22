@@ -44,9 +44,9 @@ public class PythonSpecification extends ExecutorSpecification {
         public static final String DEFAULT_FUNCTION = "execute";
 
         private String module;
-        private String parametersClass = JepAPI.STANDARD_API_PARAMETERS_CLASS_NAME;
-        private String inputsClass = JepAPI.STANDARD_API_INPUTS_CLASS_NAME;
-        private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS_NAME;
+        private String parametersClass = JepAPI.STANDARD_API_PARAMETERS_CLASS;
+        private String inputsClass = JepAPI.STANDARD_API_INPUTS_CLASS;
+        private String outputsClass = JepAPI.STANDARD_API_OUTPUTS_CLASS;
         private String className = null;
         private String function = DEFAULT_FUNCTION;
         private JepType jepType = JepType.NORMAL;

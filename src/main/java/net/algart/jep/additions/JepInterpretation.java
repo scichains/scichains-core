@@ -156,13 +156,23 @@ public class JepInterpretation {
         return "from " + from + " import " + what + "\n";
     }
 
+    public static void checkValidPythonFunctionName(String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Empty Python function name \"" + name + "\" is not allowed");
+        }
+        if (!SourceVersion.isIdentifier(name)) {
+            throw new IllegalArgumentException("Invalid Python function name \"" + name + "\": " +
+                    "it contains illegal characters");
+        }
+    }
+
     private static void checkValidPythonImportName(String what) {
         if (what.isBlank()) {
             throw new IllegalArgumentException("Empty Python attribute name \"" + what +
                     "\" in import is not allowed");
         }
         if (!SourceVersion.isIdentifier(what)) {
-            throw new IllegalArgumentException("Invalid Python attribute  name \"" + what + "\" in import: " +
+            throw new IllegalArgumentException("Invalid Python attribute name \"" + what + "\" in import: " +
                     "it contains illegal characters");
         }
     }
