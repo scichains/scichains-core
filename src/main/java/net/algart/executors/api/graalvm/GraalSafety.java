@@ -103,10 +103,13 @@ public enum GraalSafety implements GraalContextCustomizer {
             //      var ja = new IntsC(100);
             java.awt.Color.class.getCanonicalName(),
             java.awt.image.BufferedImage.class.getCanonicalName(),
+            // - but not Graphics2D: that class can be used for getting access to some system information,
+            // usually BufferedImage.getGraphics is absolutely enough
             java.awt.BasicStroke.class.getCanonicalName(),
             java.awt.RenderingHints.class.getCanonicalName(),
             java.awt.geom.Point2D.Float.class.getCanonicalName(),
             java.awt.geom.Point2D.Double.class.getCanonicalName(),
+            java.awt.Polygon.class.getCanonicalName(),
             java.awt.geom.Rectangle2D.Float.class.getCanonicalName(),
             java.awt.geom.Rectangle2D.Double.class.getCanonicalName(),
             java.awt.Font.class.getCanonicalName(),
@@ -114,6 +117,13 @@ public enum GraalSafety implements GraalContextCustomizer {
             java.awt.geom.Ellipse2D.Double.class.getCanonicalName(),
             java.awt.geom.Line2D.Float.class.getCanonicalName(),
             java.awt.geom.Line2D.Double.class.getCanonicalName(),
+            java.awt.geom.AffineTransform.class.getCanonicalName(),
+            java.awt.image.AffineTransformOp.class.getCanonicalName(),
+            java.awt.image.RescaleOp.class.getCanonicalName(),
+            java.awt.image.LookupOp.class.getCanonicalName(),
+            java.awt.image.ColorConvertOp.class.getCanonicalName(),
+            java.awt.image.ConvolveOp.class.getCanonicalName(),
+            java.awt.GradientPaint.class.getCanonicalName(),
             SScalar.class.getCanonicalName(),
             SNumbers.class.getCanonicalName(),
             SMat.class.getCanonicalName()
