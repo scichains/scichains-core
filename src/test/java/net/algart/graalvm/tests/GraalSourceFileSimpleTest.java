@@ -36,24 +36,36 @@ import java.nio.file.Paths;
 public class GraalSourceFileSimpleTest {
 
     public static void main(String[] args) throws ScriptException, IOException {
+        boolean useReturnExports = args.length > 0 && args[0].equals("exports");
         final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
         System.out.println("Loading " + modulePath.toAbsolutePath().normalize().toUri());
 
-        Source.Builder builder = Source.newBuilder("js", modulePath.toFile());
-        builder.mimeType("application/javascript+module");
-        Source source = builder.build();
-        try (Context context = Context.newBuilder("js")
-                .allowAllAccess(true)
-                .option("js.esm-eval-returns-exports", "true")
-                // - without this, the last line in mjs should return the necessary function
-                .build()) {
+        Source.Builder sourceBuilder = Source.newBuilder("js", modulePath.toFile());
+        sourceBuilder.mimeType("application/javascript+module");
+        Source source = sourceBuilder.build();
+        Context.Builder contextBuilder = Context.newBuilder("js");
+        contextBuilder.allowAllAccess(true);
+        if (useReturnExports) {
+            contextBuilder.option("js.esm-eval-returns-exports", "true");
+            // - without this, the last line in mjs should return the necessary function
+        }
+        try (Context context = contextBuilder.build()) {
             Value module = context.eval(source);
+            System.out.println("Module/last line: " + module);
             Value func = module.getMember("simpleTest");
+            if (func == null) {
+                func = module;
+            }
+            // - This code will work in both cases:
+            // useReturnExports=true (module.getMember)
+            // and =false (then it uses the last line of sometest.mjs)
+            System.out.println("Function simpleTest: " + func);
+            Value funcSecond = module.getMember("toJsonString");
+            System.out.println("Function toJsonString: " + funcSecond);
             Value result = func.execute();
             System.out.println("execute result: " + result);
-            System.out.println("Function: " + func);
         }
     }
 }

@@ -24,10 +24,10 @@
 
 package net.algart.executors.api.graalvm;
 
-import net.algart.graalvm.GraalContextCustomizer;
 import net.algart.executors.api.data.SMat;
 import net.algart.executors.api.data.SNumbers;
 import net.algart.executors.api.data.SScalar;
+import net.algart.graalvm.GraalContextCustomizer;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.io.IOAccess;
@@ -77,7 +77,7 @@ public enum GraalSafety implements GraalContextCustomizer {
             Float.class.getCanonicalName(),
             Double.class.getCanonicalName(),
             // - but not Integer/Long: they have "getInteger"/"getLong" methods,
-            // allowing to read some system properties (it is not secure operation)
+            // allowing to read some system properties (it is not a secure operation)
             Math.class.getCanonicalName(),
             StrictMath.class.getCanonicalName(),
             Arrays.class.getCanonicalName(),
@@ -101,6 +101,19 @@ public enum GraalSafety implements GraalContextCustomizer {
             // like in the following code:
             //      var IntsC = Java.type("int[]");
             //      var ja = new IntsC(100);
+            java.awt.Color.class.getCanonicalName(),
+            java.awt.image.BufferedImage.class.getCanonicalName(),
+            java.awt.BasicStroke.class.getCanonicalName(),
+            java.awt.RenderingHints.class.getCanonicalName(),
+            java.awt.geom.Point2D.Float.class.getCanonicalName(),
+            java.awt.geom.Point2D.Double.class.getCanonicalName(),
+            java.awt.geom.Rectangle2D.Float.class.getCanonicalName(),
+            java.awt.geom.Rectangle2D.Double.class.getCanonicalName(),
+            java.awt.Font.class.getCanonicalName(),
+            java.awt.geom.Ellipse2D.Float.class.getCanonicalName(),
+            java.awt.geom.Ellipse2D.Double.class.getCanonicalName(),
+            java.awt.geom.Line2D.Float.class.getCanonicalName(),
+            java.awt.geom.Line2D.Double.class.getCanonicalName(),
             SScalar.class.getCanonicalName(),
             SNumbers.class.getCanonicalName(),
             SMat.class.getCanonicalName()

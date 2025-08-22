@@ -148,12 +148,12 @@ public class JepInterpretation {
         }
     }
 
-    public static String importPythonCode(String from, String what) {
+    public static String importPythonCode(String from, String whatToImport) {
         Objects.requireNonNull(from, "Null from");
-        Objects.requireNonNull(what, "Null what");
-        checkValidPythonImportName(what);
+        Objects.requireNonNull(whatToImport, "Null whatToImport");
+        checkValidPythonImportName(whatToImport);
         checkValidPythonModuleName(from);
-        return "from " + from + " import " + what + "\n";
+        return "from " + from + " import " + whatToImport + "\n";
     }
 
     public static void checkValidPythonFunctionName(String name) {
@@ -161,6 +161,8 @@ public class JepInterpretation {
             throw new IllegalArgumentException("Empty Python function name \"" + name + "\" is not allowed");
         }
         if (!SourceVersion.isIdentifier(name)) {
+            // - Strictly speaking, Java and Python's requirements for identifiers are not identical,
+            // but in practice this is not a problem: our goal is only to disable truly dangerous JS code.
             throw new IllegalArgumentException("Invalid Python function name \"" + name + "\": " +
                     "it contains illegal characters");
         }

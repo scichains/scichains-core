@@ -388,7 +388,7 @@ public abstract class AbstractCallJS extends Executor {
             logDebug(() -> "Changing code/settings of \"" + mainFunctionName + "\" detected: rebuilding performer");
             closePerformerContainer();
         }
-        setOutputScalar(OUTPUT_CODE, code);
+        setOutputScalar(OUTPUT_CODE, script);
     }
 
     protected void executeSource(GraalPerformer performer) {

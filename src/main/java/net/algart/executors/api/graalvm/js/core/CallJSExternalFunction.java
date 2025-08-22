@@ -25,9 +25,8 @@
 package net.algart.executors.api.graalvm.js.core;
 
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
-import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalSourceContainer;
-import org.graalvm.polyglot.Value;
+import net.algart.graalvm.JSInterpretation;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,9 +52,13 @@ public final class CallJSExternalFunction extends AbstractCallJS {
 
     @Override
     protected String code() {
-        throw new UnsupportedOperationException("Unused");
+        return JSInterpretation.importJSCode(translateJsFile(), getMainFunctionName());
     }
 
+    /*
+    // Possible alternative way, requiring calling
+    // .option("js.esm-eval-returns-exports", "true")
+    // in the Context builder.
     @Override
     protected void compileSource() {
         jsFileContainer.setModuleJS(translateJsFile(), "main_module");
@@ -81,21 +84,7 @@ public final class CallJSExternalFunction extends AbstractCallJS {
             }
         }
     }
-
-    @Override
-    protected void closePerformerContainer() {
-        this.mainFunction = null;
-        // - enforce re-creating this function by perform()
-        super.closePerformerContainer();
-    }
-
-    @Override
-    protected Value callFunction(Value graalParameters, Value graalInputs, Value graalOutputs) {
-        if (mainFunction == null) {
-            throw new IllegalStateException(getClass() + " is not initialized");
-        }
-        return mainFunction.execute(graalParameters, graalInputs, graalOutputs);
-    }
+    */
 
     @Override
     protected String executorName() {

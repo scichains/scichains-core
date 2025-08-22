@@ -9,9 +9,13 @@ export function test(o) {
 }
 
 // console.log(test([1,2,3,4,5]));
-export function simpleTest() {
+function simpleTest() {
     const o = [1, 2, 3]
     print("Object type: " + typeof(o));
     return "JSON form (simple test): " +  toJsonString(o);
 }
+// export { toJsonString } // - if we want to see this function outside
+
+export { simpleTest }
+
 simpleTest;
