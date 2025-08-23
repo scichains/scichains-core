@@ -108,7 +108,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
             // Note: no sense to check importCode.changed(), because it cannot change until reloading the entire chain.
             final GraalPerformer performer = performer();
             mainFunction = performer.perform(importCode);
-            createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
+            createEmptyObjectFunction = GraalAPI.JS.storedCreateEmptyObjectFunction(performer);
         }
     }
 
@@ -178,6 +178,6 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     private void createPerformerContainer() {
         this.performerContainer = GraalPerformerContainer.getLocalAllAccess(workingDirectory);
-        GraalAPI.initializeJS(this.performerContainer);
+        GraalAPI.JS.initializeJS(this.performerContainer);
     }
 }

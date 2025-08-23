@@ -320,11 +320,11 @@ public abstract class AbstractCallJS extends Executor {
         // - in PURE mode we cannot set the working directory in Context.Builder;
         // note: we must explicitly set it to null if !isWorkingDirectorySupported -
         // maybe the user changed the safety parameter!
-        GraalAPI.initializeJS(performerContainer);
+        GraalAPI.JS.initializeJS(performerContainer);
         final GraalPerformer performer = performerContainer.performer();
         long t3 = debugTime();
         executeSource(performer);
-        createEmptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
+        createEmptyObjectFunction = GraalAPI.JS.storedCreateEmptyObjectFunction(performer);
         long t4 = debugTime();
         logDebug(() -> String.format(Locale.US,
                 "%s \"%s\" initialized in %.5f ms:"

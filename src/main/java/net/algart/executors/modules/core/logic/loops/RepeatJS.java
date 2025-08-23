@@ -418,7 +418,7 @@ public final class RepeatJS extends Executor {
     private GraalPerformerContainer performerContainer() {
         synchronized (lock) {
             if (performerContainer == null) {
-                this.performerContainer = GraalAPI.getJSContainer(shareNamespace, GraalSafety.SAFE);
+                this.performerContainer = GraalAPI.JS.getJSContainer(shareNamespace, GraalSafety.SAFE);
             }
             return performerContainer;
         }

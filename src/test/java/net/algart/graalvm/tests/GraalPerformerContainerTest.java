@@ -37,7 +37,7 @@ import javax.script.ScriptException;
 public class GraalPerformerContainerTest {
     static GraalPerformerContainerTest test = new GraalPerformerContainerTest();
 
-    GraalPerformerContainer performerContainer = GraalAPI.initializeJS(GraalPerformerContainer
+    GraalPerformerContainer performerContainer = GraalAPI.JS.initializeJS(GraalPerformerContainer
 //            .getSharedSafe()
             .getSharedPure()
             .setCustomizer(GraalSafety.SAFE)
@@ -66,7 +66,7 @@ public class GraalPerformerContainerTest {
         GraalPerformer performer = performerContainer.performer(id);
         GraalSourceContainer sourceContainer = GraalSourceContainer.newLiteralContainer()
                 .setJS(JSType.COMMON, script, "test");
-        Value emptyObjectFunction = GraalAPI.storedCreateEmptyObjectJSFunction(performer);
+        Value emptyObjectFunction = GraalAPI.JS.storedCreateEmptyObjectFunction(performer);
         System.out.println("Empty object function: \"" + emptyObjectFunction
                 + "\"; its result: " + emptyObjectFunction.execute());
 

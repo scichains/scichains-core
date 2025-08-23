@@ -48,39 +48,91 @@ public class GraalAPI {
     public static final String STANDARD_API_SCALAR_CLASS = "SScalarClass";
     public static final String STANDARD_API_NUMBERS_CLASS = "SNumbersClass";
     public static final String STANDARD_API_MAT_CLASS = "SMatClass";
-    public static final String JS_ARRAY_BLOCK_LENGTH_PROPERTY_NAME = "blockLength";
+    public static final String ARRAY_BLOCK_LENGTH_PROPERTY_NAME = "blockLength";
 
-    private static final String STANDARD_API_JS_SERVICE_SOURCE_PURE = """
+    private static final java.util.logging.Logger JAVA_LOG =
+            java.util.logging.Logger.getLogger(GraalAPI.class.getName());
+
+    public static class JS {
+        private static final String STANDARD_API_JS_SERVICE_SOURCE_PURE = """
             function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
             
             [__SYS_createEmptyObjectImpl]
             """;
-    private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
-            .newLiteralContainer()
-            .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE_PURE, "__S_service_pure");
-    private static final String STANDARD_API_JS_SERVICE_SOURCE = """
+        private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
+                .newLiteralContainer()
+                .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE_PURE, "__S_service_pure");
+        private static final String STANDARD_API_JS_SERVICE_SOURCE = """
             function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
             
             [__SYS_createEmptyObjectImpl, Java.type("%s"), Java.type("%s"), Java.type("%s")]
             """.formatted(
-            SScalar.class.getCanonicalName(),
-            SNumbers.class.getCanonicalName(),
-            SMat.class.getCanonicalName());
-    private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER = GraalSourceContainer
-            .newLiteralContainer()
-            .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE, "__S_service");
-    // - Creating a container is a very "lightweight" operation, not leading to using any Graal code
-    // Note: returning result is the last line is necessary because we do not use
-    // .option("js.esm-eval-returns-exports", "true")
-    // in GraalContextCustomizer.newBuilder
+                SScalar.class.getCanonicalName(),
+                SNumbers.class.getCanonicalName(),
+                SMat.class.getCanonicalName());
+        private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER = GraalSourceContainer
+                .newLiteralContainer()
+                .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE, "__S_service");
+        // - Creating a container is a very "lightweight" operation, not leading to using any Graal code
+        // Note: returning result is the last line is necessary because we do not use
+        // .option("js.esm-eval-returns-exports", "true")
+        // in GraalContextCustomizer.newBuilder
 
-    private static final Logger LOG = System.getLogger(GraalAPI.class.getName());
-    private static final java.util.logging.Logger JAVA_LOG =
-            java.util.logging.Logger.getLogger(GraalAPI.class.getName());
+        public static GraalPerformerContainer getJSContainer(boolean shared) {
+            return initializeJS(GraalPerformerContainer.getContainer(shared).setAutoBindingJS());
+        }
+
+        public static GraalPerformerContainer getJSContainer(boolean shared, GraalContextCustomizer customizer) {
+            return initializeJS(GraalPerformerContainer.getContainer(shared, customizer).setAutoBindingJS());
+        }
+
+        public static GraalPerformerContainer initializeJS(GraalPerformerContainer performerContainer) {
+            Objects.requireNonNull(performerContainer, "Null performerContainer");
+            final boolean addStandardClasses = performerContainer.getCustomizer().isJavaAccessSupported();
+            performerContainer.setConfigurator(performer -> standardConfigure(performer, addStandardClasses));
+            return performerContainer;
+        }
+
+        public static GraalPerformerContainer.Local initializeJS(GraalPerformerContainer.Local performerContainer) {
+            return (GraalPerformerContainer.Local) initializeJS((GraalPerformerContainer) performerContainer);
+        }
+
+        public static GraalPerformerContainer.Shared initializeJS(GraalPerformerContainer.Shared performerContainer) {
+            return (GraalPerformerContainer.Shared) initializeJS((GraalPerformerContainer) performerContainer);
+        }
+
+        public static Value storedCreateEmptyObjectFunction(GraalPerformer performer) {
+            Objects.requireNonNull(performer, "Null performer");
+            final Value result = performer.getProperty(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, Value.class);
+            if (result == null) {
+                throw new IllegalStateException("Performer is not configured properly: " + performer);
+            }
+            return result;
+        }
+
+        public static void standardConfigure(GraalPerformer performer, boolean addStandardClasses) {
+            Objects.requireNonNull(performer, "Null performer");
+            final Value serviceValues = performer.perform(
+                    addStandardClasses ?
+                            STANDARD_API_JS_SERVICE_SOURCE_CONTAINER :
+                            STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE);
+            final Value createEmptyObjectFunction = serviceValues.getArrayElement(0);
+            performer.putPropertyIfAbsent(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, createEmptyObjectFunction);
+            final Value bindings = performer.bindingsJS();
+            // - note that context.getPolyglotBindings().putMember() does not help,
+            // necessary getBinding for specified language
+            bindings.putMember(STANDARD_API_LOGGER_NAME, JAVA_LOG);
+            if (addStandardClasses) {
+                bindings.putMember(STANDARD_API_SCALAR_CLASS, serviceValues.getArrayElement(1));
+                bindings.putMember(STANDARD_API_NUMBERS_CLASS, serviceValues.getArrayElement(2));
+                bindings.putMember(STANDARD_API_MAT_CLASS, serviceValues.getArrayElement(3));
+            }
+        }
+    }
 
     private boolean convertInputScalarToNumber = false;
     private boolean convertInputNumbersToArray = false;
@@ -100,14 +152,6 @@ public class GraalAPI {
                 .setConvertInputNumbersToArray(true)
                 .setConvertInputArraysToDouble(true)
                 .setConvertOutputIntegersToBriefForm(true);
-    }
-
-    public static GraalPerformerContainer getJSContainer(boolean shared) {
-        return initializeJS(GraalPerformerContainer.getContainer(shared).setAutoBindingJS());
-    }
-
-    public static GraalPerformerContainer getJSContainer(boolean shared, GraalContextCustomizer customizer) {
-        return initializeJS(GraalPerformerContainer.getContainer(shared, customizer).setAutoBindingJS());
     }
 
     public boolean isConvertInputScalarToNumber() {
@@ -146,20 +190,22 @@ public class GraalAPI {
         return this;
     }
 
-    // Unlike loadParameters, we use here usual Map (instead of Value):
-    // it allows avoiding creating a special empty object with name
-    // STANDARD_API_PARAMETER inside "parameters" object
     public void loadSystemParameters(Executor executor, Value parameters, Path workingDirectory) {
         Objects.requireNonNull(executor, "Null executor");
-        final Map<String, Object> parameter = new LinkedHashMap<>();
+        final Map<String, Object> env = new LinkedHashMap<>();
         // Not Map.of: some fields may be null
-        parameter.put(STANDARD_API_PARAMETER_EXECUTOR, executor);
-        parameter.put(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
+        // Here we use a regular Map (instead of Value): this avoids creating a special empty object
+        // using GraalAPI.JS.storedCreateEmptyObjectFunction
+        // (this is a JS-specific solution, while Java's Map is theoretically suitable for any language).
+        // Disadvantage: this will not work with GraalSafety.PURE,
+        // but the environment is almost useless at that safety level.
+        env.put(STANDARD_API_PARAMETER_EXECUTOR, executor);
+        env.put(STANDARD_API_PARAMETER_PLATFORM, executor.executorPlatform());
         final Path directory = workingDirectory != null ? workingDirectory : executor.getCurrentDirectory();
-        parameter.put(STANDARD_API_PARAMETER_WORKING_DIRECTORY, directory == null ? null : directory.toString());
+        env.put(STANDARD_API_PARAMETER_WORKING_DIRECTORY, directory == null ? null : directory.toString());
         final Path contextPath = executor.contextPath();
-        parameter.put(STANDARD_API_PARAMETER_CONTEXT_PATH, contextPath == null ? null : contextPath.toString());
-        parameters.putMember(STANDARD_API_ENVIRONMENT_FIELD, Collections.unmodifiableMap(parameter));
+        env.put(STANDARD_API_PARAMETER_CONTEXT_PATH, contextPath == null ? null : contextPath.toString());
+        parameters.putMember(STANDARD_API_ENVIRONMENT_FIELD, Collections.unmodifiableMap(env));
         parameters.putMember(STANDARD_API_EXECUTOR_FIELD, executor);
     }
 
@@ -340,8 +386,8 @@ public class GraalAPI {
                 resultNumbers.setTo((SNumbers) object);
             } else if (object instanceof Collection<?>) {
                 int blockLength = 1;
-                if (value.hasMember(JS_ARRAY_BLOCK_LENGTH_PROPERTY_NAME)) {
-                    final Value blockLengthValue = value.getMember(JS_ARRAY_BLOCK_LENGTH_PROPERTY_NAME);
+                if (value.hasMember(ARRAY_BLOCK_LENGTH_PROPERTY_NAME)) {
+                    final Value blockLengthValue = value.getMember(ARRAY_BLOCK_LENGTH_PROPERTY_NAME);
                     if (blockLengthValue.fitsInInt()) {
                         blockLength = blockLengthValue.asInt();
                     }
@@ -416,49 +462,6 @@ public class GraalAPI {
                                 " or " + MultiMatrix.class.getCanonicalName() + ", " +
                                 "but it returned " + object.getClass().getCanonicalName());
             }
-        }
-    }
-
-    public static Value storedCreateEmptyObjectJSFunction(GraalPerformer performer) {
-        Objects.requireNonNull(performer, "Null performer");
-        final Value result = performer.getProperty(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, Value.class);
-        if (result == null) {
-            throw new IllegalStateException("Performer is not configured properly: " + performer);
-        }
-        return result;
-    }
-
-    public static GraalPerformerContainer initializeJS(GraalPerformerContainer performerContainer) {
-        Objects.requireNonNull(performerContainer, "Null performerContainer");
-        final boolean addStandardClasses = performerContainer.getCustomizer().isJavaAccessSupported();
-        performerContainer.setConfigurator(performer -> standardConfigureJS(performer, addStandardClasses));
-        return performerContainer;
-    }
-
-    public static GraalPerformerContainer.Local initializeJS(GraalPerformerContainer.Local performerContainer) {
-        return (GraalPerformerContainer.Local) initializeJS((GraalPerformerContainer) performerContainer);
-    }
-
-    public static GraalPerformerContainer.Shared initializeJS(GraalPerformerContainer.Shared performerContainer) {
-        return (GraalPerformerContainer.Shared) initializeJS((GraalPerformerContainer) performerContainer);
-    }
-
-    public static void standardConfigureJS(GraalPerformer performer, boolean addStandardClasses) {
-        Objects.requireNonNull(performer, "Null performer");
-        final Value serviceValues = performer.perform(
-                addStandardClasses ?
-                        STANDARD_API_JS_SERVICE_SOURCE_CONTAINER :
-                        STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE);
-        final Value createEmptyObjectFunction = serviceValues.getArrayElement(0);
-        performer.putPropertyIfAbsent(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, createEmptyObjectFunction);
-        final Value bindings = performer.bindingsJS();
-        // - note that context.getPolyglotBindings().putMember() does not help,
-        // necessary getBinding for specified language
-        bindings.putMember(STANDARD_API_LOGGER_NAME, JAVA_LOG);
-        if (addStandardClasses) {
-            bindings.putMember(STANDARD_API_SCALAR_CLASS, serviceValues.getArrayElement(1));
-            bindings.putMember(STANDARD_API_NUMBERS_CLASS, serviceValues.getArrayElement(2));
-            bindings.putMember(STANDARD_API_MAT_CLASS, serviceValues.getArrayElement(3));
         }
     }
 }
