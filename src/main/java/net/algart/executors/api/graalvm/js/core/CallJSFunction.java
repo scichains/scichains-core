@@ -46,7 +46,7 @@ public final class CallJSFunction extends AbstractCallJS {
     }
 
     @Override
-    protected String code() {
+    protected String code(boolean jsEsmEvalReturnsExports) {
         return code;
     }
 

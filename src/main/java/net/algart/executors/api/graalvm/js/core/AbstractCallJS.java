@@ -370,7 +370,7 @@ public abstract class AbstractCallJS extends Executor {
         closePerformerContainer();
     }
 
-    protected abstract String code();
+    protected abstract String code(boolean jsEsmEvalReturnsExports);
 
     protected Value mainFunction() {
         return mainFunction;
@@ -378,7 +378,7 @@ public abstract class AbstractCallJS extends Executor {
 
     protected void compileSource(boolean jsEsmEvalReturnsExports)  {
         final String mainFunctionName = getMainFunctionName();
-        final String code = code();
+        final String code = code(jsEsmEvalReturnsExports);
         final String script = JSInterpretation.addJSExportFunction(code, mainFunctionName, jsEsmEvalReturnsExports);
         jsCodeContainer.setModuleJS(script, "main_code");
         // - name "main_code" is not important: we will not share this performer (Graal context) with other

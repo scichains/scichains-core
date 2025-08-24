@@ -25,14 +25,23 @@
 package net.algart.executors.api.graalvm.js.core;
 
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
+import net.algart.graalvm.GraalPerformer;
 import net.algart.graalvm.GraalSourceContainer;
 import net.algart.graalvm.JSInterpretation;
+import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class CallJSExternalFunction extends AbstractCallJS {
+    private static final boolean USE_FILE_SOURCE = false;
+    // Should be false.
+    // If true, we use a possible alternative way for the case when
+    // GraalPerformerContainer.DEFAULT_JS_ESM_EVAL_RETURNS_EXPORTS=true (default value).
+    // But we prefer the common solution with a synthetic JavaScript importJSCode:
+    // so we avoid direct operations with a file system.
+
     private final GraalSourceContainer jsFileContainer = GraalSourceContainer.newFileContainer();
 
     private String jsFile = "";
@@ -51,16 +60,20 @@ public final class CallJSExternalFunction extends AbstractCallJS {
     }
 
     @Override
-    protected String code() {
-        return JSInterpretation.importJSCode(translateJsFile(), getMainFunctionName());
+    protected String code(boolean jsEsmEvalReturnsExports) {
+        if (!USE_FILE_SOURCE || !jsEsmEvalReturnsExports) {
+            return JSInterpretation.importJSCode(translateJsFile(), getMainFunctionName());
+        } else {
+            throw new UnsupportedOperationException("Should not be used");
+        }
     }
 
-    /*
-    // Possible alternative way, requiring calling
-    // .option("js.esm-eval-returns-exports", "true")
-    // in the Context builder.
     @Override
-    protected void compileSource() {
+    protected void compileSource(boolean jsEsmEvalReturnsExports) {
+        if (!USE_FILE_SOURCE || !jsEsmEvalReturnsExports) {
+            super.compileSource(jsEsmEvalReturnsExports);
+            return;
+        }
         jsFileContainer.setModuleJS(translateJsFile(), "main_module");
         // - name "main_module" is not important: we will not share this performer (Graal context) with other
         // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
@@ -73,6 +86,10 @@ public final class CallJSExternalFunction extends AbstractCallJS {
 
     @Override
     protected void executeSource(GraalPerformer performer ) {
+        if (!USE_FILE_SOURCE || !performer.isJsEsmEvalReturnsExports()) {
+            super.executeSource(performer);
+            return;
+        }
         final String mainFunctionName = getMainFunctionName();
         if (mainFunction == null) {
             // no sense to perform ECMA module if it was not changed: re-executing will have no effect
@@ -84,7 +101,6 @@ public final class CallJSExternalFunction extends AbstractCallJS {
             }
         }
     }
-    */
 
     @Override
     protected String executorName() {
