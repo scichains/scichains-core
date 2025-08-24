@@ -35,9 +35,9 @@ public class CallPythonFunctionTest {
     private static void testPython() {
         System.out.printf("CallPythonFunctionTest test%n");
         CallPythonFunction e = new CallPythonFunction();
-        // e.setJepType(JepType.SUB_INTERPRETER);
-        // - in the current version, leads to warnings in the console
         e.setJepType(JepType.NORMAL);
+//         e.setJepType(JepType.SUB_INTERPRETER);
+        // - in the current version, leads to warnings in the console
         e.execute();
         if (DO_CLOSE) {
             e.close();

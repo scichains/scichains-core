@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExampleJep extends Executor {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    private boolean shared = false;
+    private boolean subInterpreter = true;
 
     private final JepPerformerContainer normalContainer =
             JepPerformerContainer.newContainer(JepType.NORMAL);
@@ -43,12 +43,12 @@ public class ExampleJep extends Executor {
             JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
 
-    public boolean isShared() {
-        return shared;
+    public boolean isSubInterpreter() {
+        return subInterpreter;
     }
 
-    public ExampleJep setShared(boolean shared) {
-        this.shared = shared;
+    public ExampleJep setSubInterpreter(boolean subInterpreter) {
+        this.subInterpreter = subInterpreter;
         return this;
     }
 
@@ -63,18 +63,11 @@ public class ExampleJep extends Executor {
     }
 
     public Object testJep(String value) {
-//        Context context = Context.newBuilder("js")
-//                .allowAllAccess(true)
-//                .build();
-//        System.out.println("SNumbers: " +
-//                context.eval("js","Java.type('net.algart.executors.api.data.SNumbers')"));
-//
-
         long t1 = System.nanoTime();
-        final JepPerformer performer = (shared ? normalContainer : localContainer).performer();
+        final JepPerformer performer = (subInterpreter ? localContainer : normalContainer).performer();
         long t2 = System.nanoTime();
         final String script = "from java.lang import System\n"
-                + (shared ? "import numpy\n" : "")
+                + (!subInterpreter ? "import numpy\n" : "")
                 + "import sys\n\n"
                 + "def test():\n"
                 + "    System.out.println('Hello from JEP!' + str(sys.path))\n"
@@ -97,7 +90,7 @@ public class ExampleJep extends Executor {
 
     @SuppressWarnings("resource")
     public static void main(String[] args) {
-        System.out.println(new ExampleJep().setShared(true).testJep("shared"));
-        System.out.println(new ExampleJep().setShared(false).testJep("local"));
+        System.out.println(new ExampleJep().setSubInterpreter(false).testJep("shared"));
+        System.out.println(new ExampleJep().setSubInterpreter(true).testJep("sub-interpreter"));
     }
 }

@@ -31,7 +31,8 @@ public class ExampleJepTest {
     public static void main(String[] args) {
         ExecutionBlock.initializeExecutionSystem();
         try (ExampleJep e = new ExampleJep()) {
-            e.setShared(false);
+            e.setSubInterpreter(true);
+            // - problematic settings: how will it work?
             e.execute();
         }
     }

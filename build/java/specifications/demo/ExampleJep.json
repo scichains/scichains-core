@@ -25,7 +25,7 @@
   ],
   "controls": [
     {
-      "name": "shared",
+      "name": "subInterpreter",
       "value_type": "boolean",
       "edition_type": "value",
       "default": false

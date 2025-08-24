@@ -53,7 +53,7 @@ public class GraalSourceModuleSimpleTest {
             // - without this, the last line in mjs should return the necessary function
         }
         // Note: we use maximally pure mode! No allowAllAccess or similar calls.
-        // So, we theoretically could use "js.esm-eval-returns-exports" even for GraalSafety.PURE
+        // So, we can freely use "js.esm-eval-returns-exports" even for GraalSafety.PURE
         try (Context context = contextBuilder.build()) {
             Value module = context.eval(source);
             System.out.println("Module/last line: " + module);
