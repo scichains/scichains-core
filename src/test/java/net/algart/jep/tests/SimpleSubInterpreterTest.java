@@ -24,17 +24,23 @@
 
 package net.algart.jep.tests;
 
-import net.algart.executors.api.jep.JepAPI;
-import net.algart.jep.JepPerformer;
-import net.algart.jep.JepPerformerContainer;
-import net.algart.jep.additions.JepType;
+import jep.Interpreter;
+import jep.SubInterpreter;
 
-public class SimpleSubInterpreterPerformerTest {
+public class SimpleSubInterpreterTest {
     public static void main(String[] args) {
-        JepPerformerContainer subContainer = JepAPI.newContainer(JepType.SUB_INTERPRETER);
-        JepAPI jepAPI = JepAPI.getInstance();
-        JepPerformer performer = subContainer.performer();
-        jepAPI.newAPIObject(performer, JepAPI.STANDARD_API_PARAMETERS_CLASS);
-        subContainer.close();
+        String pyCode = """
+                class Parameters:
+                    def __init__(self):
+                        pass
+                """;
+        Interpreter context = new SubInterpreter();
+        String className = "Parameters";
+        context.exec(pyCode);
+        final Object callable = context.getValue(className);
+        // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
+        // (the code above is the minimal example necessary for correct usage of Python in SciChains)
+        System.out.println("Callable: " + callable.getClass());
+        context.close();
     }
 }

@@ -29,14 +29,21 @@ import jep.SubInterpreter;
 
 public class SimpleJepNoFile {
     public static void main(String[] args) {
-        try (Interpreter interp = new SubInterpreter()) {
-            System.out.println("Interpreter: " + interp);
+        boolean useGetValue = args.length > 0 && args[0].equals("getValue");
+        try (Interpreter interpreter = new SubInterpreter()) {
+            System.out.println("Interpreter: " + interpreter);
             System.out.println();
-            interp.exec("def someClass():\n    pass\n");
-            interp.exec("def test():\n    return '123'\n");
-            interp.exec("print(test())");
-            Object result = interp.invoke("test");
+            interpreter.exec("def someClass():\n    pass\n");
+            interpreter.exec("def test():\n    return '123'\n");
+            interpreter.exec("print(test())");
+            Object result = interpreter.invoke("test");
             System.out.printf("From Python: %s%n", result);
+
+            if (useGetValue) {
+                Object member = interpreter.getValue("test");
+                // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
+                System.out.printf("member: %s (%s)%n", member, member.getClass());
+            }
         }
     }
 }
