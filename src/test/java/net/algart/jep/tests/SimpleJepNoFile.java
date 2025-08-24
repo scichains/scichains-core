@@ -38,6 +38,7 @@ public class SimpleJepNoFile {
                     import sys
                     sys.modules['numpy'] = None
                     """);
+            // - useful for SubInterpreter
             interpreter.exec("""
                 class Parameters:
                     def __init__(self):
