@@ -26,6 +26,7 @@ package net.algart.jep.tests;
 
 import jep.Interpreter;
 import jep.SubInterpreter;
+import jep.python.PyCallable;
 
 public class SimpleJepNoFile {
     public static void main(String[] args) {
@@ -33,16 +34,26 @@ public class SimpleJepNoFile {
         try (Interpreter interpreter = new SubInterpreter()) {
             System.out.println("Interpreter: " + interpreter);
             System.out.println();
-            interpreter.exec("def someClass():\n    pass\n");
+            interpreter.exec("""
+                    import sys
+                    sys.modules['numpy'] = None
+                    """);
+            interpreter.exec("""
+                class Parameters:
+                    def __init__(self):
+                        pass
+                """);
             interpreter.exec("def test():\n    return '123'\n");
             interpreter.exec("print(test())");
             Object result = interpreter.invoke("test");
             System.out.printf("From Python: %s%n", result);
 
             if (useGetValue) {
-                Object member = interpreter.getValue("test");
+                PyCallable member = (PyCallable) interpreter.getValue("Parameters");
                 // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
                 System.out.printf("member: %s (%s)%n", member, member.getClass());
+                Object instance = member.call();
+                System.out.printf("Parameters instance: %s (%s)%n", instance, instance.getClass());
             }
         }
     }

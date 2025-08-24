@@ -26,10 +26,12 @@ package net.algart.jep.tests;
 
 import jep.Interpreter;
 import jep.SubInterpreter;
+import jep.python.PyCallable;
 
 public class SimpleSubInterpreterTest {
     public static void main(String[] args) {
         String pyCode = """
+                import sys; sys.modules['numpy'] = None 
                 class Parameters:
                     def __init__(self):
                         pass
@@ -37,10 +39,14 @@ public class SimpleSubInterpreterTest {
         Interpreter context = new SubInterpreter();
         String className = "Parameters";
         context.exec(pyCode);
-        final Object callable = context.getValue(className);
-        // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
+        final PyCallable callable = (PyCallable) context.getValue(className);
+        // - Without
+        // sys.modules['numpy'] = None
+        // the previous command leads to warnings in the console (when numpy+jep are correctly installed)
         // (the code above is the minimal example necessary for correct usage of Python in SciChains)
         System.out.println("Callable: " + callable.getClass());
+        Object parameters = callable.call();
+        System.out.println("parameters: " + parameters.getClass());
         context.close();
     }
 }
