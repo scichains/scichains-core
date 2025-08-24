@@ -36,7 +36,7 @@ import java.util.function.Supplier;
 public enum JepType {
     NORMAL("normal", "normal"),
     GLOBAL("global", "JVM-global"),
-    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (local)");
+    SUB_INTERPRETER("sub-interpreter", "sub-interpreter (isolated)");
 
     private final String typeName;
     private final String prettyName;
@@ -62,7 +62,7 @@ public enum JepType {
         return prettyName;
     }
 
-    public boolean isPure() {
+    public boolean isSubInterpreter() {
         return this == SUB_INTERPRETER;
     }
 

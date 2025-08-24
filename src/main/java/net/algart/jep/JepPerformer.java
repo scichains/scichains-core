@@ -104,7 +104,7 @@ public final class JepPerformer implements AutoCloseable {
     }
 
     public AtomicPyCallable getCallable(String valueName) {
-        final PyCallable callable = type.isPure() ?
+        final PyCallable callable = type.isSubInterpreter() ?
                 (PyCallable) getRawValue(valueName) :
                 getValueAs(valueName, PyCallable.class);
         return context.wrapCallable(callable);
@@ -118,7 +118,7 @@ public final class JepPerformer implements AutoCloseable {
     public AtomicPyObject newObject(String className, Object... args) {
         Objects.requireNonNull(className, "Null Python class name");
         try (final AtomicPyCallable callable = getCallable(className)) {
-            return type.isPure() ?
+            return type.isSubInterpreter() ?
                     callable.callRawAtomic(args) :
                     callable.callAsAtomic(args);
         }

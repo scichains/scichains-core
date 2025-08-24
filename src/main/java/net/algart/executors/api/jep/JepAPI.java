@@ -66,7 +66,7 @@ public class JepAPI {
     public static final String STANDARD_API_PARAMETER_CONTEXT_PATH = "context_path";
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
-    public static final List<String> STANDARD_STARTUP_PURE = List.of(
+    public static final List<String> STANDARD_STARTUP_SUB_INTERPRETER = List.of(
             "import sys\nsys.modules['numpy'] = None",
             // - force removing numpy to avoid possible access to it from SubInterpreter.getValue and other methods
             "import " + STANDARD_API_MODULE);
@@ -111,7 +111,7 @@ public class JepAPI {
 
     public void initializedGlobalEnvironment(JepPerformer performer, Executor executor, Path workingDirectory) {
         Objects.requireNonNull(performer, "Null performer");
-        if (performer.type().isPure()) {
+        if (performer.type().isSubInterpreter()) {
             // in "pure" Python (sub-interpreters) this is dangerous even to use SubInterpreter.getValue();
             // but really this is not enough: other operations also do not work well
             return;
@@ -302,8 +302,8 @@ public class JepAPI {
 
     public static List<String> initializingJepStartupCode(JepType type) {
         Objects.requireNonNull(type, "Null JEP interpretation mode");
-        return type.isPure() ?
-                STANDARD_STARTUP_PURE :
+        return type.isSubInterpreter() ?
+                STANDARD_STARTUP_SUB_INTERPRETER :
                 STANDARD_STARTUP_NORMAL;
     }
 
@@ -345,7 +345,7 @@ public class JepAPI {
     }
 
     private static JepExtendedConfiguration.Verifier standardJepVerifier(JepType type) {
-        return type.isPure() ?
+        return type.isSubInterpreter() ?
                 JepAPI::verifyPure :
                 JepAPI::verifyNormal;
     }
