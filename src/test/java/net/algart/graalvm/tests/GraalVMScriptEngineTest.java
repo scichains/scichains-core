@@ -80,7 +80,10 @@ public class GraalVMScriptEngineTest {
         System.out.println();
 
         String language = "js";
-        GraalPerformerContainer container = GraalPerformerContainer.getShared(GraalContextCustomizer.ALL_ACCESS);
+        GraalPerformerContainer container = GraalPerformerContainer
+                .getShared(GraalContextCustomizer.ALL_ACCESS)
+                .setJsEsmEvalReturnsExports(false);
+        // - restoring default "js.esm-eval-returns-exports" option for getting engine
         @SuppressWarnings("resource") Context context = container.performer("some-id").context();
         final Source source = Source.newBuilder(language, script, "Unnamed.mjs").buildLiteral();
         Value v = context.eval(source);

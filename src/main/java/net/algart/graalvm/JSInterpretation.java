@@ -84,17 +84,17 @@ public class JSInterpretation {
         }
     }
 
-    public static Value addedModuleFunction(Value module, String functionName, GraalPerformer performer) {
+    public static Value addedJSModuleMember(Value module, String functionName, GraalPerformer performer) {
         Objects.requireNonNull(performer, "Null performer");
-        return addedModuleFunction(module, functionName, performer.isJsEsmEvalReturnsExports());
+        return addedJSModuleMember(module, functionName, performer.isJsEsmEvalReturnsExports());
     }
 
-    public static Value addedModuleFunction(Value module, String functionName, boolean jsEsmEvalReturnsExport) {
+    public static Value addedJSModuleMember(Value module, String functionName, boolean jsEsmEvalReturnsExport) {
         Objects.requireNonNull(module, "Null module");
         return jsEsmEvalReturnsExport ? module.getMember(functionName) : module;
     }
 
-    public static Value moduleMemberOr(Value module, String name, Supplier<Value> defaultValue) {
+    public static Value smartModuleMember(Value module, String name, Supplier<Value> defaultValue) {
         Objects.requireNonNull(module, "Null module");
         Objects.requireNonNull(name, "Null name");
         Objects.requireNonNull(defaultValue, "Null defaultValue");

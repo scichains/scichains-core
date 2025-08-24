@@ -41,7 +41,6 @@ public class GraalSourceFileTest {
     public static void main(String[] args) throws ScriptException {
         final Path currentDirectory = Paths.get("src/test/java/net/algart/graalvm/tests");
         final String moduleFile = "./js/sometest.mjs";
-        // - the last line in mjs should return the necessary function!
         final Path modulePath = currentDirectory.resolve(Paths.get(moduleFile));
 
         for (int test = 1; test <= 10; test++) {
@@ -50,6 +49,7 @@ public class GraalSourceFileTest {
             @SuppressWarnings("resource") final GraalPerformerContainer.Local performerContainer =
                     GraalPerformerContainer
                             .getLocal(GraalContextCustomizer.ALL_ACCESS)
+                            .setJsEsmEvalReturnsExports(true)
                             .setWorkingDirectory(currentDirectory.toAbsolutePath());
             long t2 = System.nanoTime();
             GraalSourceContainer sourceContainer = GraalSourceContainer.newFileContainer()
@@ -59,7 +59,7 @@ public class GraalSourceFileTest {
             long t4 = System.nanoTime();
             final Source source = sourceContainer.source();
             long t5 = System.nanoTime();
-            Value func = performer.perform(source);
+            Value func = performer.perform(source).getMember("simpleTest");
             long t6 = System.nanoTime();
             Value result = func.execute();
             long t7 = System.nanoTime();

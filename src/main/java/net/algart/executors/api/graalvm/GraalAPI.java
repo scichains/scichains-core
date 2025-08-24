@@ -141,7 +141,7 @@ public class GraalAPI {
         }
 
         private static Value sysExport(Value m, String name, int index) {
-            return JSInterpretation.moduleMemberOr(m, name, () -> m.getArrayElement(index));
+            return JSInterpretation.smartModuleMember(m, name, () -> m.getArrayElement(index));
         }
 
     }

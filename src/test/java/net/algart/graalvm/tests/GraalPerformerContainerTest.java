@@ -87,7 +87,8 @@ public class GraalPerformerContainerTest {
     public static void main(String[] args) throws ScriptException, InterruptedException {
         test.test("some-id", false);
         gc();
-        System.out.println("Number of shared contexts (outside) " + GraalPerformerContainer.numberOfSharedPerformers());
+        System.out.println("Number of shared contexts (outside) " +
+                GraalPerformerContainer.numberOfSharedPerformers());
         System.out.println();
         gc();
         gc();
@@ -95,18 +96,21 @@ public class GraalPerformerContainerTest {
         test.test("some-id", false);
         // - same context; static operator (print) will not be performed again
 //        gc();
-        System.out.println("Number of shared contexts (outside) " + GraalPerformerContainer.numberOfSharedPerformers());
+        System.out.println("Number of shared contexts (outside) " +
+                GraalPerformerContainer.numberOfSharedPerformers());
         System.out.println();
 
         test.test("some-id2", false);
         gc();
-        System.out.println("Number of shared contexts (outside) " + GraalPerformerContainer.numberOfSharedPerformers());
+        System.out.println("Number of shared contexts (outside) " +
+                GraalPerformerContainer.numberOfSharedPerformers());
         System.out.println();
 
         test.test("some-id3", true);
         gc();
         gc();
         gc();
-        System.out.println("Number of shared contexts (outside): " + GraalPerformerContainer.numberOfSharedPerformers());
+        System.out.println("Number of shared contexts (outside): " +
+                GraalPerformerContainer.numberOfSharedPerformers());
     }
 }

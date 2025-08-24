@@ -43,12 +43,13 @@ public class GraalTwoPerformersTest {
         System.out.println();
 
         GraalSourceContainer source1 = GraalSourceContainer.newLiteralContainer();
-        source1.setModuleJS("function exec() { print(a, 'module1') }\nexec\n", "module");
+        source1.setModuleJS("export function exec() { print(a, 'module1') }", "module");
         GraalSourceContainer source2 = GraalSourceContainer.newLiteralContainer();
-        source2.setModuleJS("function exec() { print('module2') }\nexec\n", "module");
-        // - if we use here the same module name, it will work normally only under DIFFERENT performes
-        final Value exec1 = performer1.perform(source1);
-        final Value exec2 = performer2.perform(source2);
+        source2.setModuleJS("export function exec() { print('module2') }", "module");
+        // - if we use here the same module name, it will work normally only under DIFFERENT performers
+        final Value exec1 = performer1.perform(source1).getMember("exec");
+        final Value exec2 = performer2.perform(source2).getMember("exec");
+        // - we suppose that GraalPerformerContainer.DEFAULT_JS_ESM_EVAL_RETURNS_EXPORTS = true
         exec1.execute();
         exec2.execute();
         exec1.execute();

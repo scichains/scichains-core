@@ -395,7 +395,7 @@ public abstract class AbstractCallJS extends Executor {
         if (mainFunction == null) {
             // no sense to perform ECMA module if it was not changed: re-executing will have no effect
             final Value module = performer.perform(jsCodeContainer);
-            mainFunction = JSInterpretation.addedModuleFunction(module, getMainFunctionName(), performer);
+            mainFunction = JSInterpretation.addedJSModuleMember(module, getMainFunctionName(), performer);
         }
     }
 

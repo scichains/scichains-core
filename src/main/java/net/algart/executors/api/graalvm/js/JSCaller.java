@@ -107,7 +107,7 @@ public final class JSCaller implements Cloneable, AutoCloseable {
             importCode.setModuleJS(script, "importing");
             // - name "importing" is not important: we will not use share this performer (Graal context)
             final Value module = performer.perform(importCode);
-            mainFunction = JSInterpretation.addedModuleFunction(module, functionName, performer);
+            mainFunction = JSInterpretation.addedJSModuleMember(module, functionName, performer);
             createEmptyObjectFunction = GraalAPI.JS.storedCreateEmptyObjectFunction(performer);
         }
     }
