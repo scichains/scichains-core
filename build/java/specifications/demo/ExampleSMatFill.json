@@ -1,0 +1,65 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Matrix example: low-level filling by color (SMat)",
+  "tags": [
+    "demo"
+  ],
+  "id": "12910336-6c0f-46c0-bb08-42e098adfbd6",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleSMatFill"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "width",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1000
+    },
+    {
+      "name": "height",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1000
+    },
+    {
+      "name": "channels",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 3
+    },
+    {
+      "name": "r",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 255
+    },
+    {
+      "name": "g",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 255
+    },
+    {
+      "name": "b",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 255
+    },
+    {
+      "name": "a",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 255
+    }
+  ]
+}

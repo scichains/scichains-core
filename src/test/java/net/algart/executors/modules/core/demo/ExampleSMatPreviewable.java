@@ -29,6 +29,7 @@ import net.algart.executors.api.Previewable;
 import net.algart.executors.api.data.Data;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SMat;
+import net.algart.executors.api.data.SScalar;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -64,7 +65,9 @@ public final class ExampleSMatPreviewable extends Executor implements Previewabl
     public Data createPreview() {
         System.out.println("preview properties.color = " + parameters().getString("color"));
         System.out.println("ExampleSMatPreviewable: preview #" + previewCount.incrementAndGet());
-        return width < 20 || height < 20 ? null : getOutputPort("output").getData();
+        return width <= 100 && height <= 100 ?
+                SScalar.of("Small matrix") :
+                getOutputPort("output").getData();
     }
 
     @Override

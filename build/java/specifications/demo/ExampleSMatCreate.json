@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Matrix example: low-level filling (SMat)",
+  "name": "Matrix example: low-level creating (SMat)",
   "tags": [
     "demo"
   ],

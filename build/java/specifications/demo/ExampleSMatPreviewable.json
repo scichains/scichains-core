@@ -2,7 +2,7 @@
   "app": "executor",
   "version": "0.0.1",
   "category": "~examples.java",
-  "name": "Matrix example: low-level filling (SMat, previewable)",
+  "name": "Matrix example: low-level filling by pattern (SMat, previewable)",
   "tags": [
     "demo"
   ],
@@ -23,13 +23,13 @@
       "name": "width",
       "value_type": "int",
       "edition_type": "value",
-      "default": 1000
+      "default": 100
     },
     {
       "name": "height",
       "value_type": "int",
       "edition_type": "value",
-      "default": 1000
+      "default": 100
     },
     {
       "name": "color",

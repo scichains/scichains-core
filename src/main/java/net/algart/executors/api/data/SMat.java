@@ -468,6 +468,33 @@ public final class SMat extends Data {
         return setAll2D(dimX, dimY, Depth.U8, numberOfChannels, byteArray);
     }
 
+    public SMat fill2DBytes(
+            long dimX,
+            long dimY,
+            int numberOfChannels,
+            int... channelValues) {
+        checkNumberOfChannels(numberOfChannels);
+        checkDimensions(new long[] {dimX, dimY, numberOfChannels}, false);
+        Objects.requireNonNull(channelValues, "Null channelValues");
+        final byte[] byteArray = new byte[(int) (dimX * dimY * numberOfChannels)];
+        final byte[] channels = new byte[numberOfChannels];
+        boolean allEqual = true;
+        for (int i = 0; i < numberOfChannels; i++) {
+            channels[i] = i < channelValues.length ? (byte) channelValues[i] : 0;
+            if (channels[i] != channels[0]) {
+                allEqual = false;
+            }
+        }
+        if (allEqual) {
+            java.util.Arrays.fill(byteArray, channels[0]);
+        } else {
+            for (int i = 0; i < byteArray.length; i += numberOfChannels) {
+                System.arraycopy(channels, 0, byteArray, i, numberOfChannels);
+            }
+        }
+        return setAll2D(dimX, dimY, Depth.U8, numberOfChannels, byteArray);
+    }
+
     public boolean isChannelsOrderCompatibleWithMultiMatrix() {
         return !(numberOfChannels == 3 || numberOfChannels == 4);
     }
@@ -771,26 +798,7 @@ public final class SMat extends Data {
 
     @UsedForExternalCommunication
     private void setDimensions(long... dimensions) {
-        Objects.requireNonNull(dimensions, "Null dimensions array");
-        if (dimensions.length == 0) {
-            throw new IllegalArgumentException("Empty dimensions Java array");
-        }
-        dimensions = dimensions.clone();
-        for (int k = 0; k < dimensions.length; k++) {
-            checkDimension(k, dimensions[k]);
-        }
-        final long product = Arrays.longMul(dimensions);
-        if (product == Long.MIN_VALUE) {
-            throw new IllegalArgumentException("Too large matrix [" +
-                    JArrays.toString(dimensions, "x", 1000) +
-                    "]: the number of element >2^63-1 (" + Long.MAX_VALUE + ")");
-        }
-        if (!allowed63BitDimensions && product > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Too large matrix [" +
-                    JArrays.toString(dimensions, "x", 1000) +
-                    "]: the number of element >2^31-1 (" + Integer.MAX_VALUE + "), this is not allowed");
-        }
-        this.dimensions = dimensions;
+        this.dimensions = checkDimensions(dimensions, allowed63BitDimensions);
     }
 
     private void setDepth(Depth depth) {
@@ -839,7 +847,30 @@ public final class SMat extends Data {
         this.pointer = pointer;
     }
 
-    private long checkDimension(int k, long dimension) {
+    private static long[] checkDimensions(long[] dimensions, boolean allowed63BitDimensions) {
+        Objects.requireNonNull(dimensions, "Null dimensions array");
+        if (dimensions.length == 0) {
+            throw new IllegalArgumentException("Empty dimensions Java array");
+        }
+        dimensions = dimensions.clone();
+        for (int k = 0; k < dimensions.length; k++) {
+            checkDimension(k, dimensions[k], allowed63BitDimensions);
+        }
+        final long product = Arrays.longMul(dimensions);
+        if (product == Long.MIN_VALUE) {
+            throw new IllegalArgumentException("Too large matrix [" +
+                    JArrays.toString(dimensions, "x", 1000) +
+                    "]: the number of elements >2^63-1 (" + Long.MAX_VALUE + ")");
+        }
+        if (!allowed63BitDimensions && product > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Too large matrix [" +
+                    JArrays.toString(dimensions, "x", 1000) +
+                    "]: the number of elements >2^31-1 (" + Integer.MAX_VALUE + "), this is not allowed");
+        }
+        return dimensions;
+    }
+
+    private static long checkDimension(int k, long dimension, boolean allowed63BitDimensions) {
         if (k < 0) {
             throw new IllegalArgumentException("Negative dimension index " + k);
         }
@@ -941,7 +972,7 @@ public final class SMat extends Data {
         switch (sourceDepth) {
             case S8: {
                 for (int k = 0; k < length; k++) {
-                    float v = (float) source.get();
+                    float v = source.get();
                     resultBuffer.put(v);
                 }
                 break;
