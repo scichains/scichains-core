@@ -24,10 +24,13 @@
 
 package net.algart.graalvm;
 
+import org.graalvm.polyglot.Value;
+
 import javax.lang.model.SourceVersion;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class JSInterpretation {
     private JSInterpretation() {
@@ -66,22 +69,48 @@ public class JSInterpretation {
         return importJSCode(from, importList);
     }
 
+    public static String addJSExportFunction(String jsCode, String functionName, GraalPerformer performer) {
+        Objects.requireNonNull(performer, "Null performer");
+        return addJSExportFunction(jsCode, functionName, performer.isJsEsmEvalReturnsExports());
+    }
+
+    public static String addJSExportFunction(String jsCode, String functionName, boolean jsEsmEvalReturnsExports) {
+        Objects.requireNonNull(jsCode, "Null jsCode");
+        JSInterpretation.checkValidJSFunctionName(functionName);
+        if (jsEsmEvalReturnsExports) {
+            return jsCode + "\n\nexport {" + functionName + " }";
+        } else {
+            return jsCode + "\n\n" + functionName;
+        }
+    }
+
+    public static Value addedModuleFunction(Value module, String functionName, GraalPerformer performer) {
+        Objects.requireNonNull(performer, "Null performer");
+        return addedModuleFunction(module, functionName, performer.isJsEsmEvalReturnsExports());
+    }
+
+    public static Value addedModuleFunction(Value module, String functionName, boolean jsEsmEvalReturnsExport) {
+        Objects.requireNonNull(module, "Null module");
+        return jsEsmEvalReturnsExport ? module.getMember(functionName) : module;
+    }
+
+    public static Value moduleMemberOr(Value module, String name, Supplier<Value> defaultValue) {
+        Objects.requireNonNull(module, "Null module");
+        Objects.requireNonNull(name, "Null name");
+        Objects.requireNonNull(defaultValue, "Null defaultValue");
+        return module.hasMember(name) ? module.getMember(name) : defaultValue.get();
+        // hasMember() is necessary if we built the context with .option("js.esm-eval-returns-exports", "true")
+        // Note that "hasMembers" is not a suitable check:
+        // the object/function returned in the last line can contain members!
+
+    }
+
     public static void checkValidJSFunctionName(String name) {
         checkValidJSName(name, "function");
     }
 
-    // This trick is necessary to access functions from ECMA modules,
-    // unless we use the following customization:
-    // .option("js.esm-eval-returns-exports", "true")
-    // See GraalContextCustomizer.newBuilder
-    public static String addReturningJSFunction(String jsCode, String functionName) {
-        Objects.requireNonNull(jsCode, "Null jsCode");
-        Objects.requireNonNull(functionName, "Null functionName");
-        JSInterpretation.checkValidJSFunctionName(functionName);
-        return jsCode + "\n\n" + functionName;
-    }
-
     private static void checkValidJSName(String name, String kind) {
+        Objects.requireNonNull(name, "Null " + kind + " name");
         if (name.isBlank()) {
             throw new IllegalArgumentException("Empty JavaScript " + kind + " name \"" + name + "\" is not allowed");
         }

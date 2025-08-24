@@ -102,12 +102,12 @@ public final class JSCaller implements Cloneable, AutoCloseable {
             final String importing = JSInterpretation.importJSCode(js.getModule(), functionName);
             // - there is no risk that "what" file name will be a dangerous char sequence:
             // it is not a result of user input but the JSON property "module" in the specification
-            final String script = JSInterpretation.addReturningJSFunction(importing, functionName);
+            final GraalPerformer performer = performer();
+            final String script = JSInterpretation.addJSExportFunction(importing, functionName, performer);
             importCode.setModuleJS(script, "importing");
             // - name "importing" is not important: we will not use share this performer (Graal context)
-            // Note: no sense to check importCode.changed(), because it cannot change until reloading the entire chain.
-            final GraalPerformer performer = performer();
-            mainFunction = performer.perform(importCode);
+            final Value module = performer.perform(importCode);
+            mainFunction = JSInterpretation.addedModuleFunction(module, functionName, performer);
             createEmptyObjectFunction = GraalAPI.JS.storedCreateEmptyObjectFunction(performer);
         }
     }
@@ -178,6 +178,9 @@ public final class JSCaller implements Cloneable, AutoCloseable {
 
     private void createPerformerContainer() {
         this.performerContainer = GraalPerformerContainer.getLocalAllAccess(workingDirectory);
+        // performerContainer.setJsEsmEvalReturnsExports(true);
+        // - we could set this option to true and work with files (setModuleJS(Path,...));
+        // but we prefer to use literal source and built-in JS import logic
         GraalAPI.JS.initializeJS(this.performerContainer);
     }
 }

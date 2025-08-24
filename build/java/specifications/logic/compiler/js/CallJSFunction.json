@@ -138,6 +138,12 @@
       "value_type": "mat",
       "name": "m5",
       "advanced": true
+    },
+    {
+      "value_type": "scalar",
+      "name": "code",
+      "caption": "code",
+      "hint": "Actually executed JS code."
     }
   ],
   "controls": [

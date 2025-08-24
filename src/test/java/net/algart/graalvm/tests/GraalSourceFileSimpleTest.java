@@ -54,17 +54,19 @@ public class GraalSourceFileSimpleTest {
         }
         try (Context context = contextBuilder.build()) {
             Value module = context.eval(source);
-            System.out.println("Module/last line: " + module);
-            Value func = module.getMember("simpleTest");
-            if (func == null) {
-                func = module;
-            }
+            System.out.println("Module/last line: " + module + ", hasMembers: " + module.hasMembers());
+            System.out.println("Member keys: " + module.getMemberKeys());
+            Value func = module.hasMember("simpleTest") ? module.getMember("simpleTest") : module;
             // - This code will work in both cases:
             // useReturnExports=true (module.getMember)
             // and =false (then it uses the last line of sometest.mjs)
+            // Note that "hasMembers" is not a suitable check:
+            // the object/function returned in the last line can contain members!
             System.out.println("Function simpleTest: " + func);
-            Value funcSecond = module.getMember("toJsonString");
-            System.out.println("Function toJsonString: " + funcSecond);
+            Value m = module.getMember("toJsonString");
+            System.out.println("Function toJsonString: " + m + ", " + (m == null ? null : m.canExecute()));
+            m = module.getMember("__StringClass");
+            System.out.println("Constant __StringClass: " + m + ", " + (m == null ? null : m.canExecute()));
             Value result = func.execute();
             System.out.println("execute result: " + result);
         }

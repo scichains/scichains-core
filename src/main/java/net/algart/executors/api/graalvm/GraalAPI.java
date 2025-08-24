@@ -32,7 +32,6 @@ import net.algart.multimatrix.MultiMatrix;
 import org.graalvm.polyglot.Value;
 
 import java.awt.image.BufferedImage;
-import java.lang.System.Logger;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -55,21 +54,28 @@ public class GraalAPI {
 
     public static class JS {
         private static final String STANDARD_API_JS_SERVICE_SOURCE_PURE = """
-            function __SYS_createEmptyObjectImpl() {
+            export function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
             
-            [__SYS_createEmptyObjectImpl]
+            // for the case jsEsmEvalReturnsExports=false:
+            [__SYS_createEmptyObjectImpl] 
             """;
         private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
                 .newLiteralContainer()
                 .setModuleJS(STANDARD_API_JS_SERVICE_SOURCE_PURE, "__S_service_pure");
         private static final String STANDARD_API_JS_SERVICE_SOURCE = """
-            function __SYS_createEmptyObjectImpl() {
+            export function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
+            const __SYS_ScalarClass = Java.type("%s");
+            const __SYS_NumbersClass = Java.type("%s");
+            const __SYS_MatClass = Java.type("%s");
             
-            [__SYS_createEmptyObjectImpl, Java.type("%s"), Java.type("%s"), Java.type("%s")]
+            // for the case jsEsmEvalReturnsExports=true:
+            export { __SYS_ScalarClass, __SYS_NumbersClass, __SYS_MatClass }
+            // for the case jsEsmEvalReturnsExports=false:
+            [__SYS_createEmptyObjectImpl, __SYS_ScalarClass, __SYS_NumbersClass, __SYS_MatClass]
             """.formatted(
                 SScalar.class.getCanonicalName(),
                 SNumbers.class.getCanonicalName(),
@@ -93,7 +99,8 @@ public class GraalAPI {
         public static GraalPerformerContainer initializeJS(GraalPerformerContainer performerContainer) {
             Objects.requireNonNull(performerContainer, "Null performerContainer");
             final boolean addStandardClasses = performerContainer.getCustomizer().isJavaAccessSupported();
-            performerContainer.setConfigurator(performer -> standardConfigure(performer, addStandardClasses));
+            performerContainer.setConfigurator(
+                    performer -> standardConfigure(performer, addStandardClasses));
             return performerContainer;
         }
 
@@ -116,22 +123,27 @@ public class GraalAPI {
 
         public static void standardConfigure(GraalPerformer performer, boolean addStandardClasses) {
             Objects.requireNonNull(performer, "Null performer");
-            final Value serviceValues = performer.perform(
+            final Value m = performer.perform(
                     addStandardClasses ?
                             STANDARD_API_JS_SERVICE_SOURCE_CONTAINER :
                             STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE);
-            final Value createEmptyObjectFunction = serviceValues.getArrayElement(0);
-            performer.putPropertyIfAbsent(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, createEmptyObjectFunction);
             final Value bindings = performer.bindingsJS();
             // - note that context.getPolyglotBindings().putMember() does not help,
             // necessary getBinding for specified language
-            bindings.putMember(STANDARD_API_LOGGER_NAME, JAVA_LOG);
+            final Value createEmptyObjectFunction = sysExport(m, "__SYS_createEmptyObjectImpl", 0);
+            performer.putPropertyIfAbsent(STANDARD_API_CREATE_OBJECT_PROPERTY_NAME, createEmptyObjectFunction);
             if (addStandardClasses) {
-                bindings.putMember(STANDARD_API_SCALAR_CLASS, serviceValues.getArrayElement(1));
-                bindings.putMember(STANDARD_API_NUMBERS_CLASS, serviceValues.getArrayElement(2));
-                bindings.putMember(STANDARD_API_MAT_CLASS, serviceValues.getArrayElement(3));
+                bindings.putMember(STANDARD_API_SCALAR_CLASS, sysExport(m,"__SYS_ScalarClass", 1));
+                bindings.putMember(STANDARD_API_NUMBERS_CLASS, sysExport(m,"__SYS_NumbersClass",2));
+                bindings.putMember(STANDARD_API_MAT_CLASS, sysExport(m, "__SYS_MatClass", 3));
             }
+            bindings.putMember(STANDARD_API_LOGGER_NAME, JAVA_LOG);
         }
+
+        private static Value sysExport(Value m, String name, int index) {
+            return JSInterpretation.moduleMemberOr(m, name, () -> m.getArrayElement(index));
+        }
+
     }
 
     private boolean convertInputScalarToNumber = false;

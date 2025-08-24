@@ -34,6 +34,14 @@ import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 public abstract class GraalPerformerContainer {
+    /**
+     * Default value of "js.esm-eval-returns-exports" options, used by this class
+     * (default value of the flag {@link #isJsEsmEvalReturnsExports()}).
+     * In modern Graal versions the "true" value is a normal choice.
+     * However, we recommend always writing code that correctly works in both cases.
+     */
+    public static final boolean DEFAULT_JS_ESM_EVAL_RETURNS_EXPORTS = true;
+
     public enum ActionOnChangeContextId {
         NONE,
         CLOSE_PREVIOUS() {
@@ -61,9 +69,11 @@ public abstract class GraalPerformerContainer {
     static final Logger LOG = System.getLogger(GraalPerformerContainer.class.getName());
 
     private Supplier<Context> contextSupplier;
+    // - initialized in the constructor via resetSupplier()
     private String[] permittedLanguages = new String[0];
-    private GraalContextCustomizer customizer = GraalContextCustomizer.DEFAULT;
     private Path workingDirectory = null;
+    private boolean jsEsmEvalReturnsExports = DEFAULT_JS_ESM_EVAL_RETURNS_EXPORTS;
+    private GraalContextCustomizer customizer = GraalContextCustomizer.DEFAULT;
     private String autoBindingLanguage = null;
     private GraalPerformerConfigurator configurator = performer -> {
     };
@@ -123,21 +133,41 @@ public abstract class GraalPerformerContainer {
         return this;
     }
 
-    public GraalContextCustomizer getCustomizer() {
-        return customizer;
-    }
-
-    public GraalPerformerContainer setCustomizer(GraalContextCustomizer customizer) {
-        this.customizer = Objects.requireNonNull(customizer, "Null customizer");
-        return this;
-    }
-
     public Path getWorkingDirectory() {
         return workingDirectory;
     }
 
     public GraalPerformerContainer setWorkingDirectory(Path workingDirectory) {
         this.workingDirectory = workingDirectory;
+        return this;
+    }
+
+    public boolean isJsEsmEvalReturnsExports() {
+        return jsEsmEvalReturnsExports;
+    }
+
+    /**
+     * Enables namespace exports. If set, the Graal context will be built with adding the following option:
+     * <pre>
+     *     Context.newBuilder(...)
+     *     ...
+     *     .option("js.esm-eval-returns-exports", "true")
+     * </pre>
+     * @param jsEsmEvalReturnsExports enables exposing the ES module namespace exported object to a Polyglot Context;
+     *                              default is {@link #DEFAULT_JS_ESM_EVAL_RETURNS_EXPORTS}.
+     * @return reference to this object.
+     */
+    public GraalPerformerContainer setJsEsmEvalReturnsExports(boolean jsEsmEvalReturnsExports) {
+        this.jsEsmEvalReturnsExports = jsEsmEvalReturnsExports;
+        return this;
+    }
+
+    public GraalContextCustomizer getCustomizer() {
+        return customizer;
+    }
+
+    public GraalPerformerContainer setCustomizer(GraalContextCustomizer customizer) {
+        this.customizer = Objects.requireNonNull(customizer, "Null customizer");
         return this;
     }
 
@@ -174,10 +204,12 @@ public abstract class GraalPerformerContainer {
     }
 
     /**
-     * Sets custom supplier of JEP interpreter. In this case, the parameters
+     * Sets custom supplier of Graal interpreter. In this case, the parameters
      * {@link #setPermittedLanguages(String...) permittedLanguages},
-     * {@link #setCustomizer(GraalContextCustomizer) customizer},
-     * {@link #setWorkingDirectory(Path) workingDirectory} will be ignored.
+     * {@link #setWorkingDirectory(Path) workingDirectory},
+     * {@link #setJsEsmEvalReturnsExports(boolean) js.esm-eval-returns-exports},
+     * {@link #setCustomizer(GraalContextCustomizer) customizer}
+     * will be ignored.
      *
      * @param customContextSupplier custom supplier.
      * @return reference to this object.
@@ -243,6 +275,8 @@ public abstract class GraalPerformerContainer {
         final Context context = contextSupplier.get();
         final GraalPerformer result = GraalPerformer.newPerformer(context, autoBindingLanguage);
         assert customizer != null;
+        result.workingDirectory = workingDirectory;
+        result.jsEsmEvalReturnsExports = jsEsmEvalReturnsExports;
         result.setCustomizerInfo(customizer.toString());
         if (contextId != null) {
             result.setContextIdInfo(contextId.toString());
@@ -256,6 +290,11 @@ public abstract class GraalPerformerContainer {
         final Context.Builder builder = customizer.newBuilder(permittedLanguages);
         if (workingDirectory != null) {
             builder.currentWorkingDirectory(workingDirectory);
+        }
+        if (jsEsmEvalReturnsExports) {
+            // the default value in the builder is false:
+            // https://www.graalvm.org/jdk24/reference-manual/js/Modules/#java-embedding-via-context-api
+            builder.option("js.esm-eval-returns-exports", "true");
         }
         return builder.build();
     }
@@ -273,13 +312,18 @@ public abstract class GraalPerformerContainer {
         }
 
         @Override
-        public Local setCustomizer(GraalContextCustomizer customizer) {
-            return (Local) super.setCustomizer(customizer);
+        public Local setWorkingDirectory(Path workingDirectory) {
+            return (Local) super.setWorkingDirectory(workingDirectory);
         }
 
         @Override
-        public Local setWorkingDirectory(Path workingDirectory) {
-            return (Local) super.setWorkingDirectory(workingDirectory);
+        public Local setJsEsmEvalReturnsExports(boolean jsEsmEvalReturnsExports) {
+            return (Local) super.setJsEsmEvalReturnsExports(jsEsmEvalReturnsExports);
+        }
+
+        @Override
+        public Local setCustomizer(GraalContextCustomizer customizer) {
+            return (Local) super.setCustomizer(customizer);
         }
 
         @Override
@@ -366,11 +410,6 @@ public abstract class GraalPerformerContainer {
         }
 
         @Override
-        public Shared setCustomizer(GraalContextCustomizer customizer) {
-            return (Shared) super.setCustomizer(customizer);
-        }
-
-        @Override
         public Shared setPermittedLanguages(String... permittedLanguages) {
             return (Shared) super.setPermittedLanguages(permittedLanguages);
         }
@@ -378,6 +417,16 @@ public abstract class GraalPerformerContainer {
         @Override
         public Shared setWorkingDirectory(Path workingDirectory) {
             return (Shared) super.setWorkingDirectory(workingDirectory);
+        }
+
+        @Override
+        public GraalPerformerContainer setJsEsmEvalReturnsExports(boolean jsEsmEvalReturnsExports) {
+            return super.setJsEsmEvalReturnsExports(jsEsmEvalReturnsExports);
+        }
+
+        @Override
+        public Shared setCustomizer(GraalContextCustomizer customizer) {
+            return (Shared) super.setCustomizer(customizer);
         }
 
         @Override

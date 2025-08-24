@@ -16,6 +16,8 @@ function simpleTest() {
 }
 // export { toJsonString } // - if we want to see this function outside
 
-export { simpleTest }
+const __StringClass = Java.type("java.lang.String");
+
+export { simpleTest, toJsonString, __StringClass }
 
 simpleTest;

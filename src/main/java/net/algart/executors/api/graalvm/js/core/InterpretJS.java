@@ -41,8 +41,14 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
     @Override
     public void initialize() {
         useVisibleResultParameter();
+        long t1 = debugTime();
         //noinspection resource
         jsCaller().initialize();
+        long t2 = debugTime();
+        logDebug(() -> String.format(Locale.US,
+                "JS module \"%s\" initialized in %.3f ms",
+                jsCaller.name(),
+                (t2 - t1) * 1e-6));
     }
 
     @Override
@@ -61,7 +67,7 @@ public class InterpretJS extends Executor implements ReadOnlyExecutionInput {
         t4 = debugTime();
         setSystemOutputs();
         logDebug(() -> String.format(Locale.US,
-                "JS \"%s\" executed in %.5f ms:"
+                "JS module \"%s\" executed in %.5f ms:"
                         + " %.6f ms loading inputs + %.6f ms calling + %.6f ms returning outputs",
                 jsCaller.name(),
                 (t4 - t1) * 1e-6,

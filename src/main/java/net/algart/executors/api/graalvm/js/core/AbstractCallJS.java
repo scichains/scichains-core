@@ -312,7 +312,7 @@ public abstract class AbstractCallJS extends Executor {
     @Override
     public void initialize() {
         long t1 = debugTime();
-        compileSource();
+        compileSource(performerContainer.isJsEsmEvalReturnsExports());
         long t2 = debugTime();
         translatedDirectory = translateWorkingDirectory();
         performerContainer.setCustomizer(safety);
@@ -376,10 +376,10 @@ public abstract class AbstractCallJS extends Executor {
         return mainFunction;
     }
 
-    protected void compileSource()  {
+    protected void compileSource(boolean jsEsmEvalReturnsExports)  {
         final String mainFunctionName = getMainFunctionName();
         final String code = code();
-        final String script = JSInterpretation.addReturningJSFunction(code, mainFunctionName);
+        final String script = JSInterpretation.addJSExportFunction(code, mainFunctionName, jsEsmEvalReturnsExports);
         jsCodeContainer.setModuleJS(script, "main_code");
         // - name "main_code" is not important: we will not share this performer (Graal context) with other
         // executors; but if we want to use several scripts INSIDE the executor, they must have different module names
@@ -394,7 +394,8 @@ public abstract class AbstractCallJS extends Executor {
     protected void executeSource(GraalPerformer performer) {
         if (mainFunction == null) {
             // no sense to perform ECMA module if it was not changed: re-executing will have no effect
-            mainFunction = performer.perform(jsCodeContainer);
+            final Value module = performer.perform(jsCodeContainer);
+            mainFunction = JSInterpretation.addedModuleFunction(module, getMainFunctionName(), performer);
         }
     }
 

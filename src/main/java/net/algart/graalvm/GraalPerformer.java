@@ -30,6 +30,7 @@ import org.graalvm.polyglot.Value;
 
 import java.lang.System.Logger;
 import java.lang.ref.Cleaner;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -42,6 +43,9 @@ public class GraalPerformer implements AutoCloseable {
 
     private final ExpensiveCleanableState state;
     private final Cleaner.Cleanable cleanable;
+
+    Path workingDirectory = null;
+    boolean jsEsmEvalReturnsExports = false;
 
     private GraalPerformer(Context context, String autoBindingLanguage) {
         this.state = new ExpensiveCleanableState(context, autoBindingLanguage);
@@ -59,6 +63,14 @@ public class GraalPerformer implements AutoCloseable {
     public Context context() {
         checkClosed();
         return state.context;
+    }
+
+    public Path getWorkingDirectory() {
+        return workingDirectory;
+    }
+
+    public boolean isJsEsmEvalReturnsExports() {
+        return jsEsmEvalReturnsExports;
     }
 
     public String autoBindingLanguage() {
