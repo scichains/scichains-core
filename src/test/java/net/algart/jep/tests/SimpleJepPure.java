@@ -28,17 +28,22 @@ import jep.Interpreter;
 import jep.SubInterpreter;
 import jep.python.PyCallable;
 
-public class SimpleJepNoFile {
+public class SimpleJepPure {
+    private static final boolean FORCE_DISABLE_NUMPY = true;
+    private static final boolean USE_INVOKE_TO_CREATE_OBJECT = true;
+    private static final boolean USE_GET_VALUE = true;
+
     public static void main(String[] args) {
-        boolean useGetValue = args.length > 0 && args[0].equals("getValue");
         try (Interpreter interpreter = new SubInterpreter()) {
             System.out.println("Interpreter: " + interpreter);
             System.out.println();
-            interpreter.exec("""
-                    import sys
-                    sys.modules['numpy'] = None
-                    """);
-            // - useful for SubInterpreter
+            if (FORCE_DISABLE_NUMPY) {
+                interpreter.exec("""
+                        import sys
+                        sys.modules['numpy'] = None
+                        """);
+                // - useful for SubInterpreter
+            }
             interpreter.exec("""
                 class Parameters:
                     def __init__(self):
@@ -47,13 +52,20 @@ public class SimpleJepNoFile {
             interpreter.exec("def test():\n    return '123'\n");
             interpreter.exec("print(test())");
             Object result = interpreter.invoke("test");
-            System.out.printf("From Python: %s%n", result);
+            System.out.printf("Python function: %s%n", result);
+            // - before this, no problem with Numpy (jep 4.2.2)
 
-            if (useGetValue) {
-                PyCallable member = (PyCallable) interpreter.getValue("Parameters");
+            if (USE_INVOKE_TO_CREATE_OBJECT) {
+                result = interpreter.invoke("Parameters");
+                // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
+                System.out.printf("New Python object: %s (%s)%n", result, result == null ? null : result.getClass());
+            }
+
+            if (USE_GET_VALUE) {
+                Object member = interpreter.getValue("Parameters");
                 // - in the current version, leads to warnings in the console (when numpy+jep are correctly installed)
                 System.out.printf("member: %s (%s)%n", member, member.getClass());
-                Object instance = member.call();
+                Object instance = ((PyCallable) member).call();
                 System.out.printf("Parameters instance: %s (%s)%n", instance, instance.getClass());
             }
         }
