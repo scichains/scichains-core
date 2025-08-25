@@ -29,6 +29,7 @@ import jep.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +39,7 @@ class JepCreationTools {
     private static final AtomicBoolean SUB_INTERPRETER_CREATED = new AtomicBoolean(false);
     private static final AtomicBoolean SHARED_INTERPRETER_CREATED = new AtomicBoolean(false);
     private static final Pattern IMPORT_MATCHER = Pattern.compile("^import\\s+(\\w+)");
+    private static final Pattern IMPORT_NUMPY_MATCHER = Pattern.compile("\\bimport[ \\t]+numpy\\b");
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
@@ -119,8 +121,8 @@ class JepCreationTools {
             // - note: even for GLOBAL type, this code is executed many times - before creating SharedInterpreter
             for (String codeSnippet : startupCode) {
                 assert codeSnippet != null : "setStartupCode did not check null elements";
-                final boolean probablyNumpy = codeSnippet.contains("import numpy");
-                if (type == JepType.SUB_INTERPRETER && probablyNumpy) {
+                final BooleanSupplier probablyNumpy = () -> IMPORT_NUMPY_MATCHER.matcher(codeSnippet).find();
+                if (type == JepType.SUB_INTERPRETER && probablyNumpy.getAsBoolean()) {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\", because it works with NumPy, which is strictly forbidden " +
                             "for Python sub-interpreters (interpretation type " + type +
@@ -136,7 +138,7 @@ class JepCreationTools {
                     throw new JepException("cannot execute startup Python code: \"" + codeSnippet.trim() +
                             "\".\nThe necessary Python package" + importedPackage(codeSnippet) +
                             " was probably not installed correctly in Python" +
-                            (probablyNumpy && wasSubInterpreterCreated() ?
+                            (probablyNumpy.getAsBoolean() && wasSubInterpreterCreated() ?
                                     ",\nor you already used JEP SubInterpreter, which is completely " +
                                             "incompatible with NumPy even if was used once." :
                                     ".\n(Python error message: " + e.getMessage() + ").\n" +
@@ -154,4 +156,9 @@ class JepCreationTools {
         final Matcher matcher = IMPORT_MATCHER.matcher(code.trim());
         return matcher.find() ? " \"" + matcher.group(1) + "\"" : "";
     }
+
+//    public static void main(String[] args) {
+//        String codeSnippet = "sdd\n  import  numpy3\n sd";
+//        System.out.println(COMPILED_IMPORT_NUMPY_PATTERN.matcher(codeSnippet).find());
+//    }
 }
