@@ -980,7 +980,7 @@ public final class SMat extends Data {
             case S16:
                 final ShortBuffer sourceBuffer = source.asShortBuffer();
                 for (int k = 0; k < length; k++) {
-                    float v = (float) sourceBuffer.get();
+                    float v = sourceBuffer.get();
                     resultBuffer.put(v);
                 }
                 break;

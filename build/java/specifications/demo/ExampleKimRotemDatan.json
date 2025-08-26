@@ -1,0 +1,42 @@
+{
+  "app": "executor",
+  "version": "0.0.1",
+  "category": "~examples.java",
+  "name": "Matrix example: Kim-Rotem-Datan illustration",
+  "tags": [
+    "demo"
+  ],
+  "id": "68df442b-68ff-460c-b6f8-a6151f7b54ce",
+  "description": "Example of java extension",
+  "language": "java",
+  "java": {
+    "class": "net.algart.executors.modules.core.demo.ExampleKimRotemDatan"
+  },
+  "in_ports": [],
+  "out_ports": [
+    {
+      "value_type": "mat",
+      "name": "output"
+    }
+  ],
+  "controls": [
+    {
+      "name": "dimX",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 1000
+    },
+    {
+      "name": "dimY",
+      "value_type": "int",
+      "edition_type": "value",
+      "default": 2000
+    },
+    {
+      "name": "arrows",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": false
+    }
+  ]
+}
