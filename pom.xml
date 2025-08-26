@@ -237,6 +237,9 @@
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
+<!--                            <autoPublish>true</autoPublish>-->
+<!--                            <waitUntil>published</waitUntil>-->
+<!--                            - Possible automation-->
                         </configuration>
                     </plugin>
                 </plugins>
