@@ -41,6 +41,8 @@ public class SimpleSubInterpreterTest {
         Interpreter context = new SubInterpreter();
         String className = "Parameters";
         context.exec(pyCode);
+        System.err.println("Python code executed");
+        // - We use System.err instead of System.out for the correct printing order in the IDE console
         final PyCallable callable = (PyCallable) context.getValue(className);
         // - Without
         // sys.modules['numpy'] = None
@@ -49,9 +51,9 @@ public class SimpleSubInterpreterTest {
         // With this trick, we see only
         //  ModuleNotFoundError: No module named 'numpy.core'; 'numpy' is not a package
         // which is much safer.
-        System.out.println("Callable: " + callable.getClass());
+        System.err.println("Callable: " + callable.getClass());
         Object parameters = callable.call();
-        System.out.println("parameters: " + parameters.getClass());
+        System.err.println("parameters: " + parameters.getClass());
         context.close();
     }
 }
