@@ -28,6 +28,7 @@ import jep.Interpreter;
 import jep.SubInterpreter;
 import jep.python.PyCallable;
 
+// See also: https://github.com/ninia/jep/issues/612
 public class SimpleSubInterpreterTest {
     public static void main(String[] args) {
         String pyCode = """
