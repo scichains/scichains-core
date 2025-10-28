@@ -27,7 +27,7 @@ package net.algart.executors.modules.core.matrices.io;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.ReadFileOperation;
+import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.io.MatrixIO;
 import net.algart.io.UnsupportedImageFormatException;
 
@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public final class ReadImage extends ReadFileOperation implements ReadOnlyExecutionInput, MatReader {
+public final class ReadImage extends FileOperation implements ReadOnlyExecutionInput, MatReader {
     public static final String DEFAULT_HELPER_CLASS =
             ReadImage.class.getName().replace(
                     "." + ReadImage.class.getSimpleName(),

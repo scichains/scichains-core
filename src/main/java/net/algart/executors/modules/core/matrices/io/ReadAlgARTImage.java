@@ -28,7 +28,7 @@ import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.ReadFileOperation;
+import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix;
 
@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public final class ReadAlgARTImage extends ReadFileOperation implements ReadOnlyExecutionInput {
+public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExecutionInput {
     public ReadAlgARTImage() {
         addFileOperationPorts();
         addInputMat(DEFAULT_INPUT_PORT);

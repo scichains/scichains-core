@@ -26,7 +26,7 @@ package net.algart.executors.modules.core.matrices.io;
 
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.ReadFileOperation;
+import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.executors.modules.core.files.ListOfFiles;
 
 import java.io.FileNotFoundException;
@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class ReadNextImage extends ReadFileOperation implements ReadOnlyExecutionInput {
+public final class ReadNextImage extends FileOperation implements ReadOnlyExecutionInput {
     public static final String OUTPUT_DIM_X = "dim_x";
     public static final String OUTPUT_DIM_Y = "dim_y";
     public static final String OUTPUT_INDEX = "file_index";
@@ -163,7 +163,7 @@ public final class ReadNextImage extends ReadFileOperation implements ReadOnlyEx
     }
 
     @Override
-    protected boolean nonEmptyFileNameRequired() {
+    protected boolean nonEmptyPathRequired() {
         return true;
     }
 }

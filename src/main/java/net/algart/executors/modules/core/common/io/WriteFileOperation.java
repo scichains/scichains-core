@@ -26,9 +26,13 @@ package net.algart.executors.modules.core.common.io;
 
 import net.algart.executors.api.data.SNumbers;
 
+
 // Executor that writes something to disk may have a "side effect" executor: it has no obvious result.
 // So, it is convenient to add copying some data to this operation: it will be its "result".
 // But usually this technique is not a good idea; if you do not want it, just don't call copyAdditionalData.
+// Note: we do not provide an analogous ReadFileOperation, instead, we add such methods as setFileExistenceRequired()
+// inside FileOperation: this allows to create abstract I/O superclasses for both read and write operation
+// and inherit them from FileOperation.
 public abstract class WriteFileOperation extends FileOperation {
     public static final String S1 = "s";
     public static final String X1 = "x";
@@ -77,6 +81,10 @@ public abstract class WriteFileOperation extends FileOperation {
         if (isOutputNecessary(M3)) {
             getMat(M3).setTo(getInputMat(M3, true));
         }
+    }
+
+    protected boolean nonEmptyPathRequired() {
+        return true;
     }
 
     protected final void addWriteFileOperationPorts() {

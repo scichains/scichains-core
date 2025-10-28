@@ -27,6 +27,7 @@ package net.algart.executors.modules.core.common.io;
 import net.algart.executors.api.Executor;
 import net.algart.io.MatrixIO;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -82,6 +83,8 @@ public abstract class FileOperation extends Executor {
     private String file = DEFAULT_EMPTY_FILE;
     private FileNameAdditionMode fileNameAdditionMode = FileNameAdditionMode.NONE;
     private boolean secure = false;
+    private boolean fileExistenceRequired = true;
+    // - true by default: so, the methods like filePath() always return something
 
     protected FileOperation() {
         this(true);
@@ -127,6 +130,19 @@ public abstract class FileOperation extends Executor {
         return this;
     }
 
+    public boolean isFileExistenceRequired() {
+        return fileExistenceRequired;
+    }
+
+    public FileOperation setFileExistenceRequired(boolean fileExistenceRequired) {
+        this.fileExistenceRequired = fileExistenceRequired;
+        return this;
+    }
+
+    public boolean skipNonExistingFile(Path path) {
+        return path == null || (!isFileExistenceRequired() && !Files.exists(path));
+    }
+
     public final String filePath() {
         String inputFile = hasInputPort(INPUT_FILE) ?
                 // - note: here we have no guarantees that the subclass will add this port in its constructor
@@ -136,7 +152,7 @@ public abstract class FileOperation extends Executor {
         if (!result.isEmpty()) {
             return result;
         }
-        if (nonEmptyFileNameRequired()) {
+        if (nonEmptyPathRequired()) {
             throw new IllegalArgumentException("Empty path is not allowed");
         } else {
             return null;
@@ -240,8 +256,8 @@ public abstract class FileOperation extends Executor {
         }
     }
 
-    protected boolean nonEmptyFileNameRequired() {
-        return true;
+    protected boolean nonEmptyPathRequired() {
+        return fileExistenceRequired;
     }
 
     protected final void addFileOperationPorts() {
