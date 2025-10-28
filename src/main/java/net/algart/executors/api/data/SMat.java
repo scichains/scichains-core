@@ -499,6 +499,14 @@ public final class SMat extends Data {
         return !(numberOfChannels == 3 || numberOfChannels == 4);
     }
 
+    public SMat setToOrRemove(SMat mat) {
+        if (mat == null) {
+            remove();
+            return this;
+        }
+        return setTo(mat);
+    }
+
     public SMat setTo(SMat mat) {
         return setTo(mat, true);
     }
@@ -515,10 +523,27 @@ public final class SMat extends Data {
         return this;
     }
 
+    public SMat setToOrRemove(BufferedImage bufferedImage) {
+        if (bufferedImage == null) {
+            remove();
+            return this;
+        }
+        return setTo(bufferedImage);
+    }
+
     public SMat setTo(BufferedImage bufferedImage) {
         final Matrix<? extends PArray> interleaved = new ImageToMatrix.ToInterleavedBGR().toMatrix(bufferedImage);
         return setToInterleavedBGR(interleaved);
     }
+
+    public SMat setToOrRemove(MultiMatrix multiMatrix) {
+        if (multiMatrix == null) {
+            remove();
+            return this;
+        }
+        return setTo(multiMatrix);
+    }
+
 
     public SMat setTo(MultiMatrix multiMatrix) {
         return setTo(multiMatrix, ChannelOrder.STANDARD);

@@ -154,7 +154,7 @@ public class ExecutingChain {
             System.out.println(originalChain.toString(true));
         }
 
-        SMat sourceMat = sourceFile == null ? null : SMat.of(ImageIO.read(sourceFile.toFile()));
+        SMat sourceMat = sourceFile == null ? null : SMat.of(MatrixIO.readBufferedImage(sourceFile));
         final Map<String, Data> inputs = new HashMap<>();
         if (sourceMat != null) {
             if (monochrome) {

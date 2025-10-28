@@ -45,6 +45,9 @@ import java.util.Objects;
 
 public class UseJS extends FileOperation {
     public static final String JS_LANGUAGE_NAME = "JavaScript";
+    // Unlike UseChain, we do not provide special ADDITIONAL_STANDARD_JS_PATH:
+    // this is more complicated, because UseJS requires 2 folders,
+    // the 1st for executor specifications and the 2nd for JS modules (implementations)
 
     private static final DefaultExecutorLoader<JSCaller> JS_CALLER_LOADER =
             new DefaultExecutorLoader<>("JS loader");

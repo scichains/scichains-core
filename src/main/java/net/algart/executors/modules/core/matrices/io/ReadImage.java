@@ -27,18 +27,17 @@ package net.algart.executors.modules.core.matrices.io;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.executors.modules.core.common.io.ReadFileOperation;
+import net.algart.io.MatrixIO;
 import net.algart.io.UnsupportedImageFormatException;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public final class ReadImage extends FileOperation implements ReadOnlyExecutionInput, MatReader {
+public final class ReadImage extends ReadFileOperation implements ReadOnlyExecutionInput, MatReader {
     public static final String DEFAULT_HELPER_CLASS =
             ReadImage.class.getName().replace(
                     "." + ReadImage.class.getSimpleName(),
@@ -48,7 +47,6 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     public static final String OUTPUT_DIM_X = "dim_x";
     public static final String OUTPUT_DIM_Y = "dim_y";
 
-    private boolean fileExistenceRequired = true;
     private int numberOfChannels = 0;
     private boolean useHelperClass = true;
 
@@ -73,15 +71,6 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     @Override
     public ReadImage setFile(String file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public ReadImage setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
         return this;
     }
 
@@ -132,14 +121,10 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
 
     public void readMat(SMat result, Path path) throws IOException {
         Objects.requireNonNull(result, "Null result");
-        Objects.requireNonNull(path, "Null path");
         try {
             final BufferedImage bufferedImage = readBufferedImage(path);
-            if (bufferedImage == null) {
-                assert !fileExistenceRequired : "Impossible when fileExistenceRequired";
-                return;
-            }
-            result.setTo(bufferedImage);
+            assert bufferedImage != null || !isFileExistenceRequired() : "Impossible when fileExistenceRequired";
+            result.setToOrRemove(bufferedImage);
         } catch (UnsupportedImageFormatException e) {
             // If Java platform imageio failed, try the helper
             if (!useHelperClass) {
@@ -173,21 +158,11 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     }
 
     public BufferedImage readBufferedImage(Path path) throws IOException {
-        Objects.requireNonNull(path, "Null path");
-        final File file = path.toFile();
-        if (!file.isFile()) {
-            if (fileExistenceRequired) {
-                throw new FileNotFoundException("File not found: " + file);
-            } else {
-                return null;
-            }
+        if (skipNonExistingFile(path)) {
+            return null;
         }
-        final BufferedImage bufferedImage = javax.imageio.ImageIO.read(file);
-        logDebug(() -> "Reading image from " + file.getAbsolutePath() + " by Java API (ImageIO)");
-        if (bufferedImage == null) {
-            throw new UnsupportedImageFormatException("Cannot read " + file + ": no suitable reader");
-        }
-        return bufferedImage;
+        logDebug(() -> "Reading image from " + path + " by Java API (ImageIO)");
+        return MatrixIO.readBufferedImage(path);
     }
 
 }

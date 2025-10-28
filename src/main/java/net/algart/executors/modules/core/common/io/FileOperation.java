@@ -132,8 +132,15 @@ public abstract class FileOperation extends Executor {
                 // - note: here we have no guarantees that the subclass will add this port in its constructor
                 getInputScalar(INPUT_FILE, true).getValue() :
                 null;
-        final String result = inputFile != null ? inputFile : this.file;
-        return nonEmpty(result.trim(), "file");
+        final String result = (inputFile != null ? inputFile : this.file).trim();
+        if (!result.isEmpty()) {
+            return result;
+        }
+        if (nonEmptyFileNameRequired()) {
+            throw new IllegalArgumentException("Empty path is not allowed");
+        } else {
+            return null;
+        }
     }
 
     public Path completeOSFilePath(boolean relativize) {
@@ -164,7 +171,9 @@ public abstract class FileOperation extends Executor {
     }
 
     public final Path completeFilePath(String filePath, boolean processPorts) {
-        Objects.requireNonNull(filePath, "Null file path");
+        if (filePath == null) {
+            return null;
+        }
         filePath = filePath.trim();
         if (processPorts && fileNameAdditionMode != FileNameAdditionMode.NONE) {
             if (secure) {
@@ -205,10 +214,11 @@ public abstract class FileOperation extends Executor {
     }
 
     public final List<Path> completeSeveralFilePaths(String filePathsSeparatedBySemicolon) {
-        Objects.requireNonNull(filePathsSeparatedBySemicolon, "Null file paths");
         final ArrayList<Path> result = new ArrayList<>();
-        for (String filePath : filePathsSeparatedBySemicolon.split("[\\;]")) {
-            result.add(completeFilePath(filePath));
+        if (filePathsSeparatedBySemicolon != null) {
+            for (String filePath : filePathsSeparatedBySemicolon.split("[\\;]")) {
+                result.add(completeFilePath(filePath));
+            }
         }
         return result;
     }
@@ -228,6 +238,10 @@ public abstract class FileOperation extends Executor {
                 getScalar(OUTPUT_FILE_NAME).setTo(fileName.toString());
             }
         }
+    }
+
+    protected boolean nonEmptyFileNameRequired() {
+        return true;
     }
 
     protected final void addFileOperationPorts() {
@@ -285,14 +299,18 @@ public abstract class FileOperation extends Executor {
      * relativize ? {@link #relativizePathInsideCurrentOrParent
      * relativizePathInsideCurrent}(path.toAbsolutePath()) : path.toAbsolutePath()
      * </pre>
+     * <p>
+     * But for <code>null</code> argument this method simply returns <code>null</code>.
      *
-     * @param path       the path to simplify.
+     * @param path       the path to simplify; may be <code>null</code>.
      * @param relativize whether we need to shorten the path when it is located inside the current OS directory.
      * @return a shortened form of the given path if the second argument is <code>true</code>,
      * or the absolute path if it is <code>false</code>.
      */
     public static Path simplifyOSPath(Path path, boolean relativize) {
-        Objects.requireNonNull(path, "Null path");
+        if (path == null) {
+            return null;
+        }
         return relativize ? relativizePathInsideCurrentOrParent(path.toAbsolutePath()) : path.toAbsolutePath();
 //        System.out.printf("Simplify OS path: %s%n", result);
 //        return result;

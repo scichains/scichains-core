@@ -28,7 +28,7 @@ import net.algart.arrays.Matrix;
 import net.algart.arrays.PArray;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SMat;
-import net.algart.executors.modules.core.common.io.FileOperation;
+import net.algart.executors.modules.core.common.io.ReadFileOperation;
 import net.algart.io.MatrixIO;
 import net.algart.multimatrix.MultiMatrix;
 
@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExecutionInput {
+public final class ReadAlgARTImage extends ReadFileOperation implements ReadOnlyExecutionInput {
     public ReadAlgARTImage() {
         addFileOperationPorts();
         addInputMat(DEFAULT_INPUT_PORT);
@@ -58,20 +58,23 @@ public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExec
 
     @Override
     public void process() {
-        SMat input = getInputMat(defaultInputPortName(), true);
+        final SMat input = getInputMat(defaultInputPortName(), true);
         if (input.isInitialized()) {
             logDebug(() -> "Copying " + input);
             getMat().setTo(input);
         } else {
-            getMat().setTo(readMultiMatrix());
+            getMat().setToOrRemove(readMultiMatrix());
         }
     }
 
     public MultiMatrix readMultiMatrix() {
-        final Path file = completeFilePath().toAbsolutePath();
-        logDebug(() -> "Reading AlgART multi-matrix from " + file);
+        final Path path = completeFilePath();
         try {
-            final List<Matrix<? extends PArray>> matrices = MatrixIO.readImageFolder(file);
+            if (skipNonExistingFile(path)) {
+                return null;
+            }
+            logDebug(() -> "Reading AlgART multi-matrix from " + path);
+            final List<Matrix<? extends PArray>> matrices = MatrixIO.readImageFolder(path);
             final MultiMatrix multiMatrix = MultiMatrix.ofRGBA(matrices);
             final MultiMatrix result = multiMatrix.clone();
             multiMatrix.freeResources();
