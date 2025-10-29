@@ -1045,7 +1045,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             final String id = specification.getId();
             assert id != null;
             if (!ids.add(id)) {
-                throw new IllegalArgumentException("Two executor JSONs have identical IDs " + id
+                throw new IllegalArgumentException("Two executor specifications have identical IDs " + id
                         + ", one of them is \"" + specification.getName() + "\"");
             }
         }

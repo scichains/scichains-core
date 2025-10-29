@@ -71,7 +71,7 @@ public final class ChainBlock {
     // (but if there is no executorSpecification, they are still loaded as strings);
     // 4) for diagnostic messages.
 
-    ChainSpecification.Block blockJson = null;
+    ChainSpecification.Block blockSpecification = null;
     // - Correctly filled while typical usage, but not necessary for this technology.
     // It is used mostly for diagnostic messages and can be useful for external clients,
     // and also for making more user-friendly executor JSON in ExecutorSpecification.setTo(Chain) method
@@ -139,7 +139,7 @@ public final class ChainBlock {
         this.executorId = block.executorId;
         this.executorSpecification = block.executorSpecification;
 
-        this.blockJson = block.blockJson;
+        this.blockSpecification = block.blockSpecification;
         this.executionStage = block.executionStage;
         this.enabled = block.enabled;
         this.systemName = block.systemName;
@@ -191,7 +191,7 @@ public final class ChainBlock {
         Objects.requireNonNull(block, "Null block");
         final String executorId = block.getExecutorId();
         final ChainBlock result = newInstance(chain, block.getUuid(), executorId);
-        result.blockJson = block;
+        result.blockSpecification = block;
         result.setExecutionStage(block.getExecutionStage());
         result.setEnabled(block.getSystem().isEnabled());
         result.setSystemName(block.getSystem().name());
@@ -244,7 +244,7 @@ public final class ChainBlock {
     }
 
     public ChainSpecification.Block getBlock() {
-        return blockJson;
+        return blockSpecification;
     }
 
     public Map<String, ChainParameter> getParameters() {
@@ -516,10 +516,11 @@ public final class ChainBlock {
                         executor = factory.newExecutor(executorId, CreateMode.NO_REQUEST);
                     } catch (ClassNotFoundException | ExecutorExpectedException e) {
                         throw new IllegalStateException("Cannot initialize block with executor ID " + executorId
-                                + (this.blockJson == null ?
+                                + (this.blockSpecification == null ?
                                 "" :
-                                " (name=" + ExecutorSpecification.quote(blockJson.getExecutorName())
-                                        + ", category=" + ExecutorSpecification.quote(blockJson.getExecutorCategory())
+                                " (name=" + ExecutorSpecification.quote(blockSpecification.getExecutorName())
+                                        + ", category=" + ExecutorSpecification.quote(
+                                        blockSpecification.getExecutorCategory())
                                         + ")")
                                 + (e instanceof ClassNotFoundException ?
                                 " - Java class not found: " + e.getMessage() :
@@ -760,7 +761,7 @@ public final class ChainBlock {
     }
 
     public String timingInfo() {
-        final String blockName = blockJson != null ? blockJson.getSystem().name() : null;
+        final String blockName = blockSpecification != null ? blockSpecification.getSystem().name() : null;
         return String.format("block%s%s%s%s%s%s ID '%s', executor ID '%s'%s, %s [%X]: %s",
                 !isEnabled() ? " [DISABLED]" : "",
                 executionStage != ExecutionStage.RUN_TIME ? " [" + executionStage + "]" : "",
@@ -812,7 +813,8 @@ public final class ChainBlock {
                 + "      ID='" + id + "'\n"
                 + (systemName == null ? "" : "      system name='" + systemName + "'\n")
                 + "      executor ID='" + executorId + "'"
-                + (executorSpecification == null ? " (no executor JSON)" : " (name='" + executorSpecification.getName() + "')")
+                + (executorSpecification == null ? " (no executor specification)" :
+                " (name='" + executorSpecification.getName() + "')")
                 + "\n"
                 + "      address='" + System.identityHashCode(this)
                 + " (belongs to " + System.identityHashCode(chain) + ")'\n"
@@ -867,10 +869,10 @@ public final class ChainBlock {
 
     private String friendlyName(boolean useCaption) {
         final String executorName = executorSpecification != null ? executorSpecification.getName() :
-                blockJson != null ? blockJson.getExecutorName() : null;
+                blockSpecification != null ? blockSpecification.getExecutorName() : null;
         String caption = null;
-        if (useCaption && blockJson != null) {
-            caption = blockJson.getSystem().getCaption();
+        if (useCaption && blockSpecification != null) {
+            caption = blockSpecification.getSystem().getCaption();
             if (Objects.equals(caption, executorName)) {
                 caption = null;
             }
@@ -886,8 +888,8 @@ public final class ChainBlock {
 
     private String friendlyCaption(boolean quoted) {
         final String executorName = executorSpecification != null ? executorSpecification.getName() :
-                blockJson != null ? blockJson.getExecutorName() : null;
-        String caption = blockJson == null ? null : blockJson.getSystem().getCaption();
+                blockSpecification != null ? blockSpecification.getExecutorName() : null;
+        String caption = blockSpecification == null ? null : blockSpecification.getSystem().getCaption();
         if (caption == null) {
             caption = executorName;
         }
