@@ -33,7 +33,7 @@ public final class SwitchScalar extends Executor implements ReadOnlyExecutionInp
     public static final String INPUT_SELECTOR = "selector_input";
     public static final String INPUT_PORT_PREFIX = "x";
     private int selector = 0;
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public SwitchScalar() {
         addInputScalar(INPUT_SELECTOR);
@@ -49,12 +49,12 @@ public final class SwitchScalar extends Executor implements ReadOnlyExecutionInp
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public SwitchScalar setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public SwitchScalar setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -63,7 +63,7 @@ public final class SwitchScalar extends Executor implements ReadOnlyExecutionInp
         final int selector = nonNegative(selector(), "selector index");
         getScalar().setTo(selector == 0 ?
                 firstInitialized() :
-                getInputScalar(portName(selector), !requireInput));
+                getInputScalar(portName(selector), !inputRequired));
     }
 
     @Override
@@ -84,6 +84,11 @@ public final class SwitchScalar extends Executor implements ReadOnlyExecutionInp
         return inputSelector != null && !inputSelector.isEmpty() ?
                 Integer.parseInt(inputSelector) :
                 this.selector;
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private SScalar firstInitialized() {

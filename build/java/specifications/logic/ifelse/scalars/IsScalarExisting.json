@@ -42,7 +42,7 @@
     },
     {
       "caption": "Require non-empty",
-      "name": "requireNonEmpty",
+      "name": "nonEmptyRequired",
       "description": "If set, an empty scalar (with zero length or containing only white space characters) is considered not existing: this function will return \"When not initialized\". Here \"containing only white space characters\" means condition s.trim().isEmpty(), where s is Java String object with the input scalar.\nIf cleared, the input string is not checked: this function only checks if the input is initialized.",
       "value_type": "boolean",
       "edition_type": "value",

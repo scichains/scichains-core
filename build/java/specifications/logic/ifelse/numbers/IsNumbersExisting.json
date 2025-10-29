@@ -42,7 +42,7 @@
     },
     {
       "caption": "Require non-empty",
-      "name": "requireNonEmpty",
+      "name": "nonEmptyRequired",
       "description": "If set, an empty array (with zero length) is considered not existing: this function will return \"When not initialized\" if array length = 0.\nIf cleared, the length of the input array is not checked: this function only checks if the input is initialized.",
       "value_type": "boolean",
       "edition_type": "value",

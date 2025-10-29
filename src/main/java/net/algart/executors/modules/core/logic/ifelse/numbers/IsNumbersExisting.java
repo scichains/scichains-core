@@ -31,7 +31,7 @@ import net.algart.executors.api.data.SNumbers;
 public final class IsNumbersExisting extends Executor implements ReadOnlyExecutionInput {
     private String whenNonInitialized = "0";
     private String whenInitialized = "1";
-    private boolean requireNonEmpty = false;
+    private boolean nonEmptyRequired = false;
 
     public IsNumbersExisting() {
         addInputNumbers(DEFAULT_INPUT_PORT);
@@ -56,12 +56,12 @@ public final class IsNumbersExisting extends Executor implements ReadOnlyExecuti
         return this;
     }
 
-    public boolean isRequireNonEmpty() {
-        return requireNonEmpty;
+    public boolean isNonEmptyRequired() {
+        return nonEmptyRequired;
     }
 
-    public IsNumbersExisting setRequireNonEmpty(boolean requireNonEmpty) {
-        this.requireNonEmpty = requireNonEmpty;
+    public IsNumbersExisting setNonEmptyRequired(boolean nonEmptyRequired) {
+        this.nonEmptyRequired = nonEmptyRequired;
         return this;
     }
 
@@ -69,9 +69,14 @@ public final class IsNumbersExisting extends Executor implements ReadOnlyExecuti
     public void process() {
         SNumbers input = getInputNumbers(true);
         boolean existing = input.isInitialized();
-        if (requireNonEmpty && existing && input.isEmpty()) {
+        if (nonEmptyRequired && existing && input.isEmpty()) {
             existing = false;
         }
         getScalar().setTo(existing ? whenInitialized : whenNonInitialized);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireNonEmpty") ? "nonEmptyRequired" : name;
     }
 }

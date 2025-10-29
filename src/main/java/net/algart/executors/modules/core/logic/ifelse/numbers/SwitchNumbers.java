@@ -33,7 +33,7 @@ public final class SwitchNumbers extends Executor implements ReadOnlyExecutionIn
     public static final String INPUT_SELECTOR = "selector_input";
     public static final String INPUT_PORT_PREFIX = "x";
     private int selector = 0;
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public SwitchNumbers() {
         addInputScalar(INPUT_SELECTOR);
@@ -49,12 +49,12 @@ public final class SwitchNumbers extends Executor implements ReadOnlyExecutionIn
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public SwitchNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public SwitchNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -63,7 +63,7 @@ public final class SwitchNumbers extends Executor implements ReadOnlyExecutionIn
         final int selector = nonNegative(selector(), "selector index");
         getNumbers().setTo(selector == 0 ?
                 firstInitialized() :
-                getInputNumbers(portName(selector), !requireInput));
+                getInputNumbers(portName(selector), !inputRequired));
     }
 
     @Override
@@ -84,6 +84,11 @@ public final class SwitchNumbers extends Executor implements ReadOnlyExecutionIn
         return inputSelector != null && !inputSelector.isEmpty() ?
                 Integer.parseInt(inputSelector) :
                 this.selector;
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private SNumbers firstInitialized() {

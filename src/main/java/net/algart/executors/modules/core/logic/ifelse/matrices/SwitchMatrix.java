@@ -32,7 +32,7 @@ public final class SwitchMatrix extends Executor {
     public static final String INPUT_SELECTOR = "selector_input";
     public static final String INPUT_PORT_PREFIX = "m";
     private int selector = 0;
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public SwitchMatrix() {
         addInputScalar(INPUT_SELECTOR);
@@ -48,12 +48,12 @@ public final class SwitchMatrix extends Executor {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public SwitchMatrix setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public SwitchMatrix setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -62,7 +62,7 @@ public final class SwitchMatrix extends Executor {
         final int selector = nonNegative(selector(), "selector index");
         getMat().exchange(selector == 0 ?
                 firstInitialized() :
-                getInputMat(portName(selector), !requireInput));
+                getInputMat(portName(selector), !inputRequired));
     }
 
     @Override
@@ -83,6 +83,11 @@ public final class SwitchMatrix extends Executor {
         return inputSelector != null && !inputSelector.isEmpty() ?
                 Integer.parseInt(inputSelector) :
                 this.selector;
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private SMat firstInitialized() {

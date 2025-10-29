@@ -36,7 +36,7 @@ public final class IfScalarThenNumbers extends Executor {
 
     private ConditionStyle conditionStyle = ConditionStyle.JAVA_LIKE;
     private boolean defaultCondition = false;
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public IfScalarThenNumbers() {
         addInputScalar(INPUT_CONDITION);
@@ -64,19 +64,19 @@ public final class IfScalarThenNumbers extends Executor {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public IfScalarThenNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public IfScalarThenNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
         final boolean condition = condition();
-        getNumbers().exchange(getInputNumbers(portName(condition), !requireInput));
+        getNumbers().exchange(getInputNumbers(portName(condition), !inputRequired));
         getScalar(OUTPUT_CONDITION).setTo(condition);
     }
 
@@ -95,6 +95,11 @@ public final class IfScalarThenNumbers extends Executor {
     public boolean condition() {
         final String conditionString = getInputScalar(INPUT_CONDITION, true).getValue();
         return conditionStyle.toBoolean(conditionString, defaultCondition);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private static String portName(boolean condition) {

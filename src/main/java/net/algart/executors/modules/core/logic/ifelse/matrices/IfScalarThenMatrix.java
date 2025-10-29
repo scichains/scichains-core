@@ -36,7 +36,7 @@ public final class IfScalarThenMatrix extends Executor {
 
     private ConditionStyle conditionStyle = ConditionStyle.JAVA_LIKE;
     private boolean defaultCondition = false;
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public IfScalarThenMatrix() {
         addInputScalar(INPUT_CONDITION);
@@ -64,19 +64,19 @@ public final class IfScalarThenMatrix extends Executor {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public IfScalarThenMatrix setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public IfScalarThenMatrix setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
         final boolean condition = condition();
-        getMat().exchange(getInputMat(portName(condition), !requireInput));
+        getMat().exchange(getInputMat(portName(condition), !inputRequired));
         getScalar(OUTPUT_CONDITION).setTo(condition);
     }
 
@@ -95,6 +95,11 @@ public final class IfScalarThenMatrix extends Executor {
     public boolean condition() {
         final String conditionString = getInputScalar(INPUT_CONDITION, true).getValue();
         return conditionStyle.toBoolean(conditionString, defaultCondition);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private static String portName(boolean condition) {

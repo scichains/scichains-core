@@ -31,7 +31,7 @@ import net.algart.executors.api.data.SScalar;
 public final class IsScalarExisting extends Executor implements ReadOnlyExecutionInput {
     private String whenNonInitialized = "0";
     private String whenInitialized = "1";
-    private boolean requireNonEmpty = false;
+    private boolean nonEmptyRequired = false;
 
     public IsScalarExisting() {
         addInputScalar(DEFAULT_INPUT_PORT);
@@ -56,12 +56,12 @@ public final class IsScalarExisting extends Executor implements ReadOnlyExecutio
         return this;
     }
 
-    public boolean isRequireNonEmpty() {
-        return requireNonEmpty;
+    public boolean isNonEmptyRequired() {
+        return nonEmptyRequired;
     }
 
-    public IsScalarExisting setRequireNonEmpty(boolean requireNonEmpty) {
-        this.requireNonEmpty = requireNonEmpty;
+    public IsScalarExisting setNonEmptyRequired(boolean nonEmptyRequired) {
+        this.nonEmptyRequired = nonEmptyRequired;
         return this;
     }
 
@@ -69,9 +69,14 @@ public final class IsScalarExisting extends Executor implements ReadOnlyExecutio
     public void process() {
         SScalar input = getInputScalar(true);
         boolean existing = input.isInitialized();
-        if (requireNonEmpty && existing && input.getValue().trim().isEmpty()) {
+        if (nonEmptyRequired && existing && input.getValue().trim().isEmpty()) {
             existing = false;
         }
         getScalar().setTo(existing ? whenInitialized : whenNonInitialized);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireNonEmpty") ? "nonEmptyRequired" : name;
     }
 }

@@ -54,10 +54,7 @@ public final class CopyMatrix extends Executor {
 
     @Override
     public String translateLegacyParameterAlias(String name) {
-        if (name.equals("requireInput")) {
-            return "inputRequired";
-        }
-        return name;
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 }
 

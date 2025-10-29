@@ -38,7 +38,7 @@ public final class IfScalarThenScalar extends Executor {
     private boolean defaultCondition = false;
     private String defaultFalse = "";
     private String defaultTrue = "";
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public IfScalarThenScalar() {
         addInputScalar(INPUT_CONDITION);
@@ -84,19 +84,19 @@ public final class IfScalarThenScalar extends Executor {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public IfScalarThenScalar setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public IfScalarThenScalar setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
         final boolean condition = condition();
-        final String trueOrFalse = getInputScalar(portName(condition), !requireInput).getValue();
+        final String trueOrFalse = getInputScalar(portName(condition), !inputRequired).getValue();
         final String defaultValue = condition ? defaultTrue : defaultFalse;
         getScalar().setTo(trueOrFalse != null ? trueOrFalse : !defaultValue.isEmpty() ? defaultValue : null);
         getScalar(OUTPUT_CONDITION).setTo(condition);
@@ -117,6 +117,11 @@ public final class IfScalarThenScalar extends Executor {
     public boolean condition() {
         final String conditionString = getInputScalar(INPUT_CONDITION, true).getValue();
         return conditionStyle.toBoolean(conditionString, defaultCondition);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private static String portName(boolean condition) {

@@ -73,7 +73,7 @@
     },
     {
       "caption": "Requires input",
-      "name": "requireInput",
+      "name": "inputRequired",
       "description": "If set, and if the selector index is not 0, the input port must contain some initialized scalar; in another case, this function will throw an exception. If this flag is cleared, empty input port, selected by the previous parameter, doesn't lead to any effect: output port will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",
