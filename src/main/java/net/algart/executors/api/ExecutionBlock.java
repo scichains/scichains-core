@@ -1011,6 +1011,25 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     public void reset() {
     }
 
+    /**
+     * Translates a legacy parameter name to its actual name.
+     *
+     * <p>This method should be called when reading executor chains that may contain
+     * deprecated parameter names (aliases).
+     * If the given {@code name} is a legacy alias, the method returns
+     * the corresponding current name. Otherwise, it returns the argument unchanged.
+     *
+     * <p>Subclasses may override this method to provide mappings from legacy aliases.
+     * If no legacy names are used, the default implementation simply returns the argument.
+     *
+     * @param name the name of the parameter, possibly a legacy alias.
+     * @return the current, actual name corresponding to the given parameter name,
+     * or the original name if no translation is required.
+     */
+    public String translateLegacyParameterAlias(String name) {
+        return name;
+    }
+
     public final boolean isReadOnlyInput() {
         return this instanceof ReadOnlyExecutionInput && ((ReadOnlyExecutionInput) this).isReadOnly();
     }

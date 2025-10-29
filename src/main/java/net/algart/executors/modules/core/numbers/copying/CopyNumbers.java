@@ -28,26 +28,34 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SNumbers;
 
 public final class CopyNumbers extends Executor {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public CopyNumbers() {
         addInputNumbers(DEFAULT_INPUT_PORT);
         addOutputNumbers(DEFAULT_OUTPUT_PORT);
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public CopyNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public CopyNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final SNumbers input = getInputNumbers(!requireInput);
+        final SNumbers input = getInputNumbers(!inputRequired);
         logDebug(() -> "Copying number array: " + input);
         getNumbers().exchange(input);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        if (name.equals("requireInput")) {
+            return "inputRequired";
+        }
+        return name;
     }
 }

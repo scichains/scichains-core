@@ -31,7 +31,7 @@
   "controls": [
     {
       "caption": "Requires input",
-      "name": "requireInput",
+      "name": "inputRequired",
       "description": "If set, the input port must contain some initialized matrix; in another case, this function will throw an exception. If this flag is cleared, empty input port doesn't lead to any effect: output port will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",

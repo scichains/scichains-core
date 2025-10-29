@@ -527,6 +527,9 @@ public final class ChainBlock {
                                 e);
                     }
                     // - calling constructor; maybe, some ports are created here
+                    if (executor == null) {
+                        throw new AssertionError("Invalid executor factory (created null executor)");
+                    }
 
                     // Deprecated restriction:
 //                    if (!(executor instanceof Executor)) {
@@ -1066,18 +1069,19 @@ public final class ChainBlock {
 
     private void updateParameters(ExecutionBlock executor) {
         final Parameters executorParameters = executor.parameters();
-        for (ChainParameter parameter : this.parameters.values()) {
-            executorParameters.put(parameter.getName(), parameter.getValue());
+        for (ChainParameter p : this.parameters.values()) {
+            executorParameters.put(executor.translateLegacyParameterAlias(p.getName()), p.getValue());
         }
+        // - before calling onChangeParameter, we should be sure that ALL parameters are set
         for (String name : this.parameters.keySet()) {
-            executor.onChangeParameter(name);
+            executor.onChangeParameter(executor.translateLegacyParameterAlias(name));
         }
     }
 
     private void updateSystemSettings(ExecutionBlock executor) {
         executor.setCurrentDirectory(chain.getCurrentDirectory());
-        if (executor instanceof Executor) {
-            ((Executor) executor).setMultithreadingEnvironment(chain.isMultithreading());
+        if (executor instanceof Executor e) {
+            e.setMultithreadingEnvironment(chain.isMultithreading());
         }
     }
 

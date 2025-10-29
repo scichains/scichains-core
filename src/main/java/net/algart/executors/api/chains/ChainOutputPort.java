@@ -72,6 +72,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
 
     public void copyFromExecutorPort() {
         final ExecutionBlock executor = block.getExecutor();
+        assert executor != null : "should be checked by getExecutor";
         switch (portType) {
             case OUTPUT_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
@@ -83,12 +84,11 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
             case OUTPUT_CONTROL_AS_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
                     // exchanging/moving data between all ports blocks must be synchronized globally
-                    this.data.setTo(SScalar.of(executor.parameters().getString(name)));
+                    final String parameterName = executor.translateLegacyParameterAlias(name);
+                    this.data.setTo(SScalar.of(executor.parameters().getString(parameterName)));
                 }
             }
-            default -> {
-                throw new AssertionError("Unknown output port type: " + portType);
-            }
+            default -> throw new AssertionError("Unknown output port type: " + portType);
         }
     }
 

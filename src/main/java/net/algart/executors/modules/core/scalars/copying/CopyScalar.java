@@ -28,25 +28,25 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SScalar;
 
 public class CopyScalar extends Executor {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public CopyScalar() {
         addInputScalar(DEFAULT_INPUT_PORT);
         addOutputScalar(DEFAULT_OUTPUT_PORT);
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public CopyScalar setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public CopyScalar setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final SScalar input = getInputScalar(!requireInput);
+        final SScalar input = getInputScalar(!inputRequired);
         if (input.isInitialized()) {
             logDebug(() -> "Copying scalar: \"" + input + "\"");
             // Note: input.toString() returns reduced string for very large scalars
@@ -55,6 +55,14 @@ public class CopyScalar extends Executor {
             getScalar().setTo(input);
             // - actually copying null value
         }
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        if (name.equals("requireInput")) {
+            return "inputRequired";
+        }
+        return name;
     }
 
     String checkResult(String result) {

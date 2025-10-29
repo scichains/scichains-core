@@ -28,27 +28,36 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.SMat;
 
 public final class CopyMatrix extends Executor {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public CopyMatrix() {
         addInputMat(DEFAULT_INPUT_PORT);
         addOutputMat(DEFAULT_OUTPUT_PORT);
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public CopyMatrix setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public CopyMatrix setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final SMat input = getInputMat(!requireInput);
+        final SMat input = getInputMat(!inputRequired);
         logDebug(() -> "Copying " + input);
         getMat().exchange(input);
         // Note: using "exchange" means that we must not implement ReadOnlyExecutionInput
     }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        if (name.equals("requireInput")) {
+            return "inputRequired";
+        }
+        return name;
+    }
 }
+

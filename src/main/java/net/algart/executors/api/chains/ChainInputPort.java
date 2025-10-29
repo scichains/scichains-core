@@ -85,7 +85,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
 
     public void copyToExecutorPort() {
         final ExecutionBlock executor = block.getExecutor();
-        assert executor != null;
+        assert executor != null : "should be checked by getExecutor";
         switch (portType) {
             case INPUT_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
@@ -97,23 +97,24 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
             case INPUT_CONTROL_AS_PORT -> {
                 final String stringValue;
                 synchronized (chain.blocksInteractionLock) {
-                    if (!(data instanceof SScalar)) {
+                    if (!(data instanceof SScalar scalar)) {
                         throw new IllegalArgumentException("Invalid port: virtual data port contains "
                                 + "non-scalar data " + data + " (" + this + ")");
                         // - should not occur: it was already checked in ChainSpecification.Block.Port constructor
                     }
                     // exchanging/moving data between all ports blocks must be synchronized globally
                     if (!data.isInitialized()) {
-                        // don't try to override parameter from non-initialized port
+                        // don't try to override parameter from a non-initialized port
                         break;
                     }
-                    stringValue = ((SScalar) data).getValue();
+                    stringValue = scalar.getValue();
                 }
-                final ChainParameter chainParameter = block.parameters.get(this.name);
+                final String parameterName = executor.translateLegacyParameterAlias(this.name);
+                final ChainParameter chainParameter = block.parameters.get(parameterName);
                 if (chainParameter == null) {
                     // - abnormal situation: virtual port without actual control;
                     // we prefer not to disable this in the constructor, but just to set the usual scalar value
-                    executor.parameters().put(this.name, stringValue);
+                    executor.parameters().put(parameterName, stringValue);
                 } else {
                     final ParameterValueType valueType = chainParameter.probableType(block, ParameterValueType.STRING);
                     // - if there is no information about executor control, we treat the values as strings:
@@ -122,18 +123,18 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     // - when possible, we convert string value to the appropriate primitive type:
                     // we should "help" the executor in every possible way
                     if (value == null) {
-                        // - however, if this value cannot be converted to necessary type, we store string value:
+                        // - however, if this value cannot be converted to the necessary type, we store string value:
                         // an executor theoretically can somehow work with such "incorrect" parameter,
                         // even though they are not written correctly
                         // (example: ExampleLowLevelParameters)
                         value = stringValue;
                     }
-                    executor.parameters().put(this.name, value);
+                    executor.parameters().put(parameterName, value);
 
                     // - Deprecated solution: too strict restriction here
-                    // valueType.setParameter(executor.parameters(), this.name, stringValue);
+                    // valueType.setParameter(executor.parameters(), parameterName, stringValue);
                 }
-                executor.onChangeParameter(this.name);
+                executor.onChangeParameter(parameterName);
             }
             default -> {
                 throw new AssertionError("Unknown input port type: " + portType);
