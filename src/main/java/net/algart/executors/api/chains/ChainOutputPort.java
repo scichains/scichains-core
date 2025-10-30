@@ -84,7 +84,7 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
             case OUTPUT_CONTROL_AS_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
                     // exchanging/moving data between all ports blocks must be synchronized globally
-                    final String parameterName = executor.translateLegacyParameterAlias(name);
+                    final String parameterName = executor.resolveLegacyParameterAlias(name);
                     this.data.setTo(SScalar.of(executor.parameters().getString(parameterName)));
                 }
             }

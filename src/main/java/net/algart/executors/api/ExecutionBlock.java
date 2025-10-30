@@ -1012,36 +1012,6 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     }
 
     /**
-     * Translates a legacy parameter name to its actual name.
-     *
-     * <p>This method should be called when reading executor chains that may contain
-     * deprecated parameter names (aliases).
-     * If the given {@code name} is a legacy alias, the method returns
-     * the corresponding current name. Otherwise, it returns the argument unchanged.
-     *
-     * <p>Subclasses may override this method to provide mappings from legacy aliases.
-     * If no legacy names are used, the default implementation simply returns the argument.
-     *
-     * <p>This method must not return {@code null} if its argument is not {@code null}.
-     *
-     * @param name the name of the parameter, possibly a legacy alias.
-     * @return the current, actual name corresponding to the given parameter name,
-     * or the original name if no translation is required.
-     */
-    @UsedForExternalCommunication
-    public String translateLegacyParameterAlias(String name) {
-        return name;
-    }
-
-    public final boolean isReadOnlyInput() {
-        return this instanceof ReadOnlyExecutionInput && ((ReadOnlyExecutionInput) this).isReadOnly();
-    }
-
-    public final boolean isClosed() {
-        return closed;
-    }
-
-    /**
      * Main execution.
      *
      * <p>You may override this method, but we recommend to override {@link Executor#process()} instead.
@@ -1052,6 +1022,53 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     public void execute(ExecutionMode executionMode) {
         Objects.requireNonNull(executionMode, "Null executionMode");
         execute();
+    }
+
+    /**
+     * Translates a legacy parameter name to its current form.
+     *
+     * <p>This method should be called when reading executor chains that may contain
+     * deprecated parameter names (aliases).
+     * If the given {@code name} is a legacy alias, the method returns
+     * the corresponding modern name. Otherwise, it returns the argument unchanged.
+     *
+     * <p>Subclasses may override this method to provide mappings from legacy aliases.
+     * If no legacy names are used, the default implementation simply returns the argument.
+     *
+     * <p>This method may return {@code null}; this means that no translation is required
+     * and is equivalent to returning the argument unchanged.
+     *
+     * @param name the name of the parameter, possibly a legacy alias.
+     * @return the current, actual name corresponding to the given parameter name,
+     * or {@code null} (or the original name) if no translation is required.
+     */
+    @UsedForExternalCommunication
+    public String translateLegacyParameterAlias(String name) {
+        return null;
+    }
+
+    /**
+     * Equivalent to {@link #translateLegacyParameterAlias(String)} with the only difference
+     * that this method never returns {@code null}: instead, it returns the argument unchanged.
+     * Also, this method may contain additional logging when detecting legacy aliases
+     * (a situation when {@link #translateLegacyParameterAlias(String)} returns other value than the argument).
+     *
+     * @param name the name of the parameter, possibly a legacy alias.
+     * @return the current, actual name corresponding to the given parameter name,
+     * or the original name if no translation is required.
+     */
+    public String resolveLegacyParameterAlias(String name) {
+        Objects.requireNonNull(name, "Null parameter name");
+        String translatedName = translateLegacyParameterAlias(name);
+        return translatedName == null ? name : translatedName;
+    }
+
+    public final boolean isReadOnlyInput() {
+        return this instanceof ReadOnlyExecutionInput && ((ReadOnlyExecutionInput) this).isReadOnly();
+    }
+
+    public final boolean isClosed() {
+        return closed;
     }
 
     /**

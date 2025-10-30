@@ -109,7 +109,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     }
                     stringValue = scalar.getValue();
                 }
-                final String parameterName = executor.translateLegacyParameterAlias(this.name);
+                final String parameterName = executor.resolveLegacyParameterAlias(this.name);
                 final ChainParameter chainParameter = block.parameters.get(parameterName);
                 if (chainParameter == null) {
                     // - abnormal situation: virtual port without actual control;

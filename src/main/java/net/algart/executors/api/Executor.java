@@ -627,6 +627,17 @@ public abstract class Executor extends ExecutionBlock {
         }
     }
 
+    @Override
+    public String resolveLegacyParameterAlias(String name) {
+        String translatedName = super.resolveLegacyParameterAlias(name);
+        assert translatedName != null;
+        if (!translatedName.equals(name)) {
+            LOG.log(Logger.Level.DEBUG, () -> "Legacy parameter name \"" + name + "\" found for " +
+                    getClass() + ", we recommend resaving the chain file " + contextMessageInfo());
+        }
+        return translatedName;
+    }
+
     public final void disableOnChangeParametersAutomatic() {
         this.onChangeParametersAutomatic = false;
     }

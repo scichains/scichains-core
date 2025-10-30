@@ -1072,11 +1072,11 @@ public final class ChainBlock {
     private void updateParameters(ExecutionBlock executor) {
         final Parameters executorParameters = executor.parameters();
         for (ChainParameter p : this.parameters.values()) {
-            executorParameters.put(executor.translateLegacyParameterAlias(p.getName()), p.getValue());
+            executorParameters.put(executor.resolveLegacyParameterAlias(p.getName()), p.getValue());
         }
         // - before calling onChangeParameter, we should be sure that ALL parameters are set
         for (String name : this.parameters.keySet()) {
-            executor.onChangeParameter(executor.translateLegacyParameterAlias(name));
+            executor.onChangeParameter(executor.resolveLegacyParameterAlias(name));
         }
     }
 
