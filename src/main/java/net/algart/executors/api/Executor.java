@@ -618,12 +618,11 @@ public abstract class Executor extends ExecutionBlock {
     public void onChangeParameter(String name) {
         Objects.requireNonNull(name, "Null parameter name");
         if (!WARNING_FOR_DEPRECATED_PARAMETERS && deprecatedParameter(name)) {
-            LOG.log(Logger.Level.DEBUG, () -> "Old-style parameter " + name + " found for " +
-                    getClass() + ", we recommend resaving the chain file (" +
-                    (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"") +
-                    (getContextPath() == null ? "" : " at " + getContextPath())
-                    + ")");
-        } else if (onChangeParametersAutomatic && !onChangeParametersAutomaticDisabledParameters.contains(name)) {
+            LOG.log(Logger.Level.DEBUG, () -> "Old-style parameter \"" + name + "\" found for " +
+                    getClass() + ", we recommend resaving the chain file " + contextMessageInfo());
+            return;
+        }
+        if (onChangeParametersAutomatic && !onChangeParametersAutomaticDisabledParameters.contains(name)) {
             onChangeParameterAutomatic(name);
         }
     }
@@ -707,7 +706,8 @@ public abstract class Executor extends ExecutionBlock {
      * If this method returns <code>true</code>, {@link #Executor() constructor of this class} will not register
      * standard parameters, processed by {@link Executor} itself.
      * It is provided for possible future needs; the current version has no standard parameters.
-     * (Some older versions had "autoContrastVisibleResult" standard parameter, but it was deprecated and removed.)
+     * (Some older versions had the "autoContrastVisibleResult" standard parameter,
+     * but it was deprecated and removed.)
      *
      * <p>Note: for correct work, this method must return <b>constant</b> (the same value for
      * all instances of the inheritor).
@@ -724,10 +724,7 @@ public abstract class Executor extends ExecutionBlock {
         } else {
             // don't check loggingEnabled(): it is a probable inconsistency in the programming code
             LOG.log(System.Logger.Level.WARNING, () ->
-                    getClass() + " has no setter for parameter \"" + parameterName + "\" ("
-                            + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
-                            + (getContextPath() == null ? "" : " at " + getContextPath())
-                            + ")");
+                    getClass() + " has no setter for parameter \"" + parameterName + "\" " + contextMessageInfo());
         }
         long t2 = LOGGABLE_TRACE ? System.nanoTime() : 0;
         if (loggingEnabled()) {
@@ -844,6 +841,12 @@ public abstract class Executor extends ExecutionBlock {
                 || name.equals("autoContrastVisibleResult");
     }
 
+    private String contextMessageInfo() {
+        return "("
+                + (getContextName() == null ? "no context" : "context \"" + getContextName() + "\"")
+                + (getContextPath() == null ? "" : " at " + getContextPath())
+                + ")";
+    }
 
     public static final class Timing {
         private static final Timing INSTANCE = new Timing();

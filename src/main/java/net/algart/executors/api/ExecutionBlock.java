@@ -1022,10 +1022,13 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      * <p>Subclasses may override this method to provide mappings from legacy aliases.
      * If no legacy names are used, the default implementation simply returns the argument.
      *
+     * <p>This method must not return {@code null} if its argument is not {@code null}.
+     *
      * @param name the name of the parameter, possibly a legacy alias.
      * @return the current, actual name corresponding to the given parameter name,
      * or the original name if no translation is required.
      */
+    @UsedForExternalCommunication
     public String translateLegacyParameterAlias(String name) {
         return name;
     }
