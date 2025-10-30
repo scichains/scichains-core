@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public final class WriteAlgARTImage extends WriteFileOperation implements ReadOnlyExecutionInput {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public WriteAlgARTImage() {
         addFileOperationPorts();
@@ -49,18 +49,18 @@ public final class WriteAlgARTImage extends WriteFileOperation implements ReadOn
         return this;
     }
 
-    public boolean requireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public WriteAlgARTImage setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public WriteAlgARTImage setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final MultiMatrix m = getInputMat(!requireInput).toMultiMatrix();
+        final MultiMatrix m = getInputMat(!inputRequired).toMultiMatrix();
         if (m != null) {
             writeMat(m);
         }
@@ -79,5 +79,10 @@ public final class WriteAlgARTImage extends WriteFileOperation implements ReadOn
     @Override
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return defaultVisibleResultsInformation(Port.Type.INPUT, DEFAULT_INPUT_PORT);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 }

@@ -33,16 +33,16 @@ import java.util.*;
 public final class MergeNumbersColumns extends SeveralNumbersOperation implements ReadOnlyExecutionInput {
     public static final String NUMBER_OF_EMPTY_COLUMNS_FOR_NON_INITIALIZED_PREFIX = "numberOfEmptyColumns";
 
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
     private MergeNumbers.ResultElementType resultElementType = MergeNumbers.ResultElementType.FIRST_INPUT;
     private final Map<Integer, Integer> numberOfEmptyColumnsForNonInitialized = new HashMap<>();
 
-    public boolean requireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public MergeNumbersColumns setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public MergeNumbersColumns setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -87,7 +87,7 @@ public final class MergeNumbersColumns extends SeveralNumbersOperation implement
     @Override
     public SNumbers processNumbers(List<SNumbers> sources) {
         if (sources.stream().noneMatch(Objects::nonNull)) {
-            if (requireInput) {
+            if (inputRequired) {
                 throw new IllegalArgumentException("There are no initialized input arrays");
             } else {
                 return new SNumbers();
@@ -130,8 +130,13 @@ public final class MergeNumbersColumns extends SeveralNumbersOperation implement
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowAllUninitializedInputs() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override

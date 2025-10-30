@@ -64,7 +64,7 @@ public final class Resize extends MultiMatrixChannel2DFilter {
     private boolean percents = false;
     private ResizingMode resizingMode = ResizingMode.AVERAGING_BILINEAR;
     private boolean convertBitToByte = false;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public Resize() {
         addOutputScalar(OUTPUT_DIM_X);
@@ -116,12 +116,12 @@ public final class Resize extends MultiMatrixChannel2DFilter {
         return this;
     }
 
-    public boolean requireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public Resize setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public Resize setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -169,12 +169,17 @@ public final class Resize extends MultiMatrixChannel2DFilter {
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowUninitializedInput() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override
     protected boolean resultRequired() {
-        return requireInput;
+        return inputRequired;
     }
 }

@@ -39,7 +39,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 public final class WriteImage extends WriteFileOperation implements ReadOnlyExecutionInput {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
     private boolean autoContrastBeforeWriting = false;
     private boolean convertAllElementTypesToByte = true;
     private Double quality = null;
@@ -60,12 +60,12 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
         return this;
     }
 
-    public boolean requireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public WriteImage setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public WriteImage setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -107,7 +107,7 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
 
     @Override
     public void process() {
-        process(getInputMat(!requireInput));
+        process(getInputMat(!inputRequired));
     }
 
     public void process(SMat inputMat) {
@@ -173,5 +173,10 @@ public final class WriteImage extends WriteFileOperation implements ReadOnlyExec
     @Override
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return defaultVisibleResultsInformation(Port.Type.INPUT, DEFAULT_INPUT_PORT);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 }

@@ -172,7 +172,7 @@
   "controls": [
     {
       "caption": "Requires input",
-      "name": "requireInput",
+      "name": "inputRequired",
       "description": "If set, at least 1 input port must contain some initialized number array; in another case, this function will throw an exception. If this flag is cleared, all input ports may be empty: output port will still stay empty.",
       "value_type": "boolean",
       "edition_type": "value",

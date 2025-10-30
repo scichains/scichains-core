@@ -82,7 +82,7 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
         return this;
     }
 
-    public boolean requireInput() {
+    public boolean isRequireInput() {
         return requireInput;
     }
 
