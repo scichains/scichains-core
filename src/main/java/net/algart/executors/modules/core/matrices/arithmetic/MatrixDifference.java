@@ -94,7 +94,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
     private Postprocessing postprocessing = Postprocessing.NONE;
     private int dilationSize = 0;
     private boolean floatResult = false;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public MatrixDifference() {
         super(INPUT_X, INPUT_Y);
@@ -145,12 +145,12 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public MatrixDifference setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public MatrixDifference setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -186,6 +186,11 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected Matrix<? extends PArray> processChannel(List<Matrix<? extends PArray>> m) {
         final Class<? extends PArray> resultType = resultType(sampleType());
         final Matrix<? extends PArray> result;
@@ -210,7 +215,7 @@ public final class MatrixDifference extends SeveralMultiMatricesChannelOperation
 
     @Override
     protected boolean allowUninitializedInput(int inputIndex) {
-        return !requireInput;
+        return !inputRequired;
     }
 
     // Note: if sqrtFromResult, 1-channel matrix is supposed to be non-negative

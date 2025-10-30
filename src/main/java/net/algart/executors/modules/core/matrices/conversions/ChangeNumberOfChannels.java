@@ -28,16 +28,16 @@ import net.algart.executors.modules.core.common.matrices.MultiMatrixFilter;
 import net.algart.multimatrix.MultiMatrix;
 
 public final class ChangeNumberOfChannels extends MultiMatrixFilter {
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
     private int numberOfChannels = 0;
     private boolean fillAlphaWithMaxValue = false;
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public ChangeNumberOfChannels setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public ChangeNumberOfChannels setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -74,12 +74,17 @@ public final class ChangeNumberOfChannels extends MultiMatrixFilter {
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowUninitializedInput() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override
     protected boolean resultRequired() {
-        return requireInput;
+        return inputRequired;
     }
 }

@@ -82,7 +82,7 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
     }
 
     private Operation operation = Operation.E0_NY;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public CheckMatrixEquality() {
         super(INPUT_X, INPUT_Y);
@@ -97,12 +97,12 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public CheckMatrixEquality setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public CheckMatrixEquality setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -138,13 +138,18 @@ public final class CheckMatrixEquality extends SeveralMultiMatricesOperation {
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean resultRequired() {
         return false;
     }
 
     @Override
     protected boolean allowUninitializedInput(int inputIndex) {
-        return !requireInput;
+        return !inputRequired;
     }
 
     private interface SelectionFuncForEqual {

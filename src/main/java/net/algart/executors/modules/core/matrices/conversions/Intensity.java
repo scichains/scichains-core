@@ -29,7 +29,7 @@ import net.algart.multimatrix.MultiMatrix;
 
 public final class Intensity extends MultiMatrixFilter {
     private boolean rgbResult = false;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public boolean isRgbResult() {
         return rgbResult;
@@ -40,12 +40,12 @@ public final class Intensity extends MultiMatrixFilter {
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public Intensity setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public Intensity setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -55,12 +55,17 @@ public final class Intensity extends MultiMatrixFilter {
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowUninitializedInput() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override
     protected boolean resultRequired() {
-        return requireInput;
+        return inputRequired;
     }
 }

@@ -75,7 +75,7 @@
     },
     {
       "caption": "Requires input",
-      "name": "requireInput",
+      "name": "inputRequired",
       "description": "If set, both input ports must contain some initialized matrices; in another case, this function will throw an exception. If this flag is cleared and one of input ports is empty, this function will do nothing and output port will stay empty.",
       "value_type": "boolean",
       "edition_type": "value",

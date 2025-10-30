@@ -37,7 +37,7 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
     public static final String OUTPUT_ELEMENT_TYPE = "element_type";
     private boolean rawCast = false;
     private Class<?> elementType = byte.class;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public ChangePrecision() {
         addOutputScalar(OUTPUT_ELEMENT_TYPE);
@@ -68,12 +68,12 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
         return setElementType(MultiMatrixGenerator.elementType(elementType, true));
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public ChangePrecision setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public ChangePrecision setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -114,12 +114,17 @@ public final class ChangePrecision extends MultiMatrixChannelFilter {
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowUninitializedInput() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override
     protected boolean resultRequired() {
-        return requireInput;
+        return inputRequired;
     }
 }

@@ -60,20 +60,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "05be7346-0300-0000-3712-596fc4b7b937",
+                    "uuid": "05be7346-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "05be7346-0400-0000-3712-596fc4b7b937",
+                    "uuid": "05be7346-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 }
             ],
@@ -135,20 +135,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "c9c9012a-0300-0000-3712-596fc4b7b937",
+                    "uuid": "c9c9012a-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "c9c9012a-0400-0000-3712-596fc4b7b937",
+                    "uuid": "c9c9012a-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 }
             ],
@@ -205,20 +205,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "3f308496-0300-0000-3712-596fc4b7b937",
+                    "uuid": "3f308496-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "3f308496-0400-0000-3712-596fc4b7b937",
+                    "uuid": "3f308496-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 }
             ],
@@ -507,20 +507,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "b518cc76-0300-0000-3712-596fc4b7b937",
+                    "uuid": "b518cc76-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "b518cc76-0400-0000-3712-596fc4b7b937",
+                    "uuid": "b518cc76-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 }
             ],
@@ -583,20 +583,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "f6c5aff5-0300-0000-3712-596fc4b7b937",
+                    "uuid": "f6c5aff5-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "f6c5aff5-0400-0000-3712-596fc4b7b937",
+                    "uuid": "f6c5aff5-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
@@ -846,20 +846,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "a76edee0-0300-0000-3712-596fc4b7b937",
+                    "uuid": "a76edee0-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "a76edee0-0400-0000-3712-596fc4b7b937",
+                    "uuid": "a76edee0-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
@@ -1886,21 +1886,21 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "05be7346-0300-0000-3712-596fc4b7b937",
+                        "uuid": "05be7346-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "05be7346-0400-0000-3712-596fc4b7b937",
+                        "uuid": "05be7346-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     }
                 ],
                 "parameters": [
                     {
-                        "name": "requireInput",
+                        "name": "inputRequired",
                         "value": true
                     }
                 ],
@@ -1938,21 +1938,21 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "c9c9012a-0300-0000-3712-596fc4b7b937",
+                        "uuid": "c9c9012a-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "c9c9012a-0400-0000-3712-596fc4b7b937",
+                        "uuid": "c9c9012a-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     }
                 ],
                 "parameters": [
                     {
-                        "name": "requireInput",
+                        "name": "inputRequired",
                         "value": true
                     }
                 ],
@@ -1990,21 +1990,21 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "3f308496-0300-0000-3712-596fc4b7b937",
+                        "uuid": "3f308496-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "3f308496-0400-0000-3712-596fc4b7b937",
+                        "uuid": "3f308496-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     }
                 ],
                 "parameters": [
                     {
-                        "name": "requireInput",
+                        "name": "inputRequired",
                         "value": true
                     }
                 ],
@@ -2218,21 +2218,21 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "b518cc76-0300-0000-3712-596fc4b7b937",
+                        "uuid": "b518cc76-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "b518cc76-0400-0000-3712-596fc4b7b937",
+                        "uuid": "b518cc76-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     }
                 ],
                 "parameters": [
                     {
-                        "name": "requireInput",
+                        "name": "inputRequired",
                         "value": true
                     }
                 ],
@@ -2270,16 +2270,16 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "f6c5aff5-0300-0000-3712-596fc4b7b937",
+                        "uuid": "f6c5aff5-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "f6c5aff5-0400-0000-3712-596fc4b7b937",
+                        "uuid": "f6c5aff5-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
                         "uuid": "f6c5aff5-0300-0000-9806-270e20ccac95",
@@ -2296,12 +2296,12 @@
                 ],
                 "parameters": [
                     {
-                        "name": "prettyResult",
-                        "value": true
+                        "name": "inputRequired",
+                        "value": false
                     },
                     {
-                        "name": "requireInput",
-                        "value": false
+                        "name": "prettyResult",
+                        "value": true
                     }
                 ],
                 "system": {
@@ -2452,16 +2452,16 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "a76edee0-0300-0000-3712-596fc4b7b937",
+                        "uuid": "a76edee0-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "a76edee0-0400-0000-3712-596fc4b7b937",
+                        "uuid": "a76edee0-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
                         "uuid": "a76edee0-0300-0000-9806-270e20ccac95",
@@ -2478,11 +2478,11 @@
                 ],
                 "parameters": [
                     {
-                        "name": "prettyResult",
+                        "name": "inputRequired",
                         "value": true
                     },
                     {
-                        "name": "requireInput",
+                        "name": "prettyResult",
                         "value": true
                     }
                 ],
