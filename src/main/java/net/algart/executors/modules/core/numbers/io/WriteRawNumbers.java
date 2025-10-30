@@ -79,7 +79,7 @@ public final class WriteRawNumbers extends WriteFileOperation implements ReadOnl
         }
     }
 
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
     private boolean clearFileOnReset = false;
     private boolean appendToExistingFile = false;
     // - if true, the results are appended after the end of the file if it exists
@@ -107,11 +107,11 @@ public final class WriteRawNumbers extends WriteFileOperation implements ReadOnl
     }
 
     public boolean requireInput() {
-        return requireInput;
+        return inputRequired;
     }
 
-    public WriteRawNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public WriteRawNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -201,8 +201,8 @@ public final class WriteRawNumbers extends WriteFileOperation implements ReadOnl
 
     @Override
     public void process() {
-        final SNumbers numbers = getInputNumbers(deleteFileIfNonInitialized || !requireInput);
-        if (requireInput || numbers.isInitialized()) {
+        final SNumbers numbers = getInputNumbers(deleteFileIfNonInitialized || !inputRequired);
+        if (inputRequired || numbers.isInitialized()) {
             writeRaw(numbers);
         }
     }
@@ -285,6 +285,11 @@ public final class WriteRawNumbers extends WriteFileOperation implements ReadOnl
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return defaultVisibleResultsInformation(Port.Type.INPUT, DEFAULT_INPUT_PORT)
                 .addPorts(getInputPort(INPUT_COLUMN_NAMES));
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     public static int getMetadataBlockLength(JsonObject metadata) {

@@ -98,7 +98,7 @@
       "default": false
     },
     {
-      "name": "requireInput",
+      "name": "inputRequired",
       "caption": "Requires input",
       "description": "If set, the input port must contain some initialized matrix; in another case, this function will throw an exception or will delete the file (see below). If this flag is cleared, empty input port doesn't lead to any effect.",
       "value_type": "boolean",

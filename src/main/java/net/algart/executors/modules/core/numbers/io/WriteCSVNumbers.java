@@ -55,7 +55,7 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
         }
     }
 
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
     private boolean clearFileOnReset = false;
     private boolean appendToExistingFile = false;
     // - if true, the results are appended after the end of the file if it exists
@@ -82,12 +82,12 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public WriteCSVNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public WriteCSVNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -176,8 +176,8 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
 
     @Override
     public void process() {
-        final SNumbers numbers = getInputNumbers(deleteFileIfNonInitialized || !requireInput);
-        if (requireInput || numbers.isInitialized()) {
+        final SNumbers numbers = getInputNumbers(deleteFileIfNonInitialized || !inputRequired);
+        if (inputRequired || numbers.isInitialized()) {
             final SScalar inputHeader = getInputScalar(INPUT_HEADERS, true);
             writeCSV(numbers, inputHeader.toTrimmedLinesWithoutCommentsArray());
         }
@@ -239,6 +239,11 @@ public final class WriteCSVNumbers extends WriteFileOperation implements ReadOnl
 //            writer.write(makeLine(numbers, i));
 //        }
         writer.flush();
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private String makeHeader(SNumbers numbers, String[] headers) {
