@@ -2,10 +2,10 @@
     "app": "SciChains",
     "version": "1.1",
     "root": {
-        "scale": 1.0000000000000027,
+        "scale": 0.6400000000000018,
         "desktop": {
-            "scroll_h": 0.6235570505250028,
-            "scroll_v": 0.5470617516361101
+            "scroll_h": 0.6279501409878618,
+            "scroll_v": 0.537333052737136
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -1559,20 +1559,20 @@
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "9123b665-0300-0000-3712-596fc4b7b937",
+                    "uuid": "9123b665-0300-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
                     "@id": "UIPortModel",
-                    "uuid": "9123b665-0400-0000-3712-596fc4b7b937",
+                    "uuid": "9123b665-0400-0000-45ee-c4917d2e4323",
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "caption": "Requires input"
                 },
                 {
@@ -2804,16 +2804,16 @@
                         "name": "_sys___platform_id"
                     },
                     {
-                        "uuid": "9123b665-0300-0000-3712-596fc4b7b937",
+                        "uuid": "9123b665-0300-0000-45ee-c4917d2e4323",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
-                        "uuid": "9123b665-0400-0000-3712-596fc4b7b937",
+                        "uuid": "9123b665-0400-0000-45ee-c4917d2e4323",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "requireInput"
+                        "name": "inputRequired"
                     },
                     {
                         "uuid": "9123b665-0300-0000-9806-270e20ccac95",
@@ -2830,11 +2830,11 @@
                 ],
                 "parameters": [
                     {
-                        "name": "prettyResult",
+                        "name": "inputRequired",
                         "value": true
                     },
                     {
-                        "name": "requireInput",
+                        "name": "prettyResult",
                         "value": true
                     }
                 ],
