@@ -37,8 +37,8 @@ import java.awt.image.BufferedImage;
 
 public final class DrawImage extends Executor {
     public static final String INPUT_IMAGE = "image";
-    private boolean requireImage = false;
     private boolean percents = false;
+    private boolean imageRequired = false;
     private double x = 0;
     private double y = 0;
     private double opacity = 1.0;
@@ -51,12 +51,12 @@ public final class DrawImage extends Executor {
         addOutputMat(DEFAULT_OUTPUT_PORT);
     }
 
-    public boolean isRequireImage() {
-        return requireImage;
+    public boolean isImageRequired() {
+        return imageRequired;
     }
 
-    public DrawImage setRequireImage(boolean requireImage) {
-        this.requireImage = requireImage;
+    public DrawImage setImageRequired(boolean imageRequired) {
+        this.imageRequired = imageRequired;
         return this;
     }
 
@@ -122,7 +122,7 @@ public final class DrawImage extends Executor {
         if (convertMonoToColor) {
             input = AWTFilter.convertMonoToColor(input);
         }
-        final Matrix<? extends PArray> m = getInputMat(INPUT_IMAGE, !requireImage)
+        final Matrix<? extends PArray> m = getInputMat(INPUT_IMAGE, !imageRequired)
                 .toInterleavedBGR2D(false);
         if (m == null) {
             getMat().exchange(input);
@@ -148,6 +148,10 @@ public final class DrawImage extends Executor {
         getMat().setTo(baseImage);
     }
 
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireImage") ? "imageRequired" : name;
+    }
 
     private static Matrix<? extends PArray> expandToFit(Matrix<? extends PArray> source, long... minDimensions) {
         long[] dimensions = source.dimensions();

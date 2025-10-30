@@ -81,7 +81,7 @@
             "properties": [
                 {
                     "type": "bool",
-                    "name": "requireInput",
+                    "name": "inputRequired",
                     "value": true
                 }
             ]

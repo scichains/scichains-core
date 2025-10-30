@@ -42,14 +42,14 @@ public final class NumbersLength extends NumbersToScalar implements ReadOnlyExec
     }
 
     private LengthType lengthType = LengthType.NUMBER_OF_BLOCKS;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public NumbersLength setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public NumbersLength setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -69,7 +69,12 @@ public final class NumbersLength extends NumbersToScalar implements ReadOnlyExec
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowUninitializedInput() {
-        return !requireInput;
+        return !inputRequired;
     }
 }

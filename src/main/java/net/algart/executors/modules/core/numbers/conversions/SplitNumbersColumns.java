@@ -31,25 +31,25 @@ import net.algart.executors.api.data.SNumbers;
 public final class SplitNumbersColumns extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_PORT_PREFIX = "output_";
 
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public SplitNumbersColumns() {
         useVisibleResultParameter();
         addInputNumbers(DEFAULT_INPUT_PORT);
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public SplitNumbersColumns setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public SplitNumbersColumns setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final SNumbers numbers = getInputNumbers(!requireInput);
+        final SNumbers numbers = getInputNumbers(!inputRequired);
         if (!numbers.isInitialized()) {
             return;
         }
@@ -59,6 +59,11 @@ public final class SplitNumbersColumns extends Executor implements ReadOnlyExecu
                 getNumbers(portName).setTo(numbers.column(k));
             }
         }
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private String outputPortName(int outputIndex) {

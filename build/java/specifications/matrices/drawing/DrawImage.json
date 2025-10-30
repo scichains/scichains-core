@@ -32,7 +32,7 @@
   "controls": [
     {
       "caption": "Requires image",
-      "name": "requireImage",
+      "name": "imageRequired",
       "description": "If set, the \"image\" port must contain some initialized matrix; otherwise, this function will throw an exception. If this flag is cleared, an empty \"image\" port has no effect: the input image will be returned unchanged.",
       "value_type": "boolean",
       "edition_type": "value",
