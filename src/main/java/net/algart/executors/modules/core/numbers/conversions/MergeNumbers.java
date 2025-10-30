@@ -47,15 +47,15 @@ public final class MergeNumbers extends SeveralNumbersOperation implements ReadO
         }
     }
 
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
     private ResultElementType resultElementType = ResultElementType.FIRST_INPUT;
 
-    public boolean requireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public MergeNumbers setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public MergeNumbers setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -71,7 +71,7 @@ public final class MergeNumbers extends SeveralNumbersOperation implements ReadO
     @Override
     public SNumbers processNumbers(List<SNumbers> sources) {
         if (sources.stream().noneMatch(Objects::nonNull)) {
-            if (requireInput) {
+            if (inputRequired) {
                 throw new IllegalArgumentException("No non-null input arrays");
             } else {
                 return new SNumbers();
@@ -101,8 +101,13 @@ public final class MergeNumbers extends SeveralNumbersOperation implements ReadO
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
+    }
+
+    @Override
     protected boolean allowAllUninitializedInputs() {
-        return !requireInput;
+        return !inputRequired;
     }
 
     @Override

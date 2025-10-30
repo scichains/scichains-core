@@ -106,7 +106,7 @@ public final class WriteRawNumbers extends WriteFileOperation implements ReadOnl
         return this;
     }
 
-    public boolean requireInput() {
+    public boolean isInputRequired() {
         return inputRequired;
     }
 
