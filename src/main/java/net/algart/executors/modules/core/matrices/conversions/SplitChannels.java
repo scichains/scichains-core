@@ -31,25 +31,25 @@ import net.algart.multimatrix.MultiMatrix;
 public final class SplitChannels extends Executor implements ReadOnlyExecutionInput {
     public static final String OUTPUT_PORT_PREFIX = "output_";
 
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
 
     public SplitChannels() {
         useVisibleResultParameter();
         addInputMat(DEFAULT_INPUT_PORT);
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public SplitChannels setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public SplitChannels setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final MultiMatrix source = getInputMat(!requireInput).toMultiMatrix();
+        final MultiMatrix source = getInputMat(!inputRequired).toMultiMatrix();
         if (source == null) {
             return;
         }
@@ -59,6 +59,11 @@ public final class SplitChannels extends Executor implements ReadOnlyExecutionIn
                 getMat(portName).setTo(MultiMatrix.ofMono(source.channel(k)));
             }
         }
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     private String outputPortName(int outputIndex) {

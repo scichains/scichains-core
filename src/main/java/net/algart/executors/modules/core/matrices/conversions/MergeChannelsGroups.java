@@ -49,15 +49,15 @@ public final class MergeChannelsGroups extends SeveralMultiMatricesOperation {
         }
     }
 
-    private boolean requireInput = true;
+    private boolean inputRequired = true;
     private ResultElementType resultElementType = ResultElementType.FIRST_INPUT;
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public MergeChannelsGroups setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public MergeChannelsGroups setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
@@ -74,7 +74,7 @@ public final class MergeChannelsGroups extends SeveralMultiMatricesOperation {
         Objects.requireNonNull(sources, "Null sources");
         sources = new OptionalArguments<>(sources).extract();
         if (sources.isEmpty()) {
-            if (requireInput) {
+            if (inputRequired) {
                 throw new IllegalArgumentException("No source matrices");
             } else {
                 return null;
@@ -103,6 +103,11 @@ public final class MergeChannelsGroups extends SeveralMultiMatricesOperation {
             result.addAll(source.allChannels());
         }
         return MultiMatrix.of(result);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 
     @Override

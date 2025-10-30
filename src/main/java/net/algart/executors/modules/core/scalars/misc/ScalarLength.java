@@ -30,7 +30,7 @@ import net.algart.executors.api.data.SScalar;
 
 public final class ScalarLength extends Executor implements ReadOnlyExecutionInput {
     private boolean trim = false;
-    private boolean requireInput = false;
+    private boolean inputRequired = false;
 
     public ScalarLength() {
         addInputScalar(DEFAULT_INPUT_PORT);
@@ -46,21 +46,26 @@ public final class ScalarLength extends Executor implements ReadOnlyExecutionInp
         return this;
     }
 
-    public boolean isRequireInput() {
-        return requireInput;
+    public boolean isInputRequired() {
+        return inputRequired;
     }
 
-    public ScalarLength setRequireInput(boolean requireInput) {
-        this.requireInput = requireInput;
+    public ScalarLength setInputRequired(boolean inputRequired) {
+        this.inputRequired = inputRequired;
         return this;
     }
 
     @Override
     public void process() {
-        final SScalar input = getInputScalar(!requireInput);
+        final SScalar input = getInputScalar(!inputRequired);
         final String s = input.getValue();
 
         final int length = s == null ? 0 : (trim ? s.trim() : s).length();
         getScalar().setTo(length);
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireInput") ? "inputRequired" : name;
     }
 }
