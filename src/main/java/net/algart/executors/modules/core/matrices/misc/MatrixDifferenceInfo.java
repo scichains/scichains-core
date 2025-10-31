@@ -35,7 +35,7 @@ import java.util.Map;
 
 public final class MatrixDifferenceInfo extends SeveralMultiMatricesToSeveralScalars {
     private MatrixDifference.Operation differenceOperation = MatrixDifference.Operation.ABSOLUTE_DIFFERENCE;
-    private boolean requireSameDimensions = true;
+    private boolean sameDimensionsRequired = true;
     private boolean rawValues = false;
 
     public MatrixDifferenceInfo() {
@@ -53,12 +53,12 @@ public final class MatrixDifferenceInfo extends SeveralMultiMatricesToSeveralSca
         this.differenceOperation = nonNull(differenceOperation);
     }
 
-    public boolean isRequireSameDimensions() {
-        return requireSameDimensions;
+    public boolean isSameDimensionsRequired() {
+        return sameDimensionsRequired;
     }
 
-    public MatrixDifferenceInfo setRequireSameDimensions(boolean requireSameDimensions) {
-        this.requireSameDimensions = requireSameDimensions;
+    public MatrixDifferenceInfo setSameDimensionsRequired(boolean sameDimensionsRequired) {
+        this.sameDimensionsRequired = sameDimensionsRequired;
         return this;
     }
 
@@ -75,7 +75,7 @@ public final class MatrixDifferenceInfo extends SeveralMultiMatricesToSeveralSca
         final MultiMatrix differenceMatrix;
         if (sources.get(0) == null || sources.get(1) == null) {
             differenceMatrix = null;
-        } else if (!requireSameDimensions && !sources.get(0).dimEquals(sources.get(1))) {
+        } else if (!sameDimensionsRequired && !sources.get(0).dimEquals(sources.get(1))) {
             differenceMatrix = null;
         } else {
             try (MatrixDifference matrixDifference = new MatrixDifference()) {
@@ -89,13 +89,18 @@ public final class MatrixDifferenceInfo extends SeveralMultiMatricesToSeveralSca
     }
 
     @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireSameDimensions") ? "sameDimensionsRequired" : name;
+    }
+
+    @Override
     protected Integer requiredNumberOfInputs() {
         return 2;
     }
 
     @Override
     protected boolean dimensionsEqualityRequired() {
-        return requireSameDimensions;
+        return sameDimensionsRequired;
     }
 
     @Override

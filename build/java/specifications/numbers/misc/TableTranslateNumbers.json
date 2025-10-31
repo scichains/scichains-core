@@ -107,7 +107,7 @@
     },
     {
       "caption": "Require (1st) table",
-      "name": "requireTable",
+      "name": "tableRequired",
       "description": "If cleared, the 1st source table may be skipped: it is supposed that it is trivial (every index is translated to itself). In other words, the source indexes are returned in the 1st result without changes, if \"Invert indexes\" is cleared, or with inversion, if it is set.\nIf set, this function will throw an exception when the 1st input table is not specified.\nThis flag does not affect processing 2nd and other tables: if they are skipped, the corresponding result just stays non-initialized.",
       "value_type": "boolean",
       "edition_type": "value",

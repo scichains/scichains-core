@@ -53,7 +53,7 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
     private IndexingBase indexingBase = IndexingBase.ONE_BASED;
     private Double replacementForNotExisting = null;
     private boolean invertIndexes = false;
-    private boolean requireTable = false;
+    private boolean tableRequired = false;
 
     public TableTranslateNumbers() {
         useVisibleResultParameter();
@@ -97,12 +97,12 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
         return this;
     }
 
-    public boolean isRequireTable() {
-        return requireTable;
+    public boolean isTableRequired() {
+        return tableRequired;
     }
 
-    public TableTranslateNumbers setRequireTable(boolean requireTable) {
-        this.requireTable = requireTable;
+    public TableTranslateNumbers setTableRequired(boolean tableRequired) {
+        this.tableRequired = tableRequired;
         return this;
     }
 
@@ -111,7 +111,7 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
         final SNumbers source = getInputNumbers();
         final SNumbers[] result = process(source,
                 new SNumbers[]{
-                        getInputNumbers(INPUT_TABLE_1, !requireTable),
+                        getInputNumbers(INPUT_TABLE_1, !tableRequired),
                         getInputNumbers(INPUT_TABLE_2, true),
                         getInputNumbers(INPUT_TABLE_3, true),
                         getInputNumbers(INPUT_TABLE_4, true)
@@ -125,7 +125,7 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
     public SNumbers[] process(SNumbers indexes, SNumbers[] translationTables) {
         Objects.requireNonNull(indexes, "Null indexes");
         Objects.requireNonNull(translationTables, "Null translationTables array");
-        if (requireTable) {
+        if (tableRequired) {
             Objects.requireNonNull(translationTables[0], "Null 1st translation table");
         }
         long t1 = debugTime();
@@ -149,7 +149,7 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
         for (int tableIndex = 0; tableIndex < translationTables.length; tableIndex++) {
             final SNumbers translationTable = translationTables[tableIndex];
             if (translationTable == null || !translationTable.isInitialized()) {
-                results[tableIndex] = tableIndex == 0 && !requireTable ?
+                results[tableIndex] = tableIndex == 0 && !tableRequired ?
                         SNumbers.ofArray(indexArray, indexesBlockLength) :
                         new SNumbers();
                 // - note: we MUST NOT return a reference to source indexes in ReadOnlyExecutionInput
@@ -190,6 +190,11 @@ public final class TableTranslateNumbers extends Executor implements ReadOnlyExe
                     (t4 - t3) * 1e-6));
         }
         return results;
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireTable") ? "tableRequired" : name;
     }
 
     private void translateNumbers(SNumbers result, int[] indexes, SNumbers translationTable) {
