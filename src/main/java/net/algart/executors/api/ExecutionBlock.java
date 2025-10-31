@@ -1050,14 +1050,16 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
     /**
      * Equivalent to {@link #translateLegacyParameterAlias(String)} with the only difference
      * that this method never returns {@code null}: instead, it returns the argument unchanged.
-     * Also, this method may contain additional logging when detecting legacy aliases
+     * Also, this method may perform additional logging when detecting legacy aliases
      * (a situation when {@link #translateLegacyParameterAlias(String)} returns other value than the argument).
+     * This logging (when implemented) should depend on {@code logLegacyAliases} parameter.
      *
-     * @param name the name of the parameter, possibly a legacy alias.
+     * @param name             the name of the parameter, possibly a legacy alias.
+     * @param logLegacyAliases if {@code true}, this method may log the fact when this method detects a legacy alias.
      * @return the current, actual name corresponding to the given parameter name,
      * or the original name if no translation is required.
      */
-    public String resolveLegacyParameterAlias(String name) {
+    public String resolveLegacyParameterAlias(String name, boolean logLegacyAliases) {
         Objects.requireNonNull(name, "Null parameter name");
         String translatedName = translateLegacyParameterAlias(name);
         return translatedName == null ? name : translatedName;

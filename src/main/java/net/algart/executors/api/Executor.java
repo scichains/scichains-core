@@ -628,10 +628,10 @@ public abstract class Executor extends ExecutionBlock {
     }
 
     @Override
-    public String resolveLegacyParameterAlias(String name) {
-        String translatedName = super.resolveLegacyParameterAlias(name);
+    public String resolveLegacyParameterAlias(String name, boolean logLegacyAliases) {
+        String translatedName = super.resolveLegacyParameterAlias(name, logLegacyAliases);
         assert translatedName != null;
-        if (!translatedName.equals(name)) {
+        if (logLegacyAliases && !translatedName.equals(name)) {
             LOG.log(Logger.Level.DEBUG, () -> "Legacy parameter name \"" + name + "\" found for " +
                     getClass() + ", we recommend resaving the chain file " + contextMessageInfo());
         }
