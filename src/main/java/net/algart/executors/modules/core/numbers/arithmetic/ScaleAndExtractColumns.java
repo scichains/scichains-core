@@ -42,7 +42,7 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
     private boolean removeColumnsWithZeroWeight = false;
     private boolean removeColumnsAbsentInWeightJson = false;
     private boolean removeColumnsFilledByNaN = false;
-    private boolean requireNonEmptyResult = true;
+    private boolean nonEmptyResultRequired = true;
 
     public ScaleAndExtractColumns() {
         addInputNumbers(INPUT_WEIGHTS);
@@ -78,12 +78,12 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
         return this;
     }
 
-    public boolean isRequireNonEmptyResult() {
-        return requireNonEmptyResult;
+    public boolean isNonEmptyResultRequired() {
+        return nonEmptyResultRequired;
     }
 
-    public ScaleAndExtractColumns setRequireNonEmptyResult(boolean requireNonEmptyResult) {
-        this.requireNonEmptyResult = requireNonEmptyResult;
+    public ScaleAndExtractColumns setNonEmptyResultRequired(boolean nonEmptyResultRequired) {
+        this.nonEmptyResultRequired = nonEmptyResultRequired;
         return this;
     }
 
@@ -128,7 +128,7 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
             getScalar(OUTPUT_COLUMN_NAMES).setTo(extractColumnNames(columnNames, removeColumns));
         }
         if (resultBlockLength == 0) {
-            if (requireNonEmptyResult) {
+            if (nonEmptyResultRequired) {
                 throw new IllegalArgumentException("No columns in the result; "
                         + "maybe source weights are empty or incorrect");
             }
@@ -157,6 +157,12 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return super.visibleResultsInformation().addPorts(getOutputPort(OUTPUT_COLUMN_NAMES));
     }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireNonEmptyResult") ? "allColumnsRequired" : name;
+    }
+
 
     @Override
     protected boolean allowUninitializedInput() {

@@ -40,7 +40,7 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
 
     private static final int INPUT_PORT_PREFIX_LENGTH = INPUT_PORT_PREFIX.length();
 
-    private boolean requireAllColumns = false;
+    private boolean allColumnsRequired = false;
     private MergeNumbers.ResultElementType resultElementType = MergeNumbers.ResultElementType.FIRST_INPUT;
     private String resultColumnNames = "";
     private List<String> resultColumnNamesList = Collections.emptyList();
@@ -52,11 +52,11 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
     }
 
     public boolean requireAllColumns() {
-        return requireAllColumns;
+        return allColumnsRequired;
     }
 
-    public CombineNamedNumbersColumns setRequireAllColumns(boolean requireAllColumns) {
-        this.requireAllColumns = requireAllColumns;
+    public CombineNamedNumbersColumns setAllColumnsRequired(boolean allColumnsRequired) {
+        this.allColumnsRequired = allColumnsRequired;
         return this;
     }
 
@@ -130,7 +130,7 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
         }
         if (sources.stream().noneMatch(Objects::nonNull)) {
             // - no inputs: we cannot create an even empty result, because we don't know array length
-            if (requireAllColumns) {
+            if (allColumnsRequired) {
                 throw new IllegalArgumentException("There are no initialized input arrays");
             } else {
                 return new SNumbers();
@@ -187,6 +187,11 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
     @Override
     public ExecutionVisibleResultsInformation visibleResultsInformation() {
         return super.visibleResultsInformation().addPorts(getOutputPort(OUTPUT_COLUMN_NAMES));
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("requireAllColumns") ? "allColumnsRequired" : name;
     }
 
     @Override
@@ -266,7 +271,7 @@ public final class CombineNamedNumbersColumns extends SeveralNumbersOperation im
                     break;
                 }
             }
-            if (columnIndex == null && requireAllColumns) {
+            if (columnIndex == null && allColumnsRequired) {
                 throw new IllegalArgumentException("Result column name \"" + name + "\" is not found "
                         + "among column names of the source arrays");
             }

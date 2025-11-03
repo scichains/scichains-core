@@ -72,7 +72,7 @@
     },
     {
       "caption": "Require non-empty result",
-      "name": "requireNonEmptyResult",
+      "name": "nonEmptyResultRequired",
       "description": "If set and if the result is empty (all columns were removed), this function throws an exception.\nNote: if the source array is not specified (non-initialized), the result will also be empty (non-initialized) regardless this flag.",
       "value_type": "boolean",
       "edition_type": "value",

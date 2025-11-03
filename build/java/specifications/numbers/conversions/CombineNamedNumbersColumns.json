@@ -176,9 +176,9 @@
   ],
   "controls": [
     {
-      "caption": "Requires all columns",
-      "name": "requireAllColumns",
-      "description": "If set, every result column name must present among column names of the source arrays. If cleared amd if some result column name is absent, the corresponding result column will be filled by NaN for float/double element types or by 0 for integer types.",
+      "caption": "Require all columns",
+      "name": "allColumnsRequired",
+      "description": "If set, every result column name must present among column names of the source arrays. If cleared and if some result column name is absent, the corresponding result column will be filled by NaN for float/double element types or by 0 for integer types.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true
