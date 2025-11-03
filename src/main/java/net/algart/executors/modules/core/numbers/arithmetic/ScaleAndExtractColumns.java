@@ -163,7 +163,6 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
         return name.equals("requireNonEmptyResult") ? "allColumnsRequired" : name;
     }
 
-
     @Override
     protected boolean allowUninitializedInput() {
         return true;
