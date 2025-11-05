@@ -38,6 +38,8 @@ public final class CheckFileExistence extends FileOperation implements ReadOnlyE
     private String whenExists = "1";
 
     public CheckFileExistence() {
+        //noinspection resource
+        setFileExistenceRequired(false);
         addInputScalar(INPUT_FILE);
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_IS_EXISTING_FILE);
@@ -65,11 +67,11 @@ public final class CheckFileExistence extends FileOperation implements ReadOnlyE
 
     @Override
     public void process() {
-        final Path fileOrFolder = completeFilePath();
+        final Path f = completeFilePath();
         // - this function also fills the result port OUTPUT_ABSOLUTE_PATH
 
-        getScalar().setTo(Files.exists(fileOrFolder) ? whenExists : whenNotExists);
-        getScalar(OUTPUT_IS_EXISTING_FILE).setTo(Files.isRegularFile(fileOrFolder) ? whenExists : whenNotExists);
-        getScalar(OUTPUT_IS_EXISTING_FOLDER).setTo(Files.isDirectory(fileOrFolder) ? whenExists : whenNotExists);
+        getScalar().setTo(f != null && Files.exists(f) ? whenExists : whenNotExists);
+        getScalar(OUTPUT_IS_EXISTING_FILE).setTo(f != null && Files.isRegularFile(f) ? whenExists : whenNotExists);
+        getScalar(OUTPUT_IS_EXISTING_FOLDER).setTo(f != null && Files.isDirectory(f) ? whenExists : whenNotExists);
     }
 }

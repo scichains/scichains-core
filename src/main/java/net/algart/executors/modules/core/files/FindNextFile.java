@@ -50,7 +50,6 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
     private FileSortOrder sortOrder = FileSortOrder.SUBDIRECTORIES_FIRST;
     private boolean singlePath = false;
     private boolean recursiveScanning = true;
-    private boolean fileExistenceRequired = false;
     private boolean clearFileIndexOnReset = true;
 
     private final List<Path> sortedFiles = new ArrayList<>();
@@ -58,6 +57,9 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
     private int currentFileIndex = 0;
 
     public FindNextFile() {
+        //noinspection resource
+        setFileExistenceRequired(false);
+        // - but we override nonEmptyPathRequired!
         addInputScalar(INPUT_FILE);
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_ABSOLUTE_PATH);
@@ -110,15 +112,6 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
         return this;
     }
 
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public FindNextFile setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
-        return this;
-    }
-
     public boolean isClearFileIndexOnReset() {
         return clearFileIndexOnReset;
     }
@@ -142,14 +135,14 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
             sortedFiles.clear();
             final Path fileOrFolder = completeFilePath();
             // - this function also fills some result ports by fillOutputFileInformation() method,
-            // but they should be rewritten later in process for every file
+            // but they should be rewritten later in the process for every file
             if (singlePath || Files.isRegularFile(fileOrFolder)) {
                 sortedFiles.add(fileOrFolder);
             } else {
                 final String regularExpression = this.regularExpression.trim();
                 final Pattern pattern = regularExpression.isEmpty() ? null : Pattern.compile(regularExpression);
                 ListOfFiles.findFiles(sortedFiles, fileOrFolder, globPattern, pattern, recursiveScanning);
-                if (fileExistenceRequired && sortedFiles.isEmpty()) {
+                if (isFileExistenceRequired() && sortedFiles.isEmpty()) {
                     throw new FileNotFoundException("No files in " + fileOrFolder
                             + ", corresponding to pattern " + globPattern);
                 }
@@ -168,7 +161,7 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
     @Override
     public void process() {
         final int numberOfFiles = sortedFiles.size();
-        if (numberOfFiles == 0 && fileExistenceRequired) {
+        if (numberOfFiles == 0 && isFileExistenceRequired()) {
             throw new IllegalStateException("Illegal usage of process() method: "
                     + "initialize() was not successfully executed");
         }
@@ -197,5 +190,10 @@ public final class FindNextFile extends FileOperation implements ReadOnlyExecuti
         final ReadImage readImage = ReadImage.getInstance();
         readImage.setFile(fileToRead.toString());
         getScalar().setTo(result);
+    }
+
+    @Override
+    protected boolean nonEmptyPathRequired() {
+        return true;
     }
 }

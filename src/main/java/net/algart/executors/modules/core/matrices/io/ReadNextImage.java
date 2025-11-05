@@ -57,6 +57,7 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
     public ReadNextImage() {
         //noinspection resource
         setFileExistenceRequired(false);
+        // - but we override nonEmptyPathRequired!
         addFileOperationPorts();
         addOutputMat(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_DIM_X);
