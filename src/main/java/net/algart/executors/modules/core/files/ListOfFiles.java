@@ -48,9 +48,10 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
     private boolean recursiveScanning = true;
     private boolean absolutePaths = true;
     private boolean removeExtension = false;
-    private boolean folderExistenceRequired = false;
 
     public ListOfFiles() {
+        //noinspection resource
+        setFileExistenceRequired(false);
         addInputScalar(INPUT_FILE);
         setDefaultOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_ABSOLUTE_PATH);
@@ -119,15 +120,6 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
         return this;
     }
 
-    public boolean isFolderExistenceRequired() {
-        return folderExistenceRequired;
-    }
-
-    public ListOfFiles setFolderExistenceRequired(boolean folderExistenceRequired) {
-        this.folderExistenceRequired = folderExistenceRequired;
-        return this;
-    }
-
     @Override
     public void process() {
         getScalar().setTo(listOfFiles().stream().map(String::valueOf).collect(Collectors.joining("\n")));
@@ -138,15 +130,14 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
         // - this function also fills the result port OUTPUT_ABSOLUTE_PATH
         try {
             logDebug(() -> "Reading list of files in " + fileOrFolder);
-            if (singlePath || Files.isRegularFile(fileOrFolder)) {
-                return List.of(correctPath(fileOrFolder, null));
+            if (singlePath || (fileOrFolder != null && Files.isRegularFile(fileOrFolder))) {
+                return List.of(correctPath(fileOrFolder == null ? Path.of("") : fileOrFolder, null));
             } else {
+                if (skipIfMissing(fileOrFolder)) {
+                    return List.of();
+                }
                 if (!Files.exists(fileOrFolder)) {
-                    if (folderExistenceRequired) {
-                        throw new FileNotFoundException(fileOrFolder + " does not exist");
-                    } else {
-                        return List.of();
-                    }
+                    throw new FileNotFoundException("File or folder " + fileOrFolder + " does not exist");
                 }
                 final String regularExpression = this.regularExpression.trim();
                 final Pattern pattern = regularExpression.isEmpty() ? null : Pattern.compile(regularExpression);

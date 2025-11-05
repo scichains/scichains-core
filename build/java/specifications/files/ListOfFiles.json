@@ -113,8 +113,8 @@
     },
     {
       "caption": "Requires existing folder",
-      "name": "folderExistenceRequired",
-      "description": "If set, the path specified above must correspond to some existing file or folder. If cleared, the file/folder may not exist: in this function will return an empty list.\nNote that this function also returns an empty list if there are no files, matching the specified \"Globbing pattern\".",
+      "name": "fileExistenceRequired",
+      "description": "If set, the path specified above must correspond to some existing file or folder. If cleared, the file/folder may not exist: then the function will return an empty list; an empty file/folder name leads to the same result in this case.\nNote that this function also returns an empty list if there are no files, matching the specified \"Globbing pattern\".",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

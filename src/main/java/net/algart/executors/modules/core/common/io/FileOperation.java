@@ -153,7 +153,7 @@ public abstract class FileOperation extends Executor {
      * @param path the file path to check; may be {@code null}.
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
      */
-    public boolean skipIfMissing(Path path) {
+    public final boolean skipIfMissing(Path path) {
         return path == null || (!isFileExistenceRequired() && !Files.exists(path));
     }
 
@@ -175,7 +175,7 @@ public abstract class FileOperation extends Executor {
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
      * @throws FileNotFoundException if the file does not exist and its existence is required.
      */
-    public boolean skipIfMissingOrThrow(Path path) throws FileNotFoundException {
+    public final boolean skipIfMissingOrThrow(Path path) throws FileNotFoundException {
         if (path == null) {
             return true;
         } else if (Files.exists(path)) {
