@@ -42,7 +42,7 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
             ReadImage.class.getName().replace(
                     "." + ReadImage.class.getSimpleName(),
                     ".helpers.DefaultMatReaderHelper");
-    // - must be another package, to avoid problems with adding helper in another project
+    // - must be another package to avoid problems with adding helper in another project
 
     public static final String OUTPUT_DIM_X = "dim_x";
     public static final String OUTPUT_DIM_Y = "dim_y";
@@ -158,11 +158,10 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     }
 
     public BufferedImage readBufferedImage(Path path) throws IOException {
-        if (skipNonExistingFile(path)) {
+        if (skipIfMissing(path)) {
             return null;
         }
         logDebug(() -> "Reading image from " + path + " by Java API (ImageIO)");
         return MatrixIO.readBufferedImage(path);
     }
-
 }

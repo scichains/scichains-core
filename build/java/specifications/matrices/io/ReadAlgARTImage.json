@@ -102,7 +102,7 @@
     {
       "caption": "Requires existing folder",
       "name": "fileExistenceRequired",
-      "description": "If set, the input folder must exist; in another case, this function will throw an exception.\nIf this flag is cleared and the folder does not exist, this function does nothing (just returns non-initialized result); an empty folder name leads to the same result in this case.",
+      "description": "If set, the input folder must exist; in another case, this function will throw an exception.\nIf this flag is cleared and the folder does not exist, this function does nothing (just returns non-initialized result); an empty subfolder name leads to the same result in this case.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true

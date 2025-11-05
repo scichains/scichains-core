@@ -27,6 +27,7 @@ package net.algart.executors.modules.core.common.io;
 import net.algart.executors.api.Executor;
 import net.algart.io.MatrixIO;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -139,8 +140,53 @@ public abstract class FileOperation extends Executor {
         return this;
     }
 
-    public boolean skipNonExistingFile(Path path) {
+    /**
+     * Determines whether the specified file should be skipped because it does not exist.
+     *
+     * <p>If {@code path} is {@code null}, this method always returns {@code true}.
+     * Otherwise, it returns {@code true} only when the file does not exist
+     * and file existence is <i>not</i> required by the current configuration
+     * (see {@link #isFileExistenceRequired()}).</p>
+     *
+     * <p>This method never throws an exception.</p>
+     *
+     * @param path the file path to check; may be {@code null}.
+     * @return {@code true} if the file should be skipped; {@code false} otherwise.
+     */
+    public boolean skipIfMissing(Path path) {
         return path == null || (!isFileExistenceRequired() && !Files.exists(path));
+    }
+
+    /**
+     * Determines whether the specified file should be skipped because it does not exist
+     * but throws an exception for a non-existing file if its existence is required.
+     *
+     * <p>If {@code path} is {@code null}, this method returns {@code true}.
+     * If the file does not exist and file existence <i>is</i> required
+     * (see {@link #isFileExistenceRequired()}), a {@link FileNotFoundException}
+     * is thrown. Otherwise, when the file is missing but its existence is not required,
+     * this method returns {@code true}.</p>
+     *
+     * <p>In case of exception, the message looks like <code>"File ... does not exist"</code>.
+     * If you need a custom error message, for example, when working with a path to a folder instead of a file,
+     * please consider using the simpler {@link #skipIfMissing(Path)} method.</p>
+     *
+     * @param path the file path to check; may be {@code null}.
+     * @return {@code true} if the file should be skipped; {@code false} otherwise.
+     * @throws FileNotFoundException if the file does not exist and its existence is required.
+     */
+    public boolean skipIfMissingOrThrow(Path path) throws FileNotFoundException {
+        if (path == null) {
+            return true;
+        } else if (Files.exists(path)) {
+            return false;
+        } else {
+            if (isFileExistenceRequired()) {
+                throw new FileNotFoundException("File " + path + " does not exist");
+            } else {
+                return true;
+            }
+        }
     }
 
     public final String filePath() {

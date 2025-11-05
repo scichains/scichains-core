@@ -50,7 +50,6 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
             StandardCharsets.UTF_8,
     };
 
-    private boolean fileExistenceRequired = true;
     private Class<?> elementType = null;
     private int numberOfSkippedInitialLines = 0;
 
@@ -80,15 +79,6 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
     @Override
     public ReadCSVNumbers setFile(Path file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public ReadCSVNumbers setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
         return this;
     }
 
@@ -131,10 +121,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
     public SNumbers readCSV() {
         final Path csvFile = completeFilePath();
         try {
-            if (!Files.exists(csvFile)) {
-                if (fileExistenceRequired) {
-                    throw new FileNotFoundException("File not found: " + csvFile);
-                }
+            if (skipIfMissingOrThrow(csvFile)) {
                 return null;
             }
             logDebug(() -> "Reading number array from " + csvFile.toAbsolutePath());

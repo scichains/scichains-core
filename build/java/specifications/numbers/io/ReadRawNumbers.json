@@ -76,7 +76,7 @@
     },
     {
       "caption": "Requires existing file",
-      "description": "If set and the file does not exists, this function throws an exception. If cleared and if there is no existing file, output port stays not initialized.",
+      "description": "If set and the file does not exists, this function throws an exception. If cleared and if there is no existing file, the output port stays non-initialized; an empty file name leads to the same result in this case.",
       "name": "fileExistenceRequired",
       "value_type": "boolean",
       "edition_type": "value",

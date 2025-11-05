@@ -27,7 +27,6 @@ package net.algart.executors.modules.core.scalars.io;
 import net.algart.executors.api.data.SScalar;
 import net.algart.executors.modules.core.common.io.FileOperation;
 
-import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -36,7 +35,6 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class ReadScalar extends FileOperation {
-    private boolean fileExistenceRequired = true;
     private String charset = "UTF-8";
     private String defaultValue = "";
 
@@ -54,15 +52,6 @@ public class ReadScalar extends FileOperation {
         final ReadScalar result = new ReadScalar();
         result.setSecure(true);
         return result;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public ReadScalar setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
-        return this;
     }
 
     public String getCharset() {
@@ -103,10 +92,7 @@ public class ReadScalar extends FileOperation {
     public final String readString() {
         final Path path = completeFilePath();
         try {
-            if (!Files.exists(path)) {
-                if (fileExistenceRequired) {
-                    throw new FileNotFoundException("File not found: " + path);
-                }
+            if (skipIfMissingOrThrow(path)) {
                 logDebug(() -> "Creating null scalar for non-existing " + path.toAbsolutePath());
                 return defaultValue.isEmpty() ? null : defaultValue;
             } else {

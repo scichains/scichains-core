@@ -48,7 +48,6 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
     public static final String OUTPUT_COLUMN_NAMES = "column_names";
     public static final String OUTPUT_COLUMN_INDEXES = "column_indexes";
 
-    private boolean fileExistenceRequired = true;
     private int blockLength = 1;
     private Class<?> elementType = float.class;
     private WriteRawNumbers.ByteOrder byteOrder = WriteRawNumbers.ByteOrder.BIG_ENDIAN;
@@ -81,15 +80,6 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
     @Override
     public ReadRawNumbers setFile(Path file) {
         super.setFile(file);
-        return this;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public ReadRawNumbers setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
         return this;
     }
 
@@ -151,10 +141,7 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
         final Path rawFile = completeFilePath();
         final Path metadataFile = Paths.get(rawFile + WriteRawNumbers.METADATA_FILE_SUFFIX);
         try {
-            if (!Files.exists(rawFile)) {
-                if (fileExistenceRequired) {
-                    throw new FileNotFoundException("File not found: " + rawFile);
-                }
+            if (skipIfMissingOrThrow(rawFile)) {
                 return null;
             }
             JsonObject metadata = null;
