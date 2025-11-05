@@ -140,8 +140,8 @@ public final class ReadNextImage extends FileOperation implements ReadOnlyExecut
         getScalar(OUTPUT_LIST_OF_FILES).setTo(sortedFilesString);
         getScalar(OUTPUT_LAST).setTo(last);
         if (fileIndex >= numberOfFiles) {
-            // - possible when !fileExistenceRequired;
-            // not necessary to clear main output port for a case of a loop,
+            // - possible when !isFileExistenceRequired();
+            // not necessary to clear the main output port for a case of a loop,
             // because this condition cannot be "false" and then become "true" during the loop
             return;
         }
