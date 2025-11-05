@@ -134,10 +134,9 @@ public final class MultiReadRawNumbers extends FileOperation implements ReadOnly
         }
         getScalar(OUTPUT_COLUMN_INDEXES).exchange(readRawNumbers.getScalar(OUTPUT_COLUMN_INDEXES));
         getScalar(OUTPUT_COLUMN_NAMES).exchange(readRawNumbers.getScalar(OUTPUT_COLUMN_NAMES));
-
     }
 
-    public static void processFiles(Path path, String globPattern, Accumulator accumulator) {
+    static void processFiles(Path path, String globPattern, Accumulator accumulator) {
         if (Files.isRegularFile(path)) {
             accumulator.processFile(path);
         } else if (Files.isDirectory(path)) {

@@ -45,7 +45,6 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
 
     private String globPattern = "*.{txt}";
     private boolean recursiveScanning = true;
-    private boolean fileExistenceRequired = false;
     private String charset = "UTF-8";
 
     private final List<Path> sortedFiles = new ArrayList<>();
@@ -53,6 +52,9 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
     private int currentFileIndex = 0;
 
     public ReadNextScalar() {
+        //noinspection resource
+        setFileExistenceRequired(false);
+        // - but we override nonEmptyPathRequired!
         addFileOperationPorts();
         addOutputScalar(DEFAULT_OUTPUT_PORT);
         addOutputScalar(OUTPUT_INDEX);
@@ -83,15 +85,6 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
         return this;
     }
 
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public ReadNextScalar setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
-        return this;
-    }
-
     public String getCharset() {
         return charset;
     }
@@ -115,7 +108,7 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
             sortedFiles.clear();
             final Path path = completeFilePath();
             ListOfFiles.findFiles(sortedFiles, path, globPattern, null, recursiveScanning);
-            if (fileExistenceRequired && sortedFiles.isEmpty()) {
+            if (isFileExistenceRequired() && sortedFiles.isEmpty()) {
                 throw new FileNotFoundException("No files in " + path + ", corresponding to pattern " + globPattern);
             }
         } catch (IOException e) {
@@ -129,7 +122,7 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
     @Override
     public void process() {
         final int numberOfFiles = sortedFiles.size();
-        if (numberOfFiles == 0 && fileExistenceRequired) {
+        if (numberOfFiles == 0 && isFileExistenceRequired()) {
             throw new IllegalStateException("Illegal usage of process() method: "
                     + "initialize() was not successfully executed");
         }
@@ -159,5 +152,10 @@ public final class ReadNextScalar extends FileOperation implements ReadOnlyExecu
         readScalar.setFile(fileToRead.toString());
         final String result = readScalar.readString();
         getScalar().setTo(result);
+    }
+
+    @Override
+    protected boolean nonEmptyPathRequired() {
+        return true;
     }
 }
