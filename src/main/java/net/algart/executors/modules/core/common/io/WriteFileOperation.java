@@ -53,13 +53,13 @@ public abstract class WriteFileOperation extends FileOperation {
     }
 
     public void copyAdditionalData() {
-        // Note: we prefer to use setTo instead of exchange method: it allows subclasses to implement
+        // Note: we prefer to use setTo instead of the exchange method: it allows subclasses to implement
         // ReadOnlyExecutionInput interface. Usually these data are empty and copied very quickly,
-        // but even it not, writing data is usually a slower operation.
+        // but even if it is not, writing data is usually a slower operation.
         getScalar(S1).setTo(getInputScalar(S1, true));
         getScalar(S2).setTo(getInputScalar(S2, true));
         getScalar(S3).setTo(getInputScalar(S3, true));
-        // - Operations above are VERY quick, no sense to check isOutputNecessary
+        // - The operations above are VERY quick, no sense to check isOutputNecessary
         final SNumbers x1 = getInputNumbers(X1, true);
         if (x1.isInitialized() && (isOutputNecessary(X1) || x1.getArrayLength() < ARRAY_SIZE_COPIED_ALWAYS)) {
             getNumbers(X1).setTo(x1);

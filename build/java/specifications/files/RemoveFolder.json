@@ -64,7 +64,7 @@
     },
     {
       "caption": "Requires existing folder",
-      "name": "folderExistenceRequired",
+      "name": "fileExistenceRequired",
       "description": "If set, the path specified above must correspond to some existing subfolder. If cleared, the subfolder may not exist: in this function will do nothing.",
       "value_type": "boolean",
       "edition_type": "value",

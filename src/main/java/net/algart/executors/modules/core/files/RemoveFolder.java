@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 public final class RemoveFolder extends WriteFileOperation implements ReadOnlyExecutionInput {
     private RemoveFiles.Stage stage = RemoveFiles.Stage.EXECUTE;
     private boolean doAction = true;
-    private boolean folderExistenceRequired = true;
 
     public RemoveFolder() {
         addInputScalar(INPUT_FILE);
@@ -60,15 +59,6 @@ public final class RemoveFolder extends WriteFileOperation implements ReadOnlyEx
 
     public RemoveFolder setDoAction(boolean doAction) {
         this.doAction = doAction;
-        return this;
-    }
-
-    public boolean isFolderExistenceRequired() {
-        return folderExistenceRequired;
-    }
-
-    public RemoveFolder setFolderExistenceRequired(boolean folderExistenceRequired) {
-        this.folderExistenceRequired = folderExistenceRequired;
         return this;
     }
 
@@ -101,7 +91,7 @@ public final class RemoveFolder extends WriteFileOperation implements ReadOnlyEx
                 Files.delete(fileOrFolder);
             } else {
                 if (!Files.exists(fileOrFolder)) {
-                    if (folderExistenceRequired) {
+                    if (isFileExistenceRequired()) {
                         throw new FileNotFoundException(fileOrFolder + " does not exist: nothing to remove");
                     } else {
                         return;

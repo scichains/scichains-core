@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public final class RemoveFiles extends WriteFileOperation implements ReadOnlyExecutionInput {
     public enum Stage {
@@ -43,7 +44,6 @@ public final class RemoveFiles extends WriteFileOperation implements ReadOnlyExe
     private Stage stage = Stage.EXECUTE;
     private boolean doAction = true;
     private String globPattern = "*.(dat,tmp)";
-    private boolean fileExistenceRequired = true;
 
     public RemoveFiles() {
         addInputScalar(INPUT_FILE);
@@ -77,15 +77,6 @@ public final class RemoveFiles extends WriteFileOperation implements ReadOnlyExe
         return this;
     }
 
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public RemoveFiles setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
-        return this;
-    }
-
     @Override
     public void initialize() {
         final Path fileOrFolder = completeFilePath().toAbsolutePath();
@@ -106,6 +97,7 @@ public final class RemoveFiles extends WriteFileOperation implements ReadOnlyExe
     }
 
     public void removeFiles(Path fileOrFolder) {
+        Objects.requireNonNull(fileOrFolder, "Null file or folder");
         if (!doAction) {
             return;
         }
@@ -116,7 +108,7 @@ public final class RemoveFiles extends WriteFileOperation implements ReadOnlyExe
                 Files.delete(fileOrFolder);
             } else {
                 if (!Files.exists(fileOrFolder)) {
-                    if (fileExistenceRequired) {
+                    if (isFileExistenceRequired()) {
                         throw new FileNotFoundException(fileOrFolder + " does not exist: nothing to remove");
                     } else {
                         return;
