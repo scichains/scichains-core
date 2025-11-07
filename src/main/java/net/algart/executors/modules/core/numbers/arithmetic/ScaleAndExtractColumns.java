@@ -160,7 +160,7 @@ public final class ScaleAndExtractColumns extends NumbersFilter {
 
     @Override
     public String translateLegacyParameterAlias(String name) {
-        return name.equals("requireNonEmptyResult") ? "allColumnsRequired" : name;
+        return name.equals("requireNonEmptyResult") ? "nonEmptyResultRequired" : name;
     }
 
     @Override
