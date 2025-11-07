@@ -52,8 +52,8 @@
       "default": false
     },
     {
-      "caption": "Main chain settings JSON content",
-      "name": "settingsCombinerJsonContent",
+      "caption": "Main chain settings specification",
+      "name": "settingsSpecification",
       "description": "This argument is used only when \"Main chains settings JSON file\" above is an empty string. In this case, this argument must be a text, which is either entire settings specification JSON. This settings combiner will become available to use. This variant allows to use only 1 settings (2 executors) in a single call.",
       "value_type": "settings",
       "edition_type": "value",

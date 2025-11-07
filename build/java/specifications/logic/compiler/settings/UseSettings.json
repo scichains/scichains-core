@@ -45,6 +45,14 @@
       "default": ""
     },
     {
+      "caption": "Requires existing file/folder",
+      "name": "fileExistenceRequired",
+      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
       "caption": "Recursive scanning",
       "name": "recursiveScanning",
       "description": "If set, the path(s) specified above, if they are folders, is scanned recursively. If cleared, subfolders of the specified folders are not scanned.",
@@ -53,9 +61,9 @@
       "default": true
     },
     {
-      "caption": "Settings JSON content",
-      "name": "settingsCombinerJsonContent",
-      "description": "This argument is used only when \"Settings JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire settings combiner specification JSON. This settings combiner will become available to use. This variant allows to use only 1 settings (1–3 executors) in a single call.",
+      "caption": "Settings specification",
+      "name": "settingsSpecification",
+      "description": "This argument is used only when \"Settings JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire settings specification JSON. This settings combiner will become available to use. This variant allows to use only 1 settings (1–3 executors) in a single call.",
       "value_type": "settings",
       "edition_type": "value",
       "multiline": true,

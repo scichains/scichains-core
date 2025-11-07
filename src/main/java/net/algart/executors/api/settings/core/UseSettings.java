@@ -136,7 +136,7 @@ public class UseSettings extends FileOperation {
     }
 
     private boolean recursiveScanning = true;
-    private String settingsCombinerJsonContent = "";
+    private String settingsSpecification = "";
 
     private boolean mainSettings;
     // - See comments to isMainChainSettings()
@@ -175,12 +175,12 @@ public class UseSettings extends FileOperation {
         return this;
     }
 
-    public final String getSettingsCombinerJsonContent() {
-        return settingsCombinerJsonContent;
+    public final String getSettingsSpecification() {
+        return settingsSpecification;
     }
 
-    public final UseSettings setSettingsCombinerJsonContent(String settingsCombinerJsonContent) {
-        this.settingsCombinerJsonContent = nonNull(settingsCombinerJsonContent);
+    public final UseSettings setSettingsSpecification(String settingsSpecification) {
+        this.settingsSpecification = nonNull(settingsSpecification);
         return this;
     }
 
@@ -218,7 +218,7 @@ public class UseSettings extends FileOperation {
 
     @Override
     public void process() {
-        if (!this.getFile().trim().isEmpty()) {
+        if (hasFile()) {
             try {
                 useSeveralPaths(completeSeveralFilePaths());
             } catch (IOException e) {
@@ -226,13 +226,13 @@ public class UseSettings extends FileOperation {
             }
             return;
         }
-        final String settingsCombinerJsonContent = this.settingsCombinerJsonContent.trim();
-        if (!settingsCombinerJsonContent.isEmpty()) {
-            useContent(settingsCombinerJsonContent);
+        final String settingsSpecification = this.settingsSpecification.trim();
+        if (!settingsSpecification.isEmpty()) {
+            useContent(settingsSpecification);
             return;
         }
         throw new IllegalArgumentException("One of arguments \"Settings JSON file/folder\" "
-                + "or \"Settings JSON content\" must be non-empty");
+                + "or \"Settings specification\" must be non-empty");
     }
 
     public void useSeveralPaths(List<Path> settingsSpecificationPaths) throws IOException {
@@ -257,25 +257,27 @@ public class UseSettings extends FileOperation {
     }
 
     public int usePath(
-            Path settingsSpecificationPath,
+            Path path,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(settingsSpecificationPath, "Null settings specification path");
+        Objects.requireNonNull(path, "Null settings specification path");
+        // - for empty path string, useSeveralPaths will be called with an empty list, but list elements are never null
         mainSettings = false;
         // - we need to reinitialize this field for an improbable case of re-using this executor
         // (well be set again in use() method)
+        if (skipIfMissingOrThrow(path, () -> "Settings file or folder " + path + " does not exist")) {
+            return 0;
+        }
         final List<SettingsSpecification> settingsSpecifications;
-        if (Files.isDirectory(settingsSpecificationPath)) {
+        if (Files.isDirectory(path)) {
             settingsSpecifications = SettingsSpecification.readAllIfValid(
-                    settingsSpecificationPath, recursiveScanning, isMainChainSettings());
+                    path, recursiveScanning, isMainChainSettings());
             if (isExistingSettingsRequired() && settingsSpecifications.isEmpty()) {
-                throw new IllegalArgumentException("No any standard chain settings was found in a folder "
-                        + settingsSpecificationPath);
+                throw new IllegalArgumentException("No any standard chain settings was found in a folder " + path);
             }
         } else {
-            settingsSpecifications =
-                    Collections.singletonList(SettingsSpecification.read(settingsSpecificationPath));
+            settingsSpecifications = Collections.singletonList(SettingsSpecification.read(path));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         SettingsSpecification.checkIdDifference(settingsSpecifications);
@@ -332,7 +334,7 @@ public class UseSettings extends FileOperation {
         this.mainSettings = settingsSpecification.isMain();
 //      Below is a very bad idea (commented code): it leads to an effect, when the settings NAMES
 //      will depend on the order of loading chains!
-//      It is possible, when the same main chain settings are used both as actual main settings for some chain A
+//      It is possible when the same main chain settings are used both as actual main settings for some chain A
 //      and as a settings specification for some another chain B.
 //      Moreover, the category of the settings will depend on a fact, which chain uses it.
 //
@@ -378,6 +380,12 @@ public class UseSettings extends FileOperation {
             }
         }
     }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("settingsCombinerJsonContent") ? "settingsSpecification" : name;
+    }
+
 
     // Note: for multi-chain settings, this method is called as a result of
     // the call "settingsFactory.use" inside MultiChain constructor

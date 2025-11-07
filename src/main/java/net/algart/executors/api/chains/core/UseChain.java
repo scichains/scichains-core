@@ -282,8 +282,8 @@ public final class UseChain extends FileOperation {
         return chainSpecifications.size();
     }
 
-    public void useContent(String chainJsonContent) {
-        final ChainSpecification chainSpecification = ChainSpecification.of(chainJsonContent);
+    public void useContent(String chainSpecificationContent) {
+        final ChainSpecification chainSpecification = ChainSpecification.of(chainSpecificationContent);
         long t1 = infoTime();
         final Optional<Chain> chain = useIfNonRecursive(chainSpecification);
         long t2 = infoTime();
