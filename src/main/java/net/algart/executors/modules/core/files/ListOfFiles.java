@@ -133,11 +133,8 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
             if (singlePath || (fileOrFolder != null && Files.isRegularFile(fileOrFolder))) {
                 return List.of(correctPath(fileOrFolder == null ? Path.of("") : fileOrFolder, null));
             } else {
-                if (skipIfMissing(fileOrFolder)) {
+                if (skipIfMissingOrThrow(fileOrFolder, () -> "File/folder " + fileOrFolder + " does not exist")) {
                     return List.of();
-                }
-                if (!Files.exists(fileOrFolder)) {
-                    throw new FileNotFoundException("File or folder " + fileOrFolder + " does not exist");
                 }
                 final String regularExpression = this.regularExpression.trim();
                 final Pattern pattern = regularExpression.isEmpty() ? null : Pattern.compile(regularExpression);

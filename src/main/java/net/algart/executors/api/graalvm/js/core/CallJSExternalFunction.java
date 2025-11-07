@@ -111,8 +111,8 @@ public final class CallJSExternalFunction extends AbstractCallJS {
         return PathPropertyReplacement.translatePropertiesAndCurrentDirectory(jsFile, this);
     }
 
-    //TODO!!
-    public static String toJsModulePath(Path path) throws IOException {
+    // Deprecated idea
+    private static String toJsModulePath(Path path) throws IOException {
         if (!Files.exists(path)) {
             throw new IOException("Module file does not exist: " + path);
         }
