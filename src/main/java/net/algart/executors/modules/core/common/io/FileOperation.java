@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class FileOperation extends Executor {
     public static final String INPUT_FILE = "file";
@@ -97,6 +98,18 @@ public abstract class FileOperation extends Executor {
 
     public boolean readOnly() {
         return readOnly;
+    }
+
+    public final String file(boolean checkInputPort) {
+        String inputFile = checkInputPort && hasInputPort(INPUT_FILE) ?
+                // - note: here we have no guarantees that the subclass will add this port in its constructor
+                getInputScalar(INPUT_FILE, true).getValue() :
+                null;
+        return (inputFile != null ? inputFile : getFile()).trim();
+    }
+
+    public boolean hasFile() {
+        return !file.trim().isEmpty();
     }
 
     public String getFile() {
@@ -169,32 +182,43 @@ public abstract class FileOperation extends Executor {
      *
      * <p>In case of exception, the message looks like <code>"File ... does not exist"</code>.
      * If you need a custom error message, for example, when working with a path to a folder instead of a file,
-     * please consider using the simpler {@link #skipIfMissing(Path)} method.</p>
+     * please consider using the {@link #skipIfMissingOrThrow(Path, Supplier)} method.</p>
      *
      * @param path the file path to check; may be {@code null}.
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
      * @throws FileNotFoundException if the file does not exist and its existence is required.
      */
     public final boolean skipIfMissingOrThrow(Path path) throws FileNotFoundException {
+        return skipIfMissingOrThrow(path, () -> "File " + path + " does not exist");
+    }
+
+    /**
+     * Same as {@link #skipIfMissingOrThrow(Path)}, but allows specifying a custom error message.
+     *
+     * @param path                the file path to check; may be {@code null}.
+     * @param fileNotFoundMessage a supplier that provides a custom error message for the
+     *                            {@link FileNotFoundException} when it is thrown.
+     * @return {@code true} if the file should be skipped; {@code false} otherwise.
+     * @throws FileNotFoundException if the file does not exist and its existence is required.
+     */
+    public final boolean skipIfMissingOrThrow(Path path, Supplier<String> fileNotFoundMessage)
+            throws FileNotFoundException {
+        Objects.requireNonNull(fileNotFoundMessage, "Null fileNotFoundMessage");
         if (path == null) {
             return true;
         } else if (Files.exists(path)) {
             return false;
         } else {
             if (isFileExistenceRequired()) {
-                throw new FileNotFoundException("File " + path + " does not exist");
+                throw new FileNotFoundException(fileNotFoundMessage.get());
             } else {
                 return true;
             }
         }
     }
 
-    public final String filePath() {
-        String inputFile = hasInputPort(INPUT_FILE) ?
-                // - note: here we have no guarantees that the subclass will add this port in its constructor
-                getInputScalar(INPUT_FILE, true).getValue() :
-                null;
-        final String result = (inputFile != null ? inputFile : this.file).trim();
+    public final String filePathOrThrow() {
+        final String result = file(true);
         if (!result.isEmpty()) {
             return result;
         }
@@ -206,7 +230,7 @@ public abstract class FileOperation extends Executor {
     }
 
     public Path completeOSFilePath(boolean relativize) {
-        return completeOSFilePath(filePath(), relativize, true);
+        return completeOSFilePath(filePathOrThrow(), relativize, true);
     }
 
     public Path completeOSFilePath(String filePath, boolean relativize, boolean processPorts) {
@@ -219,13 +243,13 @@ public abstract class FileOperation extends Executor {
     }
 
     public Path completeFilePath() {
-        return completeFilePath(filePath());
+        return completeFilePath(filePathOrThrow());
     }
 
     // Note: this function does not work too well with OUTPUT_XXX ports:
     // it will fill out only the LAST from several paths
     public final List<Path> completeSeveralFilePaths() {
-        return completeSeveralFilePaths(filePath());
+        return completeSeveralFilePaths(filePathOrThrow());
     }
 
     public final Path completeFilePath(String filePath) {

@@ -4,8 +4,8 @@
     "root": {
         "scale": 0.8000000000000009,
         "desktop": {
-            "scroll_h": 0.5509759503870687,
-            "scroll_v": 0.5060024794174995
+            "scroll_h": 0.5279935525126084,
+            "scroll_v": 0.5098037808800342
         },
         "grid_adjust": true,
         "grid_size": 20
@@ -643,8 +643,8 @@
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "subChainJsonContent",
-                    "caption": "Chain JSON content"
+                    "name": "chainSpecification",
+                    "caption": "Chain specification"
                 },
                 {
                     "@id": "UIPortModel",
@@ -652,8 +652,8 @@
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "subChainJsonContent",
-                    "caption": "Chain JSON content"
+                    "name": "chainSpecification",
+                    "caption": "Chain specification"
                 },
                 {
                     "@id": "UIPortModel",
@@ -2384,13 +2384,13 @@
                         "uuid": "d6d5ff92-0300-0000-0aa5-22ac834ca088",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "subChainJsonContent"
+                        "name": "chainSpecification"
                     },
                     {
                         "uuid": "d6d5ff92-0400-0000-0aa5-22ac834ca088",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "subChainJsonContent"
+                        "name": "chainSpecification"
                     },
                     {
                         "uuid": "d6d5ff92-0300-0000-75dc-6b57640cee19",
@@ -2443,6 +2443,10 @@
                 ],
                 "parameters": [
                     {
+                        "name": "chainSpecification",
+                        "value": ""
+                    },
+                    {
                         "name": "executeAll",
                         "value": false
                     },
@@ -2465,10 +2469,6 @@
                     {
                         "name": "overrideBehaviour",
                         "value": false
-                    },
-                    {
-                        "name": "subChainJsonContent",
-                        "value": ""
                     }
                 ],
                 "system": {

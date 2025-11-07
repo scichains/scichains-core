@@ -39,7 +39,6 @@ import net.algart.executors.api.system.*;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
-import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -108,9 +107,7 @@ public final class UseChain extends FileOperation {
 
     private static final Set<String> NOW_USED_CHAIN_IDS = Collections.synchronizedSet(new HashSet<>());
 
-    private String subChainJsonContent = "";
-    // - we preserve the old-style name for compatibility
-    private boolean fileExistenceRequired = true;
+    private String chainSpecification = "";
     private boolean executeIsolatedLoadingTimeFunctions = true;
     private boolean overrideBehaviour = false;
     private boolean multithreading = false;
@@ -149,21 +146,12 @@ public final class UseChain extends FileOperation {
         return this;
     }
 
-    public String getSubChainJsonContent() {
-        return subChainJsonContent;
+    public String getChainSpecification() {
+        return chainSpecification;
     }
 
-    public UseChain setSubChainJsonContent(String subChainJsonContent) {
-        this.subChainJsonContent = nonNull(subChainJsonContent);
-        return this;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public UseChain setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
+    public UseChain setChainSpecification(String chainSpecification) {
+        this.chainSpecification = nonNull(chainSpecification);
         return this;
     }
 
@@ -230,19 +218,19 @@ public final class UseChain extends FileOperation {
 
     @Override
     public void process() {
-        if (!this.getFile().trim().isEmpty()) {
+        if (hasFile()) {
             try {
                 useSeveralPaths(completeSeveralFilePaths());
             } catch (IOException e) {
                 throw new IOError(e);
             }
         } else {
-            final String subChainJsonContent = this.subChainJsonContent.trim();
-            if (subChainJsonContent.isEmpty()) {
+            final String chainSpecification = this.chainSpecification.trim();
+            if (chainSpecification.isEmpty()) {
                 throw new IllegalArgumentException("One of arguments \"Chain JSON file/folder\" "
-                        + "or \"Chain JSON content\" must be non-empty");
+                        + "or \"Chain specification\" must be non-empty");
             }
-            useContent(subChainJsonContent);
+            useContent(chainSpecification);
         }
     }
 
@@ -274,24 +262,19 @@ public final class UseChain extends FileOperation {
     }
 
     public int usePath(
-            Path chainSpecificationPath,
+            Path path,
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        Objects.requireNonNull(chainSpecificationPath, "Null chains path");
-        final List<ChainSpecification> chainSpecifications;
-        if (!Files.exists(chainSpecificationPath)) {
-            if (fileExistenceRequired) {
-                throw new FileNotFoundException("Chain file or chains folder " + chainSpecificationPath
-                        + " does not exist");
-            } else {
-                return 0;
-            }
+        // - actually path should not be null when calling from process()
+        if (skipIfMissingOrThrow(path, () -> "Chain file or chains folder " + path + " does not exist")) {
+            return 0;
         }
-        if (Files.isDirectory(chainSpecificationPath)) {
-            chainSpecifications = ChainSpecification.readAllIfValid(chainSpecificationPath, true);
+        final List<ChainSpecification> chainSpecifications;
+        if (Files.isDirectory(path)) {
+            chainSpecifications = ChainSpecification.readAllIfValid(path, true);
         } else {
-            chainSpecifications = Collections.singletonList(ChainSpecification.read(chainSpecificationPath));
+            chainSpecifications = Collections.singletonList(ChainSpecification.read(path));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         use(chainSpecifications, platform, report);
@@ -346,6 +329,11 @@ public final class UseChain extends FileOperation {
         } finally {
             NOW_USED_CHAIN_IDS.remove(chainId);
         }
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("subChainJsonContent") ? "chainSpecification" : name;
     }
 
     public static void useAllInstalledInSharedContext() throws IOException {
@@ -476,7 +464,8 @@ public final class UseChain extends FileOperation {
             } catch (ChainLoadingException e) {
                 throw e;
             } catch (RuntimeException e) {
-                throw new ChainRunningException("Cannot load the chain " + chainSpecification.getSpecificationFile(), e);
+                throw new ChainRunningException("Cannot load the chain " + chainSpecification.getSpecificationFile(),
+                        e);
             }
             long t2 = infoTime();
             final int index = i;
@@ -612,7 +601,7 @@ public final class UseChain extends FileOperation {
         if (chain == null) {
             return " " + RECURSIVE_LOADING_BLOCKED_MESSAGE;
         }
-        return !chain.hasSettings()? "" : ", " + chain.getSettingsBuilder();
+        return !chain.hasSettings() ? "" : ", " + chain.getSettingsBuilder();
     }
 
     private static void addChainSettings(ExecutorSpecification result, Chain chain) {

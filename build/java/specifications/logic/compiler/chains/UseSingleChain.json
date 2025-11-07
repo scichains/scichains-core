@@ -40,9 +40,9 @@
       "default": true
     },
     {
-      "caption": "Chain JSON content",
-      "name": "subChainJsonContent",
-      "description": "This argument is used only when \"Chain JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is either entire chain JSON or a parent JSON, containing chain in the corresponding section. This chain will become available to use. This variant allows to use only 1 chain in a single call.",
+      "caption": "Chain specification",
+      "name": "chainSpecification",
+      "description": "This argument is used only when \"Chain JSON file\" above is an empty string. In this case, this argument must be a text, which is either entire chain JSON or a parent JSON, containing chain in the corresponding section. This chain will become available to use. This variant allows to use only 1 chain in a single call.",
       "value_type": "settings",
       "edition_type": "value",
       "multiline": true,

@@ -406,7 +406,7 @@
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "file",
-                    "caption": "Sub-chain JSON file(s)/folder(s)"
+                    "caption": "Chain JSON file(s)/folder(s)"
                 },
                 {
                     "@id": "UIPortModel",
@@ -415,7 +415,7 @@
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
                     "name": "file",
-                    "caption": "Sub-chain JSON file(s)/folder(s)"
+                    "caption": "Chain JSON file(s)/folder(s)"
                 },
                 {
                     "@id": "UIPortModel",
@@ -441,8 +441,8 @@
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "subChainJsonContent",
-                    "caption": "Sub-chain JSON content"
+                    "name": "chainSpecification",
+                    "caption": "Chain specification"
                 },
                 {
                     "@id": "UIPortModel",
@@ -450,8 +450,8 @@
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "subChainJsonContent",
-                    "caption": "Sub-chain JSON content"
+                    "name": "chainSpecification",
+                    "caption": "Chain specification"
                 },
                 {
                     "@id": "UIPortModel",
@@ -905,7 +905,7 @@
                 "uuid": "1e768feb-836a-4b71-9bad-0a9a14c6e739",
                 "executor_id": "1907b22c-c5c5-4d98-833f-20704c39c95a",
                 "execution_stage": "loading_time",
-                "executor_name": "Use sub-chain(s)",
+                "executor_name": "Use chain(s)",
                 "ports": [
                     {
                         "uuid": "1e768feb-0200-0000-6416-fc948a169899",
@@ -953,13 +953,13 @@
                         "uuid": "1e768feb-0300-0000-0aa5-22ac834ca088",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "subChainJsonContent"
+                        "name": "chainSpecification"
                     },
                     {
                         "uuid": "1e768feb-0400-0000-0aa5-22ac834ca088",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "subChainJsonContent"
+                        "name": "chainSpecification"
                     },
                     {
                         "uuid": "1e768feb-0300-0000-75dc-6b57640cee19",
@@ -1012,6 +1012,10 @@
                 ],
                 "parameters": [
                     {
+                        "name": "chainSpecification",
+                        "value": ""
+                    },
+                    {
                         "name": "executeAll",
                         "value": false
                     },
@@ -1034,10 +1038,6 @@
                     {
                         "name": "overrideBehaviour",
                         "value": false
-                    },
-                    {
-                        "name": "subChainJsonContent",
-                        "value": ""
                     }
                 ],
                 "system": {

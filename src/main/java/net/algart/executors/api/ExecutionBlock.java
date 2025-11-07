@@ -1061,7 +1061,7 @@ public abstract class ExecutionBlock extends PropertyChecker implements AutoClos
      */
     public String resolveLegacyParameterAlias(String name, boolean logLegacyAliases) {
         Objects.requireNonNull(name, "Null parameter name");
-        String translatedName = translateLegacyParameterAlias(name);
+        final String translatedName = translateLegacyParameterAlias(name);
         return translatedName == null ? name : translatedName;
     }
 
