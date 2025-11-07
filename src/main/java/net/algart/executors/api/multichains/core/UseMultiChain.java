@@ -106,7 +106,6 @@ public final class UseMultiChain extends FileOperation {
         globalLoaders().register(MULTI_CHAIN_LOADER);
     }
 
-    private boolean fileExistenceRequired = true;
     private boolean alsoSubChains = false;
     private boolean strictMode = false;
 
@@ -124,15 +123,6 @@ public final class UseMultiChain extends FileOperation {
 
     public static DefaultExecutorLoader<MultiChain> multiChainLoader() {
         return MULTI_CHAIN_LOADER;
-    }
-
-    public boolean isFileExistenceRequired() {
-        return fileExistenceRequired;
-    }
-
-    public UseMultiChain setFileExistenceRequired(boolean fileExistenceRequired) {
-        this.fileExistenceRequired = fileExistenceRequired;
-        return this;
     }
 
     public boolean isAlsoSubChains() {
@@ -203,41 +193,34 @@ public final class UseMultiChain extends FileOperation {
         return usePath(multiChainSpecificationPath, null);
     }
 
-    public int usePath(Path multiChainSpecificationPath, StringBuilder report) throws IOException {
-        Objects.requireNonNull(multiChainSpecificationPath, "Null multiChainSpecificationPath");
+    public int usePath(Path path, StringBuilder report) throws IOException {
+        Objects.requireNonNull(path, "Null multi-chain specifications path");
+        // - for empty path string, useSeveralPaths will be called with an empty list, but list elements are never null
         final List<MultiChainSpecification> multiChainSpecifications;
         final List<ChainSpecification> chainSpecifications;
-        if (!Files.exists(multiChainSpecificationPath)) {
-            if (fileExistenceRequired) {
-                throw new FileNotFoundException("Multi-chain file or multi-chains folder " +
-                        multiChainSpecificationPath + " does not exist");
-            } else {
-                return 0;
-            }
+        if (skipIfMissingOrThrow(path, () -> "Multi-chain file or multi-chains folder " + path + " does not exist")) {
+            return 0;
         }
-        if (Files.isDirectory(multiChainSpecificationPath)) {
-            multiChainSpecifications = MultiChainSpecification.readAllIfValid(multiChainSpecificationPath);
+        if (Files.isDirectory(path)) {
+            multiChainSpecifications = MultiChainSpecification.readAllIfValid(path);
             // - always recursive
             chainSpecifications = alsoSubChains ?
-                    ChainSpecification.readAllIfValid(multiChainSpecificationPath, true) :
+                    ChainSpecification.readAllIfValid(path, true) :
                     Collections.emptyList();
         } else if (!alsoSubChains) {
-            multiChainSpecifications = Collections.singletonList(
-                    MultiChainSpecification.read(multiChainSpecificationPath));
+            multiChainSpecifications = Collections.singletonList(MultiChainSpecification.read(path));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
             chainSpecifications = Collections.emptyList();
         } else {
-            final MultiChainSpecification multiChainSpecification = MultiChainSpecification.readIfValid(
-                    multiChainSpecificationPath);
+            final MultiChainSpecification multiChainSpecification = MultiChainSpecification.readIfValid(path);
             multiChainSpecifications = multiChainSpecification == null ?
                     Collections.emptyList() : Collections.singletonList(multiChainSpecification);
-            final ChainSpecification chainSpecification = ChainSpecification.readIfValid(multiChainSpecificationPath);
+            final ChainSpecification chainSpecification = ChainSpecification.readIfValid(path);
             chainSpecifications = chainSpecification == null ?
                     Collections.emptyList() :
                     Collections.singletonList(chainSpecification);
             if (multiChainSpecification == null && chainSpecification == null) {
-                throw new JsonException("JSON " + multiChainSpecificationPath
-                        + " is not a valid multi-chain or chain configuration");
+                throw new JsonException("JSON " + path + " is not a valid multi-chain or chain configuration");
 
             }
         }

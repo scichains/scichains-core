@@ -266,7 +266,8 @@ public final class UseChain extends FileOperation {
             ExtensionSpecification.Platform platform,
             StringBuilder report)
             throws IOException {
-        // - actually path should not be null when calling from process()
+        Objects.requireNonNull(path, "Null chain specification path");
+        // - for empty path string, useSeveralPaths will be called with an empty list, but list elements are never null
         if (skipIfMissingOrThrow(path, () -> "Chain file or chains folder " + path + " does not exist")) {
             return 0;
         }

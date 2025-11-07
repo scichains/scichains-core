@@ -34,7 +34,7 @@
     {
       "caption": "Requires existing file/folder",
       "name": "fileExistenceRequired",
-      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders.",
+      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders; an empty string (no files) is also allowed in this case.",
       "value_type": "boolean",
       "edition_type": "value",
       "default": true
