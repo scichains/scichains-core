@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.numbers.io;
 
 import jakarta.json.JsonObject;
+import net.algart.arrays.Arrays;
 import net.algart.executors.api.ExecutionVisibleResultsInformation;
 import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.api.data.SNumbers;
@@ -164,9 +165,9 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
             try (final FileInputStream stream = new FileInputStream(rawFile.toFile())) {
                 SNumbers result;
                 try {
-                    result = readRaw(stream, metadata);
+                    result = readRaw(stream, metadata, rawFile.toAbsolutePath().toString());
                 } catch (RuntimeException e) {
-                    throw new IOException("Cannot load numbers from file " + rawFile, e);
+                    throw new IOException("Cannot load numbers from file " + rawFile + ": " + e.getMessage(), e);
                 }
                 return result;
             }
@@ -176,13 +177,7 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
     }
 
     public SNumbers readRaw(FileInputStream inputStream, JsonObject metadata) throws IOException {
-        return metadata == null ?
-                readRaw(inputStream, byteOrder.order(), elementType, blockLength) :
-                readRaw(
-                        inputStream,
-                        WriteRawNumbers.getMetadataByteOrder(metadata),
-                        WriteRawNumbers.getMetadataElementType(metadata),
-                        WriteRawNumbers.getMetadataBlockLength(metadata));
+        return readRaw(inputStream, metadata, null);
     }
 
     public static SNumbers readRaw(
@@ -190,13 +185,50 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
             ByteOrder byteOrder,
             Class<?> elementType,
             int blockLength) throws IOException {
+        return readRaw(inputStream, byteOrder, elementType, blockLength, null);
+    }
+
+    private SNumbers readRaw(FileInputStream inputStream, JsonObject metadata, String fileName) throws IOException {
+        return metadata == null ?
+                readRaw(inputStream, byteOrder.order(), elementType, blockLength, fileName) :
+                readRaw(
+                        inputStream,
+                        WriteRawNumbers.getMetadataByteOrder(metadata),
+                        WriteRawNumbers.getMetadataElementType(metadata),
+                        WriteRawNumbers.getMetadataBlockLength(metadata),
+                        fileName);
+    }
+
+    private static SNumbers readRaw(
+            FileInputStream inputStream,
+            ByteOrder byteOrder,
+            Class<?> elementType,
+            int blockLength,
+            String fileName) throws IOException {
         Objects.requireNonNull(inputStream, "Null outputStream argument");
         Objects.requireNonNull(byteOrder, "Null byteOrder");
         Objects.requireNonNull(elementType, "Null elementType");
+        if (!SNumbers.isElementTypeSupported(elementType)) {
+            throw new IllegalArgumentException("Unsupported element type " + elementType);
+        }
+        fileName = fileName == null ? "" : "\"" + fileName + "\" ";
         final FileChannel channel = inputStream.getChannel();
         final long size = channel.size();
         if (size > Integer.MAX_VALUE) {
-            throw new IOException("Cannot read too large file to SNumbers: it's size " + size + " >= 2^31");
+            throw new IOException("Cannot read too large file " + fileName +
+                    "to SNumbers: it's size " + size + " >= 2^31");
+        }
+        final int bitsPerElement = (int) Arrays.bitsPerElement(elementType);
+        if (bitsPerElement < 8) {
+            throw new AssertionError("SNumbers.isElementTypeSupported(" + elementType +
+                    ") must be false! (bitsPerElement=" + bitsPerElement + ")");
+        }
+        final int bytesPerElement = bitsPerElement / 8;
+        if (size % (bytesPerElement * (long) blockLength) != 0) {
+            throw new IOException("The size " + size + " of the file " + fileName +
+                    "is not a multiple of " +
+                    "(block length) * (bytes per element) = " + blockLength + " * " + bytesPerElement +
+                    ", probably block length (" + blockLength + ") or element type (" + elementType + ") is invalid");
         }
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect((int) size);
         byteBuffer.order(byteOrder);

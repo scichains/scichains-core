@@ -61,9 +61,9 @@
       "default": true
     },
     {
-      "caption": "Subfolder",
+      "caption": "Folder",
       "name": "file",
-      "description": "Subfolder to create.\nNote: if this path already exists and is a directory, this function does nothing.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"samples/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
+      "description": "Folder to create (possibly a subfolder of some existing folder).\nNote: if this path already exists and is a directory, this function does nothing.\nYou can use here relative paths (without starting \"/\" or \"c:\\\"), for example, \"test\" or \"samples/test\". They will be resolved relative the current folder, containing the executed chain.\nIf this path starts with substring %TEMP%, %TEMP%/ or %TEMP%x. where x is OS-depended file separator character, this substring is replaced with the full path to the system temp directory (System.getProperty(\"java.io.tmpdir\")) with ending file separator. For example, it is correct to write here %TEMP%my_folder, %TEMP%/my_folder or (in Windows) %TEMP%\\my_folder.\nAlso you can use in this string Java system properties: \"${name}\", for example: \"${java.io.tmpdir}\", and executor system properties \"${path.name.ext}\", \"${path.name}\", \"${file.name.ext}\", \"${file.name}\", \"${resources}\" (chain path/file name with/without extension, resource folder of the platform, containing this function).",
       "value_type": "String",
       "edition_type": "folder",
       "default": ""

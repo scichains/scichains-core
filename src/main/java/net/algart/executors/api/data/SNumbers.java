@@ -50,6 +50,10 @@ import java.util.stream.IntStream;
  * resources. It is important while using inside user-defined scripts.
  */
 public final class SNumbers extends Data implements Cloneable {
+    /**
+     * List of all element types, for which
+     * {@link #isElementTypeSupported(Class<?>)} returns <code>true</code>.
+     */
     public static List<Class<?>> SUPPORTED_ELEMENT_TYPES = List.of(
             byte.class, short.class, int.class, long.class, float.class, double.class);
 
