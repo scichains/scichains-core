@@ -29,8 +29,8 @@ import net.algart.executors.api.data.Port;
 public enum ChainPortType {
     INPUT_PORT(1, Port.Type.INPUT, true),
     OUTPUT_PORT(2, Port.Type.OUTPUT, true),
-    INPUT_CONTROL_AS_PORT(3, Port.Type.INPUT, false),
-    OUTPUT_CONTROL_AS_PORT(4, Port.Type.OUTPUT, false);
+    INPUT_PARAMETER_AS_PORT(3, Port.Type.INPUT, false),
+    OUTPUT_PARAMETER_AS_PORT(4, Port.Type.OUTPUT, false);
 
     private final int code;
     private final Port.Type actualPortType;

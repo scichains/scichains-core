@@ -94,7 +94,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     // - copying reference to data, not content
                 }
             }
-            case INPUT_CONTROL_AS_PORT -> {
+            case INPUT_PARAMETER_AS_PORT -> {
                 final String stringValue;
                 synchronized (chain.blocksInteractionLock) {
                     if (!(data instanceof SScalar scalar)) {
@@ -109,7 +109,8 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     }
                     stringValue = scalar.getValue();
                 }
-                final String parameterName = executor.resolveLegacyParameterAlias(this.name, true);
+                final String parameterName = ChainBlock.resolveParameterAlias(executor, this.name,
+                        name -> "Legacy parameter-as-input-port name \"" + name + "\" detected");
                 final ChainParameter chainParameter = block.parameters.get(parameterName);
                 if (chainParameter == null) {
                     // - abnormal situation: virtual port without actual control;
@@ -157,7 +158,7 @@ public final class ChainInputPort extends ChainPort<ChainOutputPort> {
                     && !hasConnectedReadOnlyExecutors
                     && countOfConnectedInputs == 0
                     && !connectedSource.isStandardOutput()) {
-                // Note: if connected source port has connected read-only executors,
+                // Note: if a connected source port has connected read-only executors,
                 // we must not use this "exchange" technique at all.
                 // In this case, we will copy the reference for some links (shallow copy without cloning),
                 // and exchanging the last link with non-read-only executor will lead to damaging data

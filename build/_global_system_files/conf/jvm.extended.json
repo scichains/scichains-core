@@ -9,11 +9,19 @@
     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
     "### - Provides ability of remote debugging from IntelliJ IDEA or other IDE.",
 
+    "-Dnet.algart.executors.api.chains.warningForAliases=true",
+    "### - If 'true', and if SciChains detects deprecated parameter names in a loaded chain specification",
+    "### this situation will be logged with the level System.Logger.Level.WARNING",
+    "### instead of the default level System.Logger.Level.DEBUG.",
+
     "#-Dnet.algart.jep.numpyIntegrationRequired=false",
     "### - 'false' option sets 'softer' requirements for integration of JEP and NumPy Python packages:",
     "### even if you installed them in the wrong order, SciChains will still use Python,",
     "### but some Python-based functions may not work correctly in that case.",
     "### When using the built-in Python (from the 'python' folder), this property is set to true by default.",
+
+    "#-Dnet.algart.jep.numpyIntegrationRequired=false",
+    "### - 'false' option sets 'softer' requirements for integration of JEP and NumPy Python packages:",
 
     "#-Dnet.algart.arrays.CPUCount=1",
     "#-Dnet.algart.executors.api.showLibraryPath=true",

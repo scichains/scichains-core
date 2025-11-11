@@ -81,10 +81,11 @@ public final class ChainOutputPort extends ChainPort<ChainInputPort> {
                     // - copying reference to data, not content
                 }
             }
-            case OUTPUT_CONTROL_AS_PORT -> {
+            case OUTPUT_PARAMETER_AS_PORT -> {
                 synchronized (chain.blocksInteractionLock) {
                     // exchanging/moving data between all ports blocks must be synchronized globally
-                    final String parameterName = executor.resolveLegacyParameterAlias(name, true);
+                    final String parameterName = ChainBlock.resolveParameterAlias(executor, name,
+                            name -> "Legacy parameter-as-output-port name \"" + name + "\" detected");
                     this.data.setTo(SScalar.of(executor.parameters().getString(parameterName)), false);
                     // - no sense to clone SScalar newly created by SScalar.of
                 }

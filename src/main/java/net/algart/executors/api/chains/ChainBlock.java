@@ -38,14 +38,21 @@ import net.algart.executors.modules.core.common.FunctionTiming;
 import net.algart.executors.modules.core.common.TimingStatistics;
 
 import java.io.IOError;
-import java.lang.System.Logger;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public final class ChainBlock {
+    public static final boolean SUPPORT_ALIASES = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+            "net.algart.executors.api.chains.aliases", true);
+    // - should be true for normal work
+    public static final boolean WARNING_FOR_ALIASES = net.algart.arrays.Arrays.SystemSettings.getBooleanProperty(
+            "net.algart.executors.api.chains.warningForAliases", false);
+    // - true value helps to find deprecated parameter names
+
     private static final String DEFAULT_CHAIN_PORT_CAPTION_PATTERN = "[$$$]";
 
     private static final boolean ANALYSE_CONDITIONAL_INPUTS = Arrays.SystemSettings.getBooleanProperty(
@@ -53,7 +60,7 @@ public final class ChainBlock {
     // - can be set to false for debugging needs; it will decrease the speed of executing some chains
     // and will lead to stack overflow in recursive chains
 
-    private static final Logger LOG = System.getLogger(ChainBlock.class.getName());
+    private static final System.Logger LOG = System.getLogger(ChainBlock.class.getName());
 
     Chain chain;
     final String id;
@@ -207,8 +214,8 @@ public final class ChainBlock {
         result.setEnabledByLegacyWayIfNecessary();
         result.setSystemNameByLegacyWayIfNecessary();
         if (result.executorSpecification == null) {
-            LOG.log(Logger.Level.DEBUG, () -> "Specification of executor " + executorId + " is not registered yet "
-                    + "(while creating chain block) and will be probably loaded later; "
+            LOG.log(System.Logger.Level.DEBUG, () -> "Specification of executor " + executorId +
+                    " is not registered yet (while creating chain block) and will be probably loaded later; "
                     + result.detailedMessage());
         }
         return result;
@@ -1072,12 +1079,13 @@ public final class ChainBlock {
     private void updateParameters(ExecutionBlock executor) {
         final Parameters executorParameters = executor.parameters();
         for (ChainParameter p : this.parameters.values()) {
-            final String parameterName = executor.resolveLegacyParameterAlias(p.getName(), true);
+            final String parameterName = resolveParameterAlias(executor, p.getName(),
+                    name -> "Legacy parameter name \"" + name + "\" detected");
             executorParameters.put(parameterName, p.getValue());
         }
         // - before calling onChangeParameter, we should be sure that ALL parameters are set
         for (String name : this.parameters.keySet()) {
-            executor.onChangeParameter(executor.resolveLegacyParameterAlias(name, false));
+            executor.onChangeParameter(resolveParameterAlias(executor, name, null));
         }
     }
 
@@ -1123,4 +1131,30 @@ public final class ChainBlock {
             }
         }
     }
+
+    static String resolveParameterAlias(ExecutionBlock executor, String name, Function<String, String> message) {
+        Objects.requireNonNull(name, "Null parameter name");
+        if (!SUPPORT_ALIASES) {
+            return name;
+        }
+        String translatedName = executor.translateLegacyParameterAlias(name);
+        if (translatedName == null) {
+            translatedName = name;
+        }
+        if (message != null && !translatedName.equals(name)) {
+            LOG.log(WARNING_FOR_ALIASES ? System.Logger.Level.WARNING : System.Logger.Level.DEBUG,
+                    () -> message.apply(name) + " in " + executor.getClass() +
+                            ", we recommend resaving the chain file " + contextMessageInfo(executor));
+        }
+        return translatedName;
+    }
+
+    private static String contextMessageInfo(ExecutionBlock e) {
+        return "("
+                + (e.getContextName() == null ? "no context" : "context \"" + e.getContextName() + "\"")
+                + (e.getContextPath() == null ? "" : " at " + e.getContextPath())
+                + ")";
+    }
+
+
 }
