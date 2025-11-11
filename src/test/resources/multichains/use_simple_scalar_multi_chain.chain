@@ -4,7 +4,7 @@
     "root": {
         "scale": 0.6400000000000018,
         "desktop": {
-            "scroll_h": 0.6279501409878618,
+            "scroll_h": 0.6417864735314611,
             "scroll_v": 0.537333052737136
         },
         "grid_adjust": true,
@@ -890,8 +890,8 @@
                     "visible": false,
                     "port_type": "INPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "settingsCombinerJsonContent",
-                    "caption": "Main chain settings JSON content"
+                    "name": "settingsSpecification",
+                    "caption": "Main chain settings specification"
                 },
                 {
                     "@id": "UIPortModel",
@@ -899,8 +899,8 @@
                     "visible": false,
                     "port_type": "OUTPUT_CONTROL",
                     "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                    "name": "settingsCombinerJsonContent",
-                    "caption": "Main chain settings JSON content"
+                    "name": "settingsSpecification",
+                    "caption": "Main chain settings specification"
                 }
             ],
             "display_advanced": false,
@@ -1791,13 +1791,13 @@
                         "uuid": "15805696-0300-0000-9959-2d9178ded3eb",
                         "type": 3,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "settingsCombinerJsonContent"
+                        "name": "settingsSpecification"
                     },
                     {
                         "uuid": "15805696-0400-0000-9959-2d9178ded3eb",
                         "type": 4,
                         "data_type_uuid": "869bc442-bd01-4094-afc1-783b9ed1c24e",
-                        "name": "settingsCombinerJsonContent"
+                        "name": "settingsSpecification"
                     }
                 ],
                 "parameters": [
@@ -1810,7 +1810,7 @@
                         "value": false
                     },
                     {
-                        "name": "settingsCombinerJsonContent",
+                        "name": "settingsSpecification",
                         "value": ""
                     }
                 ],

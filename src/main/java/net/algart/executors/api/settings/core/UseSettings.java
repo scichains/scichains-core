@@ -266,7 +266,7 @@ public class UseSettings extends FileOperation {
         mainSettings = false;
         // - we need to reinitialize this field for an improbable case of re-using this executor
         // (well be set again in use() method)
-        if (skipIfMissingOrThrow(path, () -> "Settings file or folder " + path + " does not exist")) {
+        if (skipIfMissingOrThrow(path, () -> "Settings specification file or folder " + path + " does not exist")) {
             return 0;
         }
         final List<SettingsSpecification> settingsSpecifications;
@@ -274,7 +274,7 @@ public class UseSettings extends FileOperation {
             settingsSpecifications = SettingsSpecification.readAllIfValid(
                     path, recursiveScanning, isMainChainSettings());
             if (isExistingSettingsRequired() && settingsSpecifications.isEmpty()) {
-                throw new IllegalArgumentException("No any standard chain settings was found in a folder " + path);
+                throw new IllegalArgumentException("No any main chain settings was found in a folder " + path);
             }
         } else {
             settingsSpecifications = Collections.singletonList(SettingsSpecification.read(path));

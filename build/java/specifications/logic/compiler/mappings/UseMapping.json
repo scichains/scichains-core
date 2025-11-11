@@ -33,6 +33,14 @@
       "default": ""
     },
     {
+      "caption": "Requires existing file/folder",
+      "name": "fileExistenceRequired",
+      "description": "If set, and if some of file(s)/folder(s), specified in the previous parameter, do not exists, this function throws an exception. If cleared, this function just ignores all non-existing files or folders.",
+      "value_type": "boolean",
+      "edition_type": "value",
+      "default": true
+    },
+    {
       "caption": "Mapping keys file",
       "name": "mappingKeysFile",
       "description": "Path to a text file containing list of keys, separated by \\n. Every line of this file can contain a comment after // characters; this comment (with trimmed spaces) becomes a caption to the corresponding parameter, and $$$ sequence in the caption (if exists) will be replaced with the key before //. Every key can be either a valid Java identifier, or an integer number, or a range of integers min..max (like \"1..50\").\nThis file is used, when a specification JSON file has not both \"keys_file\" and \"keys\" fields. (If \"keys_file\" field is specified, it is used instead of this parameter. If \"keys\" is specified, it must be JSON array of strings with all keys; then no any file is used.)\nNote: if mapping JSON contains JDON array, named \"ignored_keys\", these ignored keys are automatically excluded from thie list of keys.\nAlso note: you can set here only 1 file. So, it may be useless when you set several mapping specifications in \"Mapping JSON file(s)/folder(s)\" parameter without  \"keys_file\" / \"keys\" fields.",
@@ -49,8 +57,8 @@
       "default": ""
     },
     {
-      "caption": "Mapping JSON content",
-      "name": "mappingJsonContent",
+      "caption": "Mapping specification",
+      "name": "mappingSpecification",
       "description": "This argument is used only when \"Mapping JSON file(s)/folder(s)\" above is an empty string. In this case, this argument must be a text, which is entire mapping specification JSON. This mapping will become available to use. This variant allows to use only 1 mapping in a single call.",
       "value_type": "settings",
       "edition_type": "value",

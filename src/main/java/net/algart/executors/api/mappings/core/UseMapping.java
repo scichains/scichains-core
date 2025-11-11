@@ -52,7 +52,7 @@ public class UseMapping extends FileOperation {
 
     private String mappingKeysFile = null;
     private String mappingEnumItemsFile = null;
-    private String mappingJsonContent = "";
+    private String mappingSpecification = "";
     private boolean advancedParameters = false;
 
     public UseMapping() {
@@ -89,12 +89,12 @@ public class UseMapping extends FileOperation {
         return this;
     }
 
-    public String getMappingJsonContent() {
-        return mappingJsonContent;
+    public String getMappingSpecification() {
+        return mappingSpecification;
     }
 
-    public UseMapping setMappingJsonContent(String mappingJsonContent) {
-        this.mappingJsonContent = nonNull(mappingJsonContent);
+    public UseMapping setMappingSpecification(String mappingSpecification) {
+        this.mappingSpecification = nonNull(mappingSpecification);
         return this;
     }
 
@@ -137,13 +137,13 @@ public class UseMapping extends FileOperation {
     @Override
     public void process() {
         try {
-            if (!this.getFile().trim().isEmpty()) {
+            if (hasFile()) {
                 useSeveralPaths(completeSeveralFilePaths());
                 return;
             }
-            final String mappingJsonContent = this.mappingJsonContent.trim();
-            if (!mappingJsonContent.isEmpty()) {
-                useContent(mappingJsonContent);
+            final String mappingSpecification = this.mappingSpecification.trim();
+            if (!mappingSpecification.isEmpty()) {
+                useContent(mappingSpecification);
                 return;
             }
         } catch (IOException e) {
@@ -164,17 +164,21 @@ public class UseMapping extends FileOperation {
         }
     }
 
-    public void usePath(Path mappingSpecificationPath, StringBuilder report) throws IOException {
-        Objects.requireNonNull(mappingSpecificationPath, "Null mapping path");
+    public int usePath(Path path, StringBuilder report) throws IOException {
+        Objects.requireNonNull(path, "Null mapping specification path");
         final List<MappingSpecification> mappingSpecifications;
-        if (Files.isDirectory(mappingSpecificationPath)) {
-            mappingSpecifications = MappingSpecification.readAllIfValid(mappingSpecificationPath);
+        if (skipIfMissingOrThrow(path, () -> "Mapping specification file or folder " + path + " does not exist")) {
+            return 0;
+        }
+        if (Files.isDirectory(path)) {
+            mappingSpecifications = MappingSpecification.readAllIfValid(path);
         } else {
-            mappingSpecifications = Collections.singletonList(MappingSpecification.read(mappingSpecificationPath));
+            mappingSpecifications = Collections.singletonList(MappingSpecification.read(path));
             // Note: for a single file, we REQUIRE that it must be a correct JSON
         }
         MappingSpecification.checkIdDifference(mappingSpecifications);
-        for (int i = 0, n = mappingSpecifications.size(); i < n; i++) {
+        final int n = mappingSpecifications.size();
+        for (int i = 0; i < n; i++) {
             final MappingSpecification mappingSpecification = mappingSpecifications.get(i);
             logDebug("Loading settings " + (n > 1 ? (i + 1) + "/" + n + " " : "")
                     + "from " + mappingSpecification.getSpecificationFile().toAbsolutePath() + "...");
@@ -183,11 +187,12 @@ public class UseMapping extends FileOperation {
                 report.append(mappingSpecification.getSpecificationFile()).append("\n");
             }
         }
+        return n;
     }
 
-    public void useContent(String mappingJsonContent) throws IOException {
+    public void useContent(String mappingSpecificationContent) throws IOException {
         final MappingSpecification mappingSpecification =
-                MappingSpecification.of(Jsons.toJson(mappingJsonContent), false);
+                MappingSpecification.of(Jsons.toJson(mappingSpecificationContent), false);
         // - we don't require strict accuracy for JSON, entered in a little text area
         logDebug("Using mapping '" + mappingSpecification.getName() + "' from the text argument...");
         use(mappingSpecification);
@@ -203,6 +208,11 @@ public class UseMapping extends FileOperation {
         final ExecutorSpecification specification = buildMappingSpecification(mappingBuilder);
         MAPPING_LOADER.registerWorker(sessionId, specification, mappingBuilder);
         return mappingBuilder;
+    }
+
+    @Override
+    public String translateLegacyParameterAlias(String name) {
+        return name.equals("mappingJsonContent") ? "mappingSpecification" : name;
     }
 
     public MappingBuilder mappingBuilder(MappingSpecification mappingSpecification) throws IOException {

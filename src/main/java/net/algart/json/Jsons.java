@@ -66,7 +66,7 @@ public class Jsons {
     }
 
     public static JsonObject toJson(String jsonString) {
-        Objects.requireNonNull(jsonString, "Null jsonString");
+        Objects.requireNonNull(jsonString, "Null JSON string");
         try (final JsonReader reader = Json.createReader(new StringReader(jsonString))) {
             return reader.readObject();
         }
@@ -81,7 +81,7 @@ public class Jsons {
     }
 
     public static JsonArray toJsonArray(String jsonString) {
-        Objects.requireNonNull(jsonString, "Null jsonString");
+        Objects.requireNonNull(jsonString, "Null JSON string");
         try (final JsonReader reader = Json.createReader(new StringReader(jsonString))) {
             return reader.readArray();
         }
