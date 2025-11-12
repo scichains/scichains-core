@@ -33,7 +33,6 @@ import net.algart.executors.modules.core.common.io.FileOperation;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +120,7 @@ public final class ReadCSVNumbers extends FileOperation implements ReadOnlyExecu
     public SNumbers readCSV() {
         final Path csvFile = completeFilePath();
         try {
-            if (skipIfMissingOrThrow(csvFile)) {
+            if (skipIfMissingFileOrThrow(csvFile)) {
                 return null;
             }
             logDebug(() -> "Reading number array from " + csvFile.toAbsolutePath());

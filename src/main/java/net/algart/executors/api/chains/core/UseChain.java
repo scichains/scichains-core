@@ -268,7 +268,8 @@ public final class UseChain extends FileOperation {
             throws IOException {
         Objects.requireNonNull(path, "Null chain specification path");
         // - for empty path string, useSeveralPaths will be called with an empty list, but list elements are never null
-        if (skipIfMissingOrThrow(path, () -> "Chain file or chains folder " + path + " does not exist")) {
+        if (skipIfMissingOrThrow(path, false,
+                () -> "Chain file or chains folder " + path + " does not exist")) {
             return 0;
         }
         final List<ChainSpecification> chainSpecifications;

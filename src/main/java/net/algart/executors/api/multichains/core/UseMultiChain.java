@@ -43,7 +43,6 @@ import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.json.Jsons;
 
-import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.lang.System.Logger.Level;
@@ -198,7 +197,8 @@ public final class UseMultiChain extends FileOperation {
         // - for empty path string, useSeveralPaths will be called with an empty list, but list elements are never null
         final List<MultiChainSpecification> multiChainSpecifications;
         final List<ChainSpecification> chainSpecifications;
-        if (skipIfMissingOrThrow(path, () -> "Multi-chain file or multi-chains folder " + path + " does not exist")) {
+        if (skipIfMissingOrThrow(path, false,
+                () -> "Multi-chain file or multi-chains folder " + path + " does not exist")) {
             return 0;
         }
         if (Files.isDirectory(path)) {

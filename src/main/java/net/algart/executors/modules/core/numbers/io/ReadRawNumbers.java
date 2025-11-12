@@ -142,7 +142,7 @@ public final class ReadRawNumbers extends FileOperation implements ReadOnlyExecu
         final Path rawFile = completeFilePath();
         final Path metadataFile = Paths.get(rawFile + WriteRawNumbers.METADATA_FILE_SUFFIX);
         try {
-            if (skipIfMissingOrThrow(rawFile)) {
+            if (skipIfMissingFileOrThrow(rawFile)) {
                 return null;
             }
             JsonObject metadata = null;

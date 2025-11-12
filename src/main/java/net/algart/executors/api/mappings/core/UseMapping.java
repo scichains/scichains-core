@@ -167,7 +167,8 @@ public class UseMapping extends FileOperation {
     public int usePath(Path path, StringBuilder report) throws IOException {
         Objects.requireNonNull(path, "Null mapping specification path");
         final List<MappingSpecification> mappingSpecifications;
-        if (skipIfMissingOrThrow(path, () -> "Mapping specification file or folder " + path + " does not exist")) {
+        if (skipIfMissingOrThrow(path, false,
+                () -> "Mapping specification file or folder " + path + " does not exist")) {
             return 0;
         }
         if (Files.isDirectory(path)) {

@@ -70,7 +70,7 @@ public final class ReadAlgARTImage extends FileOperation implements ReadOnlyExec
     public MultiMatrix readMultiMatrix() {
         final Path path = completeFilePath();
         try {
-            if (skipIfMissing(path)) {
+            if (skipIfMissing(path, false)) {
                 return null;
             }
             logDebug(() -> "Reading AlgART multi-matrix from " + path);

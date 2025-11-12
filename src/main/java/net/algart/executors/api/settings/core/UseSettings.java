@@ -266,7 +266,8 @@ public class UseSettings extends FileOperation {
         mainSettings = false;
         // - we need to reinitialize this field for an improbable case of re-using this executor
         // (well be set again in use() method)
-        if (skipIfMissingOrThrow(path, () -> "Settings specification file or folder " + path + " does not exist")) {
+        if (skipIfMissingOrThrow(path,false,
+                () -> "Settings specification file or folder " + path + " does not exist")) {
             return 0;
         }
         final List<SettingsSpecification> settingsSpecifications;

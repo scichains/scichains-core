@@ -158,7 +158,7 @@ public final class ReadImage extends FileOperation implements ReadOnlyExecutionI
     }
 
     public BufferedImage readBufferedImage(Path path) throws IOException {
-        if (skipIfMissing(path)) {
+        if (skipIfMissing(path, true)) {
             return null;
         }
         logDebug(() -> "Reading image from " + path + " by Java API (ImageIO)");

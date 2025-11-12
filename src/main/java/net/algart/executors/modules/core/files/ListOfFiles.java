@@ -28,7 +28,6 @@ import net.algart.executors.api.ReadOnlyExecutionInput;
 import net.algart.executors.modules.core.common.io.FileOperation;
 import net.algart.io.MatrixIO;
 
-import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -133,7 +132,8 @@ public final class ListOfFiles extends FileOperation implements ReadOnlyExecutio
             if (singlePath || (fileOrFolder != null && Files.isRegularFile(fileOrFolder))) {
                 return List.of(correctPath(fileOrFolder == null ? Path.of("") : fileOrFolder, null));
             } else {
-                if (skipIfMissingOrThrow(fileOrFolder, () -> "File/folder " + fileOrFolder + " does not exist")) {
+                if (skipIfMissingOrThrow(fileOrFolder, false,
+                        () -> "File/folder " + fileOrFolder + " does not exist")) {
                     return List.of();
                 }
                 final String regularExpression = this.regularExpression.trim();

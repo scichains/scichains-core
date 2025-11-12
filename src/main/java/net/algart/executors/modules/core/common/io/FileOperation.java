@@ -29,6 +29,7 @@ import net.algart.io.MatrixIO;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -154,63 +155,109 @@ public abstract class FileOperation extends Executor {
     }
 
     /**
-     * Determines whether the specified file should be skipped because it does not exist.
+     * Checks whether the specified file should be skipped because it does not exist
+     * and its presence is not required.
      *
      * <p>If {@code path} is {@code null}, this method always returns {@code true}.
      * Otherwise, it returns {@code true} only when the file does not exist
      * and file existence is <i>not</i> required by the current configuration
      * (see {@link #isFileExistenceRequired()}).</p>
      *
+     * <p>The definition of "file exists" depends on the {@code requireRegularFile} parameter.
+     * If it is {@code true}, only regular files are considered existing:
+     * {@link Files#isRegularFile(Path, LinkOption...) Files.isRegularFile(path)} is used.
+     * If it is {@code false}, directories are also allowed:
+     * {@link Files#exists(Path, LinkOption...) Files.exists(path)} is used.</p>
+     *
      * <p>This method never throws an exception.</p>
      *
-     * @param path the file path to check; may be {@code null}.
+     * @param path               the file path to check; may be {@code null}, then the method returns {@code true}.
+     * @param requireRegularFile if {@code true}, the path must refer to a regular file to be considered existing.
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
      */
-    public final boolean skipIfMissing(Path path) {
-        return path == null || (!isFileExistenceRequired() && !Files.exists(path));
+    public final boolean skipIfMissing(Path path, boolean requireRegularFile) {
+        if (path == null) {
+            return true;
+        }
+        return !isFileExistenceRequired() && !(requireRegularFile ? Files.isRegularFile(path) : Files.exists(path));
     }
 
     /**
-     * Determines whether the specified file should be skipped because it does not exist
+     * Checks whether the specified file should be skipped because it does not exist
      * but throws an exception for a non-existing file if its existence is required.
      *
      * <p>If {@code path} is {@code null}, this method returns {@code true}.
-     * If the file does not exist and file existence <i>is</i> required
+     * If the file does not exist (or is not a regular file) and if file existence <i>is</i> required
      * (see {@link #isFileExistenceRequired()}), a {@link FileNotFoundException}
      * is thrown. Otherwise, when the file is missing but its existence is not required,
      * this method returns {@code true}.</p>
      *
      * <p>In case of exception, the message looks like <code>"File ... does not exist"</code>.
-     * If you need a custom error message, for example, when working with a path to a folder instead of a file,
-     * please consider using the {@link #skipIfMissingOrThrow(Path, Supplier)} method.</p>
+     * If you need a custom error message,
+     * please use the {@link #skipIfMissingFileOrThrow(Path, Supplier)} method.</p>
      *
-     * @param path the file path to check; may be {@code null}.
+     * <p>The file existence is checked by {@link Files#isRegularFile(Path, LinkOption...) Files#isRegularFile(path)}
+     * method: an existing directory with this name will be considered as "missing".
+     * If you also need to process subfolders, please use the {@link #skipIfMissingOrThrow(Path, boolean, Supplier)}
+     * method.</p>
+     *
+     * @param path the file path to check; may be {@code null}, then the method returns {@code true}.
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
-     * @throws FileNotFoundException if the file does not exist and its existence is required.
+     * @throws FileNotFoundException if the file does not exist (or is not a regular file),
+     *                               and its existence is required.
      */
-    public final boolean skipIfMissingOrThrow(Path path) throws FileNotFoundException {
-        return skipIfMissingOrThrow(path, () -> "File " + path + " does not exist");
+    public final boolean skipIfMissingFileOrThrow(Path path) throws FileNotFoundException {
+        return skipIfMissingFileOrThrow(path, null);
     }
 
     /**
-     * Same as {@link #skipIfMissingOrThrow(Path)}, but allows specifying a custom error message.
+     * Same as {@link #skipIfMissingFileOrThrow(Path)} but allows specifying a custom error message.
+     * If the <code>notFoundMessage</code> supplier is {@code null}, the default message
+     * will be used (as in the {@link #skipIfMissingFileOrThrow(Path)} method).
      *
-     * @param path                the file path to check; may be {@code null}.
-     * @param fileNotFoundMessage a supplier that provides a custom error message for the
-     *                            {@link FileNotFoundException} when it is thrown.
+     * <p>This method is equivalent to the call:
+     * <pre>{@link #skipIfMissingOrThrow(Path, boolean, Supplier)
+     * skipIfMissingOrThrow}(path, true, notFoundMessage)</pre>
+     *
+     * @param path            the file path to check; may be {@code null}.
+     * @param notFoundMessage a supplier that provides a custom error message for the
+     *                        {@link FileNotFoundException} when it is thrown; may be {@code null}.
      * @return {@code true} if the file should be skipped; {@code false} otherwise.
-     * @throws FileNotFoundException if the file does not exist and its existence is required.
+     * @throws FileNotFoundException if the file does not exist (or is not a regular file),
+     *                               and its existence is required.
      */
-    public final boolean skipIfMissingOrThrow(Path path, Supplier<String> fileNotFoundMessage)
+    public final boolean skipIfMissingFileOrThrow(Path path, Supplier<String> notFoundMessage)
             throws FileNotFoundException {
-        Objects.requireNonNull(fileNotFoundMessage, "Null fileNotFoundMessage");
+        return skipIfMissingOrThrow(path, true, notFoundMessage);
+    }
+
+    /**
+     * Same as {@link #skipIfMissingFileOrThrow(Path, Supplier)}, but allows working with both files and folder.
+     * It depends on {@code requireRegularFile} parameter.
+     * If it is {@code true}, only regular files are considered existing:
+     * {@link Files#isRegularFile(Path, LinkOption...) Files.isRegularFile(path)} is used.
+     * If it is {@code false}, directories are also allowed:
+     * {@link Files#exists(Path, LinkOption...) Files.exists(path)} is used.</p>
+     *
+     * @param path               the file path to check; may be {@code null}, then the method returns {@code true}.
+     * @param requireRegularFile if {@code true}, the path must refer to a regular file to be considered existing.
+     * @param notFoundMessage    a supplier that provides a custom error message for the
+     *                           {@link FileNotFoundException} when it is thrown; may be {@code null}.
+     * @return {@code true} if the file / folder should be skipped; {@code false} otherwise.
+     * @throws FileNotFoundException if the file / folder does not exist and its existence is required.
+     */
+    public final boolean skipIfMissingOrThrow(Path path, boolean requireRegularFile, Supplier<String> notFoundMessage)
+            throws FileNotFoundException {
         if (path == null) {
             return true;
-        } else if (Files.exists(path)) {
+        } else if (requireRegularFile ? Files.isRegularFile(path) : Files.exists(path)) {
             return false;
         } else {
             if (isFileExistenceRequired()) {
-                throw new FileNotFoundException(fileNotFoundMessage.get());
+                throw new FileNotFoundException(notFoundMessage != null ? notFoundMessage.get() :
+                        requireRegularFile ?
+                                "File \"" + path + "\" does not exist or is not a regular file" :
+                                "File or folder \"" + path + "\" does not exist");
             } else {
                 return true;
             }

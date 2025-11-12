@@ -92,7 +92,7 @@ public class ReadScalar extends FileOperation {
     public final String readString() {
         final Path path = completeFilePath();
         try {
-            if (skipIfMissingOrThrow(path)) {
+            if (skipIfMissingFileOrThrow(path)) {
                 logDebug(() -> "Creating null scalar for non-existing " + path.toAbsolutePath());
                 return defaultValue.isEmpty() ? null : defaultValue;
             } else {
