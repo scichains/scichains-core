@@ -25,6 +25,7 @@
 package net.algart.graalvm;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public enum JSType {
     /**
@@ -56,14 +57,14 @@ public enum JSType {
         return typeName;
     }
 
-    public static JSType valueOfTypeNameOrNull(String name) {
+    public static Optional<JSType> fromName(String name) {
         Objects.requireNonNull(name, "Null type name");
         for (JSType type : values()) {
             if (name.equals(type.typeName)) {
-                return type;
+                return Optional.of(type);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void configure(GraalSourceContainer container, Object scriptOrigin, String name) {

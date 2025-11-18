@@ -26,6 +26,8 @@ package net.algart.executors.api.chains;
 
 import net.algart.executors.api.data.Port;
 
+import java.util.Optional;
+
 public enum ChainPortType {
     INPUT_PORT(1, Port.Type.INPUT, true),
     OUTPUT_PORT(2, Port.Type.OUTPUT, true),
@@ -46,13 +48,13 @@ public enum ChainPortType {
         return code;
     }
 
-    public static ChainPortType ofOrNull(int code) {
+    public static Optional<ChainPortType> fromCode(int code) {
         for (ChainPortType portType : values()) {
             if (portType.code == code) {
-                return portType;
+                return Optional.of(portType);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public boolean isActual() {

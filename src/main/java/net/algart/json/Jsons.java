@@ -645,13 +645,24 @@ public class Jsons {
         Objects.requireNonNull(json, "Null json");
         Objects.requireNonNull(name, "Null name");
         if (value == null) {
-            throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                    + ": \"" + name + "\" value is " + message
-                    + (file == null ? " <<<" + json + ">>>" : ""));
+            throw incorrectValueException(json, name, message, file);
         }
         return value;
     }
 
+    public static JsonException unknownValueException(JsonObject json, String name, Path file) {
+        return incorrectValueException(json, name, "unknown", file);
+    }
+
+    public static JsonException unknownValueException(JsonObject json, String name, String actualValue, Path file) {
+        return incorrectValueException(json, name, "unknown (\"" + actualValue + "\")", file);
+    }
+
+    public static JsonException incorrectValueException(JsonObject json, String name, String message, Path file) {
+        return new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
+                + ": \"" + name + "\" value is " + message
+                + (file == null ? " <<<" + json + ">>>" : ""));
+    }
 
     private static Double specialDoubleValue(JsonValue jsonValue) {
         if (jsonValue.getValueType() == JsonValue.ValueType.STRING) {

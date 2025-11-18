@@ -27,6 +27,7 @@ package net.algart.executors.api.data;
 import net.algart.external.UsedForExternalCommunication;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public enum DataType {
@@ -92,48 +93,36 @@ public enum DataType {
 
     @UsedForExternalCommunication
     public static DataType ofTypeName(String name) {
-        final DataType result = ofTypeNameOrNull(name);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown name " + name);
-        }
-        return result;
+        return fromTypeName(name).orElseThrow(() -> new IllegalArgumentException("Unknown name " + name));
     }
 
-    public static DataType ofTypeNameOrNull(String name) {
+    public static Optional<DataType> fromTypeName(String name) {
         Objects.requireNonNull(name, "Null name");
         for (DataType type : values()) {
             if (type.typeName.equals(name)) {
-                return type;
+                return Optional.of(type);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static DataType ofUUID(UUID uuid) {
+    public static Optional<DataType> fromUUID(UUID uuid) {
         Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
             if (type.uuid.equals(uuid)) {
-                return type;
+                return Optional.of(type);
             }
         }
-        throw new IllegalArgumentException("Unknown UUID " + uuid);
+        return Optional.empty();
     }
 
-    public static DataType ofUUID(String uuid) {
-        final DataType result = ofUUIDOrNull(uuid);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown UUID " + uuid);
-        }
-        return result;
-    }
-
-    public static DataType ofUUIDOrNull(String uuid) {
+    public static Optional<DataType> fromUUID(String uuid) {
         Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
             if (type.uuid.toString().equals(uuid)) {
-                return type;
+                return Optional.of(type);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

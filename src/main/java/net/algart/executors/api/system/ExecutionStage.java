@@ -24,6 +24,8 @@
 
 package net.algart.executors.api.system;
 
+import java.util.Optional;
+
 public enum ExecutionStage {
     LOADING_TIME("loading_time"),
     RUN_TIME("run_time");
@@ -39,20 +41,16 @@ public enum ExecutionStage {
     }
 
     public static ExecutionStage of(String name) {
-        final ExecutionStage result = ofOrNull(name);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown stage name: " + name);
-        }
-        return result;
+        return from(name).orElseThrow(() -> new IllegalArgumentException("Unknown stage name: " + name));
     }
 
-    public static ExecutionStage ofOrNull(String name) {
+    public static Optional<ExecutionStage> from(String name) {
         for (ExecutionStage stage : values()) {
             if (stage.stageName.equals(name)) {
-                return stage;
+                return Optional.of(stage);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public static void main(String[] args) {

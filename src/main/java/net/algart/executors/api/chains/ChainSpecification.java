@@ -309,12 +309,12 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             private Port(JsonObject json, Path file) {
                 this.uuid = Jsons.reqString(json, "uuid", file);
                 this.name = Jsons.reqStringWithAlias(json, "name", "port_name", file);
-                this.portType = ChainPortType.ofOrNull(
-                        Jsons.reqIntWithAlias(json, "type", "port_type", file));
-                Jsons.requireNonNull(portType, json, "type", file);
-                this.dataType = DataType.ofUUIDOrNull(
-                        Jsons.reqString(json, "data_type_uuid", file));
-                Jsons.requireNonNull(dataType, json, "data_type_uuid", file);
+                this.portType = ChainPortType.fromCode(
+                        Jsons.reqIntWithAlias(json, "type", "port_type", file))
+                        .orElseThrow(() -> Jsons.unknownValueException(json, "type", file));
+                this.dataType = DataType.fromUUID(
+                        Jsons.reqString(json, "data_type_uuid", file))
+                        .orElseThrow(() -> Jsons.unknownValueException(json, "data_type_uuid", file));
                 assert portType != null : "was checked in requireNonNull";
                 if (portType.isVirtual() && dataType != DataType.SCALAR) {
                     throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
@@ -552,9 +552,8 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorName = json.getString("executor_name", null);
             this.executorCategory = json.getString("executor_category", null);
             final String executionStage = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
-            this.executionStage = ExecutionStage.ofOrNull(executionStage);
-            Jsons.requireNonNull(this.executionStage, json,
-                    "execution_stage", "unknown (\"" + executionStage + "\")", file);
+            this.executionStage = ExecutionStage.from(executionStage).orElseThrow(
+                    () -> Jsons.unknownValueException(json, "stage", executionStage, file));
             boolean oldFormat = false;
             if (!json.containsKey("ports")) {
                 for (String name : OLD_PORT_ARRAYS) {

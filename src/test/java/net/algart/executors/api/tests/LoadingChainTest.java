@@ -69,7 +69,7 @@ public class LoadingChainTest {
             }
             System.out.println("O'k");
         } catch (JsonException e) {
-            System.out.printf("%nERROR: %s%n", e.getMessage());
+            System.out.printf("%nCannot load chain:%n%s%n", e.getMessage());
             if (stopOnError) {
                 throw e;
             }

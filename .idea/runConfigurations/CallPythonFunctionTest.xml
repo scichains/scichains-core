@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CallPythonFunctionTest" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="net.algart.executors.modules.core.logic.scripting.python.tests.CallPythonFunctionTest" />
+  <configuration default="false" name="CallPythonFunctionTest" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="net.algart.executors.api.python.tests.CallPythonFunctionTest" />
     <module name="scichains-core" />
-    <option name="VM_PARAMETERS" value="-ea -esa -Dnet.algart.executors.path=build -Djava.util.logging.config.file=build/_global_system_files/conf/logging.properties" />
+    <option name="VM_PARAMETERS" value="-Dnet.algart.executors.path=build" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="net.algart.executors.modules.core.logic.scripting.python.tests.*" />
+        <option name="PATTERN" value="net.algart.executors.api.python.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
