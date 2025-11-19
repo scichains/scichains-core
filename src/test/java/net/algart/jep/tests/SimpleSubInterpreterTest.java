@@ -32,8 +32,9 @@ import jep.python.PyCallable;
 public class SimpleSubInterpreterTest {
     public static void main(String[] args) {
         String pyCode = """
-                import sys
-                sys.modules['numpy'] = None
+                # import sys
+                # sys.modules['numpy'] = None
+                # - deprecated trick in JEP 4.3.1 and later
                 
                 class Parameters:
                     def __init__(self):
@@ -45,13 +46,17 @@ public class SimpleSubInterpreterTest {
         System.err.println("Python code executed");
         // - We use System.err instead of System.out for the correct printing order in the IDE console
         final PyCallable callable = (PyCallable) context.getValue(className);
-        // - Without
+
+        // - Note:
         // sys.modules['numpy'] = None
-        // the previous command leads to warnings in the console (when numpy+jep are correctly installed)
+        // was actual in JEP 4.2.2 and earlier versions.
+        // Without it, the previous command leads to warnings in the console (when numpy+jep are correctly installed)
         // (the code above is the minimal example necessary for correct usage of Python in SciChains)
-        // With this trick, we see only
+        // With this trick we see only
         //  ModuleNotFoundError: No module named 'numpy.core'; 'numpy' is not a package
-        // which is much safer.
+        // that is much safer.
+        // In the modern JEP 4.3.1 and later this is not actual
+
         System.err.println("Callable: " + callable.getClass());
         Object parameters = callable.call();
         System.err.println("parameters: " + parameters.getClass());

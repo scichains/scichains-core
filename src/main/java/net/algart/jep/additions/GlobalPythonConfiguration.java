@@ -29,23 +29,24 @@ import jep.PyConfig;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
 public class GlobalPythonConfiguration extends PyConfig {
-    public record PythonHomeInformation(
-            String pythonHome,
+    public record PythonHome(
+            String home,
             boolean used,
             boolean systemEnvironmentDisabled) {
 
         public boolean unknown() {
-            return pythonHome == null;
+            return home == null;
         }
 
         public boolean exists() {
-            if (pythonHome == null) {
+            if (home == null) {
                 return false;
             }
             try {
-                return Files.exists(Paths.get(pythonHome));
+                return Files.exists(Paths.get(home));
             } catch (Exception ignoredExceptionWhileParsingPath) {
                 return false;
             }
@@ -55,7 +56,7 @@ public class GlobalPythonConfiguration extends PyConfig {
             if (!used) {
                 return true;
             }
-            if (pythonHome == null) {
+            if (home == null) {
                 assert systemEnvironmentDisabled;
                 // - in another case, we should make this record with !used
                 return true;
@@ -66,153 +67,146 @@ public class GlobalPythonConfiguration extends PyConfig {
 
     public static final String JEP_CONFIG_PROPERTY_PREFIX = "jep.config.";
 
-    public static final GlobalPythonConfiguration INSTANCE = new GlobalPythonConfiguration();
+    public static final GlobalPythonConfiguration INSTANCE = new GlobalPythonConfiguration(false);
 
     private boolean used = false;
     private final Object lock = new Object();
 
-    private GlobalPythonConfiguration() {
+    public GlobalPythonConfiguration(boolean isolated) {
+        super(isolated);
     }
 
-    public int getNoSiteFlag() {
+    public String getHome() {
         synchronized (lock) {
-            return noSiteFlag;
+            return home;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setNoSiteFlag(int noSiteFlag) {
+    public GlobalPythonConfiguration setHome(String home) {
         synchronized (lock) {
-            super.setNoSiteFlag(noSiteFlag);
+            super.setHome(home);
             return this;
         }
     }
 
-    public int getNoUserSiteDirectory() {
+    public int getOptimizationLevel() {
         synchronized (lock) {
-            return noUserSiteDirectory;
+            return optimizationLevel;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setNoUserSiteDirectory(int noUserSiteDirectory) {
+    public GlobalPythonConfiguration setOptimizationLevel(int optimizationLevel) {
         synchronized (lock) {
-            super.setNoUserSiteDirectory(noUserSiteDirectory);
+            super.setOptimizationLevel(optimizationLevel);
             return this;
         }
     }
 
-    public int getIgnoreEnvironmentFlag() {
+    public Boolean getSiteImport() {
         synchronized (lock) {
-            return ignoreEnvironmentFlag;
+            return siteImport < 0 ? null : siteImport > 0;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setIgnoreEnvironmentFlag(int ignoreEnvironmentFlag) {
+    public GlobalPythonConfiguration setSiteImport(boolean siteImport) {
         synchronized (lock) {
-            super.setIgnoreEnvironmentFlag(ignoreEnvironmentFlag);
+            super.setSiteImport(siteImport);
             return this;
         }
     }
 
-    public int getVerboseFlag() {
+    public boolean isIgnoreEnvironment() {
         synchronized (lock) {
-            return verboseFlag;
+            return useEnvironment == 0;
+        }
+    }
+
+    public Boolean getUseEnvironment() {
+        synchronized (lock) {
+            return useEnvironment < 0 ? null : useEnvironment > 0;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setVerboseFlag(int verboseFlag) {
+    public GlobalPythonConfiguration setUseEnvironment(boolean useEnvironment) {
         synchronized (lock) {
-            super.setVerboseFlag(verboseFlag);
+            super.setUseEnvironment(useEnvironment);
             return this;
         }
     }
 
-    public int getOptimizeFlag() {
+    public Boolean getUserSiteDirectory() {
         synchronized (lock) {
-            return optimizeFlag;
+            return userSiteDirectory < 0 ? null : userSiteDirectory > 0;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setOptimizeFlag(int optimizeFlag) {
+    public GlobalPythonConfiguration setUserSiteDirectory(boolean userSiteDirectory) {
         synchronized (lock) {
-            super.setOptimizeFlag(optimizeFlag);
+            super.setUserSiteDirectory(userSiteDirectory);
             return this;
         }
     }
 
-    public int getDontWriteBytecodeFlag() {
+    public int getVerbose() {
         synchronized (lock) {
-            return dontWriteBytecodeFlag;
+            return verbose;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setDontWriteBytecodeFlag(int dontWriteBytecodeFlag) {
+    public GlobalPythonConfiguration setVerbose(int verbose) {
         synchronized (lock) {
-            super.setDontWriteBytecodeFlag(dontWriteBytecodeFlag);
+            super.setVerbose(verbose);
             return this;
         }
     }
 
-    public int getHashRandomizationFlag() {
+    public Boolean getWriteBytecode() {
         synchronized (lock) {
-            return hashRandomizationFlag;
+            return writeBytecode < 0 ? null : writeBytecode > 0;
         }
     }
 
     @Override
-    public GlobalPythonConfiguration setHashRandomizationFlag(int hashRandomizationFlag) {
+    public GlobalPythonConfiguration setWriteBytecode(boolean writeBytecode) {
         synchronized (lock) {
-            super.setHashRandomizationFlag(hashRandomizationFlag);
+            super.setWriteBytecode(writeBytecode);
             return this;
         }
     }
 
-    public String getPythonHome() {
-        synchronized (lock) {
-            return pythonHome;
-        }
-    }
-
-    @Override
-    public GlobalPythonConfiguration setPythonHome(String pythonHome) {
-        synchronized (lock) {
-            super.setPythonHome(pythonHome);
-            return this;
-        }
-    }
-
-    public PythonHomeInformation pythonHomeInformation() {
+    public PythonHome pythonHome() {
         synchronized (lock) {
             if (isUsed()) {
-                final String pythonHome = getPythonHome();
-                boolean ignoreEnvironment = getIgnoreEnvironmentFlag() > 0;
+                final String pythonHome = getHome();
+                final boolean ignoreEnvironment = isIgnoreEnvironment();
                 if (pythonHome != null || ignoreEnvironment) {
-                    return new PythonHomeInformation(pythonHome, true, ignoreEnvironment);
+                    return new PythonHome(pythonHome, true, ignoreEnvironment);
                 }
             }
-            return new PythonHomeInformation(getEnv("PYTHONHOME"), false, false);
+            return new PythonHome(getEnv("PYTHONHOME"), false, false);
         }
     }
 
-    public String actualPythonHome() {
-        return pythonHomeInformation().pythonHome();
+    public String pythonHomeDirectory() {
+        return pythonHome().home();
     }
 
     public GlobalPythonConfiguration loadFromSystemProperties() {
         synchronized (lock) {
-            setNoSiteFlag(getPrefixedInt("noSiteFlag", noSiteFlag));
-            setNoUserSiteDirectory(getPrefixedInt("noUserSiteDirectory", noUserSiteDirectory));
-            setIgnoreEnvironmentFlag(getPrefixedInt("ignoreEnvironmentFlag", ignoreEnvironmentFlag));
-            setVerboseFlag(getPrefixedInt("verboseFlag", verboseFlag));
-            setOptimizeFlag(getPrefixedInt("optimizeFlag", optimizeFlag));
-            setDontWriteBytecodeFlag(getPrefixedInt("dontWriteBytecodeFlag", dontWriteBytecodeFlag));
-            setHashRandomizationFlag(getPrefixedInt("hashRandomizationFlag", hashRandomizationFlag));
-            setPythonHome(getNonEmptyString("python.home", pythonHome));
+            Boolean siteImport = getPrefixedBoolean("siteImport");
+            setPrefixedInt("optimizationLevel", this::setOptimizationLevel);
+            setPrefixedBoolean("siteImport", this::setSiteImport);
+            setPrefixedBoolean("useEnvironment", this::setUseEnvironment);
+            setPrefixedBoolean("userSiteDirectory", this::setUserSiteDirectory);
+            setPrefixedInt("verbose", this::setVerbose);
+            setPrefixedBoolean("writeBytecode", this::setWriteBytecode);
+            setHome(getNonEmptyString("python.home", home));
             // - note: we preserve the previous this.pythonHome if there is no system property or if it is ""
             return this;
         }
@@ -232,15 +226,39 @@ public class GlobalPythonConfiguration extends PyConfig {
         }
     }
 
-    private static int getPrefixedInt(String propertyName, int defaultValue) {
-        try {
-            final String property = System.getProperty(JEP_CONFIG_PROPERTY_PREFIX + propertyName);
-            return property == null ? defaultValue : Integer.parseInt(property);
-        } catch (Exception ex) {
-            return defaultValue;
+    private void setPrefixedInt(String propertyName, Consumer<Integer> setter) {
+        Integer value = getPrefixedInt(propertyName);
+        if (value != null) {
+            setter.accept(value);
         }
     }
 
+    private static Integer getPrefixedInt(String propertyName) {
+        try {
+            final String property = System.getProperty(JEP_CONFIG_PROPERTY_PREFIX + propertyName);
+            return property == null ? null : Integer.parseInt(property);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private void setPrefixedBoolean(String propertyName, Consumer<Boolean> setter) {
+        Boolean value = getPrefixedBoolean(propertyName);
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
+    private static Boolean getPrefixedBoolean(String propertyName) {
+        try {
+            final String property = System.getProperty(JEP_CONFIG_PROPERTY_PREFIX + propertyName);
+            return property == null ? null : "true".equalsIgnoreCase(property);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("SameParameterValue")
     private static String getNonEmptyString(String propertyName, String defaultValue) {
         try {
             final String property = System.getProperty(propertyName);
@@ -251,6 +269,7 @@ public class GlobalPythonConfiguration extends PyConfig {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static String getEnv(String envName) {
         try {
             return System.getenv(envName);

@@ -169,6 +169,12 @@ public class JepSingleThreadInterpreter implements Interpreter {
         executeInSingleThread(() -> state.configuredInterpreter.interpreter().set(name, v));
     }
 
+    @Override
+    public Interpreter attach(boolean b) {
+        checkStateAlive();
+        return executeInSingleThread(() -> state.configuredInterpreter.interpreter().attach(b));
+    }
+
     public boolean isClosed() {
         return state.isReallyClosed();
     }

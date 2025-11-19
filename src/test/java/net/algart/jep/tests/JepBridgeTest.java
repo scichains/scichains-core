@@ -185,7 +185,7 @@ public class JepBridgeTest {
         }
         final int numberOfTests = Integer.parseInt(args[startArgIndex]);
 
-        System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
+        System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHome());
         GlobalPythonConfiguration.INSTANCE.useForJep();
 
         System.out.printf("Number of active threads at the beginning: %d%n", Thread.activeCount());

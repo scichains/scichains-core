@@ -124,7 +124,7 @@ public class UsingPython {
 
     public static void initializePython() {
         GlobalPythonConfiguration.INSTANCE.loadFromSystemProperties().useForJep();
-        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
+        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHome().home();
         Executor.LOG.log(System.Logger.Level.INFO, () -> "Python home: " + (pythonHome == null ? "n/a" : pythonHome));
     }
 

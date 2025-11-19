@@ -51,7 +51,7 @@
 
         <algart.version>1.5.0</algart.version>
         <graalvm.version>24.2.2</graalvm.version>
-        <jep.version>4.2.2</jep.version>
+        <jep.version>4.3.1</jep.version>
     </properties>
 
     <dependencies>
@@ -71,7 +71,7 @@
             <version>1.1.5</version>
         </dependency>
         <dependency>
-            <groupId>black.ninia</groupId>
+            <groupId>org.ninia</groupId>
             <artifactId>jep</artifactId>
             <version>${jep.version}</version>
         </dependency>

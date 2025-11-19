@@ -21,7 +21,7 @@
         <dependencySet>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <includes>
-                <include>black.ninia:jep*</include>
+                <include>org.ninia:jep*</include>
             </includes>
             <outputDirectory>/_global_system_files/lib/common/jep</outputDirectory>
         </dependencySet>

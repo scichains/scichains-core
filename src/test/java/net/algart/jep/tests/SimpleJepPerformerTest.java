@@ -34,21 +34,23 @@ import net.algart.jep.additions.JepType;
 public class SimpleJepPerformerTest {
 
     public static void main(String[] args) {
-        System.out.printf("Python information before initialization: %s%n",
-                GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
+        System.out.printf("Python home information before initialization:%n    %s%n",
+                GlobalPythonConfiguration.INSTANCE.pythonHome());
         GlobalPythonConfiguration.INSTANCE
                 .loadFromSystemProperties()
                 // - allows specifying python.path in the system properties
-                .setIgnoreEnvironmentFlag(0)
-//                .setPythonHome("\\tmp")
+//                .setUseEnvironment(true)
+                // - false value leads to an error: we cannot find Python
+//                .setHome("/SciChains/python")
                 .useForJep();
 
-        // - THE PREVIOUS CALL IS IMPORTANT: useForJep() calls the global static method
+        // - THE PREVIOUS useForJep() CALL IS IMPORTANT: it calls the global static method
         // MainInterpreter.setInitParams(PyConfig config)
         // for GlobalPythonConfiguration.INSTANCE
 
         final JepPerformerContainer container = JepPerformerContainer.newContainer(JepType.NORMAL);
-        System.out.printf("Python information: %s%n", GlobalPythonConfiguration.INSTANCE.pythonHomeInformation());
+        System.out.printf("Python home information:%n    %s%n", GlobalPythonConfiguration.INSTANCE.pythonHome());
+        System.out.printf("Python all information:%n    %s%n", GlobalPythonConfiguration.INSTANCE);
         final JepPerformer performer = container.performer();
         final Interpreter context = performer.context();
         context.exec("def test():\n    return 'Hello from JEP'\n");

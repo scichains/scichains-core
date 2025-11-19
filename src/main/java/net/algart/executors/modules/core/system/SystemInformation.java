@@ -78,7 +78,7 @@ public final class SystemInformation extends Executor implements ReadOnlyExecuti
         sb.append(String.format("Current context class loader: %s%n", Thread.currentThread().getContextClassLoader()));
 
         sb.append("Python (JEP):%n".formatted());
-        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation().pythonHome();
+        final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHome().home();
         sb.append("    Python home directory: %s%n".formatted(pythonHome == null ? "n/a" : pythonHome));
         try (Context context = Context.newBuilder().build()) {
             final Engine engine = context.getEngine();

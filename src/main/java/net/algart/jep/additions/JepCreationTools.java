@@ -82,7 +82,7 @@ class JepCreationTools {
     }
 
     private static String unsatisfiedLinkDiagnostics() {
-        final var homeInformation = GlobalPythonConfiguration.INSTANCE.pythonHomeInformation();
+        final var homeInformation = GlobalPythonConfiguration.INSTANCE.pythonHome();
         assert homeInformation != null;
         if (homeInformation.unknown()) {
             return homeInformation.systemEnvironmentDisabled() ?
@@ -93,7 +93,7 @@ class JepCreationTools {
                             "(for example via the PYTHONHOME system environment variable)";
         }
         final String messageHome =
-                "\"" + homeInformation.pythonHome() +
+                "\"" + homeInformation.home() +
                         "\" " + (homeInformation.systemEnvironmentUsed() ?
                         "(value of PYTHONHOME environment variable) " :
                         "");

@@ -67,8 +67,9 @@ public class JepAPI {
     public static final String STANDARD_API_JEP_VERIFIER = STANDARD_API_PACKAGE + ".jep_verifier";
     public static final String STANDARD_API_JEP_VERIFIER_FUNCTION = STANDARD_API_JEP_VERIFIER + ".returnTestNdArray";
     public static final List<String> STANDARD_STARTUP_SUB_INTERPRETER = List.of(
-            "import sys\nsys.modules['numpy'] = None",
-            // - force removing numpy to avoid possible access to it from SubInterpreter.getValue and other methods
+            // "import sys\nsys.modules['numpy'] = None",
+            // - deprecated trick since JEP 4.3.1
+            // (force removing numpy to avoid possible access to it from SubInterpreter.getValue and other methods)
             "import " + STANDARD_API_MODULE);
     public static final List<String> STANDARD_STARTUP_NORMAL = List.of(
             "import numpy",
