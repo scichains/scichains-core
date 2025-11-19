@@ -36,9 +36,10 @@ public class JepInterpretation {
             """
                     To install "jep" with all required packages, please use the following command:
                        py -m pip install --upgrade setuptools wheel numpy
-                       py -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep
+                       py -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep==4.3.1
                     Note that "numpy" must be installed BEFORE "jep" \
                     for correct integration between "jep" and "numpy".
+                    The version 4.3.1 matches to the current Java "jep" library version. 
                     Before installing "jep", \
                     please set the environment variable JAVA_HOME to a path containing the JDK.""";
 
@@ -61,7 +62,7 @@ public class JepInterpretation {
      * in the Python environment <b>before</b> the "jep" package, and "jep" must be installed with
      * the following options:
      * <pre>
-     * python -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep
+     * python -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep=[actual-version]
      * </pre>
      *
      * <p><b>Example of the expected Python function:</b>
