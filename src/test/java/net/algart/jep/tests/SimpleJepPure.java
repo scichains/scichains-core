@@ -29,7 +29,8 @@ import jep.SubInterpreter;
 import jep.python.PyCallable;
 
 public class SimpleJepPure {
-    private static final boolean FORCE_DISABLE_NUMPY = true;
+    private static final boolean FORCE_DISABLE_NUMPY = false;
+    // - not necessary since JEP 4.3.1
     private static final boolean USE_INVOKE_TO_CREATE_OBJECT = true;
     private static final boolean USE_GET_VALUE = true;
 

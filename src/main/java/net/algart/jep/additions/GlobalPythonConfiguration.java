@@ -199,7 +199,6 @@ public class GlobalPythonConfiguration extends PyConfig {
 
     public GlobalPythonConfiguration loadFromSystemProperties() {
         synchronized (lock) {
-            Boolean siteImport = getPrefixedBoolean("siteImport");
             setPrefixedInt("optimizationLevel", this::setOptimizationLevel);
             setPrefixedBoolean("siteImport", this::setSiteImport);
             setPrefixedBoolean("useEnvironment", this::setUseEnvironment);
@@ -212,6 +211,7 @@ public class GlobalPythonConfiguration extends PyConfig {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public GlobalPythonConfiguration useForJep() {
         synchronized (lock) {
             MainInterpreter.setInitParams(this);
