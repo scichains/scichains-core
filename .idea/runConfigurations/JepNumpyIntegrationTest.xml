@@ -2,7 +2,7 @@
   <configuration default="false" name="JepNumpyIntegrationTest" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="net.algart.jep.tests.JepNumpyIntegrationTest" />
     <module name="scichains-core" />
-    <option name="PROGRAM_PARAMETERS" value="C:\Users\Daniel\AppData\Local\Programs\Python\Python313" />
+    <option name="PROGRAM_PARAMETERS" value="C:\Users\Daniel\AppData\Local\Programs\Python\Python314" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="net.algart.jep.tests.*" />

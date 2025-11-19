@@ -28,10 +28,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public final class DrawingHTML extends JPanel {
-
     private static final int N = 8;
     private static final String s = "<html><big><u>Hello</u></html>";
-    private CellRendererPane crp = new CellRendererPane();
+    private final CellRendererPane crp = new CellRendererPane();
     private Dimension dim;
 
     public DrawingHTML() {
@@ -61,12 +60,6 @@ public final class DrawingHTML extends JPanel {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                new DrawingHTML().display();
-            }
-        });
+        EventQueue.invokeLater(() -> new DrawingHTML().display());
     }
 }

@@ -99,6 +99,10 @@ public class JepExtendedConfiguration extends JepConfig {
         return this;
     }
 
+    public String getIncludePath() {
+        return includePath == null? null : includePath.toString();
+    }
+
     @Override
     public String toString() {
         return "JepExtendedConfiguration with verificationStatus=" + verificationStatus + " " + super.toString();

@@ -369,7 +369,7 @@ public final class ContoursInsideStatusTest extends Executor {
                         .append(InsideContourStatus.getInsideSectionWidth(info)).append("\n");
             }
         }
-        return sb.length() == 0 ? "outside all" : sb.toString();
+        return sb.isEmpty() ? "outside all" : sb.toString();
     }
 
     private class PointTester implements IntConsumer {

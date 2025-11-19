@@ -39,7 +39,7 @@ public class JepInterpretation {
                        py -m pip install --no-cache-dir --force-reinstall --no-build-isolation jep==4.3.1
                     Note that "numpy" must be installed BEFORE "jep" \
                     for correct integration between "jep" and "numpy".
-                    The version 4.3.1 matches to the current Java "jep" library version. 
+                    The version 4.3.1 matches to the current Java "jep" library version.
                     Before installing "jep", \
                     please set the environment variable JAVA_HOME to a path containing the JDK.""";
 
@@ -121,8 +121,8 @@ public class JepInterpretation {
      *     creates the interpreter (usually {@link JepSingleThreadInterpreter}
      *     or {@link JepPerformerContainer});</li>
      *     <li><code>processing</code>: performs the main logic using the created interpreter;</li>
-     *     <li><code>closing</code>: closes the resource (for example, {@link JepPerformerContainer#close()} or
-     *     {@link JepPerformerContainer#close()}; guaranteed to be called even in case of exception.
+     *     <li><code>closing</code>: closes the resource (for example, {@link JepPerformerContainer#close()});
+     *     guaranteed to be called even in case of exception.
      * </ul>
      *
      * <p>This method uses <code>synchronized (getJVMGlobalLock()) {...}</code> operators

@@ -48,8 +48,8 @@ public class JepNumpyIntegrationTest {
         }
 
         final String pythonHome = args[0];
-        PyConfig pyConfig = new PyConfig();
-        pyConfig.setPythonHome(pythonHome);
+        PyConfig pyConfig = PyConfig.python();
+        pyConfig.setHome(pythonHome);
         System.out.printf("Using Python home: %s%n", pythonHome);
         MainInterpreter.setInitParams(pyConfig);
 

@@ -47,7 +47,7 @@ public class SScalarTest {
         }
         System.out.printf("Scalar value: %s;%n  toString(): \"%s\";%n  toDoubles(): %s;%n  toDoubles(3): %s%n",
                 scalar.getValue() == null ? "<<null>>" : "\"" + scalar.getValue() + "\"",
-                scalar.toString(),
+                scalar,
                 toDoubles,
                 toDoubles3);
     }
