@@ -28,7 +28,6 @@ import jep.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -36,10 +35,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class JepCreationTools {
-    private static final AtomicBoolean SUB_INTERPRETER_CREATED = new AtomicBoolean(false);
-    private static final AtomicBoolean SHARED_INTERPRETER_CREATED = new AtomicBoolean(false);
     private static final Pattern IMPORT_MATCHER = Pattern.compile("^import\\s+(\\w+)");
     private static final Pattern IMPORT_NUMPY_MATCHER = Pattern.compile("\\bimport[ \\t]+numpy\\b");
+
+    private static final Object globalLock = new Object();
+    private static volatile boolean subInterpreterCreated = false;
+    private static volatile boolean sharedInterpreterCreated = false;
 
     private static final System.Logger LOG = System.getLogger(JepCreationTools.class.getName());
 
@@ -47,7 +48,7 @@ class JepCreationTools {
         Objects.requireNonNull(configuration, "Null configuration");
         Objects.requireNonNull(type, "Null JEP interpretation type");
         final SubInterpreter result = doCreate(() -> new SubInterpreter(configuration));
-        SUB_INTERPRETER_CREATED.set(true);
+        subInterpreterCreated = true;
         performStartupCodeForExtended(result, configuration, type);
         return result;
     }
@@ -55,17 +56,22 @@ class JepCreationTools {
     static SharedInterpreter newSharedInterpreter(JepConfig configuration, JepType type) {
         Objects.requireNonNull(configuration, "Null configuration");
         Objects.requireNonNull(type, "Null JEP interpretation type");
-        if (!SHARED_INTERPRETER_CREATED.getAndSet(true)) {
-            SharedInterpreter.setConfig(configuration);
+        synchronized (globalLock) {
+            if (!sharedInterpreterCreated) {
+                SharedInterpreter.setConfig(configuration);
+//                System.out.println("!!! Configuration: " +
+//                        (configuration instanceof JepExtendedConfiguration ec ? ec.getIncludePath() : "n/a") +
+//                        " in " + Thread.currentThread().getName());
+            }
+            final SharedInterpreter result = doCreate(SharedInterpreter::new);
+            sharedInterpreterCreated = true;
+            performStartupCodeForExtended(result, configuration, type);
+            return result;
         }
-        final SharedInterpreter result = doCreate(SharedInterpreter::new);
-//        System.out.println("!!! Created shared interpreter: " + result + " in " + Thread.currentThread().getName());
-        performStartupCodeForExtended(result, configuration, type);
-        return result;
     }
 
     static boolean wasSubInterpreterCreated() {
-        return SUB_INTERPRETER_CREATED.get();
+        return subInterpreterCreated;
     }
 
     private static <T extends Interpreter> T doCreate(Supplier<T> constructor) {

@@ -64,8 +64,8 @@ public class JepBridgeTest {
                     """;
     // - Note: numpy is INCOMPATIBLE with sub-interpreters (local script), see SimpleJepNoFileNumpy
 
-    final JepPerformerContainer normalContainer = JepPerformerContainer.newContainer(JepType.NORMAL);
-    final JepPerformerContainer localContainer = JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
+    final JepPerformerContainer normal = JepPerformerContainer.newContainer(JepType.NORMAL);
+    final JepPerformerContainer sub = JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
 
     private static void showMemory(String message) {
         final Runtime rt = Runtime.getRuntime();
@@ -96,7 +96,7 @@ public class JepBridgeTest {
             System.out.printf(Locale.US, "%nTest #%d%n", test);
             System.out.printf(Locale.US, "Number of active threads: %d%n", Thread.activeCount());
             t1 = System.nanoTime();
-            final JepPerformer performer = (shared ? normalContainer : localContainer).performer();
+            final JepPerformer performer = (shared ? normal : sub).performer();
             t2 = System.nanoTime();
             System.out.printf(Locale.US, "Getting interpreter %s: %.3f mcs; " +
                             "number of active threads: %d%n" +
@@ -130,8 +130,8 @@ public class JepBridgeTest {
                 Thread.activeCount());
         if (free) {
             t1 = System.nanoTime();
-            normalContainer.close();
-            localContainer.close();
+            normal.close();
+            sub.close();
             t2 = System.nanoTime();
             System.out.printf(Locale.US, "freeResources(): %.3f ms; number of active threads: %d%n",
                     (t2 - t1) * 1e-6, Thread.activeCount());
@@ -143,8 +143,8 @@ public class JepBridgeTest {
 
     public static void callTest(String[] args) throws InterruptedException {
         final JepBridgeTest test = new JepBridgeTest();
-        configure(test.localContainer);
-        configure(test.normalContainer);
+        configure(test.sub);
+        configure(test.normal);
         // - WARNING! An attempt to do this directly in the declaration will lead to an error in the maven test stage
         test.performTesting();
     }

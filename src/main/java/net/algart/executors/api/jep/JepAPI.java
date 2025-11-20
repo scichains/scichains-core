@@ -297,6 +297,8 @@ public class JepAPI {
         // Python print will normally go to stdout, but some IDE redirect the java output elsewhere.
         configuration.setStartupCode(initializingJepStartupCode(type));
         configuration.setVerifier(standardJepVerifier(type));
+//        System.out.println("!!! Configuring: " + configuration.getIncludePath() + " in " +
+//                Thread.currentThread().getName());
         LOG.log(System.Logger.Level.TRACE, "Configuring " + performerContainer + ": " + configuration);
         return configuration;
     }

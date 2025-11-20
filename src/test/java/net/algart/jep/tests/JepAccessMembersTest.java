@@ -52,7 +52,8 @@ public class JepAccessMembersTest {
 
         final String pythonHome = args[0];
         PyConfig pyConfig = PyConfig.python();
-//        pyConfig.setIgnoreEnvironmentFlag(1);
+        pyConfig.setUseEnvironment(false);
+        // - not necessary: ignored when pythonHome is set
         pyConfig.setHome(pythonHome);
         MainInterpreter.setInitParams(pyConfig);
 

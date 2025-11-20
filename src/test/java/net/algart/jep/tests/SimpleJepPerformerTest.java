@@ -51,7 +51,7 @@ public class SimpleJepPerformerTest {
         final JepPerformerContainer container = JepPerformerContainer.newContainer(JepType.NORMAL);
         System.out.printf("Python home information:%n    %s%n", GlobalPythonConfiguration.INSTANCE.pythonHome());
         System.out.printf("Python all information:%n    %s%n", GlobalPythonConfiguration.INSTANCE);
-        final JepPerformer performer = container.performer();
+        final JepPerformer performer = container.noConfiguration().performer();
         final Interpreter context = performer.context();
         context.exec("def test():\n    return 'Hello from JEP'\n");
         Object result = context.invoke("test");

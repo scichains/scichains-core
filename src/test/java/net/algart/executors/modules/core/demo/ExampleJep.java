@@ -37,10 +37,8 @@ public class ExampleJep extends Executor {
 
     private boolean subInterpreter = true;
 
-    private final JepPerformerContainer normalContainer =
-            JepPerformerContainer.newContainer(JepType.NORMAL);
-    private final JepPerformerContainer localContainer =
-            JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
+    private final JepPerformerContainer normal = JepPerformerContainer.newContainer(JepType.NORMAL);
+    private final JepPerformerContainer sub = JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
     private final int instanceId = COUNTER.incrementAndGet();
 
     public boolean isSubInterpreter() {
@@ -64,7 +62,7 @@ public class ExampleJep extends Executor {
 
     public Object testJep(String value) {
         long t1 = System.nanoTime();
-        final JepPerformer performer = (subInterpreter ? localContainer : normalContainer).performer();
+        final JepPerformer performer = (subInterpreter ? sub : normal).noConfiguration().performer();
         long t2 = System.nanoTime();
         final String script = "from java.lang import System\n"
                 + (!subInterpreter ? "import numpy\n" : "")
@@ -84,8 +82,8 @@ public class ExampleJep extends Executor {
     @Override
     public void close() {
         super.close();
-        normalContainer.close();
-        localContainer.close();
+        normal.close();
+        sub.close();
     }
 
     @SuppressWarnings("resource")

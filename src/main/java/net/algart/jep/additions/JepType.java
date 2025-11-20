@@ -31,6 +31,7 @@ import net.algart.jep.JepPerformerContainer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public enum JepType {
@@ -83,13 +84,12 @@ public enum JepType {
     }
 
     public ConfiguredInterpreter newLowLevelInterpreter(Supplier<JepConfig> configurationSupplier) {
-        return newLowLevelInterpreter(configurationSupplier == null ? null : configurationSupplier.get());
+        Objects.requireNonNull(configurationSupplier, "Null configuration supplier");
+        return newLowLevelInterpreter(configurationSupplier.get());
     }
 
     public ConfiguredInterpreter newLowLevelInterpreter(JepConfig configuration) {
-        if (configuration == null) {
-            configuration = new JepExtendedConfiguration();
-        }
+        Objects.requireNonNull(configuration, "Null configuration");
         final Interpreter interpreter = this == SUB_INTERPRETER ?
                 JepCreationTools.newSubInterpreter(configuration, this) :
                 JepCreationTools.newSharedInterpreter(configuration, this);

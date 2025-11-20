@@ -24,7 +24,6 @@
 
 package net.algart.jep;
 
-import jep.Interpreter;
 import jep.JepConfig;
 import net.algart.jep.additions.JepSingleThreadInterpreter;
 import net.algart.jep.additions.JepType;
@@ -56,30 +55,66 @@ public final class JepPerformerContainer implements AutoCloseable {
     }
 
     /**
-     * Sets supplier for JEP configuration. Used to create {@link JepConfig} object,
-     * used for creating JEP {@link Interpreter}.
+     * Sets the supplier used to create a {@link JepConfig JEP cofi} object, which will be
+     * used when creating a {@link JepPerformer} by {@link #performer()} method.
+     *
+     * <p>This method <b>must</b> be called before {@link #performer()}.
+     * The reason for this requirement is that unconfigured performers created by a mistake
+     * can lead to unpredictable results.</p>
      *
      * <p>Note: using a supplier instead of an explicit configuration object (stored inside this container)
      * helps to avoid long-time and possibly problematic operations while customizing this container object.
-     * For example, maybe, you need to specify include paths inside {@link JepConfig},
-     * but you cannot find these paths without serious disc operations.
+     * For example, you may need to compute include paths or perform disk lookups
+     * before creating a {@link JepConfig}.</p>
      *
-     * @param configurationSupplier configuration supplier; may be <code>null</code>, then will be ignored.
+     * @param configurationSupplier configuration supplier.
      * @return reference to this object.
+     * @throws NullPointerException if argument is {@code null}.
      */
     public JepPerformerContainer setConfigurationSupplier(Supplier<JepConfig> configurationSupplier) {
-        this.configurationSupplier = configurationSupplier;
+        Objects.requireNonNull(configurationSupplier, "Null configuration supplier");
+        synchronized (lock) {
+//            System.out.println(">>> Setting configuration supplier in " + System.identityHashCode(this) +
+//                    ": " + configurationSupplier);
+            this.configurationSupplier = configurationSupplier;
+        }
         return this;
     }
 
+    /**
+     * Sets a default configuration supplier that simply creates a new {@link JepConfig}
+     * with no additional customization.
+     *
+     * <p>This method allows the container to be used without providing an explicit
+     * configuration. However, in most real scenarios this is not enough:
+     * typically, the {@link JepConfig} must be customized, for example, by setting Python include paths.</p>
+     *
+     * @return reference to this object.
+     */
+    public JepPerformerContainer noConfiguration() {
+        return setConfigurationSupplier(JepConfig::new);
+    }
+
+    /**
+     * Returns the {@link JepPerformer} stored in this container.
+     * If the performer does not yet exist (on the first call), it is created in a thread-safe manner.
+     *
+     * @return the existing or newly created performer.
+     * @throws IllegalStateException if the configuration supplier has not been set.
+     * @see #setConfigurationSupplier(Supplier)
+     */
     public JepPerformer performer() {
         // Maybe in the future this will be reworked: https://github.com/ninia/jep/issues/411
         JepPerformer performer;
         boolean created = false;
         synchronized (lock) {
+            if (configurationSupplier == null) {
+                throw new IllegalStateException(
+                        "Creating a new performer is not allowed: the configuration supplier has not been set.");
+            }
             performer = this.performer;
             if (performer == null) {
-//                System.out.println("!!! Requesting new performer in " + this);
+//                System.out.println("!!! Requesting new performer in" + this);
                 this.performer = performer = JepPerformer.newPerformer(
                         JepSingleThreadInterpreter.newInstance(type, configurationSupplier));
                 created = true;

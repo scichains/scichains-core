@@ -49,6 +49,8 @@ public class JepSingleThreadInterpreter implements Interpreter {
 
     private JepSingleThreadInterpreter(JepType type, Supplier<JepConfig> configurationSupplier) {
         Objects.requireNonNull(type, "Null JEP interpretation type");
+        Objects.requireNonNull(configurationSupplier, "Null configuration supplier: " +
+                "not allowed for single-thread interpreters");
         this.type = type;
         final ExpensiveCleanableState cleanableState = new ExpensiveCleanableState(type, configurationSupplier);
         this.state = cleanableState;
@@ -61,7 +63,6 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     public static JepSingleThreadInterpreter newInstance(JepType type, Supplier<JepConfig> configurationSupplier) {
-        Objects.requireNonNull(type, "Null JEP interpretation type");
         return new JepSingleThreadInterpreter(type, configurationSupplier);
     }
 
@@ -234,6 +235,22 @@ public class JepSingleThreadInterpreter implements Interpreter {
         throw new AssertionError("Impossible checked exception: " + exception);
     }
 
+    private static class ConfiguredInterpreterSupplier implements Supplier<ConfiguredInterpreter> {
+        private final JepType type;
+        private final Supplier<JepConfig> configurationSupplier;
+
+        public ConfiguredInterpreterSupplier(JepType type, Supplier<JepConfig> configurationSupplier) {
+            this.type = Objects.requireNonNull(type, "Null JEP interpretation type");
+            this.configurationSupplier = Objects.requireNonNull(configurationSupplier,
+                    "Null configuration supplier");
+        }
+
+        @Override
+        public ConfiguredInterpreter get() {
+            return type.newLowLevelInterpreter(configurationSupplier);
+        }
+    }
+
     private static class ExpensiveState {
         private final String name;
         private final boolean globalThreadPool;
@@ -244,7 +261,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
         private final Object lock = new Object();
 
         ExpensiveState(JepType type, Supplier<JepConfig> configurationSupplier) {
-            this(() -> type.newLowLevelInterpreter(configurationSupplier),
+            this(new ConfiguredInterpreterSupplier(type, configurationSupplier),
                     type.typeName(),
                     type.isJVMGlobal());
         }

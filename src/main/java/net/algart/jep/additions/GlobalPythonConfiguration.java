@@ -189,6 +189,27 @@ public class GlobalPythonConfiguration extends PyConfig {
                     return new PythonHome(pythonHome, true, ignoreEnvironment);
                 }
             }
+            // - This is based on the following fragment of JEP source code (LibraryLocator class):
+            // private LibraryLocator(PyConfig pyConfig) {
+            //     String pythonHome;
+            //     if (pyConfig != null) {
+            //         ignoreEnv = pyConfig.useEnvironment == 0;
+            //         noSite = pyConfig.siteImport == 0;
+            //         noUserSite = pyConfig.userSiteDirectory == 0;
+            //         pythonHome = pyConfig.home;
+            //     } else {
+            //         ignoreEnv = false;
+            //         noSite = false;
+            //         noUserSite = false;
+            //         pythonHome = null;
+            //     }
+            //     if (pythonHome == null && !ignoreEnv) {
+            //         pythonHome = System.getenv("PYTHONHOME");
+            //         if (pythonHome == null) {
+            //             pythonHome = System.getenv("VIRTUAL_ENV");
+            //         }
+            //     }
+            //     ...
             return new PythonHome(getEnv("PYTHONHOME"), false, false);
         }
     }
