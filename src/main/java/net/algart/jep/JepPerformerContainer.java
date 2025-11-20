@@ -32,6 +32,8 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class JepPerformerContainer implements AutoCloseable {
+    private static volatile boolean disableNoConfiguration = false;
+
     private Supplier<JepConfig> configurationSupplier = null;
     private final JepType type;
 
@@ -55,12 +57,18 @@ public final class JepPerformerContainer implements AutoCloseable {
     }
 
     /**
-     * Sets the supplier used to create a {@link JepConfig JEP cofi} object, which will be
+     * Sets the supplier used to create a {@link JepConfig JEP configuration} object, which will be
      * used when creating a {@link JepPerformer} by {@link #performer()} method.
+     * This method <b>must</b> be called before {@link #performer()}.
      *
-     * <p>This method <b>must</b> be called before {@link #performer()}.
-     * The reason for this requirement is that unconfigured performers created by a mistake
-     * can lead to unpredictable results.</p>
+     * <p><b>Important!</b> Although this method seems capable to configure each performer separately,
+     * in practice, in the current version, it sets the <b>global</b> configuration for all {@link #type() JEP types}
+     * except the rarely-used {@link JepType#SUB_INTERPRETER}.
+     * In fact, all {@link jep.SharedInterpreter} instances &mdash; throughout the whole JVM! &mdash;
+     * will use the JEP configuration created for the <b>first</b> call of
+     * {@link #performer()} method of <b>any</b> instance of this class.
+     * Therefore, please be very careful: you <b>must</b> always use the identical configuration supplier
+     * for all invocations of this method in your program.</p>
      *
      * <p>Note: using a supplier instead of an explicit configuration object (stored inside this container)
      * helps to avoid long-time and possibly problematic operations while customizing this container object.
@@ -74,8 +82,6 @@ public final class JepPerformerContainer implements AutoCloseable {
     public JepPerformerContainer setConfigurationSupplier(Supplier<JepConfig> configurationSupplier) {
         Objects.requireNonNull(configurationSupplier, "Null configuration supplier");
         synchronized (lock) {
-//            System.out.println(">>> Setting configuration supplier in " + System.identityHashCode(this) +
-//                    ": " + configurationSupplier);
             this.configurationSupplier = configurationSupplier;
         }
         return this;
@@ -92,6 +98,9 @@ public final class JepPerformerContainer implements AutoCloseable {
      * @return reference to this object.
      */
     public JepPerformerContainer noConfiguration() {
+        if (disableNoConfiguration) {
+            throw new IllegalStateException("noConfiguration() is disabled after disableNoConfiguration() call");
+        }
         return setConfigurationSupplier(JepConfig::new);
     }
 
@@ -114,7 +123,7 @@ public final class JepPerformerContainer implements AutoCloseable {
             }
             performer = this.performer;
             if (performer == null) {
-//                System.out.println("!!! Requesting new performer in" + this);
+//                System.out.printf("!!! Request performer by %s in %s%n", this, Thread.currentThread().getName());
                 this.performer = performer = JepPerformer.newPerformer(
                         JepSingleThreadInterpreter.newInstance(type, configurationSupplier));
                 created = true;
@@ -153,5 +162,17 @@ public final class JepPerformerContainer implements AutoCloseable {
         if (message != null) {
             JepPerformer.LOG.log(System.Logger.Level.DEBUG, "Closed " + message);
         }
+    }
+
+    /**
+     * Disables the {@link #noConfiguration()} method for the entire application.
+     * After this call, any invocation of {@code noConfiguration()} will result in
+     * an {@link IllegalStateException}.
+     *
+     * <p>This mechanism is intended for production environments: it allows an
+     * application to prevent accidental creation of an unconfigured interpreter.</p>
+     */
+    public static void disableNoConfiguration() {
+        disableNoConfiguration = true;
     }
 }

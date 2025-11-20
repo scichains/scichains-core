@@ -26,6 +26,7 @@ package net.algart.executors.api.python.core;
 
 import net.algart.executors.api.python.JepCaller;
 import net.algart.executors.api.python.PythonSpecification;
+import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.GlobalPythonConfiguration;
 import net.algart.executors.api.jep.JepPlatforms;
 import net.algart.executors.api.ExecutionBlock;
@@ -123,6 +124,7 @@ public class UsingPython {
     }
 
     public static void initializePython() {
+        JepPerformerContainer.disableNoConfiguration();
         GlobalPythonConfiguration.INSTANCE.loadFromSystemProperties().useForJep();
         final String pythonHome = GlobalPythonConfiguration.INSTANCE.pythonHome().home();
         Executor.LOG.log(System.Logger.Level.INFO, () -> "Python home: " + (pythonHome == null ? "n/a" : pythonHome));

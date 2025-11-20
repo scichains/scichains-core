@@ -25,6 +25,7 @@
 package net.algart.executors.modules.core.demo;
 
 import net.algart.executors.api.Executor;
+import net.algart.executors.api.jep.JepAPI;
 import net.algart.jep.JepPerformer;
 import net.algart.jep.JepPerformerContainer;
 import net.algart.jep.additions.JepType;
@@ -37,8 +38,12 @@ public class ExampleJep extends Executor {
 
     private boolean subInterpreter = true;
 
-    private final JepPerformerContainer normal = JepPerformerContainer.newContainer(JepType.NORMAL);
-    private final JepPerformerContainer sub = JepPerformerContainer.newContainer(JepType.SUB_INTERPRETER);
+    private final JepPerformerContainer normal = JepAPI.newContainer(JepType.NORMAL);
+    private final JepPerformerContainer sub = JepAPI.newContainer(JepType.SUB_INTERPRETER);
+    // - Note: we MUST NOT use here the simple call JepPerformerContainer.newContainer!
+    // We MUST configure all containers in all executors in the identical manner:
+    // see comments to JepPerformerContainer.setConfigurationSupplier
+
     private final int instanceId = COUNTER.incrementAndGet();
 
     public boolean isSubInterpreter() {
@@ -62,7 +67,7 @@ public class ExampleJep extends Executor {
 
     public Object testJep(String value) {
         long t1 = System.nanoTime();
-        final JepPerformer performer = (subInterpreter ? sub : normal).noConfiguration().performer();
+        final JepPerformer performer = (subInterpreter ? sub : normal).performer();
         long t2 = System.nanoTime();
         final String script = "from java.lang import System\n"
                 + (!subInterpreter ? "import numpy\n" : "")

@@ -60,7 +60,8 @@ class JepCreationTools {
             if (!sharedInterpreterCreated) {
                 SharedInterpreter.setConfig(configuration);
 //                System.out.println("!!! Configuration: " +
-//                        (configuration instanceof JepExtendedConfiguration ec ? ec.getIncludePath() : "n/a") +
+//                        (configuration instanceof JepExtendedConfiguration ec ?
+//                                ec.getIncludePath() : configuration.getClass()) +
 //                        " in " + Thread.currentThread().getName());
             }
             final SharedInterpreter result = doCreate(SharedInterpreter::new);

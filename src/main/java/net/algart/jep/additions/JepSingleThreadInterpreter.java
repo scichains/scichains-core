@@ -235,11 +235,11 @@ public class JepSingleThreadInterpreter implements Interpreter {
         throw new AssertionError("Impossible checked exception: " + exception);
     }
 
-    private static class ConfiguredInterpreterSupplier implements Supplier<ConfiguredInterpreter> {
-        private final JepType type;
-        private final Supplier<JepConfig> configurationSupplier;
-
-        public ConfiguredInterpreterSupplier(JepType type, Supplier<JepConfig> configurationSupplier) {
+    // This class is created (instead of a lambda) for better debugging and additional null-check.
+    private record ConfiguredInterpreterSupplier(
+            JepType type,
+            Supplier<JepConfig> configurationSupplier) implements Supplier<ConfiguredInterpreter> {
+        private ConfiguredInterpreterSupplier(JepType type, Supplier<JepConfig> configurationSupplier) {
             this.type = Objects.requireNonNull(type, "Null JEP interpretation type");
             this.configurationSupplier = Objects.requireNonNull(configurationSupplier,
                     "Null configuration supplier");
@@ -385,6 +385,7 @@ public class JepSingleThreadInterpreter implements Interpreter {
     }
 
     private final static Object GLOBAL_LOCK = new Object();
+
     private static class JVMGlobalThreadPoolHolder {
         static final JVMGlobalThreadPoolHolder INSTANCE = new JVMGlobalThreadPoolHolder();
 
