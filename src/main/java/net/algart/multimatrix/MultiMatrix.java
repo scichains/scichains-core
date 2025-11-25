@@ -387,7 +387,7 @@ public interface MultiMatrix extends Cloneable {
     }
 
     default MultiMatrix contrast(Range sourceRangeToContrast, boolean requireMonochromeOrColor) {
-        final Range destRange = Range.valueOf(0.0, maxPossibleValue());
+        final Range destRange = Range.of(0.0, maxPossibleValue());
         final LinearFunc function = sourceRangeToContrast == null || sourceRangeToContrast.size() == 0 ?
                 null :
                 LinearFunc.getInstance(destRange, sourceRangeToContrast);
@@ -423,7 +423,7 @@ public interface MultiMatrix extends Cloneable {
             // - Important: not "k < n"! We MUST NOT attempt to "contrast" alpha-channel,
             // it is senseless and can lead to invisible results
             final Matrix<? extends PArray> m = channels.get(k);
-            final Range destRange = Range.valueOf(0.0, m.array().maxPossibleValue(1.0));
+            final Range destRange = Range.of(0.0, m.array().maxPossibleValue(1.0));
             Func f = new AbstractFunc() {
                 public double get(double... x) {
                     // result = x * ic / i, where ic = ai+b; so result = x * (a+b/i)

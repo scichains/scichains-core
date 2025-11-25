@@ -152,12 +152,13 @@ public abstract class SubMatrixFilter extends MultiMatrixChannelFilter {
                 throw new IllegalArgumentException("Dimensions mismatch: rectangular area is " + area.coordCount()
                         + "-dimensional, matrix is " + m.dimCount() + "-dimensional");
             }
-            IPoint to = area.max().add(IPoint.valueOfEqualCoordinates(area.coordCount(), 1));
+            int coordCount = area.coordCount();
+            IPoint to = area.max().add(IPoint.ofEqualCoordinates(coordCount, 1));
             if (isOutputNecessary(RECTANGULAR_AREA)) {
                 // - here we also check, whether this port exists
                 getNumbers(RECTANGULAR_AREA).setTo(area);
             }
-            if (area.min().isOrigin() && to.equals(IPoint.valueOf(m.dimensions()))) {
+            if (area.min().isOrigin() && to.equals(IPoint.of(m.dimensions()))) {
                 logProcessing("whole area " + m);
                 return m;
             } else {
@@ -217,10 +218,10 @@ public abstract class SubMatrixFilter extends MultiMatrixChannelFilter {
                 sizes[2] = sizeZ;
             }
             if (isOutputNecessary(RECTANGULAR_AREA)) {
-                // - here we also check, whether this port exists
-                final IPoint minPoint = IPoint.valueOf(from);
-                final IPoint maxPoint = minPoint.add(IPoint.valueOf(sizes)).addToAllCoordinates(-1);
-                getNumbers(RECTANGULAR_AREA).setTo(IRectangularArea.valueOf(minPoint, maxPoint));
+                // - here we also check whether this port exists
+                final IPoint minPoint = IPoint.of(from);
+                final IPoint maxPoint = minPoint.add(IPoint.of(sizes)).addToAllCoordinates(-1);
+                getNumbers(RECTANGULAR_AREA).setTo(IRectangularArea.of(minPoint, maxPoint));
             }
             if (x1 == 0 && y1 == 0 && z1 == 0 && sizeX == dimX && sizeY == dimY && sizeZ == dimZ) {
                 logProcessing("whole " + m);

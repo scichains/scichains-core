@@ -57,9 +57,8 @@ public class GraalAPI {
             export function __SYS_createEmptyObjectImpl() {
                 return new Object()
             }
-            
             // for the case jsEsmEvalReturnsExports=false:
-            [__SYS_createEmptyObjectImpl] 
+            [__SYS_createEmptyObjectImpl]
             """;
         private static final GraalSourceContainer STANDARD_API_JS_SERVICE_SOURCE_CONTAINER_PURE = GraalSourceContainer
                 .newLiteralContainer()
@@ -71,7 +70,6 @@ public class GraalAPI {
             const __SYS_ScalarClass = Java.type("%s");
             const __SYS_NumbersClass = Java.type("%s");
             const __SYS_MatClass = Java.type("%s");
-            
             // for the case jsEsmEvalReturnsExports=true:
             export { __SYS_ScalarClass, __SYS_NumbersClass, __SYS_MatClass }
             // for the case jsEsmEvalReturnsExports=false:

@@ -35,7 +35,6 @@ public class SimpleSubInterpreterTest {
                 # import sys
                 # sys.modules['numpy'] = None
                 # - deprecated trick in JEP 4.3.1 and later
-                
                 class Parameters:
                     def __init__(self):
                         pass

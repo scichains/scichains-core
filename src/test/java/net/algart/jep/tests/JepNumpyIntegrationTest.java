@@ -33,10 +33,8 @@ public class JepNumpyIntegrationTest {
             """
                     import sys
                     import numpy
-                    
                     def info():
                         return str(sys.version) + "\\n" + str(sys.prefix)
-        
                     def array():
                         return numpy.array([1, 2])
                     """;

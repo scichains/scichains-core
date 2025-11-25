@@ -59,13 +59,13 @@ class NonZeroRangeCalculator extends Arrays.ParallelExecutor {
 
     @Override
     public void process() {
-        if (src.length() == 0) {
+        if (src.isEmpty()) {
             resultRange = null;
         } else if (src instanceof BitArray) {
             if (((BitArray) src).indexOf(0, src.length(), true) == -1) {
                 resultRange = null;
             } else {
-                resultRange = Range.valueOf(1.0, 1.0);
+                resultRange = Range.of(1.0, 1.0);
             }
         } else {
             super.process();
@@ -248,6 +248,6 @@ class NonZeroRangeCalculator extends Arrays.ParallelExecutor {
             }
             // - note: here and above all checks will be false for NaN
         }
-        this.resultRange = min <= max ? Range.valueOf(min, max) : null;
+        this.resultRange = min <= max ? Range.of(min, max) : null;
     }
 }

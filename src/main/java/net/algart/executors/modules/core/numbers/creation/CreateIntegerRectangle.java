@@ -133,15 +133,15 @@ public final class CreateIntegerRectangle extends Executor implements ReadOnlyEx
         if (this.sizeX != null) {
             x2 = x1 + this.sizeX - 1;
         }
-        final IRange rangeX = IRange.valueOf(x1, x2);
+        final IRange rangeX = IRange.of(x1, x2);
         this.getScalar(OUTPUT_SIZE_X).setTo(rangeX.size());
         long y1 = this.minY;
         long y2 = this.maxY;
         if (this.sizeY != null) {
             y2 = y1 + this.sizeY - 1;
         }
-        final IRange rangeY = IRange.valueOf(y1, y2);
+        final IRange rangeY = IRange.of(y1, y2);
         this.getScalar(OUTPUT_SIZE_Y).setTo(rangeY.size());
-        return SNumbers.of(IRectangularArea.valueOf(rangeX, rangeY));
+        return SNumbers.of(IRectangularArea.of(rangeX, rangeY));
     }
 }

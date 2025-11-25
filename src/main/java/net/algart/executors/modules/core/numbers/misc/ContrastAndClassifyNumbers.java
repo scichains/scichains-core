@@ -150,7 +150,7 @@ public final class ContrastAndClassifyNumbers extends NumberArrayFilter implemen
             result = array;
             selector = Arrays.nByteCopies(array.length(), (byte) (invertSelector ? 1 : 0));
         } else {
-            final Range destRange = Range.valueOf(resultMin, resultMax);
+            final Range destRange = Range.of(resultMin, resultMax);
             result = Arrays.asFuncArray(
                     truncateOverflow ?
                             new AbstractFunc() {
@@ -196,7 +196,7 @@ public final class ContrastAndClassifyNumbers extends NumberArrayFilter implemen
             // to guarantee that even the maximal element will be inside the histogram
             Arrays.histogramOf(values, histogram, range.min(), increasedMax);
         }
-        return Range.valueOf(
+        return Range.of(
                 lowLimitInterpretation.translateLimit(lowLimit, range, 1.0, histogram),
                 highLimitInterpretation.translateLimit(highLimit, range, 1.0, histogram));
     }

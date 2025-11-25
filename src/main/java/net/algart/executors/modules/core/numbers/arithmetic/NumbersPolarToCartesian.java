@@ -193,7 +193,7 @@ public final class NumbersPolarToCartesian extends SeveralNumbersOperation imple
     @Override
     protected IRange selectedColumnRange(int inputIndex) {
         final int start = getIndexInBlock(inputIndex);
-        return IRange.valueOf(start, inputIndex == 2 ? start + 1 : start);
+        return IRange.of(start, inputIndex == 2 ? start + 1 : start);
     }
 
     private static SNumbers checkRFi(SNumbers rFi, String rOrFiName) {

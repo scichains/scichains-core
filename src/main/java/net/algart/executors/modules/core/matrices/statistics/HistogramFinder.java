@@ -110,7 +110,7 @@ abstract class HistogramFinder {
         void find() {
             from = 0;
             to = array.maxPossibleValue(1.0);
-            range = Range.valueOf(from, to);
+            range = Range.of(from, to);
             if (!floatingPoint) {
                 to += 1.0;
             }
@@ -145,7 +145,7 @@ abstract class HistogramFinder {
                 multiplier = Double.NaN;
                 from = 0;
                 to = 1 << bitsPerElement;
-                range = Range.valueOf(from, to);
+                range = Range.of(from, to);
             } else {
                 histogram = new long[65536]; // zero-filled
                 range = Arrays.rangeOf(array);

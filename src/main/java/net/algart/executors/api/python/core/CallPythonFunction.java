@@ -29,7 +29,6 @@ public final class CallPythonFunction extends AbstractCallPython {
             """
                     # mod = pya.import_file("my_module.py")
                     # - import .py-file from the chain directory
-                    
                     def execute(params, inputs, outputs):
                         # outputs.x1 = inputs.x1
                         # outputs.m1 = inputs.m1 # - copy input to output

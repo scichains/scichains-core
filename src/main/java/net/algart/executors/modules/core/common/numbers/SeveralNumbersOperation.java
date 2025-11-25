@@ -245,7 +245,7 @@ public abstract class SeveralNumbersOperation extends Executor {
             return null;
         }
         final int start = getIndexInBlock(inputIndex);
-        return IRange.valueOf(start, start + lengthInBlock - 1);
+        return IRange.of(start, start + lengthInBlock - 1);
     }
 
     // If true, the result is produced by replacing selectedColumnRange(k)

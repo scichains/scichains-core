@@ -240,11 +240,12 @@ public final class DrawRectangle extends MultiMatrixChannel2DFilter {
             return Collections.emptyList();
         }
         Queue<IRectangularArea> rectangles = new LinkedList<>();
-        rectangles.add(IRectangularArea.valueOf(x1, y1, x2, y2));
-        if (thickness > 0 && 2 * thickness < sizeX && 2 * thickness < sizeY) {
+        rectangles.add(IRectangularArea.of(x1, y1, x2, y2));
+        if (thickness > 0 && 2L * thickness < sizeX && 2L * thickness < sizeY) {
             IRectangularArea.subtractCollection(rectangles,
-                    IRectangularArea.valueOf(
-                            x1 + thickness, y1 + thickness, x2 - thickness, y2 - thickness));
+                    IRectangularArea.of(
+                            x1 + thickness, y1 + thickness,
+                            x2 - thickness, y2 - thickness));
         }
         return rectangles;
     }

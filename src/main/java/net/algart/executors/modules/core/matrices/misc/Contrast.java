@@ -108,7 +108,7 @@ public final class Contrast extends MultiMatrixFilter {
             // to guarantee that even the maximal element will be inside the histogram
             Arrays.histogramOf(intensity.array(), histogram, range.min(), increasedMax);
         }
-        return Range.valueOf(
+        return Range.of(
                 lowLimitInterpretation.translateLimit(lowLimit, range, maxPossibleValue, histogram),
                 highLimitInterpretation.translateLimit(highLimit, range, maxPossibleValue, histogram));
     }

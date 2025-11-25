@@ -50,11 +50,11 @@ public class SNumbersRectangularAreasTest {
     }
 
     public static void main(String[] args) {
-        test(IRectangularArea.valueOf(1, 2, 10, 11));
-        test(IRectangularArea.valueOf(IRange.valueOf(1, 10)));
-        test(IRectangularArea.valueOf(123, 5, 523, 54125, 73, 1000));
-        test(RectangularArea.valueOf(0.6, 2, 10, 11.3));
-        test(RectangularArea.valueOf(Range.valueOf(1, 1.1)));
-        test(RectangularArea.valueOf(1.23, 5, 52.3, 541.25, 7.3, 100.6));
+        test(IRectangularArea.of(1, 2, 10, 11));
+        test(IRectangularArea.of(IRange.of(1, 10)));
+        test(IRectangularArea.of(123, 5, 523, 54125, 73, 1000));
+        test(RectangularArea.of(0.6, 2, 10, 11.3));
+        test(RectangularArea.of(Range.of(1, 1.1)));
+        test(RectangularArea.of(1.23, 5, 52.3, 541.25, 7.3, 100.6));
     }
 }

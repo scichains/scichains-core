@@ -57,4 +57,3 @@ public final class CopyMatrix extends Executor {
         return name.equals("requireInput") ? "inputRequired" : name;
     }
 }
-

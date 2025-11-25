@@ -64,7 +64,7 @@ public final class MatrixCutToRange extends MultiMatrixFilter {
     @Override
     public MultiMatrix process(MultiMatrix source) {
         final double scale = source.maxPossibleValue();
-        final Range range = Range.valueOf(min * scale, max * scale);
+        final Range range = Range.of(min * scale, max * scale);
         return source.asFunc((Func1) range::cut).clone();
     }
 }

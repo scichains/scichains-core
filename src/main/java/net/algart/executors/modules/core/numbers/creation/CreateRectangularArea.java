@@ -46,29 +46,29 @@ public final class CreateRectangularArea extends Executor implements ReadOnlyExe
                 if (e.sizeX != null) {
                     x2 = x1 + (long) e.sizeX.doubleValue() - 1;
                 }
-                final IRange rangeX = IRange.valueOf(x1, x2);
+                final IRange rangeX = IRange.of(x1, x2);
                 e.getScalar(OUTPUT_SIZE_X).setTo(rangeX.size());
                 if (e.minY == null) {
-                    return SNumbers.of(IRectangularArea.valueOf(rangeX));
+                    return SNumbers.of(IRectangularArea.of(rangeX));
                 }
                 long y1 = (long) e.minY.doubleValue();
                 long y2 = e.maxY == null ? 0 : (long) e.maxY.doubleValue();
                 if (e.sizeY != null) {
                     y2 = y1 + (long) e.sizeY.doubleValue() - 1;
                 }
-                final IRange rangeY = IRange.valueOf(y1, y2);
+                final IRange rangeY = IRange.of(y1, y2);
                 e.getScalar(OUTPUT_SIZE_Y).setTo(rangeY.size());
                 if (e.minZ == null) {
-                    return SNumbers.of(IRectangularArea.valueOf(rangeX, rangeY));
+                    return SNumbers.of(IRectangularArea.of(rangeX, rangeY));
                 }
                 long z1 = (long) e.minZ.doubleValue();
                 long z2 = e.maxZ == null ? 0 : (long) e.maxZ.doubleValue();
                 if (e.sizeZ != null) {
                     z2 = z1 + (long) e.sizeZ.doubleValue() - 1;
                 }
-                final IRange rangeZ = IRange.valueOf(z1, z2);
+                final IRange rangeZ = IRange.of(z1, z2);
                 e.getScalar(OUTPUT_SIZE_Z).setTo(rangeZ.size());
-                return SNumbers.of(IRectangularArea.valueOf(rangeX, rangeY, rangeZ));
+                return SNumbers.of(IRectangularArea.of(rangeX, rangeY, rangeZ));
             }
         },
         DOUBLE(double.class) {
@@ -79,29 +79,29 @@ public final class CreateRectangularArea extends Executor implements ReadOnlyExe
                 if (e.sizeX != null) {
                     x2 = x1 + e.sizeX;
                 }
-                final Range rangeX = Range.valueOf(x1, x2);
+                final Range rangeX = Range.of(x1, x2);
                 e.getScalar(OUTPUT_SIZE_X).setTo(rangeX.size());
                 if (e.minY == null) {
-                    return SNumbers.of(RectangularArea.valueOf(rangeX));
+                    return SNumbers.of(RectangularArea.of(rangeX));
                 }
                 double y1 = e.minY;
                 double y2 = e.maxY == null ? 0.0 : e.maxY;
                 if (e.sizeY != null) {
                     y2 = y1 + e.sizeY;
                 }
-                final Range rangeY = Range.valueOf(y1, y2);
+                final Range rangeY = Range.of(y1, y2);
                 e.getScalar(OUTPUT_SIZE_Y).setTo(rangeY.size());
                 if (e.minZ == null) {
-                    return SNumbers.of(RectangularArea.valueOf(rangeX, rangeY));
+                    return SNumbers.of(RectangularArea.of(rangeX, rangeY));
                 }
                 double z1 = e.minZ;
                 double z2 = e.maxZ == null ? 0.0 : e.maxZ;
                 if (e.sizeZ != null) {
                     z2 = z1 + e.sizeZ;
                 }
-                final Range rangeZ = Range.valueOf(z1, z2);
+                final Range rangeZ = Range.of(z1, z2);
                 e.getScalar(OUTPUT_SIZE_Z).setTo(rangeZ.size());
-                return SNumbers.of(RectangularArea.valueOf(rangeX, rangeY, rangeZ));
+                return SNumbers.of(RectangularArea.of(rangeX, rangeY, rangeZ));
             }
         };
 

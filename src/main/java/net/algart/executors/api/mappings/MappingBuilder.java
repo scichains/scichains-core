@@ -216,7 +216,7 @@ public final class MappingBuilder implements Cloneable {
         try {
             final int min = Integer.parseInt(key.substring(0, p));
             final int max = Integer.parseInt(key.substring(p + 2));
-            return IRange.valueOf(min, max);
+            return IRange.of(min, max);
         } catch (NumberFormatException e) {
             throw new JsonException("Key \"" + key + "\" in mapping \"" + name()
                     + "\" is not a correct integer range min..max", e);

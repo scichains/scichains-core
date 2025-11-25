@@ -104,7 +104,7 @@ public interface MultiMatrix2D extends MultiMatrix {
     default MultiMatrix2D asOtherNumberOfChannels(int numberOfChannels) {
         return asOtherNumberOfChannels(numberOfChannels, true);
     }
-    
+
     MultiMatrix2D asOtherNumberOfChannels(int numberOfChannels, boolean fillAlphaWithMaxValue);
 
     MultiMatrix2D clone();
@@ -183,7 +183,7 @@ public interface MultiMatrix2D extends MultiMatrix {
     }
 
     default MultiMatrix2D contrast(Range sourceRangeToContrast, boolean requireMonochromeOrColor) {
-        final Range destRange = Range.valueOf(0.0, maxPossibleValue());
+        final Range destRange = Range.of(0.0, maxPossibleValue());
         final LinearFunc function = sourceRangeToContrast == null || sourceRangeToContrast.size() == 0 ?
                 null :
                 LinearFunc.getInstance(destRange, sourceRangeToContrast);

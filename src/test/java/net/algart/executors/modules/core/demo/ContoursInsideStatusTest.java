@@ -286,7 +286,7 @@ public final class ContoursInsideStatusTest extends Executor {
                             throw new AssertionError("Failure of finding inside point in the contour #"
                                     + k + ": " + point + " (" + j + ", " + i
                                     + " at the image) is not inside, its status is "
-                                    + InsideContourStatus.valueOfInformation(information)
+                                    + InsideContourStatus.ofInformation(information)
                                     + " (information: " + information + ")");
                     } else {
                         if (point.getX() != contours.getContourPointX(k, 0)
@@ -309,7 +309,7 @@ public final class ContoursInsideStatusTest extends Executor {
                 continue;
             }
             final double info = contours.pointInsideContourInformation(k, x, y, unpackContours);
-            final InsideContourStatus status = InsideContourStatus.valueOfInformation(info);
+            final InsideContourStatus status = InsideContourStatus.ofInformation(info);
             if (status.isBoundary()) {
                 boundary = true;
                 if (InsideContourStatus.isHorizontalBoundary(info)) {
@@ -344,7 +344,7 @@ public final class ContoursInsideStatusTest extends Executor {
         sb.append("\n");
         for (int k = 0, n = contours.numberOfContours(); k < n; k++) {
             final double info = contours.pointInsideContourInformation(k, x, y, false);
-            final InsideContourStatus status = InsideContourStatus.valueOfInformation(info);
+            final InsideContourStatus status = InsideContourStatus.ofInformation(info);
             if (status.isBoundary()) {
                 sb.append("boundary of contour #").append(k);
                 if (InsideContourStatus.isHorizontalBoundary(info)) {
@@ -395,7 +395,7 @@ public final class ContoursInsideStatusTest extends Executor {
         @Override
         public void accept(int index) {
             final double info = contours.pointInsideContourInformation(index, x, y, unpackContours);
-            final InsideContourStatus status = InsideContourStatus.valueOfInformation(info);
+            final InsideContourStatus status = InsideContourStatus.ofInformation(info);
             if (status.isBoundary()) {
                 boundary = true;
                 if (InsideContourStatus.isHorizontalBoundary(info)) {

@@ -32,11 +32,9 @@ public class JepAccessMembersTest {
     private static final String TEST_SCRIPT =
             """
                     import sys
-                    
                     class TestClass:
                         def __init__(self):
                             self.a = 12
-
                     def test():
                         result = str(sys.path)
                         result = result + "\\nHello from Python: " + str(sys.version)

@@ -78,12 +78,14 @@ public enum SimpleArrayStatistics {
     public double statistics(SNumbers numbers, int indexInBlock, int lengthInBlock) {
         numbers.checkStartIndexAndLenthInBlock(indexInBlock, lengthInBlock, true);
         if (quickRangeInBlockProcessing) {
-            final IRange range = IRange.valueOf(indexInBlock, indexInBlock + lengthInBlock - 1);
+            final IRange range = IRange.of(indexInBlock, indexInBlock + lengthInBlock - 1);
+            assert rangeStatistics != null;
             return rangeStatistics.applyAsDouble(numbers, range);
         } else {
             if (indexInBlock != 0 || lengthInBlock != numbers.getBlockLength()) {
                 numbers = numbers.columnRange(indexInBlock, lengthInBlock);
             }
+            assert fullStatistics != null;
             return fullStatistics.applyAsDouble(numbers);
         }
     }

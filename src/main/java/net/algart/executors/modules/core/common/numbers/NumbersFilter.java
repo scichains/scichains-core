@@ -117,7 +117,7 @@ public abstract class NumbersFilter extends Executor {
     // If returns some range, the input array will be replaced by its columns from this range.
     // In this case, the corresponding blockLength in process() method will be the size of this range.
     protected IRange selectedColumnRange() {
-        return lengthInBlock <= 0 ? null : IRange.valueOf(indexInBlock, indexInBlock + lengthInBlock - 1);
+        return lengthInBlock <= 0 ? null : IRange.of(indexInBlock, indexInBlock + lengthInBlock - 1);
     }
 
     // If true, the result is produced by replacing selectedColumnRange() in the input array
