@@ -70,15 +70,13 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         }
 
         public ControlTemplate(JsonObject json, Path file) {
-            final String valueType = json.getString("value_type", ParameterValueType.STRING.typeName());
-            this.valueType = ParameterValueType.ofOrNull(valueType);
-            Jsons.requireNonNull(this.valueType, json, "value_type",
-                    "unknown (\"" + valueType + "\")", file);
-            final String editionType = json.getString("edition_type", null);
-            if (editionType != null) {
-                this.editionType = ControlEditionType.ofOrNull(editionType);
-                Jsons.requireNonNull(this.editionType, json, "edition_type",
-                        "unknown (\"" + editionType + "\")", file);
+            final String valueTypeName = json.getString("value_type", ParameterValueType.STRING.typeName());
+            this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
+                    () -> Jsons.unknownValueException(json, "value_type", valueTypeName, file));
+            final String editionTypeName = json.getString("edition_type", null);
+            if (editionTypeName != null) {
+                this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
+                        () -> Jsons.unknownValueException(json, "edition_type", editionTypeName, file));
             }
             try {
                 setDefaultJsonValue(json.get("default"));
@@ -141,7 +139,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
                 builder.add("value_type", valueType.typeName());
             }
             if (editionType != null) {
-                builder.add("edition_type", editionType.editionTypeName());
+                builder.add("edition_type", editionType.typeName());
             }
             if (defaultJsonValue != null) {
                 builder.add("default", defaultJsonValue);

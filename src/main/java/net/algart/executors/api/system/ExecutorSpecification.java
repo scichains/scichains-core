@@ -391,17 +391,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 this.output = json.getBoolean("output", false);
                 this.data = json.getBoolean("data", false);
                 this.copy = json.getBoolean("copy", false);
-                final String dataType = json.getString("data_type", null);
-                if (dataType != null) {
-                    this.dataType = ParameterValueType.ofOrNull(dataType);
-                    Jsons.requireNonNull(this.dataType, json, "data_type",
-                            "unknown (\"" + dataType + "\")", file);
+                final String dataTypeName = json.getString("data_type", null);
+                if (dataTypeName != null) {
+                    this.dataType = ParameterValueType.fromTypeName(dataTypeName).orElseThrow(
+                            () -> Jsons.unknownValueException(json, "data_type", dataTypeName, file));
                 }
                 final String editionType = json.getString("edition_type", null);
                 if (editionType != null) {
-                    this.editionType = ControlEditionType.ofOrNull(editionType);
-                    Jsons.requireNonNull(this.editionType, json, "edition_type",
-                            "unknown (\"" + editionType + "\")", file);
+                    this.editionType = ControlEditionType.fromTypeName(editionType).orElseThrow(
+                            () -> Jsons.unknownValueException(json, "edition_type", editionType, file));
                 }
             }
 
@@ -485,7 +483,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     builder.add("data_type", dataType.typeName());
                 }
                 if (editionType != null) {
-                    builder.add("edition_type", editionType.editionTypeName());
+                    builder.add("edition_type", editionType.typeName());
                 }
             }
         }

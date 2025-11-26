@@ -153,15 +153,13 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         this.description = json.getString("description", null);
         this.caption = json.getString("caption", null);
         this.hint = json.getString("hint", null);
-        final String valueType = Jsons.reqString(json, "value_type", file);
-        this.valueType = ParameterValueType.ofOrNull(valueType);
-        Jsons.requireNonNull(this.valueType, json, "value_type",
-                "unknown (\"" + valueType + "\")", file);
+        final String valueTypeName = Jsons.reqString(json, "value_type", file);
+        this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
+                () -> Jsons.unknownValueException(json, "value_type", valueTypeName, file));
         this.valueClassName = json.getString("value_class_name", null);
-        final String editionType = json.getString("edition_type", ControlEditionType.VALUE.editionTypeName());
-        this.editionType = ControlEditionType.ofOrNull(editionType);
-        Jsons.requireNonNull(this.editionType, json, "edition_type",
-                "unknown (\"" + editionType + "\")", file);
+        final String editionTypeName = json.getString("edition_type", ControlEditionType.VALUE.typeName());
+        this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
+                () -> Jsons.unknownValueException(json, "edition_type", editionTypeName, file));
         this.settingsId = json.getString("settings_id", null);
         this.multiline = json.getBoolean("multiline", false);
         final JsonNumber editionRows = json.getJsonNumber("edition_rows");
@@ -502,7 +500,7 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         if (valueClassName != null) {
             builder.add("value_class_name", valueClassName);
         }
-        builder.add("edition_type", editionType.editionTypeName());
+        builder.add("edition_type", editionType.typeName());
         if (settingsId != null) {
             builder.add("settings_id", settingsId);
         }

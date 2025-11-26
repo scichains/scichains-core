@@ -29,6 +29,7 @@ import net.algart.executors.api.parameters.ParameterValueType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public enum ControlEditionType {
     VALUE("value", false),
@@ -39,24 +40,24 @@ public enum ControlEditionType {
     COLOR("color", false),
     RANGE("range", false);
 
-    private final String editionTypeName;
+    private final String typeName;
     private final boolean resources;
 
     private static final Map<String, ControlEditionType> ALL_TYPES = new LinkedHashMap<>();
 
     static {
         for (ControlEditionType type : values()) {
-            ALL_TYPES.put(type.editionTypeName, type);
+            ALL_TYPES.put(type.typeName, type);
         }
     }
 
-    ControlEditionType(String editionTypeName, boolean resources) {
-        this.editionTypeName = editionTypeName;
+    ControlEditionType(String typeName, boolean resources) {
+        this.typeName = Objects.requireNonNull(typeName);
         this.resources = resources;
     }
 
-    public String editionTypeName() {
-        return editionTypeName;
+    public String typeName() {
+        return typeName;
     }
 
     public boolean isResources() {
@@ -72,16 +73,22 @@ public enum ControlEditionType {
         return this == ENUM;
     }
 
-    public static ControlEditionType of(String name) {
-        final ControlEditionType result = ALL_TYPES.get(name);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown control edition type: " + name);
-        }
-        return result;
+    public static ControlEditionType ofTypeName(String typeName) {
+        Objects.requireNonNull(typeName, "Null type name");
+        return fromTypeName(typeName).orElseThrow(
+                () -> new IllegalArgumentException("Unknown control edition type \"" + typeName + "\""));
     }
 
-    public static ControlEditionType ofOrNull(String name) {
-        return ALL_TYPES.get(name);
+    /**
+     * Returns an {@link Optional} containing the {@link ControlEditionType} with the given {@link #typeName()}.
+     * <p>If no edition type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param typeName the value type name; may be {@code null}.
+     * @return an optional edition type.
+     */
+    public static Optional<ControlEditionType> fromTypeName(String typeName) {
+        return Optional.ofNullable(ALL_TYPES.get(typeName));
     }
 
     public static ControlEditionType defaultEditionType(ParameterValueType valueType) {
@@ -91,7 +98,7 @@ public enum ControlEditionType {
 
     public static void main(String[] args) {
         for (ControlEditionType type : values()) {
-            System.out.printf("%s: %s%n", type.editionTypeName(), of(type.editionTypeName()));
+            System.out.printf("%s: %s%n", type.typeName(), ofTypeName(type.typeName()));
         }
     }
 }

@@ -27,10 +27,10 @@ package net.algart.executors.api.parameters;
 import jakarta.json.*;
 import net.algart.json.Jsons;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public enum ParameterValueType {
     INT("int", int.class, "int32") {
@@ -285,7 +285,7 @@ public enum ParameterValueType {
 
     },
     /**
-     * Actually, it is also String type, but in Java we have enum.
+     * Actually, it is also the String type, but in Java we have enum.
      */
     ENUM_STRING("String", Enum.class, "scalar") {
         @Override
@@ -373,13 +373,17 @@ public enum ParameterValueType {
     }
 
     ParameterValueType(String typeName, Class<?> javaType, String... typeNameAliases) {
-        this.typeName = typeName;
-        this.javaType = javaType;
-        this.typeNameAliases = typeNameAliases;
+        this.typeName = Objects.requireNonNull(typeName);
+        this.javaType = Objects.requireNonNull(javaType);
+        this.typeNameAliases = Objects.requireNonNull(typeNameAliases);
     }
 
     public String typeName() {
         return typeName;
+    }
+
+    public String[] typeNameAliases() {
+        return typeNameAliases.clone();
     }
 
     public Class<?> javaType() {
@@ -464,29 +468,21 @@ public enum ParameterValueType {
         return this == SETTINGS;
     }
 
-    public static ParameterValueType of(String name) {
-        final ParameterValueType result = ALL_TYPES.get(name);
-        if (result == null) {
-            throw new IllegalArgumentException("Unknown parameter value type: " + name);
-        }
-        return result;
+    public static ParameterValueType ofTypeName(String typeName) {
+        Objects.requireNonNull(typeName, "Null type name");
+        return fromTypeName(typeName).orElseThrow(
+                () -> new IllegalArgumentException("Unknown parameter value type \"" + typeName + "\""));
     }
 
-    public static ParameterValueType ofOrNull(String name) {
-        return ALL_TYPES.get(name);
-    }
-
-    public static void main(String[] args) {
-        for (ParameterValueType type : values()) {
-            System.out.printf("%s: %s, %s, %s, %s%n",
-                    type,
-                    type.typeName(),
-                    java.util.Arrays.toString(type.typeNameAliases),
-                    of(type.typeName()),
-                    type.emptyJsonValue());
-            for (String v : Arrays.asList("TRUE", "12", "12.3", "axd", "{\"key\":12}")) {
-                System.out.printf("  %s: %s%n", v, type.toJsonValue(v));
-            }
-        }
+    /**
+     * Returns an {@link Optional} containing the {@link ParameterValueType} with the given {@link #typeName()}.
+     * <p>If no value type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param typeName the value type name; may be {@code null}.
+     * @return an optional value type.
+     */
+    public static Optional<ParameterValueType> fromTypeName(String typeName) {
+        return Optional.ofNullable(ALL_TYPES.get(typeName));
     }
 }
