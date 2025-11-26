@@ -32,6 +32,7 @@ import net.algart.jep.JepPerformerContainer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public enum JepType {
@@ -96,7 +97,7 @@ public enum JepType {
         return new ConfiguredInterpreter(interpreter, configuration);
     }
 
-    public static JepType ofOrNull(String name) {
-        return ALL_MODES.get(name);
+    public static Optional<JepType> from(String name) {
+        return Optional.ofNullable(ALL_MODES.get(name));
     }
 }

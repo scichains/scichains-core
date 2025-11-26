@@ -507,9 +507,9 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         }
 
         public Options(JsonObject json, Path file) {
-            final String executionStage = json.getString("stage", ExecutionStage.RUN_TIME.stageName());
-            this.stage = ExecutionStage.from(executionStage).orElseThrow(
-                    () -> Jsons.unknownValueException(json, "stage", executionStage, file));
+            final String stageName = json.getString("stage", ExecutionStage.RUN_TIME.stageName());
+            this.stage = ExecutionStage.from(stageName).orElseThrow(
+                    () -> Jsons.unknownValueException(json, "stage", stageName, file));
             final JsonObject roleJson = json.getJsonObject("role");
             if (roleJson != null) {
                 this.role = new Role(roleJson, file);

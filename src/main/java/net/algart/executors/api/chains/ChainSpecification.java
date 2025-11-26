@@ -551,9 +551,9 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorId = Jsons.reqStringWithAlias(json, "model_uuid", "executor_id", file);
             this.executorName = json.getString("executor_name", null);
             this.executorCategory = json.getString("executor_category", null);
-            final String executionStage = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
-            this.executionStage = ExecutionStage.from(executionStage).orElseThrow(
-                    () -> Jsons.unknownValueException(json, "stage", executionStage, file));
+            String executionStageName = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
+            this.executionStage = ExecutionStage.from(executionStageName).orElseThrow(
+                    () -> Jsons.unknownValueException(json, "stage", executionStageName, file));
             boolean oldFormat = false;
             if (!json.containsKey("ports")) {
                 for (String name : OLD_PORT_ARRAYS) {

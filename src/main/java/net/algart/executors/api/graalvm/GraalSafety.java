@@ -142,14 +142,14 @@ public enum GraalSafety implements GraalContextCustomizer {
         return safetyName;
     }
 
-    public static GraalSafety ofOrNull(String name) {
+    public static Optional<GraalSafety> from(String name) {
         Objects.requireNonNull(name, "Null safety name");
         for (GraalSafety safety : values()) {
             if (name.equals(safety.safetyName)) {
-                return safety;
+                return Optional.of(safety);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
