@@ -258,8 +258,8 @@ public abstract class Executor extends ExecutionBlock {
 
     @Override
     public String statusData(int dataCode) {
-        final ExecutionStatus.DataKind dataKind = ExecutionStatus.DataKind.ofOrNull(dataCode);
-        return dataKind == null ? null : dataKind.data(status);
+        final Optional<ExecutionStatus.DataKind> dataKind = ExecutionStatus.DataKind.fromCode(dataCode);
+        return dataKind.map(kind -> kind.data(status)).orElse(null);
     }
 
     public final ExtensionSpecification.Platform executorPlatform() {

@@ -62,7 +62,7 @@ public class PythonSpecification extends ExecutorSpecification {
             this.className = json.getString("class", null);
             this.function = json.getString("function", function);
             final String jepTypeName = json.getString("jepType", JepType.NORMAL.typeName());
-            this.jepType = JepType.from(jepTypeName).orElseThrow(
+            this.jepType = JepType.fromTypeName(jepTypeName).orElseThrow(
                     () -> Jsons.unknownValueException(json, "jepType", jepTypeName, file));
         }
 

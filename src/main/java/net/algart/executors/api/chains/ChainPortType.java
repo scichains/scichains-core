@@ -48,6 +48,14 @@ public enum ChainPortType {
         return code;
     }
 
+    /**
+     * Returns an {@link Optional} containing the {@link ChainPortType} with the given {@link #code()}.
+     * <p>If no chain port type with the specified code exists,
+     * an empty optional is returned.
+     *
+     * @param code the integer code.
+     * @return an optional chain port type.
+     */
     public static Optional<ChainPortType> fromCode(int code) {
         for (ChainPortType portType : values()) {
             if (portType.code == code) {

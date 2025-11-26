@@ -24,6 +24,7 @@
 
 package net.algart.executors.api.system;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public enum ExecutionStage {
@@ -33,20 +34,30 @@ public enum ExecutionStage {
     private final String stageName;
 
     ExecutionStage(String stageName) {
-        this.stageName = stageName;
+        this.stageName = Objects.requireNonNull(stageName);
     }
 
     public String stageName() {
         return stageName;
     }
 
-    public static ExecutionStage of(String name) {
-        return from(name).orElseThrow(() -> new IllegalArgumentException("Unknown stage name: " + name));
+    public static ExecutionStage ofStageName(String stageName) {
+        Objects.requireNonNull(stageName, "Null stage name");
+        return fromStageName(stageName).orElseThrow(
+                () -> new IllegalArgumentException("Unknown stage name: \"" + stageName + "\""));
     }
 
-    public static Optional<ExecutionStage> from(String name) {
+    /**
+     * Returns an {@link Optional} containing the {@link ExecutionStage} with the given {@link #stageName()}.
+     * <p>If no execution stage with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param stageName the stage name; may be {@code null}.
+     * @return an optional execution stage.
+     */
+    public static Optional<ExecutionStage> fromStageName(String stageName) {
         for (ExecutionStage stage : values()) {
-            if (stage.stageName.equals(name)) {
+            if (stage.stageName.equals(stageName)) {
                 return Optional.of(stage);
             }
         }
@@ -55,8 +66,7 @@ public enum ExecutionStage {
 
     public static void main(String[] args) {
         for (ExecutionStage stage : values()) {
-            System.out.printf("%s: %s, %s%n", stage, stage.stageName(), of(stage.stageName()));
+            System.out.printf("%s: %s, %s%n", stage, stage.stageName(), ofStageName(stage.stageName()));
         }
     }
-
 }

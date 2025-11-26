@@ -50,17 +50,24 @@ public enum JSType {
     private final String typeName;
 
     JSType(String typeName) {
-        this.typeName = typeName;
+        this.typeName = Objects.requireNonNull(typeName);
     }
 
     public String typeName() {
         return typeName;
     }
 
-    public static Optional<JSType> fromName(String name) {
-        Objects.requireNonNull(name, "Null type name");
+    /**
+     * Returns an {@link Optional} containing the {@link JSType} with the given {@link #typeName()}.
+     * <p>If no JS type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param typeName the type name; may be {@code null}.
+     * @return an optional JS type.
+     */
+    public static Optional<JSType> fromTypeName(String typeName) {
         for (JSType type : values()) {
-            if (name.equals(type.typeName)) {
+            if (type.typeName.equals(typeName)) {
                 return Optional.of(type);
             }
         }

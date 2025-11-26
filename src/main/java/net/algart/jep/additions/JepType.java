@@ -52,7 +52,7 @@ public enum JepType {
     }
 
     JepType(String typeName, String prettyName) {
-        this.typeName = typeName;
+        this.typeName = Objects.requireNonNull(typeName);
         this.prettyName = prettyName;
     }
 
@@ -69,12 +69,12 @@ public enum JepType {
     }
 
     /**
-     * Returns <code>true</code> if this interpreter uses the single thread, global to the entire JVM.
+     * Returns <code>true</code> if this interpreter uses a single thread, global to the entire JVM.
      *
      * <p>Note: in this case, you <b>must globally synchronize</b>
      * the entire code from creation {@link jep.SharedInterpreter}
      * (usually via {@link net.algart.jep.JepPerformerContainer}) until destroying by
-     * {@link SharedInterpreter#close()} (usually via {@link JepPerformerContainer#close()}.
+     * {@link SharedInterpreter#close()} (usually via {@link JepPerformerContainer#close()}).
      * You may use {@link JepInterpretation#executeWithJVMGlobalLock(Runnable, Runnable, Runnable)} method to do
      * this.
      *
@@ -97,7 +97,15 @@ public enum JepType {
         return new ConfiguredInterpreter(interpreter, configuration);
     }
 
-    public static Optional<JepType> from(String name) {
-        return Optional.ofNullable(ALL_MODES.get(name));
+    /**
+     * Returns an {@link Optional} containing the {@link JepType} with the given {@link #typeName()}.
+     * <p>If no JEP type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param typeName the type name; may be {@code null}.
+     * @return an optional JEP type.
+     */
+    public static Optional<JepType> fromTypeName(String typeName) {
+        return Optional.ofNullable(ALL_MODES.get(typeName));
     }
 }

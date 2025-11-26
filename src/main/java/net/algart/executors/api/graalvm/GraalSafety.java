@@ -42,13 +42,13 @@ import java.util.*;
  * {@link SScalar}, {@link SNumbers}, {@link SMat}.
  */
 public enum GraalSafety implements GraalContextCustomizer {
-    PURE(false, "pure") {
+    PURE("pure", false) {
         @Override
         public void customize(Context.Builder builder) {
         }
     },
 
-    SAFE(true, "safe") {
+    SAFE("safe", true) {
         @Override
         public void customize(Context.Builder builder) {
             builder.allowIO(IOAccess.ALL);
@@ -58,7 +58,7 @@ public enum GraalSafety implements GraalContextCustomizer {
         }
     },
 
-    ALL_ACCESS(true, "all-access") {
+    ALL_ACCESS("all-access", true) {
         @Override
         public void customize(Context.Builder builder) {
             GraalContextCustomizer.ALL_ACCESS.customize(builder);
@@ -129,12 +129,12 @@ public enum GraalSafety implements GraalContextCustomizer {
             SMat.class.getCanonicalName()
     ));
 
-    private final boolean supportedJavaAccess;
     private final String safetyName;
+    private final boolean supportedJavaAccess;
 
-    GraalSafety(boolean supportedJavaAccess, String safetyName) {
+    GraalSafety(String safetyName, boolean supportedJavaAccess) {
+        this.safetyName = Objects.requireNonNull(safetyName);
         this.supportedJavaAccess = supportedJavaAccess;
-        this.safetyName = safetyName;
     }
 
 
@@ -142,10 +142,17 @@ public enum GraalSafety implements GraalContextCustomizer {
         return safetyName;
     }
 
-    public static Optional<GraalSafety> from(String name) {
-        Objects.requireNonNull(name, "Null safety name");
+    /**
+     * Returns an {@link Optional} containing the {@link GraalSafety} with the given {@link #safetyName()}.
+     * <p>If no safety type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param safetyName the safety name; may be {@code null}.
+     * @return an optional safety type.
+     */
+    public static Optional<GraalSafety> fromSafetyName(String safetyName) {
         for (GraalSafety safety : values()) {
-            if (name.equals(safety.safetyName)) {
+            if (safety.safetyName.equals(safetyName)) {
                 return Optional.of(safety);
             }
         }

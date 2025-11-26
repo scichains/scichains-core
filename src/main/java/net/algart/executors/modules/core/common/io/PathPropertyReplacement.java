@@ -58,22 +58,30 @@ public class PathPropertyReplacement {
         private static final Map<String, Property> ALL_PROPERTIES = Stream.of(values()).collect(
                 Collectors.toMap(Property::propertyName, e -> e));
 
-        private final String name;
+        private final String propertyName;
         private final Function<Path, Path> replacePath;
         private final Function<Executor, Path> getPath;
 
-        Property(String name, Function<Path, Path> replacePath, Function<Executor, Path> getPath) {
-            this.name = name;
+        Property(String propertyName, Function<Path, Path> replacePath, Function<Executor, Path> getPath) {
+            this.propertyName = Objects.requireNonNull(propertyName);
             this.replacePath = replacePath;
             this.getPath = getPath;
         }
 
-        public static Optional<Property> of(String propertyName) {
-            return Optional.ofNullable(ALL_PROPERTIES.get(propertyName));
+        public String propertyName() {
+            return propertyName;
         }
 
-        public String propertyName() {
-            return name;
+        /**
+         * Returns an {@link Optional} containing the {@link Property} with the given {@link #propertyName()}.
+         * <p>If no property with the specified name exists or if the argument is {@code null},
+         * an empty optional is returned.
+         *
+         * @param propertyName the property name; may be {@code null}.
+         * @return an optional property.
+         */
+        public static Optional<Property> fromPropertyName(String propertyName) {
+            return Optional.ofNullable(ALL_PROPERTIES.get(propertyName));
         }
 
         String replacement(Path path, Executor executor, String stringForException) {
@@ -87,12 +95,12 @@ public class PathPropertyReplacement {
             if (path == null) {
                 throw new IllegalArgumentException("String \"" + stringForException
                         + "\" contains special path property \""
-                        + name + "\" and cannot be resolved, because "
+                        + propertyName + "\" and cannot be resolved, because "
                         + "there is no any path for replacement (it is null)");
             }
             final Path result = replacePath.apply(path);
             if (result == null) {
-                throw new IllegalArgumentException("Cannot find required replacement for property \"" + name
+                throw new IllegalArgumentException("Cannot find required replacement for property \"" + propertyName
                         + "\" in the path \"" + path + "\"; probably this path is empty");
             }
             return result.toString();
@@ -139,7 +147,7 @@ public class PathPropertyReplacement {
         final Matcher matcher = PROPERTY_NAME_PATTERN.matcher(s.trim());
         while (matcher.find()) {
             final String propertyName = matcher.group(1);
-            final Optional<Property> property = Property.of(propertyName);
+            final Optional<Property> property = Property.fromPropertyName(propertyName);
             if (property.isPresent()) {
                 return property;
             }
@@ -237,7 +245,7 @@ public class PathPropertyReplacement {
         final StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
             final String propertyName = matcher.group(1);
-            final Optional<Property> property = Property.of(propertyName);
+            final Optional<Property> property = Property.fromPropertyName(propertyName);
             final String propertyValue;
             propertyValue = property
                     .map(value -> value.replacement(path, executor, s))

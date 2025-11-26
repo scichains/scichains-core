@@ -27,13 +27,25 @@ package net.algart.executors.api.tests;
 import net.algart.executors.api.data.DataType;
 
 public class DataTypeTest {
+    private static void checkString(String s) {
+        System.out.printf("%s -> %s, %s%n", s, DataType.fromTypeName(s), DataType.fromUUID(s));
+    }
+
     public static void main(String[] args) {
         for (DataType dataType : DataType.values()) {
-            System.out.printf("%s; reverse valueOf the same: %s, %s, %s%n",
+            System.out.printf("%s, name %s, UUID %s; reverse valueOf the same: %s, %s, %s, %s%n",
                     dataType,
+                    dataType.typeName(),
+                    dataType.uuid(),
                     DataType.fromUUID(dataType.uuid().toString()).orElse(null),
+                    DataType.fromUUID(dataType.uuid().toString().toUpperCase()).orElse(null),
                     DataType.ofTypeName(dataType.typeName()),
                     DataType.fromUUID(dataType.uuid()).orElse(null));
         }
+//        DataType.ofTypeName(null);
+        checkString("mat");
+        checkString("MAT");
+        checkString("031FC202-0193-4933-AB2E-D81492CE67E0");
+        checkString(null);
     }
 }

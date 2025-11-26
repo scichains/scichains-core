@@ -67,20 +67,24 @@ public class ExecutionStatus {
             return code;
         }
 
-        public static DataKind ofOrNull(String name) {
-            return NAME_TO_KIND.get(name);
+        public static DataKind ofCode(int code) {
+            return fromCode(code).orElseThrow(() -> new IllegalArgumentException("Unknown status data code: " + code));
         }
 
-        public static DataKind ofOrNull(int code) {
-            return CODE_TO_KIND.get(code);
+        /**
+         * Returns an {@link Optional} containing the {@link DataKind} with the given {@link #name()}.
+         * <p>If no data kind with the specified name exists or if the argument is {@code null},
+         * an empty optional is returned.
+         *
+         * @param name the enum name; may be {@code null}.
+         * @return an optional data kind.
+         */
+        public static Optional<DataKind> from(String name) {
+            return Optional.ofNullable(NAME_TO_KIND.get(name));
         }
 
-        public static DataKind of(int code) {
-            final DataKind result = ofOrNull(code);
-            if (result == null) {
-                throw new IllegalArgumentException("Unknown status data code: " + code);
-            }
-            return result;
+        public static Optional<DataKind> fromCode(int code) {
+            return Optional.ofNullable(CODE_TO_KIND.get(code));
         }
     }
 
@@ -89,9 +93,9 @@ public class ExecutionStatus {
 
     private static final String LOGGING_STATUS_LEVEL = net.algart.arrays.Arrays.SystemSettings.getStringProperty(
             "net.algart.executors.api.loggingStatusLevel", null);
-    private static final DataKind LOGGING_STATUS_KIND = DataKind.ofOrNull(
+    private static final DataKind LOGGING_STATUS_KIND = DataKind.from(
             net.algart.arrays.Arrays.SystemSettings.getStringProperty(
-                    "net.algart.executors.api.loggingStatusKind", null));
+                    "net.algart.executors.api.loggingStatusKind", null)).orElse(null);
     private static final long MIN_TIME_BETWEEN_LOGGING_IN_NANOSECONDS = 500_000_000;
 
     private final Supplier<String> ownerName;

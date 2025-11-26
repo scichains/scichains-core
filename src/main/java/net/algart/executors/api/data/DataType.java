@@ -73,7 +73,7 @@ public enum DataType {
     private final UUID uuid;
 
     DataType(String name, UUID uuid) {
-        this.typeName = Objects.requireNonNull(name, "Null name");
+        this.typeName = Objects.requireNonNull(name, "Null type name");
         this.uuid = Objects.requireNonNull(uuid, "Null uuid");
     }
 
@@ -92,14 +92,23 @@ public enum DataType {
     public abstract Class<? extends Data> typeClass();
 
     @UsedForExternalCommunication
-    public static DataType ofTypeName(String name) {
-        return fromTypeName(name).orElseThrow(() -> new IllegalArgumentException("Unknown name " + name));
+    public static DataType ofTypeName(String typeName) {
+        Objects.requireNonNull(typeName, "Null type name");
+        return fromTypeName(typeName).orElseThrow(
+                () -> new IllegalArgumentException("Unknown type name \"" + typeName + "\""));
     }
 
-    public static Optional<DataType> fromTypeName(String name) {
-        Objects.requireNonNull(name, "Null name");
+    /**
+     * Returns an {@link Optional} containing the {@link DataType} with the given {@link #typeName()}.
+     * <p>If no data type with the specified name exists or if the argument is {@code null},
+     * an empty optional is returned.
+     *
+     * @param typeName the type name; may be {@code null}.
+     * @return an optional data type.
+     */
+    public static Optional<DataType> fromTypeName(String typeName) {
         for (DataType type : values()) {
-            if (type.typeName.equals(name)) {
+            if (type.typeName.equals(typeName)) {
                 return Optional.of(type);
             }
         }
@@ -107,7 +116,6 @@ public enum DataType {
     }
 
     public static Optional<DataType> fromUUID(UUID uuid) {
-        Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
             if (type.uuid.equals(uuid)) {
                 return Optional.of(type);
@@ -117,9 +125,8 @@ public enum DataType {
     }
 
     public static Optional<DataType> fromUUID(String uuid) {
-        Objects.requireNonNull(uuid, "Null uuid");
         for (DataType type : values()) {
-            if (type.uuid.toString().equals(uuid)) {
+            if (type.uuid.toString().equalsIgnoreCase(uuid)) {
                 return Optional.of(type);
             }
         }

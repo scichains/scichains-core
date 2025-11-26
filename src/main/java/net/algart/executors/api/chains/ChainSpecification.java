@@ -552,7 +552,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorName = json.getString("executor_name", null);
             this.executorCategory = json.getString("executor_category", null);
             String executionStageName = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
-            this.executionStage = ExecutionStage.from(executionStageName).orElseThrow(
+            this.executionStage = ExecutionStage.fromStageName(executionStageName).orElseThrow(
                     () -> Jsons.unknownValueException(json, "stage", executionStageName, file));
             boolean oldFormat = false;
             if (!json.containsKey("ports")) {
