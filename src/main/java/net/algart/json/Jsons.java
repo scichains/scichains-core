@@ -633,14 +633,23 @@ public class Jsons {
         return Color.decode(s);
     }
 
+    // The following functions are deprecated and useless: replaced with using unknownValueException
+    @Deprecated(forRemoval = true)
     public static <T> T requireNonNull(T value, JsonObject json, String name) {
         return requireNonNull(value, json, name, null);
     }
 
+    @Deprecated(forRemoval = true)
     public static <T> T requireNonNull(T value, JsonObject json, String name, Path file) {
-        return requireNonNull(value, json, name, "required", file);
+        Objects.requireNonNull(json, "Null json");
+        Objects.requireNonNull(name, "Null name");
+        if (value == null) {
+            throw incorrectValueException(json, name, "required", file);
+        }
+        return value;
     }
 
+    @Deprecated(forRemoval = true)
     public static <T> T requireNonNull(T value, JsonObject json, String name, String message, Path file) {
         Objects.requireNonNull(json, "Null json");
         Objects.requireNonNull(name, "Null name");
