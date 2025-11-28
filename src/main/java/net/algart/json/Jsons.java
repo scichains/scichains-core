@@ -682,6 +682,10 @@ public class Jsons {
         return incorrectValue(json, name, "unknown (\"" + actualValue + "\")", file);
     }
 
+    public static JsonException incorrectValue(JsonObject json, String name, String message) {
+        return incorrectValue(json, name, message, null);
+    }
+
     public static JsonException incorrectValue(JsonObject json, String name, String message, Path file) {
         return new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
                 + ": \"" + name + "\" value is " + message
