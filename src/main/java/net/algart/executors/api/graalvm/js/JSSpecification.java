@@ -150,15 +150,6 @@ public class JSSpecification extends ExecutorSpecification {
         return new JSSpecification(executorSpecification, null);
     }
 
-    public static JSSpecification ofIfValid(String specificationString) {
-        Objects.requireNonNull(specificationString, "Null specificationString");
-        final JsonObject json = Jsons.toJson(specificationString);
-        if (!isExecutorSpecification(json)) {
-            return null;
-        }
-        return new JSSpecification(json, null);
-    }
-
     public final boolean isJSExecutor() {
         return GraalSourceContainer.JAVASCRIPT_LANGUAGE.equals(getLanguage());
     }
@@ -194,4 +185,17 @@ public class JSSpecification extends ExecutorSpecification {
         }
         super.buildLanguageJson(builder);
     }
+
+// Obsolete idea: the logic of ofIfValid is not in line with Java traditions,
+// and if we are going to do something similar, it would be better to make
+// OptionalJSSpecification> from(...)
+//
+//    public static JSSpecification ofIfValid(String specificationString) {
+//        Objects.requireNonNull(specificationString, "Null specificationString");
+//        final JsonObject json = Jsons.toJson(specificationString);
+//        if (!isExecutorSpecification(json)) {
+//            return null;
+//        }
+//        return new JSSpecification(json, null);
+//    }
 }

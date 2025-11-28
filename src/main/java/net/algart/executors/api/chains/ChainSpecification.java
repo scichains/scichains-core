@@ -861,10 +861,6 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
         return of(chainSpecificationString, true);
     }
 
-    public static ChainSpecification ofIfValid(String chainSpecificationString) {
-        return of(chainSpecificationString, false);
-    }
-
     public static ChainSpecification read(Path containingJsonFile) throws IOException {
         return read(containingJsonFile, true);
     }

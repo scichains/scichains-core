@@ -224,15 +224,6 @@ public class PythonSpecification extends ExecutorSpecification {
         return new PythonSpecification(executorSpecification, null);
     }
 
-    public static PythonSpecification ofIfValid(String specificationString) {
-        Objects.requireNonNull(specificationString, "Null specificationString");
-        final JsonObject json = Jsons.toJson(specificationString);
-        if (!isExecutorSpecification(json)) {
-            return null;
-        }
-        return new PythonSpecification(json, null);
-    }
-
     public final boolean isPythonExecutor() {
         return "python".equals(getLanguage());
     }
