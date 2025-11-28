@@ -311,10 +311,10 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
                 this.name = Jsons.reqStringWithAlias(json, "name", "port_name", file);
                 this.portType = ChainPortType.fromCode(
                         Jsons.reqIntWithAlias(json, "type", "port_type", file))
-                        .orElseThrow(() -> Jsons.unknownValueException(json, "type", file));
+                        .orElseThrow(() -> Jsons.unknownValue(json, "type", file));
                 this.dataType = DataType.fromUUID(
                         Jsons.reqString(json, "data_type_uuid", file))
-                        .orElseThrow(() -> Jsons.unknownValueException(json, "data_type_uuid", file));
+                        .orElseThrow(() -> Jsons.unknownValue(json, "data_type_uuid", file));
                 assert portType != null : "was checked in requireNonNull";
                 if (portType.isVirtual() && dataType != DataType.SCALAR) {
                     throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
@@ -553,7 +553,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorCategory = json.getString("executor_category", null);
             String executionStageName = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
             this.executionStage = ExecutionStage.fromStageName(executionStageName).orElseThrow(
-                    () -> Jsons.unknownValueException(json, "stage", executionStageName, file));
+                    () -> Jsons.unknownValue(json, "stage", executionStageName, file));
             boolean oldFormat = false;
             if (!json.containsKey("ports")) {
                 for (String name : OLD_PORT_ARRAYS) {

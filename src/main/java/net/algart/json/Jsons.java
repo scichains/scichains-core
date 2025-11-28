@@ -651,7 +651,7 @@ public class Jsons {
         Objects.requireNonNull(json, "Null json");
         Objects.requireNonNull(name, "Null name");
         if (value == null) {
-            throw incorrectValueException(json, name, "required", file);
+            throw incorrectValue(json, name, "required", file);
         }
         return value;
     }
@@ -661,28 +661,28 @@ public class Jsons {
         Objects.requireNonNull(json, "Null json");
         Objects.requireNonNull(name, "Null name");
         if (value == null) {
-            throw incorrectValueException(json, name, message, file);
+            throw incorrectValue(json, name, message, file);
         }
         return value;
     }
 
-    public static JsonException unknownValueException(JsonObject json, String name) {
-        return incorrectValueException(json, name, "unknown", null);
+    public static JsonException unknownValue(JsonObject json, String name) {
+        return incorrectValue(json, name, "unknown", null);
     }
 
-    public static JsonException unknownValueException(JsonObject json, String name, Path file) {
-        return incorrectValueException(json, name, "unknown", file);
+    public static JsonException unknownValue(JsonObject json, String name, Path file) {
+        return incorrectValue(json, name, "unknown", file);
     }
 
-    public static JsonException unknownValueException(JsonObject json, String name, String actualValue) {
-        return unknownValueException(json, name, actualValue, null);
+    public static JsonException unknownValue(JsonObject json, String name, String actualValue) {
+        return unknownValue(json, name, actualValue, null);
     }
 
-    public static JsonException unknownValueException(JsonObject json, String name, String actualValue, Path file) {
-        return incorrectValueException(json, name, "unknown (\"" + actualValue + "\")", file);
+    public static JsonException unknownValue(JsonObject json, String name, String actualValue, Path file) {
+        return incorrectValue(json, name, "unknown (\"" + actualValue + "\")", file);
     }
 
-    public static JsonException incorrectValueException(JsonObject json, String name, String message, Path file) {
+    public static JsonException incorrectValue(JsonObject json, String name, String message, Path file) {
         return new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
                 + ": \"" + name + "\" value is " + message
                 + (file == null ? " <<<" + json + ">>>" : ""));

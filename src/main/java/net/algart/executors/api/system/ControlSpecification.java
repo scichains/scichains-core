@@ -155,11 +155,11 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         this.hint = json.getString("hint", null);
         final String valueTypeName = Jsons.reqString(json, "value_type", file);
         this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
-                () -> Jsons.unknownValueException(json, "value_type", valueTypeName, file));
+                () -> Jsons.unknownValue(json, "value_type", valueTypeName, file));
         this.valueClassName = json.getString("value_class_name", null);
         final String editionTypeName = json.getString("edition_type", ControlEditionType.VALUE.typeName());
         this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
-                () -> Jsons.unknownValueException(json, "edition_type", editionTypeName, file));
+                () -> Jsons.unknownValue(json, "edition_type", editionTypeName, file));
         this.settingsId = json.getString("settings_id", null);
         this.multiline = json.getBoolean("multiline", false);
         final JsonNumber editionRows = json.getJsonNumber("edition_rows");

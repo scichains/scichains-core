@@ -394,12 +394,12 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 final String dataTypeName = json.getString("data_type", null);
                 if (dataTypeName != null) {
                     this.dataType = ParameterValueType.fromTypeName(dataTypeName).orElseThrow(
-                            () -> Jsons.unknownValueException(json, "data_type", dataTypeName, file));
+                            () -> Jsons.unknownValue(json, "data_type", dataTypeName, file));
                 }
                 final String editionType = json.getString("edition_type", null);
                 if (editionType != null) {
                     this.editionType = ControlEditionType.fromTypeName(editionType).orElseThrow(
-                            () -> Jsons.unknownValueException(json, "edition_type", editionType, file));
+                            () -> Jsons.unknownValue(json, "edition_type", editionType, file));
                 }
             }
 
@@ -507,7 +507,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         public Options(JsonObject json, Path file) {
             final String stageName = json.getString("stage", ExecutionStage.RUN_TIME.stageName());
             this.stage = ExecutionStage.fromStageName(stageName).orElseThrow(
-                    () -> Jsons.unknownValueException(json, "stage", stageName, file));
+                    () -> Jsons.unknownValue(json, "stage", stageName, file));
             final JsonObject roleJson = json.getJsonObject("role");
             if (roleJson != null) {
                 this.role = new Role(roleJson, file);

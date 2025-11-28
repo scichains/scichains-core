@@ -72,11 +72,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         public ControlTemplate(JsonObject json, Path file) {
             final String valueTypeName = json.getString("value_type", ParameterValueType.STRING.typeName());
             this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
-                    () -> Jsons.unknownValueException(json, "value_type", valueTypeName, file));
+                    () -> Jsons.unknownValue(json, "value_type", valueTypeName, file));
             final String editionTypeName = json.getString("edition_type", null);
             if (editionTypeName != null) {
                 this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
-                        () -> Jsons.unknownValueException(json, "edition_type", editionTypeName, file));
+                        () -> Jsons.unknownValue(json, "edition_type", editionTypeName, file));
             }
             try {
                 setDefaultJsonValue(json.get("default"));
