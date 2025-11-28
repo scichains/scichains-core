@@ -666,8 +666,16 @@ public class Jsons {
         return value;
     }
 
+    public static JsonException unknownValueException(JsonObject json, String name) {
+        return incorrectValueException(json, name, "unknown", null);
+    }
+
     public static JsonException unknownValueException(JsonObject json, String name, Path file) {
         return incorrectValueException(json, name, "unknown", file);
+    }
+
+    public static JsonException unknownValueException(JsonObject json, String name, String actualValue) {
+        return unknownValueException(json, name, actualValue, null);
     }
 
     public static JsonException unknownValueException(JsonObject json, String name, String actualValue, Path file) {
