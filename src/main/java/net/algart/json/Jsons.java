@@ -42,6 +42,8 @@ import java.util.*;
 public class Jsons {
 
     private static final JsonProvider JSON_PROVIDER = JsonProvider.provider();
+    // - Note: "Users are recommended to cache the result of this method" (from JavaDoc to provider() method).
+    // But we don't always use it: in most cases this optimization is not important.
 
     private Jsons() {
     }
@@ -96,29 +98,34 @@ public class Jsons {
         return builder.build();
     }
 
-    public static JsonString toJsonStringValue(String value) {
+    public static JsonString stringValue(String value) {
         Objects.requireNonNull(value, "Null value");
-        return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonString("x");
-        // Unfortunately standard JsonStringImpl constructor is never called outside
-        // JsonObjectBuilder and JsonArrayBuilder
+        // - Important: createValue MAY accept null, but the returned value will have unpredictable behavior
+        return JSON_PROVIDER.createValue(value);
+        // - this is faster than Json.createValue(): see JSON_PROVIDER
+        // Deprecated way (before the version 1.1):
+        // return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonString("x");
     }
 
-    public static JsonNumber toJsonIntValue(int value) {
-        return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
-        // See toJsonValue(String)
+    public static JsonNumber intValue(int value) {
+        return JSON_PROVIDER.createValue(value);
+        // Deprecated way (before the version 1.1):
+        // return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
     }
 
-    public static JsonNumber toJsonLongValue(long value) {
-        return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
-        // See toJsonValue(String)
+    public static JsonNumber longValue(long value) {
+        return JSON_PROVIDER.createValue(value);
+        // Deprecated way (before the version 1.1):
+        // return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
     }
 
-    public static JsonNumber toJsonDoubleValue(double value) {
-        return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
-        // See toJsonValue(String)
+    public static JsonNumber doubleValue(double value) {
+        return JSON_PROVIDER.createValue(value);
+        // Deprecated way (before the version 1.1):
+        // return JSON_PROVIDER.createObjectBuilder().add("x", value).build().getJsonNumber("x");
     }
 
-    public static JsonValue toJsonBooleanValue(boolean value) {
+    public static JsonValue booleanValue(boolean value) {
         return value ? JsonValue.TRUE : JsonValue.FALSE;
     }
 

@@ -78,13 +78,13 @@ public class CallSimpleMultiChain {
         System.out.printf("%nTree of default JSON values: %s%n", tree.defaultSettingsJsonString());
         final JsonObject settings = tree.settingsJson(path -> {
             if (path.lastName().equals("delta")) {
-                return Jsons.toJsonDoubleValue(0.004);
+                return Jsons.doubleValue(0.003);
                 // - setting some "delta" sub-parameter for a case when the chain has it
             }
             return switch (path.toString()) {
-                case "/" + MultiChain.SELECTED_CHAIN_NAME  -> Jsons.toJsonStringValue(variant);
-                case "/a" -> Jsons.toJsonStringValue(a);
-                case "/b" -> Jsons.toJsonStringValue(b);
+                case "/" + MultiChain.SELECTED_CHAIN_NAME  -> Jsons.stringValue(variant);
+                case "/a" -> Jsons.stringValue(a);
+                case "/b" -> Jsons.stringValue(b);
                 default -> path.reqControl().getDefaultJsonValue();
             };
         });

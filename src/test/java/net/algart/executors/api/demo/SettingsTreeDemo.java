@@ -48,9 +48,9 @@ public class SettingsTreeDemo {
         return tree.settingsJson(path -> {
             final ControlSpecification control = path.reqControl();
             if (control.getValueType() == ParameterValueType.STRING) {
-                return Jsons.toJsonStringValue(path.toString());
+                return Jsons.stringValue(path.toString());
             } else {
-                return Jsons.toJsonDoubleValue(111); // or: control.getValueType().toJsonValue("111");
+                return Jsons.doubleValue(111); // or: control.getValueType().toJsonValue("111");
             }
             // - some example: JSON containing the string representation of the path or "111";
             // in the real application, for example, we could extract here some value from some visual editor

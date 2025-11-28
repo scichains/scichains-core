@@ -28,16 +28,17 @@ import jakarta.json.*;
 
 public class CommonJsonTest {
     public static void main(String[] args) {
-        final JsonString stringValue = Jsons.toJsonStringValue("");
-        final JsonNumber intValue = Jsons.toJsonIntValue(123);
-        final JsonNumber longValue = Jsons.toJsonLongValue(Long.MAX_VALUE);
-        final JsonNumber doubleValue = Jsons.toJsonDoubleValue(1.1);
-        final JsonValue booleanValue = Jsons.toJsonBooleanValue(false);
-        System.out.printf("String: %s = %s%n", stringValue, stringValue.getString());
+        final JsonString stringValue = Jsons.stringValue("");
+        final JsonNumber intValue = Jsons.intValue(123);
+        final JsonNumber longValue = Jsons.longValue(Long.MAX_VALUE);
+        final JsonNumber doubleValue = Jsons.doubleValue(1.1);
+        final JsonValue booleanValue = Jsons.booleanValue(false);
+        System.out.println(stringValue);
+        System.out.printf("String: %s = %s%n", stringValue, stringValue);
         System.out.printf("int: %s = %s%n", intValue, intValue.intValue());
         System.out.printf("long: %s = %s%n", longValue, longValue.longValue());
         System.out.printf("double: %s = %s%n", doubleValue, doubleValue.doubleValue());
-        System.out.printf("boolean: %s (%s)%n", booleanValue, booleanValue == JsonValue.FALSE);
+        System.out.printf("boolean: %s (%s)%n", booleanValue, booleanValue == JsonValue.FALSE ? "==FALSE" : "!=FALSE");
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("String", stringValue);
         builder.add("int", intValue);

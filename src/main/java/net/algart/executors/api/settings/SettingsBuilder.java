@@ -458,7 +458,7 @@ public class SettingsBuilder implements Cloneable {
                 // to the current folder, but just a non-initialized parameter
                 path = PathPropertyReplacement.translatePropertiesAndCurrentDirectory(path, executor).toString();
             }
-            jsonValue = Jsons.toJsonStringValue(path);
+            jsonValue = Jsons.stringValue(path);
         }
         return jsonValue;
     }

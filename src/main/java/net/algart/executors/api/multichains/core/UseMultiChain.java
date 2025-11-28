@@ -372,7 +372,7 @@ public final class UseMultiChain extends FileOperation {
                 .setCaption(EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", multiChainName))
                 .setDescription(EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
                 .setValueType(ParameterValueType.BOOLEAN)
-                .setDefaultJsonValue(Jsons.toJsonBooleanValue(EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT))
+                .setDefaultJsonValue(Jsons.booleanValue(EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT))
                 .setAdvanced(true));
         result.addControl(new ControlSpecification()
                 .setName(LOG_SETTINGS_PARAMETER_NAME)

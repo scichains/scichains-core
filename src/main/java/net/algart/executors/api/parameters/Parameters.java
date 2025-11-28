@@ -389,12 +389,12 @@ public class Parameters implements Map<String, Object> {
             return (Boolean) o ? JsonValue.TRUE : JsonValue.FALSE;
         }
         if (o instanceof Float || o instanceof Double) {
-            return Jsons.toJsonDoubleValue(((Number) o).doubleValue());
+            return Jsons.doubleValue(((Number) o).doubleValue());
         }
         if (o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long) {
-            return Jsons.toJsonLongValue(((Number) o).longValue());
+            return Jsons.longValue(((Number) o).longValue());
         }
-        return Jsons.toJsonStringValue(o.toString());
+        return Jsons.stringValue(o.toString());
     }
 
     public static Boolean smartParseBoolean(String s) {

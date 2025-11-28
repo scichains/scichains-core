@@ -57,7 +57,7 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonIntValue(0);
+            return Jsons.intValue(0);
         }
 
         @Override
@@ -68,12 +68,12 @@ public enum ParameterValueType {
             } catch (NumberFormatException e) {
                 return emptyJsonValue();
             }
-            return Jsons.toJsonIntValue(v);
+            return Jsons.intValue(v);
         }
 
         @Override
         public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJsonIntValue(parameters.getInteger(name));
+            return Jsons.intValue(parameters.getInteger(name));
         }
 
     },
@@ -101,7 +101,7 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonIntValue(0);
+            return Jsons.intValue(0);
         }
 
         @Override
@@ -112,12 +112,12 @@ public enum ParameterValueType {
             } catch (NumberFormatException e) {
                 return emptyJsonValue();
             }
-            return Jsons.toJsonLongValue(v);
+            return Jsons.longValue(v);
         }
 
         @Override
         public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJsonLongValue(parameters.getLong(name));
+            return Jsons.longValue(parameters.getLong(name));
         }
 
     },
@@ -145,7 +145,7 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonDoubleValue(0.0);
+            return Jsons.doubleValue(0.0);
         }
 
         @Override
@@ -183,7 +183,7 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonDoubleValue(0.0);
+            return Jsons.doubleValue(0.0);
         }
 
         @Override
@@ -194,12 +194,12 @@ public enum ParameterValueType {
             } catch (NumberFormatException e) {
                 return emptyJsonValue();
             }
-            return Jsons.toJsonDoubleValue(v);
+            return Jsons.doubleValue(v);
         }
 
         @Override
         public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJsonDoubleValue(parameters.getDouble(name));
+            return Jsons.doubleValue(parameters.getDouble(name));
         }
 
     },
@@ -227,7 +227,7 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonBooleanValue(false);
+            return Jsons.booleanValue(false);
         }
 
         @Override
@@ -236,12 +236,12 @@ public enum ParameterValueType {
             if (v == null) {
                 return emptyJsonValue();
             }
-            return Jsons.toJsonBooleanValue(v);
+            return Jsons.booleanValue(v);
         }
 
         @Override
         public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJsonBooleanValue(parameters.getBoolean(name));
+            return Jsons.booleanValue(parameters.getBoolean(name));
         }
 
     },
@@ -270,17 +270,17 @@ public enum ParameterValueType {
 
         @Override
         public JsonValue emptyJsonValue() {
-            return Jsons.toJsonStringValue("");
+            return Jsons.stringValue("");
         }
 
         @Override
         public JsonValue toJsonValue(String scalar) {
-            return Jsons.toJsonStringValue(scalar);
+            return Jsons.stringValue(scalar);
         }
 
         @Override
         public JsonValue toJsonValue(Parameters parameters, String name) throws NoValidParameterException {
-            return Jsons.toJsonStringValue(parameters.getString(name));
+            return Jsons.stringValue(parameters.getString(name));
         }
 
     },

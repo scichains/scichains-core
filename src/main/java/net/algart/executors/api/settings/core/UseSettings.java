@@ -741,7 +741,7 @@ public class UseSettings extends FileOperation {
                 .setCaption(caption)
                 .setDescription(description)
                 .setValueType(ParameterValueType.BOOLEAN)
-                .setDefaultJsonValue(Jsons.toJsonBooleanValue(defaultValue))
+                .setDefaultJsonValue(Jsons.booleanValue(defaultValue))
                 .setAdvanced(advanced));
     }
 }

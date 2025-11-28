@@ -91,13 +91,13 @@ public class CreateExecutorSpecificationTest {
                 .setItems(items).setDefaultStringValue("MODE_1"));
         items = new ArrayList<>();
         items.add(new ControlSpecification.EnumItem()
-                .setValue(Jsons.toJsonIntValue(1)).setCaption("m_1"));
+                .setValue(Jsons.intValue(1)).setCaption("m_1"));
         items.add(new ControlSpecification.EnumItem()
-                .setValue(Jsons.toJsonIntValue(2)).setCaption("m_2"));
+                .setValue(Jsons.intValue(2)).setCaption("m_2"));
         controls.put("modeInt", new ControlSpecification()
                 .setName("modeInt").setValueType(ParameterValueType.INT)
                 .setCaption("Mode (int)").setEditionType(ControlEditionType.ENUM)
-                .setItems(items).setDefaultJsonValue(Jsons.toJsonIntValue(2)));
+                .setItems(items).setDefaultJsonValue(Jsons.intValue(2)));
         specification.setControls(controls);
 
         final String jsonString = specification.jsonString();

@@ -388,7 +388,7 @@ public final class UseChain extends FileOperation {
         result.setCaption(TIMING_NUMBER_OF_CALLS_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_CALLS_DESCRIPTION);
         result.setValueType(ParameterValueType.INT);
-        result.setDefaultJsonValue(Jsons.toJsonIntValue(TIMING_NUMBER_OF_CALLS_DEFAULT));
+        result.setDefaultJsonValue(Jsons.intValue(TIMING_NUMBER_OF_CALLS_DEFAULT));
         result.setEditionType(ControlEditionType.VALUE);
         result.setAdvanced(true);
         return result;
@@ -400,7 +400,7 @@ public final class UseChain extends FileOperation {
         result.setCaption(TIMING_NUMBER_OF_PERCENTILES_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_PERCENTILES_DESCRIPTION);
         result.setValueType(ParameterValueType.INT);
-        result.setDefaultJsonValue(Jsons.toJsonIntValue(TIMING_NUMBER_OF_PERCENTILES_DEFAULT));
+        result.setDefaultJsonValue(Jsons.intValue(TIMING_NUMBER_OF_PERCENTILES_DEFAULT));
         result.setEditionType(ControlEditionType.VALUE);
         result.setAdvanced(true);
         return result;

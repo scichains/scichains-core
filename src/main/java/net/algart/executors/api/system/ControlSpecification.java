@@ -75,7 +75,7 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
 
         public EnumItem setValue(String value) {
             Objects.requireNonNull(value, "Null value");
-            this.value = Jsons.toJsonStringValue(value);
+            this.value = Jsons.stringValue(value);
             return this;
         }
 
@@ -401,7 +401,7 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         if (defaultStringValue == null) {
             this.defaultJsonValue = null;
         } else {
-            this.defaultJsonValue = Jsons.toJsonStringValue(defaultStringValue);
+            this.defaultJsonValue = Jsons.stringValue(defaultStringValue);
         }
         return this;
     }
