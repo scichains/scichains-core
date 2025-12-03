@@ -32,7 +32,7 @@ import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.multichains.core.CombineMultiChainSettings;
 import net.algart.executors.api.multichains.core.MultiChainExecutor;
 import net.algart.executors.api.multichains.core.UseMultiChainSettings;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.*;
 import net.algart.executors.api.system.*;
 import net.algart.json.Jsons;
@@ -473,10 +473,10 @@ public final class MultiChain implements Cloneable, AutoCloseable {
                             specificationFileMessage, e);
                 }
                 final ControlSpecification settingsControlSpecification = new ControlSpecification()
-                        .setValueType(ParameterValueType.SETTINGS)
+                        .setValueType(ValueType.SETTINGS)
                         .setName(name)
                         .setDescription(executor.getDescription())
-                        .setEditionType(ControlEditionType.VALUE)
+                        .setEditionType(EditionType.VALUE)
                         .setAdvanced(true)
                         .setMultiline(true);
                 final Chain chain = helpingChainMap.get(chainSpecification.chainId());
@@ -531,8 +531,8 @@ public final class MultiChain implements Cloneable, AutoCloseable {
         ControlSpecification result = new ControlSpecification();
         result.setName(selectedChainParameter());
         result.setCaption(SELECTED_CHAIN_ID_PARAMETER_CAPTION);
-        result.setValueType(ParameterValueType.ENUM_STRING);
-        result.setEditionType(ControlEditionType.ENUM);
+        result.setValueType(ValueType.ENUM_STRING);
+        result.setEditionType(EditionType.ENUM);
         result.setItems(items);
         result.setDefaultStringValue(defaultValue);
         return result;

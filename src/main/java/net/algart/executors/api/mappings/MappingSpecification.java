@@ -26,8 +26,8 @@ package net.algart.executors.api.mappings;
 
 import jakarta.json.*;
 import net.algart.executors.api.ExecutionBlock;
-import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.system.ControlEditionType;
+import net.algart.executors.api.parameters.ValueType;
+import net.algart.executors.api.system.EditionType;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.io.MatrixIO;
@@ -62,21 +62,23 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
     private static final Pattern COMPILED_MAPPING_FILE_PATTERN = Pattern.compile(MAPPING_FILE_PATTERN);
 
     public static final class ControlTemplate extends AbstractConvertibleToJson {
-        private ParameterValueType valueType = ParameterValueType.STRING;
-        private ControlEditionType editionType = null;
+        private ValueType valueType = ValueType.STRING;
+        private EditionType editionType = null;
         private JsonValue defaultJsonValue = null;
 
         public ControlTemplate() {
         }
 
         public ControlTemplate(JsonObject json, Path file) {
-            final String valueTypeName = json.getString("value_type", ParameterValueType.STRING.typeName());
-            this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
-                    () -> Jsons.unknownValue(json, "value_type", valueTypeName, file));
+            final String valueTypeName = json.getString("value_type", ValueType.STRING.typeName());
+            this.valueType = ValueType.fromTypeName(valueTypeName).orElseThrow(
+                    () -> Jsons.badValue(json, "value_type", valueTypeName,
+                            ValueType.typeNames(), file));
             final String editionTypeName = json.getString("edition_type", null);
             if (editionTypeName != null) {
-                this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
-                        () -> Jsons.unknownValue(json, "edition_type", editionTypeName, file));
+                this.editionType = EditionType.fromTypeName(editionTypeName).orElseThrow(
+                        () -> Jsons.badValue(json, "edition_type", editionTypeName,
+                                EditionType.typeNames(), file));
             }
             try {
                 setDefaultJsonValue(json.get("default"));
@@ -86,11 +88,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
             }
         }
 
-        public ParameterValueType getValueType() {
+        public ValueType getValueType() {
             return valueType;
         }
 
-        public ControlTemplate setValueType(ParameterValueType valueType) {
+        public ControlTemplate setValueType(ValueType valueType) {
             this.valueType = Objects.requireNonNull(valueType, "Null valueType");
             return this;
         }
@@ -111,11 +113,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
             return this;
         }
 
-        public ControlEditionType getEditionType() {
+        public EditionType getEditionType() {
             return editionType;
         }
 
-        public ControlTemplate setEditionType(ControlEditionType editionType) {
+        public ControlTemplate setEditionType(EditionType editionType) {
             this.editionType = editionType;
             return this;
         }
@@ -135,7 +137,7 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
 
         @Override
         public void buildJson(JsonObjectBuilder builder) {
-            if (valueType != ParameterValueType.STRING) {
+            if (valueType != ValueType.STRING) {
                 builder.add("value_type", valueType.typeName());
             }
             if (editionType != null) {
@@ -413,11 +415,11 @@ public final class MappingSpecification extends AbstractConvertibleToJson {
         return this;
     }
 
-    public ControlEditionType editionTypeOrDefault() {
+    public EditionType editionTypeOrDefault() {
         if (controlTemplate.editionType != null) {
             return controlTemplate.editionType;
         }
-        return hasEnumItems() || enumItemsFile != null ? ControlEditionType.ENUM : ControlEditionType.VALUE;
+        return hasEnumItems() || enumItemsFile != null ? EditionType.ENUM : EditionType.VALUE;
     }
 
     public String parentFolderName() {

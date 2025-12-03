@@ -26,9 +26,7 @@ package net.algart.executors.api.data;
 
 import net.algart.external.UsedForExternalCommunication;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public enum DataType {
     MAT("mat", UUID.fromString("031FC202-0193-4933-AB2E-D81492CE67E0")) {
@@ -90,6 +88,10 @@ public enum DataType {
     public abstract Data createEmpty();
 
     public abstract Class<? extends Data> typeClass();
+
+    public static Collection<String> typeNames() {
+        return Arrays.stream(values()).map(DataType::typeName).toList();
+    }
 
     @UsedForExternalCommunication
     public static DataType ofTypeName(String typeName) {

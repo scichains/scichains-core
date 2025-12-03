@@ -25,7 +25,7 @@
 package net.algart.executors.api;
 
 import net.algart.executors.api.parameters.NoValidParameterException;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.parameters.Parameters;
 
 import java.awt.*;
@@ -55,7 +55,7 @@ abstract class ParameterSetter {
 
     abstract Object getValue(Parameters properties);
 
-    abstract ParameterValueType getControlValueType();
+    abstract ValueType getValueType();
 
     void set(Executor executor) {
         try {
@@ -155,8 +155,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.BOOLEAN;
+        ValueType getValueType() {
+            return ValueType.BOOLEAN;
         }
     }
 
@@ -171,8 +171,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.INT;
+        ValueType getValueType() {
+            return ValueType.INT;
         }
     }
 
@@ -187,8 +187,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.LONG;
+        ValueType getValueType() {
+            return ValueType.LONG;
         }
     }
 
@@ -203,8 +203,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.FLOAT;
+        ValueType getValueType() {
+            return ValueType.FLOAT;
         }
     }
 
@@ -219,8 +219,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.DOUBLE;
+        ValueType getValueType() {
+            return ValueType.DOUBLE;
         }
     }
 
@@ -242,8 +242,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -265,8 +265,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -288,8 +288,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -311,8 +311,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -327,8 +327,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -354,8 +354,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.STRING;
+        ValueType getValueType() {
+            return ValueType.STRING;
         }
     }
 
@@ -410,8 +410,8 @@ abstract class ParameterSetter {
         }
 
         @Override
-        ParameterValueType getControlValueType() {
-            return ParameterValueType.ENUM_STRING;
+        ValueType getValueType() {
+            return ValueType.ENUM_STRING;
             // Note: EnumSetter is used only for String controls.
             // For comparison, enum control for the int type does not require Java enum in "setXxx" method;
             // it uses usual Java int (setXxx(int)).

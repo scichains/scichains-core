@@ -38,6 +38,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Jsons {
 
@@ -666,20 +668,44 @@ public class Jsons {
         return value;
     }
 
-    public static JsonException unknownValue(JsonObject json, String name) {
-        return incorrectValue(json, name, "unknown", null);
+    public static JsonException badValue(JsonObject json, String name) {
+        return badValue(json, name, (Path) null);
     }
 
-    public static JsonException unknownValue(JsonObject json, String name, Path file) {
-        return incorrectValue(json, name, "unknown", file);
+    public static JsonException badValue(JsonObject json, String name, Path file) {
+        return incorrectValue(json, name, "unknown value", file);
     }
 
-    public static JsonException unknownValue(JsonObject json, String name, String actualValue) {
-        return unknownValue(json, name, actualValue, null);
+    public static JsonException badValue(JsonObject json, String name, String actualValue) {
+        return badValue(json, name, actualValue, (Path) null);
     }
 
-    public static JsonException unknownValue(JsonObject json, String name, String actualValue, Path file) {
-        return incorrectValue(json, name, "unknown (\"" + actualValue + "\")", file);
+    public static JsonException badValue(JsonObject json, String name, String actualValue, Path file) {
+        return incorrectValue(json, name, "unknown value: \"" + actualValue + "\"", file);
+    }
+
+    public static JsonException badValue(JsonObject json, String name, String actual, Collection<?> values) {
+        return badValue(json, name, actual, values, null);
+    }
+
+    public static JsonException badValue(
+            JsonObject json,
+            String name,
+            String actual,
+            Collection<?> values,
+            Path file) {
+        return badValue(json, name, actual, values.stream(), file);
+    }
+
+    public static JsonException badValue(JsonObject json, String name, String actual, Stream<?> allowed) {
+        return badValue(json, name, actual, allowed, null);
+    }
+
+    public static JsonException badValue(JsonObject json, String name, String actual, Stream<?> allowed, Path file) {
+        return incorrectValue(json, name, "unknown value: \"" + actual +
+                "\" (allowed variants: "
+                + allowed.map(v -> "\"" + v + "\"").collect(Collectors.joining(", ")) + ")",
+                file);
     }
 
     public static JsonException incorrectValue(JsonObject json, String name, String message) {
@@ -688,7 +714,7 @@ public class Jsons {
 
     public static JsonException incorrectValue(JsonObject json, String name, String message, Path file) {
         return new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
-                + ": \"" + name + "\" value is " + message
+                + ": \"" + name + "\" property contains " + message
                 + (file == null ? " <<<" + json + ">>>" : ""));
     }
 

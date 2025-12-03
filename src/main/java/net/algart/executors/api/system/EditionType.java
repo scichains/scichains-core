@@ -24,14 +24,11 @@
 
 package net.algart.executors.api.system;
 
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-public enum ControlEditionType {
+public enum EditionType {
     VALUE("value", false),
     ENUM("enum", false),
     FILE("file", true),
@@ -43,17 +40,21 @@ public enum ControlEditionType {
     private final String typeName;
     private final boolean resources;
 
-    private static final Map<String, ControlEditionType> ALL_TYPES = new LinkedHashMap<>();
+    private static final Map<String, EditionType> ALL_TYPES = new LinkedHashMap<>();
 
     static {
-        for (ControlEditionType type : values()) {
+        for (EditionType type : values()) {
             ALL_TYPES.put(type.typeName, type);
         }
     }
 
-    ControlEditionType(String typeName, boolean resources) {
+    EditionType(String typeName, boolean resources) {
         this.typeName = Objects.requireNonNull(typeName);
         this.resources = resources;
+    }
+
+    public static Collection<String> typeNames() {
+        return Collections.unmodifiableCollection(ALL_TYPES.keySet());
     }
 
     public String typeName() {
@@ -73,31 +74,31 @@ public enum ControlEditionType {
         return this == ENUM;
     }
 
-    public static ControlEditionType ofTypeName(String typeName) {
+    public static EditionType ofTypeName(String typeName) {
         Objects.requireNonNull(typeName, "Null type name");
         return fromTypeName(typeName).orElseThrow(
                 () -> new IllegalArgumentException("Unknown control edition type \"" + typeName + "\""));
     }
 
     /**
-     * Returns an {@link Optional} containing the {@link ControlEditionType} with the given {@link #typeName()}.
+     * Returns an {@link Optional} containing the {@link EditionType} with the given {@link #typeName()}.
      * <p>If no edition type with the specified name exists or if the argument is {@code null},
      * an empty optional is returned.
      *
      * @param typeName the value type name; may be {@code null}.
      * @return an optional edition type.
      */
-    public static Optional<ControlEditionType> fromTypeName(String typeName) {
+    public static Optional<EditionType> fromTypeName(String typeName) {
         return Optional.ofNullable(ALL_TYPES.get(typeName));
     }
 
-    public static ControlEditionType defaultEditionType(ParameterValueType valueType) {
+    public static EditionType defaultEditionType(ValueType valueType) {
         Objects.requireNonNull(valueType, "Null valueType");
-        return valueType == ParameterValueType.ENUM_STRING ? ENUM : VALUE;
+        return valueType == ValueType.ENUM_STRING ? ENUM : VALUE;
     }
 
     public static void main(String[] args) {
-        for (ControlEditionType type : values()) {
+        for (EditionType type : values()) {
             System.out.printf("%s: %s%n", type.typeName(), ofTypeName(type.typeName()));
         }
     }

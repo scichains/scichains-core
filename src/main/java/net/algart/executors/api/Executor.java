@@ -30,7 +30,7 @@ import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledExtensions;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.modules.core.scalars.creation.CreateScalar;
 import net.algart.external.UsedForExternalCommunication;
@@ -82,7 +82,7 @@ public abstract class Executor extends ExecutionBlock {
 
 
     private static final Map<String, Map<String, ParameterSetter>> EXECUTOR_CLASS_SETTERS = new HashMap<>();
-    private static final Map<String, Map<String, ParameterValueType>> EXECUTOR_CLASS_PARAMETER_TYPES = new HashMap<>();
+    private static final Map<String, Map<String, ValueType>> EXECUTOR_CLASS_PARAMETER_TYPES = new HashMap<>();
     static final Set<String> NON_SETTERS = new HashSet<>(Arrays.asList(
             "setDefaultInputPort",
             "setDefaultOutputPort",
@@ -113,7 +113,7 @@ public abstract class Executor extends ExecutionBlock {
     private final Set<String> onChangeParametersAutomaticDisabledParameters = new HashSet<>();
     private boolean onChangeParametersAutomatic = true;
     private final Map<String, ParameterSetter> parameterSetters;
-    private final Map<String, ParameterValueType> parameterTypes;
+    private final Map<String, ValueType> parameterTypes;
 
     private String defaultInputPortName = DEFAULT_INPUT_PORT;
     private String defaultOutputPortName = DEFAULT_OUTPUT_PORT;
@@ -139,13 +139,13 @@ public abstract class Executor extends ExecutionBlock {
         }
         synchronized (EXECUTOR_CLASS_SETTERS) {
             Map<String, ParameterSetter> setters = EXECUTOR_CLASS_SETTERS.get(className);
-            Map<String, ParameterValueType> parameterTypes = EXECUTOR_CLASS_PARAMETER_TYPES.get(className);
+            Map<String, ValueType> parameterTypes = EXECUTOR_CLASS_PARAMETER_TYPES.get(className);
             if (setters == null) {
                 assert parameterTypes == null;
                 setters = ParameterSetter.findSetters(this);
                 parameterTypes = new TreeMap<>();
                 for (Map.Entry<String, ParameterSetter> entry : setters.entrySet()) {
-                    parameterTypes.put(entry.getKey(), entry.getValue().getControlValueType());
+                    parameterTypes.put(entry.getKey(), entry.getValue().getValueType());
                 }
                 EXECUTOR_CLASS_SETTERS.put(className, setters);
                 EXECUTOR_CLASS_PARAMETER_TYPES.put(className, parameterTypes);
@@ -389,7 +389,7 @@ public abstract class Executor extends ExecutionBlock {
         return Collections.unmodifiableSet(parameterTypes.keySet());
     }
 
-    public final ParameterValueType parameterControlValueType(String parameterName) {
+    public final ValueType parameterValueType(String parameterName) {
         return parameterTypes.get(parameterName);
     }
 

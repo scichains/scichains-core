@@ -27,12 +27,9 @@ package net.algart.executors.api.parameters;
 import jakarta.json.*;
 import net.algart.json.Jsons;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-public enum ParameterValueType {
+public enum ValueType {
     INT("int", int.class, "int32") {
         @Override
         public Integer toParameter(String stringValue) {
@@ -358,12 +355,14 @@ public enum ParameterValueType {
     private final Class<?> javaType;
     private final String[] typeNameAliases;
 
-    private static final Map<String, ParameterValueType> ALL_TYPES = new LinkedHashMap<>();
-    private static final ParameterValueType[] FOR_SUITABLE_JAVA_OBJECT = {SETTINGS, STRING, DOUBLE, BOOLEAN};
+    private static final Map<String, ValueType> ALL_TYPES = new LinkedHashMap<>();
+    private static final List<String> ALL_RECOMMENDED_TYPE_NAMES = new ArrayList<>();
+    private static final ValueType[] FOR_SUITABLE_JAVA_OBJECT = {SETTINGS, STRING, DOUBLE, BOOLEAN};
 
     static {
-        for (ParameterValueType type : values()) {
+        for (ValueType type : values()) {
             if (type != ENUM_STRING) {
+                ALL_RECOMMENDED_TYPE_NAMES.add(type.typeName);
                 ALL_TYPES.put(type.typeName, type);
                 for (String alias : type.typeNameAliases) {
                     ALL_TYPES.put(alias, type);
@@ -372,18 +371,22 @@ public enum ParameterValueType {
         }
     }
 
-    ParameterValueType(String typeName, Class<?> javaType, String... typeNameAliases) {
+    ValueType(String typeName, Class<?> javaType, String... typeNameAliases) {
         this.typeName = Objects.requireNonNull(typeName);
         this.javaType = Objects.requireNonNull(javaType);
         this.typeNameAliases = Objects.requireNonNull(typeNameAliases);
+    }
+
+    public static Collection<String> typeNames() {
+        return Collections.unmodifiableList(ALL_RECOMMENDED_TYPE_NAMES);
     }
 
     public String typeName() {
         return typeName;
     }
 
-    public String[] typeNameAliases() {
-        return typeNameAliases.clone();
+    public List<String> aliases() {
+        return List.of(typeNameAliases);
     }
 
     public Class<?> javaType() {
@@ -415,9 +418,9 @@ public enum ParameterValueType {
         if (probe != null) {
             return probe;
         }
-        for (ParameterValueType parameterValueType : FOR_SUITABLE_JAVA_OBJECT) {
+        for (ValueType valueType : FOR_SUITABLE_JAVA_OBJECT) {
             // note: for example, we should not check LONG before DOUBLE
-            probe = parameterValueType.toParameter(jsonValue);
+            probe = valueType.toParameter(jsonValue);
             if (probe != null) {
                 return probe;
             }
@@ -468,21 +471,21 @@ public enum ParameterValueType {
         return this == SETTINGS;
     }
 
-    public static ParameterValueType ofTypeName(String typeName) {
+    public static ValueType ofTypeName(String typeName) {
         Objects.requireNonNull(typeName, "Null type name");
         return fromTypeName(typeName).orElseThrow(
                 () -> new IllegalArgumentException("Unknown parameter value type \"" + typeName + "\""));
     }
 
     /**
-     * Returns an {@link Optional} containing the {@link ParameterValueType} with the given {@link #typeName()}.
+     * Returns an {@link Optional} containing the {@link ValueType} with the given {@link #typeName()}.
      * <p>If no value type with the specified name exists or if the argument is {@code null},
      * an empty optional is returned.
      *
      * @param typeName the value type name; may be {@code null}.
      * @return an optional value type.
      */
-    public static Optional<ParameterValueType> fromTypeName(String typeName) {
+    public static Optional<ValueType> fromTypeName(String typeName) {
         return Optional.ofNullable(ALL_TYPES.get(typeName));
     }
 }

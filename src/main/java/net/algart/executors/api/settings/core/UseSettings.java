@@ -28,7 +28,7 @@ import jakarta.json.JsonValue;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.system.*;
@@ -440,7 +440,7 @@ public class UseSettings extends FileOperation {
         executorControls.get("resultType").setCaption("Result type");
         executorControls.get("resultJsonKey").setCaption("Key in result JSON").setDefaultStringValue("names");
         for (ControlSpecification controlSpecification : executorControls.values()) {
-            if (controlSpecification.getValueType() == ParameterValueType.BOOLEAN
+            if (controlSpecification.getValueType() == ValueType.BOOLEAN
                     && controlSpecification.getName().startsWith("extract")) {
                 controlSpecification.setDefaultJsonValue(JsonValue.TRUE);
             }
@@ -591,7 +591,7 @@ public class UseSettings extends FileOperation {
                     .setName(ALL_SETTINGS_PARAMETER_NAME)
                     .setCaption(ALL_SETTINGS_PARAMETER_CAPTION)
                     .setDescription(ALL_SETTINGS_PARAMETER_DESCRIPTION)
-                    .setValueType(ParameterValueType.SETTINGS)
+                    .setValueType(ValueType.SETTINGS)
                     .setDefaultJsonValue(Jsons.newEmptyJson())
                     .setAdvanced(true));
         }
@@ -684,7 +684,7 @@ public class UseSettings extends FileOperation {
             // - bad idea:
             // if we see the sub-settings, this is an advice to like their to the corresponding subtasks
             result.addOutputPort(portSpecification);
-            if (controlSpecification.getValueType() == ParameterValueType.STRING && controlSpecification.getEditionType().isPath()) {
+            if (controlSpecification.getValueType() == ValueType.STRING && controlSpecification.getEditionType().isPath()) {
                 result.addOutputPort(new PortSpecification()
                         .setName(name + SettingsBuilder.PATH_PARENT_FOLDER_SUFFIX)
                         .setHint(PATH_PARENT_FOLDER_HINT)
@@ -740,7 +740,7 @@ public class UseSettings extends FileOperation {
                 .setName(name)
                 .setCaption(caption)
                 .setDescription(description)
-                .setValueType(ParameterValueType.BOOLEAN)
+                .setValueType(ValueType.BOOLEAN)
                 .setDefaultJsonValue(Jsons.booleanValue(defaultValue))
                 .setAdvanced(advanced));
     }

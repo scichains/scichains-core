@@ -31,7 +31,7 @@ import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.extensions.ExtensionSpecification;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.core.UseChainSettings;
 import net.algart.executors.api.settings.core.UseSettings;
@@ -359,7 +359,7 @@ public final class UseChain extends FileOperation {
         result.setName(parameterName);
         result.setCaption(LOG_TIMING_CAPTION);
         result.setDescription(LOG_TIMING_DESCRIPTION);
-        result.setValueType(ParameterValueType.BOOLEAN);
+        result.setValueType(ValueType.BOOLEAN);
         result.setDefaultJsonValue(JsonValue.TRUE);
         result.setAdvanced(true);
         return result;
@@ -370,9 +370,9 @@ public final class UseChain extends FileOperation {
         result.setName(parameterName);
         result.setCaption(TIMING_LOG_LEVEL_CAPTION);
         result.setDescription(TIMING_LOG_LEVEL_DESCRIPTION);
-        result.setValueType(ParameterValueType.STRING);
+        result.setValueType(ValueType.STRING);
         result.setDefaultStringValue(TIMING_LOG_LEVEL_DEFAULT);
-        result.setEditionType(ControlEditionType.ENUM);
+        result.setEditionType(EditionType.ENUM);
         result.setItems(List.of(
                 new ControlSpecification.EnumItem(System.Logger.Level.WARNING.getName()),
                 new ControlSpecification.EnumItem(System.Logger.Level.INFO.getName()),
@@ -387,9 +387,9 @@ public final class UseChain extends FileOperation {
         result.setName(parameterName);
         result.setCaption(TIMING_NUMBER_OF_CALLS_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_CALLS_DESCRIPTION);
-        result.setValueType(ParameterValueType.INT);
+        result.setValueType(ValueType.INT);
         result.setDefaultJsonValue(Jsons.intValue(TIMING_NUMBER_OF_CALLS_DEFAULT));
-        result.setEditionType(ControlEditionType.VALUE);
+        result.setEditionType(EditionType.VALUE);
         result.setAdvanced(true);
         return result;
     }
@@ -399,9 +399,9 @@ public final class UseChain extends FileOperation {
         result.setName(parameterName);
         result.setCaption(TIMING_NUMBER_OF_PERCENTILES_CAPTION);
         result.setDescription(TIMING_NUMBER_OF_PERCENTILES_DESCRIPTION);
-        result.setValueType(ParameterValueType.INT);
+        result.setValueType(ValueType.INT);
         result.setDefaultJsonValue(Jsons.intValue(TIMING_NUMBER_OF_PERCENTILES_DEFAULT));
-        result.setEditionType(ControlEditionType.VALUE);
+        result.setEditionType(EditionType.VALUE);
         result.setAdvanced(true);
         return result;
     }
@@ -429,8 +429,8 @@ public final class UseChain extends FileOperation {
         ControlSpecification result = new ControlSpecification();
         result.setName(parameterName);
         result.setCaption(VISIBLE_RESULT_PARAMETER_CAPTION);
-        result.setValueType(ParameterValueType.ENUM_STRING);
-        result.setEditionType(ControlEditionType.ENUM);
+        result.setValueType(ValueType.ENUM_STRING);
+        result.setEditionType(EditionType.ENUM);
         result.setItems(items);
         result.setDefaultStringValue(firstEnumValue);
         return result;
@@ -543,7 +543,7 @@ public final class UseChain extends FileOperation {
                 .setName(DO_ACTION_NAME)
                 .setCaption(DO_ACTION_CAPTION)
                 .setDescription(DO_ACTION_DESCRIPTION)
-                .setValueType(ParameterValueType.BOOLEAN)
+                .setValueType(ValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.TRUE)
                 .setAdvanced(false));
         result.addControl(createLogTimingControl(LOG_TIMING_NAME));

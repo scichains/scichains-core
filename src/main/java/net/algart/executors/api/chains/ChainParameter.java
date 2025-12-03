@@ -25,7 +25,7 @@
 package net.algart.executors.api.chains;
 
 import jakarta.json.JsonValue;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 
@@ -60,7 +60,7 @@ public final class ChainParameter {
         return value;
     }
 
-    public ParameterValueType probableType(ChainBlock block, ParameterValueType defaultType) {
+    public ValueType probableType(ChainBlock block, ValueType defaultType) {
         Objects.requireNonNull(block, "Null block");
         final ControlSpecification control = controlSpecification(block);
         return control != null ? control.getValueType() : defaultType;
@@ -82,7 +82,7 @@ public final class ChainParameter {
         ControlSpecification control = controlSpecification(block);
         if (control != null) {
             // can be null, for example, for system properties (obsolete concept)
-            final ParameterValueType valueType = control.getValueType();
+            final ValueType valueType = control.getValueType();
             final JsonValue defaultJsonValue = control.getDefaultJsonValue();
             final Object defaultValue = valueType.toParameter(defaultJsonValue);
             if (defaultValue != null) {
@@ -98,7 +98,7 @@ public final class ChainParameter {
         // - if there is no information (from executor control) to set non-null value
         // with properly (efficient) type, we will treat the value as a string:
         // this is a suitable variant for string, boolean, integer and floating-point values
-        Object stringValue = ParameterValueType.STRING.toParameter(parameterJsonValue);
+        Object stringValue = ValueType.STRING.toParameter(parameterJsonValue);
         if (stringValue != null) {
             this.value = stringValue;
         }

@@ -32,7 +32,7 @@ import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.multichains.core.MultiChainExecutor;
 import net.algart.executors.api.multichains.MultiChainSpecification;
 import net.algart.executors.api.multichains.core.UseMultiChain;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.core.CombineSettings;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.core.UseSettings;
@@ -47,7 +47,7 @@ public class SettingsTreeDemo {
     private static JsonObject buildCustomSettings(SettingsTree tree) {
         return tree.settingsJson(path -> {
             final ControlSpecification control = path.reqControl();
-            if (control.getValueType() == ParameterValueType.STRING) {
+            if (control.getValueType() == ValueType.STRING) {
                 return Jsons.stringValue(path.toString());
             } else {
                 return Jsons.doubleValue(111); // or: control.getValueType().toJsonValue("111");

@@ -27,7 +27,7 @@ package net.algart.executors.api.mappings;
 import jakarta.json.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.mappings.core.UseMapping;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.math.IRange;
 
@@ -242,7 +242,7 @@ public final class MappingBuilder implements Cloneable {
             String name,
             MappingSpecification.ControlTemplate controlTemplate,
             Parameters parameters) {
-        final ParameterValueType valueType = controlTemplate.getValueType();
+        final ValueType valueType = controlTemplate.getValueType();
         JsonValue jsonValue = null;
         if (parameters.containsKey(name)) {
             jsonValue = valueType.toJsonValue(parameters, name);

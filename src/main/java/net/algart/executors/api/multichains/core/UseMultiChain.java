@@ -32,7 +32,7 @@ import net.algart.executors.api.chains.core.UseChain;
 import net.algart.executors.api.extensions.InstalledPlatformsForTechnology;
 import net.algart.executors.api.multichains.MultiChain;
 import net.algart.executors.api.multichains.MultiChainSpecification;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.SettingsBuilder;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.executors.api.settings.core.UseSettings;
@@ -359,7 +359,7 @@ public final class UseMultiChain extends FileOperation {
                     .setName(DO_ACTION_NAME)
                     .setCaption(DO_ACTION_CAPTION)
                     .setDescription(DO_ACTION_DESCRIPTION)
-                    .setValueType(ParameterValueType.BOOLEAN)
+                    .setValueType(ValueType.BOOLEAN)
                     .setDefaultJsonValue(JsonValue.TRUE)
                     .setAdvanced(false));
         }
@@ -371,21 +371,21 @@ public final class UseMultiChain extends FileOperation {
                 .setName(EXTRACT_SUB_SETTINGS_PARAMETER_NAME)
                 .setCaption(EXTRACT_SUB_SETTINGS_PARAMETER_CAPTION.replace("%%%", multiChainName))
                 .setDescription(EXTRACT_SUB_SETTINGS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
-                .setValueType(ParameterValueType.BOOLEAN)
+                .setValueType(ValueType.BOOLEAN)
                 .setDefaultJsonValue(Jsons.booleanValue(EXTRACT_SUB_SETTINGS_PARAMETER_DEFAULT))
                 .setAdvanced(true));
         result.addControl(new ControlSpecification()
                 .setName(LOG_SETTINGS_PARAMETER_NAME)
                 .setCaption(LOG_SETTINGS_PARAMETER_CAPTION)
                 .setDescription(LOG_SETTINGS_PARAMETER_DESCRIPTION)
-                .setValueType(ParameterValueType.BOOLEAN)
+                .setValueType(ValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.FALSE)
                 .setAdvanced(true));
         result.addControl(new ControlSpecification()
                 .setName(IGNORE_PARAMETERS_PARAMETER_NAME)
                 .setCaption(IGNORE_PARAMETERS_PARAMETER_CAPTION)
                 .setDescription(IGNORE_PARAMETERS_PARAMETER_DESCRIPTION.replace("%%%", multiChainName))
-                .setValueType(ParameterValueType.BOOLEAN)
+                .setValueType(ValueType.BOOLEAN)
                 .setDefaultJsonValue(JsonValue.FALSE)
                 .setAdvanced(true));
     }

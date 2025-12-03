@@ -45,8 +45,10 @@ public final class PortSpecification extends AbstractConvertibleToJson {
 
     public PortSpecification(JsonObject json, Path file) {
         this.name = Jsons.reqString(json, "name", file);
-        this.valueType = DataType.fromTypeName(Jsons.reqString(json, "value_type", file))
-                .orElseThrow(() -> Jsons.unknownValue(json, "value_type", file));
+        final String valueTypeName = Jsons.reqString(json, "value_type", file);
+        this.valueType = DataType.fromTypeName(valueTypeName)
+                .orElseThrow(() -> Jsons.badValue(json, "value_type", valueTypeName,
+                        DataType.typeNames(), file));
         this.caption = json.getString("caption", null);
         this.hint = json.getString("hint", null);
         this.advanced = json.getBoolean("advanced", false);

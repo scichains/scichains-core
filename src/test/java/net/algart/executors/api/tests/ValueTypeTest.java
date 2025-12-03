@@ -24,19 +24,19 @@
 
 package net.algart.executors.api.tests;
 
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 
 import java.util.Arrays;
 
-public class ParameterValueTypeTest {
+public class ValueTypeTest {
     public static void main(String[] args) {
-        for (ParameterValueType type : ParameterValueType.values()) {
+        for (ValueType type : ValueType.values()) {
             System.out.printf("%s; %s, %s, reverse valueOf the same: %s, %s; empty value: %s (%s)%n",
                     type,
                     type.typeName(),
-                    java.util.Arrays.toString(type.typeNameAliases()),
-                    ParameterValueType.valueOf(type.name()),
-                    ParameterValueType.ofTypeName(type.typeName()),
+                    type.aliases(),
+                    ValueType.valueOf(type.name()),
+                    ValueType.ofTypeName(type.typeName()),
                     type.emptyJsonValue(),
                     type.emptyJsonValue().getClass());
             for (String v : Arrays.asList("TRUE", "12", "12.3", "axd", "{\"key\":12}")) {
@@ -44,7 +44,7 @@ public class ParameterValueTypeTest {
             }
         }
         try {
-            ParameterValueType.ofTypeName("something");
+            ValueType.ofTypeName("something");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

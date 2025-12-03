@@ -28,7 +28,7 @@ import jakarta.json.*;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.Port;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.parameters.Parameters;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.modules.core.common.io.PathPropertyReplacement;
@@ -248,7 +248,7 @@ public class SettingsBuilder implements Cloneable {
         for (ControlSpecification control : specification.getControls().values()) {
             final String name = portName(control);
             if (executor.hasOutputPort(name)) {
-                final ParameterValueType valueType = control.getValueType();
+                final ValueType valueType = control.getValueType();
                 final String jsonKey = control.key();
                 JsonValue jsonValue = settings.get(jsonKey);
                 if (jsonValue == null) {
@@ -270,9 +270,7 @@ public class SettingsBuilder implements Cloneable {
                     // does not distinguish types
                 }
                 executor.getScalar(name).setTo(value);
-                if (valueType == ParameterValueType.STRING
-                        && value instanceof String
-                        && control.getEditionType().isPath()) {
+                if (valueType == ValueType.STRING && value instanceof String && control.getEditionType().isPath()) {
                     final Path path;
                     try {
                         path = Paths.get((String) value);
@@ -408,7 +406,7 @@ public class SettingsBuilder implements Cloneable {
             Parameters parameters,
             Map<String, Port> inputPortsMap) {
         final String name = control.getName();
-        final ParameterValueType valueType = control.getValueType();
+        final ValueType valueType = control.getValueType();
         JsonValue jsonValue = null;
         if (inputPortsMap != null && valueType.isSettings()) {
             final Port inputPort = inputPortsMap.get(name);
@@ -435,11 +433,11 @@ public class SettingsBuilder implements Cloneable {
 
     private static void setJsonValue(ControlSpecification control, Parameters parameters, JsonValue jsonValue) {
         final String name = control.getName();
-        final ParameterValueType valueType = control.getValueType();
+        final ValueType valueType = control.getValueType();
         Object parameterValue = valueType.toParameter(jsonValue);
         if (parameterValue == null) {
             // - if the parameter is a correctly written value, try STRING value
-            parameterValue = ParameterValueType.STRING.toParameter(jsonValue);
+            parameterValue = ValueType.STRING.toParameter(jsonValue);
         }
         if (parameterValue != null) {
             parameters.put(name, parameterValue);
@@ -448,9 +446,7 @@ public class SettingsBuilder implements Cloneable {
 
     private JsonValue replaceToAbsolutePath(Executor executor, ControlSpecification control, JsonValue jsonValue) {
         assert jsonValue != null;
-        if (control.getValueType() == ParameterValueType.STRING
-                && control.getEditionType().isPath()
-                && absolutePaths) {
+        if (control.getValueType() == ValueType.STRING && control.getEditionType().isPath() && absolutePaths) {
             assert jsonValue instanceof JsonString : "Invalid " + control + ": did not check default value";
             String path = ((JsonString) jsonValue).getString().trim();
             if (!path.isEmpty()) {

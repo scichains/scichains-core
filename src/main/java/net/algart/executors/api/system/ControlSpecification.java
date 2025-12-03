@@ -26,7 +26,7 @@ package net.algart.executors.api.system;
 
 import jakarta.json.*;
 import net.algart.executors.api.data.SScalar;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -123,11 +123,11 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
     private String description = null;
     private String caption = null;
     private String hint = null;
-    private ParameterValueType valueType;
+    private ValueType valueType;
     private volatile String valueClassName = null;
     // - can be the name of some class of similar values; for example,
     // for value-type "settings" it may be the SettingsSpecification.settingsClass()
-    private ControlEditionType editionType = ControlEditionType.VALUE;
+    private EditionType editionType = EditionType.VALUE;
     private volatile String settingsId = null;
     // - settings ID (for value-type "settings");
     // it is the only field that is sometimes modifying in a ready specification
@@ -154,12 +154,12 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         this.caption = json.getString("caption", null);
         this.hint = json.getString("hint", null);
         final String valueTypeName = Jsons.reqString(json, "value_type", file);
-        this.valueType = ParameterValueType.fromTypeName(valueTypeName).orElseThrow(
-                () -> Jsons.unknownValue(json, "value_type", valueTypeName, file));
+        this.valueType = ValueType.fromTypeName(valueTypeName).orElseThrow(
+                () -> Jsons.badValue(json, "value_type", valueTypeName, ValueType.typeNames(), file));
         this.valueClassName = json.getString("value_class_name", null);
-        final String editionTypeName = json.getString("edition_type", ControlEditionType.VALUE.typeName());
-        this.editionType = ControlEditionType.fromTypeName(editionTypeName).orElseThrow(
-                () -> Jsons.unknownValue(json, "edition_type", editionTypeName, file));
+        final String editionTypeName = json.getString("edition_type", EditionType.VALUE.typeName());
+        this.editionType = EditionType.fromTypeName(editionTypeName).orElseThrow(
+                () -> Jsons.badValue(json, "edition_type", editionTypeName, EditionType.typeNames(), file));
         this.settingsId = json.getString("settings_id", null);
         this.multiline = json.getBoolean("multiline", false);
         final JsonNumber editionRows = json.getJsonNumber("edition_rows");
@@ -169,14 +169,14 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         }
         this.resources = json.getBoolean("resources", this.editionType.isResources());
         this.advanced = json.getBoolean("advanced", false);
-        if (this.editionType == ControlEditionType.ENUM) {
-            if (this.valueType == ParameterValueType.STRING) {
-                // for other value types, "enum" edition type does not affect
+        if (this.editionType == EditionType.ENUM) {
+            if (this.valueType == ValueType.STRING) {
+                // for other value types, the "enum" edition type does not affect
                 // the way of setting the value: Executor still has a setter
                 // like setXxx(int value)
-                this.valueType = ParameterValueType.ENUM_STRING;
+                this.valueType = ValueType.ENUM_STRING;
             }
-            // Note: we allow to skip "items" in this case, because
+            // Note: we allow skipping "items" in this case because
             // some external libraries can add items from other sources.
         }
         final JsonArray itemsJson = json.getJsonArray("items");
@@ -250,12 +250,12 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         return this;
     }
 
-    public ParameterValueType getValueType() {
+    public ValueType getValueType() {
         assert valueType != null : "valueType cannot be null";
         return valueType;
     }
 
-    public ControlSpecification setValueType(ParameterValueType valueType) {
+    public ControlSpecification setValueType(ValueType valueType) {
         this.valueType = Objects.requireNonNull(valueType, "Null valueType");
         return this;
     }
@@ -269,11 +269,11 @@ public final class ControlSpecification extends AbstractConvertibleToJson implem
         return this;
     }
 
-    public ControlEditionType getEditionType() {
+    public EditionType getEditionType() {
         return editionType;
     }
 
-    public ControlSpecification setEditionType(ControlEditionType editionType) {
+    public ControlSpecification setEditionType(EditionType editionType) {
         this.editionType = Objects.requireNonNull(editionType, "Null editionType");
         return this;
     }

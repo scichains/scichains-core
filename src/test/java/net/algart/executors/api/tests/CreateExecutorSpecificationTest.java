@@ -27,8 +27,8 @@ package net.algart.executors.api.tests;
 import net.algart.executors.api.ExecutionBlock;
 import net.algart.executors.api.Executor;
 import net.algart.executors.api.data.DataType;
-import net.algart.executors.api.parameters.ParameterValueType;
-import net.algart.executors.api.system.ControlEditionType;
+import net.algart.executors.api.parameters.ValueType;
+import net.algart.executors.api.system.EditionType;
 import net.algart.executors.api.system.ControlSpecification;
 import net.algart.executors.api.system.ExecutorSpecification;
 import net.algart.executors.api.system.PortSpecification;
@@ -81,13 +81,13 @@ public class CreateExecutorSpecificationTest {
         specification.setOutputPorts(outputPorts);
         final Map<String, ControlSpecification> controls = new LinkedHashMap<>();
         controls.put("width", new ControlSpecification()
-                .setName("width").setValueType(ParameterValueType.INT));
+                .setName("width").setValueType(ValueType.INT));
         List<ControlSpecification.EnumItem> items = new ArrayList<>();
         items.add(new ControlSpecification.EnumItem().setValue("MODE_1").setCaption("mode 2"));
         items.add(new ControlSpecification.EnumItem().setValue("MODE_2").setCaption("mode 2"));
         controls.put("mode", new ControlSpecification()
-                .setName("mode").setValueType(ParameterValueType.STRING)
-                .setCaption("Mode").setEditionType(ControlEditionType.ENUM)
+                .setName("mode").setValueType(ValueType.STRING)
+                .setCaption("Mode").setEditionType(EditionType.ENUM)
                 .setItems(items).setDefaultStringValue("MODE_1"));
         items = new ArrayList<>();
         items.add(new ControlSpecification.EnumItem()
@@ -95,8 +95,8 @@ public class CreateExecutorSpecificationTest {
         items.add(new ControlSpecification.EnumItem()
                 .setValue(Jsons.intValue(2)).setCaption("m_2"));
         controls.put("modeInt", new ControlSpecification()
-                .setName("modeInt").setValueType(ParameterValueType.INT)
-                .setCaption("Mode (int)").setEditionType(ControlEditionType.ENUM)
+                .setName("modeInt").setValueType(ValueType.INT)
+                .setCaption("Mode (int)").setEditionType(EditionType.ENUM)
                 .setItems(items).setDefaultJsonValue(Jsons.intValue(2)));
         specification.setControls(controls);
 

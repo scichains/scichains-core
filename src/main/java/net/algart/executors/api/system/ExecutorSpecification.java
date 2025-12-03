@@ -29,7 +29,7 @@ import net.algart.executors.api.Executor;
 import net.algart.executors.api.chains.*;
 import net.algart.executors.api.data.DataType;
 import net.algart.executors.api.data.Port;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 import net.algart.executors.api.settings.SettingsSpecification;
 import net.algart.json.AbstractConvertibleToJson;
 import net.algart.json.Jsons;
@@ -378,8 +378,8 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
             private boolean output = false;
             private boolean data = false;
             private boolean copy = false;
-            private ParameterValueType dataType = null;
-            private ControlEditionType editionType = ControlEditionType.VALUE;
+            private ValueType dataType = null;
+            private EditionType editionType = EditionType.VALUE;
             // - dataType and editionType are used in setTo(Chain chain) method
             // for choosing valueType and editionType of chain controls
 
@@ -393,13 +393,15 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 this.copy = json.getBoolean("copy", false);
                 final String dataTypeName = json.getString("data_type", null);
                 if (dataTypeName != null) {
-                    this.dataType = ParameterValueType.fromTypeName(dataTypeName).orElseThrow(
-                            () -> Jsons.unknownValue(json, "data_type", dataTypeName, file));
+                    this.dataType = ValueType.fromTypeName(dataTypeName).orElseThrow(
+                            () -> Jsons.badValue(json, "data_type", dataTypeName,
+                                    ValueType.typeNames(), file));
                 }
                 final String editionType = json.getString("edition_type", null);
                 if (editionType != null) {
-                    this.editionType = ControlEditionType.fromTypeName(editionType).orElseThrow(
-                            () -> Jsons.unknownValue(json, "edition_type", editionType, file));
+                    this.editionType = EditionType.fromTypeName(editionType).orElseThrow(
+                            () -> Jsons.badValue(json, "edition_type", editionType,
+                                    EditionType.typeNames(), file));
                 }
             }
 
@@ -439,20 +441,20 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 return this;
             }
 
-            public ParameterValueType getDataType() {
+            public ValueType getDataType() {
                 return dataType;
             }
 
-            public Behavior setDataType(ParameterValueType dataType) {
+            public Behavior setDataType(ValueType dataType) {
                 this.dataType = dataType;
                 return this;
             }
 
-            public ControlEditionType getEditionType() {
+            public EditionType getEditionType() {
                 return editionType;
             }
 
-            public Behavior setEditionType(ControlEditionType editionType) {
+            public Behavior setEditionType(EditionType editionType) {
                 this.editionType = editionType;
                 return this;
             }
@@ -507,7 +509,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         public Options(JsonObject json, Path file) {
             final String stageName = json.getString("stage", ExecutionStage.RUN_TIME.stageName());
             this.stage = ExecutionStage.fromStageName(stageName).orElseThrow(
-                    () -> Jsons.unknownValue(json, "stage", stageName, file));
+                    () -> Jsons.badValue(json, "stage", stageName, file));
             final JsonObject roleJson = json.getJsonObject("role");
             if (roleJson != null) {
                 this.role = new Role(roleJson, file);
@@ -1412,11 +1414,11 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         return options != null && options.behavior != null && options.behavior.copy;
     }
 
-    public final ParameterValueType dataType() {
+    public final ValueType dataType() {
         return isData() ? options.behavior.dataType : null;
     }
 
-    public final ControlEditionType editionType() {
+    public final EditionType editionType() {
         return isData() ? options.behavior.editionType : null;
     }
 
@@ -1479,10 +1481,10 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
         final Map<String, ControlSpecification> controls = new LinkedHashMap<>(this.controls);
         for (String name : executor.allParameters()) {
             final ControlSpecification controlSpecification = controls.getOrDefault(name, new ControlSpecification());
-            final ParameterValueType parameterValueType = executor.parameterControlValueType(name);
-            controlSpecification.setName(name).setValueType(parameterValueType);
-            if (parameterValueType == ParameterValueType.ENUM_STRING) {
-                controlSpecification.setEditionType(ControlEditionType.ENUM);
+            final ValueType valueType = executor.parameterValueType(name);
+            controlSpecification.setName(name).setValueType(valueType);
+            if (valueType == ValueType.ENUM_STRING) {
+                controlSpecification.setEditionType(EditionType.ENUM);
                 final Class<?> enumClass = executor.parameterJavaType(name);
                 if (enumClass == null || !Enum.class.isAssignableFrom(enumClass)) {
                     throw new AssertionError("Invalid propertyJavaType method result: not enum ("
@@ -1505,7 +1507,7 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                     controlSpecification.setDefaultStringValue(firstEnumName);
                 }
             } else {
-                controlSpecification.setEditionType(ControlEditionType.VALUE);
+                controlSpecification.setEditionType(EditionType.VALUE);
             }
             controls.put(name, controlSpecification);
         }
@@ -1589,13 +1591,13 @@ public class ExecutorSpecification extends AbstractConvertibleToJson {
                 final ControlSpecification controlSpecification = controls.getOrDefault(parameterName, new ControlSpecification());
                 controlSpecification.setName(parameterName);
                 final ExecutorSpecification specification = block.getExecutorSpecification();
-                ParameterValueType valueType = specification != null ? specification.dataType() : null;
-                ControlEditionType editionType = specification != null ? specification.editionType() : null;
+                ValueType valueType = specification != null ? specification.dataType() : null;
+                EditionType editionType = specification != null ? specification.editionType() : null;
                 if (valueType == null) {
-                    valueType = ParameterValueType.STRING;
+                    valueType = ValueType.STRING;
                 }
                 controlSpecification.setValueType(valueType);
-                controlSpecification.setEditionType(editionType != null ? editionType : ControlEditionType.VALUE);
+                controlSpecification.setEditionType(editionType != null ? editionType : EditionType.VALUE);
                 String defaultStringValue = null;
                 final ChainOutputPort outputPort = block.getActualOutputPort(Executor.DEFAULT_OUTPUT_PORT);
                 if (outputPort != null && outputPort.getDataType() == DataType.SCALAR) {

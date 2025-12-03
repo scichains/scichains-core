@@ -25,7 +25,7 @@
 package net.algart.executors.api.tests;
 
 import net.algart.executors.api.Executor;
-import net.algart.executors.api.parameters.ParameterValueType;
+import net.algart.executors.api.parameters.ValueType;
 
 public final class ExecutorParametersTest {
     public static void main(String[] args) throws Exception {
@@ -38,7 +38,7 @@ public final class ExecutorParametersTest {
         System.out.printf("Created %s%n", executor);
 
         for (String name : executor.allParameters()) {
-            final ParameterValueType propertyValueType = executor.parameterControlValueType(name);
+            final ValueType propertyValueType = executor.parameterValueType(name);
             System.out.printf("Parameter %s: type %s (%s)%n", name, propertyValueType, propertyValueType.typeName());
         }
     }
