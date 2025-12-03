@@ -24,6 +24,8 @@
 
 package net.algart.graalvm;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,6 +53,10 @@ public enum JSType {
 
     JSType(String typeName) {
         this.typeName = Objects.requireNonNull(typeName);
+    }
+
+    public static Collection<String> typeNames() {
+        return Arrays.stream(values()).map(JSType::typeName).toList();
     }
 
     public String typeName() {

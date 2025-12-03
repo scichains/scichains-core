@@ -137,7 +137,6 @@ public enum GraalSafety implements GraalContextCustomizer {
         this.supportedJavaAccess = supportedJavaAccess;
     }
 
-
     public String safetyName() {
         return safetyName;
     }

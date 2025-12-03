@@ -24,6 +24,8 @@
 
 package net.algart.executors.api.system;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,6 +37,10 @@ public enum ExecutionStage {
 
     ExecutionStage(String stageName) {
         this.stageName = Objects.requireNonNull(stageName);
+    }
+
+    public static Collection<String> stageNames() {
+        return Arrays.stream(values()).map(ExecutionStage::stageName).toList();
     }
 
     public String stageName() {

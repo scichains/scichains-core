@@ -29,10 +29,7 @@ import jep.JepConfig;
 import jep.SharedInterpreter;
 import net.algart.jep.JepPerformerContainer;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public enum JepType {
@@ -54,6 +51,10 @@ public enum JepType {
     JepType(String typeName, String prettyName) {
         this.typeName = Objects.requireNonNull(typeName);
         this.prettyName = prettyName;
+    }
+
+    public static Collection<String> typeNames() {
+        return Collections.unmodifiableCollection(ALL_MODES.keySet());
     }
 
     public String typeName() {

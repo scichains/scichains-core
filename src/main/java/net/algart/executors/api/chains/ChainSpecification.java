@@ -39,6 +39,7 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static net.algart.executors.api.system.ExecutorSpecification.quote;
 
@@ -309,12 +310,13 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             private Port(JsonObject json, Path file) {
                 this.uuid = Jsons.reqString(json, "uuid", file);
                 this.name = Jsons.reqStringWithAlias(json, "name", "port_name", file);
-                this.portType = ChainPortType.fromCode(
-                        Jsons.reqIntWithAlias(json, "type", "port_type", file))
-                        .orElseThrow(() -> Jsons.badValue(json, "type", file));
-                this.dataType = DataType.fromUUID(
-                        Jsons.reqString(json, "data_type_uuid", file))
-                        .orElseThrow(() -> Jsons.badValue(json, "data_type_uuid", file));
+                final int portTypeCode = Jsons.reqIntWithAlias(json, "type", "port_type", file);
+                this.portType = ChainPortType.fromCode(portTypeCode)
+                        .orElseThrow(() -> Jsons.badValue(json, "type", String.valueOf(portTypeCode), file));
+                final String dataTypeUuid = Jsons.reqString(json, "data_type_uuid", file);
+                this.dataType = DataType.fromUUID(dataTypeUuid)
+                        .orElseThrow(() -> Jsons.badValue(json, "data_type_uuid", dataTypeUuid,
+                                Stream.of(DataType.values()).map(DataType::uuid), file));
                 assert portType != null : "was checked in requireNonNull";
                 if (portType.isVirtual() && dataType != DataType.SCALAR) {
                     throw new JsonException("Invalid JSON" + (file == null ? "" : " " + file)
@@ -553,7 +555,7 @@ public final class ChainSpecification extends AbstractConvertibleToJson {
             this.executorCategory = json.getString("executor_category", null);
             String executionStageName = json.getString("execution_stage", ExecutionStage.RUN_TIME.stageName());
             this.executionStage = ExecutionStage.fromStageName(executionStageName).orElseThrow(
-                    () -> Jsons.badValue(json, "stage", executionStageName, file));
+                    () -> Jsons.badValue(json, "stage", executionStageName, ExecutionStage.stageNames(), file));
             boolean oldFormat = false;
             if (!json.containsKey("ports")) {
                 for (String name : OLD_PORT_ARRAYS) {
